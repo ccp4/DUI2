@@ -91,16 +91,6 @@ class node(object):
 
 if __name__ == "__main__":
 
-    tst2add = '''
-    dials.generate_mask untrusted.rectangle=0,1421,1258,1312 input.experiments=1_experiments.expt output.mask=tmp_mask.pickle
-    dials.apply_mask input.experiments=1_experiments.expt input.mask=tmp_mask.pickle output.experiments=2_experiments.expt
-    '''
-
-    tst2add = '''
-    dials.generate_mask untrusted.rectangle=0,1421,1258,1312 output.mask=tmp_mask.pickle
-    dials.apply_mask input.mask=tmp_mask.pickle
-    '''
-
     cmd_lst = [
         [
             [
@@ -138,8 +128,12 @@ if __name__ == "__main__":
     old_node = node(None)
     base_dir = os.getcwd()
     old_node.set_base_dir(base_dir)
-    old_node._run_dir = "/tmp/dui2run/tst_chain/imp_dir"
-    old_node._lst_expt = ["/tmp/dui2run/tst_chain/imp_dir/imported.expt"]
+
+    #old_node._run_dir = "/tmp/dui2run/tst_chain/imp_dir"
+    old_node._run_dir = "/tmp/tst/"
+
+    #old_node._lst_expt = ["/tmp/dui2run/tst_chain/imp_dir/imported.expt"]
+    old_node._lst_expt = ["/tmp/tst/imported.expt"]
     old_node._lst_refl = []
 
     for num, comd in enumerate(cmd_lst):
