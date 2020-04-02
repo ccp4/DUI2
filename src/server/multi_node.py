@@ -28,6 +28,13 @@ class node(object):
         except:
             print("NOT _base_dir on old_node")
 
+    def set_root(self, run_dir = "/tmp/tst/", lst_expt = "/tmp/tst/imported.expt"):
+        base_dir = os.getcwd()
+        self.set_base_dir(base_dir)
+        self._run_dir = run_dir
+        self._lst_expt = lst_expt
+        self._lst_refl = []
+
 
     def set_base_dir(self, dir_in = None):
             self._base_dir = dir_in
@@ -126,15 +133,7 @@ if __name__ == "__main__":
         ]
 
     old_node = node(None)
-    base_dir = os.getcwd()
-    old_node.set_base_dir(base_dir)
-
-    #old_node._run_dir = "/tmp/dui2run/tst_chain/imp_dir"
-    old_node._run_dir = "/tmp/tst/"
-
-    #old_node._lst_expt = ["/tmp/dui2run/tst_chain/imp_dir/imported.expt"]
-    old_node._lst_expt = ["/tmp/tst/imported.expt"]
-    old_node._lst_refl = []
+    old_node.set_root()
 
     for num, comd in enumerate(cmd_lst):
         new_node = node(old_node)
