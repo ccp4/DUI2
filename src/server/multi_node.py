@@ -2,13 +2,21 @@ import subprocess
 import os
 import glob
 
-class node(object):
+import shutil
+import sys
+
+
+class CmdNode(object):
     def __init__(self, old_node = None):
         self._old_node = old_node
         self._lst_expt = []
         self._lst_refl = []
         self._lst2run = [[]]
         self._run_dir = ""
+
+        self.success = True
+        self.next_step_list = []
+        self.lin_num = 0
 
         try:
             self.set_base_dir(self._old_node._base_dir)
@@ -28,6 +36,14 @@ class node(object):
         except:
             print("NOT _base_dir on old_node")
 
+    def __call__(self, cmd_lst):
+        print("\n cmd_lst in =", cmd_lst)
+        self.set_cmd_lst(list(cmd_lst))
+        self.set_base_dir(os.getcwd())
+        self.set_run_dir(self.lin_num)
+        print("Running:", self._lst2run)
+        self.run_cmd()
+
     def set_root(self, run_dir = "/tmp/tst/", lst_expt = "/tmp/tst/imported.expt"):
         base_dir = os.getcwd()
         self.set_base_dir(base_dir)
@@ -40,7 +56,6 @@ class node(object):
             self._base_dir = dir_in
 
     def set_run_dir(self, num = None):
-        print("\nnum=", num, "comd", comd)
         self._run_dir = self._base_dir + "/run" + str(num)
 
         print("new_dir: ", self._run_dir, "\n")
@@ -96,25 +111,113 @@ class node(object):
             proc.stdout.close()
 
 
+
+class Runner(object):
+    def __init__(self):
+
+        root_node = CmdNode(None)
+        root_node.set_root()
+
+        #root_node = CmdNode(old_node=None)
+        #root_node.ll_command_lst = [["Root"]]
+        root_node.success = True
+
+        self.step_list = [root_node]
+        self.bigger_lin = 0
+        self.current_line = self.bigger_lin
+        self.create_step(root_node)
+
+    def run(self, command):
+        if type(command) is str:
+            cmd_lst = command.split()
+        else:
+            cmd_lst = command
+
+        if cmd_lst[0] == "goto":
+            print("doing << goto >>")
+            self.goto(int(cmd_lst[1]))
+
+        elif cmd_lst == ["mkchi"]:
+            self.create_step(self.current_node)
+
+        elif cmd_lst == ["mksib"]:
+            old_command_lst = list(self.current_node.ll_command_lst)
+            self.goto_prev()
+            print("forking")
+            self.create_step(self.current_node)
+            self.current_node.edit_list(old_command_lst)
+
+        else:
+            if self.current_node.success is True:
+                self.goto_prev()
+                print("forking")
+                self.create_step(self.current_node)
+
+            self.current_node(cmd_lst)
+            if self.current_node.success is not True:
+                print("failed step")
+
+    def create_step(self, prev_step):
+        new_step = CmdNode(old_node=prev_step)
+
+        self.bigger_lin += 1
+        new_step.lin_num = self.bigger_lin
+        prev_step.next_step_list.append(new_step)
+        self.step_list.append(new_step)
+        self.goto(self.bigger_lin)
+
+    def goto_prev(self):
+        try:
+            self.goto(self.current_node.prev_step.lin_num)
+
+        except BaseException as e:
+            print("can NOT fork <None> node ")
+
+    def goto(self, new_lin):
+        self.current_line = new_lin
+
+        for node in self.step_list:
+            if node.lin_num == self.current_line:
+                self.current_node = node
+
+    def get_current_node(self):
+        return self.current_node
+
 if __name__ == "__main__":
 
+    cmd_tree_runner = Runner()
+    command = ""
+
+    while command.strip() != "exit" and command.strip() != "quit":
+        try:
+            inp_str = "lin [" + str(cmd_tree_runner.current_line) + "] >>> "
+            command = str(input(inp_str))
+
+        except EOFError:
+            print("Caught << EOFError >> \n  ... interrupting")
+            sys.exit(0)
+
+        except:
+            print("Caught << some error >>", e, " ... interrupting")
+            sys.exit(1)
+
+        print("command =", command)
+        if command[0:5] == "goto ":
+            cmd_tree_runner.run(command.split(" "))
+            #tree_output(cmd_tree_runner)
+
+        else:
+            cmd_tree_runner.run([command.split(" ")])
+            #tree_output(cmd_tree_runner)
+
+            cmd_tree_runner.run(["mkchi"])
+            #tree_output(cmd_tree_runner)
+
+
+
+stable_guide = '''
+if __name__ == "__main__":
     cmd_lst = [
-        [
-            [
-                "dials.modify_geometry", "geometry.detector.slow_fast_beam_centre=1279,1234"
-            ]
-        ],
-        [
-            [
-                "dials.generate_mask",
-                "untrusted.rectangle=0,1421,1258,1312",
-                "output.mask=tmp_mask.pickle"
-            ],
-            [
-                "dials.apply_mask",
-                "input.mask=tmp_mask.pickle"
-            ]
-        ],
         [
             [
                 "dials.find_spots",
@@ -122,26 +225,21 @@ if __name__ == "__main__":
             ]
         ],
         [["dials.index"]],
-        [["dials.refine"]],
-        [
-            [
-                "dials.integrate",
-                "nproc=3"
-            ]
-        ],
-        [["dials.scale"]],
         ]
 
-    old_node = node(None)
+    old_node = CmdNode(None)
     old_node.set_root()
 
     for num, comd in enumerate(cmd_lst):
-        new_node = node(old_node)
+        new_node = CmdNode(old_node)
         new_node.set_run_dir(num)
         new_node.set_cmd_lst(comd)
         new_node.run_cmd()
 
         old_node = new_node
+
+
+'''
 
 
 
