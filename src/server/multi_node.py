@@ -230,6 +230,9 @@ if __name__ == "__main__":
 
         out_utils.print_list(cmd_tree_runner.step_list, cmd_tree_runner.current_line)
 
+        tree_output = out_utils.TreeShow()
+        tree_output(cmd_tree_runner)
+
 
 stable_guide = '''
 if __name__ == "__main__":
