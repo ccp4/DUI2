@@ -5,6 +5,7 @@ import glob
 import shutil
 import sys
 
+import out_utils
 
 class CmdNode(object):
     def __init__(self, old_node = None):
@@ -14,7 +15,7 @@ class CmdNode(object):
         self._lst2run = [[]]
         self._run_dir = ""
 
-        self.success = True
+        self.success = None
         self.next_step_list = []
         self.lin_num = 0
 
@@ -86,29 +87,43 @@ class CmdNode(object):
         print("\n _lst2run:", self._lst2run, "\n")
 
     def run_cmd(self):
+        try:
+            for inner_lst in self._lst2run:
+                print("\n Running:", inner_lst, "\n")
+                proc = subprocess.Popen(
+                    inner_lst,
+                    shell=False,
+                    cwd=self._run_dir,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    universal_newlines=True
+                )
 
-        for inner_lst in self._lst2run:
-            print("\n Running:", inner_lst, "\n")
-            proc = subprocess.Popen(
-                inner_lst,
-                shell=False,
-                cwd=self._run_dir,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                universal_newlines=True
-            )
+                line = None
+                while proc.poll() is None or line != '':
+                    line = proc.stdout.readline()[:-1]
+                    print("StdOut>> ", line)
+                    '''
+                    line_err = proc.stderr.readline()[:-1]
+                    if line_err != '':
+                        print("_err>>", line_err)
+                    '''
 
-            line = None
-            while proc.poll() is None or line != '':
-                line = proc.stdout.readline()[:-1]
-                print("StdOut>> ", line)
-                '''
-                line_err = proc.stderr.readline()[:-1]
-                if line_err != '':
-                    print("_err>>", line_err)
-                '''
+                proc.stdout.close()
 
-            proc.stdout.close()
+                if proc.poll() == 0:
+                    print("subprocess poll 0")
+
+                else:
+                    print("ERR \n poll =", proc.poll())
+                    self.success = False
+
+            if self.success is not False:
+                self.success = True
+
+        except BaseException as e:
+            print("Failed to run subprocess \n ERR:", e)
+            self.success = False
 
 
 
@@ -213,6 +228,7 @@ if __name__ == "__main__":
             cmd_tree_runner.run(["mkchi"])
             #tree_output(cmd_tree_runner)
 
+        out_utils.print_list(cmd_tree_runner.step_list, cmd_tree_runner.current_line)
 
 
 stable_guide = '''
