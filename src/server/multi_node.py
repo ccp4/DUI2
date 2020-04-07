@@ -214,7 +214,15 @@ if __name__ == "__main__":
             sys.exit(1)
 
         print("command =", command)
-        cmd_tree_runner.run([command.split(" ")])
+
+        lst_cmd = command.split(";")
+
+        lst_cmd_lst = []
+        for sub_str in lst_cmd:
+            lst_cmd_lst.append(sub_str.split(" "))
+
+        print("lst_cmd_lst:", lst_cmd_lst)
+        cmd_tree_runner.run(lst_cmd_lst)
 
         #out_utils.print_list(cmd_tree_runner.step_list, cmd_tree_runner.current_line)
 
