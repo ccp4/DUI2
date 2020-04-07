@@ -53,6 +53,7 @@ class CmdNode(object):
         self._lst_expt = lst_expt
         self._lst_refl = []
         self._lst2run = [['Root']]
+        self.success = True
 
 
     def set_base_dir(self, dir_in = None):
@@ -135,10 +136,6 @@ class Runner(object):
         root_node = CmdNode(None)
         root_node.set_root()
 
-        #root_node = CmdNode(old_node=None)
-        #root_node.ll_command_lst = [["Root"]]
-        root_node.success = True
-
         self.step_list = [root_node]
         self.bigger_lin = 0
         self.current_line = self.bigger_lin
@@ -158,11 +155,11 @@ class Runner(object):
             self.create_step(self.current_node)
 
         elif cmd_lst == ["mksib"]:
-            old_command_lst = list(self.current_node.ll_command_lst)
+            #old_command_lst = list(self.current_node._lst2run)
             self.goto_prev()
             print("forking")
             self.create_step(self.current_node)
-            self.current_node.edit_list(old_command_lst)
+            #self.current_node.edit_list(old_command_lst)
 
         else:
             if self.current_node.success is True:
@@ -185,7 +182,7 @@ class Runner(object):
 
     def goto_prev(self):
         try:
-            self.goto(self.current_node.prev_step.lin_num)
+            self.goto(self.current_node._old_node.lin_num)
 
         except BaseException as e:
             print("can NOT fork <None> node ")
@@ -219,7 +216,11 @@ if __name__ == "__main__":
             sys.exit(1)
 
         print("command =", command)
-        if command[0:5] == "goto ":
+        if(
+            command[0:5] == "goto " or
+            command[0:5] == "mksib" or
+            command[0:5] == "mkchi"
+        ):
             cmd_tree_runner.run(command.split(" "))
             #tree_output(cmd_tree_runner)
 
