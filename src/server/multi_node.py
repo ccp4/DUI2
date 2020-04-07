@@ -141,20 +141,16 @@ class Runner(object):
         self.current_line = self.bigger_lin
         self.create_step(root_node)
 
-    def run(self, command):
-        if type(command) is str:
-            cmd_lst = command.split()
-        else:
-            cmd_lst = command
+    def run(self, cmd_lst):
 
-        if cmd_lst[0] == "goto":
+        if cmd_lst[0][0] == "goto":
             print("doing << goto >>")
-            self.goto(int(cmd_lst[1]))
+            self.goto(int(cmd_lst[0][1]))
 
-        elif cmd_lst == ["mkchi"]:
+        elif cmd_lst == [["mkchi"]]:
             self.create_step(self.current_node)
 
-        elif cmd_lst == ["mksib"]:
+        elif cmd_lst == [["mksib"]]:
             #old_command_lst = list(self.current_node._lst2run)
             self.goto_prev()
             print("forking")
@@ -197,6 +193,8 @@ class Runner(object):
     def get_current_node(self):
         return self.current_node
 
+
+tree_output = out_utils.TreeShow()
 if __name__ == "__main__":
 
     cmd_tree_runner = Runner()
@@ -216,23 +214,9 @@ if __name__ == "__main__":
             sys.exit(1)
 
         print("command =", command)
-        if(
-            command[0:5] == "goto " or
-            command[0:5] == "mksib" or
-            command[0:5] == "mkchi"
-        ):
-            cmd_tree_runner.run(command.split(" "))
-            #tree_output(cmd_tree_runner)
+        cmd_tree_runner.run([command.split(" ")])
 
-        else:
-            cmd_tree_runner.run([command.split(" ")])
-            #tree_output(cmd_tree_runner)
+        #out_utils.print_list(cmd_tree_runner.step_list, cmd_tree_runner.current_line)
 
-            cmd_tree_runner.run(["mkchi"])
-            #tree_output(cmd_tree_runner)
-
-        out_utils.print_list(cmd_tree_runner.step_list, cmd_tree_runner.current_line)
-
-        tree_output = out_utils.TreeShow()
         tree_output(cmd_tree_runner)
 
