@@ -12,7 +12,8 @@ class CmdNode(object):
         self._old_node = old_node
         self._lst_expt = []
         self._lst_refl = []
-        self._lst2run = [[]]
+        self._lst2run = [[None]]
+
         self._run_dir = ""
 
         self.success = None
@@ -51,6 +52,7 @@ class CmdNode(object):
         self._run_dir = run_dir
         self._lst_expt = lst_expt
         self._lst_refl = []
+        self._lst2run = [['Root']]
 
 
     def set_base_dir(self, dir_in = None):
@@ -232,33 +234,4 @@ if __name__ == "__main__":
 
         tree_output = out_utils.TreeShow()
         tree_output(cmd_tree_runner)
-
-
-stable_guide = '''
-if __name__ == "__main__":
-    cmd_lst = [
-        [
-            [
-                "dials.find_spots",
-                "nproc=5"
-            ]
-        ],
-        [["dials.index"]],
-        ]
-
-    old_node = CmdNode(None)
-    old_node.set_root()
-
-    for num, comd in enumerate(cmd_lst):
-        new_node = CmdNode(old_node)
-        new_node.set_run_dir(num)
-        new_node.set_cmd_lst(comd)
-        new_node.run_cmd()
-
-        old_node = new_node
-
-
-'''
-
-
 
