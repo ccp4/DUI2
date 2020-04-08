@@ -118,7 +118,7 @@ class CmdNode(object):
                     print("subprocess poll 0")
 
                 else:
-                    print("ERR \n poll =", proc.poll())
+                    print("\n  *** ERROR *** \n\n poll =", proc.poll())
                     self.success = False
 
             if self.success is not False:
@@ -147,10 +147,10 @@ class Runner(object):
             print("doing << goto >>")
             self.goto(int(cmd_lst[0][1]))
 
-        elif cmd_lst == [["mkchi"]]:
+        elif cmd_lst == [["mkchi"]] or cmd_lst == [["c"]]:
             self.create_step(self.current_node)
 
-        elif cmd_lst == [["mksib"]]:
+        elif cmd_lst == [["mksib"]] or cmd_lst == [["s"]]:
             #old_command_lst = list(self.current_node._lst2run)
             self.goto_prev()
             print("forking")
@@ -204,6 +204,7 @@ if __name__ == "__main__":
         try:
             inp_str = "lin [" + str(cmd_tree_runner.current_line) + "] >>> "
             command = str(input(inp_str))
+            print("\n")
 
         except EOFError:
             print("Caught << EOFError >> \n  ... interrupting")
@@ -213,7 +214,7 @@ if __name__ == "__main__":
             print("Caught << some error >>", e, " ... interrupting")
             sys.exit(1)
 
-        print("command =", command)
+        print("command =", command, "\n")
 
         lst_cmd = command.split(";")
 
