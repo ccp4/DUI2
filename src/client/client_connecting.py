@@ -1,5 +1,29 @@
 from PySide2 import QtCore, QtWidgets, QtGui, QtNetwork
-import sys
+import sys, time
+import requests
+
+
+class Run_n_Output(QtCore.QThread):
+    line_out = QtCore.Signal(str)
+    def __init__(self, request):
+        super(Run_n_Output, self).__init__()
+        self.request = request
+
+    def run(self):
+        line_str = ''
+        while True:
+            tmp_dat = self.request.raw.read(1)
+            single_char = str(tmp_dat.decode('utf-8'))
+            line_str += single_char
+            if single_char == '\n':
+                print(line_str[:-1])
+                self.line_out.emit(line_str)
+                line_str = ''
+
+            elif line_str[-7:] == '/*EOF*/':
+                print('>>  /*EOF*/  <<')
+                break
+
 
 class Client(QtWidgets.QDialog):
     def __init__(self, parent=None):
@@ -7,15 +31,13 @@ class Client(QtWidgets.QDialog):
 
         self.incoming_text = QtWidgets.QTextEdit()
         self.incoming_text.setFont(QtGui.QFont("Monospace"))
-        self.dataLineEdit = QtWidgets.QLineEdit('test text')
+
+        self.dataLineEdit = QtWidgets.QLineEdit()
+        self.dataLineEdit.setPlaceholderText("Type command")
         self.dataLineEdit.setFont(QtGui.QFont("Monospace"))
-        send2serverButton = QtWidgets.QPushButton("send to server")
 
-        self.tcpSocket = QtNetwork.QTcpSocket(self)
-
-        send2serverButton.clicked.connect(self.requestNewConnection)
-        self.tcpSocket.readyRead.connect(self.readFromServer)
-        self.tcpSocket.error.connect(self.displayError)
+        send2serverButton = QtWidgets.QPushButton("Launch command")
+        send2serverButton.clicked.connect(self.request_launch)
 
         mainLayout = QtWidgets.QVBoxLayout()
         mainLayout.addWidget(self.incoming_text)
@@ -23,50 +45,25 @@ class Client(QtWidgets.QDialog):
         mainLayout.addWidget(self.dataLineEdit)
         mainLayout.addWidget(send2serverButton)
         self.setLayout(mainLayout)
-        self.setWindowTitle("DUI front end test")
+        self.setWindowTitle("DUI front end test with HTTP")
 
-        self.tcpSocket.stateChanged.connect(self.tell_State)
-
-    def tell_State(self):
-        print("self.tcpSocket.state()", self.tcpSocket.state())
-        print("self.tcpSocket.isValid()", self.tcpSocket.isValid())
-
-    def requestNewConnection(self):
-        if not self.tcpSocket.isValid():
-            self.tcpSocket.abort()
-            self.tcpSocket.connectToHost(QtNetwork.QHostAddress.Any, 12354, QtCore.QIODevice.ReadWrite)
-
-        if self.tcpSocket.waitForConnected(1000):
-            print("Connected!")
-
-        else:
-            print("Failed to connect")
-
-        txt2send = str.encode(self.dataLineEdit.text())
-        self.tcpSocket.write(txt2send)
-
-    def readFromServer(self):
-        instr = self.tcpSocket.readAll()
-        nxt_str = str(instr.data().decode('utf-8'))
-        #print(nxt_str, "<<line")
+    def add_line(self, new_line):
         self.incoming_text.moveCursor(QtGui.QTextCursor.End)
-        self.incoming_text.insertPlainText(nxt_str + "\n")
+        self.incoming_text.insertPlainText(new_line)
 
-    def displayError(self, socketError):
-        if socketError == QtNetwork.QAbstractSocket.RemoteHostClosedError:
-            pass
-        elif socketError == QtNetwork.QAbstractSocket.HostNotFoundError:
-            QtWidgets.QMessageBox.information(self, " Client",
-                    "The host was not found. Please check the host name and "
-                    "port settings.")
-        elif socketError == QtNetwork.QAbstractSocket.ConnectionRefusedError:
-            QtWidgets.QMessageBox.information(self, " Client",
-                    "The connection was refused by the peer. Make sure "
-                    "the server is running, and check that the host name "
-                    "and port settings are correct.")
-        else:
-            QtWidgets.QMessageBox.information(self, " Client",
-                    "The following error occurred: %s." % self.tcpSocket.errorString())
+    def run_ended(self):
+        print("run_ended")
+
+    def request_launch(self):
+
+        cmd_str = str.encode(self.dataLineEdit.text())
+        cmd = {'command': [cmd_str]}
+        req_get = requests.get('http://localhost:8080/', stream = True, params = cmd)
+
+        self.thrd = Run_n_Output(req_get)
+        self.thrd.line_out.connect(self.add_line)
+        self.thrd.finished.connect(self.run_ended)
+        self.thrd.start()
 
 
 if __name__ == '__main__':
@@ -74,3 +71,6 @@ if __name__ == '__main__':
     client = Client()
     client.show()
     sys.exit(client.exec_())
+
+
+
