@@ -8,9 +8,8 @@ import sys
 import out_utils
 
 class CmdNode(object):
-    def __init__(self, old_node = None, parent = None):
+    def __init__(self, old_node = None):
         self._old_node = old_node
-        self.parent = parent
         self._lst_expt = []
         self._lst_refl = []
         self._lst2run = [[None]]
@@ -138,33 +137,33 @@ class Runner(object):
         self.step_list = [root_node]
         self.bigger_lin = 0
         self.current_line = self.bigger_lin
-        self.create_step(root_node, None)
+        self.create_step(root_node)
 
     def run(self, cmd_lst, parent):
-        if cmd_lst[0][0] == "goto":
+        if cmd_lst[0][0] == "goto" or cmd_lst[0][0] == "g":
             print("doing << goto >>")
             self.goto(int(cmd_lst[0][1]))
 
         elif cmd_lst == [["mkchi"]] or cmd_lst == [["c"]]:
-            self.create_step(self.current_node, parent)
+            self.create_step(self.current_node)
 
         elif cmd_lst == [["mksib"]] or cmd_lst == [["s"]]:
             self.goto_prev()
             print("forking")
-            self.create_step(self.current_node, parent)
+            self.create_step(self.current_node)
 
         else:
             if self.current_node.success is True:
                 self.goto_prev()
                 print("forking")
-                self.create_step(self.current_node, parent)
+                self.create_step(self.current_node)
 
             self.current_node(cmd_lst, parent)
             if self.current_node.success is not True:
                 print("failed step")
 
-    def create_step(self, prev_step, parent):
-        new_step = CmdNode(old_node=prev_step, parent = parent)
+    def create_step(self, prev_step):
+        new_step = CmdNode(old_node=prev_step)
 
         self.bigger_lin += 1
         new_step.lin_num = self.bigger_lin
