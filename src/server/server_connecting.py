@@ -26,32 +26,8 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
             lst_cmd_lst.append(sub_str.split(" "))
 
         print("lst_cmd_lst:", lst_cmd_lst)
-        cmd_tree_runner.run(lst_cmd_lst)
+        cmd_tree_runner.run(lst_cmd_lst, self)
         tree_output(cmd_tree_runner)
-
-
-        old_stable = '''
-        try:
-            print("\n Running:", cmd_lst, "\n")
-            proc = subprocess.Popen(
-                cmd_lst,
-                shell=False,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                universal_newlines=True
-            )
-            line = None
-            while proc.poll() is None or line != '':
-                line = proc.stdout.readline()
-                #print("StdOut>> ", line)
-                self.wfile.write(bytes(line , 'utf-8'))
-
-            proc.stdout.close()
-
-        except:
-            print("error running subprocess from server")
-
-        '''
 
         print("sending /*EOF*/")
         self.wfile.write(bytes('/*EOF*/', 'utf-8'))

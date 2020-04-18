@@ -8,8 +8,9 @@ import sys
 import out_utils
 
 class CmdNode(object):
-    def __init__(self, old_node = None):
+    def __init__(self, old_node = None, parent = None):
         self._old_node = old_node
+        self.parent = parent
         self._lst_expt = []
         self._lst_refl = []
         self._lst2run = [[None]]
@@ -38,13 +39,13 @@ class CmdNode(object):
         except:
             print("NOT _base_dir on old_node")
 
-    def __call__(self, cmd_lst):
+    def __call__(self, cmd_lst, parent):
         print("\n cmd_lst in =", cmd_lst)
         self.set_cmd_lst(list(cmd_lst))
         self.set_base_dir(os.getcwd())
         self.set_run_dir(self.lin_num)
         print("Running:", self._lst2run)
-        self.run_cmd()
+        self.run_cmd(parent)
 
     def set_root(self, run_dir = "/tmp/tst/", lst_expt = "/tmp/tst/imported.expt"):
         base_dir = os.getcwd()
@@ -89,7 +90,7 @@ class CmdNode(object):
 
         print("\n _lst2run:", self._lst2run, "\n")
 
-    def run_cmd(self):
+    def run_cmd(self, parent):
         try:
             for inner_lst in self._lst2run:
                 print("\n Running:", inner_lst, "\n")
@@ -104,13 +105,12 @@ class CmdNode(object):
 
                 line = None
                 while proc.poll() is None or line != '':
-                    line = proc.stdout.readline()[:-1]
-                    print("StdOut>> ", line)
-                    '''
-                    line_err = proc.stderr.readline()[:-1]
-                    if line_err != '':
-                        print("_err>>", line_err)
-                    '''
+                    line = proc.stdout.readline()
+                    try:
+                        parent.wfile.write(bytes(line , 'utf-8'))
+
+                    except:
+                        print(line[:-1])
 
                 proc.stdout.close()
 
@@ -129,7 +129,6 @@ class CmdNode(object):
             self.success = False
 
 
-
 class Runner(object):
     def __init__(self):
 
@@ -139,36 +138,33 @@ class Runner(object):
         self.step_list = [root_node]
         self.bigger_lin = 0
         self.current_line = self.bigger_lin
-        self.create_step(root_node)
+        self.create_step(root_node, None)
 
-    def run(self, cmd_lst):
-
+    def run(self, cmd_lst, parent):
         if cmd_lst[0][0] == "goto":
             print("doing << goto >>")
             self.goto(int(cmd_lst[0][1]))
 
         elif cmd_lst == [["mkchi"]] or cmd_lst == [["c"]]:
-            self.create_step(self.current_node)
+            self.create_step(self.current_node, parent)
 
         elif cmd_lst == [["mksib"]] or cmd_lst == [["s"]]:
-            #old_command_lst = list(self.current_node._lst2run)
             self.goto_prev()
             print("forking")
-            self.create_step(self.current_node)
-            #self.current_node.edit_list(old_command_lst)
+            self.create_step(self.current_node, parent)
 
         else:
             if self.current_node.success is True:
                 self.goto_prev()
                 print("forking")
-                self.create_step(self.current_node)
+                self.create_step(self.current_node, parent)
 
-            self.current_node(cmd_lst)
+            self.current_node(cmd_lst, parent)
             if self.current_node.success is not True:
                 print("failed step")
 
-    def create_step(self, prev_step):
-        new_step = CmdNode(old_node=prev_step)
+    def create_step(self, prev_step, parent):
+        new_step = CmdNode(old_node=prev_step, parent = parent)
 
         self.bigger_lin += 1
         new_step.lin_num = self.bigger_lin
