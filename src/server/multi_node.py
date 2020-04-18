@@ -108,7 +108,7 @@ class CmdNode(object):
                     try:
                         parent.wfile.write(bytes(line , 'utf-8'))
 
-                    except:
+                    except AttributeError:
                         print(line[:-1])
 
                 proc.stdout.close()
