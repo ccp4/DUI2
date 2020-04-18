@@ -30,7 +30,7 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
         tree_output(cmd_tree_runner)
 
 
-        '''
+        old_stable = '''
         try:
             print("\n Running:", cmd_lst, "\n")
             proc = subprocess.Popen(
@@ -61,39 +61,7 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
 
 tree_output = out_utils.TreeShow()
 cmd_tree_runner = multi_node.Runner()
-'''
-if __name__ == "__main__":
 
-    command = ""
-
-    while command.strip() != "exit" and command.strip() != "quit":
-        try:
-            inp_str = "lin [" + str(cmd_tree_runner.current_line) + "] >>> "
-            command = str(input(inp_str))
-
-        except EOFError:
-            print("Caught << EOFError >> \n  ... interrupting")
-            sys.exit(0)
-
-        except:
-            print("Caught << some error >>", e, " ... interrupting")
-            sys.exit(1)
-
-        print("command =", command)
-
-        lst_cmd = command.split(";")
-
-        lst_cmd_lst = []
-        for sub_str in lst_cmd:
-            lst_cmd_lst.append(sub_str.split(" "))
-
-        print("lst_cmd_lst:", lst_cmd_lst)
-        cmd_tree_runner.run(lst_cmd_lst)
-
-        #out_utils.print_list(cmd_tree_runner.step_list, cmd_tree_runner.current_line)
-
-        tree_output(cmd_tree_runner)
-'''
 
 
 if __name__ == "__main__":
