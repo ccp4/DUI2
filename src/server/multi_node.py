@@ -139,7 +139,7 @@ class Runner(object):
         self.current_line = self.bigger_lin
         self.create_step(root_node)
 
-    def run(self, cmd_lst, parent):
+    def run(self, cmd_lst, parent = None):
         if cmd_lst[0][0] == "goto" or cmd_lst[0][0] == "g":
             print("doing << goto >>")
             self.goto(int(cmd_lst[0][1]))
