@@ -13,7 +13,6 @@ class CmdNode(object):
         self._lst_expt = []
         self._lst_refl = []
         self._lst2run = [[None]]
-
         self._run_dir = ""
 
         self.success = None
@@ -54,7 +53,6 @@ class CmdNode(object):
         self._lst_refl = []
         self._lst2run = [['Root']]
         self.success = True
-
 
     def set_base_dir(self, dir_in = None):
             self._base_dir = dir_in
@@ -130,10 +128,8 @@ class CmdNode(object):
 
 class Runner(object):
     def __init__(self):
-
         root_node = CmdNode(None)
         root_node.set_root()
-
         self.step_list = [root_node]
         self.bigger_lin = 0
         self.current_line = self.bigger_lin
@@ -212,15 +208,11 @@ if __name__ == "__main__":
         print("command =", command, "\n")
 
         lst_cmd = command.split(";")
-
         lst_cmd_lst = []
         for sub_str in lst_cmd:
             lst_cmd_lst.append(sub_str.split(" "))
 
         print("lst_cmd_lst:", lst_cmd_lst)
         cmd_tree_runner.run(lst_cmd_lst)
-
-        #out_utils.print_list(cmd_tree_runner.step_list, cmd_tree_runner.current_line)
-
         tree_output(cmd_tree_runner)
 
