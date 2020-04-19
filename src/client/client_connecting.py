@@ -22,6 +22,7 @@ class Run_n_Output(QtCore.QThread):
 
             elif line_str[-7:] == '/*EOF*/':
                 print('>>  /*EOF*/  <<')
+                self.line_out.emit(' \n /*EOF*/ \n')
                 break
 
 
@@ -50,6 +51,7 @@ class Client(QtWidgets.QDialog):
     def add_line(self, new_line):
         self.incoming_text.moveCursor(QtGui.QTextCursor.End)
         self.incoming_text.insertPlainText(new_line)
+        self.incoming_text.moveCursor(QtGui.QTextCursor.End)
 
     def run_ended(self):
         print("run_ended")
