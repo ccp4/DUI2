@@ -126,6 +126,24 @@ class CmdNode(object):
             self.success = False
 
 
+def fix_alias(short_in):
+    pair_list = [
+        ("g", "goto"),
+        ("c", "mkchi"),
+        ("s", "mksib"),
+        ("fd", "dials.find_spots"),
+        ("id", "dials.index"     ),
+        ("rf", "dials.refine"    ),
+        ("it", "dials.integrate" ),
+    ]
+    long_out = short_in
+    for pair in pair_list:
+        if pair[0] == short_in:
+            print("replacing ", pair[0], " with ", pair[1])
+            long_out = pair[1]
+
+    return long_out
+
 class Runner(object):
     def __init__(self):
         root_node = CmdNode(None)
@@ -136,14 +154,16 @@ class Runner(object):
         self.create_step(root_node)
 
     def run(self, cmd_lst, parent = None):
-        if cmd_lst[0][0] == "goto" or cmd_lst[0][0] == "g":
+        cmd_lst[0][0] = fix_alias(cmd_lst[0][0])
+
+        if cmd_lst[0][0] == "goto":
             print("doing << goto >>")
             self.goto(int(cmd_lst[0][1]))
 
-        elif cmd_lst == [["mkchi"]] or cmd_lst == [["c"]]:
+        elif cmd_lst == [["mkchi"]]:
             self.create_step(self.current_node)
 
-        elif cmd_lst == [["mksib"]] or cmd_lst == [["s"]]:
+        elif cmd_lst == [["mksib"]]:
             self.goto_prev()
             print("forking")
             self.create_step(self.current_node)
