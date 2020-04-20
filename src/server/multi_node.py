@@ -222,7 +222,7 @@ if __name__ == "__main__":
             sys.exit(0)
 
         except:
-            print("Caught << some error >>", e, " ... interrupting")
+            print("Caught << some error >> ... interrupting")
             sys.exit(1)
 
         print("command =", command, "\n")
