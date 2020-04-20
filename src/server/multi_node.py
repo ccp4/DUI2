@@ -128,13 +128,18 @@ class CmdNode(object):
 
 def fix_alias(short_in):
     pair_list = [
-        ("g", "goto"),
-        ("c", "mkchi"),
-        ("s", "mksib"),
-        ("fd", "dials.find_spots"),
-        ("id", "dials.index"     ),
-        ("rf", "dials.refine"    ),
-        ("it", "dials.integrate" ),
+        ("g", "goto"    ),
+        ("c", "mkchi"   ),
+        ("s", "mksib"   ),
+        ("mg", "dials.modify_geometry"  ),
+        ("gm", "dials.generate_mask"          ),
+        ("am", "dials.apply_mask"       ),
+        ("fd", "dials.find_spots"       ),
+        ("id", "dials.index"            ),
+        ("rf", "dials.refine"           ),
+        ("it", "dials.integrate"        ),
+        ("sm", "dials.symmetry"         ),
+        ("sc", "dials.scale"            ),
     ]
     long_out = short_in
     for pair in pair_list:
