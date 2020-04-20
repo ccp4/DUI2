@@ -65,7 +65,8 @@ class TreeShow(object):
         str_lin_num = "{0:3}".format(int(step.lin_num))
 
         stp_prn += str_lin_num + self.ind_spc * indent + r"   \___"
-        stp_prn += str(step._lst2run[0][0])
+        for new_stp in step._lst2run:
+            stp_prn += str(step._lst2run[0][0]) + "     "
 
         self.str_lst.append([stp_prn, indent, int(step.lin_num)])
         new_indent = indent
@@ -101,7 +102,7 @@ class TreeShow(object):
                 lng = len(self.ind_spc) * self.max_indent + 22
                 lng_lft = lng - len(self.tree_dat[pos][0])
                 str_here = lng_lft * " "
-                self.tree_dat[pos][0] += str_here + "   <<< here "
+                self.tree_dat[pos][0] += str_here + "  <<< here "
 
         for prn_str in self.tree_dat:
             print(prn_str[0])

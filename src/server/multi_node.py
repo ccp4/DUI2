@@ -132,7 +132,7 @@ def fix_alias(short_in):
         ("c", "mkchi"   ),
         ("s", "mksib"   ),
         ("mg", "dials.modify_geometry"  ),
-        ("gm", "dials.generate_mask"          ),
+        ("gm", "dials.generate_mask"    ),
         ("am", "dials.apply_mask"       ),
         ("fd", "dials.find_spots"       ),
         ("id", "dials.index"            ),
@@ -159,7 +159,8 @@ class Runner(object):
         self.create_step(root_node)
 
     def run(self, cmd_lst, parent = None):
-        cmd_lst[0][0] = fix_alias(cmd_lst[0][0])
+        for inner_lst in cmd_lst:
+            inner_lst[0] = fix_alias(inner_lst[0])
 
         if cmd_lst[0][0] == "goto":
             print("doing << goto >>")
