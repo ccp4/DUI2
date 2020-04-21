@@ -58,6 +58,8 @@ class TreeShow(object):
             stp_prn = " S "
         elif step.status == "Failed":
             stp_prn = " F "
+        elif step.status == "Busy":
+            stp_prn = " B "
         else:
             stp_prn = " R "
 

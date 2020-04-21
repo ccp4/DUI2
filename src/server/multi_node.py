@@ -88,6 +88,7 @@ class CmdNode(object):
         print("\n _lst2run:", self._lst2run, "\n")
 
     def run_cmd(self, parent):
+        self.status = "Busy"
         try:
             for inner_lst in self._lst2run:
                 print("\n Running:", inner_lst, "\n")
@@ -189,7 +190,7 @@ class Runner(object):
                 self.create_step(self.current_node)
 
             self.current_node(cmd_lst, parent)
-            if self.current_node.status != "Succeeded":
+            if self.current_node.status == "Failed":
                 print("failed step")
 
         return return_list
