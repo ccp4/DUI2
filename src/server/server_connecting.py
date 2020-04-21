@@ -5,6 +5,8 @@ import time, subprocess
 
 import out_utils, multi_node
 
+tree_output = out_utils.TreeShow()
+cmd_tree_runner = multi_node.Runner()
 
 class ReqHandler(http.server.BaseHTTPRequestHandler):
 
@@ -29,16 +31,12 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
         print("lst_cmd_lst:", lst_cmd_lst)
         cmd_tree_runner.run(lst_cmd_lst, self)
         tree_output(cmd_tree_runner)
+        #tree_output.print_output()
 
         print("sending /*EOF*/")
         self.wfile.write(bytes('/*EOF*/', 'utf-8'))
 
         lst_test.append(cmd_str)
-
-
-tree_output = out_utils.TreeShow()
-cmd_tree_runner = multi_node.Runner()
-
 
 
 if __name__ == "__main__":

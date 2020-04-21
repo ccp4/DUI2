@@ -175,6 +175,16 @@ class Runner(object):
             print("forking")
             self.create_step(self.current_node)
 
+        elif cmd_lst == [["display"]]:
+            try:
+                tree_output(cmd_tree_runner)
+                tree_output.print_output()
+
+            except:
+                tree_output(self)
+                tree_output.print_output()
+
+
         else:
             if self.current_node.status == "Succeeded":
                 self.goto_prev()
