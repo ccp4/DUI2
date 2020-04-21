@@ -192,7 +192,6 @@ class Runner(object):
             if self.current_node.status != "Succeeded":
                 print("failed step")
 
-        print("here")
         return return_list
 
     def create_step(self, prev_step):
