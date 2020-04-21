@@ -128,6 +128,7 @@ class CmdNode(object):
 
 def fix_alias(short_in):
     pair_list = [
+        ("d", "display" ),
         ("g", "goto"    ),
         ("c", "mkchi"   ),
         ("s", "mksib"   ),

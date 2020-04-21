@@ -1,6 +1,6 @@
 
 def print_list(lst, curr):
-    print("__________________________listing:")
+    self.lst_out.append("__________________________listing:")
     for uni in lst:
         # TODO loopthru all commands, in "both" lists
         stp_str = (
@@ -30,7 +30,7 @@ def print_list(lst, curr):
         if curr == uni.lin_num:
             stp_str += "                           <<< here I am <<<"
 
-        print(stp_str)
+        self.lst_out.append(stp_str)
 
 
 class TreeShow(object):
@@ -40,19 +40,20 @@ class TreeShow(object):
 
     def __call__(self, my_runner):
 
-        print("\n")
-        print("")
-        print("status ")
-        print(" |  lin num ")
-        print(" |   |  command ")
-        print(" |   |   | ")
-        print("------------------")
+        self.lst_out = []
+        self.lst_out.append("\n")
+        self.lst_out.append("")
+        self.lst_out.append("status ")
+        self.lst_out.append(" |  lin num ")
+        self.lst_out.append(" |   |  command ")
+        self.lst_out.append(" |   |   | ")
+        self.lst_out.append("------------------")
         self.max_indent = 0
         self.str_lst = []
         self.add_tree(step=my_runner.step_list[0], indent=0)
         self.tree_print(my_runner.current_line)
         # TODO maybe here goes a print print function instead of logger ...
-        print("---------------------" + self.max_indent * self.ind_lin)
+        self.lst_out.append("---------------------" + self.max_indent * self.ind_lin)
 
     def add_tree(self, step=None, indent=None):
         if step.status == "Succeeded":
@@ -81,28 +82,32 @@ class TreeShow(object):
                 self.max_indent = new_indent
 
     def tree_print(self, curr):
-        self.tree_dat = []
+        tree_str_dat = []
         for tmp_lst in self.str_lst:
-            self.tree_dat.append(tmp_lst)
+            tree_str_dat.append(tmp_lst)
 
-        for pos, loc_lst in enumerate(self.tree_dat):
+        for pos, loc_lst in enumerate(tree_str_dat):
             if pos > 0:
-                if loc_lst[1] < self.tree_dat[pos - 1][1]:
+                if loc_lst[1] < tree_str_dat[pos - 1][1]:
                     for up_pos in range(pos - 1, 0, -1):
                         pos_in_str = loc_lst[1] * len(self.ind_spc) + 9
-                        left_side = self.tree_dat[up_pos][0][0:pos_in_str]
-                        right_side = self.tree_dat[up_pos][0][pos_in_str + 1 :]
-                        if self.tree_dat[up_pos][1] > loc_lst[1]:
-                            self.tree_dat[up_pos][0] = left_side + "|" + right_side
+                        left_side = tree_str_dat[up_pos][0][0:pos_in_str]
+                        right_side = tree_str_dat[up_pos][0][pos_in_str + 1 :]
+                        if tree_str_dat[up_pos][1] > loc_lst[1]:
+                            tree_str_dat[up_pos][0] = left_side + "|" + right_side
 
-                        elif self.tree_dat[up_pos][1] == loc_lst[1]:
+                        elif tree_str_dat[up_pos][1] == loc_lst[1]:
                             break
 
             if loc_lst[2] == curr:
                 lng = len(self.ind_spc) * self.max_indent + 22
-                lng_lft = lng - len(self.tree_dat[pos][0])
+                lng_lft = lng - len(tree_str_dat[pos][0])
                 str_here = lng_lft * " "
-                self.tree_dat[pos][0] += str_here + "  <<< here "
+                tree_str_dat[pos][0] += str_here + "  <<< here "
 
-        for prn_str in self.tree_dat:
-            print(prn_str[0])
+        for prn_str in tree_str_dat:
+            self.lst_out.append(prn_str[0])
+
+        for prn_str in self.lst_out:
+            print(prn_str)
+
