@@ -242,4 +242,6 @@ if __name__ == "__main__":
         print("lst_cmd_lst:", lst_cmd_lst)
         cmd_tree_runner.run(lst_cmd_lst)
         tree_output(cmd_tree_runner)
+        tree_output.print_output()
+
 

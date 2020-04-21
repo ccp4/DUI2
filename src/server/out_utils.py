@@ -51,9 +51,7 @@ class TreeShow(object):
         self.max_indent = 0
         self.str_lst = []
         self.add_tree(step=my_runner.step_list[0], indent=0)
-        self.tree_print(my_runner.current_line)
-        # TODO maybe here goes a print print function instead of logger ...
-        self.lst_out.append("---------------------" + self.max_indent * self.ind_lin)
+        self.output_connect(my_runner.current_line)
 
     def add_tree(self, step=None, indent=None):
         if step.status == "Succeeded":
@@ -81,7 +79,7 @@ class TreeShow(object):
             if new_indent > self.max_indent:
                 self.max_indent = new_indent
 
-    def tree_print(self, curr):
+    def output_connect(self, curr):
         tree_str_dat = []
         for tmp_lst in self.str_lst:
             tree_str_dat.append(tmp_lst)
@@ -108,6 +106,9 @@ class TreeShow(object):
         for prn_str in tree_str_dat:
             self.lst_out.append(prn_str[0])
 
+        self.lst_out.append("---------------------" + self.max_indent * self.ind_lin)
+
+    def print_output(self):
         for prn_str in self.lst_out:
             print(prn_str)
 
