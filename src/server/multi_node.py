@@ -15,7 +15,7 @@ class CmdNode(object):
         self._lst2run = [[None]]
         self._run_dir = ""
 
-        self.success = None
+        self.status = "Ready"
         self.next_step_list = []
         self.lin_num = 0
 
@@ -52,7 +52,7 @@ class CmdNode(object):
         self._lst_expt = lst_expt
         self._lst_refl = []
         self._lst2run = [['Root']]
-        self.success = True
+        self.status = "Succeeded"
 
     def set_base_dir(self, dir_in = None):
             self._base_dir = dir_in
@@ -116,14 +116,14 @@ class CmdNode(object):
 
                 else:
                     print("\n  *** ERROR *** \n\n poll =", proc.poll())
-                    self.success = False
+                    self.status = "Failed"
 
-            if self.success is not False:
-                self.success = True
+            if self.status != "Failed":
+                self.status = "Succeeded"
 
         except BaseException as e:
             print("Failed to run subprocess \n ERR:", e)
-            self.success = False
+            self.status = "Failed"
 
 
 def fix_alias(short_in):
@@ -175,13 +175,13 @@ class Runner(object):
             self.create_step(self.current_node)
 
         else:
-            if self.current_node.success is True:
+            if self.current_node.status == "Succeeded":
                 self.goto_prev()
                 print("forking")
                 self.create_step(self.current_node)
 
             self.current_node(cmd_lst, parent)
-            if self.current_node.success is not True:
+            if self.current_node.status != "Succeeded":
                 print("failed step")
 
     def create_step(self, prev_step):

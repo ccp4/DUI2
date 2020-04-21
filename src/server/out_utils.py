@@ -6,7 +6,7 @@ def print_list(lst, curr):
         stp_str = (
             str(uni.lin_num)
             + " "
-            + str(uni.success)
+            + str(uni.status)
             + " comm: "
             + str(uni._lst2run[0])
         )
@@ -55,12 +55,12 @@ class TreeShow(object):
         print("---------------------" + self.max_indent * self.ind_lin)
 
     def add_tree(self, step=None, indent=None):
-        if step.success is True:
+        if step.status == "Succeeded":
             stp_prn = " S "
-        elif step.success is False:
+        elif step.status == "Failed":
             stp_prn = " F "
         else:
-            stp_prn = " N "
+            stp_prn = " R "
 
         str_lin_num = "{0:3}".format(int(step.lin_num))
 
