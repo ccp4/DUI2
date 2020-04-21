@@ -163,6 +163,8 @@ class Runner(object):
         for inner_lst in cmd_lst:
             inner_lst[0] = fix_alias(inner_lst[0])
 
+        return_list = []
+
         if cmd_lst[0][0] == "goto":
             print("doing << goto >>")
             self.goto(int(cmd_lst[0][1]))
@@ -177,6 +179,7 @@ class Runner(object):
 
         elif cmd_lst == [["display"]]:
             tree_output(self)
+            return_list = tree_output.lst_out
             tree_output.print_output()
 
         else:
@@ -188,6 +191,9 @@ class Runner(object):
             self.current_node(cmd_lst, parent)
             if self.current_node.status != "Succeeded":
                 print("failed step")
+
+        print("here")
+        return return_list
 
     def create_step(self, prev_step):
         new_step = CmdNode(old_node=prev_step)
@@ -245,7 +251,7 @@ if __name__ == "__main__":
 
         print("lst_cmd_lst:", lst_cmd_lst)
         cmd_tree_runner.run(lst_cmd_lst)
-        tree_output(cmd_tree_runner)
-        tree_output.print_output()
+        #tree_output(cmd_tree_runner)
+        #tree_output.print_output()
 
 

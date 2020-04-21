@@ -29,9 +29,12 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
             lst_cmd_lst.append(sub_str.split(" "))
 
         print("lst_cmd_lst:", lst_cmd_lst)
-        cmd_tree_runner.run(lst_cmd_lst, self)
-        tree_output(cmd_tree_runner)
-        tree_output.print_output()
+        lst_out = cmd_tree_runner.run(lst_cmd_lst, self)
+        print("lst_out:", lst_out)
+
+        for lin in lst_out:
+            print("writing", lin)
+            self.wfile.write(bytes(lin + '\n', 'utf-8'))
 
         print("sending /*EOF*/")
         self.wfile.write(bytes('/*EOF*/', 'utf-8'))
