@@ -31,7 +31,7 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
         print("lst_cmd_lst:", lst_cmd_lst)
         cmd_tree_runner.run(lst_cmd_lst, self)
         tree_output(cmd_tree_runner)
-        #tree_output.print_output()
+        tree_output.print_output()
 
         print("sending /*EOF*/")
         self.wfile.write(bytes('/*EOF*/', 'utf-8'))
