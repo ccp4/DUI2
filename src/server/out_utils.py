@@ -11,15 +11,6 @@ def print_list(lst, curr):
             + str(uni._lst2run[0])
         )
 
-        to_go = '''
-        try:
-            stp_str += " prev: " + str(uni.prev_step.lin_num)
-
-        except BaseException as e:
-            print("Caught unknown exception type %s: %s", type(e).__name__, e)
-            stp_str += " prev: None"
-        '''
-
         stp_str += " nxt: "
         if len(uni.next_step_list) > 0:
             for nxt_uni in uni.next_step_list:
@@ -39,15 +30,15 @@ class TreeShow(object):
         self.ind_lin = "------"
 
     def __call__(self, my_runner):
-
         self.lst_out = []
-        self.lst_out.append("\n")
         self.lst_out.append("")
-        self.lst_out.append("status ")
-        self.lst_out.append(" |  lin num ")
+        self.lst_out.append("status: (R)eady  (B)usy (F)ailed (S)ucceeded")
+        self.lst_out.append(" | ")
+        self.lst_out.append(" |  line number ")
+        self.lst_out.append(" |   | ")
         self.lst_out.append(" |   |  command ")
         self.lst_out.append(" |   |   | ")
-        self.lst_out.append("------------------")
+        self.lst_out.append("--------------------------")
         self.max_indent = 0
         self.str_lst = []
         self.add_tree(step=my_runner.step_list[0], indent=0)

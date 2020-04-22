@@ -11,7 +11,6 @@ cmd_tree_runner = multi_node.Runner()
 class ReqHandler(http.server.BaseHTTPRequestHandler):
 
     def do_GET(self):
-        print("lst_test =", lst_test)
         self.send_response(200)
         self.send_header("Content-type", "text/html")
         self.end_headers()
@@ -28,7 +27,6 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
         for sub_str in lst_cmd:
             lst_cmd_lst.append(sub_str.split(" "))
 
-        #print("lst_cmd_lst:", lst_cmd_lst)
         lst_out = cmd_tree_runner.run(lst_cmd_lst, self)
 
         for lin in lst_out:
@@ -37,11 +35,8 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
         print("sending /*EOF*/")
         self.wfile.write(bytes('/*EOF*/', 'utf-8'))
 
-        lst_test.append(cmd_str)
-
 
 if __name__ == "__main__":
-    lst_test = []
     PORT = 8080
     with socketserver.ThreadingTCPServer(("", PORT), ReqHandler) as http_daemon:
         print("serving at port", PORT)
