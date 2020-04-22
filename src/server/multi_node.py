@@ -184,6 +184,9 @@ class Runner(object):
             return_list = tree_output.lst_out
             tree_output.print_output()
 
+            out_utils.print_list(self)
+
+
         else:
             if self.current_node.status == "Succeeded":
                 self.goto_prev()

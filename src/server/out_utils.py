@@ -1,7 +1,8 @@
 
-def print_list(lst, curr):
-    self.lst_out.append("__________________________listing:")
-    for uni in lst:
+def print_list(main_obj):
+    lst_out = []
+    lst_out.append("__________________________listing:")
+    for uni in main_obj.step_list:
         # TODO loopthru all commands, in "both" lists
         stp_str = (
             str(uni.lin_num)
@@ -15,13 +16,17 @@ def print_list(lst, curr):
         if len(uni.next_step_list) > 0:
             for nxt_uni in uni.next_step_list:
                 stp_str += "  " + str(nxt_uni.lin_num)
+
         else:
             stp_str += "empty"
 
-        if curr == uni.lin_num:
+        if main_obj.current_line == uni.lin_num:
             stp_str += "                           <<< here I am <<<"
 
-        self.lst_out.append(stp_str)
+        lst_out.append(stp_str)
+
+    for line in lst_out:
+        print(line)
 
 
 class TreeShow(object):
