@@ -17,6 +17,7 @@ class CmdNode(object):
 
         self.status = "Ready"
         self.next_step_list = []
+        self.cmd_lst = []
         self.lin_num = 0
 
         try:
@@ -72,16 +73,18 @@ class CmdNode(object):
                 inner_lst.append(refl_2_add)
 
     def set_cmd_lst(self, lst_in):
+        self.cmd_lst = lst_in
         self._lst2run = []
-        for inner_lst in lst_in:
+        for inner_lst in self.cmd_lst:
             self._lst2run.append([inner_lst[0]])
 
         self.set_imp_fil(self._lst_expt, self._lst_refl)
 
         for num, inner_lst in enumerate(self._lst2run):
             try:
-                for par in lst_in[num][1:]:
+                for par in self.cmd_lst[num][1:]:
                     inner_lst.append(par)
+
             except:
                 print("no extra parameters")
 

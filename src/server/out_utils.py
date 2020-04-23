@@ -1,3 +1,4 @@
+import json
 
 def print_list(main_obj):
     lst_nod = []
@@ -10,12 +11,20 @@ def print_list(main_obj):
 
         node = {"lin_num"           :uni.lin_num,
                 "status"            :uni.status,
-                "lst2run"           :uni._lst2run,
+                "cmd_lst"           :uni.cmd_lst,
                 "next_step_list"    :stp_nxt_lst}
 
         lst_nod.append(node)
 
     print("lst_nod", lst_nod)
+
+    with open("run_data", "w") as fp:
+        json.dump(lst_nod, fp, indent=4)
+
+    to_use_later = '''
+    with open(json_path) as json_file:
+        json_data = json.load(json_file)
+    '''
 
 
 class TreeShow(object):
