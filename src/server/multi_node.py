@@ -17,7 +17,7 @@ class CmdNode(object):
 
         self.status = "Ready"
         self.next_step_list = []
-        self.cmd_lst = []
+        self.cmd_lst = [["None"]]
         self.lin_num = 0
 
         try:
@@ -53,6 +53,7 @@ class CmdNode(object):
         self._lst_expt = lst_expt
         self._lst_refl = []
         self._lst2run = [['Root']]
+        self.cmd_lst = [['Root']]
         self.status = "Succeeded"
 
     def set_base_dir(self, dir_in = None):
