@@ -1,32 +1,21 @@
 
 def print_list(main_obj):
-    lst_out = []
-    lst_out.append("__________________________listing:")
+    lst_nod = []
     for uni in main_obj.step_list:
-        # TODO loopthru all commands, in "both" lists
-        stp_str = (
-            str(uni.lin_num)
-            + " "
-            + str(uni.status)
-            + " comm: "
-            + str(uni._lst2run[0])
-        )
 
-        stp_str += " nxt: "
+        stp_nxt_lst = []
         if len(uni.next_step_list) > 0:
             for nxt_uni in uni.next_step_list:
-                stp_str += "  " + str(nxt_uni.lin_num)
+                stp_nxt_lst.append(nxt_uni.lin_num)
 
-        else:
-            stp_str += "empty"
+        node = {"lin_num"           :uni.lin_num,
+                "status"            :uni.status,
+                "lst2run"           :uni._lst2run,
+                "next_step_list"    :stp_nxt_lst}
 
-        if main_obj.current_line == uni.lin_num:
-            stp_str += "                           <<< here I am <<<"
+        lst_nod.append(node)
 
-        lst_out.append(stp_str)
-
-    for line in lst_out:
-        print(line)
+    print("lst_nod", lst_nod)
 
 
 class TreeShow(object):
