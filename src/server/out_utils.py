@@ -21,10 +21,6 @@ def print_list(main_obj):
     with open("run_data", "w") as fp:
         json.dump(lst_nod, fp, indent=4)
 
-    to_use_later = '''
-    with open(json_path) as json_file:
-        json_data = json.load(json_file)
-    '''
 
 
 class TreeShow(object):
@@ -33,6 +29,12 @@ class TreeShow(object):
         self.ind_lin = "------"
 
     def __call__(self, my_runner):
+
+        with open("run_data") as json_file:
+            self.lst_nod = json.load(json_file)
+
+        print("\n self.lst_nod =", self.lst_nod, "\n")
+
         self.lst_out = []
         self.lst_out.append("")
         self.lst_out.append("status: (R)eady  (B)usy (F)ailed (S)ucceeded")
@@ -44,31 +46,46 @@ class TreeShow(object):
         self.lst_out.append("--------------------------")
         self.max_indent = 0
         self.str_lst = []
-        self.add_tree(step=my_runner.step_list[0], indent=0)
+        self.add_tree(step = self.lst_nod[0], indent=0)
         self.output_connect(my_runner.current_line)
 
     def add_tree(self, step=None, indent=None):
-        if step.status == "Succeeded":
+        if step["status"] == "Succeeded":
             stp_prn = " S "
-        elif step.status == "Failed":
+
+        elif step["status"] == "Failed":
             stp_prn = " F "
-        elif step.status == "Busy":
+
+        elif step["status"] == "Busy":
             stp_prn = " B "
+
         else:
             stp_prn = " R "
 
-        str_lin_num = "{0:3}".format(int(step.lin_num))
+        str_lin_num = "{0:3}".format(int(step["lin_num"]))
 
         stp_prn += str_lin_num + self.ind_spc * indent + r"   \___"
+        '''
         for new_stp in step._lst2run:
             stp_prn += str(new_stp[0]) + "     "
+        '''
+        for new_stp in step["cmd_lst"]:
+            stp_prn += str(new_stp[0]) + "     "
 
-        self.str_lst.append([stp_prn, indent, int(step.lin_num)])
+        self.str_lst.append([stp_prn, indent, int(step["lin_num"])])
         new_indent = indent
+        '''
         if len(step.next_step_list) > 0:
             for line in step.next_step_list:
                 new_indent = indent + 1
                 self.add_tree(step=line, indent=new_indent)
+        '''
+        if len(step["next_step_list"]) > 0:
+            for nxt_stp_lin_num in step["next_step_list"]:
+                new_indent = indent + 1
+                for node in self.lst_nod:
+                    if nxt_stp_lin_num == node["lin_num"]:
+                        self.add_tree(step=node, indent=new_indent)
 
         else:
             new_indent = int(new_indent)

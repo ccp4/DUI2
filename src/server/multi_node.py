@@ -183,12 +183,12 @@ class Runner(object):
             self.create_step(self.current_node)
 
         elif cmd_lst == [["display"]]:
-            tree_output(self)
-            return_list = tree_output.lst_out
-            tree_output.print_output()
 
             out_utils.print_list(self)
 
+            tree_output(self)
+            return_list = tree_output.lst_out
+            tree_output.print_output()
 
         else:
             if self.current_node.status == "Succeeded":
