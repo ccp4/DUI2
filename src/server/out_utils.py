@@ -28,7 +28,7 @@ class TreeShow(object):
         self.ind_spc = "      "
         self.ind_lin = "------"
 
-    def __call__(self, my_runner):
+    def __call__(self, current_line = None):
 
         with open("run_data") as json_file:
             self.lst_nod = json.load(json_file)
@@ -37,7 +37,7 @@ class TreeShow(object):
 
         self.lst_out = []
         self.lst_out.append("")
-        self.lst_out.append("status: (R)eady  (B)usy (F)ailed (S)ucceeded")
+        self.lst_out.append("status: (R)eady  (B)usy  (F)ailed  (S)ucceeded")
         self.lst_out.append(" | ")
         self.lst_out.append(" |  line number ")
         self.lst_out.append(" |   | ")
@@ -47,7 +47,7 @@ class TreeShow(object):
         self.max_indent = 0
         self.str_lst = []
         self.add_tree(step = self.lst_nod[0], indent=0)
-        self.output_connect(my_runner.current_line)
+        self.output_connect(current_line)
 
     def add_tree(self, step=None, indent=None):
         if step["status"] == "Succeeded":
@@ -84,7 +84,7 @@ class TreeShow(object):
             if new_indent > self.max_indent:
                 self.max_indent = new_indent
 
-    def output_connect(self, curr):
+    def output_connect(self, current_line):
         tree_str_dat = []
         for tmp_lst in self.str_lst:
             tree_str_dat.append(tmp_lst)
@@ -102,7 +102,7 @@ class TreeShow(object):
                         elif tree_str_dat[up_pos][1] == loc_lst[1]:
                             break
 
-            if loc_lst[2] == curr:
+            if loc_lst[2] == current_line:
                 lng = len(self.ind_spc) * self.max_indent + 22
                 lng_lft = lng - len(tree_str_dat[pos][0])
                 str_here = lng_lft * " "

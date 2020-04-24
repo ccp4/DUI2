@@ -187,7 +187,7 @@ class Runner(object):
 
             out_utils.print_list(self)
 
-            tree_output(self)
+            tree_output(self.current_line)
             return_list = tree_output.lst_out
             tree_output.print_output()
 
