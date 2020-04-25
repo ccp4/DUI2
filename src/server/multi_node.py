@@ -185,10 +185,10 @@ class Runner(object):
 
         elif cmd_lst == [["display"]]:
 
-            out_utils.print_list(self)
+            return_list = out_utils.print_list(self)
 
             tree_output(self.current_line)
-            return_list = tree_output.lst_out
+            #return_list = tree_output.lst_out
             tree_output.print_output()
 
         else:

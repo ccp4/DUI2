@@ -1,7 +1,6 @@
-import http.server
-import socketserver
+import http.server, socketserver
 from urllib.parse import urlparse, parse_qs
-import time, subprocess
+import time, subprocess, json
 
 import out_utils, multi_node
 
@@ -26,8 +25,8 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
             lst_cmd_lst.append(sub_str.split(" "))
 
         lst_out = cmd_tree_runner.run(lst_cmd_lst, self)
-        for lin in lst_out:
-            self.wfile.write(bytes(lin + '\n', 'utf-8'))
+        self.wfile.write(bytes(json.dumps(lst_out, indent=4), 'utf-8'))
+
 
         print("sending /*EOF*/")
         self.wfile.write(bytes('/*EOF*/', 'utf-8'))

@@ -21,7 +21,7 @@ def print_list(main_obj):
     with open("run_data", "w") as fp:
         json.dump(lst_nod, fp, indent=4)
 
-
+    return lst_nod
 
 class TreeShow(object):
     def __init__(self):
