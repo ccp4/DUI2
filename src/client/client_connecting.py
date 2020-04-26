@@ -1,7 +1,6 @@
 from PySide2 import QtCore, QtWidgets, QtGui, QtNetwork
-import sys, time
+import sys, time, json
 import requests
-
 
 class Run_n_Output(QtCore.QThread):
     line_out = QtCore.Signal(str)
@@ -24,6 +23,7 @@ class Run_n_Output(QtCore.QThread):
                 print('>>  /*EOF*/  <<')
                 self.line_out.emit(' \n /*EOF*/ \n')
                 break
+
 
 
 class Client(QtWidgets.QDialog):
@@ -55,6 +55,41 @@ class Client(QtWidgets.QDialog):
 
     def run_ended(self):
         print("run_ended")
+
+        cmd = {'command': ["display"]}
+        req_get = requests.get('http://localhost:8080/', stream = True, params = cmd)
+
+        str_lst = []
+
+        line_str = ''
+        while True:
+            tmp_dat = req_get.raw.read(1)
+            single_char = str(tmp_dat.decode('utf-8'))
+            line_str += single_char
+            if single_char == '\n':
+                str_lst.append(line_str[:-1])
+                line_str = ''
+
+            elif line_str[-7:] == '/*EOF*/':
+                print('>>  /*EOF*/  <<')
+                break
+
+        print("str_lst", str_lst)
+
+
+        from_stackoverflow = '''
+            import json
+            import requests as reqs
+
+            # Make the HTTP request.
+            response = reqs.get('http://demo.ckan.org/api/3/action/group_list')
+
+            # Use the json module to load CKAN's response into a dictionary.
+            response_dict = json.loads(response.text)
+
+            for i in response_dict:
+                print("key: ", i, "val: ", response_dict[i])
+        '''
 
     def request_launch(self):
 

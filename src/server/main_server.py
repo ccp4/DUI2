@@ -24,9 +24,15 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
         for sub_str in lst_cmd:
             lst_cmd_lst.append(sub_str.split(" "))
 
+        lst_out = []
         lst_out = cmd_tree_runner.run(lst_cmd_lst, self)
-        self.wfile.write(bytes(json.dumps(lst_out, indent=4), 'utf-8'))
 
+        print("lst_out =", lst_out)
+
+        json_str = json.dumps(lst_out) + '\n'
+        print("json_str =", json_str)
+
+        self.wfile.write(bytes(json_str, 'utf-8'))
 
         print("sending /*EOF*/")
         self.wfile.write(bytes('/*EOF*/', 'utf-8'))
