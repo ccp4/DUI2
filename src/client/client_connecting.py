@@ -49,6 +49,7 @@ class Client(QtWidgets.QDialog):
         self.setLayout(mainLayout)
         self.setWindowTitle("DUI front end test with HTTP")
 
+        self.lin_num = 1
         self.tree_obj = tree_draw_tmp.TreeShow()
 
     def add_line(self, new_line):
@@ -57,7 +58,7 @@ class Client(QtWidgets.QDialog):
         self.incoming_text.moveCursor(QtGui.QTextCursor.End)
 
     def run_ended(self):
-        print("run_ended")
+        print("run ended")
 
         cmd = {'command': ["display"]}
         req_get = requests.get('http://localhost:8080/', stream = True, params = cmd)
@@ -78,18 +79,27 @@ class Client(QtWidgets.QDialog):
                 break
 
         lst_nodes = json.loads(str_lst[1])
-        print("lst_nodes =", lst_nodes)
-
-        lst_str = self.tree_obj(new_lst_nod = lst_nodes, current_line = 1)
-        #self.tree_obj.print_output()
+        lst_str = self.tree_obj(
+            new_lst_nod = lst_nodes,
+            current_line = self.lin_num
+        )
 
         for tree_line in lst_str:
             self.add_line(tree_line + "\n")
 
+        print("show tree ended")
+
     def request_launch(self):
 
-        cmd_str = str.encode(self.dataLineEdit.text())
-        cmd = {'command': [cmd_str]}
+        cmd_byte = str.encode(self.dataLineEdit.text())
+        cmd_str = str(self.dataLineEdit.text())
+        print("type(cmd_str) =", type(cmd_str))
+        lst_par = cmd_str.split(" ")
+        for num, par in enumerate(lst_par):
+            if par == "g" or par == "goto":
+                self.lin_num = int(lst_par[num + 1])
+
+        cmd = {'command': [cmd_byte]}
         req_get = requests.get('http://localhost:8080/', stream = True, params = cmd)
 
         self.thrd = Run_n_Output(req_get)
