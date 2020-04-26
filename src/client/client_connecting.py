@@ -1,6 +1,7 @@
 from PySide2 import QtCore, QtWidgets, QtGui, QtNetwork
 import sys, time, json
 import requests
+import tree_draw_tmp
 
 class Run_n_Output(QtCore.QThread):
     line_out = QtCore.Signal(str)
@@ -48,6 +49,8 @@ class Client(QtWidgets.QDialog):
         self.setLayout(mainLayout)
         self.setWindowTitle("DUI front end test with HTTP")
 
+        self.tree_obj = tree_draw_tmp.TreeShow()
+
     def add_line(self, new_line):
         self.incoming_text.moveCursor(QtGui.QTextCursor.End)
         self.incoming_text.insertPlainText(new_line)
@@ -74,22 +77,14 @@ class Client(QtWidgets.QDialog):
                 print('>>  /*EOF*/  <<')
                 break
 
-        print("str_lst", str_lst)
+        lst_nodes = json.loads(str_lst[1])
+        print("lst_nodes =", lst_nodes)
 
+        lst_str = self.tree_obj(new_lst_nod = lst_nodes, current_line = 1)
+        #self.tree_obj.print_output()
 
-        from_stackoverflow = '''
-            import json
-            import requests as reqs
-
-            # Make the HTTP request.
-            response = reqs.get('http://demo.ckan.org/api/3/action/group_list')
-
-            # Use the json module to load CKAN's response into a dictionary.
-            response_dict = json.loads(response.text)
-
-            for i in response_dict:
-                print("key: ", i, "val: ", response_dict[i])
-        '''
+        for tree_line in lst_str:
+            self.add_line(tree_line + "\n")
 
     def request_launch(self):
 

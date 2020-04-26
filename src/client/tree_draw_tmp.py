@@ -5,10 +5,9 @@ class TreeShow(object):
         self.ind_spc = "      "
         self.ind_lin = "------"
 
-    def __call__(self, current_line = None):
+    def __call__(self, new_lst_nod = None, current_line = None):
 
-        with open("run_data") as json_file:
-            self.lst_nod = json.load(json_file)
+        self.lst_nod = new_lst_nod
 
         print("\n self.lst_nod =", self.lst_nod, "\n")
 
@@ -25,6 +24,7 @@ class TreeShow(object):
         self.str_lst = []
         self.add_tree(step = self.lst_nod[0], indent=0)
         self.output_connect(current_line)
+        return self.lst_out
 
     def add_tree(self, step=None, indent=None):
         if step["status"] == "Succeeded":
