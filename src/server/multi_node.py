@@ -7,15 +7,28 @@ import out_utils
 def save_state(main_obj):
     lst_nod = []
     for uni in main_obj.step_list:
-
         stp_nxt_lst = []
         if len(uni.next_step_list) > 0:
             for nxt_uni in uni.next_step_list:
                 stp_nxt_lst.append(nxt_uni.lin_num)
 
-        node = {"lin_num"           :uni.lin_num,
-                "status"            :uni.status,
-                "cmd_lst"           :uni.cmd_lst,
+        try:
+            old_node = uni._old_node.lin_num
+
+        except AttributeError:
+            old_node = None
+
+        node = {
+                "_base_dir"            :uni._base_dir,
+                "_lst2run"             :uni._lst2run,
+                "_lst_expt"            :uni._lst_expt,
+                "_lst_refl"            :uni._lst_refl,
+                "_run_dir"             :uni._run_dir,
+                "cmd_lst"              :uni.cmd_lst,
+                "lin_num"              :uni.lin_num,
+                "status"               :uni.status,
+
+                "_old_node"            :old_node,
                 "next_step_list"    :stp_nxt_lst}
 
         lst_nod.append(node)
@@ -26,6 +39,7 @@ def save_state(main_obj):
         json.dump(lst_nod, fp, indent=4)
 
     return lst_nod
+
 
 
 class CmdNode(object):
@@ -211,8 +225,8 @@ class Runner(object):
             tree_output(self.current_line, return_list)
             tree_output.print_output()
 
-            with open("run_data", "w") as fp:
-                json.dump(return_list, fp, indent=4)
+            #with open("run_data", "w") as fp:
+            #    json.dump(return_list, fp, indent=4)
 
         else:
             if self.current_node.status == "Succeeded":
@@ -223,7 +237,6 @@ class Runner(object):
             self.current_node(cmd_lst, parent)
             if self.current_node.status == "Failed":
                 print("failed step")
-
 
         return return_list
 
@@ -257,12 +270,15 @@ class Runner(object):
 tree_output = out_utils.TreeShow()
 if __name__ == "__main__":
 
-    '''
-    with open("run_data") as json_file:
-        lst_nod = json.load(json_file)
+    try:
+        with open("run_data") as json_file:
+            lst_nod = json.load(json_file)
 
-    print("lst_nod =", lst_nod)
-    '''
+        print("lst_nod =", lst_nod)
+
+    except FileNotFoundError:
+        print("Nothing to recover")
+
 
     cmd_tree_runner = Runner()
     command = ""
@@ -291,5 +307,5 @@ if __name__ == "__main__":
         print("lst_cmd_lst:", lst_cmd_lst)
         cmd_tree_runner.run(lst_cmd_lst)
         cmd_tree_runner.run([["display"]])
-
+        save_state(cmd_tree_runner)
 
