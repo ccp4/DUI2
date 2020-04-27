@@ -185,25 +185,84 @@ def save_state(main_obj):
             "step_list"             :lst_nod,
             "bigger_lin"            :main_obj.bigger_lin,
             "current_line"          :main_obj.current_line,
-            "current_node"          :main_obj.current_node.lin_num,
         }
 
 
     with open("run_data", "w") as fp:
         json.dump(all_dat, fp, indent=4)
 
-    return lst_nod
+def recover_state(main_obj, recovery_data):
+    lst_nod = recovery_data["step_list"]
+
+    root_node = CmdNode(None)
+    root_node._base_dir  = lst_nod[0]["_base_dir"]
+    root_node._lst2run   = lst_nod[0]["_lst2run"]
+    root_node._lst_expt  = lst_nod[0]["_lst_expt"]
+    root_node._lst_refl  = lst_nod[0]["_lst_refl"]
+    root_node._run_dir   = lst_nod[0]["_run_dir"]
+    root_node.cmd_lst    = lst_nod[0]["cmd_lst"]
+    root_node.lin_num    = lst_nod[0]["lin_num"]
+    root_node.status     = lst_nod[0]["status"]
+
+    main_obj.step_list = [root_node]
+    main_obj.bigger_lin =   recovery_data["bigger_lin"]
+    main_obj.current_line = recovery_data["current_line"]
+
+    for uni_dic in lst_nod[1:]:
+        new_node = CmdNode(None)
+        new_node._base_dir      = uni_dic["_base_dir"]
+        new_node._lst2run       = uni_dic["_lst2run"]
+        new_node._lst_expt      = uni_dic["_lst_expt"]
+        new_node._lst_refl      = uni_dic["_lst_refl"]
+        new_node._run_dir       = uni_dic["_run_dir"]
+        new_node.cmd_lst        = uni_dic["cmd_lst"]
+        new_node.lin_num        = uni_dic["lin_num"]
+        new_node.status         = uni_dic["status"]
+
+        new_node.next_step_list = uni_dic["next_step_list"]
+        new_node._old_node      = uni_dic["_old_node"]
+
+        main_obj.step_list.append(new_node)
+
+    for nxt2root in lst_nod[0]["next_step_list"]:
+        for inner_node in main_obj.step_list:
+            if inner_node.lin_num == nxt2root:
+                main_obj.step_list[0].next_step_list.append(inner_node)
+
+    for uni in main_obj.step_list[1:]:
+        stp_nxt_lst = []
+        if len(uni.next_step_list) > 0:
+            for nxt_uni in uni.next_step_list:
+                for inner_node in main_obj.step_list:
+                    if inner_node.lin_num == nxt_uni:
+                        stp_nxt_lst.append(inner_node)
+
+        uni.next_step_list = stp_nxt_lst
+
+    for uni in main_obj.step_list:
+        for pos, inner_node in enumerate(main_obj.step_list):
+            if pos == uni._old_node:
+                uni._old_node = inner_node
+
+    main_obj.current_node = main_obj.step_list[0]
+    for uni in main_obj.step_list:
+        if uni.lin_num == main_obj.current_line:
+            main_obj.current_node = uni
 
 
 
 class Runner(object):
-    def __init__(self):
-        root_node = CmdNode(None)
-        root_node.set_root()
-        self.step_list = [root_node]
-        self.bigger_lin = 0
-        self.current_line = self.bigger_lin
-        self.create_step(root_node)
+    def __init__(self, recovery_data):
+        if recovery_data == None:
+            root_node = CmdNode(None)
+            root_node.set_root()
+            self.step_list = [root_node]
+            self.bigger_lin = 0
+            self.current_line = self.bigger_lin
+            self.create_step(root_node)
+
+        else:
+            recover_state(self, recovery_data)
 
     def run(self, cmd_lst, parent = None):
         for inner_lst in cmd_lst:
@@ -280,10 +339,11 @@ if __name__ == "__main__":
         print("runner_data =", runner_data)
 
     except FileNotFoundError:
+        runner_data = None
         print("Nothing to recover")
 
 
-    cmd_tree_runner = Runner()
+    cmd_tree_runner = Runner(runner_data)
     command = ""
 
     while command.strip() != "exit" and command.strip() != "quit":
