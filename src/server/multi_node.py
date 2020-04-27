@@ -4,44 +4,6 @@ import glob, json
 
 import out_utils
 
-def save_state(main_obj):
-    lst_nod = []
-    for uni in main_obj.step_list:
-        stp_nxt_lst = []
-        if len(uni.next_step_list) > 0:
-            for nxt_uni in uni.next_step_list:
-                stp_nxt_lst.append(nxt_uni.lin_num)
-
-        try:
-            old_node = uni._old_node.lin_num
-
-        except AttributeError:
-            old_node = None
-
-        node = {
-                "_base_dir"            :uni._base_dir,
-                "_lst2run"             :uni._lst2run,
-                "_lst_expt"            :uni._lst_expt,
-                "_lst_refl"            :uni._lst_refl,
-                "_run_dir"             :uni._run_dir,
-                "cmd_lst"              :uni.cmd_lst,
-                "lin_num"              :uni.lin_num,
-                "status"               :uni.status,
-
-                "_old_node"            :old_node,
-                "next_step_list"    :stp_nxt_lst}
-
-        lst_nod.append(node)
-
-    print("lst_nod", lst_nod)
-
-    with open("run_data", "w") as fp:
-        json.dump(lst_nod, fp, indent=4)
-
-    return lst_nod
-
-
-
 class CmdNode(object):
     def __init__(self, old_node = None):
         self._old_node = old_node
@@ -190,6 +152,49 @@ def fix_alias(short_in):
 
     return long_out
 
+def save_state(main_obj):
+    lst_nod = []
+    for uni in main_obj.step_list:
+        stp_nxt_lst = []
+        if len(uni.next_step_list) > 0:
+            for nxt_uni in uni.next_step_list:
+                stp_nxt_lst.append(nxt_uni.lin_num)
+
+        try:
+            old_node = uni._old_node.lin_num
+
+        except AttributeError:
+            old_node = None
+
+        node = {
+                "_base_dir"            :uni._base_dir,
+                "_lst2run"             :uni._lst2run,
+                "_lst_expt"            :uni._lst_expt,
+                "_lst_refl"            :uni._lst_refl,
+                "_run_dir"             :uni._run_dir,
+                "cmd_lst"              :uni.cmd_lst,
+                "lin_num"              :uni.lin_num,
+                "status"               :uni.status,
+
+                "_old_node"            :old_node,
+                "next_step_list"    :stp_nxt_lst}
+
+        lst_nod.append(node)
+
+    all_dat = {
+            "step_list"             :lst_nod,
+            "bigger_lin"            :main_obj.bigger_lin,
+            "current_line"          :main_obj.current_line,
+            "current_node"          :main_obj.current_node.lin_num,
+        }
+
+
+    with open("run_data", "w") as fp:
+        json.dump(all_dat, fp, indent=4)
+
+    return lst_nod
+
+
 
 class Runner(object):
     def __init__(self):
@@ -219,14 +224,10 @@ class Runner(object):
             self.create_step(self.current_node)
 
         elif cmd_lst == [["display"]]:
-
             return_list = out_utils.print_list(self)
             print("return_list =", return_list)
             tree_output(self.current_line, return_list)
             tree_output.print_output()
-
-            #with open("run_data", "w") as fp:
-            #    json.dump(return_list, fp, indent=4)
 
         else:
             if self.current_node.status == "Succeeded":
@@ -237,6 +238,8 @@ class Runner(object):
             self.current_node(cmd_lst, parent)
             if self.current_node.status == "Failed":
                 print("failed step")
+
+        save_state(self)
 
         return return_list
 
@@ -272,9 +275,9 @@ if __name__ == "__main__":
 
     try:
         with open("run_data") as json_file:
-            lst_nod = json.load(json_file)
+            runner_data = json.load(json_file)
 
-        print("lst_nod =", lst_nod)
+        print("runner_data =", runner_data)
 
     except FileNotFoundError:
         print("Nothing to recover")
@@ -307,5 +310,4 @@ if __name__ == "__main__":
         print("lst_cmd_lst:", lst_cmd_lst)
         cmd_tree_runner.run(lst_cmd_lst)
         cmd_tree_runner.run([["display"]])
-        save_state(cmd_tree_runner)
 
