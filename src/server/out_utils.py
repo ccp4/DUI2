@@ -16,10 +16,6 @@ def print_list(main_obj):
 
         lst_nod.append(node)
 
-    print("lst_nod", lst_nod)
-
-    with open("run_data", "w") as fp:
-        json.dump(lst_nod, fp, indent=4)
 
     return lst_nod
 
@@ -28,12 +24,8 @@ class TreeShow(object):
         self.ind_spc = "      "
         self.ind_lin = "------"
 
-    def __call__(self, current_line = None):
-
-        with open("run_data") as json_file:
-            self.lst_nod = json.load(json_file)
-
-        print("\n self.lst_nod =", self.lst_nod, "\n")
+    def __call__(self, current_line = None, lst_nod = None):
+        self.lst_nod = lst_nod
 
         self.lst_out = []
         self.lst_out.append("")
@@ -44,6 +36,7 @@ class TreeShow(object):
         self.lst_out.append(" |   |  command ")
         self.lst_out.append(" |   |   | ")
         self.lst_out.append("--------------------------")
+
         self.max_indent = 0
         self.str_lst = []
         self.add_tree(step = self.lst_nod[0], indent=0)
