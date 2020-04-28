@@ -91,7 +91,11 @@ class CmdNode(object):
         self._run_dir = self._base_dir + "/run" + str(num)
 
         print("new_dir: ", self._run_dir, "\n")
-        os.mkdir(self._run_dir)
+        try:
+            os.mkdir(self._run_dir)
+
+        except FileExistsError:
+            print("assuming the command should run in same dir")
 
     def set_imp_fil(self, lst_expt, lst_refl):
         for inner_lst in self._lst2run:
@@ -102,7 +106,7 @@ class CmdNode(object):
                 inner_lst.append(refl_2_add)
 
     def set_cmd_lst(self, lst_in):
-        self.cmd_lst = lst_in
+        self.cmd_lst = [lst_in]
         self._lst2run = []
         for inner_lst in self.cmd_lst:
             self._lst2run.append([inner_lst[0]])
@@ -178,34 +182,40 @@ class Runner(object):
 
         return_list = []
 
-        if cmd_lst[0][0] == "goto":
-            print("doing << goto >>")
-            self.goto(int(cmd_lst[0][1]))
+        for uni_cmd in cmd_lst:
 
-        elif cmd_lst == [["mkchi"]]:
-            self.create_step(self.current_node)
+            print("uni_cmd", uni_cmd)
 
-        elif cmd_lst == [["mksib"]]:
-            self.goto_prev()
-            print("forking")
-            self.create_step(self.current_node)
+            if uni_cmd[0] == "goto":
+                print("doing << goto >>")
+                self.goto(int(uni_cmd[1]))
 
-        elif cmd_lst == [["display"]]:
-            return_list = out_utils.print_list(self)
-            tree_output(self.current_line, return_list)
-            tree_output.print_output()
+            elif uni_cmd == ["mkchi"]:
+                self.create_step(self.current_node)
 
-        else:
-            if self.current_node.status == "Succeeded":
+            elif uni_cmd == ["mksib"]:
                 self.goto_prev()
                 print("forking")
                 self.create_step(self.current_node)
 
-            self.current_node(cmd_lst, parent)
-            if self.current_node.status == "Failed":
-                print("failed step")
+            elif uni_cmd == ["display"]:
+                return_list = out_utils.print_list(self)
+                tree_output(self.current_line, return_list)
+                tree_output.print_output()
 
-        self.save_state()
+            else:
+                tst_off = '''
+                if self.current_node.status == "Succeeded":
+                    self.goto_prev()
+                    print("forking")
+                    self.create_step(self.current_node)
+                '''
+
+                self.current_node(uni_cmd, parent)
+                if self.current_node.status == "Failed":
+                    print("failed step")
+
+            self.save_state()
 
         return return_list
 
