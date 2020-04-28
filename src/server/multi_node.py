@@ -4,6 +4,130 @@ import glob, json
 
 import out_utils
 
+
+def fix_alias(short_in):
+    pair_list = [
+        ("d", "display" ),
+        ("g", "goto"    ),
+        ("c", "mkchi"   ),
+        ("s", "mksib"   ),
+        ("mg", "dials.modify_geometry"  ),
+        ("gm", "dials.generate_mask"    ),
+        ("am", "dials.apply_mask"       ),
+        ("fd", "dials.find_spots"       ),
+        ("id", "dials.index"            ),
+        ("rf", "dials.refine"           ),
+        ("it", "dials.integrate"        ),
+        ("sm", "dials.symmetry"         ),
+        ("sc", "dials.scale"            ),
+    ]
+    long_out = short_in
+    for pair in pair_list:
+        if pair[0] == short_in:
+            print("replacing ", pair[0], " with ", pair[1])
+            long_out = pair[1]
+
+    return long_out
+
+
+def save_state(main_obj):
+    lst_nod = []
+    for uni in main_obj.step_list:
+        stp_nxt_lst = []
+        if len(uni.next_step_list) > 0:
+            for nxt_uni in uni.next_step_list:
+                stp_nxt_lst.append(nxt_uni.lin_num)
+
+        try:
+            old_node = uni._old_node.lin_num
+
+        except AttributeError:
+            old_node = None
+
+        node = {
+                "_base_dir"            :uni._base_dir,
+                "_lst2run"             :uni._lst2run,
+                "_lst_expt"            :uni._lst_expt,
+                "_lst_refl"            :uni._lst_refl,
+                "_run_dir"             :uni._run_dir,
+                "cmd_lst"              :uni.cmd_lst,
+                "lin_num"              :uni.lin_num,
+                "status"               :uni.status,
+
+                "_old_node"            :old_node,
+                "next_step_list"    :stp_nxt_lst}
+
+        lst_nod.append(node)
+
+    all_dat = {
+            "step_list"             :lst_nod,
+            "bigger_lin"            :main_obj.bigger_lin,
+            "current_line"          :main_obj.current_line,
+        }
+
+    with open("run_data", "w") as fp:
+        json.dump(all_dat, fp, indent=4)
+
+
+def recover_state(main_obj, recovery_data):
+    lst_nod = recovery_data["step_list"]
+
+    root_node = CmdNode(None)
+    root_node._base_dir  = lst_nod[0]["_base_dir"]
+    root_node._lst2run   = lst_nod[0]["_lst2run"]
+    root_node._lst_expt  = lst_nod[0]["_lst_expt"]
+    root_node._lst_refl  = lst_nod[0]["_lst_refl"]
+    root_node._run_dir   = lst_nod[0]["_run_dir"]
+    root_node.cmd_lst    = lst_nod[0]["cmd_lst"]
+    root_node.lin_num    = lst_nod[0]["lin_num"]
+    root_node.status     = lst_nod[0]["status"]
+
+    main_obj.step_list = [root_node]
+    main_obj.bigger_lin =   recovery_data["bigger_lin"]
+    main_obj.current_line = recovery_data["current_line"]
+
+    for uni_dic in lst_nod[1:]:
+        new_node = CmdNode(None)
+        new_node._base_dir      = uni_dic["_base_dir"]
+        new_node._lst2run       = uni_dic["_lst2run"]
+        new_node._lst_expt      = uni_dic["_lst_expt"]
+        new_node._lst_refl      = uni_dic["_lst_refl"]
+        new_node._run_dir       = uni_dic["_run_dir"]
+        new_node.cmd_lst        = uni_dic["cmd_lst"]
+        new_node.lin_num        = uni_dic["lin_num"]
+        new_node.status         = uni_dic["status"]
+
+        new_node.next_step_list = uni_dic["next_step_list"]
+        new_node._old_node      = uni_dic["_old_node"]
+
+        main_obj.step_list.append(new_node)
+
+    for nxt2root in lst_nod[0]["next_step_list"]:
+        for inner_node in main_obj.step_list:
+            if inner_node.lin_num == nxt2root:
+                main_obj.step_list[0].next_step_list.append(inner_node)
+
+    for uni in main_obj.step_list[1:]:
+        stp_nxt_lst = []
+        if len(uni.next_step_list) > 0:
+            for nxt_uni in uni.next_step_list:
+                for inner_node in main_obj.step_list:
+                    if inner_node.lin_num == nxt_uni:
+                        stp_nxt_lst.append(inner_node)
+
+        uni.next_step_list = stp_nxt_lst
+
+    for uni in main_obj.step_list:
+        for pos, inner_node in enumerate(main_obj.step_list):
+            if pos == uni._old_node:
+                uni._old_node = inner_node
+
+    main_obj.current_node = main_obj.step_list[0]
+    for uni in main_obj.step_list:
+        if uni.lin_num == main_obj.current_line:
+            main_obj.current_node = uni
+
+
 class CmdNode(object):
     def __init__(self, old_node = None):
         self._old_node = old_node
@@ -126,129 +250,6 @@ class CmdNode(object):
         except BaseException as e:
             print("Failed to run subprocess \n ERR:", e)
             self.status = "Failed"
-
-
-def fix_alias(short_in):
-    pair_list = [
-        ("d", "display" ),
-        ("g", "goto"    ),
-        ("c", "mkchi"   ),
-        ("s", "mksib"   ),
-        ("mg", "dials.modify_geometry"  ),
-        ("gm", "dials.generate_mask"    ),
-        ("am", "dials.apply_mask"       ),
-        ("fd", "dials.find_spots"       ),
-        ("id", "dials.index"            ),
-        ("rf", "dials.refine"           ),
-        ("it", "dials.integrate"        ),
-        ("sm", "dials.symmetry"         ),
-        ("sc", "dials.scale"            ),
-    ]
-    long_out = short_in
-    for pair in pair_list:
-        if pair[0] == short_in:
-            print("replacing ", pair[0], " with ", pair[1])
-            long_out = pair[1]
-
-    return long_out
-
-
-def save_state(main_obj):
-    lst_nod = []
-    for uni in main_obj.step_list:
-        stp_nxt_lst = []
-        if len(uni.next_step_list) > 0:
-            for nxt_uni in uni.next_step_list:
-                stp_nxt_lst.append(nxt_uni.lin_num)
-
-        try:
-            old_node = uni._old_node.lin_num
-
-        except AttributeError:
-            old_node = None
-
-        node = {
-                "_base_dir"            :uni._base_dir,
-                "_lst2run"             :uni._lst2run,
-                "_lst_expt"            :uni._lst_expt,
-                "_lst_refl"            :uni._lst_refl,
-                "_run_dir"             :uni._run_dir,
-                "cmd_lst"              :uni.cmd_lst,
-                "lin_num"              :uni.lin_num,
-                "status"               :uni.status,
-
-                "_old_node"            :old_node,
-                "next_step_list"    :stp_nxt_lst}
-
-        lst_nod.append(node)
-
-    all_dat = {
-            "step_list"             :lst_nod,
-            "bigger_lin"            :main_obj.bigger_lin,
-            "current_line"          :main_obj.current_line,
-        }
-
-
-    with open("run_data", "w") as fp:
-        json.dump(all_dat, fp, indent=4)
-
-def recover_state(main_obj, recovery_data):
-    lst_nod = recovery_data["step_list"]
-
-    root_node = CmdNode(None)
-    root_node._base_dir  = lst_nod[0]["_base_dir"]
-    root_node._lst2run   = lst_nod[0]["_lst2run"]
-    root_node._lst_expt  = lst_nod[0]["_lst_expt"]
-    root_node._lst_refl  = lst_nod[0]["_lst_refl"]
-    root_node._run_dir   = lst_nod[0]["_run_dir"]
-    root_node.cmd_lst    = lst_nod[0]["cmd_lst"]
-    root_node.lin_num    = lst_nod[0]["lin_num"]
-    root_node.status     = lst_nod[0]["status"]
-
-    main_obj.step_list = [root_node]
-    main_obj.bigger_lin =   recovery_data["bigger_lin"]
-    main_obj.current_line = recovery_data["current_line"]
-
-    for uni_dic in lst_nod[1:]:
-        new_node = CmdNode(None)
-        new_node._base_dir      = uni_dic["_base_dir"]
-        new_node._lst2run       = uni_dic["_lst2run"]
-        new_node._lst_expt      = uni_dic["_lst_expt"]
-        new_node._lst_refl      = uni_dic["_lst_refl"]
-        new_node._run_dir       = uni_dic["_run_dir"]
-        new_node.cmd_lst        = uni_dic["cmd_lst"]
-        new_node.lin_num        = uni_dic["lin_num"]
-        new_node.status         = uni_dic["status"]
-
-        new_node.next_step_list = uni_dic["next_step_list"]
-        new_node._old_node      = uni_dic["_old_node"]
-
-        main_obj.step_list.append(new_node)
-
-    for nxt2root in lst_nod[0]["next_step_list"]:
-        for inner_node in main_obj.step_list:
-            if inner_node.lin_num == nxt2root:
-                main_obj.step_list[0].next_step_list.append(inner_node)
-
-    for uni in main_obj.step_list[1:]:
-        stp_nxt_lst = []
-        if len(uni.next_step_list) > 0:
-            for nxt_uni in uni.next_step_list:
-                for inner_node in main_obj.step_list:
-                    if inner_node.lin_num == nxt_uni:
-                        stp_nxt_lst.append(inner_node)
-
-        uni.next_step_list = stp_nxt_lst
-
-    for uni in main_obj.step_list:
-        for pos, inner_node in enumerate(main_obj.step_list):
-            if pos == uni._old_node:
-                uni._old_node = inner_node
-
-    main_obj.current_node = main_obj.step_list[0]
-    for uni in main_obj.step_list:
-        if uni.lin_num == main_obj.current_line:
-            main_obj.current_node = uni
 
 
 class Runner(object):
