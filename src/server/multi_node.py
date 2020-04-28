@@ -38,12 +38,6 @@ def save_state(main_obj):
             for nxt_uni in uni.next_step_list:
                 stp_nxt_lst.append(nxt_uni.lin_num)
 
-        try:
-            old_node = uni._old_node.lin_num
-
-        except AttributeError:
-            old_node = None
-
         node = {
                 "_base_dir"            :uni._base_dir,
                 "_lst2run"             :uni._lst2run,
@@ -53,8 +47,8 @@ def save_state(main_obj):
                 "cmd_lst"              :uni.cmd_lst,
                 "lin_num"              :uni.lin_num,
                 "status"               :uni.status,
+                "_old_node"            :uni._old_node,
 
-                "_old_node"            :old_node,
                 "next_step_list"    :stp_nxt_lst}
 
         lst_nod.append(node)
@@ -117,11 +111,6 @@ def recover_state(main_obj, recovery_data):
 
         uni.next_step_list = stp_nxt_lst
 
-    for uni in main_obj.step_list:
-        for pos, inner_node in enumerate(main_obj.step_list):
-            if pos == uni._old_node:
-                uni._old_node = inner_node
-
     main_obj.current_node = main_obj.step_list[0]
     for uni in main_obj.step_list:
         if uni.lin_num == main_obj.current_line:
@@ -130,7 +119,12 @@ def recover_state(main_obj, recovery_data):
 
 class CmdNode(object):
     def __init__(self, old_node = None):
-        self._old_node = old_node
+        try:
+            self._old_node = old_node.lin_num
+
+        except AttributeError:
+            self._old_node = None
+
         self._lst_expt = []
         self._lst_refl = []
         self._lst2run = [[None]]
@@ -142,16 +136,15 @@ class CmdNode(object):
         self.lin_num = 0
 
         try:
-            self.set_base_dir(self._old_node._base_dir)
-            print("\n old_node._base_dir =", self._old_node._base_dir)
-            self._lst_expt = glob.glob(self._old_node._run_dir + "/*.expt")
-            self._lst_refl = glob.glob(self._old_node._run_dir + "/*.refl")
+            self.set_base_dir(old_node._base_dir)
+            self._lst_expt = glob.glob(old_node._run_dir + "/*.expt")
+            self._lst_refl = glob.glob(old_node._run_dir + "/*.refl")
 
             if len(self._lst_expt) == 0:
-                self._lst_expt = self._old_node._lst_expt
+                self._lst_expt = old_node._lst_expt
 
             if len(self._lst_refl) == 0:
-                self._lst_refl = self._old_node._lst_refl
+                self._lst_refl = old_node._lst_refl
 
             print("self._lst_expt: ", self._lst_expt)
             print("self._lst_refl: ", self._lst_refl)
@@ -314,7 +307,7 @@ class Runner(object):
 
     def goto_prev(self):
         try:
-            self.goto(self.current_node._old_node.lin_num)
+            self.goto(self.current_node._old_node)
 
         except BaseException as e:
             print("can NOT fork <None> node ")
