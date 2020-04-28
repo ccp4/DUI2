@@ -30,57 +30,6 @@ def fix_alias(short_in):
     return long_out
 
 
-def save_state(main_obj):
-    lst_nod = []
-    for uni in main_obj.step_list:
-        node = {
-                "_base_dir"            :uni._base_dir,
-                "_lst2run"             :uni._lst2run,
-                "_lst_expt"            :uni._lst_expt,
-                "_lst_refl"            :uni._lst_refl,
-                "_run_dir"             :uni._run_dir,
-                "cmd_lst"              :uni.cmd_lst,
-                "lin_num"              :uni.lin_num,
-                "status"               :uni.status,
-                "_old_node"            :uni._old_node,
-                "next_step_list"       :uni.next_step_list}
-
-        lst_nod.append(node)
-
-    all_dat = {
-            "step_list"             :lst_nod,
-            "bigger_lin"            :main_obj.bigger_lin,
-            "current_line"          :main_obj.current_line,
-        }
-
-    with open("run_data", "w") as fp:
-        json.dump(all_dat, fp, indent=4)
-
-
-def recover_state(main_obj, recovery_data):
-    lst_nod = recovery_data["step_list"]
-
-    main_obj.step_list = []
-    main_obj.bigger_lin =   recovery_data["bigger_lin"]
-    main_obj.current_line = recovery_data["current_line"]
-
-    for uni_dic in lst_nod:
-        new_node = CmdNode(None)
-        new_node._base_dir      = uni_dic["_base_dir"]
-        new_node._lst2run       = uni_dic["_lst2run"]
-        new_node._lst_expt      = uni_dic["_lst_expt"]
-        new_node._lst_refl      = uni_dic["_lst_refl"]
-        new_node._run_dir       = uni_dic["_run_dir"]
-        new_node.cmd_lst        = uni_dic["cmd_lst"]
-        new_node.lin_num        = uni_dic["lin_num"]
-        new_node.status         = uni_dic["status"]
-        new_node.next_step_list = uni_dic["next_step_list"]
-        new_node._old_node      = uni_dic["_old_node"]
-
-        if new_node.lin_num == main_obj.current_line:
-            main_obj.current_node = new_node
-
-        main_obj.step_list.append(new_node)
 
 class CmdNode(object):
     def __init__(self, old_node = None):
@@ -221,7 +170,7 @@ class Runner(object):
             self.create_step(root_node)
 
         else:
-            recover_state(self, recovery_data)
+            self.recover_state(recovery_data)
 
     def run(self, cmd_lst, parent = None):
         for inner_lst in cmd_lst:
@@ -256,7 +205,7 @@ class Runner(object):
             if self.current_node.status == "Failed":
                 print("failed step")
 
-        save_state(self)
+        self.save_state()
 
         return return_list
 
@@ -285,6 +234,58 @@ class Runner(object):
 
     def get_current_node(self):
         return self.current_node
+
+    def save_state(self):
+        lst_nod = []
+        for uni in self.step_list:
+            node = {
+                    "_base_dir"            :uni._base_dir,
+                    "_lst2run"             :uni._lst2run,
+                    "_lst_expt"            :uni._lst_expt,
+                    "_lst_refl"            :uni._lst_refl,
+                    "_run_dir"             :uni._run_dir,
+                    "cmd_lst"              :uni.cmd_lst,
+                    "lin_num"              :uni.lin_num,
+                    "status"               :uni.status,
+                    "_old_node"            :uni._old_node,
+                    "next_step_list"       :uni.next_step_list}
+
+            lst_nod.append(node)
+
+        all_dat = {
+                "step_list"             :lst_nod,
+                "bigger_lin"            :self.bigger_lin,
+                "current_line"          :self.current_line,
+            }
+
+        with open("run_data", "w") as fp:
+            json.dump(all_dat, fp, indent=4)
+
+    def recover_state(self, recovery_data):
+        lst_nod = recovery_data["step_list"]
+
+        self.step_list = []
+        self.bigger_lin =   recovery_data["bigger_lin"]
+        self.current_line = recovery_data["current_line"]
+
+        for uni_dic in lst_nod:
+            new_node = CmdNode(None)
+            new_node._base_dir      = uni_dic["_base_dir"]
+            new_node._lst2run       = uni_dic["_lst2run"]
+            new_node._lst_expt      = uni_dic["_lst_expt"]
+            new_node._lst_refl      = uni_dic["_lst_refl"]
+            new_node._run_dir       = uni_dic["_run_dir"]
+            new_node.cmd_lst        = uni_dic["cmd_lst"]
+            new_node.lin_num        = uni_dic["lin_num"]
+            new_node.status         = uni_dic["status"]
+            new_node.next_step_list = uni_dic["next_step_list"]
+            new_node._old_node      = uni_dic["_old_node"]
+
+            if new_node.lin_num == self.current_line:
+                self.current_node = new_node
+
+            self.step_list.append(new_node)
+
 
 
 tree_output = out_utils.TreeShow()
