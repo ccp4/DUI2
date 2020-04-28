@@ -59,17 +59,6 @@ def save_state(main_obj):
 
 def recover_state(main_obj, recovery_data):
     lst_nod = recovery_data["step_list"]
-    '''
-    root_node = CmdNode(None)
-    root_node._base_dir  = lst_nod[0]["_base_dir"]
-    root_node._lst2run   = lst_nod[0]["_lst2run"]
-    root_node._lst_expt  = lst_nod[0]["_lst_expt"]
-    root_node._lst_refl  = lst_nod[0]["_lst_refl"]
-    root_node._run_dir   = lst_nod[0]["_run_dir"]
-    root_node.cmd_lst    = lst_nod[0]["cmd_lst"]
-    root_node.lin_num    = lst_nod[0]["lin_num"]
-    root_node.status     = lst_nod[0]["status"]
-    '''
 
     main_obj.step_list = []
     main_obj.bigger_lin =   recovery_data["bigger_lin"]
@@ -125,8 +114,8 @@ class CmdNode(object):
             print("self._lst_expt: ", self._lst_expt)
             print("self._lst_refl: ", self._lst_refl)
 
-        except:
-            print("NOT _base_dir on old_node")
+        except AttributeError:
+            print("creating none without parent")
 
     def __call__(self, cmd_lst, parent):
         print("\n cmd_lst in =", cmd_lst)
@@ -305,14 +294,13 @@ if __name__ == "__main__":
         with open("run_data") as json_file:
             runner_data = json.load(json_file)
 
-        print("runner_data =", runner_data)
-
     except FileNotFoundError:
         runner_data = None
         print("Nothing to recover")
 
 
     cmd_tree_runner = Runner(runner_data)
+    cmd_tree_runner.run([["display"]])
     command = ""
 
     while command.strip() != "exit" and command.strip() != "quit":
