@@ -4,8 +4,24 @@ import time, subprocess, json
 
 import out_utils, multi_node
 
-tree_output = out_utils.TreeShow()
-cmd_tree_runner = multi_node.Runner()
+#tree_output = out_utils.TreeShow()
+#cmd_tree_runner = multi_node.Runner()
+
+
+try:
+    with open("run_data") as json_file:
+        runner_data = json.load(json_file)
+
+except FileNotFoundError:
+    runner_data = None
+    print("Nothing to recover")
+
+
+cmd_tree_runner = multi_node.Runner(runner_data)
+cmd_tree_runner.run([["display"]])
+command = ""
+
+
 
 class ReqHandler(http.server.BaseHTTPRequestHandler):
 

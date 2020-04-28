@@ -115,7 +115,7 @@ class CmdNode(object):
             print("self._lst_refl: ", self._lst_refl)
 
         except AttributeError:
-            print("creating none without parent")
+            print("creating node without parent")
 
     def __call__(self, cmd_lst, parent):
         print("\n cmd_lst in =", cmd_lst)
