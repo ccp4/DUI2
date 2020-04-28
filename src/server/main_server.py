@@ -16,11 +16,9 @@ except FileNotFoundError:
     runner_data = None
     print("Nothing to recover")
 
-
 cmd_tree_runner = multi_node.Runner(runner_data)
 cmd_tree_runner.run([["display"]])
 command = ""
-
 
 
 class ReqHandler(http.server.BaseHTTPRequestHandler):

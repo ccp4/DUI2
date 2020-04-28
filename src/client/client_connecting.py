@@ -26,7 +26,6 @@ class Run_n_Output(QtCore.QThread):
                 break
 
 
-
 class Client(QtWidgets.QDialog):
     def __init__(self, parent=None):
         super(Client, self).__init__(parent)

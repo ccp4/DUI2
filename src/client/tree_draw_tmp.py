@@ -6,7 +6,6 @@ class TreeShow(object):
         self.ind_lin = "------"
 
     def __call__(self, new_lst_nod = None, current_line = None):
-
         self.lst_nod = new_lst_nod
 
         self.lst_out = []
@@ -38,9 +37,7 @@ class TreeShow(object):
             stp_prn = " R "
 
         str_lin_num = "{0:3}".format(int(step["lin_num"]))
-
         stp_prn += str_lin_num + self.ind_spc * indent + r"   \___"
-
         for new_stp in step["cmd_lst"]:
             stp_prn += str(new_stp[0]) + "     "
 

@@ -126,11 +126,11 @@ class CmdNode(object):
                 print("\n Running:", inner_lst, "\n")
                 proc = subprocess.Popen(
                     inner_lst,
-                    shell=False,
-                    cwd=self._run_dir,
-                    stdout=subprocess.PIPE,
-                    stderr=subprocess.PIPE,
-                    universal_newlines=True
+                    shell = False,
+                    cwd = self._run_dir,
+                    stdout = subprocess.PIPE,
+                    stderr = subprocess.PIPE,
+                    universal_newlines = True
                 )
 
                 line = None
@@ -211,7 +211,6 @@ class Runner(object):
 
     def create_step(self, prev_step):
         new_step = CmdNode(old_node=prev_step)
-
         self.bigger_lin += 1
         new_step.lin_num = self.bigger_lin
         prev_step.next_step_list.append(new_step.lin_num)
@@ -227,7 +226,6 @@ class Runner(object):
 
     def goto(self, new_lin):
         self.current_line = new_lin
-
         for node in self.step_list:
             if node.lin_num == self.current_line:
                 self.current_node = node
@@ -262,24 +260,23 @@ class Runner(object):
             json.dump(all_dat, fp, indent=4)
 
     def recover_state(self, recovery_data):
-        lst_nod = recovery_data["step_list"]
-
-        self.step_list = []
+        self.step_list =    []
         self.bigger_lin =   recovery_data["bigger_lin"]
         self.current_line = recovery_data["current_line"]
 
+        lst_nod = recovery_data["step_list"]
         for uni_dic in lst_nod:
             new_node = CmdNode(None)
-            new_node._base_dir      = uni_dic["_base_dir"]
-            new_node._lst2run       = uni_dic["_lst2run"]
-            new_node._lst_expt      = uni_dic["_lst_expt"]
-            new_node._lst_refl      = uni_dic["_lst_refl"]
-            new_node._run_dir       = uni_dic["_run_dir"]
-            new_node.cmd_lst        = uni_dic["cmd_lst"]
-            new_node.lin_num        = uni_dic["lin_num"]
-            new_node.status         = uni_dic["status"]
-            new_node.next_step_list = uni_dic["next_step_list"]
-            new_node._old_node      = uni_dic["_old_node"]
+            new_node._base_dir       = uni_dic["_base_dir"]
+            new_node._lst2run        = uni_dic["_lst2run"]
+            new_node._lst_expt       = uni_dic["_lst_expt"]
+            new_node._lst_refl       = uni_dic["_lst_refl"]
+            new_node._run_dir        = uni_dic["_run_dir"]
+            new_node.cmd_lst         = uni_dic["cmd_lst"]
+            new_node.lin_num         = uni_dic["lin_num"]
+            new_node.status          = uni_dic["status"]
+            new_node.next_step_list  = uni_dic["next_step_list"]
+            new_node._old_node       = uni_dic["_old_node"]
 
             if new_node.lin_num == self.current_line:
                 self.current_node = new_node
@@ -298,7 +295,6 @@ if __name__ == "__main__":
     except FileNotFoundError:
         runner_data = None
         print("Nothing to recover")
-
 
     cmd_tree_runner = Runner(runner_data)
     cmd_tree_runner.run([["display"]])
