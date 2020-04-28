@@ -152,6 +152,7 @@ def fix_alias(short_in):
 
     return long_out
 
+
 def save_state(main_obj):
     lst_nod = []
     for uni in main_obj.step_list:
@@ -248,7 +249,6 @@ def recover_state(main_obj, recovery_data):
     for uni in main_obj.step_list:
         if uni.lin_num == main_obj.current_line:
             main_obj.current_node = uni
-
 
 
 class Runner(object):
