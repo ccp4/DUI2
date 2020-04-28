@@ -9,8 +9,6 @@ class TreeShow(object):
 
         self.lst_nod = new_lst_nod
 
-        print("\n self.lst_nod =", self.lst_nod, "\n")
-
         self.lst_out = []
         self.lst_out.append("")
         self.lst_out.append("status: (R)eady  (B)usy  (F)ailed  (S)ucceeded")

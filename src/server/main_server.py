@@ -43,10 +43,7 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
         lst_out = []
         lst_out = cmd_tree_runner.run(lst_cmd_lst, self)
 
-        print("lst_out =", lst_out)
-
         json_str = json.dumps(lst_out) + '\n'
-        print("json_str =", json_str)
 
         self.wfile.write(bytes(json_str, 'utf-8'))
 
