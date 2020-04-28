@@ -4,15 +4,10 @@ def print_list(main_obj):
     lst_nod = []
     for uni in main_obj.step_list:
 
-        stp_nxt_lst = []
-        if len(uni.next_step_list) > 0:
-            for nxt_uni in uni.next_step_list:
-                stp_nxt_lst.append(nxt_uni.lin_num)
-
         node = {"lin_num"           :uni.lin_num,
                 "status"            :uni.status,
                 "cmd_lst"           :uni.cmd_lst,
-                "next_step_list"    :stp_nxt_lst}
+                "next_step_list"    :uni.next_step_list}
 
         lst_nod.append(node)
 

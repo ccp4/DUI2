@@ -33,11 +33,6 @@ def fix_alias(short_in):
 def save_state(main_obj):
     lst_nod = []
     for uni in main_obj.step_list:
-        stp_nxt_lst = []
-        if len(uni.next_step_list) > 0:
-            for nxt_uni in uni.next_step_list:
-                stp_nxt_lst.append(nxt_uni.lin_num)
-
         node = {
                 "_base_dir"            :uni._base_dir,
                 "_lst2run"             :uni._lst2run,
@@ -48,8 +43,7 @@ def save_state(main_obj):
                 "lin_num"              :uni.lin_num,
                 "status"               :uni.status,
                 "_old_node"            :uni._old_node,
-
-                "next_step_list"    :stp_nxt_lst}
+                "next_step_list"       :uni.next_step_list}
 
         lst_nod.append(node)
 
@@ -65,7 +59,7 @@ def save_state(main_obj):
 
 def recover_state(main_obj, recovery_data):
     lst_nod = recovery_data["step_list"]
-
+    '''
     root_node = CmdNode(None)
     root_node._base_dir  = lst_nod[0]["_base_dir"]
     root_node._lst2run   = lst_nod[0]["_lst2run"]
@@ -75,12 +69,13 @@ def recover_state(main_obj, recovery_data):
     root_node.cmd_lst    = lst_nod[0]["cmd_lst"]
     root_node.lin_num    = lst_nod[0]["lin_num"]
     root_node.status     = lst_nod[0]["status"]
+    '''
 
-    main_obj.step_list = [root_node]
+    main_obj.step_list = []
     main_obj.bigger_lin =   recovery_data["bigger_lin"]
     main_obj.current_line = recovery_data["current_line"]
 
-    for uni_dic in lst_nod[1:]:
+    for uni_dic in lst_nod:
         new_node = CmdNode(None)
         new_node._base_dir      = uni_dic["_base_dir"]
         new_node._lst2run       = uni_dic["_lst2run"]
@@ -90,32 +85,13 @@ def recover_state(main_obj, recovery_data):
         new_node.cmd_lst        = uni_dic["cmd_lst"]
         new_node.lin_num        = uni_dic["lin_num"]
         new_node.status         = uni_dic["status"]
-
         new_node.next_step_list = uni_dic["next_step_list"]
         new_node._old_node      = uni_dic["_old_node"]
 
+        if new_node.lin_num == main_obj.current_line:
+            main_obj.current_node = new_node
+
         main_obj.step_list.append(new_node)
-
-    for nxt2root in lst_nod[0]["next_step_list"]:
-        for inner_node in main_obj.step_list:
-            if inner_node.lin_num == nxt2root:
-                main_obj.step_list[0].next_step_list.append(inner_node)
-
-    for uni in main_obj.step_list[1:]:
-        stp_nxt_lst = []
-        if len(uni.next_step_list) > 0:
-            for nxt_uni in uni.next_step_list:
-                for inner_node in main_obj.step_list:
-                    if inner_node.lin_num == nxt_uni:
-                        stp_nxt_lst.append(inner_node)
-
-        uni.next_step_list = stp_nxt_lst
-
-    main_obj.current_node = main_obj.step_list[0]
-    for uni in main_obj.step_list:
-        if uni.lin_num == main_obj.current_line:
-            main_obj.current_node = uni
-
 
 class CmdNode(object):
     def __init__(self, old_node = None):
@@ -278,7 +254,6 @@ class Runner(object):
 
         elif cmd_lst == [["display"]]:
             return_list = out_utils.print_list(self)
-            print("return_list =", return_list)
             tree_output(self.current_line, return_list)
             tree_output.print_output()
 
@@ -301,7 +276,7 @@ class Runner(object):
 
         self.bigger_lin += 1
         new_step.lin_num = self.bigger_lin
-        prev_step.next_step_list.append(new_step)
+        prev_step.next_step_list.append(new_step.lin_num)
         self.step_list.append(new_step)
         self.goto(self.bigger_lin)
 
