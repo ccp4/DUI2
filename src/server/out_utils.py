@@ -3,11 +3,11 @@ import json
 def print_list(main_obj):
     lst_nod = []
     for uni in main_obj.step_list:
-        if uni._lst2run == []:
+        if uni.lst2run == []:
             cmd2show = ["None"]
 
         else:
-            cmd2show = uni._lst2run[0]
+            cmd2show = uni.lst2run[0]
 
         node = {"lin_num"           :uni.lin_num,
                 "status"            :uni.status,

@@ -41,7 +41,7 @@ class CmdNode(object):
 
         self._lst_expt = []
         self._lst_refl = []
-        self._lst2run = []
+        self.lst2run = []
         self._run_dir = ""
 
         self.status = "Ready"
@@ -68,14 +68,14 @@ class CmdNode(object):
     def __call__(self, lst_in, parent):
         print("\n lst_in =", lst_in)
 
-        self._lst2run.append([lst_in[0]])
+        self.lst2run.append([lst_in[0]])
         self.set_imp_fil(self._lst_expt, self._lst_refl)
         for par in lst_in[1:]:
-            self._lst2run[-1].append(par)
+            self.lst2run[-1].append(par)
 
         self.set_base_dir(os.getcwd())
         self.set_run_dir(self.lin_num)
-        print("Running:", self._lst2run)
+        print("Running:", self.lst2run)
         self.run_cmd(parent)
 
     def set_root(self, run_dir = "/tmp/tst/", lst_expt = "/tmp/tst/imported.expt"):
@@ -84,7 +84,7 @@ class CmdNode(object):
         self._run_dir = run_dir
         self._lst_expt = lst_expt
         self._lst_refl = []
-        self._lst2run = [['Root']]
+        self.lst2run = [['Root']]
         self.status = "Succeeded"
 
     def set_base_dir(self, dir_in = None):
@@ -102,15 +102,15 @@ class CmdNode(object):
 
     def set_imp_fil(self, lst_expt, lst_refl):
         for expt_2_add in lst_expt:
-            self._lst2run[-1].append(expt_2_add)
+            self.lst2run[-1].append(expt_2_add)
 
         for refl_2_add in lst_refl:
-            self._lst2run[-1].append(refl_2_add)
+            self.lst2run[-1].append(refl_2_add)
 
     def run_cmd(self, parent):
         self.status = "Busy"
         try:
-            inner_lst = self._lst2run[-1]
+            inner_lst = self.lst2run[-1]
             print("\n Running:", inner_lst, "\n")
             proc = subprocess.Popen(
                 inner_lst,
@@ -224,7 +224,7 @@ class Runner(object):
         for uni in self.step_list:
             node = {
                     "_base_dir"            :uni._base_dir,
-                    "_lst2run"             :uni._lst2run,
+                    "lst2run"             :uni.lst2run,
                     "_lst_expt"            :uni._lst_expt,
                     "_lst_refl"            :uni._lst_refl,
                     "_run_dir"             :uni._run_dir,
@@ -253,7 +253,7 @@ class Runner(object):
         for uni_dic in lst_nod:
             new_node = CmdNode(None)
             new_node._base_dir       = uni_dic["_base_dir"]
-            new_node._lst2run        = uni_dic["_lst2run"]
+            new_node.lst2run        = uni_dic["lst2run"]
             new_node._lst_expt       = uni_dic["_lst_expt"]
             new_node._lst_refl       = uni_dic["_lst_refl"]
             new_node._run_dir        = uni_dic["_run_dir"]
