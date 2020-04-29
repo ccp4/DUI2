@@ -3,9 +3,15 @@ import json
 def print_list(main_obj):
     lst_nod = []
     for uni in main_obj.step_list:
+        if uni._lst2run == []:
+            cmd2show = ["None"]
+
+        else:
+            cmd2show = uni._lst2run[0]
+
         node = {"lin_num"           :uni.lin_num,
                 "status"            :uni.status,
-                "cmd_lst"           :uni.cmd_lst,
+                "cmd2show"           :cmd2show,
                 "next_step_list"    :uni.next_step_list}
 
         lst_nod.append(node)
@@ -52,10 +58,7 @@ class TreeShow(object):
         str_lin_num = "{0:3}".format(int(step["lin_num"]))
         stp_prn += str_lin_num + self.ind_spc * indent + r"   \___"
 
-        #for new_stp in step["cmd_lst"]:
-        #    stp_prn += str(new_stp[0]) + "     "
-
-        stp_prn += str(step["cmd_lst"][0]) + "     "
+        stp_prn += str(step["cmd2show"][0]) + "     "
 
         self.str_lst.append([stp_prn, indent, int(step["lin_num"])])
         new_indent = indent

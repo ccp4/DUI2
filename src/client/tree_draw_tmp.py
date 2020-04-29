@@ -38,7 +38,7 @@ class TreeShow(object):
 
         str_lin_num = "{0:3}".format(int(step["lin_num"]))
         stp_prn += str_lin_num + self.ind_spc * indent + r"   \___"
-        stp_prn += str(step["cmd_lst"][0]) + "     "
+        stp_prn += str(step["cmd2show"][0]) + "     "
 
         self.str_lst.append([stp_prn, indent, int(step["lin_num"])])
         new_indent = indent

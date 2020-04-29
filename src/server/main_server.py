@@ -34,12 +34,12 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
         dict_cmd = parse_qs(urlparse(url_path).query)
         cmd_str = dict_cmd['command'][0]
         lst_cmd = cmd_str.split(";")
-        lst_cmd_lst = []
+        lst_of_cmd = []
         for sub_str in lst_cmd:
-            lst_cmd_lst.append(sub_str.split(" "))
+            lst_of_cmd.append(sub_str.split(" "))
 
         lst_out = []
-        lst_out = cmd_tree_runner.run(lst_cmd_lst, self)
+        lst_out = cmd_tree_runner.run(lst_of_cmd, self)
 
         json_str = json.dumps(lst_out) + '\n'
 

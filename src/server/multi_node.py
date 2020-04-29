@@ -46,7 +46,6 @@ class CmdNode(object):
 
         self.status = "Ready"
         self.next_step_list = []
-        self.cmd_lst = ["None"]
         self.lin_num = 0
 
         try:
@@ -66,9 +65,9 @@ class CmdNode(object):
         except AttributeError:
             print("creating node without parent")
 
-    def __call__(self, cmd_lst, parent):
-        print("\n cmd_lst in =", cmd_lst)
-        self.set_cmd_lst(cmd_lst)
+    def __call__(self, lst_in, parent):
+        print("\n lst_in in =", lst_in)
+        self.set_cmd_lst(lst_in)
         self.set_base_dir(os.getcwd())
         self.set_run_dir(self.lin_num)
         print("Running:", self._lst2run)
@@ -81,7 +80,6 @@ class CmdNode(object):
         self._lst_expt = lst_expt
         self._lst_refl = []
         self._lst2run = [['Root']]
-        self.cmd_lst = ['Root']
         self.status = "Succeeded"
 
     def set_base_dir(self, dir_in = None):
@@ -105,12 +103,11 @@ class CmdNode(object):
             self._lst2run[-1].append(refl_2_add)
 
     def set_cmd_lst(self, lst_in):
-        self.cmd_lst = lst_in
-        self._lst2run.append([self.cmd_lst[0]])
+        self._lst2run.append([lst_in[0]])
         self.set_imp_fil(self._lst_expt, self._lst_refl)
 
         try:
-            for par in self.cmd_lst[1:]:
+            for par in lst_in[1:]:
                 self._lst2run[-1].append(par)
 
         except:
@@ -171,13 +168,13 @@ class Runner(object):
         else:
             self.recover_state(recovery_data)
 
-    def run(self, cmd_lst, parent = None):
-        for inner_lst in cmd_lst:
+    def run(self, cmd2lst, parent = None):
+        for inner_lst in cmd2lst:
             inner_lst[0] = fix_alias(inner_lst[0])
 
-        print("cmd_lst(unaliased) =", cmd_lst)
+        print("cmd2lst(unaliased) =", cmd2lst)
         return_list = []
-        for uni_cmd in cmd_lst:
+        for uni_cmd in cmd2lst:
             print("uni_cmd", uni_cmd)
 
             if uni_cmd[0] == "goto":
@@ -239,7 +236,6 @@ class Runner(object):
                     "_lst_expt"            :uni._lst_expt,
                     "_lst_refl"            :uni._lst_refl,
                     "_run_dir"             :uni._run_dir,
-                    "cmd_lst"              :uni.cmd_lst,
                     "lin_num"              :uni.lin_num,
                     "status"               :uni.status,
                     "_old_node"            :uni._old_node,
@@ -269,7 +265,6 @@ class Runner(object):
             new_node._lst_expt       = uni_dic["_lst_expt"]
             new_node._lst_refl       = uni_dic["_lst_refl"]
             new_node._run_dir        = uni_dic["_run_dir"]
-            new_node.cmd_lst         = uni_dic["cmd_lst"]
             new_node.lin_num         = uni_dic["lin_num"]
             new_node.status          = uni_dic["status"]
             new_node.next_step_list  = uni_dic["next_step_list"]
@@ -314,11 +309,11 @@ if __name__ == "__main__":
         print("command =", command, "\n")
 
         lst_cmd = command.split(";")
-        lst_cmd_lst = []
+        lst_cmd2lst = []
         for sub_str in lst_cmd:
-            lst_cmd_lst.append(sub_str.split(" "))
+            lst_cmd2lst.append(sub_str.split(" "))
 
-        print("lst_cmd_lst:", lst_cmd_lst)
-        cmd_tree_runner.run(lst_cmd_lst)
+        print("lst_cmd2lst:", lst_cmd2lst)
+        cmd_tree_runner.run(lst_cmd2lst)
         cmd_tree_runner.run([["display"]])
 
