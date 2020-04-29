@@ -66,8 +66,13 @@ class CmdNode(object):
             print("creating node without parent")
 
     def __call__(self, lst_in, parent):
-        print("\n lst_in in =", lst_in)
-        self.set_cmd_lst(lst_in)
+        print("\n lst_in =", lst_in)
+
+        self._lst2run.append([lst_in[0]])
+        self.set_imp_fil(self._lst_expt, self._lst_refl)
+        for par in lst_in[1:]:
+            self._lst2run[-1].append(par)
+
         self.set_base_dir(os.getcwd())
         self.set_run_dir(self.lin_num)
         print("Running:", self._lst2run)
@@ -101,19 +106,6 @@ class CmdNode(object):
 
         for refl_2_add in lst_refl:
             self._lst2run[-1].append(refl_2_add)
-
-    def set_cmd_lst(self, lst_in):
-        self._lst2run.append([lst_in[0]])
-        self.set_imp_fil(self._lst_expt, self._lst_refl)
-
-        try:
-            for par in lst_in[1:]:
-                self._lst2run[-1].append(par)
-
-        except:
-            print("no extra parameters")
-
-        print("\n _lst2run:", self._lst2run, "\n")
 
     def run_cmd(self, parent):
         self.status = "Busy"
