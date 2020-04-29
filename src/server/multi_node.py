@@ -41,12 +41,12 @@ class CmdNode(object):
 
         self._lst_expt = []
         self._lst_refl = []
-        self._lst2run = [[None]]
+        self._lst2run = []
         self._run_dir = ""
 
         self.status = "Ready"
         self.next_step_list = []
-        self.cmd_lst = [["None"]]
+        self.cmd_lst = ["None"]
         self.lin_num = 0
 
         try:
@@ -68,7 +68,7 @@ class CmdNode(object):
 
     def __call__(self, cmd_lst, parent):
         print("\n cmd_lst in =", cmd_lst)
-        self.set_cmd_lst(list(cmd_lst))
+        self.set_cmd_lst(cmd_lst)
         self.set_base_dir(os.getcwd())
         self.set_run_dir(self.lin_num)
         print("Running:", self._lst2run)
@@ -81,7 +81,7 @@ class CmdNode(object):
         self._lst_expt = lst_expt
         self._lst_refl = []
         self._lst2run = [['Root']]
-        self.cmd_lst = [['Root']]
+        self.cmd_lst = ['Root']
         self.status = "Succeeded"
 
     def set_base_dir(self, dir_in = None):
@@ -98,62 +98,57 @@ class CmdNode(object):
             print("assuming the command should run in same dir")
 
     def set_imp_fil(self, lst_expt, lst_refl):
-        for inner_lst in self._lst2run:
-            for expt_2_add in lst_expt:
-                inner_lst.append(expt_2_add)
+        for expt_2_add in lst_expt:
+            self._lst2run[-1].append(expt_2_add)
 
-            for refl_2_add in lst_refl:
-                inner_lst.append(refl_2_add)
+        for refl_2_add in lst_refl:
+            self._lst2run[-1].append(refl_2_add)
 
     def set_cmd_lst(self, lst_in):
-        self.cmd_lst = [lst_in]
-        self._lst2run = []
-        for inner_lst in self.cmd_lst:
-            self._lst2run.append([inner_lst[0]])
-
+        self.cmd_lst = lst_in
+        self._lst2run.append([self.cmd_lst[0]])
         self.set_imp_fil(self._lst_expt, self._lst_refl)
 
-        for num, inner_lst in enumerate(self._lst2run):
-            try:
-                for par in self.cmd_lst[num][1:]:
-                    inner_lst.append(par)
+        try:
+            for par in self.cmd_lst[1:]:
+                self._lst2run[-1].append(par)
 
-            except:
-                print("no extra parameters")
+        except:
+            print("no extra parameters")
 
         print("\n _lst2run:", self._lst2run, "\n")
 
     def run_cmd(self, parent):
         self.status = "Busy"
         try:
-            for inner_lst in self._lst2run:
-                print("\n Running:", inner_lst, "\n")
-                proc = subprocess.Popen(
-                    inner_lst,
-                    shell = False,
-                    cwd = self._run_dir,
-                    stdout = subprocess.PIPE,
-                    stderr = subprocess.PIPE,
-                    universal_newlines = True
-                )
+            inner_lst = self._lst2run[-1]
+            print("\n Running:", inner_lst, "\n")
+            proc = subprocess.Popen(
+                inner_lst,
+                shell = False,
+                cwd = self._run_dir,
+                stdout = subprocess.PIPE,
+                stderr = subprocess.PIPE,
+                universal_newlines = True
+            )
 
-                line = None
-                while proc.poll() is None or line != '':
-                    line = proc.stdout.readline()
-                    try:
-                        parent.wfile.write(bytes(line , 'utf-8'))
+            line = None
+            while proc.poll() is None or line != '':
+                line = proc.stdout.readline()
+                try:
+                    parent.wfile.write(bytes(line , 'utf-8'))
 
-                    except AttributeError:
-                        print(line[:-1])
+                except AttributeError:
+                    print(line[:-1])
 
-                proc.stdout.close()
+            proc.stdout.close()
 
-                if proc.poll() == 0:
-                    print("subprocess poll 0")
+            if proc.poll() == 0:
+                print("subprocess poll 0")
 
-                else:
-                    print("\n  *** ERROR *** \n\n poll =", proc.poll())
-                    self.status = "Failed"
+            else:
+                print("\n  *** ERROR *** \n\n poll =", proc.poll())
+                self.status = "Failed"
 
             if self.status != "Failed":
                 self.status = "Succeeded"
@@ -180,10 +175,9 @@ class Runner(object):
         for inner_lst in cmd_lst:
             inner_lst[0] = fix_alias(inner_lst[0])
 
+        print("cmd_lst(unaliased) =", cmd_lst)
         return_list = []
-
         for uni_cmd in cmd_lst:
-
             print("uni_cmd", uni_cmd)
 
             if uni_cmd[0] == "goto":
@@ -204,13 +198,6 @@ class Runner(object):
                 tree_output.print_output()
 
             else:
-                tst_off = '''
-                if self.current_node.status == "Succeeded":
-                    self.goto_prev()
-                    print("forking")
-                    self.create_step(self.current_node)
-                '''
-
                 self.current_node(uni_cmd, parent)
                 if self.current_node.status == "Failed":
                     print("failed step")
