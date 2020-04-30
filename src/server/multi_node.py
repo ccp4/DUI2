@@ -224,7 +224,7 @@ class Runner(object):
         for uni in self.step_list:
             node = {
                     "_base_dir"            :uni._base_dir,
-                    "lst2run"             :uni.lst2run,
+                    "lst2run"              :uni.lst2run,
                     "_lst_expt"            :uni._lst_expt,
                     "_lst_refl"            :uni._lst_refl,
                     "_run_dir"             :uni._run_dir,
