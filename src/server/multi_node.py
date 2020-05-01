@@ -155,10 +155,10 @@ class Runner(object):
             self.step_list = [root_node]
             self.bigger_lin = 0
             self.current_line = self.bigger_lin
-            self.create_step(root_node)
+            self._create_step(root_node)
 
         else:
-            self.recover_state(recovery_data)
+            self._recover_state(recovery_data)
 
     def run(self, cmd2lst, parent = None):
         for inner_lst in cmd2lst:
@@ -171,15 +171,15 @@ class Runner(object):
 
             if uni_cmd[0] == "goto":
                 print("doing << goto >>")
-                self.goto(int(uni_cmd[1]))
+                self._goto(int(uni_cmd[1]))
 
             elif uni_cmd == ["mkchi"]:
-                self.create_step(self.current_node)
+                self._create_step(self.current_node)
 
             elif uni_cmd == ["mksib"]:
-                self.goto_prev()
+                self._goto_prev()
                 print("forking")
-                self.create_step(self.current_node)
+                self._create_step(self.current_node)
 
             elif uni_cmd == ["display"]:
                 return_list = out_utils.print_list(self)
@@ -191,35 +191,32 @@ class Runner(object):
                 if self.current_node.status == "Failed":
                     print("failed step")
 
-            self.save_state()
+            self._save_state()
 
         return return_list
 
-    def create_step(self, prev_step):
+    def _create_step(self, prev_step):
         new_step = CmdNode(old_node=prev_step)
         self.bigger_lin += 1
         new_step.lin_num = self.bigger_lin
         prev_step.next_step_list.append(new_step.lin_num)
         self.step_list.append(new_step)
-        self.goto(self.bigger_lin)
+        self._goto(self.bigger_lin)
 
-    def goto_prev(self):
+    def _goto_prev(self):
         try:
-            self.goto(self.current_node._old_node)
+            self._goto(self.current_node._old_node)
 
         except BaseException as e:
             print("can NOT fork <None> node ")
 
-    def goto(self, new_lin):
+    def _goto(self, new_lin):
         self.current_line = new_lin
         for node in self.step_list:
             if node.lin_num == self.current_line:
                 self.current_node = node
 
-    def get_current_node(self):
-        return self.current_node
-
-    def save_state(self):
+    def _save_state(self):
         lst_nod = []
         for uni in self.step_list:
             node = {
@@ -244,7 +241,7 @@ class Runner(object):
         with open("run_data", "w") as fp:
             json.dump(all_dat, fp, indent=4)
 
-    def recover_state(self, recovery_data):
+    def _recover_state(self, recovery_data):
         self.step_list =    []
         self.bigger_lin =   recovery_data["bigger_lin"]
         self.current_line = recovery_data["current_line"]

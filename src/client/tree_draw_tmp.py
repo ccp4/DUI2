@@ -19,11 +19,11 @@ class TreeShow(object):
         self.lst_out.append("--------------------------")
         self.max_indent = 0
         self.str_lst = []
-        self.add_tree(step = self.lst_nod[0], indent=0)
-        self.output_connect(current_line)
+        self._add_tree(step = self.lst_nod[0], indent=0)
+        self._output_connect(current_line)
         return self.lst_out
 
-    def add_tree(self, step=None, indent=None):
+    def _add_tree(self, step=None, indent=None):
         if step["status"] == "Succeeded":
             stp_prn = " S "
 
@@ -48,14 +48,14 @@ class TreeShow(object):
                 new_indent = indent + 1
                 for node in self.lst_nod:
                     if nxt_stp_lin_num == node["lin_num"]:
-                        self.add_tree(step=node, indent=new_indent)
+                        self._add_tree(step=node, indent=new_indent)
 
         else:
             new_indent = int(new_indent)
             if new_indent > self.max_indent:
                 self.max_indent = new_indent
 
-    def output_connect(self, current_line):
+    def _output_connect(self, current_line):
         tree_str_dat = []
         for tmp_lst in self.str_lst:
             tree_str_dat.append(tmp_lst)
