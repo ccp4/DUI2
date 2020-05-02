@@ -36,10 +36,10 @@ def fix_alias(short_in):
 class CmdNode(object):
     def __init__(self, old_node = None):
         try:
-            self._old_node = old_node.lin_num
+            self.parent_node = old_node.lin_num
 
         except AttributeError:
-            self._old_node = None
+            self.parent_node = None
 
         self._lst_expt = []
         self._lst_refl = []
@@ -55,6 +55,11 @@ class CmdNode(object):
             self._lst_expt = glob.glob(old_node._run_dir + "/*.expt")
             self._lst_refl = glob.glob(old_node._run_dir + "/*.refl")
 
+
+            lst_json = glob.glob(old_node._run_dir + "/*.json")
+            for json2add in lst_json:
+                self._lst_expt.append(json2add)
+
             if len(self._lst_expt) == 0:
                 self._lst_expt = old_node._lst_expt
 
@@ -67,18 +72,15 @@ class CmdNode(object):
         except AttributeError:
             print("creating node without parent")
 
-    def __call__(self, lst_in, parent):
+    def __call__(self, lst_in, req_obj):
         print("\n lst_in =", lst_in)
 
         self.lst2run.append([lst_in[0]])
-        self.set_imp_fil(self._lst_expt, self._lst_refl)
-        for par in lst_in[1:]:
-            self.lst2run[-1].append(par)
-
+        self.set_in_fil_n_par(lst_in)
         self.set_base_dir(os.getcwd())
         self.set_run_dir(self.lin_num)
-        print("Running:", self.lst2run)
-        self.run_cmd(parent)
+        self.run_cmd(req_obj)
+
 
     def set_root(self, run_dir = "/tmp/tst/", lst_expt = "/tmp/tst/imported.expt"):
         base_dir = os.getcwd()
@@ -102,14 +104,60 @@ class CmdNode(object):
         except FileExistsError:
             print("assuming the command should run in same dir")
 
-    def set_imp_fil(self, lst_expt, lst_refl):
-        for expt_2_add in lst_expt:
-            self.lst2run[-1].append(expt_2_add)
+    def set_in_fil_n_par(self, lst_in):
+        if self.lst2run[-1][0] == "dials.reindex":
+            print("\n IN **** dials.reindex **** \n")
 
-        for refl_2_add in lst_refl:
+            #try:
+            sol_str = lst_in[1]
+            if sol_str[0:9] == "solution=":
+                sol_num = int(sol_str[9:])
+
+            else:
+                logger.info("\nDEFAULT  to sol_num = 1 \n")
+                sol_num = 1
+
+            json_file_tmp = None
+            for file_str in self._lst_expt:
+                if "bravais_summary" in file_str:
+                    print("found ", file_str)
+                    json_file_tmp = str(file_str)
+
+            if json_file_tmp is not None:
+                with open(json_file_tmp) as summary_file:
+                    j_obj = json.load(summary_file)
+
+                change_of_basis_op = j_obj[str(sol_num)]["cb_op"]
+
+                input_str = "change_of_basis_op=" + str(change_of_basis_op)
+                print("input_str =", input_str)
+                self.lst2run[-1].append(input_str)
+
+                new_exp_fil = None
+                str2comp = "bravais_setting_" + str(sol_num)
+                for file_str in self._lst_expt:
+                    if str2comp in file_str:
+                        self._lst_expt = [str(file_str)]
+
+                '''
+                node_obj.json_file_out = (
+                    node_obj.prev_step.prefix_out + "bravais_setting_" + str(sol_num) + ".expt"
+                )
+                '''
+
+        else:
+            for expt_2_add in self._lst_expt:
+                self.lst2run[-1].append(expt_2_add)
+
+        for refl_2_add in self._lst_refl:
             self.lst2run[-1].append(refl_2_add)
 
-    def run_cmd(self, parent):
+        if self.lst2run[-1][0] != "dials.reindex":
+            for par in lst_in[1:]:
+                self.lst2run[-1].append(par)
+
+
+    def run_cmd(self, req_obj):
         self.status = "Busy"
         try:
             inner_lst = self.lst2run[-1]
@@ -127,7 +175,7 @@ class CmdNode(object):
             while proc.poll() is None or line != '':
                 line = proc.stdout.readline()
                 try:
-                    parent.wfile.write(bytes(line , 'utf-8'))
+                    req_obj.wfile.write(bytes(line , 'utf-8'))
 
                 except AttributeError:
                     print(line[:-1])
@@ -162,7 +210,7 @@ class Runner(object):
         else:
             self._recover_state(recovery_data)
 
-    def run(self, cmd2lst, parent = None):
+    def run(self, cmd2lst, req_obj = None):
         for inner_lst in cmd2lst:
             inner_lst[0] = fix_alias(inner_lst[0])
 
@@ -189,7 +237,7 @@ class Runner(object):
                 tree_output.print_output()
 
             else:
-                self.current_node(uni_cmd, parent)
+                self.current_node(uni_cmd, req_obj)
                 if self.current_node.status == "Failed":
                     print("failed step")
 
@@ -207,7 +255,7 @@ class Runner(object):
 
     def _goto_prev(self):
         try:
-            self._goto(self.current_node._old_node)
+            self._goto(self.current_node.parent_node)
 
         except BaseException as e:
             print("can NOT fork <None> node ")
@@ -229,7 +277,7 @@ class Runner(object):
                     "_run_dir"             :uni._run_dir,
                     "lin_num"              :uni.lin_num,
                     "status"               :uni.status,
-                    "_old_node"            :uni._old_node,
+                    "parent_node"          :uni.parent_node,
                     "next_step_list"       :uni.next_step_list}
 
             lst_nod.append(node)
@@ -252,14 +300,14 @@ class Runner(object):
         for uni_dic in lst_nod:
             new_node = CmdNode(None)
             new_node._base_dir       = uni_dic["_base_dir"]
-            new_node.lst2run        = uni_dic["lst2run"]
+            new_node.lst2run         = uni_dic["lst2run"]
             new_node._lst_expt       = uni_dic["_lst_expt"]
             new_node._lst_refl       = uni_dic["_lst_refl"]
             new_node._run_dir        = uni_dic["_run_dir"]
             new_node.lin_num         = uni_dic["lin_num"]
             new_node.status          = uni_dic["status"]
             new_node.next_step_list  = uni_dic["next_step_list"]
-            new_node._old_node       = uni_dic["_old_node"]
+            new_node.parent_node     = uni_dic["parent_node"]
 
             if new_node.lin_num == self.current_line:
                 self.current_node = new_node
