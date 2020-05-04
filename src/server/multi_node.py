@@ -10,7 +10,6 @@ def fix_alias(short_in):
         ("d", "display" ),
         ("g", "goto"    ),
         ("c", "mkchi"   ),
-        ("s", "mksib"   ),
         ("mg", "dials.modify_geometry"         ),
         ("gm", "dials.generate_mask"           ),
         ("am", "dials.apply_mask"              ),
@@ -30,7 +29,6 @@ def fix_alias(short_in):
             long_out = pair[1]
 
     return long_out
-
 
 
 class CmdNode(object):
@@ -135,7 +133,6 @@ class CmdNode(object):
             except KeyError:
                 print("KeyError from attempting to reindex")
 
-
         else:
             for expt_2_add in self._lst_expt:
                 self.lst2run[-1].append(expt_2_add)
@@ -146,7 +143,6 @@ class CmdNode(object):
         if self.lst2run[-1][0] != "dials.reindex":
             for par in lst_in[1:]:
                 self.lst2run[-1].append(par)
-
 
     def run_cmd(self, req_obj):
         self.status = "Busy"
@@ -161,7 +157,6 @@ class CmdNode(object):
                 stderr = subprocess.PIPE,
                 universal_newlines = True
             )
-
             line = None
             while proc.poll() is None or line != '':
                 line = proc.stdout.readline()
@@ -172,7 +167,6 @@ class CmdNode(object):
                     print(line[:-1])
 
             proc.stdout.close()
-
             if proc.poll() == 0:
                 print("subprocess poll 0")
 
@@ -217,11 +211,6 @@ class Runner(object):
             elif uni_cmd == ["mkchi"]:
                 self._create_step(self.current_node)
 
-            elif uni_cmd == ["mksib"]:
-                self._goto_prev()
-                print("forking")
-                self._create_step(self.current_node)
-
             elif uni_cmd == ["display"]:
                 return_list = out_utils.print_list(self)
                 tree_output(self.current_line, return_list)
@@ -243,13 +232,6 @@ class Runner(object):
         prev_step.next_step_list.append(new_step.lin_num)
         self.step_list.append(new_step)
         self._goto(self.bigger_lin)
-
-    def _goto_prev(self):
-        try:
-            self._goto(self.current_node.parent_node)
-
-        except BaseException as e:
-            print("can NOT fork <None> node ")
 
     def _goto(self, new_lin):
         self.current_line = new_lin
