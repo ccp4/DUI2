@@ -106,15 +106,13 @@ class CmdNode(object):
 
     def set_in_fil_n_par(self, lst_in):
         if self.lst2run[-1][0] == "dials.reindex":
-            print("\n IN **** dials.reindex **** \n")
-
             try:
-                sol_str = lst_in[1]
-                if sol_str[0:9] == "solution=":
-                    sol_num = int(sol_str[9:])
+                try:
+                    sol_num = int(lst_in[1])
 
-                else:
-                    logger.info("\nDEFAULT  to sol_num = 1 \n")
+                except(IndexError, ValueError):
+                    print(" *** ERROR ***")
+                    print(" wrong solution number, defaulting to 1")
                     sol_num = 1
 
                 json_file_tmp = None
@@ -134,7 +132,7 @@ class CmdNode(object):
                     self.lst2run[-1].append(input_str)
 
                     new_exp_fil = None
-                    str2comp = "bravais_setting_" + str(sol_num)
+                    str2comp = "bravais_setting_" + str(sol_num) + ".expt"
                     for file_str in self._lst_expt:
                         if str2comp in file_str:
                             self._lst_expt = [str(file_str)]
