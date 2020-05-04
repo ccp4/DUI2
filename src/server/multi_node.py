@@ -118,7 +118,6 @@ class CmdNode(object):
                 json_file_tmp = None
                 for file_str in self._lst_expt:
                     if "bravais_summary" in file_str:
-                        print("found ", file_str)
                         json_file_tmp = str(file_str)
 
                 if json_file_tmp is not None:
@@ -126,12 +125,8 @@ class CmdNode(object):
                         j_obj = json.load(summary_file)
 
                     change_of_basis_op = j_obj[str(sol_num)]["cb_op"]
-
                     input_str = "change_of_basis_op=" + str(change_of_basis_op)
-                    print("input_str =", input_str)
                     self.lst2run[-1].append(input_str)
-
-                    new_exp_fil = None
                     str2comp = "bravais_setting_" + str(sol_num) + ".expt"
                     for file_str in self._lst_expt:
                         if str2comp in file_str:
