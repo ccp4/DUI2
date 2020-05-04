@@ -108,42 +108,40 @@ class CmdNode(object):
         if self.lst2run[-1][0] == "dials.reindex":
             print("\n IN **** dials.reindex **** \n")
 
-            #try:
-            sol_str = lst_in[1]
-            if sol_str[0:9] == "solution=":
-                sol_num = int(sol_str[9:])
+            try:
+                sol_str = lst_in[1]
+                if sol_str[0:9] == "solution=":
+                    sol_num = int(sol_str[9:])
 
-            else:
-                logger.info("\nDEFAULT  to sol_num = 1 \n")
-                sol_num = 1
+                else:
+                    logger.info("\nDEFAULT  to sol_num = 1 \n")
+                    sol_num = 1
 
-            json_file_tmp = None
-            for file_str in self._lst_expt:
-                if "bravais_summary" in file_str:
-                    print("found ", file_str)
-                    json_file_tmp = str(file_str)
-
-            if json_file_tmp is not None:
-                with open(json_file_tmp) as summary_file:
-                    j_obj = json.load(summary_file)
-
-                change_of_basis_op = j_obj[str(sol_num)]["cb_op"]
-
-                input_str = "change_of_basis_op=" + str(change_of_basis_op)
-                print("input_str =", input_str)
-                self.lst2run[-1].append(input_str)
-
-                new_exp_fil = None
-                str2comp = "bravais_setting_" + str(sol_num)
+                json_file_tmp = None
                 for file_str in self._lst_expt:
-                    if str2comp in file_str:
-                        self._lst_expt = [str(file_str)]
+                    if "bravais_summary" in file_str:
+                        print("found ", file_str)
+                        json_file_tmp = str(file_str)
 
-                '''
-                node_obj.json_file_out = (
-                    node_obj.prev_step.prefix_out + "bravais_setting_" + str(sol_num) + ".expt"
-                )
-                '''
+                if json_file_tmp is not None:
+                    with open(json_file_tmp) as summary_file:
+                        j_obj = json.load(summary_file)
+
+                    change_of_basis_op = j_obj[str(sol_num)]["cb_op"]
+
+                    input_str = "change_of_basis_op=" + str(change_of_basis_op)
+                    print("input_str =", input_str)
+                    self.lst2run[-1].append(input_str)
+
+                    new_exp_fil = None
+                    str2comp = "bravais_setting_" + str(sol_num)
+                    for file_str in self._lst_expt:
+                        if str2comp in file_str:
+                            self._lst_expt = [str(file_str)]
+
+            except KeyError:
+                print("KeyError from attempting to reindex")
+
 
         else:
             for expt_2_add in self._lst_expt:
