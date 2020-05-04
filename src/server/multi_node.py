@@ -189,7 +189,6 @@ class Runner(object):
             root_node.set_root()
             self.step_list = [root_node]
             self.bigger_lin = 0
-            self.current_line = self.bigger_lin
             self._create_step(root_node)
 
         else:
@@ -213,7 +212,7 @@ class Runner(object):
 
             elif uni_cmd == ["display"]:
                 return_list = out_utils.print_list(self)
-                tree_output(self.current_line, return_list)
+                tree_output(self.current_node.lin_num, return_list)
                 tree_output.print_output()
 
             else:
@@ -234,9 +233,8 @@ class Runner(object):
         self._goto(self.bigger_lin)
 
     def _goto(self, new_lin):
-        self.current_line = new_lin
         for node in self.step_list:
-            if node.lin_num == self.current_line:
+            if node.lin_num == new_lin:
                 self.current_node = node
 
     def _save_state(self):
@@ -258,7 +256,7 @@ class Runner(object):
         all_dat = {
                 "step_list"             :lst_nod,
                 "bigger_lin"            :self.bigger_lin,
-                "current_line"          :self.current_line,
+                "current_line"          :self.current_node.lin_num,
             }
 
         with open("run_data", "w") as fp:
@@ -267,7 +265,6 @@ class Runner(object):
     def _recover_state(self, recovery_data):
         self.step_list =    []
         self.bigger_lin =   recovery_data["bigger_lin"]
-        self.current_line = recovery_data["current_line"]
 
         lst_nod = recovery_data["step_list"]
         for uni_dic in lst_nod:
@@ -282,7 +279,7 @@ class Runner(object):
             new_node.next_step_list  = uni_dic["next_step_list"]
             new_node.parent_node     = uni_dic["parent_node"]
 
-            if new_node.lin_num == self.current_line:
+            if new_node.lin_num == recovery_data["current_line"]:
                 self.current_node = new_node
 
             self.step_list.append(new_node)
@@ -306,7 +303,7 @@ if __name__ == "__main__":
 
     while command.strip() != "exit" and command.strip() != "quit":
         try:
-            inp_str = "lin [" + str(cmd_tree_runner.current_line) + "] >>> "
+            inp_str = "lin [" + str(cmd_tree_runner.current_node.lin_num) + "] >>> "
             command = str(input(inp_str))
             print("\n")
 
