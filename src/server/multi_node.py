@@ -8,8 +8,6 @@ import out_utils
 def fix_alias(short_in):
     pair_list = [
         ("d", "display" ),
-        ("g", "goto"    ),
-        ("c", "mkchi"   ),
         ("mg", "dials.modify_geometry"         ),
         ("gm", "dials.generate_mask"           ),
         ("am", "dials.apply_mask"              ),
@@ -195,6 +193,18 @@ class Runner(object):
             self._recover_state(recovery_data)
 
     def run(self, cmd2lst, req_obj = None):
+
+        try:
+            lin2go = int(cmd2lst[0][0])
+            print("Moving to line", lin2go, "before making a child node")
+            cmd2lst[0] = cmd2lst[0][1:]
+            self._goto(lin2go)
+            self._create_step(self.current_node)
+
+        except ValueError:
+            print("No request for line change")
+
+
         for inner_lst in cmd2lst:
             inner_lst[0] = fix_alias(inner_lst[0])
 
@@ -203,14 +213,7 @@ class Runner(object):
         for uni_cmd in cmd2lst:
             print("uni_cmd", uni_cmd)
 
-            if uni_cmd[0] == "goto":
-                print("doing << goto >>")
-                self._goto(int(uni_cmd[1]))
-
-            elif uni_cmd == ["mkchi"]:
-                self._create_step(self.current_node)
-
-            elif uni_cmd == ["display"]:
+            if uni_cmd == ["display"]:
                 return_list = out_utils.print_list(self)
                 tree_output(self.current_node.lin_num, return_list)
                 tree_output.print_output()
