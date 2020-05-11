@@ -4,7 +4,6 @@ import glob, json
 
 import out_utils
 
-
 def fix_alias(short_in):
     pair_list = [
         ("d", "display" ),
@@ -51,7 +50,6 @@ class CmdNode(object):
             self._lst_expt = glob.glob(old_node._run_dir + "/*.expt")
             self._lst_refl = glob.glob(old_node._run_dir + "/*.refl")
 
-
             lst_json = glob.glob(old_node._run_dir + "/*.json")
             for json2add in lst_json:
                 self._lst_expt.append(json2add)
@@ -76,7 +74,6 @@ class CmdNode(object):
         self.set_base_dir(os.getcwd())
         self.set_run_dir(self.lin_num)
         self.run_cmd(req_obj)
-
 
     def set_root(self, run_dir = "/tmp/tst/", lst_expt = "/tmp/tst/imported.expt"):
         base_dir = os.getcwd()
@@ -185,9 +182,9 @@ class Runner(object):
         if recovery_data == None:
             root_node = CmdNode(None)
             root_node.set_root()
+            self.current_node = root_node
             self.step_list = [root_node]
             self.bigger_lin = 0
-            self._create_step(root_node)
 
         else:
             self._recover_state(recovery_data)
@@ -203,7 +200,6 @@ class Runner(object):
 
         except ValueError:
             print("No request for line change")
-
 
         for inner_lst in cmd2lst:
             inner_lst[0] = fix_alias(inner_lst[0])
@@ -286,7 +282,6 @@ class Runner(object):
                 self.current_node = new_node
 
             self.step_list.append(new_node)
-
 
 
 tree_output = out_utils.TreeShow()
