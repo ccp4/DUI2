@@ -4,10 +4,6 @@ import time, subprocess, json
 
 import out_utils, multi_node
 
-#tree_output = out_utils.TreeShow()
-#cmd_tree_runner = multi_node.Runner()
-
-
 try:
     with open("run_data") as json_file:
         runner_data = json.load(json_file)

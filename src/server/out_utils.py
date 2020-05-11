@@ -76,30 +76,33 @@ class TreeShow(object):
                 self.max_indent = new_indent
 
     def _output_connect(self, current_line):
-        tree_str_dat = []
-        for tmp_lst in self.str_lst:
-            tree_str_dat.append(tmp_lst)
-
-        for pos, loc_lst in enumerate(tree_str_dat):
+        for pos, loc_lst in enumerate(self.str_lst):
             if pos > 0:
-                if loc_lst[1] < tree_str_dat[pos - 1][1]:
+                if loc_lst[1] < self.str_lst[pos - 1][1]:
                     for up_pos in range(pos - 1, 0, -1):
                         pos_in_str = loc_lst[1] * len(self.ind_spc) + 9
-                        left_side = tree_str_dat[up_pos][0][0:pos_in_str]
-                        right_side = tree_str_dat[up_pos][0][pos_in_str + 1 :]
-                        if tree_str_dat[up_pos][1] > loc_lst[1]:
-                            tree_str_dat[up_pos][0] = left_side + "|" + right_side
+                        left_side = self.str_lst[up_pos][0][0:pos_in_str]
+                        right_side = self.str_lst[up_pos][0][pos_in_str + 1 :]
+                        if self.str_lst[up_pos][1] > loc_lst[1]:
+                            self.str_lst[up_pos][0] = left_side + "|" + right_side
 
-                        elif tree_str_dat[up_pos][1] == loc_lst[1]:
+                        elif self.str_lst[up_pos][1] == loc_lst[1]:
                             break
 
+            lng = len(self.ind_spc) * self.max_indent + 22
+            lng_lft = lng - len(self.str_lst[pos][0])
+            str_here = lng_lft * " "
+            self.str_lst[pos][0] += str_here + "  <<< here "
+
+            tst_off = '''
             if loc_lst[2] == current_line:
                 lng = len(self.ind_spc) * self.max_indent + 22
-                lng_lft = lng - len(tree_str_dat[pos][0])
+                lng_lft = lng - len(self.str_lst[pos][0])
                 str_here = lng_lft * " "
-                tree_str_dat[pos][0] += str_here + "  <<< here "
+                self.str_lst[pos][0] += str_here + "  <<< here "
+            '''
 
-        for prn_str in tree_str_dat:
+        for prn_str in self.str_lst:
             self.lst_out.append(prn_str[0])
 
         self.lst_out.append("---------------------" + self.max_indent * self.ind_lin)
