@@ -210,7 +210,7 @@ class Runner(object):
             print("uni_cmd", uni_cmd)
 
             if uni_cmd == ["display"]:
-                return_list = out_utils.print_list(self)
+                return_list = out_utils.get_lst2show(self)
                 tree_output(self.current_node.lin_num, return_list)
                 tree_output.print_output()
 

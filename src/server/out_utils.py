@@ -1,6 +1,6 @@
 import json
 
-def print_list(main_obj):
+def get_lst2show(main_obj):
     lst_nod = []
     for uni in main_obj.step_list:
         if uni.lst2run == []:
@@ -11,7 +11,7 @@ def print_list(main_obj):
 
         node = {"lin_num"           :uni.lin_num,
                 "status"            :uni.status,
-                "cmd2show"           :cmd2show,
+                "cmd2show"          :cmd2show,
                 "next_step_list"    :uni.next_step_list}
 
         lst_nod.append(node)
