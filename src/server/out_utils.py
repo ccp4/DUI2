@@ -21,8 +21,8 @@ def get_lst2show(main_obj):
 
 class TreeShow(object):
     def __init__(self):
-        self.ind_spc = "      "
-        self.ind_lin = "------"
+        self.ind_spc = "    "
+        self.ind_lin = "----"
 
     def __call__(self, current_line = None, lst_nod = None):
         self.lst_nod = lst_nod
@@ -55,12 +55,14 @@ class TreeShow(object):
         else:
             stp_prn = " R "
 
-        str_lin_num = "{0:3}".format(int(step["lin_num"]))
-        stp_prn += str_lin_num + self.ind_spc * indent + r"   \___"
+        #str_lin_num = "{0:3}".format(int(step["lin_num"]))
+        str_lin_num = "(" + str(step["lin_num"]) + ")"
+        stp_prn += self.ind_spc * indent + r"  \__"
 
-        stp_prn += str(step["cmd2show"][0]) + "     "
+        stp_prn += str_lin_num + "     "
+        str_cmd = str(step["cmd2show"][0])
 
-        self.str_lst.append([stp_prn, indent, int(step["lin_num"])])
+        self.str_lst.append([stp_prn, indent, int(step["lin_num"]), str_cmd])
         new_indent = indent
 
         if len(step["next_step_list"]) > 0:
@@ -80,7 +82,7 @@ class TreeShow(object):
             if pos > 0:
                 if loc_lst[1] < self.str_lst[pos - 1][1]:
                     for up_pos in range(pos - 1, 0, -1):
-                        pos_in_str = loc_lst[1] * len(self.ind_spc) + 9
+                        pos_in_str = loc_lst[1] * len(self.ind_spc) + 5
                         left_side = self.str_lst[up_pos][0][0:pos_in_str]
                         right_side = self.str_lst[up_pos][0][pos_in_str + 1 :]
                         if self.str_lst[up_pos][1] > loc_lst[1]:
@@ -92,15 +94,7 @@ class TreeShow(object):
             lng = len(self.ind_spc) * self.max_indent + 22
             lng_lft = lng - len(self.str_lst[pos][0])
             str_here = lng_lft * " "
-            self.str_lst[pos][0] += str_here + "  <<< here "
-
-            tst_off = '''
-            if loc_lst[2] == current_line:
-                lng = len(self.ind_spc) * self.max_indent + 22
-                lng_lft = lng - len(self.str_lst[pos][0])
-                str_here = lng_lft * " "
-                self.str_lst[pos][0] += str_here + "  <<< here "
-            '''
+            self.str_lst[pos][0] += str_here + " | " + self.str_lst[pos][3]
 
         for prn_str in self.str_lst:
             self.lst_out.append(prn_str[0])
