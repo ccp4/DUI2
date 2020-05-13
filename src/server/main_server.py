@@ -34,7 +34,6 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
 
 if __name__ == "__main__":
 
-    #################################################################################
     try:
         with open("run_data") as json_file:
             runner_data = json.load(json_file)
@@ -46,7 +45,6 @@ if __name__ == "__main__":
     cmd_tree_runner = multi_node.Runner(runner_data)
     cmd_tree_runner.run([["display"]])
     command = ""
-    #################################################################################
 
     PORT = 8080
     with socketserver.ThreadingTCPServer(("", PORT), ReqHandler) as http_daemon:

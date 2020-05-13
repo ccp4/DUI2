@@ -5,7 +5,7 @@ class TreeShow(object):
         self.ind_spc = "      "
         self.ind_lin = "------"
 
-    def __call__(self, new_lst_nod = None, current_line = None):
+    def __call__(self, new_lst_nod = None):
         self.lst_nod = new_lst_nod
 
         self.lst_out = []
@@ -20,7 +20,7 @@ class TreeShow(object):
         self.max_indent = 0
         self.str_lst = []
         self._add_tree(step = self.lst_nod[0], indent=0)
-        self._output_connect(current_line)
+        self._output_connect()
         return self.lst_out
 
     def _add_tree(self, step=None, indent=None):
@@ -55,7 +55,7 @@ class TreeShow(object):
             if new_indent > self.max_indent:
                 self.max_indent = new_indent
 
-    def _output_connect(self, current_line):
+    def _output_connect(self):
         tree_str_dat = []
         for tmp_lst in self.str_lst:
             tree_str_dat.append(tmp_lst)
@@ -72,12 +72,6 @@ class TreeShow(object):
 
                         elif tree_str_dat[up_pos][1] == loc_lst[1]:
                             break
-
-            if loc_lst[2] == current_line:
-                lng = len(self.ind_spc) * self.max_indent + 22
-                lng_lft = lng - len(tree_str_dat[pos][0])
-                str_here = lng_lft * " "
-                tree_str_dat[pos][0] += str_here + "  <<< here "
 
         for prn_str in tree_str_dat:
             self.lst_out.append(prn_str[0])

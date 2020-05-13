@@ -24,7 +24,7 @@ class TreeShow(object):
         self.ind_spc = "    "
         self.ind_lin = "----"
 
-    def __call__(self, current_line = None, lst_nod = None):
+    def __call__(self, lst_nod = None):
         self.lst_nod = lst_nod
 
         self.lst_out = []
@@ -40,7 +40,7 @@ class TreeShow(object):
         self.max_indent = 0
         self.str_lst = []
         self._add_tree(step = self.lst_nod[0], indent=0)
-        self._output_connect(current_line)
+        self._output_connect()
 
     def _add_tree(self, step=None, indent=None):
         if step["status"] == "Succeeded":
@@ -77,7 +77,7 @@ class TreeShow(object):
             if new_indent > self.max_indent:
                 self.max_indent = new_indent
 
-    def _output_connect(self, current_line):
+    def _output_connect(self):
         for pos, loc_lst in enumerate(self.str_lst):
             if pos > 0:
                 if loc_lst[1] < self.str_lst[pos - 1][1]:

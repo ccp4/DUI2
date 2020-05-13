@@ -48,7 +48,6 @@ class Client(QtWidgets.QDialog):
         self.setLayout(mainLayout)
         self.setWindowTitle("DUI front end test with HTTP")
 
-        self.lin_num = 1
         self.tree_obj = tree_draw_tmp.TreeShow()
 
     def add_line(self, new_line):
@@ -78,10 +77,7 @@ class Client(QtWidgets.QDialog):
                 break
 
         lst_nodes = json.loads(str_lst[1])
-        lst_str = self.tree_obj(
-            new_lst_nod = lst_nodes,
-            current_line = self.lin_num
-        )
+        lst_str = self.tree_obj(new_lst_nod = lst_nodes)
 
         for tree_line in lst_str:
             self.add_line(tree_line + "\n")
@@ -91,15 +87,7 @@ class Client(QtWidgets.QDialog):
     def request_launch(self):
 
         cmd_byte = str.encode(self.dataLineEdit.text())
-
         cmd_str = str(self.dataLineEdit.text())
-        lst_cmd = cmd_str.split(";")
-        for sing_cmd in lst_cmd:
-            lst_par = sing_cmd.split(" ")
-            for num, par in enumerate(lst_par):
-                if par == "g" or par == "goto":
-                    self.lin_num = int(lst_par[num + 1])
-
         cmd = {'command': [cmd_byte]}
         req_get = requests.get('http://localhost:8080/', stream = True, params = cmd)
 

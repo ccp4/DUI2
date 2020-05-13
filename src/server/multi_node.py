@@ -183,7 +183,6 @@ class Runner(object):
         if recovery_data == None:
             root_node = CmdNode(None)
             root_node.set_root()
-            self.current_node = root_node
             self.step_list = [root_node]
             self.bigger_lin = 0
 
@@ -196,8 +195,12 @@ class Runner(object):
             lin2go = int(cmd2lst[0][0])
             print("Moving to line", lin2go, "before making a child node")
             cmd2lst[0] = cmd2lst[0][1:]
-            self._goto(lin2go)
-            self._create_step(self.current_node)
+
+            for node in self.step_list:
+                if node.lin_num == lin2go:
+                    tmp_current_node = node
+
+            new_node = self._create_step(tmp_current_node)
 
         except ValueError:
             print("No request for line change")
@@ -212,12 +215,12 @@ class Runner(object):
 
             if uni_cmd == ["display"]:
                 return_list = out_utils.get_lst2show(self)
-                self.tree_output(self.current_node.lin_num, return_list)
+                self.tree_output(return_list)
                 self.tree_output.print_output()
 
             else:
-                self.current_node(uni_cmd, req_obj)
-                if self.current_node.status == "Failed":
+                new_node(uni_cmd, req_obj)
+                if tmp_current_node.status == "Failed":
                     print("failed step")
 
             self._save_state()
@@ -230,12 +233,8 @@ class Runner(object):
         new_step.lin_num = self.bigger_lin
         prev_step.next_step_list.append(new_step.lin_num)
         self.step_list.append(new_step)
-        self._goto(self.bigger_lin)
 
-    def _goto(self, new_lin):
-        for node in self.step_list:
-            if node.lin_num == new_lin:
-                self.current_node = node
+        return new_step
 
     def _save_state(self):
         lst_nod = []
@@ -256,7 +255,6 @@ class Runner(object):
         all_dat = {
                 "step_list"             :lst_nod,
                 "bigger_lin"            :self.bigger_lin,
-                "current_line"          :self.current_node.lin_num,
             }
 
         with open("run_data", "w") as fp:
@@ -279,9 +277,6 @@ class Runner(object):
             new_node.next_step_list  = uni_dic["next_step_list"]
             new_node.parent_node     = uni_dic["parent_node"]
 
-            if new_node.lin_num == recovery_data["current_line"]:
-                self.current_node = new_node
-
             self.step_list.append(new_node)
 
 
@@ -301,7 +296,7 @@ if __name__ == "__main__":
 
     while command.strip() != "exit" and command.strip() != "quit":
         try:
-            inp_str = "lin [" + str(cmd_tree_runner.current_node.lin_num) + "] >>> "
+            inp_str = "]]]>>> "
             command = str(input(inp_str))
             print("\n")
 
