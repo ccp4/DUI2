@@ -196,11 +196,13 @@ class Runner(object):
             print("Moving to line", lin2go, "before making a child node")
             cmd2lst[0] = cmd2lst[0][1:]
 
+            tmp_old_node = None
             for node in self.step_list:
                 if node.lin_num == lin2go:
-                    tmp_current_node = node
+                    tmp_old_node = node
 
-            new_node = self._create_step(tmp_current_node)
+            if tmp_old_node:
+                node2run = self._create_step(tmp_old_node)
 
         except ValueError:
             print("No request for line change")
@@ -219,9 +221,13 @@ class Runner(object):
                 self.tree_output.print_output()
 
             else:
-                new_node(uni_cmd, req_obj)
-                if tmp_current_node.status == "Failed":
-                    print("failed step")
+                try:
+                    node2run(uni_cmd, req_obj)
+                    if tmp_old_node.status == "Failed":
+                        print("failed step")
+
+                except UnboundLocalError:
+                    print("\n *** ERROR *** \n No node to connect to")
 
             self._save_state()
 
