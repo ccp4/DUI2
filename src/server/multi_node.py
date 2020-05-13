@@ -179,6 +179,7 @@ class CmdNode(object):
 
 class Runner(object):
     def __init__(self, recovery_data):
+        self.tree_output = out_utils.TreeShow()
         if recovery_data == None:
             root_node = CmdNode(None)
             root_node.set_root()
@@ -211,8 +212,8 @@ class Runner(object):
 
             if uni_cmd == ["display"]:
                 return_list = out_utils.get_lst2show(self)
-                tree_output(self.current_node.lin_num, return_list)
-                tree_output.print_output()
+                self.tree_output(self.current_node.lin_num, return_list)
+                self.tree_output.print_output()
 
             else:
                 self.current_node(uni_cmd, req_obj)
@@ -284,7 +285,6 @@ class Runner(object):
             self.step_list.append(new_node)
 
 
-tree_output = out_utils.TreeShow()
 if __name__ == "__main__":
 
     try:
