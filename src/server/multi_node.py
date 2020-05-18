@@ -31,7 +31,8 @@ def fix_alias(short_in):
 class CmdNode(object):
     def __init__(self, parent_lst_in = None):
         try:
-            self.parent_node_lst = parent_lst_in[0].lin_num
+            for single_parent in parent_lst_in:
+                self.parent_node_lst = single_parent.lin_num
 
         except TypeError:
             self.parent_node_lst = None
@@ -46,19 +47,23 @@ class CmdNode(object):
         self.lin_num = 0
 
         try:
-            self.set_base_dir(parent_lst_in[0]._base_dir)
-            self._lst_expt = glob.glob(parent_lst_in[0]._run_dir + "/*.expt")
-            self._lst_refl = glob.glob(parent_lst_in[0]._run_dir + "/*.refl")
+            for single_parent in parent_lst_in:
+                self.set_base_dir(single_parent._base_dir)
+                for expt_2_add in glob.glob(single_parent._run_dir + "/*.expt"):
+                    self._lst_expt.append(expt_2_add)
 
-            lst_json = glob.glob(parent_lst_in[0]._run_dir + "/*.json")
-            for json2add in lst_json:
-                self._lst_expt.append(json2add)
+                for refl_2_add in glob.glob(single_parent._run_dir + "/*.refl"):
+                    self._lst_refl.append(refl_2_add)
 
-            if len(self._lst_expt) == 0:
-                self._lst_expt = parent_lst_in[0]._lst_expt
+                lst_json = glob.glob(single_parent._run_dir + "/*.json")
+                for json_2_add in lst_json:
+                    self._lst_expt.append(json_2_add)
 
-            if len(self._lst_refl) == 0:
-                self._lst_refl = parent_lst_in[0]._lst_refl
+                if len(self._lst_expt) == 0:
+                    self._lst_expt = single_parent._lst_expt
+
+                if len(self._lst_refl) == 0:
+                    self._lst_refl = single_parent._lst_refl
 
             print("self._lst_expt: ", self._lst_expt)
             print("self._lst_refl: ", self._lst_refl)
