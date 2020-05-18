@@ -1,11 +1,9 @@
 class TreeShow(object):
     def __init__(self):
         self.ind_spc = "    "
-        self.ind_lin = "----"
 
     def __call__(self, new_lst_nod = None):
         self.lst_nod = new_lst_nod
-
 
         self.lst_out = []
         self.lst_out.append("")
@@ -78,7 +76,7 @@ class TreeShow(object):
         for prn_str in self.str_lst:
             self.lst_out.append(prn_str[0])
 
-        self.lst_out.append("---------------------" + self.max_indent * self.ind_lin)
+        self.lst_out.append("---------------------" + self.max_indent * "-" * len(self.ind_spc))
 
     def print_output(self):
         for prn_str in self.lst_out:
