@@ -29,12 +29,12 @@ def fix_alias(short_in):
 
 
 class CmdNode(object):
-    def __init__(self, old_node = None):
+    def __init__(self, parent_lst_in = None):
         try:
-            self.parent_node = old_node.lin_num
+            self.parent_node_lst = parent_lst_in.lin_num
 
         except AttributeError:
-            self.parent_node = None
+            self.parent_node_lst = None
 
         self._lst_expt = []
         self._lst_refl = []
@@ -46,25 +46,25 @@ class CmdNode(object):
         self.lin_num = 0
 
         try:
-            self.set_base_dir(old_node._base_dir)
-            self._lst_expt = glob.glob(old_node._run_dir + "/*.expt")
-            self._lst_refl = glob.glob(old_node._run_dir + "/*.refl")
+            self.set_base_dir(parent_lst_in._base_dir)
+            self._lst_expt = glob.glob(parent_lst_in._run_dir + "/*.expt")
+            self._lst_refl = glob.glob(parent_lst_in._run_dir + "/*.refl")
 
-            lst_json = glob.glob(old_node._run_dir + "/*.json")
+            lst_json = glob.glob(parent_lst_in._run_dir + "/*.json")
             for json2add in lst_json:
                 self._lst_expt.append(json2add)
 
             if len(self._lst_expt) == 0:
-                self._lst_expt = old_node._lst_expt
+                self._lst_expt = parent_lst_in._lst_expt
 
             if len(self._lst_refl) == 0:
-                self._lst_refl = old_node._lst_refl
+                self._lst_refl = parent_lst_in._lst_refl
 
             print("self._lst_expt: ", self._lst_expt)
             print("self._lst_refl: ", self._lst_refl)
 
         except AttributeError:
-            print("creating node without parent")
+            print("parent_lst_in =", parent_lst_in, "tmp empty")
 
     def __call__(self, lst_in, req_obj):
         print("\n lst_in =", lst_in)
@@ -196,13 +196,13 @@ class Runner(object):
             print("Moving to line", lin2go, "before making a child node")
             cmd2lst[0] = cmd2lst[0][1:]
 
-            tmp_old_node = None
+            tmp_parent_lst_in = None
             for node in self.step_list:
                 if node.lin_num == lin2go:
-                    tmp_old_node = node
+                    tmp_parent_lst_in = node
 
-            if tmp_old_node:
-                node2run = self._create_step(tmp_old_node)
+            if tmp_parent_lst_in:
+                node2run = self._create_step(tmp_parent_lst_in)
 
         except ValueError:
             print("No request for line change")
@@ -223,7 +223,7 @@ class Runner(object):
             else:
                 try:
                     node2run(uni_cmd, req_obj)
-                    if tmp_old_node.status == "Failed":
+                    if tmp_parent_lst_in.status == "Failed":
                         print("failed step")
 
                 except UnboundLocalError:
@@ -234,7 +234,7 @@ class Runner(object):
         return return_list
 
     def _create_step(self, prev_step):
-        new_step = CmdNode(old_node=prev_step)
+        new_step = CmdNode(parent_lst_in=prev_step)
         self.bigger_lin += 1
         new_step.lin_num = self.bigger_lin
         prev_step.next_step_list.append(new_step.lin_num)
@@ -253,7 +253,7 @@ class Runner(object):
                     "_run_dir"             :uni._run_dir,
                     "lin_num"              :uni.lin_num,
                     "status"               :uni.status,
-                    "parent_node"          :uni.parent_node,
+                    "parent_node_lst"      :uni.parent_node_lst,
                     "next_step_list"       :uni.next_step_list}
 
             lst_nod.append(node)
@@ -281,7 +281,7 @@ class Runner(object):
             new_node.lin_num         = uni_dic["lin_num"]
             new_node.status          = uni_dic["status"]
             new_node.next_step_list  = uni_dic["next_step_list"]
-            new_node.parent_node     = uni_dic["parent_node"]
+            new_node.parent_node_lst = uni_dic["parent_node_lst"]
 
             self.step_list.append(new_node)
 
