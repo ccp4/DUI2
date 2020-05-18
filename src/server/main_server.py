@@ -21,15 +21,18 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
         for sub_str in lst_cmd:
             lst_of_cmd.append(sub_str.split(" "))
 
-        lst_out = []
-        lst_out = cmd_tree_runner.run(lst_of_cmd, self)
+        try:
+            lst_out = []
+            lst_out = cmd_tree_runner.run(lst_of_cmd, self)
+            json_str = json.dumps(lst_out) + '\n'
 
-        json_str = json.dumps(lst_out) + '\n'
+            self.wfile.write(bytes(json_str, 'utf-8'))
 
-        self.wfile.write(bytes(json_str, 'utf-8'))
+            print("sending /*EOF*/")
+            self.wfile.write(bytes('/*EOF*/', 'utf-8'))
 
-        print("sending /*EOF*/")
-        self.wfile.write(bytes('/*EOF*/', 'utf-8'))
+        except BrokenPipeError:
+            print("\n *** BrokenPipeError *** while sending EOF or JSON \n")
 
 
 if __name__ == "__main__":

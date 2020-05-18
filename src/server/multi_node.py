@@ -158,6 +158,7 @@ class CmdNode(object):
                 universal_newlines = True
             )
             line = None
+            n_Broken_Pipes = 0
             while proc.poll() is None or line != '':
                 line = proc.stdout.readline()
                 try:
@@ -165,6 +166,12 @@ class CmdNode(object):
 
                 except AttributeError:
                     print(line[:-1])
+
+                except BrokenPipeError:
+                    n_Broken_Pipes += 1
+
+            if n_Broken_Pipes > 0:
+                print("\n *** BrokenPipeError *** while sending output \n")
 
             proc.stdout.close()
             if proc.poll() == 0:
