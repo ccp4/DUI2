@@ -33,8 +33,7 @@ class TreeShow(object):
         self.lst_out.append(" | ")
         self.lst_out.append(" |  line number ")
         self.lst_out.append(" |   | ")
-        self.lst_out.append(" |   |  command ")
-        self.lst_out.append(" |   |   | ")
+        self.lst_out.append(" |   |    command --->  ")
         self.lst_out.append("--------------------------")
 
         self.max_indent = 0
