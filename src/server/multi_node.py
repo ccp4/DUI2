@@ -233,11 +233,13 @@ class Runner(object):
 
         return return_list
 
-    def _create_step(self, prev_step):
-        new_step = CmdNode(parent_lst_in=prev_step)
+    def _create_step(self, prev_step_lst):
+        new_step = CmdNode(parent_lst_in=prev_step_lst)
         self.bigger_lin += 1
         new_step.lin_num = self.bigger_lin
-        prev_step[0].next_step_list.append(new_step.lin_num)
+        for prev_step in prev_step_lst:
+            prev_step.next_step_list.append(new_step.lin_num)
+
         self.step_list.append(new_step)
 
         return new_step
