@@ -31,9 +31,9 @@ def fix_alias(short_in):
 class CmdNode(object):
     def __init__(self, parent_lst_in = None):
         try:
-            self.parent_node_lst = parent_lst_in.lin_num
+            self.parent_node_lst = parent_lst_in[0].lin_num
 
-        except AttributeError:
+        except TypeError:
             self.parent_node_lst = None
 
         self._lst_expt = []
@@ -46,24 +46,24 @@ class CmdNode(object):
         self.lin_num = 0
 
         try:
-            self.set_base_dir(parent_lst_in._base_dir)
-            self._lst_expt = glob.glob(parent_lst_in._run_dir + "/*.expt")
-            self._lst_refl = glob.glob(parent_lst_in._run_dir + "/*.refl")
+            self.set_base_dir(parent_lst_in[0]._base_dir)
+            self._lst_expt = glob.glob(parent_lst_in[0]._run_dir + "/*.expt")
+            self._lst_refl = glob.glob(parent_lst_in[0]._run_dir + "/*.refl")
 
-            lst_json = glob.glob(parent_lst_in._run_dir + "/*.json")
+            lst_json = glob.glob(parent_lst_in[0]._run_dir + "/*.json")
             for json2add in lst_json:
                 self._lst_expt.append(json2add)
 
             if len(self._lst_expt) == 0:
-                self._lst_expt = parent_lst_in._lst_expt
+                self._lst_expt = parent_lst_in[0]._lst_expt
 
             if len(self._lst_refl) == 0:
-                self._lst_refl = parent_lst_in._lst_refl
+                self._lst_refl = parent_lst_in[0]._lst_refl
 
             print("self._lst_expt: ", self._lst_expt)
             print("self._lst_refl: ", self._lst_refl)
 
-        except AttributeError:
+        except TypeError:
             print("parent_lst_in =", parent_lst_in, "tmp empty")
 
     def __call__(self, lst_in, req_obj):
@@ -181,7 +181,7 @@ class Runner(object):
     def __init__(self, recovery_data):
         self.tree_output = out_utils.TreeShow()
         if recovery_data == None:
-            root_node = CmdNode(None)
+            root_node = CmdNode()
             root_node.set_root()
             self.step_list = [root_node]
             self.bigger_lin = 0
@@ -202,7 +202,7 @@ class Runner(object):
                     tmp_parent_lst_in = node
 
             if tmp_parent_lst_in:
-                node2run = self._create_step(tmp_parent_lst_in)
+                node2run = self._create_step([tmp_parent_lst_in])
 
         except ValueError:
             print("No request for line change")
@@ -237,7 +237,7 @@ class Runner(object):
         new_step = CmdNode(parent_lst_in=prev_step)
         self.bigger_lin += 1
         new_step.lin_num = self.bigger_lin
-        prev_step.next_step_list.append(new_step.lin_num)
+        prev_step[0].next_step_list.append(new_step.lin_num)
         self.step_list.append(new_step)
 
         return new_step
@@ -272,7 +272,7 @@ class Runner(object):
 
         lst_nod = recovery_data["step_list"]
         for uni_dic in lst_nod:
-            new_node = CmdNode(None)
+            new_node = CmdNode()
             new_node._base_dir       = uni_dic["_base_dir"]
             new_node.lst2run         = uni_dic["lst2run"]
             new_node._lst_expt       = uni_dic["_lst_expt"]
