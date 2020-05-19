@@ -7,6 +7,8 @@ import out_utils
 def fix_alias(short_in):
     pair_list = [
         ("d", "display" ),
+        ("ip", "dials.import"),
+        ("x4", "/scratch/dui_tst/X4_wide_0_to_9/X4_wide_M1S4_2_000*.cbf"),
         ("mg", "dials.modify_geometry"         ),
         ("gm", "dials.generate_mask"           ),
         ("am", "dials.apply_mask"              ),
@@ -73,7 +75,6 @@ class CmdNode(object):
 
     def __call__(self, lst_in, req_obj):
         print("\n lst_in =", lst_in)
-
         self.lst2run.append([lst_in[0]])
         self.set_in_fil_n_par(lst_in)
         self.set_base_dir(os.getcwd())
@@ -84,7 +85,7 @@ class CmdNode(object):
         base_dir = os.getcwd()
         self.set_base_dir(base_dir)
         self._run_dir = run_dir
-        self._lst_expt = lst_expt
+        self._lst_expt = []
         self._lst_refl = []
         self.lst2run = [['Root']]
         self.status = "Succeeded"
@@ -217,14 +218,19 @@ class Runner(object):
                 node2run = self._create_step([tmp_parent_lst_in])
 
         except ValueError:
-            print("No request for line change")
+            print("assuming disconnected command")
 
+        unalias_lst = []
         for inner_lst in cmd2lst:
-            inner_lst[0] = fix_alias(inner_lst[0])
+            unalias_inner_lst = []
+            for elem in inner_lst:
+                unalias_inner_lst.append(fix_alias(elem))
+
+            unalias_lst.append(unalias_inner_lst)
 
         print("cmd2lst(unaliased) =", cmd2lst)
         return_list = []
-        for uni_cmd in cmd2lst:
+        for uni_cmd in unalias_lst:
             print("uni_cmd", uni_cmd)
 
             if uni_cmd == ["display"]:
