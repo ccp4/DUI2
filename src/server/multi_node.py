@@ -73,7 +73,7 @@ class CmdNode(object):
         except TypeError:
             print("parent_lst_in =", parent_lst_in, "tmp empty")
 
-    def __call__(self, lst_in, req_obj):
+    def __call__(self, lst_in, req_obj = None):
         print("\n lst_in =", lst_in)
         self.lst2run.append([lst_in[0]])
         self.set_in_fil_n_par(lst_in)
@@ -145,7 +145,7 @@ class CmdNode(object):
             for par in lst_in[1:]:
                 self.lst2run[-1].append(par)
 
-    def run_cmd(self, req_obj):
+    def run_cmd(self, req_obj = None):
         self.status = "Busy"
         try:
             inner_lst = self.lst2run[-1]
@@ -162,14 +162,16 @@ class CmdNode(object):
             n_Broken_Pipes = 0
             while proc.poll() is None or line != '':
                 line = proc.stdout.readline()
-                try:
-                    req_obj.wfile.write(bytes(line , 'utf-8'))
-
-                except AttributeError:
+                if req_obj == None:
                     print(line[:-1])
 
-                except BrokenPipeError:
-                    n_Broken_Pipes += 1
+                else:
+                    try:
+                        req_obj.wfile.write(bytes(line , 'utf-8'))
+
+                    except BrokenPipeError:
+                        n_Broken_Pipes += 1
+
 
             if n_Broken_Pipes > 0:
                 print("\n *** BrokenPipeError *** while sending output \n")
