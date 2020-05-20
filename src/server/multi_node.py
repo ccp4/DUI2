@@ -32,9 +32,10 @@ def fix_alias(short_in):
 
 class CmdNode(object):
     def __init__(self, parent_lst_in = None):
+        self.parent_node_lst = []
         try:
             for single_parent in parent_lst_in:
-                self.parent_node_lst = single_parent.lin_num
+                self.parent_node_lst.append(single_parent.lin_num)
 
         except TypeError:
             self.parent_node_lst = None
@@ -204,19 +205,18 @@ class Runner(object):
             self._recover_state(recovery_data)
 
     def run(self, cmd2lst, req_obj = None):
-
         try:
             lin2go = int(cmd2lst[0][0])
             print("Moving to line", lin2go, "before making a child node")
             cmd2lst[0] = cmd2lst[0][1:]
 
-            tmp_parent_lst_in = None
+            tmp_parent_lst_in = []
             for node in self.step_list:
                 if node.lin_num == lin2go:
-                    tmp_parent_lst_in = node
+                    tmp_parent_lst_in.append(node)
 
-            if tmp_parent_lst_in:
-                node2run = self._create_step([tmp_parent_lst_in])
+            if len(tmp_parent_lst_in) > 0:
+                node2run = self._create_step(tmp_parent_lst_in)
 
         except ValueError:
             print("assuming disconnected command")
@@ -242,8 +242,10 @@ class Runner(object):
             else:
                 try:
                     node2run(uni_cmd, req_obj)
+                    tmp_off = '''
                     if tmp_parent_lst_in.status == "Failed":
                         print("failed step")
+                    '''
 
                 except UnboundLocalError:
                     print("\n *** ERROR *** \n No node to connect to")

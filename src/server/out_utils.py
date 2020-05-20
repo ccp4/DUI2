@@ -14,6 +14,17 @@ def get_lst2show(main_obj):
                 "cmd2show"          :cmd2show,
                 "next_step_list"    :uni.next_step_list}
 
+        print("\n")
+        print("_base_dir =         ", uni._base_dir         )
+        print("_lst_expt =         ", uni._lst_expt         )
+        print("_lst_refl =         ", uni._lst_refl         )
+        print("_run_dir =          ", uni._run_dir          )
+        print("lin_num =           ", uni.lin_num           )
+        print("lst2run =           ", uni.lst2run           )
+        print("next_step_list =    ", uni.next_step_list    )
+        print("parent_node_lst =   ", uni.parent_node_lst   )
+        print("status =            ", uni.status            )
+
         lst_nod.append(node)
 
     return lst_nod
