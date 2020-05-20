@@ -162,16 +162,15 @@ class CmdNode(object):
             n_Broken_Pipes = 0
             while proc.poll() is None or line != '':
                 line = proc.stdout.readline()
-                if req_obj == None:
-                    print(line[:-1])
-
-                else:
+                if req_obj is not None:
                     try:
                         req_obj.wfile.write(bytes(line , 'utf-8'))
 
                     except BrokenPipeError:
                         n_Broken_Pipes += 1
 
+                else:
+                    print(line[:-1])
 
             if n_Broken_Pipes > 0:
                 print("\n *** BrokenPipeError *** while sending output \n")
