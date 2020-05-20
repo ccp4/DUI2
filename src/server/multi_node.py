@@ -205,31 +205,62 @@ class Runner(object):
             self._recover_state(recovery_data)
 
     def run(self, cmd_str, req_obj = None):
-        ##################################################
         print("cmd_str =", cmd_str, "\n")
-
+        old2go = '''
         lst_cmd = cmd_str.split(";")
         cmd2lst = []
         for sub_str in lst_cmd:
             cmd2lst.append(sub_str.split(" "))
 
         print("cmd2lst:", cmd2lst)
-        ##################################################
         try:
             lin2go = int(cmd2lst[0][0])
             print("Moving to line", lin2go, "before making a child node")
             cmd2lst[0] = cmd2lst[0][1:]
 
-            tmp_parent_lst_in = []
+        except ValueError:
+            print("assuming disconnected command")
+        '''
+
+        #############################################################################
+        lstpar = cmd_str.split(" ")
+        lin2go_lst = []
+        for single_param in lstpar:
+            try:
+                lin2go_lst.append(int(single_param))
+
+            except ValueError:
+                break
+
+        if len(lin2go_lst) > 0:
+            print("lin2go_lst=", lin2go_lst)
+
+            new_par_str = ""
+            for single_param in lstpar[len(lin2go_lst):]:
+                new_par_str += single_param + " "
+
+            cmd_lst = new_par_str[0:-1].split(";")
+            cmd2lst = []
+            for single_command in cmd_lst:
+                inner_lst = single_command.split(" ")
+                cmd2lst.append(inner_lst)
+
+            print("cmd2lst: ", cmd2lst)
+
+        else:
+            print("assuming disconnected command")
+            cmd2lst = [[cmd_str]]
+
+        #############################################################################
+        tmp_parent_lst_in = []
+        for lin2go in lin2go_lst:
             for node in self.step_list:
                 if node.lin_num == lin2go:
                     tmp_parent_lst_in.append(node)
 
-            if len(tmp_parent_lst_in) > 0:
-                node2run = self._create_step(tmp_parent_lst_in)
+        if len(tmp_parent_lst_in) > 0:
+            node2run = self._create_step(tmp_parent_lst_in)
 
-        except ValueError:
-            print("assuming disconnected command")
 
         unalias_lst = []
         for inner_lst in cmd2lst:
@@ -250,13 +281,13 @@ class Runner(object):
                 self.tree_output.print_output()
 
             else:
-                try:
-                    node2run(uni_cmd, req_obj)
+                #try:
+                node2run(uni_cmd, req_obj)
                     #if tmp_parent_lst_in.status == "Failed":
                     #    print("failed step")
 
-                except UnboundLocalError:
-                    print("\n *** ERROR *** \n No node to connect to")
+                #except UnboundLocalError:
+                #    print("\n *** ERROR *** \n No node to connect to")
 
             self._save_state()
 
