@@ -204,7 +204,17 @@ class Runner(object):
         else:
             self._recover_state(recovery_data)
 
-    def run(self, cmd2lst, req_obj = None):
+    def run(self, cmd_str, req_obj = None):
+        ##################################################
+        print("cmd_str =", cmd_str, "\n")
+
+        lst_cmd = cmd_str.split(";")
+        cmd2lst = []
+        for sub_str in lst_cmd:
+            cmd2lst.append(sub_str.split(" "))
+
+        print("cmd2lst:", cmd2lst)
+        ##################################################
         try:
             lin2go = int(cmd2lst[0][0])
             print("Moving to line", lin2go, "before making a child node")
@@ -242,10 +252,8 @@ class Runner(object):
             else:
                 try:
                     node2run(uni_cmd, req_obj)
-                    tmp_off = '''
-                    if tmp_parent_lst_in.status == "Failed":
-                        print("failed step")
-                    '''
+                    #if tmp_parent_lst_in.status == "Failed":
+                    #    print("failed step")
 
                 except UnboundLocalError:
                     print("\n *** ERROR *** \n No node to connect to")
@@ -320,13 +328,13 @@ if __name__ == "__main__":
         print("Nothing to recover")
 
     cmd_tree_runner = Runner(runner_data)
-    cmd_tree_runner.run([["display"]])
-    command = ""
+    cmd_tree_runner.run("display")
+    cmd_str = ""
 
-    while command.strip() != "exit" and command.strip() != "quit":
+    while cmd_str.strip() != "exit" and cmd_str.strip() != "quit":
         try:
             inp_str = "]]]>>> "
-            command = str(input(inp_str))
+            cmd_str = str(input(inp_str))
             print("\n")
 
         except EOFError:
@@ -337,14 +345,6 @@ if __name__ == "__main__":
             print("Caught << some error >> ... interrupting")
             sys.exit(1)
 
-        print("command =", command, "\n")
-
-        lst_cmd = command.split(";")
-        lst_cmd2lst = []
-        for sub_str in lst_cmd:
-            lst_cmd2lst.append(sub_str.split(" "))
-
-        print("lst_cmd2lst:", lst_cmd2lst)
-        cmd_tree_runner.run(lst_cmd2lst)
-        cmd_tree_runner.run([["display"]])
+        cmd_tree_runner.run(cmd_str)
+        cmd_tree_runner.run("display")
 
