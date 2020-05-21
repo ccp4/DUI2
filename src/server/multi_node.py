@@ -264,13 +264,7 @@ class Runner(object):
                 self.tree_output.print_output()
 
             else:
-                #try:
                 node2run(uni_cmd, req_obj)
-                    #if tmp_parent_lst_in.status == "Failed":
-                    #    print("failed step")
-
-                #except UnboundLocalError:
-                #    print("\n *** ERROR *** \n No node to connect to")
 
             self._save_state()
 
