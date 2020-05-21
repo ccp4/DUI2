@@ -8,7 +8,9 @@ def fix_alias(short_in):
     pair_list = [
         ("d", "display" ),
         ("ip", "dials.import"),
-        ("x4", "/scratch/dui_tst/X4_wide_0_to_9/X4_wide_M1S4_2_000*.cbf"),
+        ("x4", "/scratch/dui_tst/X4_wide_0_to_9/*.cbf"),
+        ("x41", "/scratch/dui_tst/X4_wide_10_to_19/*.cbf"),
+        ("x42", "/scratch/dui_tst/X4_wide_20_to_29/*.cbf"),
         ("mg", "dials.modify_geometry"         ),
         ("gm", "dials.generate_mask"           ),
         ("am", "dials.apply_mask"              ),
@@ -20,6 +22,7 @@ def fix_alias(short_in):
         ("it", "dials.integrate"               ),
         ("sm", "dials.symmetry"                ),
         ("sc", "dials.scale"                   ),
+        ("ce", "dials.combine_experiments"     ),
     ]
     long_out = short_in
     for pair in pair_list:
