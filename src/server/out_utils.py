@@ -12,18 +12,19 @@ def get_lst2show(main_obj):
         node = {"lin_num"           :uni.lin_num,
                 "status"            :uni.status,
                 "cmd2show"          :cmd2show,
-                "next_step_list"    :uni.next_step_list}
+                "next_step_list"    :uni.next_step_list,
+                "parent_node_lst"   :uni.parent_node_lst}
 
         print("\n")
-        print("_base_dir =         ", uni._base_dir         )
-        print("_lst_expt =         ", uni._lst_expt         )
-        print("_lst_refl =         ", uni._lst_refl         )
-        print("_run_dir =          ", uni._run_dir          )
+        #print("_base_dir =         ", uni._base_dir         )
+        #print("_lst_expt =         ", uni._lst_expt         )
+        #print("_lst_refl =         ", uni._lst_refl         )
+        #print("_run_dir =          ", uni._run_dir          )
         print("lin_num =           ", uni.lin_num           )
-        print("lst2run =           ", uni.lst2run           )
+        #print("lst2run =           ", uni.lst2run           )
         print("next_step_list =    ", uni.next_step_list    )
         print("parent_node_lst =   ", uni.parent_node_lst   )
-        print("status =            ", uni.status            )
+        #print("status =            ", uni.status            )
 
         lst_nod.append(node)
 
@@ -64,7 +65,6 @@ class TreeShow(object):
         else:
             stp_prn = " R "
 
-        #str_lin_num = "{0:3}".format(int(step["lin_num"]))
         str_lin_num = "(" + str(step["lin_num"]) + ")"
         stp_prn += self.ind_spc * indent + r"  \__"
 
