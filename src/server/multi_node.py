@@ -267,7 +267,11 @@ class Runner(object):
                 self.tree_output.print_output()
 
             else:
-                node2run(uni_cmd, req_obj)
+                try:
+                    node2run(uni_cmd, req_obj)
+
+                except UnboundLocalError:
+                    print("\n *** ERROR *** \n wrong line")
 
             self._save_state()
 

@@ -79,7 +79,17 @@ class TreeShow(object):
                 new_indent = indent + 1
                 for node in self.lst_nod:
                     if nxt_stp_lin_num == node["lin_num"]:
-                        self._add_tree(step=node, indent=new_indent)
+                        #if len(node["parent_node_lst"]) == 1:
+                        #    self._add_tree(step=node, indent=new_indent)
+
+                        #else:
+                        found = False
+                        for node_pos in self.str_lst:
+                            if node_pos[2] == node["lin_num"]:
+                                found = True
+
+                        if found == False:
+                            self._add_tree(step=node, indent=new_indent)
 
         else:
             new_indent = int(new_indent)
