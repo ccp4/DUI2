@@ -206,23 +206,7 @@ class Runner(object):
 
     def run(self, cmd_str, req_obj = None):
         print("cmd_str =", cmd_str, "\n")
-        old2go = '''
-        lst_cmd = cmd_str.split(";")
-        cmd2lst = []
-        for sub_str in lst_cmd:
-            cmd2lst.append(sub_str.split(" "))
 
-        print("cmd2lst:", cmd2lst)
-        try:
-            lin2go = int(cmd2lst[0][0])
-            print("Moving to line", lin2go, "before making a child node")
-            cmd2lst[0] = cmd2lst[0][1:]
-
-        except ValueError:
-            print("assuming disconnected command")
-        '''
-
-        #############################################################################
         lstpar = cmd_str.split(" ")
         lin2go_lst = []
         for single_param in lstpar:
@@ -251,7 +235,6 @@ class Runner(object):
             print("assuming disconnected command")
             cmd2lst = [[cmd_str]]
 
-        #############################################################################
         tmp_parent_lst_in = []
         for lin2go in lin2go_lst:
             for node in self.step_list:
