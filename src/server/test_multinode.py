@@ -6,7 +6,8 @@ lst_cmd1= [
 "2 ls",
 "1 ls",
 "1 2 ls",
-"5 ls"
+"5 ls",
+"4 ls"
 ]
 
 lst_cmd2 = [

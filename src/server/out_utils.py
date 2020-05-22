@@ -99,6 +99,12 @@ class TreeShow(object):
                                 found = False
 
                         if found:
+                            if len(node["parent_node_lst"]) > 1:
+                                for elem in self.str_lst:
+                                    if elem.indent > new_indent:
+                                        new_indent = elem.indent
+
+                                new_indent += 1
                             self._add_tree(step=node, indent=new_indent)
 
         else:
