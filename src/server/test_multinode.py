@@ -15,6 +15,7 @@ if __name__ == "__main__":
     "8 rf",
     "9 rf",
     "10 11 12 ce",
+    "13 it nproc=4"
     ]
 
     cmd_tree_runner = Runner(None)
