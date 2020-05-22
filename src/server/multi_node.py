@@ -41,7 +41,7 @@ class CmdNode(object):
                 self.parent_node_lst.append(single_parent.lin_num)
 
         except TypeError:
-            self.parent_node_lst = None
+            self.parent_node_lst = []
 
         self._lst_expt = []
         self._lst_refl = []

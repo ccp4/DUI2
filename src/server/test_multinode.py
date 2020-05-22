@@ -6,6 +6,7 @@ lst_cmd1= [
 "2 ls",
 "1 ls",
 "1 2 ls",
+"5 ls"
 ]
 
 lst_cmd2 = [
@@ -22,7 +23,8 @@ lst_cmd2 = [
 "8 rf",
 "9 rf",
 "10 11 12 ce",
-"13 it nproc=4"
+"13 it nproc=4",
+"14 sm",
 ]
 
 if __name__ == "__main__":
@@ -31,6 +33,6 @@ if __name__ == "__main__":
     cmd_tree_runner.run("display")
 
     # swap lst_cmd1 with lst_cmd2 to select test
-    for cmd_str in lst_cmd1:
+    for cmd_str in lst_cmd2:
         cmd_tree_runner.run(cmd_str)
         cmd_tree_runner.run("display")

@@ -31,7 +31,7 @@ def get_lst2show(main_obj):
     return lst_nod
 
 class node_print_data(object):
-    def __init__(self, stp_prn, indent, lin_num, str_cmd):
+    def __init__(self, stp_prn, indent, lin_num, str_cmd, par_lst):
         self.stp_prn = stp_prn
         self.indent = indent
         self.lin_num = lin_num
@@ -78,24 +78,29 @@ class TreeShow(object):
         stp_prn += str_lin_num + "     "
         str_cmd = str(step["cmd2show"][0])
 
-        nod_dat = node_print_data(stp_prn, indent, int(step["lin_num"]), str_cmd)
+        nod_dat = node_print_data(
+            stp_prn, indent, int(step["lin_num"]),
+            str_cmd, step["parent_node_lst"]
+            )
         self.str_lst.append(nod_dat)
 
-        new_indent = indent
-
+        new_indent = indent+1
         if len(step["next_step_list"]) > 0:
             for nxt_stp_lin_num in step["next_step_list"]:
                 for node in self.lst_nod:
                     if nxt_stp_lin_num == node["lin_num"]:
-                        #if all(item in List1 for item in List2):
-                        #if all(item in node[parent_node_lst] for item in self.str_lst[:][2]):
-                        found = False
-                        for node_pos in self.str_lst:
-                            if node_pos.lin_num == node["lin_num"]:
-                                found = True
-                        if found == False:
-                            new_indent = indent + 1
+                        found = True
+                        tmp_lst_num = []
+                        for elem in self.str_lst:
+                            tmp_lst_num.append(elem.lin_num)
+
+                        for node_pos in node["parent_node_lst"]:
+                            if node_pos not in tmp_lst_num:
+                                found = False
+
+                        if found:
                             self._add_tree(step=node, indent=new_indent)
+
         else:
             new_indent = int(new_indent)
             if new_indent > self.max_indent:
