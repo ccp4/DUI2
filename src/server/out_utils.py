@@ -31,7 +31,12 @@ def get_lst2show(main_obj):
     return lst_nod
 
 class node_print_data(object):
-    pass
+    def __init__(self, stp_prn, indent, lin_num, str_cmd):
+        self.stp_prn = stp_prn
+        self.indent = indent
+        self.lin_num = lin_num
+        self.str_cmd = str_cmd
+
 
 class TreeShow(object):
     def __init__(self):
@@ -73,13 +78,8 @@ class TreeShow(object):
         stp_prn += str_lin_num + "     "
         str_cmd = str(step["cmd2show"][0])
 
-        nod_dat = node_print_data()
-        nod_dat.stp_prn = stp_prn
-        nod_dat.indent = indent
-        nod_dat.lin_num = int(step["lin_num"])
-        nod_dat.str_cmd = str_cmd
+        nod_dat = node_print_data(stp_prn, indent, int(step["lin_num"]), str_cmd)
         self.str_lst.append(nod_dat)
-        #self.str_lst.append([stp_prn, indent, int(step["lin_num"]), str_cmd])
 
         new_indent = indent
 
