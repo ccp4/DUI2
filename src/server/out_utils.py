@@ -31,9 +31,10 @@ def get_lst2show(main_obj):
     return lst_nod
 
 class node_print_data(object):
-    def __init__(self, stp_prn, indent, lin_num, str_cmd, par_lst):
+    def __init__(self, stp_prn, indent, parent_indent, lin_num, str_cmd, par_lst):
         self.stp_prn = stp_prn
         self.indent = indent
+        self.parent_indent = parent_indent
         self.lin_num = lin_num
         self.str_cmd = str_cmd
 
@@ -56,80 +57,89 @@ class TreeShow(object):
 
         self.max_indent = 0
         self.str_lst = []
-        self._add_tree(step = self.lst_nod[0], indent=0)
+        self._add_tree(step = self.lst_nod[0], parent_indent = 0, indent=1)
         self._output_connect()
 
-    def _add_tree(self, step=None, indent=None):
+    def _add_tree(self, step=None, parent_indent = 0, indent = 0):
         if step["status"] == "Succeeded":
-            stp_prn = " S "
+            stp_prn = " S   "
 
         elif step["status"] == "Failed":
-            stp_prn = " F "
+            stp_prn = " F   "
 
         elif step["status"] == "Busy":
-            stp_prn = " B "
+            stp_prn = " B   "
 
         else:
-            stp_prn = " R "
+            stp_prn = " R   "
 
         str_lin_num = "(" + str(step["lin_num"]) + ")"
-        stp_prn += self.ind_spc * indent + r"  \__"
+        diff_inde = (indent - parent_indent) * 2 - 1
+        stp_prn += self.ind_spc * (parent_indent) + "\\" + r"__" * diff_inde
 
         stp_prn += str_lin_num + "     "
         str_cmd = str(step["cmd2show"][0])
 
         nod_dat = node_print_data(
-            stp_prn, indent, int(step["lin_num"]),
+            stp_prn, indent, parent_indent,
+            int(step["lin_num"]),
             str_cmd, step["parent_node_lst"]
             )
         self.str_lst.append(nod_dat)
 
-        new_indent = indent+1
+        new_indent = indent + 1
         if len(step["next_step_list"]) > 0:
             for nxt_stp_lin_num in step["next_step_list"]:
                 for node in self.lst_nod:
                     if nxt_stp_lin_num == node["lin_num"]:
-                        found = True
                         tmp_lst_num = []
                         for elem in self.str_lst:
                             tmp_lst_num.append(elem.lin_num)
 
+                        found_parents = True
                         for node_pos in node["parent_node_lst"]:
                             if node_pos not in tmp_lst_num:
-                                found = False
+                                found_parents = False
 
-                        if found:
+                        if(
+                            found_parents == True and
+                            node["lin_num"] not in tmp_lst_num
+                        ):
                             if len(node["parent_node_lst"]) > 1:
                                 for elem in self.str_lst:
                                     if elem.indent > new_indent:
                                         new_indent = elem.indent
 
                                 new_indent += 1
-                            self._add_tree(step=node, indent=new_indent)
+
+                            self._add_tree(
+                                step=node,
+                                parent_indent = indent,
+                                indent=new_indent)
 
         else:
-            new_indent = int(new_indent)
             if new_indent > self.max_indent:
                 self.max_indent = new_indent
 
     def _output_connect(self):
         for pos, loc_lst in enumerate(self.str_lst):
             if pos > 0:
-                if loc_lst.indent < self.str_lst[pos - 1].indent:
+                if loc_lst.parent_indent < self.str_lst[pos - 1].parent_indent:
                     for up_pos in range(pos - 1, 0, -1):
-                        pos_in_str = loc_lst.indent * len(self.ind_spc) + 5
+                        pos_in_str = loc_lst.parent_indent * len(self.ind_spc) + 5
                         left_side = self.str_lst[up_pos].stp_prn[0:pos_in_str]
                         right_side = self.str_lst[up_pos].stp_prn[pos_in_str + 1 :]
-                        if self.str_lst[up_pos].indent > loc_lst.indent:
+                        if self.str_lst[up_pos].parent_indent > loc_lst.parent_indent:
                             self.str_lst[up_pos].stp_prn = left_side + "|" + right_side
 
-                        elif self.str_lst[up_pos].indent == loc_lst.indent:
+                        elif self.str_lst[up_pos].parent_indent == loc_lst.parent_indent:
                             break
 
+
             lng = len(self.ind_spc) * self.max_indent + 22
-            lng_lft = lng - len(self.str_lst[pos].stp_prn)
+            lng_lft = lng - len(loc_lst.stp_prn)
             str_here = lng_lft * " "
-            self.str_lst[pos].stp_prn += str_here + " | " + self.str_lst[pos].str_cmd
+            loc_lst.stp_prn += str_here + " | " + loc_lst.str_cmd
 
         for prn_str in self.str_lst:
             self.lst_out.append(prn_str.stp_prn)
