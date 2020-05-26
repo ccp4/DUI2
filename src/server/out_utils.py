@@ -37,6 +37,7 @@ class node_print_data(object):
         self.parent_indent = parent_indent
         self.lin_num = lin_num
         self.str_cmd = str_cmd
+        self.par_lst = par_lst
 
 
 class TreeShow(object):
@@ -77,7 +78,7 @@ class TreeShow(object):
         diff_inde = (indent - parent_indent) * 2 - 1
         stp_prn += self.ind_spc * (parent_indent) + "\\" + r"__" * diff_inde
 
-        stp_prn += str_lin_num + "     "
+        stp_prn += str_lin_num
         str_cmd = str(step["cmd2show"][0])
 
         nod_dat = node_print_data(
@@ -122,24 +123,46 @@ class TreeShow(object):
                 self.max_indent = new_indent
 
     def _output_connect(self):
-        for pos, loc_lst in enumerate(self.str_lst):
+        for pos, obj2prn in enumerate(self.str_lst):
             if pos > 0:
-                if loc_lst.parent_indent < self.str_lst[pos - 1].parent_indent:
+                if obj2prn.parent_indent < self.str_lst[pos - 1].parent_indent:
                     for up_pos in range(pos - 1, 0, -1):
-                        pos_in_str = loc_lst.parent_indent * len(self.ind_spc) + 5
+                        pos_in_str = obj2prn.parent_indent * len(self.ind_spc) + 5
                         left_side = self.str_lst[up_pos].stp_prn[0:pos_in_str]
                         right_side = self.str_lst[up_pos].stp_prn[pos_in_str + 1 :]
-                        if self.str_lst[up_pos].parent_indent > loc_lst.parent_indent:
+                        if self.str_lst[up_pos].parent_indent > obj2prn.parent_indent:
                             self.str_lst[up_pos].stp_prn = left_side + "|" + right_side
 
-                        elif self.str_lst[up_pos].parent_indent == loc_lst.parent_indent:
+                        else:
                             break
 
+            lng = len(self.ind_spc) * self.max_indent + 12
+            lng_lft = lng - len(obj2prn.stp_prn)
+            str_here = lng_lft * "."
+            obj2prn.stp_prn += str_here + " | " + str(pos) + " " + obj2prn.str_cmd
 
-            lng = len(self.ind_spc) * self.max_indent + 22
-            lng_lft = lng - len(loc_lst.stp_prn)
-            str_here = lng_lft * " "
-            loc_lst.stp_prn += str_here + " | " + loc_lst.str_cmd
+        ##############################################################################
+        for pos, obj2prn in enumerate(self.str_lst):
+            if len(obj2prn.par_lst) > 1:
+                lst2connect = []
+                for par_pos, prev in enumerate(self.str_lst[0:pos]):
+                    if prev.lin_num in obj2prn.par_lst:
+                        lst2connect.append(par_pos)
+
+                lst2connect.remove(max(lst2connect))
+
+                for raw_pos in range(min(lst2connect) + 1, pos, 1):
+                    left_side = self.str_lst[raw_pos].stp_prn[0:obj2prn.indent * 4 + 5]
+                    right_side = self.str_lst[raw_pos].stp_prn[obj2prn.indent * 4 + 6:]
+                    self.str_lst[raw_pos].stp_prn = left_side + "|" + right_side
+
+                obj2prn.stp_prn += " arr pos:" + str(lst2connect) + ",  lst pos:" + str(obj2prn.par_lst)
+
+                for up_lin in lst2connect:
+                        self.str_lst[up_lin].stp_prn += "XX"
+
+
+
 
         for prn_str in self.str_lst:
             self.lst_out.append(prn_str.stp_prn)
