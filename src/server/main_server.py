@@ -13,11 +13,25 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
         self.wfile.write(bytes(str_out, 'utf-8'))
 
         url_path = self.path
-        dict_cmd = parse_qs(urlparse(url_path).query)
-        cmd_str = dict_cmd['command'][0]
+        url_dict = parse_qs(urlparse(url_path).query)
+        print("url_dict =", url_dict)
+        tmp_cmd_lst = url_dict["unalias_lst"]
+        print("tmp_cmd_lst =", tmp_cmd_lst)
+        unalias_lst = []
+        for inner_str in tmp_cmd_lst:
+            unalias_lst.append(inner_str.split(" "))
+
+        lin2go_lst = []
+        for inner_str in url_dict["lin2go_lst"]:
+            lin2go_lst.append(int(inner_str))
+
+        cmd_dict = {"lin2go_lst":lin2go_lst,
+                    "unalias_lst":unalias_lst}
+
+        print("parse_qs(urlparse(url_path).query", cmd_dict)
+
         try:
             lst_out = []
-            cmd_dict = multi_node.str2dic(cmd_str)
             lst_out = cmd_tree_runner.run(cmd_dict, self)
             json_str = json.dumps(lst_out) + '\n'
             self.wfile.write(bytes(json_str, 'utf-8'))
@@ -42,7 +56,6 @@ if __name__ == "__main__":
     cmd_tree_runner = multi_node.Runner(runner_data)
     cmd_dict = multi_node.str2dic("display")
     cmd_tree_runner.run(cmd_dict)
-    #command = ""
 
     PORT = 8080
     with socketserver.ThreadingTCPServer(("", PORT), ReqHandler) as http_daemon:
