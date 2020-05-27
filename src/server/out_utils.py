@@ -75,8 +75,8 @@ class TreeShow(object):
             stp_prn = " R   "
 
         str_lin_num = "(" + str(step["lin_num"]) + ")"
-        diff_inde = (indent - parent_indent) * 2 - 1
-        stp_prn += self.ind_spc * (parent_indent) + "\\" + r"__" * diff_inde
+        diff_inde = (indent - parent_indent) * 4 - 3
+        stp_prn += self.ind_spc * (parent_indent) + "\\" + r"_" * diff_inde
 
         stp_prn += str_lin_num
         str_cmd = str(step["cmd2show"][0])
@@ -108,10 +108,8 @@ class TreeShow(object):
                         ):
                             if len(node["parent_node_lst"]) > 1:
                                 for elem in self.str_lst:
-                                    if elem.indent > new_indent:
-                                        new_indent = elem.indent
-
-                                new_indent += 1
+                                    if new_indent < elem.indent + 1:
+                                        new_indent = elem.indent + 1
 
                             self._add_tree(
                                 step=node,
@@ -149,23 +147,33 @@ class TreeShow(object):
                         lst2connect.append(par_pos)
 
                 lst2connect.remove(max(lst2connect))
+                inde4times = obj2prn.indent * 4
 
                 for raw_pos in range(min(lst2connect) + 1, pos, 1):
-                    left_side = self.str_lst[raw_pos].stp_prn[0:obj2prn.indent * 4 + 5]
-                    right_side = self.str_lst[raw_pos].stp_prn[obj2prn.indent * 4 + 6:]
+                    loc_lin_str = self.str_lst[raw_pos].stp_prn
+                    left_side = loc_lin_str[0:inde4times + 5]
+                    right_side = loc_lin_str[inde4times + 6:]
                     self.str_lst[raw_pos].stp_prn = left_side + ":" + right_side
 
-                obj2prn.stp_prn += " parents:" + str(obj2prn.par_lst)
-
                 for up_lin in lst2connect:
-                    pos_left = self.str_lst[up_lin].indent * 4 + 8
-                    pos_right = obj2prn.indent * 4 + 6
+                    loc_lin_str = self.str_lst[up_lin].stp_prn
+                    pos_left = self.str_lst[up_lin].indent * 4 + 7
+                    pos_right = inde4times + 6
+                    mid_lin = ""
+                    for loc_char in loc_lin_str[pos_left:pos_right - 1]:
+                        if loc_char == "\\":
+                            mid_lin += "\\"
 
-                    mid_lin = "`" * (pos_right - pos_left - 1) + "\\"
-                    left_side = self.str_lst[up_lin].stp_prn[0:pos_left]
-                    right_side = self.str_lst[up_lin].stp_prn[pos_right:]
+                        else:
+                            mid_lin += "`"
+
+                    mid_lin += "\\"
+
+                    left_side = loc_lin_str[0:pos_left]
+                    right_side = loc_lin_str[pos_right:]
                     self.str_lst[up_lin].stp_prn = left_side + mid_lin + right_side
 
+                obj2prn.stp_prn += ",  parents:" + str(obj2prn.par_lst)
 
         for prn_str in self.str_lst:
             self.lst_out.append(prn_str.stp_prn)
