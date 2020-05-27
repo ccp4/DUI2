@@ -1,4 +1,4 @@
-from multi_node import Runner
+from multi_node import Runner, str2dic
 
 lst_cmd1= [
 "0 ls",
@@ -42,9 +42,15 @@ lst_cmd2 = [
 if __name__ == "__main__":
 
     cmd_tree_runner = Runner(None)
-    cmd_tree_runner.run("display")
+
+    cmd_dict = str2dic("display")
+    cmd_tree_runner.run(cmd_dict)
 
     # swap lst_cmd1 with lst_cmd2 to select test
-    for cmd_str in lst_cmd1:
-        cmd_tree_runner.run(cmd_str)
-        cmd_tree_runner.run("display")
+    for cmd_str in lst_cmd2:
+
+        cmd_dict = str2dic(cmd_str)
+        cmd_tree_runner.run(cmd_dict)
+
+        cmd_dict = str2dic("display")
+        cmd_tree_runner.run(cmd_dict)

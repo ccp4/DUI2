@@ -17,7 +17,8 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
         cmd_str = dict_cmd['command'][0]
         try:
             lst_out = []
-            lst_out = cmd_tree_runner.run(cmd_str, self)
+            cmd_dict = multi_node.str2dic(cmd_str)
+            lst_out = cmd_tree_runner.run(cmd_dict, self)
             json_str = json.dumps(lst_out) + '\n'
             self.wfile.write(bytes(json_str, 'utf-8'))
 
@@ -39,8 +40,9 @@ if __name__ == "__main__":
         print("Nothing to recover")
 
     cmd_tree_runner = multi_node.Runner(runner_data)
-    cmd_tree_runner.run("display")
-    command = ""
+    cmd_dict = multi_node.str2dic("display")
+    cmd_tree_runner.run(cmd_dict)
+    #command = ""
 
     PORT = 8080
     with socketserver.ThreadingTCPServer(("", PORT), ReqHandler) as http_daemon:

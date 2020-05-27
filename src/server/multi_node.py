@@ -207,51 +207,9 @@ class Runner(object):
         else:
             self._recover_state(recovery_data)
 
-    def run(self, cmd_str, req_obj = None):
-        print("cmd_str =", cmd_str, "\n")
-
-        lstpar = cmd_str.split(" ")
-        lin2go_lst = []
-        for single_param in lstpar:
-            try:
-                lin2go_lst.append(int(single_param))
-
-            except ValueError:
-                break
-
-        if len(lin2go_lst) > 0:
-            print("lin2go_lst=", lin2go_lst)
-
-            new_par_str = ""
-            for single_param in lstpar[len(lin2go_lst):]:
-                new_par_str += single_param + " "
-
-            cmd_lst = new_par_str[0:-1].split(";")
-            cmd2lst = []
-            for single_command in cmd_lst:
-                inner_lst = single_command.split(" ")
-                cmd2lst.append(inner_lst)
-
-            print("cmd2lst: ", cmd2lst)
-
-        else:
-            print("assuming disconnected command")
-            cmd2lst = [[cmd_str]]
-
-
-        unalias_lst = []
-        for inner_lst in cmd2lst:
-            unalias_inner_lst = []
-            for elem in inner_lst:
-                unalias_inner_lst.append(fix_alias(elem))
-
-            unalias_lst.append(unalias_inner_lst)
-
-        print("cmd2lst(unaliased) =", cmd2lst)
-
-
+    def run(self, cmd_dict, req_obj = None):
         tmp_parent_lst_in = []
-        for lin2go in lin2go_lst:
+        for lin2go in cmd_dict["lin2go_lst"]:
             for node in self.step_list:
                 if node.lin_num == lin2go:
                     tmp_parent_lst_in.append(node)
@@ -262,9 +220,8 @@ class Runner(object):
 
 
         return_list = []
-        for uni_cmd in unalias_lst:
+        for uni_cmd in cmd_dict["unalias_lst"]:
             print("uni_cmd", uni_cmd)
-
             if uni_cmd == ["display"]:
                 return_list = out_utils.get_lst2show(self)
                 self.tree_output(return_list)
@@ -336,8 +293,51 @@ class Runner(object):
             self.step_list.append(new_node)
 
 def str2dic(cmd_str):
-    pass
+    print("cmd_str =", cmd_str, "\n")
 
+    cmd_dict = {"lin2go_lst":[],
+                "unalias_lst":[]}
+
+    lstpar = cmd_str.split(" ")
+    #lin2go_lst = []
+    for single_param in lstpar:
+        try:
+            cmd_dict["lin2go_lst"].append(int(single_param))
+
+        except ValueError:
+            break
+
+    if len(cmd_dict["lin2go_lst"]) > 0:
+        print("lin2go_lst=", cmd_dict["lin2go_lst"])
+
+        new_par_str = ""
+        for single_param in lstpar[len(cmd_dict["lin2go_lst"]):]:
+            new_par_str += single_param + " "
+
+        cmd_lst = new_par_str[0:-1].split(";")
+        cmd2lst = []
+        for single_command in cmd_lst:
+            inner_lst = single_command.split(" ")
+            cmd2lst.append(inner_lst)
+
+        print("cmd2lst: ", cmd2lst)
+
+    else:
+        print("assuming disconnected command")
+        cmd2lst = [[cmd_str]]
+
+
+    #unalias_lst = []
+    for inner_lst in cmd2lst:
+        unalias_inner_lst = []
+        for elem in inner_lst:
+            unalias_inner_lst.append(fix_alias(elem))
+
+        cmd_dict["unalias_lst"].append(unalias_inner_lst)
+
+    print("cmd2lst(unaliased) =", cmd2lst)
+
+    return cmd_dict
 
 
 if __name__ == "__main__":
@@ -351,7 +351,8 @@ if __name__ == "__main__":
         print("Nothing to recover")
 
     cmd_tree_runner = Runner(runner_data)
-    cmd_tree_runner.run("display")
+    cmd_dict = str2dic("display")
+    cmd_tree_runner.run(cmd_dict)
     cmd_str = ""
 
     while cmd_str.strip() != "exit" and cmd_str.strip() != "quit":
@@ -368,6 +369,9 @@ if __name__ == "__main__":
             print("Caught << some error >> ... interrupting")
             sys.exit(1)
 
-        cmd_tree_runner.run(cmd_str)
-        cmd_tree_runner.run("display")
+        cmd_dict = str2dic(cmd_str)
+        cmd_tree_runner.run(cmd_dict)
+
+        cmd_dict = str2dic("display")
+        cmd_tree_runner.run(cmd_dict)
 
