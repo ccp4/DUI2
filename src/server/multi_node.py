@@ -238,15 +238,6 @@ class Runner(object):
             print("assuming disconnected command")
             cmd2lst = [[cmd_str]]
 
-        tmp_parent_lst_in = []
-        for lin2go in lin2go_lst:
-            for node in self.step_list:
-                if node.lin_num == lin2go:
-                    tmp_parent_lst_in.append(node)
-
-        if len(tmp_parent_lst_in) > 0:
-            node2run = self._create_step(tmp_parent_lst_in)
-
 
         unalias_lst = []
         for inner_lst in cmd2lst:
@@ -257,6 +248,19 @@ class Runner(object):
             unalias_lst.append(unalias_inner_lst)
 
         print("cmd2lst(unaliased) =", cmd2lst)
+
+
+        tmp_parent_lst_in = []
+        for lin2go in lin2go_lst:
+            for node in self.step_list:
+                if node.lin_num == lin2go:
+                    tmp_parent_lst_in.append(node)
+
+        if len(tmp_parent_lst_in) > 0:
+            node2run = self._create_step(tmp_parent_lst_in)
+
+
+
         return_list = []
         for uni_cmd in unalias_lst:
             print("uni_cmd", uni_cmd)
@@ -330,6 +334,10 @@ class Runner(object):
             new_node.parent_node_lst = uni_dic["parent_node_lst"]
 
             self.step_list.append(new_node)
+
+def str2dic(cmd_str):
+    pass
+
 
 
 if __name__ == "__main__":
