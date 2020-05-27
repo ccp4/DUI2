@@ -14,7 +14,9 @@ def get_lst2show(main_obj):
                 "cmd2show"          :cmd2show,
                 "next_step_list"    :uni.next_step_list,
                 "parent_node_lst"   :uni.parent_node_lst}
+        lst_nod.append(node)
 
+        debugging_code = '''
         print("\n")
         #print("_base_dir =         ", uni._base_dir         )
         #print("_lst_expt =         ", uni._lst_expt         )
@@ -25,9 +27,7 @@ def get_lst2show(main_obj):
         print("next_step_list =    ", uni.next_step_list    )
         print("parent_node_lst =   ", uni.parent_node_lst   )
         #print("status =            ", uni.status            )
-
-        lst_nod.append(node)
-
+        '''
     return lst_nod
 
 class node_print_data(object):
