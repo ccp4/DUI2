@@ -75,7 +75,7 @@ class CmdNode(object):
             print("self._lst_refl: ", self._lst_refl)
 
         except TypeError:
-            print("parent_lst_in =", parent_lst_in, "tmp empty")
+            print("parent_lst_in =", parent_lst_in, "tmp empty; ", end='')
 
     def __call__(self, lst_in, req_obj = None):
         print("\n lst_in =", lst_in)

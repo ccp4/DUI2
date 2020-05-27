@@ -1,13 +1,24 @@
 from multi_node import Runner
 
 lst_cmd1= [
-"0 ip x4",
-"0 ip x41",
+"0 ls",
+"0 ls",
 "2 ls",
 "1 ls",
 "1 2 ls",
 "5 ls",
-"4 ls"
+"4 ls",
+"0 ls",
+"0 ls",
+"0 ls",
+"8 ls",
+"9 ls",
+"10 ls",
+"11 ls",
+"12 ls",
+"13 ls",
+"10 12 14 ls",
+"6 ls",
 ]
 
 lst_cmd2 = [
@@ -34,6 +45,6 @@ if __name__ == "__main__":
     cmd_tree_runner.run("display")
 
     # swap lst_cmd1 with lst_cmd2 to select test
-    for cmd_str in lst_cmd2:
+    for cmd_str in lst_cmd1:
         cmd_tree_runner.run(cmd_str)
         cmd_tree_runner.run("display")
