@@ -158,10 +158,10 @@ class TreeShow(object):
                 obj2prn.stp_prn += " parents:" + str(obj2prn.par_lst)
 
                 for up_lin in lst2connect:
-                    pos_left = self.str_lst[up_lin].indent * 4 + 7
-
+                    pos_left = self.str_lst[up_lin].indent * 4 + 8
                     pos_right = obj2prn.indent * 4 + 6
-                    mid_lin = "-" * (pos_right - pos_left - 1) + "."
+
+                    mid_lin = "`" * (pos_right - pos_left - 1) + "\\"
                     left_side = self.str_lst[up_lin].stp_prn[0:pos_left]
                     right_side = self.str_lst[up_lin].stp_prn[pos_right:]
                     self.str_lst[up_lin].stp_prn = left_side + mid_lin + right_side
