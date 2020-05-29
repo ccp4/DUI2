@@ -15,18 +15,21 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
         url_path = self.path
         url_dict = parse_qs(urlparse(url_path).query)
         print("url_dict =", url_dict)
-        tmp_cmd_lst = url_dict["unalias_lst"]
-        print("tmp_cmd_lst =", tmp_cmd_lst)
-        unalias_lst = []
-        for inner_str in tmp_cmd_lst:
-            unalias_lst.append(inner_str.split(" "))
-
+        tmp_cmd2lst = url_dict["cmd_lst"]
+        print("tmp_cmd2lst =", tmp_cmd2lst)
+        cmd_lst = []
+        for inner_str in tmp_cmd2lst:
+            cmd_lst.append(inner_str.split(" "))
         lin2go_lst = []
-        for inner_str in url_dict["lin2go_lst"]:
-            lin2go_lst.append(int(inner_str))
+        try:
+            for inner_str in url_dict["lin2go_lst"]:
+                lin2go_lst.append(int(inner_str))
+
+        except KeyError:
+            print("no node number provided")
 
         cmd_dict = {"lin2go_lst":lin2go_lst,
-                    "unalias_lst":unalias_lst}
+                    "cmd_lst":cmd_lst}
 
         print("parse_qs(urlparse(url_path).query", cmd_dict)
 

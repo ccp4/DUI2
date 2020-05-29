@@ -39,6 +39,23 @@ lst_cmd2 = [
 "14 sm",
 ]
 
+lst_dic = [
+{'lin2go_lst': [0], 'cmd_lst': [['ip', 'x4']]},
+{'lin2go_lst': [0], 'cmd_lst': [['ip', 'x41']]},
+{'lin2go_lst': [0], 'cmd_lst': [['ip', 'x42']]},
+{'lin2go_lst': [1], 'cmd_lst': [['fd', 'nproc=9']]},
+{'lin2go_lst': [2], 'cmd_lst': [['fd', 'nproc=9']]},
+{'lin2go_lst': [3], 'cmd_lst': [['fd', 'nproc=9']]},
+{'lin2go_lst': [4], 'cmd_lst': [['id']]},
+{'lin2go_lst': [5], 'cmd_lst': [['id']]},
+{'lin2go_lst': [6], 'cmd_lst': [['id']]},
+{'lin2go_lst': [7, 8, 9], 'cmd_lst': [['ce']]},
+{'lin2go_lst': [10], 'cmd_lst': [['rf']]},
+{'lin2go_lst': [11], 'cmd_lst': [['it', 'nproc=3']]},
+]
+
+#{'lin2go_lst': [], 'cmd_lst': [['display']]}
+
 if __name__ == "__main__":
 
     cmd_tree_runner = Runner(None)
@@ -47,10 +64,14 @@ if __name__ == "__main__":
     cmd_tree_runner.run(cmd_dict)
 
     # swap lst_cmd1 with lst_cmd2 to select test
-    for cmd_str in lst_cmd2:
+    #for cmd_str in lst_cmd2:
+    for cmd_dict in lst_dic:
+        cmd_tree_runner.run(cmd_dict)
 
+        '''
         cmd_dict = str2dic(cmd_str)
         cmd_tree_runner.run(cmd_dict)
+        '''
 
         cmd_dict = str2dic("display")
         cmd_tree_runner.run(cmd_dict)

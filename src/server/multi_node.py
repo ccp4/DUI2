@@ -217,11 +217,18 @@ class Runner(object):
         if len(tmp_parent_lst_in) > 0:
             node2run = self._create_step(tmp_parent_lst_in)
 
+        print("\n cmd_dict: ", cmd_dict, "\n")
 
+        full_cmd_lst = []
+        for inner_lst in cmd_dict["cmd_lst"]:
+            unalias_inner_lst = []
+            for elem in inner_lst:
+                unalias_inner_lst.append(fix_alias(elem))
+
+            full_cmd_lst.append(unalias_inner_lst)
 
         return_list = []
-        for uni_cmd in cmd_dict["unalias_lst"]:
-            print("uni_cmd", uni_cmd)
+        for uni_cmd in full_cmd_lst:
             if uni_cmd == ["display"]:
                 return_list = out_utils.get_lst2show(self)
                 self.tree_output(return_list)
@@ -296,7 +303,7 @@ def str2dic(cmd_str):
     print("cmd_str =", cmd_str, "\n")
 
     cmd_dict = {"lin2go_lst":[],
-                "unalias_lst":[]}
+                "cmd_lst":[]}
 
     lstpar = cmd_str.split(" ")
     #lin2go_lst = []
@@ -314,28 +321,17 @@ def str2dic(cmd_str):
         for single_param in lstpar[len(cmd_dict["lin2go_lst"]):]:
             new_par_str += single_param + " "
 
-        cmd_lst = new_par_str[0:-1].split(";")
-        cmd2lst = []
-        for single_command in cmd_lst:
+        tmp_cmd_lst = new_par_str[0:-1].split(";")
+        par_n_cmd_lst = []
+        for single_command in tmp_cmd_lst:
             inner_lst = single_command.split(" ")
-            cmd2lst.append(inner_lst)
-
-        print("cmd2lst: ", cmd2lst)
+            par_n_cmd_lst.append(inner_lst)
 
     else:
         print("assuming disconnected command")
-        cmd2lst = [[cmd_str]]
+        par_n_cmd_lst = [[cmd_str]]
 
-
-    #unalias_lst = []
-    for inner_lst in cmd2lst:
-        unalias_inner_lst = []
-        for elem in inner_lst:
-            unalias_inner_lst.append(fix_alias(elem))
-
-        cmd_dict["unalias_lst"].append(unalias_inner_lst)
-
-    print("cmd2lst(unaliased) =", cmd2lst)
+    cmd_dict["cmd_lst"] = par_n_cmd_lst
 
     return cmd_dict
 
