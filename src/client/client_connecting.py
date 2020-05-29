@@ -58,10 +58,7 @@ class Client(QtWidgets.QDialog):
     def run_ended(self):
         print("run ended")
 
-        cmd = {"lin2go_lst":"0",
-                "cmd_lst":["display"]}
-
-        #cmd = {'command': ["display"]}
+        cmd = {"nod_lst":"0", "cmd_lst":["display"]}
         req_get = requests.get('http://localhost:8080/', stream = True, params = cmd)
 
         str_lst = []
@@ -92,10 +89,7 @@ class Client(QtWidgets.QDialog):
         cmd_byte = str.encode(self.dataLineEdit.text())
         cmd_str = str(self.dataLineEdit.text())
 
-        cmd = {"lin2go_lst":"0",
-                "cmd_lst":["ls", "ls aaa"]}
-
-        #cmd = {'command': [cmd_byte]}
+        cmd = {"nod_lst":"0", "cmd_lst":["ls", "ls aaa"]}
         req_get = requests.get('http://localhost:8080/', stream = True, params = cmd)
 
         self.thrd = Run_n_Output(req_get)

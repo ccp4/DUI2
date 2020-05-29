@@ -2,32 +2,32 @@ import sys, time, json
 import requests
 
 lst_cmd = [
-            {"lin2go_lst":["0"], "cmd_lst":["ip x4"]},
-            {"lin2go_lst":["0"], "cmd_lst":["ip x41"]},
-            {"lin2go_lst":["0"], "cmd_lst":["ip x42"]},
-            {'lin2go_lst': [1], 'cmd_lst':
+            {"nod_lst":["0"], "cmd_lst":["ip x4"]},
+            {"nod_lst":["0"], "cmd_lst":["ip x41"]},
+            {"nod_lst":["0"], "cmd_lst":["ip x42"]},
+            {'nod_lst': [1], 'cmd_lst':
                  [['gm untrusted.rectangle=0,1421,1258,1312 output.mask=tmp_mask.pickle'],
                   ['am input.mask=tmp_mask.pickle']]},
-            {'lin2go_lst': [2], 'cmd_lst':
+            {'nod_lst': [2], 'cmd_lst':
                  [['gm untrusted.rectangle=0,1421,1258,1312 output.mask=tmp_mask.pickle'],
                   ['am input.mask=tmp_mask.pickle']]},
-            {'lin2go_lst': [3], 'cmd_lst':
+            {'nod_lst': [3], 'cmd_lst':
                  [['gm untrusted.rectangle=0,1421,1258,1312 output.mask=tmp_mask.pickle'],
                   ['am input.mask=tmp_mask.pickle']]},
-            {"lin2go_lst":[""], "cmd_lst":["d"]},
-            {"lin2go_lst":["4"], "cmd_lst":["fd nproc=9"]},
-            {"lin2go_lst":["5"], "cmd_lst":["fd nproc=9"]},
-            {"lin2go_lst":["6"], "cmd_lst":["fd nproc=9"]},
-            {"lin2go_lst":[""], "cmd_lst":["d"]},
-            {"lin2go_lst":["7"], "cmd_lst":["id"]},
-            {"lin2go_lst":["8"], "cmd_lst":["id"]},
-            {"lin2go_lst":["9"], "cmd_lst":["id"]},
-            {"lin2go_lst":[""], "cmd_lst":["d"]},
-            {"lin2go_lst":["10","11","12"], "cmd_lst":["ce"]},
-            {"lin2go_lst":["13"], "cmd_lst":["rf"]},
-            {"lin2go_lst":[""], "cmd_lst":["d"]},
-            {"lin2go_lst":["14"], "cmd_lst":["it nproc=3"]},
-            {"lin2go_lst":[""], "cmd_lst":["d"]},
+            {"nod_lst":[""], "cmd_lst":["d"]},
+            {"nod_lst":["4"], "cmd_lst":["fd nproc=9"]},
+            {"nod_lst":["5"], "cmd_lst":["fd nproc=9"]},
+            {"nod_lst":["6"], "cmd_lst":["fd nproc=9"]},
+            {"nod_lst":[""], "cmd_lst":["d"]},
+            {"nod_lst":["7"], "cmd_lst":["id"]},
+            {"nod_lst":["8"], "cmd_lst":["id"]},
+            {"nod_lst":["9"], "cmd_lst":["id"]},
+            {"nod_lst":[""], "cmd_lst":["d"]},
+            {"nod_lst":["10","11","12"], "cmd_lst":["ce"]},
+            {"nod_lst":["13"], "cmd_lst":["rf"]},
+            {"nod_lst":[""], "cmd_lst":["d"]},
+            {"nod_lst":["14"], "cmd_lst":["it nproc=3"]},
+            {"nod_lst":[""], "cmd_lst":["d"]},
           ]
 
 

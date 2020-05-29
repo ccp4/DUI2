@@ -209,7 +209,7 @@ class Runner(object):
 
     def run(self, cmd_dict, req_obj = None):
         tmp_parent_lst_in = []
-        for lin2go in cmd_dict["lin2go_lst"]:
+        for lin2go in cmd_dict["nod_lst"]:
             for node in self.step_list:
                 if node.lin_num == lin2go:
                     tmp_parent_lst_in.append(node)
@@ -302,23 +302,22 @@ class Runner(object):
 def str2dic(cmd_str):
     print("cmd_str =", cmd_str, "\n")
 
-    cmd_dict = {"lin2go_lst":[],
+    cmd_dict = {"nod_lst":[],
                 "cmd_lst":[]}
 
     lstpar = cmd_str.split(" ")
-    #lin2go_lst = []
     for single_param in lstpar:
         try:
-            cmd_dict["lin2go_lst"].append(int(single_param))
+            cmd_dict["nod_lst"].append(int(single_param))
 
         except ValueError:
             break
 
-    if len(cmd_dict["lin2go_lst"]) > 0:
-        print("lin2go_lst=", cmd_dict["lin2go_lst"])
+    if len(cmd_dict["nod_lst"]) > 0:
+        print("nod_lst=", cmd_dict["nod_lst"])
 
         new_par_str = ""
-        for single_param in lstpar[len(cmd_dict["lin2go_lst"]):]:
+        for single_param in lstpar[len(cmd_dict["nod_lst"]):]:
             new_par_str += single_param + " "
 
         tmp_cmd_lst = new_par_str[0:-1].split(";")

@@ -20,15 +20,15 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
         cmd_lst = []
         for inner_str in tmp_cmd2lst:
             cmd_lst.append(inner_str.split(" "))
-        lin2go_lst = []
+        nod_lst = []
         try:
-            for inner_str in url_dict["lin2go_lst"]:
-                lin2go_lst.append(int(inner_str))
+            for inner_str in url_dict["nod_lst"]:
+                nod_lst.append(int(inner_str))
 
         except KeyError:
             print("no node number provided")
 
-        cmd_dict = {"lin2go_lst":lin2go_lst,
+        cmd_dict = {"nod_lst":nod_lst,
                     "cmd_lst":cmd_lst}
 
         print("parse_qs(urlparse(url_path).query", cmd_dict)
