@@ -27,6 +27,7 @@ lst_cmd = [
             {"lin2go_lst":["13"], "cmd_lst":["rf"]},
             {"lin2go_lst":[""], "cmd_lst":["d"]},
             {"lin2go_lst":["14"], "cmd_lst":["it nproc=3"]},
+            {"lin2go_lst":[""], "cmd_lst":["d"]},
           ]
 
 

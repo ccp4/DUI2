@@ -7,7 +7,7 @@ def get_lst2show(main_obj):
             cmd2show = ["None"]
 
         else:
-            cmd2show = uni.lst2run[0]
+            cmd2show = uni.lst2run[-1]
 
         node = {"lin_num"           :uni.lin_num,
                 "status"            :uni.status,
@@ -16,18 +16,6 @@ def get_lst2show(main_obj):
                 "parent_node_lst"   :uni.parent_node_lst}
         lst_nod.append(node)
 
-        debugging_code = '''
-        print("\n")
-        #print("_base_dir =         ", uni._base_dir         )
-        #print("_lst_expt =         ", uni._lst_expt         )
-        #print("_lst_refl =         ", uni._lst_refl         )
-        #print("_run_dir =          ", uni._run_dir          )
-        print("lin_num =           ", uni.lin_num           )
-        #print("lst2run =           ", uni.lst2run           )
-        print("next_step_list =    ", uni.next_step_list    )
-        print("parent_node_lst =   ", uni.parent_node_lst   )
-        #print("status =            ", uni.status            )
-        '''
     return lst_nod
 
 class node_print_data(object):
@@ -80,6 +68,10 @@ class TreeShow(object):
 
         stp_prn += str_lin_num
         str_cmd = str(step["cmd2show"][0])
+
+        if str_cmd[:6] == "dials.":
+            str_cmd = str_cmd[6:]
+
 
         nod_dat = node_print_data(
             stp_prn, indent, parent_indent,
