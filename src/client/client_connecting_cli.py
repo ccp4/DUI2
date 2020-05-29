@@ -6,14 +6,14 @@ lst_cmd = [
             {"lin2go_lst":["0"], "cmd_lst":["ip x41"]},
             {"lin2go_lst":["0"], "cmd_lst":["ip x42"]},
             {'lin2go_lst': [1], 'cmd_lst':
-                 [['dials.generate_mask untrusted.rectangle=0,1421,1258,1312 output.mask=tmp_mask.pickle'],
-                  ['dials.apply_mask input.mask=tmp_mask.pickle']]},
+                 [['gm untrusted.rectangle=0,1421,1258,1312 output.mask=tmp_mask.pickle'],
+                  ['am input.mask=tmp_mask.pickle']]},
             {'lin2go_lst': [2], 'cmd_lst':
-                 [['dials.generate_mask untrusted.rectangle=0,1421,1258,1312 output.mask=tmp_mask.pickle'],
-                  ['dials.apply_mask input.mask=tmp_mask.pickle']]},
+                 [['gm untrusted.rectangle=0,1421,1258,1312 output.mask=tmp_mask.pickle'],
+                  ['am input.mask=tmp_mask.pickle']]},
             {'lin2go_lst': [3], 'cmd_lst':
-                 [['dials.generate_mask untrusted.rectangle=0,1421,1258,1312 output.mask=tmp_mask.pickle'],
-                  ['dials.apply_mask input.mask=tmp_mask.pickle']]},
+                 [['gm untrusted.rectangle=0,1421,1258,1312 output.mask=tmp_mask.pickle'],
+                  ['am input.mask=tmp_mask.pickle']]},
             {"lin2go_lst":[""], "cmd_lst":["d"]},
             {"lin2go_lst":["4"], "cmd_lst":["fd nproc=9"]},
             {"lin2go_lst":["5"], "cmd_lst":["fd nproc=9"]},
