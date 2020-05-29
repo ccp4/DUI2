@@ -2,25 +2,20 @@ import sys, time, json
 import requests
 
 lst_cmd = [
-            {
-                "lin2go_lst":["0"],
-                "cmd_lst":["ip x4"]
-            },{
-                "lin2go_lst":["1"],
-                "cmd_lst":["fd"]
-            },{
-                "lin2go_lst":["2"],
-                "cmd_lst":["id"]
-            },{
-                "lin2go_lst":["3"],
-                "cmd_lst":["rf"]
-            },{
-                "lin2go_lst":["4"],
-                "cmd_lst":["it"]
-            },{
-                "lin2go_lst":["5"],
-                "cmd_lst":["sm"]
-            }
+            {"lin2go_lst":["0"], "cmd_lst":["ip x4"]},
+            {"lin2go_lst":["1"], "cmd_lst":["fd nproc=9"]},
+            {"lin2go_lst":["2"], "cmd_lst":["id"]},
+            {"lin2go_lst":["3"], "cmd_lst":["rf"]},
+            {"lin2go_lst":["4"], "cmd_lst":["it"]},
+            {"lin2go_lst":[""], "cmd_lst":["d"]},
+            {"lin2go_lst":["0"], "cmd_lst":["ip x41"]},
+            {"lin2go_lst":["6"], "cmd_lst":["fd nproc=9"]},
+            {"lin2go_lst":["7"], "cmd_lst":["id"]},
+            {"lin2go_lst":["8"], "cmd_lst":["rf"]},
+            {"lin2go_lst":["9"], "cmd_lst":["it"]},
+            {"lin2go_lst":["5", "10"], "cmd_lst":["ce"]},
+            {"lin2go_lst":["11"], "cmd_lst":["sm"]},
+            {"lin2go_lst":[""], "cmd_lst":["d"]},
           ]
 
 if __name__ == "__main__":
