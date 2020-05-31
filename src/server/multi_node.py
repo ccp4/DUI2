@@ -207,7 +207,7 @@ class Runner(object):
         else:
             self._recover_state(recovery_data)
 
-    def run(self, cmd_dict, req_obj = None):
+    def run_dict(self, cmd_dict, req_obj = None):
         tmp_parent_lst_in = []
         for lin2go in cmd_dict["nod_lst"]:
             for node in self.step_list:
@@ -347,7 +347,7 @@ if __name__ == "__main__":
 
     cmd_tree_runner = Runner(runner_data)
     cmd_dict = str2dic("display")
-    cmd_tree_runner.run(cmd_dict)
+    cmd_tree_runner.run_dict(cmd_dict)
     cmd_str = ""
 
     while cmd_str.strip() != "exit" and cmd_str.strip() != "quit":
@@ -365,8 +365,8 @@ if __name__ == "__main__":
             sys.exit(1)
 
         cmd_dict = str2dic(cmd_str)
-        cmd_tree_runner.run(cmd_dict)
+        cmd_tree_runner.run_dict(cmd_dict)
 
         cmd_dict = str2dic("display")
-        cmd_tree_runner.run(cmd_dict)
+        cmd_tree_runner.run_dict(cmd_dict)
 
