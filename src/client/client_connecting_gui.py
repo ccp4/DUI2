@@ -81,7 +81,7 @@ class Client(QtWidgets.QDialog):
                 break
 
         lst_nodes = json.loads(str_lst[1])
-        lst_str = self.tree_obj(new_lst_nod = lst_nodes)
+        lst_str = self.tree_obj(lst_nod = lst_nodes)
 
         for tree_line in lst_str:
             self.add_line(tree_line + "\n")
