@@ -33,17 +33,21 @@ class Client(QtWidgets.QDialog):
         self.incoming_text = QtWidgets.QTextEdit()
         self.incoming_text.setFont(QtGui.QFont("Monospace"))
 
-        self.dataLineEdit = QtWidgets.QLineEdit()
-        self.dataLineEdit.setPlaceholderText("Type command")
-        self.dataLineEdit.setFont(QtGui.QFont("Monospace"))
+        self.CmdEdit = QtWidgets.QLineEdit()
+        self.CmdEdit.setPlaceholderText("Type command")
+        self.CmdEdit.setFont(QtGui.QFont("Monospace"))
+
+        self.NumLin = QtWidgets.QSpinBox()
 
         send2serverButton = QtWidgets.QPushButton("Launch command")
         send2serverButton.clicked.connect(self.request_launch)
 
         mainLayout = QtWidgets.QVBoxLayout()
         mainLayout.addWidget(self.incoming_text)
-        mainLayout.addWidget(QtWidgets.QLabel(" \n Type here"))
-        mainLayout.addWidget(self.dataLineEdit)
+        h_layout = QtWidgets.QHBoxLayout()
+        h_layout.addWidget(self.NumLin)
+        h_layout.addWidget(self.CmdEdit)
+        mainLayout.addLayout(h_layout)
         mainLayout.addWidget(send2serverButton)
         self.setLayout(mainLayout)
         self.setWindowTitle("DUI front end test with HTTP")
@@ -58,7 +62,7 @@ class Client(QtWidgets.QDialog):
     def run_ended(self):
         print("run ended")
 
-        cmd = {"nod_lst":"0", "cmd_lst":["display"]}
+        cmd = {"nod_lst":"", "cmd_lst":["display"]}
         req_get = requests.get('http://localhost:8080/', stream = True, params = cmd)
 
         str_lst = []
@@ -85,11 +89,11 @@ class Client(QtWidgets.QDialog):
         print("show tree ended")
 
     def request_launch(self):
+        cmd_str = str(self.CmdEdit.text())
+        print("cmd_str", cmd_str)
+        nod_str = str(self.NumLin.value())
 
-        cmd_byte = str.encode(self.dataLineEdit.text())
-        cmd_str = str(self.dataLineEdit.text())
-
-        cmd = {"nod_lst":"0", "cmd_lst":["ls", "ls aaa"]}
+        cmd = {"nod_lst":nod_str, "cmd_lst":[cmd_str]}
         req_get = requests.get('http://localhost:8080/', stream = True, params = cmd)
 
         self.thrd = Run_n_Output(req_get)
