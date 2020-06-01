@@ -12,7 +12,7 @@ def get_lst2show(main_obj):
         node = {"lin_num"           :uni.lin_num,
                 "status"            :uni.status,
                 "cmd2show"          :cmd2show,
-                "next_step_list"    :uni.next_step_list,
+                "child_node_lst"    :uni.child_node_lst,
                 "parent_node_lst"   :uni.parent_node_lst}
         lst_nod.append(node)
 
@@ -81,8 +81,8 @@ class TreeShow(object):
         self.str_lst.append(nod_dat)
 
         new_indent = indent + 1
-        if len(step["next_step_list"]) > 0:
-            for nxt_stp_lin_num in step["next_step_list"]:
+        if len(step["child_node_lst"]) > 0:
+            for nxt_stp_lin_num in step["child_node_lst"]:
                 for node in self.lst_nod:
                     if nxt_stp_lin_num == node["lin_num"]:
                         tmp_lst_num = []

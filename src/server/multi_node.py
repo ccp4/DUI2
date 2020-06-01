@@ -49,7 +49,7 @@ class CmdNode(object):
         self._run_dir = ""
 
         self.status = "Ready"
-        self.next_step_list = []
+        self.child_node_lst = []
         self.lin_num = 0
 
         try:
@@ -250,7 +250,7 @@ class Runner(object):
         self.bigger_lin += 1
         new_step.lin_num = self.bigger_lin
         for prev_step in prev_step_lst:
-            prev_step.next_step_list.append(new_step.lin_num)
+            prev_step.child_node_lst.append(new_step.lin_num)
 
         self.step_list.append(new_step)
 
@@ -268,7 +268,7 @@ class Runner(object):
                     "lin_num"              :uni.lin_num,
                     "status"               :uni.status,
                     "parent_node_lst"      :uni.parent_node_lst,
-                    "next_step_list"       :uni.next_step_list}
+                    "child_node_lst"       :uni.child_node_lst}
 
             lst_nod.append(node)
 
@@ -294,7 +294,7 @@ class Runner(object):
             new_node._run_dir        = uni_dic["_run_dir"]
             new_node.lin_num         = uni_dic["lin_num"]
             new_node.status          = uni_dic["status"]
-            new_node.next_step_list  = uni_dic["next_step_list"]
+            new_node.child_node_lst  = uni_dic["child_node_lst"]
             new_node.parent_node_lst = uni_dic["parent_node_lst"]
 
             self.step_list.append(new_node)
