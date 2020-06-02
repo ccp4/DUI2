@@ -53,7 +53,32 @@ nod_lst = [
 {"lin_num": 20, "status": "Ready", "cmd2show": ["None"], "child_node_lst": [], "parent_node_lst": [0]}
 ]
 
+
+
 if __name__ == "__main__":
+
+    for node in nod_lst:
+        node["indent"] = 0
+
+    for pos, node in enumerate(nod_lst):
+        child_indent = node["indent"]
+        for inner_node in nod_lst:
+            if inner_node["lin_num"] in node["child_node_lst"]:
+                inner_node["indent"] = child_indent
+                child_indent +=1
+
+        if len(node["parent_node_lst"]) > 1:
+            indent_lst = []
+            for inner_node in nod_lst:
+                if inner_node["lin_num"] in node["parent_node_lst"]:
+                    indent_lst.append(inner_node["indent"])
+
+            indent_lst.sort()
+            node["indent"] = indent_lst[0]
+
     for node in nod_lst:
         print(node)
 
+    for node in nod_lst:
+        str2prn = "     " * node["indent"] + "(" + str(node["lin_num"]) + ")"
+        print(str2prn)
