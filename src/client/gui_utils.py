@@ -87,9 +87,9 @@ def add_indent(nod_lst):
     return nod_lst
 
 
-class Form(QObject):
+class MainObject(QObject):
     def __init__(self, parent = None):
-        super(Form, self).__init__(parent)
+        super(MainObject, self).__init__(parent)
 
         self.window = QtUiTools.QUiLoader().load("tree_test.ui")
 
@@ -98,7 +98,18 @@ class Form(QObject):
         self.window.ButtonSelect.clicked.connect(self.on_select)
         self.window.ButtonClear.clicked.connect(self.on_clear)
         self.window.ButtonMkChild.clicked.connect(self.on_make)
+
         self.window.show()
+
+    def draw_graph(self, nod_lst):
+        scene = QGraphicsScene()
+        scene.addText("Hello, world!")
+        self.window.graphicsView.setScene(scene)
+        #self.window.graphicsView.show()
+
+        for node in nod_lst:
+            str2prn = "     " * node["indent"] + "(" + str(node["lin_num"]) + ")"
+            print(str2prn)
 
     def on_select(self):
         print("on_select")
@@ -114,10 +125,8 @@ if __name__ == "__main__":
 
     nod_lst = add_indent(nod_lst)
 
-    for node in nod_lst:
-        str2prn = "     " * node["indent"] + "(" + str(node["lin_num"]) + ")"
-        print(str2prn)
 
     app = QApplication(sys.argv)
-    form = Form()
+    m_obj = MainObject()
+    m_obj.draw_graph(nod_lst)
     sys.exit(app.exec_())
