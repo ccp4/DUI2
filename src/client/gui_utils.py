@@ -103,13 +103,28 @@ class MainObject(QObject):
 
     def draw_graph(self, nod_lst):
         scene = QGraphicsScene()
-        scene.addText("Hello, world!")
-        self.window.graphicsView.setScene(scene)
-        #self.window.graphicsView.show()
+        scene.setSceneRect(0, 0, 350, 600)
 
         for node in nod_lst:
             str2prn = "     " * node["indent"] + "(" + str(node["lin_num"]) + ")"
             print(str2prn)
+
+        indent_size = 55
+        row_size = 24
+        for row, node in enumerate(nod_lst):
+            my_coord_x =  node["indent"] * indent_size + indent_size
+            my_coord_y = row * row_size + row_size
+
+            for inner_row, inner_node in enumerate(nod_lst):
+                if inner_node["lin_num"] in node["parent_node_lst"]:
+                    my_parent_coord_x =  inner_node["indent"] * indent_size + indent_size
+                    my_parent_coord_y = inner_row * row_size + row_size
+                    scene.addLine(my_parent_coord_x, my_parent_coord_y, my_coord_x, my_coord_y)
+
+            text = scene.addText(str(node["lin_num"]))
+            text.setPos(my_coord_x, my_coord_y)
+
+        self.window.graphicsView.setScene(scene)
 
     def on_select(self):
         print("on_select")
