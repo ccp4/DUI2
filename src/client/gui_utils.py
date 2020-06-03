@@ -1,3 +1,11 @@
+
+import sys
+from PySide2.QtCore import *
+from PySide2.QtWidgets import *
+from PySide2 import QtUiTools
+from PySide2.QtGui import *
+
+
 old_graph = '''
 status: (R)eady  (B)usy  (F)ailed  (S)ucceeded
  |
@@ -53,10 +61,7 @@ nod_lst = [
 {"lin_num": 20, "status": "Ready", "cmd2show": ["None"], "child_node_lst": [], "parent_node_lst": [0]}
 ]
 
-
-
-if __name__ == "__main__":
-
+def add_indent(nod_lst):
     for node in nod_lst:
         node["indent"] = 0
 
@@ -79,6 +84,40 @@ if __name__ == "__main__":
     for node in nod_lst:
         print(node)
 
+    return nod_lst
+
+
+class Form(QObject):
+    def __init__(self, parent = None):
+        super(Form, self).__init__(parent)
+
+        self.window = QtUiTools.QUiLoader().load("tree_test.ui")
+
+        #self.my_gview = self.window....
+
+        self.window.ButtonSelect.clicked.connect(self.on_select)
+        self.window.ButtonClear.clicked.connect(self.on_clear)
+        self.window.ButtonMkChild.clicked.connect(self.on_make)
+        self.window.show()
+
+    def on_select(self):
+        print("on_select")
+
+    def on_clear(self):
+        print("on_clear")
+
+    def on_make(self):
+        print("on_make")
+
+
+if __name__ == "__main__":
+
+    nod_lst = add_indent(nod_lst)
+
     for node in nod_lst:
         str2prn = "     " * node["indent"] + "(" + str(node["lin_num"]) + ")"
         print(str2prn)
+
+    app = QApplication(sys.argv)
+    form = Form()
+    sys.exit(app.exec_())
