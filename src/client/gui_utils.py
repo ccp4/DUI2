@@ -63,10 +63,6 @@ def draw_bezier(scene_in, p1x, p1y, p4x, p4y):
     p3x = p4x
     p3y = (p1y + p4y) / 2.0
 
-    #scene_in.addLine(p1x, p1y, p2x, p2y)
-    #scene_in.addLine(p2x, p2y, p3x, p3y)
-    #scene_in.addLine(p3x, p3y, p4x, p4y)
-
     n_points = 25
 
     dx12 = (p2x - p1x) / n_points
@@ -110,14 +106,14 @@ def draw_bezier(scene_in, p1x, p1y, p4x, p4y):
         x = nx
         y = ny
 
+def get_coords(row, col):
+    return col * 24 + 20 + row * 5, row  * 25 + 10
 
 class MainObject(QObject):
     def __init__(self, parent = None):
         super(MainObject, self).__init__(parent)
 
         self.window = QtUiTools.QUiLoader().load("tree_test.ui")
-
-        #self.my_gview = self.window....
 
         self.window.ButtonSelect.clicked.connect(self.on_select)
         self.window.ButtonClear.clicked.connect(self.on_clear)
@@ -133,25 +129,16 @@ class MainObject(QObject):
             str2prn = "     " * node["indent"] + "(" + str(node["lin_num"]) + ")"
             print(str2prn)
 
-        indent_size = 55
         row_size = 24
         for row, node in enumerate(nod_lst):
-            my_coord_x =  node["indent"] * indent_size + indent_size
-            my_coord_y = row * row_size + row_size
-
+            my_coord_x ,my_coord_y = get_coords(row, node["indent"])
             for inner_row, inner_node in enumerate(nod_lst):
                 if inner_node["lin_num"] in node["parent_node_lst"]:
-                    my_parent_coord_x =  inner_node["indent"] * indent_size + indent_size
-                    my_parent_coord_y = inner_row * row_size + row_size
-                    #scene.addLine(my_parent_coord_x, my_parent_coord_y, my_coord_x, my_coord_y)
+                    my_parent_coord_x, my_parent_coord_y = get_coords(inner_row, inner_node["indent"])
                     draw_bezier(scene, my_parent_coord_x, my_parent_coord_y, my_coord_x, my_coord_y)
 
             text = scene.addText(str(node["lin_num"]))
             text.setPos(my_coord_x, my_coord_y)
-
-        #draw_bezier(scene, 30.0, 30.0, 320.0, 570.0)
-        #scene.addLine(30, 30, 320, 570)
-
 
         self.window.graphicsView.setScene(scene)
 
