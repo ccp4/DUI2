@@ -50,10 +50,65 @@ def add_indent(nod_lst):
             indent_lst.sort()
             node["indent"] = indent_lst[0]
 
-    for node in nod_lst:
-        print(node)
+    #for node in nod_lst:
+    #    print(node)
 
     return nod_lst
+
+def draw_bezier(scene_in, p1x, p1y, p4x, p4y):
+
+    p2x = p1x
+    p2y = (p1y + p4y) / 2.0
+
+    p3x = p4x
+    p3y = (p1y + p4y) / 2.0
+
+    #scene_in.addLine(p1x, p1y, p2x, p2y)
+    #scene_in.addLine(p2x, p2y, p3x, p3y)
+    #scene_in.addLine(p3x, p3y, p4x, p4y)
+
+    n_points = 25
+
+    dx12 = (p2x - p1x) / n_points
+    dx23 = (p3x - p2x) / n_points
+    dx34 = (p4x - p3x) / n_points
+
+    dy12 = (p2y - p1y) / n_points
+    dy23 = (p3y - p2y) / n_points
+    dy34 = (p4y - p3y) / n_points
+
+    for pos in range(n_points + 1):
+        x1 = p1x + dx12 * float(pos)
+        y1 = p1y + dy12 * float(pos)
+        x2 = p2x + dx23 * float(pos)
+        y2 = p2y + dy23 * float(pos)
+        x3 = p3x + dx34 * float(pos)
+        y3 = p3y + dy34 * float(pos)
+
+
+        dx1 = (x2 - x1) / n_points
+        dy1 = (y2 - y1) / n_points
+
+        dx2 = (x3 - x2) / n_points
+        dy2 = (y3 - y2) / n_points
+
+        gx1 = x1 + dx1 * float(pos)
+        gy1 = y1 + dy1 * float(pos)
+
+        gx2 = x2 + dx2 * float(pos)
+        gy2 = y2 + dy2 * float(pos)
+
+        dx = (gx2 - gx1) / n_points
+        dy = (gy2 - gy1) / n_points
+
+        nx = gx1 + dx * float(pos)
+        ny = gy1 + dy * float(pos)
+
+        if pos > 0:
+            scene_in.addLine(x, y, nx, ny)
+
+        x = nx
+        y = ny
 
 
 class MainObject(QObject):
@@ -88,10 +143,15 @@ class MainObject(QObject):
                 if inner_node["lin_num"] in node["parent_node_lst"]:
                     my_parent_coord_x =  inner_node["indent"] * indent_size + indent_size
                     my_parent_coord_y = inner_row * row_size + row_size
-                    scene.addLine(my_parent_coord_x, my_parent_coord_y, my_coord_x, my_coord_y)
+                    #scene.addLine(my_parent_coord_x, my_parent_coord_y, my_coord_x, my_coord_y)
+                    draw_bezier(scene, my_parent_coord_x, my_parent_coord_y, my_coord_x, my_coord_y)
 
             text = scene.addText(str(node["lin_num"]))
             text.setPos(my_coord_x, my_coord_y)
+
+        #draw_bezier(scene, 30.0, 30.0, 320.0, 570.0)
+        #scene.addLine(30, 30, 320, 570)
+
 
         self.window.graphicsView.setScene(scene)
 
