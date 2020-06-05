@@ -58,10 +58,14 @@ def add_indent(nod_lst):
 def draw_bezier(scene_in, p1x, p1y, p4x, p4y):
 
     p2x = p1x
-    p2y = (p1y + p4y) / 2.0
+    p2y = (p1y * 2.0 + p4y) / 3.0
 
-    p3x = p4x
-    p3y = (p1y + p4y) / 2.0
+    p3x = p4x + (p4x - p1x) / 3.0
+    p3y = p1y
+
+    #scene_in.addLine(p1x, p1y, p2x, p2y)
+    #scene_in.addLine(p2x, p2y, p3x, p3y)
+    #scene_in.addLine(p3x, p3y, p4x, p4y)
 
     n_points = 25
 
@@ -162,34 +166,3 @@ if __name__ == "__main__":
     m_obj.draw_graph(nod_lst)
     sys.exit(app.exec_())
 
-
-old_graph = '''
-status: (R)eady  (B)usy  (F)ailed  (S)ucceeded
- |
- |  line number
- |   |
- |   |    command --->
---------------------------
- S   \_(0)                                   | Root
- S       \_(1)                               | ls
- S       |   \_(4)                           | ls
- S       |       \_(7) ``\```\```\           | ls
- S       |       \_(10)``\```\```\           | ls
- S       |       \_(11)  :   :   :           | ls
- S       |       \_(12)  :   :   :           | ls
- S       \_(2)           :   :   :           | ls
- S       |   \_(5)       :   :   :           | ls
- S       |       \_(8) ``\```\```\           | ls
- S       |       \_(13)``\```\```\           | ls
- S       |       \_(14)  :   :   :           | ls
- S       \_(3)           :   :   :           | ls
- S       |   \_(6)       :   :   :           | ls
- S       |       \_(9)   :   :   :           | ls
- S       |       \_(15)  :   :   :           | ls
- S       |           \_(16)  :   :           | ls,  parents:[7, 10, 8, 13, 15]
- S       |           \_____(17)  :           | ls,  parents:[7, 10, 8, 13, 15]
- S       |           \_________(18)          | ls,  parents:[15, 13, 8, 10, 7]
- F       \_(19)                              | 0
- R       \_(20)                              | None
-----------------------------------------------------
-'''
