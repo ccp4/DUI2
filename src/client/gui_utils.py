@@ -107,7 +107,7 @@ def draw_bezier(scene_in, p1x, p1y, p4x, p4y):
         y = ny
 
 def get_coords(row, col):
-    return col * 24 + 20 + row * 5, row  * 25 + 10
+    return col * 55 + row * 4 + 5, row  * 25 + 10
 
 class MainObject(QObject):
     def __init__(self, parent = None):
