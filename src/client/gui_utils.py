@@ -58,10 +58,9 @@ def add_indent(nod_lst):
 def draw_bezier(scene_in, p1x, p1y, p4x, p4y):
 
     p2x = p1x
-    p2y = (p1y * 2.0 + p4y) / 3.0
-
-    p3x = p4x + (p4x - p1x) / 3.0
-    p3y = p1y
+    p2y = (p1y + p4y) / 2.0
+    p3x = p4x
+    p3y = p1y - (p4y - p1y) / 4.0
 
     #scene_in.addLine(p1x, p1y, p2x, p2y)
     #scene_in.addLine(p2x, p2y, p3x, p3y)
@@ -110,8 +109,25 @@ def draw_bezier(scene_in, p1x, p1y, p4x, p4y):
         x = nx
         y = ny
 
+    x_arr_siz = (p4x - p1x) / 30.0
+    y_arr_siz = (p4y - p1y) / 20.0
+    scene_in.addLine(
+        p4x, p4y,
+        p4x + x_arr_siz, p4y - y_arr_siz
+    )
+    scene_in.addLine(
+        p4x, p4y,
+        p4x - x_arr_siz, p4y - y_arr_siz
+    )
+
+    #scene_in.addLine(
+    #    p4x + x_arr_siz, p4y - y_arr_siz,
+    #    p4x - x_arr_siz, p4y - y_arr_siz
+    #)
+
+
 def get_coords(row, col):
-    return col * 55 + row * 4 + 5, row  * 25 + 10
+    return col * 55 + row * 4 + 5, row  * 28 + 10
 
 class MainObject(QObject):
     def __init__(self, parent = None):
@@ -133,16 +149,22 @@ class MainObject(QObject):
             str2prn = "     " * node["indent"] + "(" + str(node["lin_num"]) + ")"
             print(str2prn)
 
-        row_size = 24
+        ft_ht = 10
         for row, node in enumerate(nod_lst):
             my_coord_x ,my_coord_y = get_coords(row, node["indent"])
             for inner_row, inner_node in enumerate(nod_lst):
                 if inner_node["lin_num"] in node["parent_node_lst"]:
-                    my_parent_coord_x, my_parent_coord_y = get_coords(inner_row, inner_node["indent"])
-                    draw_bezier(scene, my_parent_coord_x, my_parent_coord_y, my_coord_x, my_coord_y)
+                    my_parent_coord_x, my_parent_coord_y = get_coords(
+                        inner_row, inner_node["indent"]
+                    )
+                    draw_bezier(
+                        scene,
+                        my_parent_coord_x, my_parent_coord_y + ft_ht,
+                        my_coord_x, my_coord_y - ft_ht
+                    )
 
             text = scene.addText(str(node["lin_num"]))
-            text.setPos(my_coord_x, my_coord_y)
+            text.setPos(my_coord_x - 8, my_coord_y - ft_ht)
 
         self.window.graphicsView.setScene(scene)
 
