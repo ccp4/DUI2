@@ -127,7 +127,7 @@ def draw_bezier(scene_in, p1x, p1y, p4x, p4y):
 
 
 def get_coords(row, col, ft_ht, ft_wd):
-    return col * ft_wd + row * ft_wd / 4, row  * ft_ht * 2
+    return col * ft_wd * 2+ row * ft_wd, int(row  * ft_ht * 1.3)
 
 class MainObject(QObject):
     def __init__(self, parent = None):
@@ -146,7 +146,7 @@ class MainObject(QObject):
         scene.setSceneRect(0, 0, 350, 600)
 
         fm = QFontMetrics(scene.font())
-        ft_wd = fm.width("0 0")
+        ft_wd = fm.width("0")
         ft_ht = fm.height()
 
         print("fm.width", ft_wd)
