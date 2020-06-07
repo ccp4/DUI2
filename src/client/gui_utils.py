@@ -143,8 +143,6 @@ class MainObject(QObject):
 
     def draw_graph(self, nod_lst):
         scene = QGraphicsScene()
-        scene.setSceneRect(0, 0, 350, 600)
-
         fm = QFontMetrics(scene.font())
         ft_wd = fm.width("0")
         ft_ht = fm.height()
@@ -172,7 +170,7 @@ class MainObject(QObject):
                     )
 
             text = scene.addText(str(node["lin_num"]))
-            text.setPos(my_coord_x - 8, my_coord_y - ft_ht)
+            text.setPos(my_coord_x - ft_ht / 2, my_coord_y - ft_ht)
 
         self.window.graphicsView.setScene(scene)
 
