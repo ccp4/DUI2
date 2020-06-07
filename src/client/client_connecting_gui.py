@@ -39,8 +39,8 @@ class Client(QtWidgets.QDialog):
 
         self.NumLin = QtWidgets.QSpinBox()
 
-        send2serverButton = QtWidgets.QPushButton("Launch command")
-        send2serverButton.clicked.connect(self.request_launch)
+        self.CmdSend2server = QtWidgets.QPushButton("Launch command")
+        self.CmdSend2server.clicked.connect(self.request_launch)
 
         mainLayout = QtWidgets.QVBoxLayout()
         mainLayout.addWidget(self.incoming_text)
@@ -48,7 +48,7 @@ class Client(QtWidgets.QDialog):
         h_layout.addWidget(self.NumLin)
         h_layout.addWidget(self.CmdEdit)
         mainLayout.addLayout(h_layout)
-        mainLayout.addWidget(send2serverButton)
+        mainLayout.addWidget(self.CmdSend2server)
         self.setLayout(mainLayout)
         self.setWindowTitle("DUI front end test with HTTP")
 
