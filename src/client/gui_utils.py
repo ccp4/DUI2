@@ -167,7 +167,7 @@ class MainObject(QObject):
                     )
                     draw_bezier(
                         scene,
-                        my_parent_coord_x, my_parent_coord_y + ft_ht,
+                        my_parent_coord_x, my_parent_coord_y + ft_ht / 4,
                         my_coord_x, my_coord_y - ft_ht
                     )
 
