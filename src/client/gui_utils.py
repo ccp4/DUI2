@@ -118,6 +118,40 @@ def draw_bezier(scene_in, p1x, p1y, p4x, p4y):
 def get_coords(row, col, ft_ht, ft_wd):
     return col * ft_wd * 2+ row * ft_wd, int(row  * ft_ht * 1.3)
 
+def draw_inner_graph(scene_in, nod_lst):
+
+    fm = QFontMetrics(scene_in.font())
+    ft_wd = fm.width("0")
+    ft_ht = fm.height()
+
+    print("fm.width", ft_wd)
+    print("fm.height", ft_ht)
+    print(scene_in.font())
+
+
+    lst_w_indent = add_indent(nod_lst)
+    for node in lst_w_indent:
+        str2prn = "     " * node["indent"] + "(" + str(node["lin_num"]) + ")"
+        print(str2prn)
+
+    for row, node in enumerate(lst_w_indent):
+        my_coord_x ,my_coord_y = get_coords(row, node["indent"], ft_ht, ft_wd)
+        for inner_row, inner_node in enumerate(lst_w_indent):
+            if inner_node["lin_num"] in node["parent_node_lst"]:
+                my_parent_coord_x, my_parent_coord_y = get_coords(
+                    inner_row, inner_node["indent"],
+                    ft_ht, ft_wd
+                )
+                draw_bezier(
+                    scene_in,
+                    my_parent_coord_x, my_parent_coord_y + ft_ht / 4,
+                    my_coord_x, my_coord_y - ft_ht
+                )
+
+        text = scene_in.addText(str(node["lin_num"]))
+        text.setPos(my_coord_x - ft_ht / 2, my_coord_y - ft_ht)
+
+
 class MainObject(QObject):
     def __init__(self, parent = None):
         super(MainObject, self).__init__(parent)
@@ -127,46 +161,16 @@ class MainObject(QObject):
         self.window.ButtonSelect.clicked.connect(self.on_select)
         self.window.ButtonClear.clicked.connect(self.on_clear)
         self.window.ButtonMkChild.clicked.connect(self.on_make)
-
         self.window.show()
-        self.draw_graph(nod_lst)
 
+        self.my_scene = QGraphicsScene()
+        self.window.graphicsView.setScene(self.my_scene)
+        self.draw_graph(nod_lst)
 
     def draw_graph(self, new_nod_lst):
         self.nod_lst = new_nod_lst
-        scene = QGraphicsScene()
-        fm = QFontMetrics(scene.font())
-        ft_wd = fm.width("0")
-        ft_ht = fm.height()
-
-        print("fm.width", ft_wd)
-        print("fm.height", ft_ht)
-        print(scene.font())
-
-
-        lst_w_indent = add_indent(self.nod_lst)
-        for node in lst_w_indent:
-            str2prn = "     " * node["indent"] + "(" + str(node["lin_num"]) + ")"
-            print(str2prn)
-
-        for row, node in enumerate(lst_w_indent):
-            my_coord_x ,my_coord_y = get_coords(row, node["indent"], ft_ht, ft_wd)
-            for inner_row, inner_node in enumerate(lst_w_indent):
-                if inner_node["lin_num"] in node["parent_node_lst"]:
-                    my_parent_coord_x, my_parent_coord_y = get_coords(
-                        inner_row, inner_node["indent"],
-                        ft_ht, ft_wd
-                    )
-                    draw_bezier(
-                        scene,
-                        my_parent_coord_x, my_parent_coord_y + ft_ht / 4,
-                        my_coord_x, my_coord_y - ft_ht
-                    )
-
-            text = scene.addText(str(node["lin_num"]))
-            text.setPos(my_coord_x - ft_ht / 2, my_coord_y - ft_ht)
-
-        self.window.graphicsView.setScene(scene)
+        draw_inner_graph(self.my_scene, self.nod_lst)
+        #self.my_scene.update()
 
     def on_select(self):
         print("on_select")
