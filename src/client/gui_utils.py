@@ -1,12 +1,6 @@
+nod_lst = [{"lin_num": 0, "status": "Succeeded", "cmd2show": ["Root"], "child_node_lst": [], "parent_node_lst": []}]
 
-import sys
-from PySide2.QtCore import *
-from PySide2.QtWidgets import *
-from PySide2 import QtUiTools
-from PySide2.QtGui import *
-
-
-nod_lst = [
+new_nod_lst = [
 {"lin_num": 0, "status": "Succeeded", "cmd2show": ["Root"], "child_node_lst": [1, 2, 3, 19, 20], "parent_node_lst": []},
 {"lin_num": 1, "status": "Succeeded", "cmd2show": ["ls"], "child_node_lst": [4], "parent_node_lst": [0]},
 {"lin_num": 2, "status": "Succeeded", "cmd2show": ["ls"], "child_node_lst": [5], "parent_node_lst": [0]},
@@ -30,30 +24,34 @@ nod_lst = [
 {"lin_num": 20, "status": "Ready", "cmd2show": ["None"], "child_node_lst": [], "parent_node_lst": [0]}
 ]
 
-def add_indent(nod_lst):
-    for node in nod_lst:
+import sys
+from PySide2.QtCore import *
+from PySide2.QtWidgets import *
+from PySide2 import QtUiTools
+from PySide2.QtGui import *
+
+def add_indent(nod_lst_in):
+    nod_lst_out = nod_lst_in
+    for node in nod_lst_out:
         node["indent"] = 0
 
-    for pos, node in enumerate(nod_lst):
+    for pos, node in enumerate(nod_lst_out):
         child_indent = node["indent"]
-        for inner_node in nod_lst:
+        for inner_node in nod_lst_out:
             if inner_node["lin_num"] in node["child_node_lst"]:
                 inner_node["indent"] = child_indent
                 child_indent +=1
 
         if len(node["parent_node_lst"]) > 1:
             indent_lst = []
-            for inner_node in nod_lst:
+            for inner_node in nod_lst_out:
                 if inner_node["lin_num"] in node["parent_node_lst"]:
                     indent_lst.append(inner_node["indent"])
 
             indent_lst.sort()
             node["indent"] = indent_lst[0]
 
-    #for node in nod_lst:
-    #    print(node)
-
-    return nod_lst
+    return nod_lst_out
 
 def draw_bezier(scene_in, p1x, p1y, p4x, p4y):
 
@@ -61,10 +59,6 @@ def draw_bezier(scene_in, p1x, p1y, p4x, p4y):
     p2y = (p1y + p4y) / 2.0
     p3x = p4x
     p3y = p1y - (p4y - p1y) / 4.0
-
-    #scene_in.addLine(p1x, p1y, p2x, p2y)
-    #scene_in.addLine(p2x, p2y, p3x, p3y)
-    #scene_in.addLine(p3x, p3y, p4x, p4y)
 
     n_points = 25
 
@@ -120,11 +114,6 @@ def draw_bezier(scene_in, p1x, p1y, p4x, p4y):
         p4x - x_arr_siz, p4y - y_arr_siz
     )
 
-    #scene_in.addLine(
-    #    p4x + x_arr_siz, p4y - y_arr_siz,
-    #    p4x - x_arr_siz, p4y - y_arr_siz
-    #)
-
 
 def get_coords(row, col, ft_ht, ft_wd):
     return col * ft_wd * 2+ row * ft_wd, int(row  * ft_ht * 1.3)
@@ -140,8 +129,11 @@ class MainObject(QObject):
         self.window.ButtonMkChild.clicked.connect(self.on_make)
 
         self.window.show()
+        self.draw_graph(nod_lst)
 
-    def draw_graph(self, nod_lst):
+
+    def draw_graph(self, new_nod_lst):
+        self.nod_lst = new_nod_lst
         scene = QGraphicsScene()
         fm = QFontMetrics(scene.font())
         ft_wd = fm.width("0")
@@ -151,13 +143,15 @@ class MainObject(QObject):
         print("fm.height", ft_ht)
         print(scene.font())
 
-        for node in nod_lst:
+
+        lst_w_indent = add_indent(self.nod_lst)
+        for node in lst_w_indent:
             str2prn = "     " * node["indent"] + "(" + str(node["lin_num"]) + ")"
             print(str2prn)
 
-        for row, node in enumerate(nod_lst):
+        for row, node in enumerate(lst_w_indent):
             my_coord_x ,my_coord_y = get_coords(row, node["indent"], ft_ht, ft_wd)
-            for inner_row, inner_node in enumerate(nod_lst):
+            for inner_row, inner_node in enumerate(lst_w_indent):
                 if inner_node["lin_num"] in node["parent_node_lst"]:
                     my_parent_coord_x, my_parent_coord_y = get_coords(
                         inner_row, inner_node["indent"],
@@ -182,15 +176,11 @@ class MainObject(QObject):
 
     def on_make(self):
         print("on_make")
+        self.draw_graph(new_nod_lst)
 
 
 if __name__ == "__main__":
-
-    nod_lst = add_indent(nod_lst)
-
-
     app = QApplication(sys.argv)
     m_obj = MainObject()
-    m_obj.draw_graph(nod_lst)
     sys.exit(app.exec_())
 
