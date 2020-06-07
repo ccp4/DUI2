@@ -126,8 +126,8 @@ def draw_bezier(scene_in, p1x, p1y, p4x, p4y):
     #)
 
 
-def get_coords(row, col):
-    return col * 55 + row * 4 + 5, row  * 28 + 10
+def get_coords(row, col, ft_ht, ft_wd):
+    return col * ft_wd + row * ft_wd / 4, row  * ft_ht * 2
 
 class MainObject(QObject):
     def __init__(self, parent = None):
@@ -145,17 +145,25 @@ class MainObject(QObject):
         scene = QGraphicsScene()
         scene.setSceneRect(0, 0, 350, 600)
 
+        fm = QFontMetrics(scene.font())
+        ft_wd = fm.width("0 0")
+        ft_ht = fm.height()
+
+        print("fm.width", ft_wd)
+        print("fm.height", ft_ht)
+        print(scene.font())
+
         for node in nod_lst:
             str2prn = "     " * node["indent"] + "(" + str(node["lin_num"]) + ")"
             print(str2prn)
 
-        ft_ht = 10
         for row, node in enumerate(nod_lst):
-            my_coord_x ,my_coord_y = get_coords(row, node["indent"])
+            my_coord_x ,my_coord_y = get_coords(row, node["indent"], ft_ht, ft_wd)
             for inner_row, inner_node in enumerate(nod_lst):
                 if inner_node["lin_num"] in node["parent_node_lst"]:
                     my_parent_coord_x, my_parent_coord_y = get_coords(
-                        inner_row, inner_node["indent"]
+                        inner_row, inner_node["indent"],
+                        ft_ht, ft_wd
                     )
                     draw_bezier(
                         scene,
