@@ -36,7 +36,7 @@ class Run_n_Output(QThread):
 class MainObject(QObject):
     def __init__(self, parent = None):
         super(MainObject, self).__init__(parent)
-        self.window = QtUiTools.QUiLoader().load("tree_test.ui")
+        self.window = QtUiTools.QUiLoader().load("main_dui.ui")
         self.window.CmdSend2server.clicked.connect(self.request_launch)
         self.tree_obj = tree_draw_tmp.TreeShow()
 
