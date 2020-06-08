@@ -93,9 +93,9 @@ class MainObject(QObject):
     def request_launch(self):
         cmd_str = str(self.window.CmdEdit.text())
         print("cmd_str", cmd_str)
-        nod_str = str(self.window.NumLin.value())
-
-        cmd = {"nod_lst":nod_str, "cmd_lst":[cmd_str]}
+        nod_str = str(self.window.NumLinLst.text())
+        nod_lst = nod_str.split(" ")
+        cmd = {"nod_lst":nod_lst, "cmd_lst":[cmd_str]}
         req_get = requests.get('http://localhost:8080/', stream = True, params = cmd)
 
         self.thrd = Run_n_Output(req_get)
