@@ -68,6 +68,7 @@ class MainObject(QObject):
         self.window.ButtonSelect.clicked.connect(self.on_select)
         self.window.ButtonClear.clicked.connect(self.on_clear)
         self.window.ButtonMkChild.clicked.connect(self.on_make)
+        self.window.incoming_text.setFont(QFont("Monospace"))
 
         self.window.show()
         self.my_scene = QGraphicsScene()
