@@ -90,6 +90,7 @@ class MainObject(QObject):
         for tree_line in lst_str:
             self.add_line(tree_line + "\n")
 
+        self.my_scene.clear()
         draw_inner_graph(self.my_scene, lst_nodes)
         self.my_scene.update()
 
