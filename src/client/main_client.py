@@ -95,6 +95,7 @@ class MainObject(QObject):
         print("cmd_str", cmd_str)
         nod_str = str(self.window.NumLinLst.text())
         nod_lst = nod_str.split(" ")
+        print("nod_lst", nod_lst)
         cmd = {"nod_lst":nod_lst, "cmd_lst":[cmd_str]}
         req_get = requests.get('http://localhost:8080/', stream = True, params = cmd)
 
