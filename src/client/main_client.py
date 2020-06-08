@@ -25,59 +25,15 @@ new_nod_lst = [
 ]
 
 import sys
+import time, json
+import requests
+import tree_draw_tmp
 from PySide2.QtCore import *
 from PySide2.QtWidgets import *
 from PySide2 import QtUiTools
 from PySide2.QtGui import *
 
 from gui_utils import draw_inner_graph
-
-#from PySide2 import QtCore, QtWidgets, QtGui, QtNetwork
-#import sys
-import time, json
-import requests
-import tree_draw_tmp
-
-'''
-class MainObject(QObject):
-    def __init__(self, parent = None):
-        super(MainObject, self).__init__(parent)
-
-        self.window = QtUiTools.QUiLoader().load("tree_test.ui")
-
-        self.window.ButtonSelect.clicked.connect(self.on_select)
-        self.window.ButtonClear.clicked.connect(self.on_clear)
-        self.window.ButtonMkChild.clicked.connect(self.on_make)
-        self.window.show()
-
-        self.my_scene = QGraphicsScene()
-        self.window.graphicsView.setScene(self.my_scene)
-        self.draw_graph(nod_lst)
-
-    def draw_graph(self, new_nod_lst):
-        self.nod_lst = new_nod_lst
-        draw_inner_graph(self.my_scene, self.nod_lst)
-        #self.my_scene.update()
-
-    def on_select(self):
-        print("on_select")
-
-    def on_clear(self):
-        print("on_clear")
-
-    def on_make(self):
-        print("on_make")
-        self.draw_graph(new_nod_lst)
-
-
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    m_obj = MainObject()
-    sys.exit(app.exec_())
-
-'''
-##################################################################################################
-
 
 class Run_n_Output(QThread):
     line_out = Signal(str)
@@ -101,11 +57,6 @@ class Run_n_Output(QThread):
                 self.line_out.emit(' \n /*EOF*/ \n')
                 break
 
-'''
-class Client(QtWidgets.QDialog):
-    def __init__(self, parent=None):
-        super(Client, self).__init__(parent)
-'''
 
 class MainObject(QObject):
     def __init__(self, parent = None):
@@ -189,14 +140,6 @@ class MainObject(QObject):
         self.thrd.line_out.connect(self.add_line)
         self.thrd.finished.connect(self.run_ended)
         self.thrd.start()
-
-'''
-if __name__ == '__main__':
-    app = QtWidgets.QApplication(sys.argv)
-    client = Client()
-    client.show()
-    sys.exit(client.exec_())
-'''
 
 
 if __name__ == "__main__":
