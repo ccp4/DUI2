@@ -4,31 +4,29 @@ from PySide2.QtWidgets import *
 from PySide2 import QtUiTools
 from PySide2.QtGui import *
 
-def add_indent(nod_lst_in):
-    nod_lst_out = nod_lst_in
-    for node in nod_lst_out:
+def add_indent(nod_lst):
+    for node in nod_lst:
         node["indent"] = 0
 
-    for pos, node in enumerate(nod_lst_out):
+    for pos, node in enumerate(nod_lst):
         child_indent = node["indent"]
-        for inner_node in nod_lst_out:
+        for inner_node in nod_lst:
             if inner_node["lin_num"] in node["child_node_lst"]:
                 inner_node["indent"] = child_indent
                 child_indent +=1
 
         if len(node["parent_node_lst"]) > 1:
             indent_lst = []
-            for inner_node in nod_lst_out:
+            for inner_node in nod_lst:
                 if inner_node["lin_num"] in node["parent_node_lst"]:
                     indent_lst.append(inner_node["indent"])
 
             indent_lst.sort()
             node["indent"] = indent_lst[0]
 
-    return nod_lst_out
+    return nod_lst
 
 def draw_bezier(scene_in, p1x, p1y, p4x, p4y):
-
     p2x = p1x
     p2y = (p1y + p4y) / 2.0
     p3x = p4x
@@ -92,16 +90,11 @@ def draw_bezier(scene_in, p1x, p1y, p4x, p4y):
 def get_coords(row, col, ft_ht, ft_wd):
     return col * ft_wd * 2+ row * ft_wd, int(row  * ft_ht * 1.3)
 
-def draw_inner_graph(scene_in, nod_lst):
 
+def draw_inner_graph(scene_in, nod_lst):
     fm = QFontMetrics(scene_in.font())
     ft_wd = fm.width("0")
     ft_ht = fm.height()
-
-    print("fm.width", ft_wd)
-    print("fm.height", ft_ht)
-    print(scene_in.font())
-
 
     lst_w_indent = add_indent(nod_lst)
     for node in lst_w_indent:

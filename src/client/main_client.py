@@ -48,12 +48,7 @@ class MainObject(QObject):
         self.window.show()
         self.my_scene = QGraphicsScene()
         self.window.graphicsView.setScene(self.my_scene)
-        self.draw_graph([])
-
-    def draw_graph(self, new_nod_lst):
-        self.nod_lst = new_nod_lst
-        draw_inner_graph(self.my_scene, self.nod_lst)
-        self.my_scene.update()
+        draw_inner_graph(self.my_scene, [])
 
     def on_select(self):
         print("on_select")
@@ -76,7 +71,6 @@ class MainObject(QObject):
         req_get = requests.get('http://localhost:8080/', stream = True, params = cmd)
 
         str_lst = []
-
         line_str = ''
         while True:
             tmp_dat = req_get.raw.read(1)
@@ -96,8 +90,8 @@ class MainObject(QObject):
         for tree_line in lst_str:
             self.add_line(tree_line + "\n")
 
-        print("show tree ended")
-        self.draw_graph(lst_nodes)
+        draw_inner_graph(self.my_scene, lst_nodes)
+        self.my_scene.update()
 
     def request_launch(self):
         cmd_str = str(self.window.CmdEdit.text())
