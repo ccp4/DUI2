@@ -90,11 +90,6 @@ class MainObject(QObject):
         print("on_make")
         self.draw_graph(new_nod_lst)
 
-    def on_make(self):
-        print("on_make")
-        self.draw_graph(new_nod_lst)
-
-
     def add_line(self, new_line):
         self.window.incoming_text.moveCursor(QTextCursor.End)
         self.window.incoming_text.insertPlainText(new_line)
