@@ -42,7 +42,6 @@ class MainObject(QObject):
 
         self.window.ButtonSelect.clicked.connect(self.on_select)
         self.window.ButtonClear.clicked.connect(self.on_clear)
-        self.window.ButtonMkChild.clicked.connect(self.on_make)
         self.window.incoming_text.setFont(QFont("Monospace"))
 
         self.window.show()
@@ -55,9 +54,6 @@ class MainObject(QObject):
 
     def on_clear(self):
         print("on_clear")
-
-    def on_make(self):
-        print("on_make")
 
     def add_line(self, new_line):
         self.window.incoming_text.moveCursor(QTextCursor.End)

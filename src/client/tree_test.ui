@@ -39,13 +39,6 @@
           </property>
          </widget>
         </item>
-        <item>
-         <widget class="QPushButton" name="ButtonMkChild">
-          <property name="text">
-           <string>Make Child</string>
-          </property>
-         </widget>
-        </item>
        </layout>
       </widget>
       <widget class="QWidget" name="layoutWidget">
@@ -70,7 +63,7 @@
     <item>
      <widget class="QPushButton" name="CmdSend2server">
       <property name="text">
-       <string>PushButton</string>
+       <string>Run cmd</string>
       </property>
      </widget>
     </item>
