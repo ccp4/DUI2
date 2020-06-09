@@ -95,6 +95,8 @@ def draw_inner_graph(scene_in, nod_lst):
     fm = QFontMetrics(scene_in.font())
     ft_wd = fm.width("0")
     ft_ht = fm.height()
+    red_pen = QPen(Qt.red)
+    grayBrush = QBrush(Qt.gray, bs=Qt.SolidPattern)
 
     lst_w_indent = add_indent(nod_lst)
     for node in lst_w_indent:
@@ -115,11 +117,14 @@ def draw_inner_graph(scene_in, nod_lst):
                     my_coord_x, my_coord_y - ft_ht
                 )
 
+    for row, node in enumerate(lst_w_indent):
+        my_coord_x ,my_coord_y = get_coords(row, node["indent"], ft_ht, ft_wd)
         text = scene_in.addEllipse(
             my_coord_x - ft_wd * 1.3, my_coord_y - ft_ht * 0.85,
-            ft_wd * 3.2, ft_ht * 1.2
+            ft_wd * 3.2, ft_ht * 1.2,
+            red_pen, grayBrush
         )
 
         text = scene_in.addText(str(node["lin_num"]))
-        text.setPos(my_coord_x - ft_ht / 2, my_coord_y - ft_ht)
+        text.setPos(my_coord_x - ft_wd, my_coord_y - ft_ht)
 
