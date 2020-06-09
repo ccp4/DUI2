@@ -8,7 +8,7 @@ def add_indent(nod_lst):
     for node in nod_lst:
         node["indent"] = 0
 
-    for pos, node in enumerate(nod_lst):
+    for node in nod_lst:
         child_indent = node["indent"]
         for inner_node in nod_lst:
             if inner_node["lin_num"] in node["child_node_lst"]:
@@ -114,6 +114,11 @@ def draw_inner_graph(scene_in, nod_lst):
                     my_parent_coord_x, my_parent_coord_y + ft_ht / 4,
                     my_coord_x, my_coord_y - ft_ht
                 )
+
+        text = scene_in.addEllipse(
+            my_coord_x - ft_wd * 1.3, my_coord_y - ft_ht * 0.85,
+            ft_wd * 3.2, ft_ht * 1.2
+        )
 
         text = scene_in.addText(str(node["lin_num"]))
         text.setPos(my_coord_x - ft_ht / 2, my_coord_y - ft_ht)
