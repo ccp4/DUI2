@@ -15,6 +15,7 @@ def add_indent(nod_lst):
                 inner_node["indent"] = child_indent
                 child_indent +=1
 
+    '''
         if len(node["parent_node_lst"]) > 1:
             indent_lst = []
             for inner_node in nod_lst:
@@ -23,6 +24,7 @@ def add_indent(nod_lst):
 
             indent_lst.sort()
             node["indent"] = indent_lst[0]
+    '''
 
     return nod_lst
 
@@ -30,7 +32,8 @@ def draw_bezier(scene_in, p1x, p1y, p4x, p4y):
     p2x = p1x
     p2y = (p1y + p4y) / 2.0
     p3x = p4x
-    p3y = p1y - (p4y - p1y) / 4.0
+    p3y = (p1y + p4y) / 2.0
+    #p3y = p1y - (p4y - p1y) / 4.0
 
     n_points = 25
 
