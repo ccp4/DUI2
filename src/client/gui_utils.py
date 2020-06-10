@@ -26,12 +26,18 @@ def add_indent(nod_lst):
 
     return nod_lst
 
-def draw_bezier(scene_in, p1x, p1y, p4x, p4y):
-    p2x = p1x
-    p2y = (p1y + p4y) / 2.0
-    p3x = p4x
-    p3y = (p1y + p4y) / 2.0
-    #p3y = p1y - (p4y - p1y) / 4.0
+def draw_bezier(scene_in, p1x, p1y, p4x, p4y, vertical = False):
+    if vertical:
+        p2x = p1x
+        p2y = (p1y + p4y) / 2.0
+        p3x = p4x
+        p3y = p2y
+
+    else:
+        p2x = (p1x + p4x) / 2.0
+        p2y = p1y
+        p3x = p4x
+        p3y = (p1y + p4y) / 2.0
 
     n_points = 25
 
@@ -76,6 +82,7 @@ def draw_bezier(scene_in, p1x, p1y, p4x, p4y):
         x = nx
         y = ny
 
+    to_remove = '''
     x_arr_siz = (p4x - p1x) / 30.0
     y_arr_siz = (p4y - p1y) / 20.0
     scene_in.addLine(
@@ -86,7 +93,7 @@ def draw_bezier(scene_in, p1x, p1y, p4x, p4y):
         p4x, p4y,
         p4x - x_arr_siz, p4y - y_arr_siz
     )
-
+    '''
 
 def get_coords(row, col, ft_ht, ft_wd):
     return col * ft_wd * 2 + row * ft_wd / 4, row  * ft_ht * 2
@@ -112,10 +119,15 @@ def draw_inner_graph(scene_in, nod_lst):
                     inner_row, inner_node["indent"],
                     ft_ht, ft_wd
                 )
+                vertical = False
+                if inner_node["indent"] == node["indent"]:
+                    vertical = True
+
                 draw_bezier(
                     scene_in,
                     my_parent_coord_x, my_parent_coord_y + ft_ht / 4,
-                    my_coord_x, my_coord_y - ft_ht
+                    my_coord_x, my_coord_y - ft_ht,
+                    vertical
                 )
 
     for row, node in enumerate(lst_w_indent):
