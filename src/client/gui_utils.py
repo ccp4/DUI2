@@ -84,12 +84,13 @@ def draw_inner_graph(scene_in, nod_lst):
     fm = QFontMetrics(scene_in.font())
     ft_wd = fm.width("0")
     ft_ht = fm.height()
-    red_pen = QPen(Qt.red)
-    grayBrush = QBrush(Qt.gray, bs=Qt.SolidPattern)
 
-    #lin_pen = QPen(Qt.blue)
-    #blueBrush = QBrush(Qt.blue, bs=Qt.SolidPattern)
-    lin_pen = QPen(Qt.blue, 2, Qt.SolidLine)
+    blue_brush = QBrush(Qt.blue, bs=Qt.SolidPattern)
+    dark_blue_brush = QBrush(Qt.darkBlue, bs=Qt.SolidPattern)
+    cyan_brush = QBrush(Qt.cyan, bs=Qt.SolidPattern)
+    blue_pen = QPen(Qt.blue, 2, Qt.SolidLine)
+    dark_blue_pen = QPen(Qt.darkBlue, 2, Qt.SolidLine)
+    cyan_pen = QPen(Qt.cyan, 2, Qt.SolidLine)
 
     lst_w_indent = add_indent(nod_lst)
     for node in lst_w_indent:
@@ -113,7 +114,7 @@ def draw_inner_graph(scene_in, nod_lst):
                     my_parent_coord_x, my_parent_coord_y + ft_ht / 4,
                     my_coord_x, my_coord_y - ft_ht,
                     vertical,
-                    lin_pen
+                    blue_pen
                 )
 
     for row, node in enumerate(lst_w_indent):
@@ -121,9 +122,10 @@ def draw_inner_graph(scene_in, nod_lst):
         text = scene_in.addEllipse(
             my_coord_x - ft_wd * 1.3, my_coord_y - ft_ht * 0.85,
             ft_wd * 3.2, ft_ht * 1.2,
-            red_pen, grayBrush
+            blue_pen, blue_brush
         )
 
-        text = scene_in.addText(str(node["lin_num"]))
-        text.setPos(my_coord_x - ft_wd, my_coord_y - ft_ht)
+        text = scene_in.addSimpleText(str(node["lin_num"]))
+        text.setPos(my_coord_x - ft_wd * 0.5, my_coord_y - ft_ht * 0.8)
+        text.setBrush(cyan_brush)
 
