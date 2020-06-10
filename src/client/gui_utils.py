@@ -9,13 +9,6 @@ def add_indent(nod_lst):
         node["indent"] = 0
 
     for node in nod_lst:
-        child_indent = node["indent"]
-        for inner_node in nod_lst:
-            if inner_node["lin_num"] in node["child_node_lst"]:
-                inner_node["indent"] = child_indent
-                child_indent +=1
-
-    '''
         if len(node["parent_node_lst"]) > 1:
             indent_lst = []
             for inner_node in nod_lst:
@@ -24,7 +17,12 @@ def add_indent(nod_lst):
 
             indent_lst.sort()
             node["indent"] = indent_lst[0]
-    '''
+
+        child_indent = node["indent"]
+        for inner_node in nod_lst:
+            if inner_node["lin_num"] in node["child_node_lst"]:
+                inner_node["indent"] = child_indent
+                child_indent +=1
 
     return nod_lst
 
