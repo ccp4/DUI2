@@ -82,19 +82,6 @@ def draw_bezier(scene_in, p1x, p1y, p4x, p4y, vertical = False):
         x = nx
         y = ny
 
-    to_remove = '''
-    x_arr_siz = (p4x - p1x) / 30.0
-    y_arr_siz = (p4y - p1y) / 20.0
-    scene_in.addLine(
-        p4x, p4y,
-        p4x + x_arr_siz, p4y - y_arr_siz
-    )
-    scene_in.addLine(
-        p4x, p4y,
-        p4x - x_arr_siz, p4y - y_arr_siz
-    )
-    '''
-
 def get_coords(row, col, ft_ht, ft_wd):
     return col * ft_wd * 2 + row * ft_wd / 4, row  * ft_ht * 2
 
