@@ -32,6 +32,13 @@ class Run_n_Output(QThread):
                 self.line_out.emit(' \n /*EOF*/ \n')
                 break
 
+class GrScene(QGraphicsScene):
+    def __init__(self, parent = None):
+        super(GrScene, self).__init__(parent)
+        print("QGraphicsScene(parent) =", parent)
+
+    def mouseMoveEvent(self, event):
+        print("event.scenePos", event.scenePos())
 
 class MainObject(QObject):
     def __init__(self, parent = None):
@@ -45,7 +52,7 @@ class MainObject(QObject):
         self.window.incoming_text.setFont(QFont("Monospace"))
 
         self.window.show()
-        self.my_scene = QGraphicsScene()
+        self.my_scene = GrScene(self)
         self.window.graphicsView.setScene(self.my_scene)
         draw_inner_graph(self.my_scene, [])
 
