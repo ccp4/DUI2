@@ -77,7 +77,7 @@ def draw_bezier(scene_in, p1x, p1y, p4x, p4y, vertical = False, lin_pen = Qt.blu
 
 
 def get_coords(row, col, ft_ht, ft_wd):
-    return col * ft_wd * 4 + row * ft_wd / 4, row  * ft_ht * 2
+    return col * ft_wd * 3 + row * ft_wd / 4, row  * ft_ht * 2
 
 
 def draw_inner_graph(scene_in, nod_lst):
