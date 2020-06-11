@@ -8,7 +8,7 @@ from PySide2.QtWidgets import *
 from PySide2 import QtUiTools
 from PySide2.QtGui import *
 
-from gui_utils import draw_inner_graph, TreeScene
+from gui_utils import TreeScene
 
 class Run_n_Output(QThread):
     line_out = Signal(str)
@@ -46,7 +46,7 @@ class MainObject(QObject):
         self.window.show()
         self.my_scene = TreeScene(self)
         self.window.graphicsView.setScene(self.my_scene)
-        draw_inner_graph(self.my_scene, [])
+        self.my_scene.draw_inner_graph([])
 
     def on_select(self):
         print("on_select")
@@ -86,7 +86,7 @@ class MainObject(QObject):
             self.add_line(tree_line + "\n")
 
         self.my_scene.clear()
-        draw_inner_graph(self.my_scene, lst_nodes)
+        self.my_scene.draw_inner_graph(lst_nodes)
         self.my_scene.update()
 
     def request_launch(self):
