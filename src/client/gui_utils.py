@@ -27,8 +27,6 @@ def add_indent(nod_lst):
     return nod_lst
 
 
-
-
 class TreeScene(QGraphicsScene):
     def __init__(self, parent = None):
         super(TreeScene, self).__init__(parent)
@@ -83,10 +81,13 @@ class TreeScene(QGraphicsScene):
             )
 
             text = self.addSimpleText(str(node["lin_num"]))
-            text.setPos(my_coord_x - self.f_width * 0.5, my_coord_y - self.f_height * 0.8)
+            text.setPos(my_coord_x - self.f_width * 0.5,
+                        my_coord_y - self.f_height * 0.8)
             text.setBrush(self.cyan_brush)
 
-    def draw_bezier(self, p1x, p1y, p4x, p4y, vertical = False, lin_pen = Qt.blue):
+    def draw_bezier(self, p1x, p1y, p4x, p4y,
+                    vertical = False, lin_pen = Qt.blue):
+
         if vertical:
             p2x = p1x
             p2y = (p1y + p4y) / 2.0
