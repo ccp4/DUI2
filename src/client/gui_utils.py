@@ -27,29 +27,29 @@ def add_indent(nod_lst):
     return nod_lst
 
 
-def get_coords(row, col, ft_ht, ft_wd):
-    return col * ft_wd * 3 + row * ft_wd / 4, row  * ft_ht * 2
 
 
 class TreeScene(QGraphicsScene):
     def __init__(self, parent = None):
         super(TreeScene, self).__init__(parent)
-        print("QGraphicsScene(parent) =", parent)
+        fm = QFontMetrics(self.font())
+        self.f_width = fm.width("0")
+        self.f_height = fm.height()
+
+        self.blue_brush = QBrush(Qt.blue, bs=Qt.SolidPattern)
+        self.dark_blue_brush = QBrush(Qt.darkBlue, bs=Qt.SolidPattern)
+        self.cyan_brush = QBrush(Qt.cyan, bs=Qt.SolidPattern)
+        self.blue_pen = QPen(Qt.blue, 2, Qt.SolidLine)
+        self.dark_blue_pen = QPen(Qt.darkBlue, 2, Qt.SolidLine)
+        self.cyan_pen = QPen(Qt.cyan, 2, Qt.SolidLine)
+
+    def get_coords(self, row, col):
+        return col * self.f_width * 3 + row * self.f_width / 4, row  * self.f_height * 2
 
     def mouseMoveEvent(self, event):
         print("event.scenePos", event.scenePos())
 
     def draw_inner_graph(self, nod_lst):
-        fm = QFontMetrics(self.font())
-        ft_wd = fm.width("0")
-        ft_ht = fm.height()
-
-        blue_brush = QBrush(Qt.blue, bs=Qt.SolidPattern)
-        dark_blue_brush = QBrush(Qt.darkBlue, bs=Qt.SolidPattern)
-        cyan_brush = QBrush(Qt.cyan, bs=Qt.SolidPattern)
-        blue_pen = QPen(Qt.blue, 2, Qt.SolidLine)
-        dark_blue_pen = QPen(Qt.darkBlue, 2, Qt.SolidLine)
-        cyan_pen = QPen(Qt.cyan, 2, Qt.SolidLine)
 
         lst_w_indent = add_indent(nod_lst)
         for node in lst_w_indent:
@@ -57,35 +57,34 @@ class TreeScene(QGraphicsScene):
             print(str2prn)
 
         for row, node in enumerate(lst_w_indent):
-            my_coord_x ,my_coord_y = get_coords(row, node["indent"], ft_ht, ft_wd)
+            my_coord_x ,my_coord_y = self.get_coords(row, node["indent"])
             for inner_row, inner_node in enumerate(lst_w_indent):
                 if inner_node["lin_num"] in node["parent_node_lst"]:
-                    my_parent_coord_x, my_parent_coord_y = get_coords(
-                        inner_row, inner_node["indent"],
-                        ft_ht, ft_wd
+                    my_parent_coord_x, my_parent_coord_y = self.get_coords(
+                        inner_row, inner_node["indent"]
                     )
                     vertical = False
                     if inner_node["indent"] == node["indent"]:
                         vertical = True
 
                     self.draw_bezier(
-                        my_parent_coord_x, my_parent_coord_y + ft_ht / 4,
-                        my_coord_x, my_coord_y - ft_ht,
+                        my_parent_coord_x, my_parent_coord_y + self.f_height / 4,
+                        my_coord_x, my_coord_y - self.f_height,
                         vertical,
-                        blue_pen
+                        self.blue_pen
                     )
 
         for row, node in enumerate(lst_w_indent):
-            my_coord_x ,my_coord_y = get_coords(row, node["indent"], ft_ht, ft_wd)
+            my_coord_x ,my_coord_y = self.get_coords(row, node["indent"])
             text = self.addEllipse(
-                my_coord_x - ft_wd * 1.3, my_coord_y - ft_ht * 0.85,
-                ft_wd * 3.2, ft_ht * 1.2,
-                blue_pen, blue_brush
+                my_coord_x - self.f_width * 1.3, my_coord_y - self.f_height * 0.85,
+                self.f_width * 3.2, self.f_height * 1.2,
+                self.blue_pen, self.blue_brush
             )
 
             text = self.addSimpleText(str(node["lin_num"]))
-            text.setPos(my_coord_x - ft_wd * 0.5, my_coord_y - ft_ht * 0.8)
-            text.setBrush(cyan_brush)
+            text.setPos(my_coord_x - self.f_width * 0.5, my_coord_y - self.f_height * 0.8)
+            text.setBrush(self.cyan_brush)
 
     def draw_bezier(self, p1x, p1y, p4x, p4y, vertical = False, lin_pen = Qt.blue):
         if vertical:
