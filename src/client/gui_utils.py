@@ -4,6 +4,16 @@ from PySide2.QtWidgets import *
 from PySide2 import QtUiTools
 from PySide2.QtGui import *
 
+
+class TreeScene(QGraphicsScene):
+    def __init__(self, parent = None):
+        super(TreeScene, self).__init__(parent)
+        print("QGraphicsScene(parent) =", parent)
+
+    def mouseMoveEvent(self, event):
+        print("event.scenePos", event.scenePos())
+
+
 def add_indent(nod_lst):
     for node in nod_lst:
         node["indent"] = 0

@@ -8,7 +8,7 @@ from PySide2.QtWidgets import *
 from PySide2 import QtUiTools
 from PySide2.QtGui import *
 
-from gui_utils import draw_inner_graph
+from gui_utils import draw_inner_graph, TreeScene
 
 class Run_n_Output(QThread):
     line_out = Signal(str)
@@ -32,14 +32,6 @@ class Run_n_Output(QThread):
                 self.line_out.emit(' \n /*EOF*/ \n')
                 break
 
-class GrScene(QGraphicsScene):
-    def __init__(self, parent = None):
-        super(GrScene, self).__init__(parent)
-        print("QGraphicsScene(parent) =", parent)
-
-    def mouseMoveEvent(self, event):
-        print("event.scenePos", event.scenePos())
-
 class MainObject(QObject):
     def __init__(self, parent = None):
         super(MainObject, self).__init__(parent)
@@ -52,7 +44,7 @@ class MainObject(QObject):
         self.window.incoming_text.setFont(QFont("Monospace"))
 
         self.window.show()
-        self.my_scene = GrScene(self)
+        self.my_scene = TreeScene(self)
         self.window.graphicsView.setScene(self.my_scene)
         draw_inner_graph(self.my_scene, [])
 
