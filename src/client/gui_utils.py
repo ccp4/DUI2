@@ -68,16 +68,19 @@ class TreeScene(QGraphicsScene):
                     my_parent_coord_x, my_parent_coord_y = self.get_coords(
                         inner_row, inner_node["indent"]
                     )
-                    vertical = False
-                    if inner_node["indent"] == node["indent"]:
-                        vertical = True
 
-                    self.draw_bezier(
+                    self.draw_quadratic_bezier(
                         my_parent_coord_x, my_parent_coord_y + self.f_height / 4,
                         my_coord_x, my_coord_y - self.f_height,
-                        vertical,
                         self.blue_pen
                     )
+                    '''
+                    self.draw_cubic_bezier(
+                        my_parent_coord_x, my_parent_coord_y + self.f_height / 4,
+                        my_coord_x, my_coord_y - self.f_height,
+                        self.blue_pen
+                    )
+                    '''
 
         for row, node in enumerate(lst_w_indent):
             my_coord_x ,my_coord_y = self.get_coords(row, node["indent"])
@@ -92,20 +95,13 @@ class TreeScene(QGraphicsScene):
                         my_coord_y - self.f_height * 0.8)
             text.setBrush(self.cyan_brush)
 
-    def draw_bezier(self, p1x, p1y, p4x, p4y,
-                    vertical = False, lin_pen = Qt.blue):
+    def draw_cubic_bezier(self, p1x, p1y, p4x, p4y,
+                          lin_pen = Qt.blue):
 
-        if vertical:
-            p2x = p1x
-            p2y = (p1y + p4y) / 2.0
-            p3x = p4x
-            p3y = p2y
-
-        else:
-            p2x = (p1x + p4x) / 2.0
-            p2y = p1y
-            p3x = p4x
-            p3y = (p1y + p4y) / 2.0
+        p2x = p1x
+        p2y = (p1y + p4y) / 2.0
+        p3x = p4x
+        p3y = p2y
 
         n_points = 25
 
@@ -142,4 +138,41 @@ class TreeScene(QGraphicsScene):
 
             x = nx
             y = ny
+
+    def draw_quadratic_bezier(self,
+                              p1x, p1y, p3x, p3y,
+                              lin_pen = Qt.blue):
+        if p3x > p1x:
+            p2x = p3x
+            p2y = p1y
+
+        else:
+            p2x = p1x
+            p2y = p3y
+
+        n_points = 25
+
+        dx12 = (p2x - p1x) / n_points
+        dx23 = (p3x - p2x) / n_points
+
+        dy12 = (p2y - p1y) / n_points
+        dy23 = (p3y - p2y) / n_points
+
+        for pos in range(n_points + 1):
+            x1 = p1x + dx12 * float(pos)
+            y1 = p1y + dy12 * float(pos)
+            x2 = p2x + dx23 * float(pos)
+            y2 = p2y + dy23 * float(pos)
+
+            dx1 = (x2 - x1) / n_points
+            dy1 = (y2 - y1) / n_points
+
+            gx1 = x1 + dx1 * float(pos)
+            gy1 = y1 + dy1 * float(pos)
+
+            if pos > 0:
+                self.addLine(x, y, gx1, gy1, lin_pen)
+
+            x = gx1
+            y = gy1
 
