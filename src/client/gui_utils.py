@@ -41,11 +41,18 @@ class TreeScene(QGraphicsScene):
         self.dark_blue_pen = QPen(Qt.darkBlue, 2, Qt.SolidLine)
         self.cyan_pen = QPen(Qt.cyan, 2, Qt.SolidLine)
 
+        #self.setFocus()
+
     def get_coords(self, row, col):
-        return col * self.f_width * 3 + row * self.f_width / 4, row  * self.f_height * 2
+        return col * self.f_width * 3, row  * self.f_height * 2
 
     def mouseMoveEvent(self, event):
-        print("event.scenePos", event.scenePos())
+        print("mouseMoveEvent event.scenePos",
+              event.scenePos().x(),
+              event.scenePos().y())
+
+    def focusInEvent(self, event):
+        print("focusInEvent", event)
 
     def draw_inner_graph(self, nod_lst):
 
