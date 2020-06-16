@@ -1,8 +1,24 @@
 
-import sys
+import os, sys
 import time, json
 import requests
-import tree_draw_tmp
+#import tree_draw_tmp
+
+try:
+    from shared_modules import out_utils
+
+except ModuleNotFoundError:
+    '''
+    This trick to import the out_utils module can be
+    removed once the project gets properly packaged
+    '''
+
+    comm_path = os.path.abspath(__file__)[0:-21] + "shared_modules"
+    print("comm_path: ", comm_path)
+    sys.path.insert(1, comm_path)
+    import out_utils
+
+
 from PySide2.QtCore import *
 from PySide2.QtWidgets import *
 from PySide2 import QtUiTools
@@ -37,7 +53,7 @@ class MainObject(QObject):
         super(MainObject, self).__init__(parent)
         self.window = QtUiTools.QUiLoader().load("main_dui.ui")
         self.window.CmdSend2server.clicked.connect(self.request_launch)
-        self.tree_obj = tree_draw_tmp.TreeShow()
+        self.tree_obj = out_utils.TreeShow()
 
         self.window.ButtonSelect.clicked.connect(self.on_select)
         self.window.ButtonClear.clicked.connect(self.on_clear)

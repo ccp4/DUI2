@@ -2,7 +2,19 @@ import subprocess
 import os, sys
 import glob, json
 
-import out_utils
+try:
+    from shared_modules import out_utils
+
+except ModuleNotFoundError:
+    '''
+    This trick to import the out_utils module can be
+    removed once the project gets properly packaged
+    '''
+
+    comm_path = os.path.abspath(__file__)[0:-20] + "shared_modules"
+    sys.path.insert(1, comm_path)
+    import out_utils
+
 
 def fix_alias(short_in):
     pair_list = [

@@ -1,7 +1,20 @@
 from PySide2 import QtCore, QtWidgets, QtGui, QtNetwork
-import sys, time, json
+import os, sys, time, json
 import requests
-import tree_draw_tmp
+
+try:
+    from shared_modules import out_utils
+
+except ModuleNotFoundError:
+    '''
+    This trick to import the out_utils module can be
+    removed once the project gets properly packaged
+    '''
+
+    comm_path = os.path.abspath(__file__)[0:-31] + "shared_modules"
+    sys.path.insert(1, comm_path)
+    import out_utils
+
 
 class Run_n_Output(QtCore.QThread):
     line_out = QtCore.Signal(str)
@@ -52,7 +65,7 @@ class Client(QtWidgets.QDialog):
         self.setLayout(mainLayout)
         self.setWindowTitle("DUI front end test with HTTP")
 
-        self.tree_obj = tree_draw_tmp.TreeShow()
+        self.tree_obj = out_utils.TreeShow()
 
     def add_line(self, new_line):
         self.incoming_text.moveCursor(QtGui.QTextCursor.End)
