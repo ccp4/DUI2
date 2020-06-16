@@ -2,7 +2,6 @@
 import os, sys
 import time, json
 import requests
-#import tree_draw_tmp
 
 try:
     from shared_modules import out_utils
