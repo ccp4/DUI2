@@ -51,6 +51,11 @@ class TreeShow(object):
         return self.lst_out
 
     def _add_tree(self, step=None, parent_indent = 0, indent = 0):
+        '''
+            building recursively the a list of objects node_print_data
+            which contains info about how to draw the tree
+        '''
+
         if step["status"] == "Succeeded":
             stp_prn = " S   "
 
@@ -82,31 +87,27 @@ class TreeShow(object):
 
         new_indent = indent + 1
         if len(step["child_node_lst"]) > 0:
-            for nxt_stp_lin_num in step["child_node_lst"]:
-                for node in self.lst_nod:
-                    if nxt_stp_lin_num == node["lin_num"]:
-                        tmp_lst_num = []
-                        for elem in self.dat_lst:
-                            tmp_lst_num.append(elem.lin_num)
+            for node in self.lst_nod:
+                if node["lin_num"] in step["child_node_lst"]:
+                    tmp_lst_num = [emt.lin_num for emt in self.dat_lst]
+                    found_parents = True
+                    for node_pos in node["parent_node_lst"]:
+                        if node_pos not in tmp_lst_num:
+                            found_parents = False
 
-                        found_parents = True
-                        for node_pos in node["parent_node_lst"]:
-                            if node_pos not in tmp_lst_num:
-                                found_parents = False
+                    if(
+                        found_parents == True and
+                        node["lin_num"] not in tmp_lst_num
+                    ):
+                        if len(node["parent_node_lst"]) > 1:
+                            for elem in self.dat_lst:
+                                if new_indent < elem.indent + 1:
+                                    new_indent = elem.indent + 1
 
-                        if(
-                            found_parents == True and
-                            node["lin_num"] not in tmp_lst_num
-                        ):
-                            if len(node["parent_node_lst"]) > 1:
-                                for elem in self.dat_lst:
-                                    if new_indent < elem.indent + 1:
-                                        new_indent = elem.indent + 1
-
-                            self._add_tree(
-                                step=node,
-                                parent_indent = indent,
-                                indent=new_indent)
+                        self._add_tree(
+                            step=node,
+                            parent_indent = indent,
+                            indent=new_indent)
 
         else:
             if new_indent > self.max_indent:
