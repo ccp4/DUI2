@@ -60,7 +60,7 @@ class MainObject(QObject):
 
         self.window.show()
         self.my_scene = TreeScene(self)
-        self.window.graphicsView.setScene(self.my_scene)
+        self.window.gitView.setScene(self.my_scene)
         self.my_scene.draw_inner_graph([])
 
     def on_select(self):
