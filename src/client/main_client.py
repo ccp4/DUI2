@@ -23,7 +23,7 @@ from PySide2.QtWidgets import *
 from PySide2 import QtUiTools
 from PySide2.QtGui import *
 
-from gui_utils import TreeGitScene
+from gui_utils import TreeGitScene, TreeDirScene
 
 class Run_n_Output(QThread):
     line_out = Signal(str)
@@ -58,10 +58,18 @@ class MainObject(QObject):
         self.window.ButtonClear.clicked.connect(self.on_clear)
         self.window.incoming_text.setFont(QFont("Monospace"))
 
+        self.my_scene1 = TreeGitScene(self)
+        self.window.gitView.setScene(self.my_scene1)
+        self.my_scene1.draw_inner_graph([])
+
+
+
+        self.my_scene2 = TreeDirScene(self)
+        self.window.treeView.setScene(self.my_scene2)
+        self.my_scene2.draw_inner_graph([])
+
+
         self.window.show()
-        self.my_scene = TreeGitScene(self)
-        self.window.gitView.setScene(self.my_scene)
-        self.my_scene.draw_inner_graph([])
 
     def on_select(self):
         print("on_select")
@@ -100,9 +108,13 @@ class MainObject(QObject):
         for tree_line in lst_str:
             self.add_line(tree_line + "\n")
 
-        self.my_scene.clear()
-        self.my_scene.draw_inner_graph(lst_nodes)
-        self.my_scene.update()
+        self.my_scene1.clear()
+        self.my_scene1.draw_inner_graph(lst_nodes)
+        self.my_scene1.update()
+
+        self.my_scene2.clear()
+        self.my_scene2.draw_inner_graph(lst_nodes)
+        self.my_scene2.update()
 
     def request_launch(self):
         cmd_str = str(self.window.CmdEdit.text())

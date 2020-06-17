@@ -109,8 +109,6 @@ def draw_quadratic_bezier(scene_obj,
         y = gy1
 
 
-
-
 class TreeGitScene(QGraphicsScene):
     def __init__(self, parent = None):
         super(TreeGitScene, self).__init__(parent)
@@ -125,7 +123,81 @@ class TreeGitScene(QGraphicsScene):
         self.dark_blue_pen = QPen(Qt.darkBlue, 2, Qt.SolidLine)
         self.cyan_pen = QPen(Qt.cyan, 2, Qt.SolidLine)
 
-        #self.setFocus()
+    def get_coords(self, row, col):
+        return col * self.f_width * 3, row  * self.f_height * 2
+
+    def mouseMoveEvent(self, event):
+        print("mouseMoveEvent event.scenePos",
+              event.scenePos().x(),
+              event.scenePos().y())
+
+    def focusInEvent(self, event):
+        print("focusInEvent", event)
+
+    def draw_inner_graph(self, nod_lst):
+
+        lst_w_indent = add_indent(nod_lst)
+        for node in lst_w_indent:
+            str2prn = "     " * node["indent"] + "(" + str(node["lin_num"]) + ")"
+            print(str2prn)
+
+        for row, node in enumerate(lst_w_indent):
+            my_coord_x ,my_coord_y = self.get_coords(row, node["indent"])
+            for inner_row, inner_node in enumerate(lst_w_indent):
+                if inner_node["lin_num"] in node["parent_node_lst"]:
+                    my_parent_coord_x, my_parent_coord_y = self.get_coords(
+                        inner_row, inner_node["indent"]
+                    )
+
+                    draw_quadratic_bezier(
+                        self,
+                        my_parent_coord_x, my_parent_coord_y + self.f_height / 4,
+                        my_coord_x, my_coord_y - self.f_height,
+                        self.blue_pen
+                    )
+                    '''
+                    draw_cubic_bezier(
+                        self,
+                        my_parent_coord_x, my_parent_coord_y + self.f_height / 4,
+                        my_coord_x, my_coord_y - self.f_height,
+                        self.blue_pen
+                    )
+                    '''
+
+        for row, node in enumerate(lst_w_indent):
+            my_coord_x ,my_coord_y = self.get_coords(row, node["indent"])
+            text = self.addEllipse(
+                my_coord_x - self.f_width * 1.3, my_coord_y - self.f_height * 0.85,
+                self.f_width * 3.2, self.f_height * 1.2,
+                self.blue_pen, self.blue_brush
+            )
+
+            text = self.addSimpleText(str(node["lin_num"]))
+            text.setPos(my_coord_x - self.f_width * 0.5,
+                        my_coord_y - self.f_height * 0.8)
+            text.setBrush(self.cyan_brush)
+
+
+##################################################################################################
+
+##################################################################################################
+
+##################################################################################################
+
+
+class TreeDirScene(QGraphicsScene):
+    def __init__(self, parent = None):
+        super(TreeDirScene, self).__init__(parent)
+        fm = QFontMetrics(self.font())
+        self.f_width = fm.width("0")
+        self.f_height = fm.height()
+
+        self.blue_brush = QBrush(Qt.blue, bs=Qt.SolidPattern)
+        self.dark_blue_brush = QBrush(Qt.darkBlue, bs=Qt.SolidPattern)
+        self.cyan_brush = QBrush(Qt.cyan, bs=Qt.SolidPattern)
+        self.blue_pen = QPen(Qt.blue, 2, Qt.SolidLine)
+        self.dark_blue_pen = QPen(Qt.darkBlue, 2, Qt.SolidLine)
+        self.cyan_pen = QPen(Qt.cyan, 2, Qt.SolidLine)
 
     def get_coords(self, row, col):
         return col * self.f_width * 3, row  * self.f_height * 2
