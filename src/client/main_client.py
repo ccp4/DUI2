@@ -63,7 +63,6 @@ class MainObject(QObject):
         self.my_scene1.draw_inner_graph([])
 
 
-
         self.my_scene2 = TreeDirScene(self)
         self.window.treeView.setScene(self.my_scene2)
         self.my_scene2.draw_tree_graph([])

@@ -163,7 +163,7 @@ class TreeGitScene(QGraphicsScene):
 
         for row, node in enumerate(lst_w_indent):
             my_coord_x ,my_coord_y = self.get_coords(row, node["indent"])
-            text = self.addEllipse(
+            elip = self.addEllipse(
                 my_coord_x - self.f_width * 1.3, my_coord_y - self.f_height * 0.85,
                 self.f_width * 3.2, self.f_height * 1.2,
                 self.blue_pen, self.blue_brush
@@ -202,6 +202,16 @@ class TreeDirScene(QGraphicsScene):
               event.scenePos().y())
 
     def draw_tree_graph(self, nod_lst):
-        for node_info in nod_lst:
-            print(node_info)
+        for row, node in enumerate(nod_lst):
+            my_coord_x ,my_coord_y = self.get_coords(row, node.indent)
+            elip = self.addEllipse(
+                my_coord_x - self.f_width * 1.3, my_coord_y - self.f_height * 0.85,
+                self.f_width * 3.2, self.f_height * 1.2,
+                self.blue_pen, self.blue_brush
+            )
+
+            text = self.addSimpleText(str(node.lin_num))
+            text.setPos(my_coord_x - self.f_width * 0.5,
+                        my_coord_y - self.f_height * 0.8)
+            text.setBrush(self.cyan_brush)
 
