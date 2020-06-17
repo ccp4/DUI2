@@ -39,6 +39,9 @@
           </property>
          </widget>
         </item>
+        <item>
+         <widget class="QGraphicsView" name="treeView"/>
+        </item>
        </layout>
       </widget>
       <widget class="QWidget" name="layoutWidget">
