@@ -27,9 +27,93 @@ def add_indent(nod_lst):
     return nod_lst
 
 
-class TreeScene(QGraphicsScene):
+def draw_cubic_bezier(scene_obj, p1x, p1y, p4x, p4y,
+                      lin_pen = Qt.blue):
+
+    p2x = p1x
+    p2y = (p1y + p4y) / 2.0
+    p3x = p4x
+    p3y = p2y
+
+    n_points = 25
+
+    dx12 = (p2x - p1x) / n_points
+    dx23 = (p3x - p2x) / n_points
+    dx34 = (p4x - p3x) / n_points
+
+    dy12 = (p2y - p1y) / n_points
+    dy23 = (p3y - p2y) / n_points
+    dy34 = (p4y - p3y) / n_points
+
+    for pos in range(n_points + 1):
+        x1 = p1x + dx12 * float(pos)
+        y1 = p1y + dy12 * float(pos)
+        x2 = p2x + dx23 * float(pos)
+        y2 = p2y + dy23 * float(pos)
+        x3 = p3x + dx34 * float(pos)
+        y3 = p3y + dy34 * float(pos)
+        dx1 = (x2 - x1) / n_points
+        dy1 = (y2 - y1) / n_points
+        dx2 = (x3 - x2) / n_points
+        dy2 = (y3 - y2) / n_points
+        gx1 = x1 + dx1 * float(pos)
+        gy1 = y1 + dy1 * float(pos)
+        gx2 = x2 + dx2 * float(pos)
+        gy2 = y2 + dy2 * float(pos)
+        dx = (gx2 - gx1) / n_points
+        dy = (gy2 - gy1) / n_points
+        nx = gx1 + dx * float(pos)
+        ny = gy1 + dy * float(pos)
+
+        if pos > 0:
+            scene_obj.addLine(x, y, nx, ny, lin_pen)
+
+        x = nx
+        y = ny
+
+def draw_quadratic_bezier(scene_obj,
+                          p1x, p1y, p3x, p3y,
+                          lin_pen = Qt.blue):
+    if p3x > p1x:
+        p2x = p3x
+        p2y = p1y
+
+    else:
+        p2x = p1x
+        p2y = p3y
+
+    n_points = 25
+
+    dx12 = (p2x - p1x) / n_points
+    dx23 = (p3x - p2x) / n_points
+
+    dy12 = (p2y - p1y) / n_points
+    dy23 = (p3y - p2y) / n_points
+
+    for pos in range(n_points + 1):
+        x1 = p1x + dx12 * float(pos)
+        y1 = p1y + dy12 * float(pos)
+        x2 = p2x + dx23 * float(pos)
+        y2 = p2y + dy23 * float(pos)
+
+        dx1 = (x2 - x1) / n_points
+        dy1 = (y2 - y1) / n_points
+
+        gx1 = x1 + dx1 * float(pos)
+        gy1 = y1 + dy1 * float(pos)
+
+        if pos > 0:
+            scene_obj.addLine(x, y, gx1, gy1, lin_pen)
+
+        x = gx1
+        y = gy1
+
+
+
+
+class TreeGitScene(QGraphicsScene):
     def __init__(self, parent = None):
-        super(TreeScene, self).__init__(parent)
+        super(TreeGitScene, self).__init__(parent)
         fm = QFontMetrics(self.font())
         self.f_width = fm.width("0")
         self.f_height = fm.height()
@@ -69,13 +153,15 @@ class TreeScene(QGraphicsScene):
                         inner_row, inner_node["indent"]
                     )
 
-                    self.draw_quadratic_bezier(
+                    draw_quadratic_bezier(
+                        self,
                         my_parent_coord_x, my_parent_coord_y + self.f_height / 4,
                         my_coord_x, my_coord_y - self.f_height,
                         self.blue_pen
                     )
                     '''
-                    self.draw_cubic_bezier(
+                    draw_cubic_bezier(
+                        self,
                         my_parent_coord_x, my_parent_coord_y + self.f_height / 4,
                         my_coord_x, my_coord_y - self.f_height,
                         self.blue_pen
@@ -94,85 +180,3 @@ class TreeScene(QGraphicsScene):
             text.setPos(my_coord_x - self.f_width * 0.5,
                         my_coord_y - self.f_height * 0.8)
             text.setBrush(self.cyan_brush)
-
-    def draw_cubic_bezier(self, p1x, p1y, p4x, p4y,
-                          lin_pen = Qt.blue):
-
-        p2x = p1x
-        p2y = (p1y + p4y) / 2.0
-        p3x = p4x
-        p3y = p2y
-
-        n_points = 25
-
-        dx12 = (p2x - p1x) / n_points
-        dx23 = (p3x - p2x) / n_points
-        dx34 = (p4x - p3x) / n_points
-
-        dy12 = (p2y - p1y) / n_points
-        dy23 = (p3y - p2y) / n_points
-        dy34 = (p4y - p3y) / n_points
-
-        for pos in range(n_points + 1):
-            x1 = p1x + dx12 * float(pos)
-            y1 = p1y + dy12 * float(pos)
-            x2 = p2x + dx23 * float(pos)
-            y2 = p2y + dy23 * float(pos)
-            x3 = p3x + dx34 * float(pos)
-            y3 = p3y + dy34 * float(pos)
-            dx1 = (x2 - x1) / n_points
-            dy1 = (y2 - y1) / n_points
-            dx2 = (x3 - x2) / n_points
-            dy2 = (y3 - y2) / n_points
-            gx1 = x1 + dx1 * float(pos)
-            gy1 = y1 + dy1 * float(pos)
-            gx2 = x2 + dx2 * float(pos)
-            gy2 = y2 + dy2 * float(pos)
-            dx = (gx2 - gx1) / n_points
-            dy = (gy2 - gy1) / n_points
-            nx = gx1 + dx * float(pos)
-            ny = gy1 + dy * float(pos)
-
-            if pos > 0:
-                self.addLine(x, y, nx, ny, lin_pen)
-
-            x = nx
-            y = ny
-
-    def draw_quadratic_bezier(self,
-                              p1x, p1y, p3x, p3y,
-                              lin_pen = Qt.blue):
-        if p3x > p1x:
-            p2x = p3x
-            p2y = p1y
-
-        else:
-            p2x = p1x
-            p2y = p3y
-
-        n_points = 25
-
-        dx12 = (p2x - p1x) / n_points
-        dx23 = (p3x - p2x) / n_points
-
-        dy12 = (p2y - p1y) / n_points
-        dy23 = (p3y - p2y) / n_points
-
-        for pos in range(n_points + 1):
-            x1 = p1x + dx12 * float(pos)
-            y1 = p1y + dy12 * float(pos)
-            x2 = p2x + dx23 * float(pos)
-            y2 = p2y + dy23 * float(pos)
-
-            dx1 = (x2 - x1) / n_points
-            dy1 = (y2 - y1) / n_points
-
-            gx1 = x1 + dx1 * float(pos)
-            gy1 = y1 + dy1 * float(pos)
-
-            if pos > 0:
-                self.addLine(x, y, gx1, gy1, lin_pen)
-
-            x = gx1
-            y = gy1
-

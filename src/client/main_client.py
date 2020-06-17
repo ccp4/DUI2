@@ -23,7 +23,7 @@ from PySide2.QtWidgets import *
 from PySide2 import QtUiTools
 from PySide2.QtGui import *
 
-from gui_utils import TreeScene
+from gui_utils import TreeGitScene
 
 class Run_n_Output(QThread):
     line_out = Signal(str)
@@ -59,7 +59,7 @@ class MainObject(QObject):
         self.window.incoming_text.setFont(QFont("Monospace"))
 
         self.window.show()
-        self.my_scene = TreeScene(self)
+        self.my_scene = TreeGitScene(self)
         self.window.gitView.setScene(self.my_scene)
         self.my_scene.draw_inner_graph([])
 
