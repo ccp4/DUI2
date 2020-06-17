@@ -66,7 +66,7 @@ class MainObject(QObject):
 
         self.my_scene2 = TreeDirScene(self)
         self.window.treeView.setScene(self.my_scene2)
-        self.my_scene2.draw_inner_graph([])
+        self.my_scene2.draw_tree_graph([])
 
 
         self.window.show()
@@ -104,6 +104,7 @@ class MainObject(QObject):
 
         lst_nodes = json.loads(str_lst[1])
         lst_str = self.tree_obj(lst_nod = lst_nodes)
+        lst_2d_dat = self.tree_obj.get_tree_data()
 
         for tree_line in lst_str:
             self.add_line(tree_line + "\n")
@@ -113,7 +114,7 @@ class MainObject(QObject):
         self.my_scene1.update()
 
         self.my_scene2.clear()
-        self.my_scene2.draw_inner_graph(lst_nodes)
+        self.my_scene2.draw_tree_graph(lst_2d_dat)
         self.my_scene2.update()
 
     def request_launch(self):

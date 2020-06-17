@@ -18,7 +18,7 @@ def get_lst2show(main_obj):
 
     return lst_nod
 
-class node_print_data(object):
+class NodePrintData(object):
     def __init__(self, stp_prn, indent, parent_indent, lin_num, str_cmd, par_lst):
         self.stp_prn = stp_prn
         self.indent = indent
@@ -52,7 +52,7 @@ class TreeShow(object):
 
     def _add_tree(self, step=None, parent_indent = 0, indent = 0):
         '''
-            building recursively the a list of objects node_print_data
+            building recursively the a list of objects NodePrintData
             which contains info about how to draw the tree
         '''
 
@@ -78,7 +78,7 @@ class TreeShow(object):
         if str_cmd[:6] == "dials.":
             str_cmd = str_cmd[6:]
 
-        nod_dat = node_print_data(
+        nod_dat = NodePrintData(
             stp_prn, indent, parent_indent,
             int(step["lin_num"]),
             str_cmd, step["parent_node_lst"]
