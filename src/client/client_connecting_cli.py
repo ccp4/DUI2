@@ -34,7 +34,6 @@ lst_cmd = [
 if __name__ == "__main__":
     for cmd in lst_cmd:
         req_get = requests.get('http://localhost:8080/', stream = True, params = cmd)
-        str_lst = []
         line_str = ''
         while True:
             tmp_dat = req_get.raw.read(1)

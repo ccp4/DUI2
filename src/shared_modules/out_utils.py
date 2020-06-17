@@ -45,7 +45,7 @@ class TreeShow(object):
         self.lst_out.append("--------------------------")
 
         self.max_indent = 0
-        self.str_lst = []
+        self.dat_lst = []
         self._add_tree(step = self.lst_nod[0], parent_indent = 0, indent=1)
         self._output_connect()
         return self.lst_out
@@ -73,13 +73,12 @@ class TreeShow(object):
         if str_cmd[:6] == "dials.":
             str_cmd = str_cmd[6:]
 
-
         nod_dat = node_print_data(
             stp_prn, indent, parent_indent,
             int(step["lin_num"]),
             str_cmd, step["parent_node_lst"]
             )
-        self.str_lst.append(nod_dat)
+        self.dat_lst.append(nod_dat)
 
         new_indent = indent + 1
         if len(step["child_node_lst"]) > 0:
@@ -87,7 +86,7 @@ class TreeShow(object):
                 for node in self.lst_nod:
                     if nxt_stp_lin_num == node["lin_num"]:
                         tmp_lst_num = []
-                        for elem in self.str_lst:
+                        for elem in self.dat_lst:
                             tmp_lst_num.append(elem.lin_num)
 
                         found_parents = True
@@ -100,7 +99,7 @@ class TreeShow(object):
                             node["lin_num"] not in tmp_lst_num
                         ):
                             if len(node["parent_node_lst"]) > 1:
-                                for elem in self.str_lst:
+                                for elem in self.dat_lst:
                                     if new_indent < elem.indent + 1:
                                         new_indent = elem.indent + 1
 
@@ -114,15 +113,15 @@ class TreeShow(object):
                 self.max_indent = new_indent
 
     def _output_connect(self):
-        for pos, obj2prn in enumerate(self.str_lst):
+        for pos, obj2prn in enumerate(self.dat_lst):
             if pos > 0:
-                if obj2prn.parent_indent < self.str_lst[pos - 1].parent_indent:
+                if obj2prn.parent_indent < self.dat_lst[pos - 1].parent_indent:
                     for up_pos in range(pos - 1, 0, -1):
                         pos_in_str = obj2prn.parent_indent * len(self.ind_spc) + 5
-                        left_side = self.str_lst[up_pos].stp_prn[0:pos_in_str]
-                        right_side = self.str_lst[up_pos].stp_prn[pos_in_str + 1 :]
-                        if self.str_lst[up_pos].parent_indent > obj2prn.parent_indent:
-                            self.str_lst[up_pos].stp_prn = left_side + "|" + right_side
+                        left_side = self.dat_lst[up_pos].stp_prn[0:pos_in_str]
+                        right_side = self.dat_lst[up_pos].stp_prn[pos_in_str + 1 :]
+                        if self.dat_lst[up_pos].parent_indent > obj2prn.parent_indent:
+                            self.dat_lst[up_pos].stp_prn = left_side + "|" + right_side
 
                         else:
                             break
@@ -132,10 +131,10 @@ class TreeShow(object):
             str_here = lng_lft * " "
             obj2prn.stp_prn += str_here + " | " + obj2prn.str_cmd
 
-        for pos, obj2prn in enumerate(self.str_lst):
+        for pos, obj2prn in enumerate(self.dat_lst):
             if len(obj2prn.par_lst) > 1:
                 lst2connect = []
-                for par_pos, prev in enumerate(self.str_lst[0:pos]):
+                for par_pos, prev in enumerate(self.dat_lst[0:pos]):
                     if prev.lin_num in obj2prn.par_lst:
                         lst2connect.append(par_pos)
 
@@ -143,14 +142,14 @@ class TreeShow(object):
                 inde4times = obj2prn.indent * 4
 
                 for raw_pos in range(min(lst2connect) + 1, pos, 1):
-                    loc_lin_str = self.str_lst[raw_pos].stp_prn
+                    loc_lin_str = self.dat_lst[raw_pos].stp_prn
                     left_side = loc_lin_str[0:inde4times + 5]
                     right_side = loc_lin_str[inde4times + 6:]
-                    self.str_lst[raw_pos].stp_prn = left_side + ":" + right_side
+                    self.dat_lst[raw_pos].stp_prn = left_side + ":" + right_side
 
                 for up_lin in lst2connect:
-                    loc_lin_str = self.str_lst[up_lin].stp_prn
-                    pos_left = self.str_lst[up_lin].indent * 4 + 7
+                    loc_lin_str = self.dat_lst[up_lin].stp_prn
+                    pos_left = self.dat_lst[up_lin].indent * 4 + 7
                     pos_right = inde4times + 6
                     mid_lin = ""
                     for loc_char in loc_lin_str[pos_left:pos_right - 1]:
@@ -164,11 +163,11 @@ class TreeShow(object):
 
                     left_side = loc_lin_str[0:pos_left]
                     right_side = loc_lin_str[pos_right:]
-                    self.str_lst[up_lin].stp_prn = left_side + mid_lin + right_side
+                    self.dat_lst[up_lin].stp_prn = left_side + mid_lin + right_side
 
                 obj2prn.stp_prn += ",  parents:" + str(obj2prn.par_lst)
 
-        for prn_str in self.str_lst:
+        for prn_str in self.dat_lst:
             self.lst_out.append(prn_str.stp_prn)
 
         self.lst_out.append("---------------------" + self.max_indent * "-" * len(self.ind_spc))
