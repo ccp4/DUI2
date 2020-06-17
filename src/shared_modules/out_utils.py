@@ -185,3 +185,6 @@ class TreeShow(object):
         for prn_str in self.lst_out:
             print(prn_str)
 
+    def get_tree_data(self):
+        return self.dat_lst
+
