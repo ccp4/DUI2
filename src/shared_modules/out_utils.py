@@ -87,17 +87,21 @@ class TreeShow(object):
 
         new_indent = indent + 1
         if len(step["child_node_lst"]) > 0:
+            '''
+                making sure all parent nodes of <step>
+                are already in <self.lst_nod>
+            '''
             for node in self.lst_nod:
                 if node["lin_num"] in step["child_node_lst"]:
-                    tmp_lst_num = [emt.lin_num for emt in self.dat_lst]
+                    lst_num = [emt.lin_num for emt in self.dat_lst]
                     found_parents = True
                     for node_pos in node["parent_node_lst"]:
-                        if node_pos not in tmp_lst_num:
+                        if node_pos not in lst_num:
                             found_parents = False
 
                     if(
                         found_parents == True and
-                        node["lin_num"] not in tmp_lst_num
+                        node["lin_num"] not in lst_num
                     ):
                         if len(node["parent_node_lst"]) > 1:
                             for elem in self.dat_lst:
@@ -114,6 +118,10 @@ class TreeShow(object):
                 self.max_indent = new_indent
 
     def _output_connect(self):
+        '''
+            inserting/editing what to print in in <stp_prn>
+            which is part of each element of <self.dat_lst>
+        '''
         for pos, obj2prn in enumerate(self.dat_lst):
             if pos > 0:
                 if obj2prn.parent_indent < self.dat_lst[pos - 1].parent_indent:
