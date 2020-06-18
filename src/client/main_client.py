@@ -50,7 +50,11 @@ class Run_n_Output(QThread):
 class MainObject(QObject):
     def __init__(self, parent = None):
         super(MainObject, self).__init__(parent)
-        self.window = QtUiTools.QUiLoader().load("main_dui.ui")
+
+        ui_path = os.path.dirname(os.path.abspath(__file__))
+        ui_path += os.sep + "main_dui.ui"
+        self.window = QtUiTools.QUiLoader().load(ui_path)
+
         self.window.CmdSend2server.clicked.connect(self.request_launch)
         self.tree_obj = out_utils.TreeShow()
 
