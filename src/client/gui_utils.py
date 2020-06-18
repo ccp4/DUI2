@@ -238,9 +238,17 @@ class TreeDirScene(QGraphicsScene):
                 lst2connect = []
                 for par_pos, prev in enumerate(nod_lst[0:pos]):
                     if prev.lin_num in obj2prn.par_lst:
-                        ########################################################
+                        lst2connect.append((par_pos, prev.indent))
+
+                max_pos = 0
+                for lst_item in lst2connect:
+                    if lst_item[0] > max_pos:
+                        max_pos = lst_item[0]
+
+                for lst_item in lst2connect:
+                    if lst_item[0] != max_pos:
                         my_parent_coord_x, my_parent_coord_y = self.get_coords(
-                            par_pos, prev.indent
+                            lst_item[0], lst_item[1]
                         )
                         draw_quadratic_bezier_3_points(
                         self,
@@ -248,12 +256,7 @@ class TreeDirScene(QGraphicsScene):
                         my_coord_x, my_parent_coord_y,
                         my_coord_x, my_coord_y
                         )
-                        #self.addLine(my_coord_x, my_coord_y, my_parent_coord_x, my_parent_coord_y, self.blue_pen)
-                        #######################################################
-                        #lst2connect.append((par_pos, prev))
 
-                #lst2connect.remove(max(lst2connect))
-                #inde2draw = obj2prn.indent
 
 
 
