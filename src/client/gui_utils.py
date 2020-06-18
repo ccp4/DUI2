@@ -196,7 +196,7 @@ class TreeDirScene(QGraphicsScene):
         self.cyan_pen = QPen(Qt.cyan, 2, Qt.SolidLine)
 
     def get_coords(self, row, col):
-        return col * self.f_width * 3, row  * self.f_height * 2
+        return col * self.f_width * 4, row  * self.f_height * 2
 
     def mouseMoveEvent(self, event):
         print("mouseMoveEvent event.scenePos",
@@ -209,13 +209,14 @@ class TreeDirScene(QGraphicsScene):
             elip = self.addEllipse(
                 my_coord_x - self.f_width * 1.3, my_coord_y - self.f_height * 0.85,
                 self.f_width * 3.2, self.f_height * 1.2,
-                self.blue_pen, self.blue_brush
+                self.blue_pen, self.cyan_brush
             )
 
             text = self.addSimpleText(str(node.lin_num))
             text.setPos(my_coord_x - self.f_width * 0.5,
                         my_coord_y - self.f_height * 0.8)
-            text.setBrush(self.cyan_brush)
+            #text.setBrush(self.cyan_brush)
+            text.setBrush(self.dark_blue_brush)
 
             if pos > 0:
                 for inner_row, inner_node in enumerate(nod_lst):
@@ -226,9 +227,9 @@ class TreeDirScene(QGraphicsScene):
 
                         draw_quadratic_bezier_3_points(
                         self,
-                        my_parent_coord_x, my_parent_coord_y,
+                        my_parent_coord_x, my_parent_coord_y + self.f_height * 0.3,
                         my_parent_coord_x, my_coord_y,
-                        my_coord_x, my_coord_y
+                        my_coord_x - self.f_width * 1.3, my_coord_y - self.f_height * 0.3
                         )
 
 
@@ -252,9 +253,9 @@ class TreeDirScene(QGraphicsScene):
                         )
                         draw_quadratic_bezier_3_points(
                         self,
-                        my_parent_coord_x, my_parent_coord_y,
-                        my_coord_x, my_parent_coord_y,
-                        my_coord_x, my_coord_y
+                        my_parent_coord_x + self.f_width * 1.9, my_parent_coord_y - self.f_height * 0.3,
+                        my_coord_x + self.f_width * 0.2, my_parent_coord_y - self.f_height * 0.3,
+                        my_coord_x + self.f_width * 0.2, my_coord_y - self.f_height * 0.8
                         )
 
 
