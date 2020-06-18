@@ -71,17 +71,10 @@ def draw_cubic_bezier(scene_obj, p1x, p1y, p4x, p4y,
         x = nx
         y = ny
 
-def draw_quadratic_bezier(scene_obj,
-                          p1x, p1y, p3x, p3y,
-                          lin_pen = Qt.blue):
-    if p3x > p1x:
-        p2x = p3x
-        p2y = p1y
 
-    else:
-        p2x = p1x
-        p2y = p3y
-
+def draw_quadratic_bezier_3_points(scene_obj,
+                          p1x, p1y, p2x, p2y, p3x, p3y,
+                          lin_pen = QPen(Qt.blue, 2, Qt.SolidLine)):
     n_points = 25
 
     dx12 = (p2x - p1x) / n_points
@@ -107,6 +100,20 @@ def draw_quadratic_bezier(scene_obj,
 
         x = gx1
         y = gy1
+
+
+def draw_quadratic_bezier_auto(scene_obj,
+                          p1x, p1y, p3x, p3y):
+    if p3x > p1x:
+        p2x = p3x
+        p2y = p1y
+
+    else:
+        p2x = p1x
+        p2y = p3y
+
+    draw_quadratic_bezier_3_points(scene_obj,
+                          p1x, p1y, p2x, p2y, p3x, p3y)
 
 
 class TreeGitScene(QGraphicsScene):
@@ -145,12 +152,10 @@ class TreeGitScene(QGraphicsScene):
                     my_parent_coord_x, my_parent_coord_y = self.get_coords(
                         inner_row, inner_node["indent"]
                     )
-
-                    draw_quadratic_bezier(
+                    draw_quadratic_bezier_auto(
                         self,
                         my_parent_coord_x, my_parent_coord_y + self.f_height / 4,
-                        my_coord_x, my_coord_y - self.f_height,
-                        self.blue_pen
+                        my_coord_x, my_coord_y - self.f_height
                     )
                     '''
                     draw_cubic_bezier(
@@ -174,9 +179,6 @@ class TreeGitScene(QGraphicsScene):
                         my_coord_y - self.f_height * 0.8)
             text.setBrush(self.cyan_brush)
 
-
-
-##################################################################################################
 
 
 class TreeDirScene(QGraphicsScene):
