@@ -204,8 +204,8 @@ class TreeDirScene(QGraphicsScene):
               event.scenePos().y())
 
     def draw_tree_graph(self, nod_lst):
-        for row, node in enumerate(nod_lst):
-            my_coord_x ,my_coord_y = self.get_coords(row, node.indent)
+        for pos, node in enumerate(nod_lst):
+            my_coord_x ,my_coord_y = self.get_coords(pos, node.indent)
             elip = self.addEllipse(
                 my_coord_x - self.f_width * 1.3, my_coord_y - self.f_height * 0.85,
                 self.f_width * 3.2, self.f_height * 1.2,
@@ -216,4 +216,76 @@ class TreeDirScene(QGraphicsScene):
             text.setPos(my_coord_x - self.f_width * 0.5,
                         my_coord_y - self.f_height * 0.8)
             text.setBrush(self.cyan_brush)
+
+            if pos > 0:
+                my_parent_coord_x, my_parent_coord_y = self.get_coords(pos, node.parent_indent)
+
+                self.addLine(
+                    my_parent_coord_x, my_parent_coord_y,
+                    my_coord_x, my_coord_y, self.blue_pen
+                )
+
+        copied = '''
+
+        for pos, obj2prn in enumerate(self.dat_lst):
+            if pos > 0:
+                if obj2prn.parent_indent < self.dat_lst[pos - 1].parent_indent:
+                    for up_pos in range(pos - 1, 0, -1):
+                        pos_in_str = obj2prn.parent_indent * len(self.ind_spc) + 5
+                        left_side = self.dat_lst[up_pos].stp_prn[0:pos_in_str]
+                        right_side = self.dat_lst[up_pos].stp_prn[pos_in_str + 1 :]
+                        if self.dat_lst[up_pos].parent_indent > obj2prn.parent_indent:
+                            self.dat_lst[up_pos].stp_prn = left_side + "|" + right_side
+
+                        else:
+                            break
+
+            lng = len(self.ind_spc) * self.max_indent + 12
+            lng_lft = lng - len(obj2prn.stp_prn)
+            str_here = lng_lft * " "
+            obj2prn.stp_prn += str_here + " | " + obj2prn.str_cmd
+
+        for pos, obj2prn in enumerate(self.dat_lst):
+            if len(obj2prn.par_lst) > 1:
+                lst2connect = []
+                for par_pos, prev in enumerate(self.dat_lst[0:pos]):
+                    if prev.lin_num in obj2prn.par_lst:
+                        lst2connect.append(par_pos)
+
+                lst2connect.remove(max(lst2connect))
+                inde4times = obj2prn.indent * 4
+
+                for raw_pos in range(min(lst2connect) + 1, pos, 1):
+                    loc_lin_str = self.dat_lst[raw_pos].stp_prn
+                    left_side = loc_lin_str[0:inde4times + 5]
+                    right_side = loc_lin_str[inde4times + 6:]
+                    self.dat_lst[raw_pos].stp_prn = left_side + ":" + right_side
+
+                for up_lin in lst2connect:
+                    loc_lin_str = self.dat_lst[up_lin].stp_prn
+                    pos_left = self.dat_lst[up_lin].indent * 4 + 7
+                    pos_right = inde4times + 6
+                    mid_lin = ""
+                    for loc_char in loc_lin_str[pos_left:pos_right - 1]:
+                        if loc_char == "\\":
+                            mid_lin += "\\"
+
+                        else:
+                            mid_lin += "`"
+
+                    mid_lin += "\\"
+
+                    left_side = loc_lin_str[0:pos_left]
+                    right_side = loc_lin_str[pos_right:]
+                    self.dat_lst[up_lin].stp_prn = left_side + mid_lin + right_side
+
+                obj2prn.stp_prn += ",  parents:" + str(obj2prn.par_lst)
+
+        for prn_str in self.dat_lst:
+            self.lst_out.append(prn_str.stp_prn)
+
+        self.lst_out.append("---------------------" + self.max_indent * "-" * len(self.ind_spc))
+
+
+        '''
 
