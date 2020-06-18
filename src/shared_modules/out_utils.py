@@ -19,13 +19,18 @@ def get_lst2show(main_obj):
     return lst_nod
 
 class NodePrintData(object):
-    def __init__(self, stp_prn, indent, parent_indent, lin_num, str_cmd, par_lst):
+    def __init__(self,
+                    stp_prn, indent, parent_indent, lin_num,
+                    str_cmd, par_lst, low_par_lin_num
+                ):
+
         self.stp_prn = stp_prn
         self.indent = indent
         self.parent_indent = parent_indent
         self.lin_num = lin_num
         self.str_cmd = str_cmd
         self.par_lst = par_lst
+        self.low_par_lin_num = low_par_lin_num
 
 
 class TreeShow(object):
@@ -50,7 +55,7 @@ class TreeShow(object):
         self._output_connect()
         return self.lst_out
 
-    def _add_tree(self, step=None, parent_indent = 0, indent = 0):
+    def _add_tree(self, step=None, parent_indent = 0, indent = 0, low_par_lin_num = 0):
         '''
             building recursively the a list of objects NodePrintData
             which contains info about how to draw the tree
@@ -81,7 +86,8 @@ class TreeShow(object):
         nod_dat = NodePrintData(
             stp_prn, indent, parent_indent,
             int(step["lin_num"]),
-            str_cmd, step["parent_node_lst"]
+            str_cmd, step["parent_node_lst"],
+            low_par_lin_num
             )
         self.dat_lst.append(nod_dat)
 
@@ -111,7 +117,9 @@ class TreeShow(object):
                         self._add_tree(
                             step=node,
                             parent_indent = indent,
-                            indent=new_indent)
+                            indent = new_indent,
+                            low_par_lin_num = step["lin_num"]
+                            )
 
         else:
             if new_indent > self.max_indent:
