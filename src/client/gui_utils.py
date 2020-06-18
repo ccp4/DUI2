@@ -231,3 +231,31 @@ class TreeDirScene(QGraphicsScene):
                         my_coord_x, my_coord_y
                         )
 
+
+        for pos, obj2prn in enumerate(nod_lst):
+            if len(obj2prn.par_lst) > 1:
+                my_coord_x ,my_coord_y = self.get_coords(pos, obj2prn.indent)
+                lst2connect = []
+                for par_pos, prev in enumerate(nod_lst[0:pos]):
+                    if prev.lin_num in obj2prn.par_lst:
+                        ########################################################
+                        my_parent_coord_x, my_parent_coord_y = self.get_coords(
+                            par_pos, prev.indent
+                        )
+                        draw_quadratic_bezier_3_points(
+                        self,
+                        my_parent_coord_x, my_parent_coord_y,
+                        my_coord_x, my_parent_coord_y,
+                        my_coord_x, my_coord_y
+                        )
+                        #self.addLine(my_coord_x, my_coord_y, my_parent_coord_x, my_parent_coord_y, self.blue_pen)
+                        #######################################################
+                        #lst2connect.append((par_pos, prev))
+
+                #lst2connect.remove(max(lst2connect))
+                #inde2draw = obj2prn.indent
+
+
+
+
+
