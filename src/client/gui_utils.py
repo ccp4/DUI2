@@ -218,15 +218,16 @@ class TreeDirScene(QGraphicsScene):
             text.setBrush(self.cyan_brush)
 
             if pos > 0:
-                #my_parent_coord_x, my_parent_coord_y = self.get_coords(pos, node.parent_indent)
-
                 for inner_row, inner_node in enumerate(nod_lst):
                     if inner_node.lin_num == node.low_par_lin_num:
                         my_parent_coord_x, my_parent_coord_y = self.get_coords(
                             inner_row, node.parent_indent
                         )
-                        self.addLine(
-                            my_parent_coord_x, my_parent_coord_y,
-                            my_coord_x, my_coord_y, self.blue_pen
+
+                        draw_quadratic_bezier_3_points(
+                        self,
+                        my_parent_coord_x, my_parent_coord_y,
+                        my_parent_coord_x, my_coord_y,
+                        my_coord_x, my_coord_y
                         )
 
