@@ -110,9 +110,20 @@ class TreeShow(object):
                         node["lin_num"] not in lst_num
                     ):
                         if len(node["parent_node_lst"]) > 1:
-                            for elem in self.dat_lst:
+                            #finding top parent and bottom parent
+                            lst_par_pos = []
+                            for tmp_pos, tmp_elem in enumerate(self.dat_lst):
+                                if tmp_elem.lin_num in node["parent_node_lst"]:
+                                    lst_par_pos.append(tmp_pos)
+
+                            for elem in self.dat_lst[min(lst_par_pos):]:
                                 if new_indent < elem.indent + 1:
                                     new_indent = elem.indent + 1
+
+                        elif len(node["parent_node_lst"]) == 1:
+                            for tmp_elem in self.dat_lst:
+                                if tmp_elem.lin_num == node["parent_node_lst"][0]:
+                                    new_indent = tmp_elem.indent + 1
 
                         self._add_tree(
                             step=node,
