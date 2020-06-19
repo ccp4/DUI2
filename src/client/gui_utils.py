@@ -204,35 +204,6 @@ class TreeDirScene(QGraphicsScene):
               event.scenePos().y())
 
     def draw_tree_graph(self, nod_lst):
-        for pos, node in enumerate(nod_lst):
-            my_coord_x ,my_coord_y = self.get_coords(pos, node.indent)
-            elip = self.addEllipse(
-                my_coord_x - self.f_width * 1.3, my_coord_y - self.f_height * 0.85,
-                self.f_width * 3.2, self.f_height * 1.2,
-                self.blue_pen, self.cyan_brush
-            )
-
-            text = self.addSimpleText(str(node.lin_num))
-            text.setPos(my_coord_x - self.f_width * 0.5,
-                        my_coord_y - self.f_height * 0.8)
-            #text.setBrush(self.cyan_brush)
-            text.setBrush(self.dark_blue_brush)
-
-            if pos > 0:
-                for inner_row, inner_node in enumerate(nod_lst):
-                    if inner_node.lin_num == node.low_par_lin_num:
-                        my_parent_coord_x, my_parent_coord_y = self.get_coords(
-                            inner_row, node.parent_indent
-                        )
-
-                        draw_quadratic_bezier_3_points(
-                        self,
-                        my_parent_coord_x, my_parent_coord_y + self.f_height * 0.3,
-                        my_parent_coord_x, my_coord_y,
-                        my_coord_x - self.f_width * 1.3, my_coord_y - self.f_height * 0.3
-                        )
-
-
         for pos, obj2prn in enumerate(nod_lst):
             if len(obj2prn.par_lst) > 1:
                 my_coord_x ,my_coord_y = self.get_coords(pos, obj2prn.indent)
@@ -258,8 +229,32 @@ class TreeDirScene(QGraphicsScene):
                         my_coord_x + self.f_width * 0.2, my_coord_y - self.f_height * 0.8
                         )
 
+        for pos, node in enumerate(nod_lst):
+            my_coord_x ,my_coord_y = self.get_coords(pos, node.indent)
+            if pos > 0:
+                for inner_row, inner_node in enumerate(nod_lst):
+                    if inner_node.lin_num == node.low_par_lin_num:
+                        my_parent_coord_x, my_parent_coord_y = self.get_coords(
+                            inner_row, node.parent_indent
+                        )
 
+                        draw_quadratic_bezier_3_points(
+                        self,
+                        my_parent_coord_x, my_parent_coord_y + self.f_height * 0.3,
+                        my_parent_coord_x, my_coord_y,
+                        my_coord_x - self.f_width * 1.3, my_coord_y - self.f_height * 0.3
+                        )
 
+            elip = self.addEllipse(
+                my_coord_x - self.f_width * 1.3, my_coord_y - self.f_height * 0.85,
+                self.f_width * 3.2, self.f_height * 1.2,
+                self.blue_pen, self.cyan_brush
+            )
 
+            text = self.addSimpleText(str(node.lin_num))
+            text.setPos(my_coord_x - self.f_width * 0.5,
+                        my_coord_y - self.f_height * 0.8)
+            #text.setBrush(self.cyan_brush)
+            text.setBrush(self.dark_blue_brush)
 
 
