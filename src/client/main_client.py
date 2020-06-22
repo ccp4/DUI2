@@ -21,7 +21,7 @@ from PySide2.QtWidgets import *
 from PySide2 import QtUiTools
 from PySide2.QtGui import *
 
-from gui_utils import TreeGitScene, TreeDirScene
+from gui_utils import TreeDirScene
 
 class Run_n_Output(QThread):
     line_out = Signal(str)
