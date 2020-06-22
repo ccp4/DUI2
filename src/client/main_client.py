@@ -11,12 +11,10 @@ except ModuleNotFoundError:
     This trick to import the out_utils module can be
     removed once the project gets properly packaged
     '''
-
     comm_path = os.path.abspath(__file__)[0:-21] + "shared_modules"
     print("comm_path: ", comm_path)
     sys.path.insert(1, comm_path)
     import out_utils
-
 
 from PySide2.QtCore import *
 from PySide2.QtWidgets import *
@@ -62,11 +60,6 @@ class MainObject(QObject):
         self.window.ButtonClear.clicked.connect(self.on_clear)
         self.window.incoming_text.setFont(QFont("Monospace"))
 
-        self.my_scene1 = TreeGitScene(self)
-        self.window.gitView.setScene(self.my_scene1)
-        self.my_scene1.draw_inner_graph([])
-
-
         self.my_scene2 = TreeDirScene(self)
         self.window.treeView.setScene(self.my_scene2)
         self.my_scene2.draw_tree_graph([])
@@ -111,10 +104,6 @@ class MainObject(QObject):
 
         for tree_line in lst_str:
             self.add_line(tree_line + "\n")
-
-        self.my_scene1.clear()
-        self.my_scene1.draw_inner_graph(lst_nodes)
-        self.my_scene1.update()
 
         self.my_scene2.clear()
         self.my_scene2.draw_tree_graph(lst_2d_dat)
