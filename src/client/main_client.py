@@ -60,9 +60,9 @@ class MainObject(QObject):
         self.window.ButtonClear.clicked.connect(self.on_clear)
         self.window.incoming_text.setFont(QFont("Monospace"))
 
-        self.my_scene2 = TreeDirScene(self)
-        self.window.treeView.setScene(self.my_scene2)
-        self.my_scene2.draw_tree_graph([])
+        self.tree_scene = TreeDirScene(self)
+        self.window.treeView.setScene(self.tree_scene)
+        self.tree_scene.draw_tree_graph([])
 
 
         self.window.show()
@@ -105,9 +105,9 @@ class MainObject(QObject):
         for tree_line in lst_str:
             self.add_line(tree_line + "\n")
 
-        self.my_scene2.clear()
-        self.my_scene2.draw_tree_graph(lst_2d_dat)
-        self.my_scene2.update()
+        self.tree_scene.clear()
+        self.tree_scene.draw_tree_graph(lst_2d_dat)
+        self.tree_scene.update()
 
     def request_launch(self):
         cmd_str = str(self.window.CmdEdit.text())
