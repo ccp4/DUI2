@@ -157,14 +157,6 @@ class TreeGitScene(QGraphicsScene):
                         my_parent_coord_x, my_parent_coord_y + self.f_height / 4,
                         my_coord_x, my_coord_y - self.f_height
                     )
-                    '''
-                    draw_cubic_bezier(
-                        self,
-                        my_parent_coord_x, my_parent_coord_y + self.f_height / 4,
-                        my_coord_x, my_coord_y - self.f_height,
-                        self.blue_pen
-                    )
-                    '''
 
         for row, node in enumerate(lst_w_indent):
             my_coord_x ,my_coord_y = self.get_coords(row, node["indent"])
