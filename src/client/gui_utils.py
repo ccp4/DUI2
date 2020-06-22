@@ -6,7 +6,7 @@ from PySide2.QtGui import *
 
 def draw_quadratic_bezier_3_points(scene_obj,
                           p1x, p1y, p2x, p2y, p3x, p3y,
-                          lin_pen = QPen(Qt.blue, 2, Qt.SolidLine)):
+                          lin_pen):
     n_points = 25
 
     dx12 = (p2x - p1x) / n_points
@@ -79,7 +79,8 @@ class TreeDirScene(QGraphicsScene):
                         self,
                         my_parent_coord_x + self.f_width * 1.9, my_parent_coord_y - self.f_height * 0.3,
                         my_coord_x + self.f_width * 0.2, my_parent_coord_y - self.f_height * 0.3,
-                        my_coord_x + self.f_width * 0.2, my_coord_y - self.f_height * 0.8
+                        my_coord_x + self.f_width * 0.2, my_coord_y - self.f_height * 0.8,
+                        self.blue_pen
                         )
 
         for pos, node in enumerate(nod_lst):
@@ -95,7 +96,8 @@ class TreeDirScene(QGraphicsScene):
                         self,
                         my_parent_coord_x, my_parent_coord_y + self.f_height * 0.3,
                         my_parent_coord_x, my_coord_y,
-                        my_coord_x - self.f_width * 1.3, my_coord_y - self.f_height * 0.3
+                        my_coord_x - self.f_width * 1.3, my_coord_y - self.f_height * 0.3,
+                        self.blue_pen
                         )
 
         for pos, node in enumerate(nod_lst):
@@ -109,7 +111,6 @@ class TreeDirScene(QGraphicsScene):
             text = self.addSimpleText(str(node.lin_num))
             text.setPos(my_coord_x - self.f_width * 0.5,
                         my_coord_y - self.f_height * 0.8)
-            #text.setBrush(self.cyan_brush)
             text.setBrush(self.dark_blue_brush)
 
 
