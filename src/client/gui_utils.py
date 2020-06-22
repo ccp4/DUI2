@@ -237,6 +237,8 @@ class TreeDirScene(QGraphicsScene):
                         my_coord_x - self.f_width * 1.3, my_coord_y - self.f_height * 0.3
                         )
 
+        for pos, node in enumerate(nod_lst):
+            my_coord_x ,my_coord_y = self.get_coords(pos, node.indent)
             elip = self.addEllipse(
                 my_coord_x - self.f_width * 1.3, my_coord_y - self.f_height * 0.85,
                 self.f_width * 3.2, self.f_height * 1.2,
