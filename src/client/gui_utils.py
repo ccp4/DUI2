@@ -35,6 +35,9 @@ def draw_quadratic_bezier_3_points(scene_obj,
 
 
 class TreeDirScene(QGraphicsScene):
+
+    node_clicked = Signal(int)
+
     def __init__(self, parent = None):
         super(TreeDirScene, self).__init__(parent)
         fm = QFontMetrics(self.font())
@@ -56,6 +59,8 @@ class TreeDirScene(QGraphicsScene):
     def mouseReleaseEvent(self, event):
         x_ms = event.scenePos().x()
         y_ms = event.scenePos().y()
+        nod_num = None
+        min_d = None
         for num, nod in enumerate(self.lst_nod_pos):
             dx_sq = (nod["x_pos"] - x_ms) ** 2
             dy_sq = (nod["y_pos"] - y_ms) ** 2
@@ -69,9 +74,8 @@ class TreeDirScene(QGraphicsScene):
                 min_d = d_sq
                 nod_num = nod["lin_num"]
 
-        print("closest node(lin_num) =", nod_num)
-        print("closest node(d sqr) =", min_d)
-
+        if nod_num is not None:
+            self.node_clicked.emit(nod_num)
 
     def draw_tree_graph(self, nod_lst):
         for pos, obj2prn in enumerate(nod_lst):
@@ -127,7 +131,6 @@ class TreeDirScene(QGraphicsScene):
                 self.f_width * 3.2, self.f_height * 1.2,
                 self.blue_pen, self.cyan_brush
             )
-
             text = self.addSimpleText(str(node.lin_num))
             text.setPos(my_coord_x - self.f_width * 0.7,
                         my_coord_y - self.f_height * 0.5)

@@ -62,8 +62,8 @@ class MainObject(QObject):
 
         self.tree_scene = TreeDirScene(self)
         self.window.treeView.setScene(self.tree_scene)
+        self.tree_scene.node_clicked.connect(self.on_node_click)
         self.tree_scene.draw_tree_graph([])
-
 
         self.window.show()
 
@@ -72,6 +72,9 @@ class MainObject(QObject):
 
     def on_clear(self):
         print("on_clear")
+
+    def on_node_click(self, nod_num):
+        print("clicked node number ", nod_num)
 
     def add_line(self, new_line):
         self.window.incoming_text.moveCursor(QTextCursor.End)
