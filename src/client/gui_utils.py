@@ -48,13 +48,31 @@ class TreeDirScene(QGraphicsScene):
         self.dark_blue_pen = QPen(Qt.darkBlue, 2, Qt.SolidLine)
         self.cyan_pen = QPen(Qt.cyan, 2, Qt.SolidLine)
 
+        self.lst_nod_pos = []
+
     def get_coords(self, row, col):
         return col * self.f_width * 4, row  * self.f_height * 2
 
-    def mouseMoveEvent(self, event):
-        print("mouseMoveEvent event.scenePos",
-              event.scenePos().x(),
-              event.scenePos().y())
+    def mouseReleaseEvent(self, event):
+        x_ms = event.scenePos().x()
+        y_ms = event.scenePos().y()
+        for num, nod in enumerate(self.lst_nod_pos):
+            dx_sq = (nod["x_pos"] - x_ms) ** 2
+            dy_sq = (nod["y_pos"] - y_ms) ** 2
+            d_sq = dx_sq + dy_sq
+
+            if num == 0:
+                min_d = d_sq
+                nod_num = nod["lin_num"]
+
+            elif d_sq < min_d:
+                min_d = d_sq
+                nod_num = nod["lin_num"]
+
+        print("closer node(lin_num) =", nod_num)
+
+
+
 
     def draw_tree_graph(self, nod_lst):
         for pos, obj2prn in enumerate(nod_lst):
@@ -100,8 +118,12 @@ class TreeDirScene(QGraphicsScene):
                         self.blue_pen
                         )
 
+        self.lst_nod_pos = []
+
         for pos, node in enumerate(nod_lst):
             my_coord_x ,my_coord_y = self.get_coords(pos, node.indent)
+            nod_pos = {"lin_num": node.lin_num, "x_pos": my_coord_x, "y_pos": my_coord_y}
+            self.lst_nod_pos.append(nod_pos)
             elip = self.addEllipse(
                 my_coord_x - self.f_width * 1.3, my_coord_y - self.f_height * 0.85,
                 self.f_width * 3.2, self.f_height * 1.2,
