@@ -69,9 +69,8 @@ class TreeDirScene(QGraphicsScene):
                 min_d = d_sq
                 nod_num = nod["lin_num"]
 
-        print("closer node(lin_num) =", nod_num)
-
-
+        print("closest node(lin_num) =", nod_num)
+        print("closest node(d sqr) =", min_d)
 
 
     def draw_tree_graph(self, nod_lst):
@@ -95,9 +94,9 @@ class TreeDirScene(QGraphicsScene):
                         )
                         draw_quadratic_bezier_3_points(
                         self,
-                        my_parent_coord_x + self.f_width * 1.9, my_parent_coord_y - self.f_height * 0.3,
-                        my_coord_x + self.f_width * 0.2, my_parent_coord_y - self.f_height * 0.3,
-                        my_coord_x + self.f_width * 0.2, my_coord_y - self.f_height * 0.8,
+                        my_parent_coord_x + self.f_width * 1.6, my_parent_coord_y,
+                        my_coord_x, my_parent_coord_y,
+                        my_coord_x, my_coord_y - self.f_height * 0.6,
                         self.blue_pen
                         )
 
@@ -112,27 +111,26 @@ class TreeDirScene(QGraphicsScene):
 
                         draw_quadratic_bezier_3_points(
                         self,
-                        my_parent_coord_x, my_parent_coord_y + self.f_height * 0.3,
+                        my_parent_coord_x, my_parent_coord_y + self.f_height * 0.6,
                         my_parent_coord_x, my_coord_y,
-                        my_coord_x - self.f_width * 1.3, my_coord_y - self.f_height * 0.3,
+                        my_coord_x - self.f_width * 1.6, my_coord_y,
                         self.blue_pen
                         )
 
         self.lst_nod_pos = []
-
         for pos, node in enumerate(nod_lst):
             my_coord_x ,my_coord_y = self.get_coords(pos, node.indent)
             nod_pos = {"lin_num": node.lin_num, "x_pos": my_coord_x, "y_pos": my_coord_y}
             self.lst_nod_pos.append(nod_pos)
             elip = self.addEllipse(
-                my_coord_x - self.f_width * 1.3, my_coord_y - self.f_height * 0.85,
+                my_coord_x - self.f_width * 1.6, my_coord_y - self.f_height * 0.6,
                 self.f_width * 3.2, self.f_height * 1.2,
                 self.blue_pen, self.cyan_brush
             )
 
             text = self.addSimpleText(str(node.lin_num))
-            text.setPos(my_coord_x - self.f_width * 0.5,
-                        my_coord_y - self.f_height * 0.8)
+            text.setPos(my_coord_x - self.f_width * 0.7,
+                        my_coord_y - self.f_height * 0.5)
             text.setBrush(self.dark_blue_brush)
 
 
