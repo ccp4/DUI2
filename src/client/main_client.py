@@ -75,6 +75,10 @@ class MainObject(QObject):
 
     def on_node_click(self, nod_num):
         print("clicked node number ", nod_num)
+        prev_text = str(self.window.NumLinLst.text())
+        self.window.NumLinLst.setText(
+            str(prev_text + " " + str(nod_num))
+        )
 
     def add_line(self, new_line):
         self.window.incoming_text.moveCursor(QTextCursor.End)
@@ -116,6 +120,7 @@ class MainObject(QObject):
         cmd_str = str(self.window.CmdEdit.text())
         print("cmd_str", cmd_str)
         nod_str = str(self.window.NumLinLst.text())
+        self.window.NumLinLst.clear()
         nod_lst = nod_str.split(" ")
         print("nod_lst", nod_lst)
         cmd = {"nod_lst":nod_lst, "cmd_lst":[cmd_str]}
