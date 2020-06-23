@@ -52,26 +52,17 @@ class MainObject(QObject):
         ui_path = os.path.dirname(os.path.abspath(__file__))
         ui_path += os.sep + "client.ui"
         self.window = QtUiTools.QUiLoader().load(ui_path)
-
-        self.window.CmdSend2server.clicked.connect(self.request_launch)
-        self.tree_obj = out_utils.TreeShow()
-
-        self.window.ButtonSelect.clicked.connect(self.on_select)
-        self.window.ButtonClear.clicked.connect(self.on_clear)
         self.window.incoming_text.setFont(QFont("Monospace"))
 
+        self.tree_obj = out_utils.TreeShow()
         self.tree_scene = TreeDirScene(self)
         self.window.treeView.setScene(self.tree_scene)
+
         self.tree_scene.node_clicked.connect(self.on_node_click)
+        self.window.CmdSend2server.clicked.connect(self.request_launch)
         self.tree_scene.draw_tree_graph([])
 
         self.window.show()
-
-    def on_select(self):
-        print("on_select")
-
-    def on_clear(self):
-        print("on_clear")
 
     def on_node_click(self, nod_num):
         print("clicked node number ", nod_num)
