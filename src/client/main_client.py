@@ -50,7 +50,7 @@ class MainObject(QObject):
         super(MainObject, self).__init__(parent)
 
         ui_path = os.path.dirname(os.path.abspath(__file__))
-        ui_path += os.sep + "main_dui.ui"
+        ui_path += os.sep + "client.ui"
         self.window = QtUiTools.QUiLoader().load(ui_path)
 
         self.window.CmdSend2server.clicked.connect(self.request_launch)
