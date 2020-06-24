@@ -97,11 +97,11 @@ class TreeDirScene(QGraphicsScene):
                             lst_item[0], lst_item[1]
                         )
                         draw_quadratic_bezier_3_points(
-                        self,
-                        my_parent_coord_x + self.f_width * 1.6, my_parent_coord_y,
-                        my_coord_x, my_parent_coord_y,
-                        my_coord_x, my_coord_y - self.f_height * 0.6,
-                        self.blue_pen
+                            self,
+                            my_parent_coord_x + self.f_width * 1.6, my_parent_coord_y,
+                            my_coord_x, my_parent_coord_y,
+                            my_coord_x, my_coord_y - self.f_height * 0.6,
+                            self.blue_pen
                         )
 
         for pos, node in enumerate(nod_lst):
@@ -112,13 +112,12 @@ class TreeDirScene(QGraphicsScene):
                         my_parent_coord_x, my_parent_coord_y = self.get_coords(
                             inner_row, node.parent_indent
                         )
-
                         draw_quadratic_bezier_3_points(
-                        self,
-                        my_parent_coord_x, my_parent_coord_y + self.f_height * 0.6,
-                        my_parent_coord_x, my_coord_y,
-                        my_coord_x - self.f_width * 1.6, my_coord_y,
-                        self.blue_pen
+                            self,
+                            my_parent_coord_x, my_parent_coord_y + self.f_height * 0.6,
+                            my_parent_coord_x, my_coord_y,
+                            my_coord_x - self.f_width * 1.6, my_coord_y,
+                            self.blue_pen
                         )
 
         self.lst_nod_pos = []

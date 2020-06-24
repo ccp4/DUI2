@@ -10,7 +10,6 @@ except ModuleNotFoundError:
     This trick to import the out_utils module can be
     removed once the project gets properly packaged
     '''
-
     comm_path = os.path.abspath(__file__)[0:-20] + "shared_modules"
     sys.path.insert(1, comm_path)
     import out_utils
@@ -272,15 +271,16 @@ class Runner(object):
         lst_nod = []
         for uni in self.step_list:
             node = {
-                    "_base_dir"            :uni._base_dir,
-                    "lst2run"              :uni.lst2run,
-                    "_lst_expt"            :uni._lst_expt,
-                    "_lst_refl"            :uni._lst_refl,
-                    "_run_dir"             :uni._run_dir,
-                    "lin_num"              :uni.lin_num,
-                    "status"               :uni.status,
-                    "parent_node_lst"      :uni.parent_node_lst,
-                    "child_node_lst"       :uni.child_node_lst}
+                        "_base_dir"            :uni._base_dir,
+                        "lst2run"              :uni.lst2run,
+                        "_lst_expt"            :uni._lst_expt,
+                        "_lst_refl"            :uni._lst_refl,
+                        "_run_dir"             :uni._run_dir,
+                        "lin_num"              :uni.lin_num,
+                        "status"               :uni.status,
+                        "parent_node_lst"      :uni.parent_node_lst,
+                        "child_node_lst"       :uni.child_node_lst
+                    }
 
             lst_nod.append(node)
 
