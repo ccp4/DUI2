@@ -7,7 +7,7 @@ from PySide2.QtGui import *
 def draw_quadratic_bezier_3_points(scene_obj,
                           p1x, p1y, p2x, p2y, p3x, p3y,
                           lin_pen):
-    n_points = 25
+    n_points = 35
 
     dx12 = (p2x - p1x) / n_points
     dx23 = (p3x - p2x) / n_points
@@ -44,12 +44,27 @@ class TreeDirScene(QGraphicsScene):
         self.f_width = fm.width("0")
         self.f_height = fm.height()
 
-        self.blue_brush = QBrush(Qt.blue, bs=Qt.SolidPattern)
-        self.dark_blue_brush = QBrush(Qt.darkBlue, bs=Qt.SolidPattern)
-        self.cyan_brush = QBrush(Qt.cyan, bs=Qt.SolidPattern)
-        self.blue_pen = QPen(Qt.blue, 2, Qt.SolidLine)
-        self.dark_blue_pen = QPen(Qt.darkBlue, 2, Qt.SolidLine)
-        self.cyan_pen = QPen(Qt.cyan, 2, Qt.SolidLine)
+        self.blue_brush = QBrush(
+            Qt.blue, Qt.SolidPattern,
+        )
+        self.dark_blue_brush = QBrush(
+            Qt.darkBlue, Qt.SolidPattern,
+        )
+        self.cyan_brush = QBrush(
+            Qt.cyan, Qt.SolidPattern,
+        )
+        self.blue_pen = QPen(
+            Qt.blue, 3, Qt.SolidLine,
+            Qt.RoundCap, Qt.RoundJoin
+        )
+        self.dark_blue_pen = QPen(
+            Qt.darkBlue, 3, Qt.SolidLine,
+            Qt.RoundCap, Qt.RoundJoin
+        )
+        self.cyan_pen = QPen(
+            Qt.cyan, 2, Qt.SolidLine,
+            Qt.RoundCap, Qt.RoundJoin
+        )
 
         self.lst_nod_pos = []
 
