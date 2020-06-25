@@ -7,7 +7,7 @@ from PySide2.QtGui import *
 def draw_quadratic_bezier_3_points(scene_obj,
                           p1x, p1y, p2x, p2y, p3x, p3y,
                           lin_pen):
-    n_points = 35
+    n_points = 45
 
     dx12 = (p2x - p1x) / n_points
     dx23 = (p3x - p2x) / n_points
@@ -53,6 +53,19 @@ class TreeDirScene(QGraphicsScene):
         self.cyan_brush = QBrush(
             Qt.cyan, Qt.SolidPattern,
         )
+
+        self.gray_brush = QBrush(
+            Qt.gray, Qt.SolidPattern,
+        )
+
+        self.light_gray_brush = QBrush(
+            Qt.lightGray, Qt.SolidPattern,
+        )
+        self.white_brush = QBrush(
+            Qt.white, Qt.SolidPattern,
+        )
+
+
         self.blue_pen = QPen(
             Qt.blue, 3, Qt.SolidLine,
             Qt.RoundCap, Qt.RoundJoin
@@ -63,6 +76,14 @@ class TreeDirScene(QGraphicsScene):
         )
         self.cyan_pen = QPen(
             Qt.cyan, 2, Qt.SolidLine,
+            Qt.RoundCap, Qt.RoundJoin
+        )
+        self.gray_pen = QPen(
+            Qt.gray, 2, Qt.SolidLine,
+            Qt.RoundCap, Qt.RoundJoin
+        )
+        self.white_pen = QPen(
+            Qt.white, 2, Qt.SolidLine,
             Qt.RoundCap, Qt.RoundJoin
         )
 
@@ -93,6 +114,30 @@ class TreeDirScene(QGraphicsScene):
             self.node_clicked.emit(nod_num)
 
     def draw_tree_graph(self, nod_lst):
+        max_indent = 0
+        for node in nod_lst:
+            if node.indent > max_indent:
+                max_indent = node.indent
+
+        right_x, down_y = self.get_coords(len(nod_lst), max_indent + 1)
+        left_x, up_y = self.get_coords(-1, 0)
+
+        up_y += self.f_height
+        down_y -= self.f_height
+
+        dx = right_x - left_x
+        dy = down_y - up_y
+        self.addRect(left_x, up_y, dx, dy, self.white_pen, self.light_gray_brush)
+        for i in range(int(len(nod_lst) / 2 + 1)):
+            pos = i * 2
+            my_x, my_y = self.get_coords(pos, 0)
+            self.addRect(
+                left_x, my_y - self.f_height,
+                dx, self.f_height * 2,
+                self.white_pen, self.white_brush
+            )
+
+
         for pos, obj2prn in enumerate(nod_lst):
             if len(obj2prn.par_lst) > 1:
                 my_coord_x ,my_coord_y = self.get_coords(pos, obj2prn.indent)
