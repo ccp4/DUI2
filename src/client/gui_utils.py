@@ -165,25 +165,23 @@ class TreeDirScene(QGraphicsScene):
             if node.indent > max_indent:
                 max_indent = node.indent
 
-        right_x, down_y = self.get_coords(len(nod_lst), max_indent + 1)
+        right_x, down_y = self.get_coords(len(nod_lst), max_indent + 5)
         left_x, up_y = self.get_coords(-1, 0)
-
-        up_y += self.f_height
-        down_y -= self.f_height
 
         dx = right_x - left_x
         dy = down_y - up_y
         self.addRect(
-            left_x - self.f_width, up_y - self.f_height,
-            dx + self.f_width * 2, dy + self.f_height * 2,
+            left_x - self.f_width, up_y,
+            dx + self.f_width, dy,
             self.gray_pen, self.light_gray_brush
         )
+
         for i in range(int((len(nod_lst) - 1) / 2 + 1)):
             pos = i * 2
             my_x, my_y = self.get_coords(pos, 0)
             self.addRect(
                 left_x, my_y - self.f_height,
-                dx, self.f_height * 2,
+                dx - self.f_width, self.f_height * 2,
                 self.white_pen, self.white_brush
             )
 
