@@ -3,6 +3,7 @@ from PySide2.QtCore import *
 from PySide2.QtWidgets import *
 from PySide2 import QtUiTools
 from PySide2.QtGui import *
+import numpy as np
 
 def draw_quadratic_bezier_3_points(scene_obj,
                           p1x, p1y, p2x, p2y, p3x, p3y,
@@ -30,7 +31,7 @@ def draw_quadratic_bezier_3_points(scene_obj,
         if pos > 0:
             scene_obj.addLine(x, y, gx1, gy1, lin_pen)
 
-        if pos == n_points - 3:
+        if pos == n_points - 5:
             arrow_base_x = x
             arrow_base_y = y
 
@@ -41,26 +42,43 @@ def draw_quadratic_bezier_3_points(scene_obj,
         x = gx1
         y = gy1
 
-
     dx = arrow_tip_x - arrow_base_x
     dy = arrow_tip_y - arrow_base_y
 
-    x_base_1 = arrow_base_x + dy / 3.0
-    y_base_1 = arrow_base_y - dx / 3.0
-    x_base_2 = arrow_base_x - dy / 3.0
-    y_base_2 = arrow_base_y + dx / 3.0
+    # temporal non scaled arrowhead positions
+    x_base_1 = arrow_base_x + dy / 2.0
+    y_base_1 = arrow_base_y - dx / 2.0
+    x_base_2 = arrow_base_x - dy / 2.0
+    y_base_2 = arrow_base_y + dx / 2.0
 
-    scene_obj.addLine(arrow_tip_x, arrow_tip_y, x_base_2, y_base_2,
-      QPen(
-            Qt.red, 4, Qt.SolidLine,
-            Qt.RoundCap, Qt.RoundJoin
-        ) )
+    #scaling arrowheads
+    dx1 = arrow_tip_x - x_base_1
+    dy1 = arrow_tip_y - y_base_1
+    dx2 = arrow_tip_x - x_base_2
+    dy2 = arrow_tip_y - y_base_2
 
-    scene_obj.addLine(x_base_1, y_base_1, arrow_tip_x, arrow_tip_y,
-      QPen(
-            Qt.red, 4, Qt.SolidLine,
-            Qt.RoundCap, Qt.RoundJoin
-        ) )
+    size = np.sqrt((dx1 + dx2) ** 2.0 + (dy1 + dy2) ** 2.0) / 2.0
+
+    scale = 7.0 / size
+
+    x_base_1 = arrow_tip_x - dx1 * scale
+    y_base_1 = arrow_tip_y - dy1 * scale
+
+    x_base_2 = arrow_tip_x - dx2 * scale
+    y_base_2 = arrow_tip_y - dy2 * scale
+
+    #drawing arrowheads
+    scene_obj.addLine(
+        arrow_tip_x, arrow_tip_y,
+        x_base_2, y_base_2,
+        lin_pen
+    )
+
+    scene_obj.addLine(
+        x_base_1, y_base_1,
+        arrow_tip_x, arrow_tip_y,
+        lin_pen
+    )
 
 
 class TreeDirScene(QGraphicsScene):
@@ -96,11 +114,11 @@ class TreeDirScene(QGraphicsScene):
 
 
         self.blue_pen = QPen(
-            Qt.blue, 3, Qt.SolidLine,
+            Qt.blue, 1.6, Qt.SolidLine,
             Qt.RoundCap, Qt.RoundJoin
         )
         self.dark_blue_pen = QPen(
-            Qt.darkBlue, 3, Qt.SolidLine,
+            Qt.darkBlue, 1.9, Qt.SolidLine,
             Qt.RoundCap, Qt.RoundJoin
         )
         self.cyan_pen = QPen(
@@ -190,7 +208,7 @@ class TreeDirScene(QGraphicsScene):
                             my_parent_coord_x + self.f_width * 1.6, my_parent_coord_y,
                             my_coord_x, my_parent_coord_y,
                             my_coord_x, my_coord_y - self.f_height * 0.6,
-                            self.blue_pen
+                            self.dark_blue_pen
                         )
 
         for pos, node in enumerate(nod_lst):
@@ -206,7 +224,7 @@ class TreeDirScene(QGraphicsScene):
                             my_parent_coord_x, my_parent_coord_y + self.f_height * 0.6,
                             my_parent_coord_x, my_coord_y,
                             my_coord_x - self.f_width * 1.6, my_coord_y,
-                            self.blue_pen
+                            self.dark_blue_pen
                         )
 
         self.lst_nod_pos = []
