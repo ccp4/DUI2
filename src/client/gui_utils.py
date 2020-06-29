@@ -42,28 +42,23 @@ def draw_quadratic_bezier_3_points(scene_obj,
         y = gy1
 
 
-
     dx = arrow_tip_x - arrow_base_x
     dy = arrow_tip_y - arrow_base_y
 
-    up_dx = dy / 3.0
-    up_dy = dx / 3.0
-
-    x_base_1 = arrow_base_x + up_dx
-    y_base_1 = arrow_base_y - up_dy
-
-    x_base_2 = arrow_base_x - up_dx
-    y_base_2 = arrow_base_y + up_dy
+    x_base_1 = arrow_base_x + dy / 3.0
+    y_base_1 = arrow_base_y - dx / 3.0
+    x_base_2 = arrow_base_x - dy / 3.0
+    y_base_2 = arrow_base_y + dx / 3.0
 
     scene_obj.addLine(arrow_tip_x, arrow_tip_y, x_base_2, y_base_2,
       QPen(
-            Qt.cyan, 4, Qt.SolidLine,
+            Qt.red, 4, Qt.SolidLine,
             Qt.RoundCap, Qt.RoundJoin
         ) )
 
     scene_obj.addLine(x_base_1, y_base_1, arrow_tip_x, arrow_tip_y,
       QPen(
-            Qt.cyan, 4, Qt.SolidLine,
+            Qt.red, 4, Qt.SolidLine,
             Qt.RoundCap, Qt.RoundJoin
         ) )
 
