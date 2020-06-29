@@ -112,7 +112,6 @@ class TreeDirScene(QGraphicsScene):
             Qt.white, Qt.SolidPattern,
         )
 
-
         self.blue_pen = QPen(
             Qt.blue, 1.6, Qt.SolidLine,
             Qt.RoundCap, Qt.RoundJoin
@@ -174,8 +173,12 @@ class TreeDirScene(QGraphicsScene):
 
         dx = right_x - left_x
         dy = down_y - up_y
-        self.addRect(left_x, up_y, dx, dy, self.white_pen, self.light_gray_brush)
-        for i in range(int(len(nod_lst) / 2 + 1)):
+        self.addRect(
+            left_x - self.f_width, up_y - self.f_height,
+            dx + self.f_width * 2, dy + self.f_height * 2,
+            self.gray_pen, self.light_gray_brush
+        )
+        for i in range(int((len(nod_lst) - 1) / 2 + 1)):
             pos = i * 2
             my_x, my_y = self.get_coords(pos, 0)
             self.addRect(
