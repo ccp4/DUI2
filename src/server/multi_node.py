@@ -14,35 +14,36 @@ except ModuleNotFoundError:
     sys.path.insert(1, comm_path)
     import out_utils
 
+from params_2_json import get_param_list
+
 
 def fix_alias(short_in):
     pair_list = [
         ("d", "display" ),
-        ("fdp", "find_spots_params"              ),
-        ("ipp", "import_params"                  ),
-        ("idp", "index_params"                   ),
-        ("rbp", "refine_bravais_settings_params" ),
-        ("rip", "reindex_params"                 ),
-        ("rfp", "refine_params"                  ),
-        ("itp", "integrate_params"               ),
-        ("smp", "symmetry_params"                ),
-        ("scp", "scale_params"                   ),
-        ("cep", "combine_experiments_params"     ),
-        ("x4", "/scratch/dui_tst/X4_wide_0_to_9/*.cbf"),
-        ("x41", "/scratch/dui_tst/X4_wide_10_to_19/*.cbf"),
-        ("x42", "/scratch/dui_tst/X4_wide_20_to_29/*.cbf"),
-        ("mg", "dials.modify_geometry"         ),
-        ("gm", "dials.generate_mask"           ),
-        ("am", "dials.apply_mask"              ),
-        ("fd", "dials.find_spots"              ),
-        ("id", "dials.index"                   ),
-        ("rb", "dials.refine_bravais_settings" ),
-        ("ri", "dials.reindex"                 ),
-        ("rf", "dials.refine"                  ),
-        ("it", "dials.integrate"               ),
-        ("sm", "dials.symmetry"                ),
-        ("sc", "dials.scale"                   ),
-        ("ce", "dials.combine_experiments"     ),
+        ("fdp", "find_spots_params"                         ),
+        ("idp", "index_params"                              ),
+        ("rbp", "refine_bravais_settings_params"            ),
+        ("rfp", "refine_params"                             ),
+        ("itp", "integrate_params"                          ),
+        ("smp", "symmetry_params"                           ),
+        ("scp", "scale_params"                              ),
+        ("cep", "combine_experiments_params"                ),
+        ("x4", "/scratch/dui_tst/X4_wide_0_to_9/*.cbf"      ),
+        ("x41", "/scratch/dui_tst/X4_wide_10_to_19/*.cbf"   ),
+        ("x42", "/scratch/dui_tst/X4_wide_20_to_29/*.cbf"   ),
+        ("ip", "dials.import"                               ),
+        ("mg", "dials.modify_geometry"                      ),
+        ("gm", "dials.generate_mask"                        ),
+        ("am", "dials.apply_mask"                           ),
+        ("fd", "dials.find_spots"                           ),
+        ("id", "dials.index"                                ),
+        ("rb", "dials.refine_bravais_settings"              ),
+        ("ri", "dials.reindex"                              ),
+        ("rf", "dials.refine"                               ),
+        ("it", "dials.integrate"                            ),
+        ("sm", "dials.symmetry"                             ),
+        ("sc", "dials.scale"                                ),
+        ("ce", "dials.combine_experiments"                  ),
     ]
     long_out = short_in
     for pair in pair_list:
@@ -255,7 +256,7 @@ class Runner(object):
                 self.tree_output.print_output()
 
             elif uni_cmd[0][-7:] == "_params":
-                return_list = ["a", "b", "c"]
+                return_list = get_param_list(uni_cmd[0])
 
             else:
                 try:
