@@ -254,7 +254,7 @@ class Runner(object):
                 self.tree_output(return_list)
                 self.tree_output.print_output()
 
-            elif uni_cmd == ["find_spots_params"]:
+            elif uni_cmd[0][-7:] == "_params":
                 return_list = ["a", "b", "c"]
 
             else:
