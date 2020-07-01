@@ -8,6 +8,8 @@ from dials.command_line.refine_bravais_settings import (
 from dials.command_line.refine import working_phil as phil_scope_refine
 from dials.command_line.integrate import phil_scope as phil_scope_integrate
 
+from dials.command_line.scale import phil_scope as phil_scope_scale
+from dials.command_line.symmetry import phil_scope as phil_scope_symmetry
 
 class tree_2_lineal(object):
     """
@@ -100,6 +102,8 @@ def get_param_list(cmd_str):
             "refine_bravais_settings_params"    :phil_scope_r_b_settings.objects ,
             "refine_params"                     :phil_scope_refine.objects       ,
             "integrate_params"                  :phil_scope_integrate.objects    ,
+            "symmetry_params"                   :phil_scope_symmetry.objects     ,
+            "scale_params"                      :phil_scope_scale.objects        ,
         }
 
     lst_dict = tree_2_lineal(connect_dict[cmd_str])
@@ -112,6 +116,9 @@ if __name__ == "__main__":
     #lst_dict = tree_2_lineal(phil_scope_index.objects)
     #lst_dict = tree_2_lineal(phil_scope_integrate.objects)
     #lst_dict = tree_2_lineal(phil_scope_r_b_settings.objects)
+    #lst_dict = tree_2_lineal(phil_scope_scale.objects)
+    #lst_dict = tree_2_lineal(phil_scope_symmetry.objects)
+
     lst_dict = tree_2_lineal(phil_scope_refine.objects)
 
     lst_phil_obj = lst_dict()
