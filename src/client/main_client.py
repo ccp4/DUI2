@@ -98,6 +98,7 @@ class MainObject(QObject):
                 break
 
         lst_nodes = json.loads(str_lst[1])
+        print("lst_nodes:\n", lst_nodes, "\n")
         lst_str = self.tree_obj(lst_nod = lst_nodes)
         lst_2d_dat = self.tree_obj.get_tree_data()
 

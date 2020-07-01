@@ -18,7 +18,16 @@ except ModuleNotFoundError:
 def fix_alias(short_in):
     pair_list = [
         ("d", "display" ),
-        ("ip", "dials.import"),
+        ("fdp", "find_spots_params"              ),
+        ("ipp", "import_params"                  ),
+        ("idp", "index_params"                   ),
+        ("rbp", "refine_bravais_settings_params" ),
+        ("rip", "reindex_params"                 ),
+        ("rfp", "refine_params"                  ),
+        ("itp", "integrate_params"               ),
+        ("smp", "symmetry_params"                ),
+        ("scp", "scale_params"                   ),
+        ("cep", "combine_experiments_params"     ),
         ("x4", "/scratch/dui_tst/X4_wide_0_to_9/*.cbf"),
         ("x41", "/scratch/dui_tst/X4_wide_10_to_19/*.cbf"),
         ("x42", "/scratch/dui_tst/X4_wide_20_to_29/*.cbf"),
@@ -244,6 +253,9 @@ class Runner(object):
                 return_list = out_utils.get_lst2show(self)
                 self.tree_output(return_list)
                 self.tree_output.print_output()
+
+            elif uni_cmd == ["find_spots_params"]:
+                return_list = ["a", "b", "c"]
 
             else:
                 try:
