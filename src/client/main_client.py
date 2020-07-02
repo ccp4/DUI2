@@ -21,7 +21,7 @@ from PySide2.QtWidgets import *
 from PySide2 import QtUiTools
 from PySide2.QtGui import *
 
-from gui_utils import TreeDirScene
+from gui_utils import TreeDirScene, AdvancedParameters
 
 class Run_n_Output(QThread):
     line_out = Signal(str)
@@ -58,6 +58,13 @@ class MainObject(QObject):
         self.tree_obj = out_utils.TreeShow()
         self.tree_scene = TreeDirScene(self)
         self.window.treeView.setScene(self.tree_scene)
+
+        #self.window.ParamsTabWidget.
+
+        self.advanced_parameters = AdvancedParameters()
+        vbox = QVBoxLayout()
+        vbox.addWidget(self.advanced_parameters)
+        self.window.AdavancedParamsTab.setLayout(vbox)
 
         self.tree_scene.node_clicked.connect(self.on_node_click)
         self.window.CmdSend2server.clicked.connect(self.request_launch)

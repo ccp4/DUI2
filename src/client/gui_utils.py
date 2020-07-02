@@ -5,6 +5,42 @@ from PySide2 import QtUiTools
 from PySide2.QtGui import *
 import numpy as np
 
+class AdvancedParameters(QWidget):
+
+    #node_clicked = Signal(int)
+
+    def __init__(self, parent = None):
+        super(AdvancedParameters, self).__init__(parent)
+        print("Hi from AdvancedParameters")
+        self.build_pars([])
+
+    def build_pars(self, lst_phil_obj):
+        print("Hi from build_pars")
+        main_vbox = QVBoxLayout()
+        for data_info in lst_phil_obj:
+            par_str = "   " * data_info["indent"]
+            par_str += data_info["name"]
+            try:
+                default = data_info["default"]
+                if(
+                    (data_info["type"] == "bool" or data_info["type"] == "choice")
+                    and default is not None
+                ):
+                    par_str += "  =  " + str(data_info["opt_lst"][default])
+
+                else:
+                    par_str += "  =  " + str(data_info["default"])
+
+            except KeyError:
+                pass
+
+            main_vbox.addWidget(QLabel(par_str))
+            print(par_str)
+
+        self.setLayout(main_vbox)
+
+
+
 def draw_quadratic_bezier_3_points(scene_obj,
                           p1x, p1y, p2x, p2y, p3x, p3y,
                           lin_pen):

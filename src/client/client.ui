@@ -25,7 +25,7 @@
         <enum>Qt::Vertical</enum>
        </property>
        <widget class="QGraphicsView" name="treeView"/>
-       <widget class="QWidget" name="">
+       <widget class="QWidget" name="layoutWidget">
         <layout class="QVBoxLayout" name="verticalLayout">
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout">
@@ -70,16 +70,16 @@
           </layout>
          </item>
          <item>
-          <widget class="QTabWidget" name="tabWidget">
+          <widget class="QTabWidget" name="ParamsTabWidget">
            <property name="currentIndex">
             <number>1</number>
            </property>
-           <widget class="QWidget" name="tab">
+           <widget class="QWidget" name="SimpleParamTab">
             <attribute name="title">
              <string>Tab 1</string>
             </attribute>
            </widget>
-           <widget class="QWidget" name="tab_2">
+           <widget class="QWidget" name="AdavancedParamsTab">
             <attribute name="title">
              <string>Tab 2</string>
             </attribute>
