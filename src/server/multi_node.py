@@ -3,16 +3,16 @@ import os, sys
 import glob, json
 
 try:
-    from shared_modules import out_utils
+    from shared_modules import format_utils
 
 except ModuleNotFoundError:
     '''
-    This trick to import the out_utils module can be
+    This trick to import the format_utils module can be
     removed once the project gets properly packaged
     '''
     comm_path = os.path.abspath(__file__)[0:-20] + "shared_modules"
     sys.path.insert(1, comm_path)
-    import out_utils
+    import format_utils
 
 from params_2_json import get_param_list
 
@@ -218,7 +218,7 @@ class CmdNode(object):
 
 class Runner(object):
     def __init__(self, recovery_data):
-        self.tree_output = out_utils.TreeShow()
+        self.tree_output = format_utils.TreeShow()
         if recovery_data == None:
             root_node = CmdNode()
             root_node.set_root()
@@ -251,7 +251,7 @@ class Runner(object):
         return_list = []
         for uni_cmd in full_cmd_lst:
             if uni_cmd == ["display"]:
-                return_list = out_utils.get_lst2show(self)
+                return_list = format_utils.get_lst2show(self)
                 self.tree_output(return_list)
                 self.tree_output.print_output()
 

@@ -4,17 +4,17 @@ import time, json
 import requests
 
 try:
-    from shared_modules import out_utils
+    from shared_modules import format_utils
 
 except ModuleNotFoundError:
     '''
-    This trick to import the out_utils module can be
+    This trick to import the format_utils module can be
     removed once the project gets properly packaged
     '''
     comm_path = os.path.abspath(__file__)[0:-21] + "shared_modules"
     print("comm_path: ", comm_path)
     sys.path.insert(1, comm_path)
-    import out_utils
+    import format_utils
 
 from PySide2.QtCore import *
 from PySide2.QtWidgets import *
@@ -55,7 +55,7 @@ class MainObject(QObject):
         self.window = QtUiTools.QUiLoader().load(ui_path)
         self.window.incoming_text.setFont(QFont("Monospace"))
 
-        self.tree_obj = out_utils.TreeShow()
+        self.tree_obj = format_utils.TreeShow()
         self.tree_scene = TreeDirScene(self)
         self.window.treeView.setScene(self.tree_scene)
 
