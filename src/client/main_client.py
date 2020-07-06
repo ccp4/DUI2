@@ -23,6 +23,26 @@ from PySide2.QtGui import *
 
 from gui_utils import TreeDirScene, AdvancedParameters
 
+def json_data_request(url, cmd):
+    req_get = requests.get(url, stream = True, params = cmd)
+    str_lst = []
+    line_str = ''
+    while True:
+        tmp_dat = req_get.raw.read(1)
+        single_char = str(tmp_dat.decode('utf-8'))
+        line_str += single_char
+        if single_char == '\n':
+            str_lst.append(line_str[:-1])
+            line_str = ''
+
+        elif line_str[-7:] == '/*EOF*/':
+            print('>>  /*EOF*/  <<')
+            break
+
+    json_out = json.loads(str_lst[1])
+    return json_out
+
+
 class Run_n_Output(QThread):
     line_out = Signal(str)
     def __init__(self, request):
@@ -59,7 +79,7 @@ class MainObject(QObject):
         self.tree_scene = TreeDirScene(self)
         self.window.treeView.setScene(self.tree_scene)
 
-        #self.window.ParamsTabWidget.
+        self.my_url = 'http://localhost:8080/'
 
         self.advanced_parameters = AdvancedParameters()
         vbox = QVBoxLayout()
@@ -68,6 +88,7 @@ class MainObject(QObject):
 
         self.tree_scene.node_clicked.connect(self.on_node_click)
         self.window.CmdSend2server.clicked.connect(self.request_launch)
+        self.window.pushButton.clicked.connect(self.request_params)
         self.tree_scene.draw_tree_graph([])
 
         self.window.show()
@@ -84,28 +105,10 @@ class MainObject(QObject):
         self.window.incoming_text.insertPlainText(new_line)
         self.window.incoming_text.moveCursor(QTextCursor.End)
 
-    def run_ended(self):
-        print("run ended")
-
+    def request_display(self):
         cmd = {"nod_lst":"", "cmd_lst":["display"]}
-        req_get = requests.get('http://localhost:8080/', stream = True, params = cmd)
+        lst_nodes = json_data_request(self.my_url, cmd)
 
-        str_lst = []
-        line_str = ''
-        while True:
-            tmp_dat = req_get.raw.read(1)
-            single_char = str(tmp_dat.decode('utf-8'))
-            line_str += single_char
-            if single_char == '\n':
-                str_lst.append(line_str[:-1])
-                line_str = ''
-
-            elif line_str[-7:] == '/*EOF*/':
-                print('>>  /*EOF*/  <<')
-                break
-
-        lst_nodes = json.loads(str_lst[1])
-        print("lst_nodes:\n", lst_nodes, "\n")
         lst_str = self.tree_obj(lst_nod = lst_nodes)
         lst_2d_dat = self.tree_obj.get_tree_data()
 
@@ -116,6 +119,13 @@ class MainObject(QObject):
         self.tree_scene.draw_tree_graph(lst_2d_dat)
         self.tree_scene.update()
 
+    def request_params(self):
+
+        cmd = {"nod_lst":"", "cmd_lst":["idp"]}
+        lst_params = json_data_request(self.my_url, cmd)
+        print("\nlst_params =", lst_params, "\n")
+
+
     def request_launch(self):
         cmd_str = str(self.window.CmdEdit.text())
         print("cmd_str", cmd_str)
@@ -124,11 +134,11 @@ class MainObject(QObject):
         nod_lst = nod_str.split(" ")
         print("nod_lst", nod_lst)
         cmd = {"nod_lst":nod_lst, "cmd_lst":[cmd_str]}
-        req_get = requests.get('http://localhost:8080/', stream = True, params = cmd)
+        req_get = requests.get(self.my_url, stream = True, params = cmd)
 
         self.thrd = Run_n_Output(req_get)
         self.thrd.line_out.connect(self.add_line)
-        self.thrd.finished.connect(self.run_ended)
+        self.thrd.finished.connect(self.request_display)
         self.thrd.start()
 
 
