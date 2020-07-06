@@ -82,9 +82,7 @@ class MainObject(QObject):
         self.my_url = 'http://localhost:8080/'
 
         self.advanced_parameters = AdvancedParameters()
-        vbox = QVBoxLayout()
-        vbox.addWidget(self.advanced_parameters)
-        self.window.AdavancedParamsTab.setLayout(vbox)
+        self.window.scrollAreaAdavancedParams.setWidget(self.advanced_parameters)
 
         self.tree_scene.node_clicked.connect(self.on_node_click)
         self.window.CmdSend2server.clicked.connect(self.request_launch)
@@ -120,7 +118,7 @@ class MainObject(QObject):
         self.tree_scene.update()
 
     def request_params(self):
-        cmd = {"nod_lst":"", "cmd_lst":["smp"]}
+        cmd = {"nod_lst":"", "cmd_lst":["idp"]}
         lst_params = json_data_request(self.my_url, cmd)
 
         lin_lst = format_utils.param_tree_2_lineal(lst_params)
