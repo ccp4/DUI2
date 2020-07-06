@@ -12,11 +12,18 @@ class AdvancedParameters(QWidget):
     def __init__(self, parent = None):
         super(AdvancedParameters, self).__init__(parent)
         print("Hi from AdvancedParameters")
+        self.main_vbox = QVBoxLayout()
         self.build_pars([])
 
     def build_pars(self, lst_phil_obj):
         print("Hi from build_pars")
-        main_vbox = QVBoxLayout()
+
+        for i in reversed(list(range(self.main_vbox.count()))):
+            widgetToRemove = self.main_vbox.itemAt(i).widget()
+            self.main_vbox.removeWidget(widgetToRemove)
+            widgetToRemove.setParent(None)
+
+
         for data_info in lst_phil_obj:
             par_str = "   " * data_info["indent"]
             par_str += data_info["name"]
@@ -34,10 +41,9 @@ class AdvancedParameters(QWidget):
             except KeyError:
                 pass
 
-            main_vbox.addWidget(QLabel(par_str))
-            print(par_str)
+            self.main_vbox.addWidget(QLabel(par_str))
 
-        self.setLayout(main_vbox)
+        self.setLayout(self.main_vbox)
 
 
 

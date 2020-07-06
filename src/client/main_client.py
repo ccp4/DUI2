@@ -120,29 +120,14 @@ class MainObject(QObject):
         self.tree_scene.update()
 
     def request_params(self):
-        cmd = {"nod_lst":"", "cmd_lst":["idp"]}
+        cmd = {"nod_lst":"", "cmd_lst":["smp"]}
         lst_params = json_data_request(self.my_url, cmd)
 
         lin_lst = format_utils.param_tree_2_lineal(lst_params)
         new_lin_lst = lin_lst()
-        for data_info in new_lin_lst:
-            par_str = "    " * data_info["indent"]
-            par_str += data_info["name"]
-            try:
-                default = data_info["default"]
-                if(
-                    (data_info["type"] == "bool" or data_info["type"] == "choice")
-                    and default is not None
-                ):
-                    par_str += "  =  " + str(data_info["opt_lst"][default])
 
-                else:
-                    par_str += "  =  " + str(data_info["default"])
+        self.advanced_parameters.build_pars(new_lin_lst)
 
-            except KeyError:
-                pass
-
-            print(par_str)
 
     def request_launch(self):
         cmd_str = str(self.window.CmdEdit.text())
