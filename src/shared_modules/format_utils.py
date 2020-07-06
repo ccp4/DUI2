@@ -208,5 +208,32 @@ class TreeShow(object):
         return self.dat_lst
 
 
+class param_tree_2_lineal(object):
+    """
+    Recursively navigates the Phil objects in a way that the final
+    self.lst_obj is a lineal list without ramifications, then another list
+    is created with the info about parameters
+    """
+    def __init__(self, phl_obj_lst):
+        self.lst_obj = []
+        self.deep_in_recurs(phl_obj_lst)
+
+    def __call__(self):
+        return self.lst_obj
+
+    def deep_in_recurs(self, phl_obj_lst):
+        for single_obj in phl_obj_lst:
+            single_obj["indent"] = int(str(single_obj["full_path"]).count("."))
+            if single_obj["name"] == "output":
+                print(" << output >> should be handled by DUI")
+
+            elif single_obj["type"] == "scope":
+                self.lst_obj.append(single_obj)
+                self.deep_in_recurs(single_obj["child_objects"])
+
+
+            else:
+                self.lst_obj.append(single_obj)
+
 
 
