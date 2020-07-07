@@ -120,12 +120,9 @@ class MainObject(QObject):
     def request_params(self):
         cmd = {"nod_lst":"", "cmd_lst":["idp"]}
         lst_params = json_data_request(self.my_url, cmd)
-
         lin_lst = format_utils.param_tree_2_lineal(lst_params)
         new_lin_lst = lin_lst()
-
         self.advanced_parameters.build_pars(new_lin_lst)
-
 
     def request_launch(self):
         cmd_str = str(self.window.CmdEdit.text())

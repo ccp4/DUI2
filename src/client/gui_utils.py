@@ -19,9 +19,13 @@ class AdvancedParameters(QWidget):
         print("Hi from build_pars")
 
         for i in reversed(list(range(self.main_vbox.count()))):
-            widgetToRemove = self.main_vbox.itemAt(i).widget()
-            self.main_vbox.removeWidget(widgetToRemove)
-            widgetToRemove.setParent(None)
+            try:
+                widgetToRemove = self.main_vbox.itemAt(i).widget()
+                self.main_vbox.removeWidget(widgetToRemove)
+                widgetToRemove.setParent(None)
+
+            except AttributeError:
+                print("AttributeError in widgetToRemove.setParent(None)")
 
 
         for data_info in lst_phil_obj:
@@ -43,6 +47,7 @@ class AdvancedParameters(QWidget):
 
             self.main_vbox.addWidget(QLabel(par_str))
 
+        self.main_vbox.addStretch()
         self.setLayout(self.main_vbox)
 
 
