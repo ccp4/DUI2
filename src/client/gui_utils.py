@@ -13,7 +13,11 @@ class AdvancedParameters(QWidget):
         super(AdvancedParameters, self).__init__(parent)
         print("Hi from AdvancedParameters")
         self.main_vbox = QVBoxLayout()
+        sys_font = QFont()
+        self.font_point_size = sys_font.pointSize()
+
         self.build_pars([])
+
 
     def build_pars(self, lst_phil_obj):
         print("Hi from build_pars")
@@ -28,31 +32,61 @@ class AdvancedParameters(QWidget):
                 print("AttributeError in widgetToRemove.setParent(None)")
 
         for data_info in lst_phil_obj:
-            label_str = "   " * data_info["indent"]
+            label_str = "    " * data_info["indent"]
             label_str += data_info["name"]
+            new_hbox = QHBoxLayout()
+
+            new_label = QLabel(label_str)
+            new_label.setAutoFillBackground(True)
+            new_label.setFont(QFont("Monospace", self.font_point_size, QFont.Bold))
+
             try:
                 default = data_info["default"]
-                if(
-                    (data_info["type"] == "bool"
-                     or
-                     data_info["type"] == "choice")
-                     and default is not None
-                ):
-                    par_str = str(data_info["opt_lst"][default])
-
-                else:
-                    par_str = str(data_info["default"])
-
-                new_txt_in = QLineEdit()
-                new_txt_in.setText(par_str)
-                new_label = QLabel(label_str)
-                new_hbox = QHBoxLayout()
-                new_hbox.addWidget(new_label)
-                new_hbox.addWidget(new_txt_in)
-                self.main_vbox.addLayout(new_hbox)
 
             except KeyError:
-                pass
+                default = None
+
+            if data_info["type"] == "scope":
+                new_label.setStyleSheet("color: rgba(105, 105, 105, 255)")
+                new_hbox.addWidget(new_label)
+
+            elif(
+                (data_info["type"] == "bool"
+                 or
+                 data_info["type"] == "choice")
+            ):
+                new_label.setStyleSheet("color: rgba(0, 0, 0, 255)")
+                new_hbox.addWidget(new_label)
+
+                new_combo = QComboBox()
+
+                for lst_itm in data_info["opt_lst"]:
+                    new_combo.addItem(lst_itm)
+                try:
+                    new_combo.setCurrentIndex(default)
+
+                except TypeError:
+                    new_combo.setCurrentIndex(0)
+
+                new_hbox.addWidget(new_combo)
+
+            # if default is None ...
+
+
+            elif data_info["type"] == "other(s)":
+                new_label.setStyleSheet("color: rgba(0, 0, 0, 255)")
+                new_hbox.addWidget(new_label)
+                par_str = str(data_info["default"])
+                new_txt_in = QLineEdit()
+                new_txt_in.setText(par_str)
+                new_hbox.addWidget(new_txt_in)
+
+            else:
+                print("else: ", data_info)
+
+
+            self.main_vbox.addLayout(new_hbox)
+
 
         self.main_vbox.addStretch()
         self.setLayout(self.main_vbox)
