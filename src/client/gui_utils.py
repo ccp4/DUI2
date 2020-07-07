@@ -27,25 +27,32 @@ class AdvancedParameters(QWidget):
             except AttributeError:
                 print("AttributeError in widgetToRemove.setParent(None)")
 
-
         for data_info in lst_phil_obj:
-            par_str = "   " * data_info["indent"]
-            par_str += data_info["name"]
+            label_str = "   " * data_info["indent"]
+            label_str += data_info["name"]
             try:
                 default = data_info["default"]
                 if(
-                    (data_info["type"] == "bool" or data_info["type"] == "choice")
-                    and default is not None
+                    (data_info["type"] == "bool"
+                     or
+                     data_info["type"] == "choice")
+                     and default is not None
                 ):
-                    par_str += "  =  " + str(data_info["opt_lst"][default])
+                    par_str = str(data_info["opt_lst"][default])
 
                 else:
-                    par_str += "  =  " + str(data_info["default"])
+                    par_str = str(data_info["default"])
+
+                new_txt_in = QLineEdit()
+                new_txt_in.setText(par_str)
+                new_label = QLabel(label_str)
+                new_hbox = QHBoxLayout()
+                new_hbox.addWidget(new_label)
+                new_hbox.addWidget(new_txt_in)
+                self.main_vbox.addLayout(new_hbox)
 
             except KeyError:
                 pass
-
-            self.main_vbox.addWidget(QLabel(par_str))
 
         self.main_vbox.addStretch()
         self.setLayout(self.main_vbox)
