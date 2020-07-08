@@ -99,11 +99,13 @@ class MainObject(QObject):
         self.my_url = 'http://localhost:8080/'
 
         self.advanced_parameters = AdvancedParameters()
-        #self.window.scrollAreaAdavancedParams.setWidget(self.advanced_parameters)
-        self.window.scrollAreaAdavancedParams_2.setWidget(self.advanced_parameters)
+        self.window.scrollAreaAdavancedParams.setWidget(self.advanced_parameters)
+        #self.window.scrollAreaAdavancedParams_2.setWidget(self.advanced_parameters)
         self.tree_scene.node_clicked.connect(self.on_node_click)
         self.window.CmdSend2server.clicked.connect(self.request_launch)
-        self.window.pushButton.clicked.connect(self.request_params)
+        self.window.LoadParsButton.clicked.connect(self.request_params)
+        self.window.SwapPageButton.clicked.connect(self.swap_page)
+
         self.tree_scene.draw_tree_graph([])
 
         self.window.show()
@@ -119,6 +121,9 @@ class MainObject(QObject):
         self.window.incoming_text.moveCursor(QTextCursor.End)
         self.window.incoming_text.insertPlainText(new_line)
         self.window.incoming_text.moveCursor(QTextCursor.End)
+
+    def swap_page(self):
+        print("swap_page")
 
     def request_display(self):
         cmd = {"nod_lst":"", "cmd_lst":["display"]}

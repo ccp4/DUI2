@@ -14,8 +14,8 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
+   <layout class="QHBoxLayout" name="horizontalLayout_5">
+    <item>
      <widget class="QSplitter" name="splitter_2">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
@@ -47,9 +47,9 @@
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_2">
            <item>
-            <widget class="QPushButton" name="pushButton">
+            <widget class="QPushButton" name="LoadParsButton">
              <property name="text">
-              <string>PushButton</string>
+              <string>Load Pars ( TMP )</string>
              </property>
             </widget>
            </item>
@@ -61,9 +61,9 @@
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="pushButton_2">
+            <widget class="QPushButton" name="SwapPageButton">
              <property name="text">
-              <string>PushButton</string>
+              <string>Swap Page ( TMP )</string>
              </property>
             </widget>
            </item>
@@ -75,19 +75,19 @@
             <number>1</number>
            </property>
            <widget class="QWidget" name="page">
-            <layout class="QHBoxLayout" name="horizontalLayout_5">
+            <layout class="QHBoxLayout" name="horizontalLayout_3">
              <item>
               <widget class="QScrollArea" name="scrollArea">
                <property name="widgetResizable">
                 <bool>true</bool>
                </property>
-               <widget class="QWidget" name="scrollAreaWidgetContents_3">
+               <widget class="QWidget" name="scrollAreaWidgetContents">
                 <property name="geometry">
                  <rect>
                   <x>0</x>
                   <y>0</y>
                   <width>506</width>
-                  <height>336</height>
+                  <height>317</height>
                  </rect>
                 </property>
                </widget>
@@ -96,29 +96,29 @@
             </layout>
            </widget>
            <widget class="QWidget" name="page_2">
-            <layout class="QGridLayout" name="gridLayout_3">
-             <item row="0" column="0">
-              <widget class="QTabWidget" name="ParamsTabWidget">
+            <layout class="QHBoxLayout" name="horizontalLayout_4">
+             <item>
+              <widget class="QTabWidget" name="DualTabParamsWidget">
                <property name="currentIndex">
                 <number>1</number>
                </property>
-               <widget class="QWidget" name="SimpleParamTab_2">
+               <widget class="QWidget" name="SimpleParamTab">
                 <attribute name="title">
                  <string>Tab 1</string>
                 </attribute>
-                <layout class="QHBoxLayout" name="horizontalLayout_6">
+                <layout class="QHBoxLayout" name="horizontalLayout_9">
                  <item>
-                  <widget class="QScrollArea" name="scrollAreaSimpleParams_2">
+                  <widget class="QScrollArea" name="scrollAreaSimpleParams">
                    <property name="widgetResizable">
                     <bool>true</bool>
                    </property>
-                   <widget class="QWidget" name="scrollAreaWidgetContents_4">
+                   <widget class="QWidget" name="scrollAreaWidgetContents_7">
                     <property name="geometry">
                      <rect>
                       <x>0</x>
                       <y>0</y>
                       <width>484</width>
-                      <height>289</height>
+                      <height>270</height>
                      </rect>
                     </property>
                    </widget>
@@ -126,23 +126,23 @@
                  </item>
                 </layout>
                </widget>
-               <widget class="QWidget" name="AdavancedParamsTab_2">
+               <widget class="QWidget" name="AdavancedParamsTab">
                 <attribute name="title">
                  <string>Tab 2</string>
                 </attribute>
-                <layout class="QHBoxLayout" name="horizontalLayout_7">
+                <layout class="QHBoxLayout" name="horizontalLayout_10">
                  <item>
-                  <widget class="QScrollArea" name="scrollAreaAdavancedParams_2">
+                  <widget class="QScrollArea" name="scrollAreaAdavancedParams">
                    <property name="widgetResizable">
                     <bool>true</bool>
                    </property>
-                   <widget class="QWidget" name="scrollAreaWidgetContents_5">
+                   <widget class="QWidget" name="scrollAreaWidgetContents_8">
                     <property name="geometry">
                      <rect>
                       <x>0</x>
                       <y>0</y>
                       <width>484</width>
-                      <height>289</height>
+                      <height>270</height>
                      </rect>
                     </property>
                    </widget>
@@ -159,11 +159,11 @@
         </layout>
        </widget>
       </widget>
-      <widget class="QTabWidget" name="tabWidget_2">
+      <widget class="QTabWidget" name="OutputTabWidget">
        <property name="currentIndex">
         <number>0</number>
        </property>
-       <widget class="QWidget" name="tab_3">
+       <widget class="QWidget" name="LogOutPutTab">
         <attribute name="title">
          <string>Tab 1</string>
         </attribute>
