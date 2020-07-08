@@ -24,22 +24,39 @@ from PySide2.QtGui import *
 from gui_utils import TreeDirScene, AdvancedParameters
 
 def json_data_request(url, cmd):
-    req_get = requests.get(url, stream = True, params = cmd)
-    str_lst = []
-    line_str = ''
-    while True:
-        tmp_dat = req_get.raw.read(1)
-        single_char = str(tmp_dat.decode('utf-8'))
-        line_str += single_char
-        if single_char == '\n':
-            str_lst.append(line_str[:-1])
-            line_str = ''
+    bkp = '''
+    try:
+        try:
+            req_get = requests.get(url, stream = True, params = cmd)
 
-        elif line_str[-7:] == '/*EOF*/':
-            print('>>  /*EOF*/  <<')
-            break
+        except BaseException as bs_ex:
+            print(" exception <<<>>> level 2", bs_ex)
 
-    json_out = json.loads(str_lst[1])
+    except BaseException as bs_ex:
+        print(" exception <<<>>> level 1", bs_ex)
+    '''
+    try:
+        req_get = requests.get(url, stream = True, params = cmd)
+        str_lst = []
+        line_str = ''
+        while True:
+            tmp_dat = req_get.raw.read(1)
+            single_char = str(tmp_dat.decode('utf-8'))
+            line_str += single_char
+            if single_char == '\n':
+                str_lst.append(line_str[:-1])
+                line_str = ''
+
+            elif line_str[-7:] == '/*EOF*/':
+                print('>>  /*EOF*/  <<')
+                break
+
+        json_out = json.loads(str_lst[1])
+
+    except requests.exceptions.RequestException:
+        print("\n requests.exceptions.RequestException \n")
+        json_out = None
+
     return json_out
 
 
@@ -106,23 +123,30 @@ class MainObject(QObject):
     def request_display(self):
         cmd = {"nod_lst":"", "cmd_lst":["display"]}
         lst_nodes = json_data_request(self.my_url, cmd)
+        if lst_nodes is not None:
+            lst_str = self.tree_obj(lst_nod = lst_nodes)
+            lst_2d_dat = self.tree_obj.get_tree_data()
 
-        lst_str = self.tree_obj(lst_nod = lst_nodes)
-        lst_2d_dat = self.tree_obj.get_tree_data()
+            for tree_line in lst_str:
+                self.add_line(tree_line + "\n")
 
-        for tree_line in lst_str:
-            self.add_line(tree_line + "\n")
+            self.tree_scene.clear()
+            self.tree_scene.draw_tree_graph(lst_2d_dat)
+            self.tree_scene.update()
 
-        self.tree_scene.clear()
-        self.tree_scene.draw_tree_graph(lst_2d_dat)
-        self.tree_scene.update()
+        else:
+            print("something went wrong with the list of nodes")
 
     def request_params(self):
         cmd = {"nod_lst":"", "cmd_lst":["idp"]}
         lst_params = json_data_request(self.my_url, cmd)
-        lin_lst = format_utils.param_tree_2_lineal(lst_params)
-        new_lin_lst = lin_lst()
-        self.advanced_parameters.build_pars(new_lin_lst)
+        if lst_params is not None:
+            lin_lst = format_utils.param_tree_2_lineal(lst_params)
+            new_lin_lst = lin_lst()
+            self.advanced_parameters.build_pars(new_lin_lst)
+
+        else:
+            print("something went wrong with the list of parameters")
 
     def request_launch(self):
         cmd_str = str(self.window.CmdEdit.text())
@@ -132,12 +156,15 @@ class MainObject(QObject):
         nod_lst = nod_str.split(" ")
         print("nod_lst", nod_lst)
         cmd = {"nod_lst":nod_lst, "cmd_lst":[cmd_str]}
-        req_get = requests.get(self.my_url, stream = True, params = cmd)
+        try:
+            req_get = requests.get(self.my_url, stream = True, params = cmd)
+            self.thrd = Run_n_Output(req_get)
+            self.thrd.line_out.connect(self.add_line)
+            self.thrd.finished.connect(self.request_display)
+            self.thrd.start()
 
-        self.thrd = Run_n_Output(req_get)
-        self.thrd.line_out.connect(self.add_line)
-        self.thrd.finished.connect(self.request_display)
-        self.thrd.start()
+        except requests.exceptions.RequestException:
+            print("something went wrong with the request launch")
 
 
 if __name__ == "__main__":
