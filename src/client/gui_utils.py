@@ -5,6 +5,20 @@ from PySide2 import QtUiTools
 from PySide2.QtGui import *
 import numpy as np
 
+
+class MyQComboBox(QComboBox):
+    def __init__(self, parent=None):
+        super(MyQComboBox, self).__init__(parent)
+        self.setFocusPolicy(Qt.ClickFocus)
+
+    def wheelEvent(self, event):
+        print(
+            "event: \n", event,
+            "\n not suposed to change with wheel event"
+        )
+        return
+
+
 class AdvancedParameters(QWidget):
 
     #node_clicked = Signal(int)
@@ -58,7 +72,7 @@ class AdvancedParameters(QWidget):
                 new_label.setStyleSheet("color: rgba(0, 0, 0, 255)")
                 new_hbox.addWidget(new_label)
 
-                new_combo = QComboBox()
+                new_combo = MyQComboBox()
 
                 for lst_itm in data_info["opt_lst"]:
                     new_combo.addItem(lst_itm)
