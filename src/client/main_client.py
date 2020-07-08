@@ -99,8 +99,8 @@ class MainObject(QObject):
         self.my_url = 'http://localhost:8080/'
 
         self.advanced_parameters = AdvancedParameters()
-        self.window.scrollAreaAdavancedParams.setWidget(self.advanced_parameters)
-
+        #self.window.scrollAreaAdavancedParams.setWidget(self.advanced_parameters)
+        self.window.scrollAreaAdavancedParams_2.setWidget(self.advanced_parameters)
         self.tree_scene.node_clicked.connect(self.on_node_click)
         self.window.CmdSend2server.clicked.connect(self.request_launch)
         self.window.pushButton.clicked.connect(self.request_params)

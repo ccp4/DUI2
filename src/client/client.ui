@@ -70,27 +70,24 @@
           </layout>
          </item>
          <item>
-          <widget class="QTabWidget" name="ParamsTabWidget">
+          <widget class="QStackedWidget" name="stackedWidget">
            <property name="currentIndex">
             <number>1</number>
            </property>
-           <widget class="QWidget" name="SimpleParamTab">
-            <attribute name="title">
-             <string>Tab 1</string>
-            </attribute>
-            <layout class="QHBoxLayout" name="horizontalLayout_4">
+           <widget class="QWidget" name="page">
+            <layout class="QHBoxLayout" name="horizontalLayout_5">
              <item>
-              <widget class="QScrollArea" name="scrollAreaSimpleParams">
+              <widget class="QScrollArea" name="scrollArea">
                <property name="widgetResizable">
                 <bool>true</bool>
                </property>
-               <widget class="QWidget" name="scrollAreaWidgetContents_2">
+               <widget class="QWidget" name="scrollAreaWidgetContents_3">
                 <property name="geometry">
                  <rect>
                   <x>0</x>
                   <y>0</y>
-                  <width>502</width>
-                  <height>192</height>
+                  <width>506</width>
+                  <height>336</height>
                  </rect>
                 </property>
                </widget>
@@ -98,37 +95,65 @@
              </item>
             </layout>
            </widget>
-           <widget class="QWidget" name="AdavancedParamsTab">
-            <attribute name="title">
-             <string>Tab 2</string>
-            </attribute>
-            <layout class="QHBoxLayout" name="horizontalLayout_3">
-             <item>
-              <widget class="QScrollArea" name="scrollAreaAdavancedParams">
-               <property name="widgetResizable">
-                <bool>true</bool>
+           <widget class="QWidget" name="page_2">
+            <layout class="QGridLayout" name="gridLayout_3">
+             <item row="0" column="0">
+              <widget class="QTabWidget" name="ParamsTabWidget">
+               <property name="currentIndex">
+                <number>1</number>
                </property>
-               <widget class="QWidget" name="scrollAreaWidgetContents">
-                <property name="geometry">
-                 <rect>
-                  <x>0</x>
-                  <y>0</y>
-                  <width>502</width>
-                  <height>192</height>
-                 </rect>
-                </property>
+               <widget class="QWidget" name="SimpleParamTab_2">
+                <attribute name="title">
+                 <string>Tab 1</string>
+                </attribute>
+                <layout class="QHBoxLayout" name="horizontalLayout_6">
+                 <item>
+                  <widget class="QScrollArea" name="scrollAreaSimpleParams_2">
+                   <property name="widgetResizable">
+                    <bool>true</bool>
+                   </property>
+                   <widget class="QWidget" name="scrollAreaWidgetContents_4">
+                    <property name="geometry">
+                     <rect>
+                      <x>0</x>
+                      <y>0</y>
+                      <width>484</width>
+                      <height>289</height>
+                     </rect>
+                    </property>
+                   </widget>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+               <widget class="QWidget" name="AdavancedParamsTab_2">
+                <attribute name="title">
+                 <string>Tab 2</string>
+                </attribute>
+                <layout class="QHBoxLayout" name="horizontalLayout_7">
+                 <item>
+                  <widget class="QScrollArea" name="scrollAreaAdavancedParams_2">
+                   <property name="widgetResizable">
+                    <bool>true</bool>
+                   </property>
+                   <widget class="QWidget" name="scrollAreaWidgetContents_5">
+                    <property name="geometry">
+                     <rect>
+                      <x>0</x>
+                      <y>0</y>
+                      <width>484</width>
+                      <height>289</height>
+                     </rect>
+                    </property>
+                   </widget>
+                  </widget>
+                 </item>
+                </layout>
                </widget>
               </widget>
              </item>
             </layout>
            </widget>
-          </widget>
-         </item>
-         <item>
-          <widget class="QGroupBox" name="groupBox">
-           <property name="title">
-            <string>GroupBox</string>
-           </property>
           </widget>
          </item>
         </layout>
