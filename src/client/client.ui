@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1115</width>
+    <width>933</width>
     <height>806</height>
    </rect>
   </property>
@@ -14,8 +14,8 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QHBoxLayout" name="horizontalLayout_5">
-    <item>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
      <widget class="QSplitter" name="splitter_2">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
@@ -75,7 +75,7 @@
             <number>0</number>
            </property>
            <widget class="QWidget" name="SingleWidgetParamsPage">
-            <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <layout class="QVBoxLayout" name="verticalLayout_4">
              <item>
               <widget class="QScrollArea" name="scrollArea">
                <property name="widgetResizable">
@@ -86,8 +86,8 @@
                  <rect>
                   <x>0</x>
                   <y>0</y>
-                  <width>569</width>
-                  <height>317</height>
+                  <width>470</width>
+                  <height>177</height>
                  </rect>
                 </property>
                </widget>
@@ -96,7 +96,13 @@
             </layout>
            </widget>
            <widget class="QWidget" name="DualTabParamsPage">
-            <layout class="QHBoxLayout" name="horizontalLayout_4">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>166</height>
+             </size>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_5">
              <item>
               <widget class="QTabWidget" name="DualTabParamsWidget">
                <property name="currentIndex">
@@ -106,7 +112,7 @@
                 <attribute name="title">
                  <string>Tab 1</string>
                 </attribute>
-                <layout class="QHBoxLayout" name="horizontalLayout_9">
+                <layout class="QVBoxLayout" name="verticalLayout_2">
                  <item>
                   <widget class="QScrollArea" name="scrollAreaSimpleParams">
                    <property name="widgetResizable">
@@ -117,8 +123,8 @@
                      <rect>
                       <x>0</x>
                       <y>0</y>
-                      <width>547</width>
-                      <height>270</height>
+                      <width>98</width>
+                      <height>28</height>
                      </rect>
                     </property>
                    </widget>
@@ -130,7 +136,7 @@
                 <attribute name="title">
                  <string>Tab 2</string>
                 </attribute>
-                <layout class="QHBoxLayout" name="horizontalLayout_10">
+                <layout class="QVBoxLayout" name="verticalLayout_3">
                  <item>
                   <widget class="QScrollArea" name="scrollAreaAdavancedParams">
                    <property name="widgetResizable">
@@ -141,8 +147,8 @@
                      <rect>
                       <x>0</x>
                       <y>0</y>
-                      <width>547</width>
-                      <height>270</height>
+                      <width>98</width>
+                      <height>28</height>
                      </rect>
                     </property>
                    </widget>
@@ -150,6 +156,88 @@
                  </item>
                 </layout>
                </widget>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </widget>
+         </item>
+         <item>
+          <widget class="QStackedWidget" name="NextCommadStackedWidget">
+           <property name="currentIndex">
+            <number>0</number>
+           </property>
+           <widget class="QWidget" name="Next2importButtons">
+            <layout class="QHBoxLayout" name="horizontalLayout_7">
+             <item>
+              <widget class="QPushButton" name="pushButton_2">
+               <property name="text">
+                <string>PushButton</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="pushButton">
+               <property name="text">
+                <string>PushButton</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="Next2indexButtons">
+            <layout class="QHBoxLayout" name="horizontalLayout_8">
+             <item>
+              <widget class="QPushButton" name="pushButton_3">
+               <property name="text">
+                <string>PushButton</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="pushButton_7">
+               <property name="text">
+                <string>PushButton</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="pushButton_4">
+               <property name="text">
+                <string>PushButton</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="Next2integrateButtons">
+            <layout class="QHBoxLayout" name="horizontalLayout_9">
+             <item>
+              <widget class="QPushButton" name="pushButton_5">
+               <property name="text">
+                <string>PushButton</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="pushButton_9">
+               <property name="text">
+                <string>PushButton</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="pushButton_8">
+               <property name="text">
+                <string>PushButton</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="pushButton_6">
+               <property name="text">
+                <string>PushButton</string>
+               </property>
               </widget>
              </item>
             </layout>

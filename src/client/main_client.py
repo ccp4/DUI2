@@ -87,6 +87,7 @@ class MainObject(QObject):
 
         self.my_url = 'http://localhost:8080/'
         self.single_params_page = True
+        self.current_next_buttons = 0
 
         self.advanced_parameters = AdvancedParameters()
         self.window.scrollAreaAdavancedParams.setWidget(self.advanced_parameters)
@@ -123,6 +124,14 @@ class MainObject(QObject):
                 self.window.SingleWidgetParamsPage
             )
             self.single_params_page = True
+
+        self.current_next_buttons +=1
+        if self.current_next_buttons > 2:
+            self.current_next_buttons = 0
+
+        self.window.NextCommadStackedWidget.setCurrentIndex(
+            self.current_next_buttons
+        )
 
 
     def request_display(self):
