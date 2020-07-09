@@ -28,9 +28,9 @@ except ModuleNotFoundError:
 
 class build_json_data(object):
     """
-    Recursively navigates the Phil objects in a way that the final
-    self.lst_obj is a lineal list without ramifications, then another list
-    is created with the info about parameters
+    Recursively navigates the Phil objects and creates another list
+    of dictionaries with info about parameters, this new list is still
+    ramified with objects hierarchy
     """
     def __init__(self, phl_obj_lst):
         self.lst_obj = []
@@ -86,7 +86,6 @@ class build_json_data(object):
 
             return param_info
 
-
         elif single_obj.is_scope:
             param_info = {
                 "name"          :str(single_obj.name),
@@ -127,7 +126,6 @@ def get_param_list(cmd_str):
     return lst_phil_obj
 
 
-
 if __name__ == "__main__":
     #lst_dict = build_json_data(phil_scope_find_spots.objects)
     lst_dict = build_json_data(phil_scope_index.objects)
@@ -138,7 +136,6 @@ if __name__ == "__main__":
     #lst_dict = build_json_data(phil_scope_symmetry.objects)
     #lst_dict = build_json_data(phil_scope_combine_params.objects)
 
-
     lst_phil_obj = lst_dict()
 
     json_str = json.dumps(lst_phil_obj, indent = 4)
@@ -148,7 +145,6 @@ if __name__ == "__main__":
     lin_lst = format_utils.param_tree_2_lineal(new_lst)
     new_lin_lst = lin_lst()
     #print(new_lin_lst)
-
 
     for data_info in new_lin_lst:
         par_str = "    " * data_info["indent"]

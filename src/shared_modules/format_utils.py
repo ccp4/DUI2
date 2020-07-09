@@ -211,8 +211,7 @@ class TreeShow(object):
 class param_tree_2_lineal(object):
     """
     Recursively navigates the Phil objects in a way that the final
-    self.lst_obj is a lineal list without ramifications, then another list
-    is created with the info about parameters
+    self.lst_obj is a lineal list without ramifications
     """
     def __init__(self, phl_obj_lst):
         self.lst_obj = []
@@ -230,7 +229,6 @@ class param_tree_2_lineal(object):
             elif single_obj["type"] == "scope":
                 self.lst_obj.append(single_obj)
                 self.deep_in_recurs(single_obj["child_objects"])
-
 
             else:
                 self.lst_obj.append(single_obj)
