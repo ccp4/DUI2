@@ -24,17 +24,6 @@ from PySide2.QtGui import *
 from gui_utils import TreeDirScene, AdvancedParameters
 
 def json_data_request(url, cmd):
-    bkp = '''
-    try:
-        try:
-            req_get = requests.get(url, stream = True, params = cmd)
-
-        except BaseException as bs_ex:
-            print(" exception <<<>>> level 2", bs_ex)
-
-    except BaseException as bs_ex:
-        print(" exception <<<>>> level 1", bs_ex)
-    '''
     try:
         req_get = requests.get(url, stream = True, params = cmd)
         str_lst = []
@@ -97,10 +86,10 @@ class MainObject(QObject):
         self.window.treeView.setScene(self.tree_scene)
 
         self.my_url = 'http://localhost:8080/'
+        self.single_params_page = True
 
         self.advanced_parameters = AdvancedParameters()
         self.window.scrollAreaAdavancedParams.setWidget(self.advanced_parameters)
-        #self.window.scrollAreaAdavancedParams_2.setWidget(self.advanced_parameters)
         self.tree_scene.node_clicked.connect(self.on_node_click)
         self.window.CmdSend2server.clicked.connect(self.request_launch)
         self.window.LoadParsButton.clicked.connect(self.request_params)
@@ -123,7 +112,18 @@ class MainObject(QObject):
         self.window.incoming_text.moveCursor(QTextCursor.End)
 
     def swap_page(self):
-        print("swap_page")
+        if self.single_params_page == True:
+            self.window.StackedParamsWidget.setCurrentWidget(
+                self.window.DualTabParamsPage
+            )
+            self.single_params_page = False
+
+        else:
+            self.window.StackedParamsWidget.setCurrentWidget(
+                self.window.SingleWidgetParamsPage
+            )
+            self.single_params_page = True
+
 
     def request_display(self):
         cmd = {"nod_lst":"", "cmd_lst":["display"]}

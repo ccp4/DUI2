@@ -70,11 +70,11 @@
           </layout>
          </item>
          <item>
-          <widget class="QStackedWidget" name="stackedWidget">
+          <widget class="QStackedWidget" name="StackedParamsWidget">
            <property name="currentIndex">
-            <number>1</number>
+            <number>0</number>
            </property>
-           <widget class="QWidget" name="page">
+           <widget class="QWidget" name="SingleWidgetParamsPage">
             <layout class="QHBoxLayout" name="horizontalLayout_3">
              <item>
               <widget class="QScrollArea" name="scrollArea">
@@ -86,7 +86,7 @@
                  <rect>
                   <x>0</x>
                   <y>0</y>
-                  <width>506</width>
+                  <width>569</width>
                   <height>317</height>
                  </rect>
                 </property>
@@ -95,7 +95,7 @@
              </item>
             </layout>
            </widget>
-           <widget class="QWidget" name="page_2">
+           <widget class="QWidget" name="DualTabParamsPage">
             <layout class="QHBoxLayout" name="horizontalLayout_4">
              <item>
               <widget class="QTabWidget" name="DualTabParamsWidget">
@@ -117,7 +117,7 @@
                      <rect>
                       <x>0</x>
                       <y>0</y>
-                      <width>484</width>
+                      <width>547</width>
                       <height>270</height>
                      </rect>
                     </property>
@@ -141,7 +141,7 @@
                      <rect>
                       <x>0</x>
                       <y>0</y>
-                      <width>484</width>
+                      <width>547</width>
                       <height>270</height>
                      </rect>
                     </property>
