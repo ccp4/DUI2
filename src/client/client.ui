@@ -86,8 +86,8 @@
                  <rect>
                   <x>0</x>
                   <y>0</y>
-                  <width>470</width>
-                  <height>177</height>
+                  <width>491</width>
+                  <height>317</height>
                  </rect>
                 </property>
                </widget>
@@ -164,8 +164,14 @@
          </item>
          <item>
           <widget class="QStackedWidget" name="NextCommadStackedWidget">
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>56</height>
+            </size>
+           </property>
            <property name="currentIndex">
-            <number>0</number>
+            <number>2</number>
            </property>
            <widget class="QWidget" name="Next2importButtons">
             <layout class="QHBoxLayout" name="horizontalLayout_7">
