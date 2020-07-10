@@ -19,6 +19,7 @@ class MyQComboBox(QComboBox):
         return
 
 
+
 class AdvancedParameters(QWidget):
 
     #node_clicked = Signal(int)
@@ -29,21 +30,24 @@ class AdvancedParameters(QWidget):
         self.main_vbox = QVBoxLayout()
         sys_font = QFont()
         self.font_point_size = sys_font.pointSize()
-
         self.build_pars([])
+        self.setLayout(self.main_vbox)
+
+    def clearLayout(self, layout):
+        if layout is not None:
+            while layout.count():
+                item = layout.takeAt(0)
+                widget = item.widget()
+                if widget is not None:
+                    widget.deleteLater()
+
+                else:
+                    self.clearLayout(item.layout())
 
 
     def build_pars(self, lst_phil_obj):
         print("Hi from build_pars")
-
-        for i in reversed(list(range(self.main_vbox.count()))):
-            try:
-                widgetToRemove = self.main_vbox.itemAt(i).widget()
-                self.main_vbox.removeWidget(widgetToRemove)
-                widgetToRemove.setParent(None)
-
-            except AttributeError:
-                print("AttributeError in widgetToRemove.setParent(None)")
+        self.clearLayout(self.main_vbox)
 
         for data_info in lst_phil_obj:
             label_str = "    " * data_info["indent"]
@@ -76,6 +80,8 @@ class AdvancedParameters(QWidget):
 
                 for lst_itm in data_info["opt_lst"]:
                     new_combo.addItem(lst_itm)
+
+                new_combo.addItem(" ")
                 try:
                     new_combo.setCurrentIndex(default)
 
@@ -83,8 +89,6 @@ class AdvancedParameters(QWidget):
                     new_combo.setCurrentIndex(0)
 
                 new_hbox.addWidget(new_combo)
-
-            # if default is None ...
 
 
             elif data_info["type"] == "other(s)":
@@ -98,12 +102,9 @@ class AdvancedParameters(QWidget):
             else:
                 print("else: ", data_info)
 
-
             self.main_vbox.addLayout(new_hbox)
 
-
         self.main_vbox.addStretch()
-        self.setLayout(self.main_vbox)
 
 
 

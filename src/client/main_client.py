@@ -88,6 +88,7 @@ class MainObject(QObject):
         self.my_url = 'http://localhost:8080/'
         self.single_params_page = True
         self.current_next_buttons = 0
+        self.current_params_widget = 0
 
         self.advanced_parameters = AdvancedParameters()
         self.window.scrollAreaAdavancedParams.setWidget(self.advanced_parameters)
@@ -152,7 +153,12 @@ class MainObject(QObject):
             print("something went wrong with the list of nodes")
 
     def request_params(self):
-        cmd = {"nod_lst":"", "cmd_lst":["idp"]}
+        self.current_params_widget += 1
+        lst_par_com = ["fdp", "idp", "rbp", "rfp", "itp", "smp", "scp", "cep"]
+        if self.current_params_widget >= len(lst_par_com):
+            self.current_params_widget = 0
+
+        cmd = {"nod_lst":"", "cmd_lst":[lst_par_com[self.current_params_widget]]}
         lst_params = json_data_request(self.my_url, cmd)
         if lst_params is not None:
             lin_lst = format_utils.param_tree_2_lineal(lst_params)

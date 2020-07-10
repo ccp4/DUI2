@@ -72,6 +72,7 @@ class build_json_data(object):
             elif single_obj.type.phil_type == "choice":
                 param_info["type"] = "choice"
                 param_info["opt_lst"] = []
+                param_info["default"] = len(single_obj.words)
                 for num, opt in enumerate(single_obj.words):
                     opt = str(opt)
                     if opt[0] == "*":
