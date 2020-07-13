@@ -92,6 +92,28 @@ class MainObject(QObject):
 
         self.advanced_parameters = AdvancedParameters()
         self.window.scrollAreaAdavancedParams.setWidget(self.advanced_parameters)
+
+        self.advan_param_def = {
+            "find_spots_params"               :[],
+            "index_params"                    :[],
+            "refine_bravais_settings_params"  :[],
+            "refine_params"                   :[],
+            "integrate_params"                :[],
+            "symmetry_params"                 :[],
+            "scale_params"                    :[],
+            "combine_experiments_params"      :[]
+        }
+
+        for key in self.advan_param_def:
+            cmd = {"nod_lst":"", "cmd_lst":[key]}
+            lst_params = json_data_request(self.my_url, cmd)
+            if lst_params is not None:
+                lin_lst = format_utils.param_tree_2_lineal(lst_params)
+                self.advan_param_def[key] = lin_lst()
+
+            else:
+                print("something went wrong with the list of parameters")
+
         self.tree_scene.node_clicked.connect(self.on_node_click)
         self.window.CmdSend2server.clicked.connect(self.request_launch)
         self.window.LoadParsButton.clicked.connect(self.request_params)
@@ -152,20 +174,22 @@ class MainObject(QObject):
             print("something went wrong with the list of nodes")
 
     def request_params(self):
+        lst_par_com = [
+            "find_spots_params"              ,
+            "index_params"                   ,
+            "refine_bravais_settings_params" ,
+            "refine_params"                  ,
+            "integrate_params"               ,
+            "symmetry_params"                ,
+            "scale_params"                   ,
+            "combine_experiments_params"
+        ]
         self.current_params_widget += 1
-        lst_par_com = ["fdp", "idp", "rbp", "rfp", "itp", "smp", "scp", "cep"]
         if self.current_params_widget >= len(lst_par_com):
             self.current_params_widget = 0
 
-        cmd = {"nod_lst":"", "cmd_lst":[lst_par_com[self.current_params_widget]]}
-        lst_params = json_data_request(self.my_url, cmd)
-        if lst_params is not None:
-            lin_lst = format_utils.param_tree_2_lineal(lst_params)
-            new_lin_lst = lin_lst()
-            self.advanced_parameters.build_pars(new_lin_lst)
-
-        else:
-            print("something went wrong with the list of parameters")
+        par_def = self.advan_param_def[lst_par_com[self.current_params_widget]]
+        self.advanced_parameters.build_pars(par_def)
 
     def request_launch(self):
         cmd_str = str(self.window.CmdEdit.text())
