@@ -134,7 +134,6 @@ class MainObject(QObject):
             self.current_next_buttons
         )
 
-
     def request_display(self):
         cmd = {"nod_lst":"", "cmd_lst":["display"]}
         lst_nodes = json_data_request(self.my_url, cmd)
@@ -191,5 +190,4 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     m_obj = MainObject()
     sys.exit(app.exec_())
-
 

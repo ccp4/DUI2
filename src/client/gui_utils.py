@@ -19,11 +19,7 @@ class MyQComboBox(QComboBox):
         return
 
 
-
 class AdvancedParameters(QWidget):
-
-    #node_clicked = Signal(int)
-
     def __init__(self, parent = None):
         super(AdvancedParameters, self).__init__(parent)
         print("Hi from AdvancedParameters")
@@ -43,7 +39,6 @@ class AdvancedParameters(QWidget):
 
                 else:
                     self.clearLayout(item.layout())
-
 
     def build_pars(self, lst_phil_obj):
         print("Hi from build_pars")
@@ -90,7 +85,6 @@ class AdvancedParameters(QWidget):
 
                 new_hbox.addWidget(new_combo)
 
-
             elif data_info["type"] == "other(s)":
                 new_label.setStyleSheet("color: rgba(0, 0, 0, 255)")
                 new_hbox.addWidget(new_label)
@@ -105,7 +99,6 @@ class AdvancedParameters(QWidget):
             self.main_vbox.addLayout(new_hbox)
 
         self.main_vbox.addStretch()
-
 
 
 def draw_quadratic_bezier_3_points(scene_obj,
@@ -287,7 +280,6 @@ class TreeDirScene(QGraphicsScene):
                 dx - self.f_width, self.f_height * 2,
                 self.white_pen, self.white_brush
             )
-
 
         for pos, obj2prn in enumerate(nod_lst):
             if len(obj2prn.par_lst) > 1:
