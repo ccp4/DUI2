@@ -71,6 +71,53 @@ class Run_n_Output(QThread):
                 self.line_out.emit(' \n /*EOF*/ \n')
                 break
 
+###############################################################################################
+class DefaultComboBox(QComboBox):
+    """A ComboBox initialised with a list of items and keeps track of which one
+    is default"""
+
+    def __init__(self, local_path, items, default_index=0):
+        super(DefaultComboBox, self).__init__()
+        self.local_path = local_path
+        self.tmp_lst = items
+        self.default_index = default_index
+        for item in items:
+            self.addItem(item)
+
+        self.setCurrentIndex(self.default_index)
+
+
+
+class RefineBravaiSimplerParamTab(QWidget):
+    def __init__(self, parent=None):
+        super(RefineBravaiSimplerParamTab, self).__init__()
+
+        localLayout = QVBoxLayout()
+        hbox_lay_outlier_algorithm = QHBoxLayout()
+        label_outlier_algorithm = QLabel("Outlier rejection algorithm")
+
+        hbox_lay_outlier_algorithm.addWidget(label_outlier_algorithm)
+        box_outlier_algorithm = DefaultComboBox(
+            "refinement.reflections.outlier.algorithm", ["null", "Auto", "mcd",
+            "tukey", "sauter_poon"], default_index=1)
+        box_outlier_algorithm.currentIndexChanged.connect(self.combobox_changed)
+        hbox_lay_outlier_algorithm.addWidget(box_outlier_algorithm)
+        localLayout.addLayout(hbox_lay_outlier_algorithm)
+
+        #self.inner_reset_btn = ResetButton()
+        #localLayout.addWidget(self.inner_reset_btn)
+        localLayout.addStretch()
+
+        self.setLayout(localLayout)
+
+        self.lst_var_widg = []
+        self.lst_var_widg.append(box_outlier_algorithm)
+        self.lst_var_widg.append(label_outlier_algorithm)
+
+    def combobox_changed(self,value):
+        print("combobox_changed")
+###############################################################################################
+
 
 class MainObject(QObject):
     def __init__(self, parent = None):
@@ -92,7 +139,13 @@ class MainObject(QObject):
 
         self.advanced_parameters = AdvancedParameters()
         self.window.scrollAreaAdavancedParams.setWidget(self.advanced_parameters)
-        self.window.SimpleParamsScrollArea.setWidget(QLabel("Dummy widget"))
+
+
+        #self.window.SimpleParamsScrollArea.setWidget(QLabel("Dummy widget"))
+
+        SimplerParamTab = RefineBravaiSimplerParamTab()
+        self.window.SimpleParamsScrollArea.setWidget(SimplerParamTab)
+
         self.advan_param_def = {
             "find_spots_params"               :[],
             "index_params"                    :[],
@@ -210,7 +263,9 @@ class MainObject(QObject):
             print("something went wrong with the request launch")
 
 
+
 if __name__ == "__main__":
+    QCoreApplication.setAttribute(Qt.AA_ShareOpenGLContexts)
     app = QApplication(sys.argv)
     m_obj = MainObject()
     sys.exit(app.exec_())
