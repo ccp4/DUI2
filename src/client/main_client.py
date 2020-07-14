@@ -23,7 +23,16 @@ from PySide2.QtGui import *
 
 from gui_utils import TreeDirScene, AdvancedParameters
 
-from simpler_param_widgets import IndexSimplerParamTab
+from simpler_param_widgets import (
+          FindspotsSimplerParameterTab,
+          IndexSimplerParamTab,
+          RefineBravaiSimplerParamTab,
+          RefineSimplerParamTab,
+          IntegrateSimplerParamTab,
+          SymmetrySimplerParamTab,
+          ScaleSimplerParamTab
+          )
+
 
 def json_data_request(url, cmd):
     try:
@@ -97,10 +106,10 @@ class MainObject(QObject):
         self.window.scrollAreaAdavancedParams.setWidget(self.advanced_parameters)
 
 
-        #self.window.SimpleParamsScrollArea.setWidget(QLabel("Dummy widget"))
 
-        SimplerParamTab = IndexSimplerParamTab()
-        self.window.SimpleParamsScrollArea.setWidget(SimplerParamTab)
+        #SimplerParamTab = IndexSimplerParamTab()
+        SimplerParamTab = FindspotsSimplerParameterTab()
+        self.window.FindspotsSimplerScrollArea.setWidget(SimplerParamTab)
 
         self.advan_param_def = {
             "find_spots_params"               :[],
