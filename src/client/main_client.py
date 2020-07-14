@@ -92,7 +92,7 @@ class MainObject(QObject):
 
         self.advanced_parameters = AdvancedParameters()
         self.window.scrollAreaAdavancedParams.setWidget(self.advanced_parameters)
-
+        self.window.SimpleParamsScrollArea.setWidget(QLabel("Dummy widget"))
         self.advan_param_def = {
             "find_spots_params"               :[],
             "index_params"                    :[],
