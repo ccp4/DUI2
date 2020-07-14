@@ -105,11 +105,27 @@ class MainObject(QObject):
         self.advanced_parameters = AdvancedParameters()
         self.window.scrollAreaAdavancedParams.setWidget(self.advanced_parameters)
 
-
-
-        #SimplerParamTab = IndexSimplerParamTab()
-        SimplerParamTab = FindspotsSimplerParameterTab()
-        self.window.FindspotsSimplerScrollArea.setWidget(SimplerParamTab)
+        self.window.FindspotsSimplerScrollArea.setWidget(
+            FindspotsSimplerParameterTab()
+        )
+        self.window.IndexSimplerScrollArea.setWidget(
+            IndexSimplerParamTab()
+        )
+        self.window.RefineBravaiSimplerScrollArea.setWidget(
+            RefineBravaiSimplerParamTab()
+        )
+        self.window.RefineSimplerScrollArea.setWidget(
+            RefineSimplerParamTab()
+        )
+        self.window.IntegrateSimplerScrollArea.setWidget(
+            IntegrateSimplerParamTab()
+        )
+        self.window.SymmetrySimplerScrollArea.setWidget(
+            SymmetrySimplerParamTab()
+        )
+        self.window.ScaleSimplerScrollArea.setWidget(
+            ScaleSimplerParamTab()
+        )
 
         self.advan_param_def = {
             "find_spots_params"               :[],
@@ -208,6 +224,10 @@ class MainObject(QObject):
 
         par_def = self.advan_param_def[lst_par_com[self.current_params_widget]]
         self.advanced_parameters.build_pars(par_def)
+
+        self.window.SimpleParamStackedWidget.setCurrentIndex(
+            self.current_params_widget
+        )
 
     def request_launch(self):
         cmd_str = str(self.window.CmdEdit.text())

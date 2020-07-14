@@ -115,6 +115,9 @@
                 <layout class="QVBoxLayout" name="verticalLayout_2">
                  <item>
                   <widget class="QStackedWidget" name="SimpleParamStackedWidget">
+                   <property name="currentIndex">
+                    <number>0</number>
+                   </property>
                    <widget class="QWidget" name="FindspotsSimplerPage">
                     <layout class="QVBoxLayout" name="verticalLayout_6">
                      <item>
