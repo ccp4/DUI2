@@ -86,8 +86,8 @@
                  <rect>
                   <x>0</x>
                   <y>0</y>
-                  <width>444</width>
-                  <height>222</height>
+                  <width>98</width>
+                  <height>28</height>
                  </rect>
                 </property>
                </widget>
@@ -106,7 +106,7 @@
              <item>
               <widget class="QTabWidget" name="DualTabParamsWidget">
                <property name="currentIndex">
-                <number>0</number>
+                <number>1</number>
                </property>
                <widget class="QWidget" name="SimpleParamTab">
                 <attribute name="title">
@@ -172,8 +172,8 @@
                          <rect>
                           <x>0</x>
                           <y>0</y>
-                          <width>404</width>
-                          <height>157</height>
+                          <width>98</width>
+                          <height>28</height>
                          </rect>
                         </property>
                        </widget>
@@ -193,8 +193,8 @@
                          <rect>
                           <x>0</x>
                           <y>0</y>
-                          <width>404</width>
-                          <height>157</height>
+                          <width>98</width>
+                          <height>28</height>
                          </rect>
                         </property>
                        </widget>
@@ -214,8 +214,8 @@
                          <rect>
                           <x>0</x>
                           <y>0</y>
-                          <width>404</width>
-                          <height>157</height>
+                          <width>98</width>
+                          <height>28</height>
                          </rect>
                         </property>
                        </widget>
@@ -235,8 +235,8 @@
                          <rect>
                           <x>0</x>
                           <y>0</y>
-                          <width>404</width>
-                          <height>157</height>
+                          <width>98</width>
+                          <height>28</height>
                          </rect>
                         </property>
                        </widget>
@@ -265,6 +265,27 @@
                      </item>
                     </layout>
                    </widget>
+                   <widget class="QWidget" name="CombineSimplerPage">
+                    <layout class="QVBoxLayout" name="verticalLayout_13">
+                     <item>
+                      <widget class="QScrollArea" name="CombineSimplerScrollArea">
+                       <property name="widgetResizable">
+                        <bool>true</bool>
+                       </property>
+                       <widget class="QWidget" name="scrollAreaWidgetContents_9">
+                        <property name="geometry">
+                         <rect>
+                          <x>0</x>
+                          <y>0</y>
+                          <width>404</width>
+                          <height>157</height>
+                         </rect>
+                        </property>
+                       </widget>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
                   </widget>
                  </item>
                 </layout>
@@ -279,7 +300,7 @@
                    <property name="widgetResizable">
                     <bool>true</bool>
                    </property>
-                   <widget class="QWidget" name="scrollAreaWidgetContents_9">
+                   <widget class="QWidget" name="scrollAreaWidgetContents_10">
                     <property name="geometry">
                      <rect>
                       <x>0</x>

@@ -536,18 +536,52 @@ class ScaleSimplerParamTab(SimpleParamTab):
         self.lst_var_widg.append(d_min_label)
 
 
+class CombineExperimentSimplerParamTab(SimpleParamTab):
+
+
+    def __init__(self, parent=None):
+        super(CombineExperimentSimplerParamTab, self).__init__()
+
+        localLayout = QVBoxLayout()
+        hbox_lay_dummy_1 = QHBoxLayout()
+        label_dummy_1 = QLabel("Dummy TMP selector")
+
+        hbox_lay_dummy_1.addWidget(label_dummy_1)
+        box_dummy_2 = DefaultComboBox(
+            "scope_1.scope_2.definition", [
+                "opt 1", "opt 2", "None", "Auto"
+            ], default_index=1)
+        box_dummy_2.currentIndexChanged.connect(self.combobox_changed)
+        hbox_lay_dummy_1.addWidget(box_dummy_2)
+        localLayout.addLayout(hbox_lay_dummy_1)
+
+        self.inner_reset_btn = ResetButton()
+        localLayout.addWidget(self.inner_reset_btn)
+        localLayout.addStretch()
+
+        self.setLayout(localLayout)
+
+        self.lst_var_widg = []
+        self.lst_var_widg.append(box_dummy_2)
+        self.lst_var_widg.append(label_dummy_1)
+
+
+
+
+
 class TmpTstWidget(QWidget):
     def __init__(self, parent=None):
         super(TmpTstWidget, self).__init__()
         # self.param_widget_parent = self
 
         #my_widget = FindspotsSimplerParameterTab(self)
-        my_widget = IndexSimplerParamTab(self)
+        #my_widget = IndexSimplerParamTab(self)
         #my_widget = RefineBravaiSimplerParamTab(self)
         #my_widget = RefineSimplerParamTab(self)
         #my_widget = IntegrateSimplerParamTab(self)
         #my_widget = SymmetrySimplerParamTab(self)
         #my_widget = ScaleSimplerParamTab(self)
+        my_widget = CombineExperimentSimplerParamTab(self)
 
 
         my_box = QVBoxLayout()

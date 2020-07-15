@@ -30,7 +30,8 @@ from simpler_param_widgets import (
           RefineSimplerParamTab,
           IntegrateSimplerParamTab,
           SymmetrySimplerParamTab,
-          ScaleSimplerParamTab
+          ScaleSimplerParamTab,
+          CombineExperimentSimplerParamTab
           )
 
 
@@ -125,6 +126,10 @@ class MainObject(QObject):
         )
         self.window.ScaleSimplerScrollArea.setWidget(
             ScaleSimplerParamTab()
+        )
+
+        self.window.CombineSimplerScrollArea.setWidget(
+            CombineExperimentSimplerParamTab()
         )
 
         self.advan_param_def = {
