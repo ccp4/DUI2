@@ -106,31 +106,39 @@ class MainObject(QObject):
         self.advanced_parameters = AdvancedParameters()
         self.window.scrollAreaAdavancedParams.setWidget(self.advanced_parameters)
 
-        self.window.FindspotsSimplerScrollArea.setWidget(
-            FindspotsSimplerParameterTab()
-        )
-        self.window.IndexSimplerScrollArea.setWidget(
-            IndexSimplerParamTab()
-        )
-        self.window.RefineBravaiSimplerScrollArea.setWidget(
-            RefineBravaiSimplerParamTab()
-        )
-        self.window.RefineSimplerScrollArea.setWidget(
-            RefineSimplerParamTab()
-        )
-        self.window.IntegrateSimplerScrollArea.setWidget(
-            IntegrateSimplerParamTab()
-        )
-        self.window.SymmetrySimplerScrollArea.setWidget(
-            SymmetrySimplerParamTab()
-        )
-        self.window.ScaleSimplerScrollArea.setWidget(
-            ScaleSimplerParamTab()
-        )
+        ###################################################################################
+        self.find_simpl_widg = FindspotsSimplerParameterTab()
+        self.find_simpl_widg.item_changed.connect(self.item_changed_f_simple)
+        self.window.FindspotsSimplerScrollArea.setWidget(self.find_simpl_widg)
 
-        self.window.CombineSimplerScrollArea.setWidget(
-            CombineExperimentSimplerParamTab()
-        )
+        self.index_simpl_widg = IndexSimplerParamTab()
+        self.index_simpl_widg.item_changed.connect(self.item_changed_f_simple)
+        self.window.IndexSimplerScrollArea.setWidget(self.index_simpl_widg)
+
+        self.refine_brava_simpl_widg = RefineBravaiSimplerParamTab()
+        self.refine_brava_simpl_widg.item_changed.connect(self.item_changed_f_simple)
+        self.window.RefineBravaiSimplerScrollArea.setWidget(self.refine_brava_simpl_widg)
+
+        self.refine_simpl_widg = RefineSimplerParamTab()
+        self.refine_simpl_widg.item_changed.connect(self.item_changed_f_simple)
+        self.window.RefineSimplerScrollArea.setWidget(self.refine_simpl_widg)
+
+        self.integrate_simpl_widg = IntegrateSimplerParamTab()
+        self.integrate_simpl_widg.item_changed.connect(self.item_changed_f_simple)
+        self.window.IntegrateSimplerScrollArea.setWidget(self.integrate_simpl_widg)
+
+        self.symmetry_simpl_widg = SymmetrySimplerParamTab()
+        self.symmetry_simpl_widg.item_changed.connect(self.item_changed_f_simple)
+        self.window.SymmetrySimplerScrollArea.setWidget(self.symmetry_simpl_widg)
+
+        self.scale_simpl_widg = ScaleSimplerParamTab()
+        self.scale_simpl_widg.item_changed.connect(self.item_changed_f_simple)
+        self.window.ScaleSimplerScrollArea.setWidget(self.scale_simpl_widg)
+
+        self.combine_simpl_widg = CombineExperimentSimplerParamTab()
+        self.combine_simpl_widg.item_changed.connect(self.item_changed_f_simple)
+        self.window.CombineSimplerScrollArea.setWidget(self.combine_simpl_widg)
+
 
         self.advan_param_def = {
             "find_spots_params"               :[],
@@ -173,6 +181,10 @@ class MainObject(QObject):
         self.window.incoming_text.moveCursor(QTextCursor.End)
         self.window.incoming_text.insertPlainText(new_line)
         self.window.incoming_text.moveCursor(QTextCursor.End)
+
+    def item_changed_f_simple(self, str_path, str_value):
+        print("item_changed from Simple Param Widget")
+        print("str_path, str_value: ", str_path, str_value)
 
     def swap_page(self):
         if self.single_params_page == True:

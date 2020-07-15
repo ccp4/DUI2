@@ -84,6 +84,7 @@ class SimpleParamTab(QWidget):
     item_to_remove = Signal(str)
 
     def spnbox_finished(self):
+        print("spnbox_finished")
         sender = self.sender()
         value = sender.value()
         str_path = str(sender.local_path)
@@ -94,7 +95,7 @@ class SimpleParamTab(QWidget):
             self.item_changed.emit(str_path, str_value)
 
     def combobox_changed(self, value):
-
+        print("combobox_changed")
         sender = self.sender()
         str_value = str(sender.tmp_lst[value])
         str_path = str(sender.local_path)
