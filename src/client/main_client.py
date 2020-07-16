@@ -144,6 +144,18 @@ class MainObject(QObject):
         self.window.CombineSimplerScrollArea.setWidget(self.combine_simpl_widg)
 
 
+        self.lst_pw_dat = [
+            "find_spots_params"              ,
+            "index_params"                   ,
+            "refine_bravais_settings_params" ,
+            "refine_params"                  ,
+            "integrate_params"               ,
+            "symmetry_params"                ,
+            "scale_params"                   ,
+            "combine_experiments_params"
+        ]
+
+
         self.advan_param_def = {
             "find_spots_params"               :[],
             "index_params"                    :[],
@@ -234,21 +246,13 @@ class MainObject(QObject):
             print("something went wrong with the list of nodes")
 
     def request_params(self):
-        lst_par_com = [
-            "find_spots_params"              ,
-            "index_params"                   ,
-            "refine_bravais_settings_params" ,
-            "refine_params"                  ,
-            "integrate_params"               ,
-            "symmetry_params"                ,
-            "scale_params"                   ,
-            "combine_experiments_params"
-        ]
         self.current_params_widget += 1
-        if self.current_params_widget >= len(lst_par_com):
+        if self.current_params_widget >= len(self.lst_pw_dat):
             self.current_params_widget = 0
 
-        par_def = self.advan_param_def[lst_par_com[self.current_params_widget]]
+        par_def = self.advan_param_def[
+            self.lst_pw_dat[self.current_params_widget]
+        ]
         self.advanced_parameters.build_pars(par_def)
 
         self.window.SimpleParamStackedWidget.setCurrentIndex(
