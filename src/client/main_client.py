@@ -94,6 +94,10 @@ class MainObject(QObject):
         self.window = QtUiTools.QUiLoader().load(ui_path)
         self.window.incoming_text.setFont(QFont("Monospace"))
 
+        sys_font = QFont()
+        self.font_point_size = sys_font.pointSize()
+
+
         self.tree_obj = format_utils.TreeShow()
         self.tree_scene = TreeDirScene(self)
         self.window.treeView.setScene(self.tree_scene)
@@ -160,6 +164,11 @@ class MainObject(QObject):
 
             else:
                 print("something went wrong with the list of parameters")
+
+        big_f_size = int(self.font_point_size * 1.6)
+        big_font = QFont("OldEnglish", pointSize = big_f_size, italic=True)
+        self.window.CurrentControlWidgetLabel.setFont(big_font)
+        self.window.CurrentControlWidgetLabel.setText("The Quick Brown Fox Jumps Over The Lazy Dog")
 
         self.tree_scene.node_clicked.connect(self.on_node_click)
         self.window.CmdSend2server.clicked.connect(self.request_launch)
