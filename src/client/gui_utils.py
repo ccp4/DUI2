@@ -73,10 +73,15 @@ class AdvancedParameters(QWidget):
 
                 new_combo = MyQComboBox()
 
-                for lst_itm in data_info["opt_lst"]:
-                    new_combo.addItem(lst_itm)
+                found_none = False
+                for opt_itm in data_info["opt_lst"]:
+                    new_combo.addItem(opt_itm)
+                    if opt_itm == "None" or opt_itm == "none":
+                        found_none = True
 
-                new_combo.addItem(" ")
+                if found_none is False:
+                    new_combo.addItem("None")
+
                 try:
                     new_combo.setCurrentIndex(default)
 
