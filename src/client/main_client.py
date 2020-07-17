@@ -107,8 +107,6 @@ class MainObject(QObject):
         self.current_next_buttons = 0
         self.current_params_widget = 0
 
-        ######################################################################
-
 
         cmd = {"nod_lst":"", "cmd_lst":["find_spots_params"]}
         lst_params = json_data_request(self.my_url, cmd)
@@ -122,7 +120,6 @@ class MainObject(QObject):
         else:
             print("something went wrong with the list of parameters")
 
-        #########################################################################################
 
         cmd = {"nod_lst":"", "cmd_lst":["index_params"]}
         lst_params = json_data_request(self.my_url, cmd)
@@ -136,7 +133,6 @@ class MainObject(QObject):
         else:
             print("something went wrong with the list of parameters")
 
-        #########################################################################################
 
         cmd = {"nod_lst":"", "cmd_lst":["refine_bravais_settings_params"]}
         lst_params = json_data_request(self.my_url, cmd)
@@ -150,7 +146,6 @@ class MainObject(QObject):
         else:
             print("something went wrong with the list of parameters")
 
-        #########################################################################################
 
         cmd = {"nod_lst":"", "cmd_lst":["refine_params"]}
         lst_params = json_data_request(self.my_url, cmd)
@@ -164,7 +159,6 @@ class MainObject(QObject):
         else:
             print("something went wrong with the list of parameters")
 
-        #########################################################################################
 
         cmd = {"nod_lst":"", "cmd_lst":["integrate_params"]}
         lst_params = json_data_request(self.my_url, cmd)
@@ -178,7 +172,7 @@ class MainObject(QObject):
         else:
             print("something went wrong with the list of parameters")
 
-        #########################################################################################
+
         cmd = {"nod_lst":"", "cmd_lst":["symmetry_params"]}
         lst_params = json_data_request(self.my_url, cmd)
         if lst_params is not None:
@@ -191,7 +185,6 @@ class MainObject(QObject):
         else:
             print("something went wrong with the list of parameters")
 
-        #########################################################################################
 
         cmd = {"nod_lst":"", "cmd_lst":["scale_params"]}
         lst_params = json_data_request(self.my_url, cmd)
@@ -204,8 +197,6 @@ class MainObject(QObject):
 
         else:
             print("something went wrong with the list of parameters")
-
-        #########################################################################################
 
 
         cmd = {"nod_lst":"", "cmd_lst":["combine_experiments_params"]}
@@ -220,7 +211,7 @@ class MainObject(QObject):
         else:
             print("something went wrong with the list of parameters")
 
-        #########################################################################################
+
 
 
         self.find_simpl_widg = FindspotsSimplerParameterTab()
