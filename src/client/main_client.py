@@ -108,7 +108,7 @@ class MainObject(QObject):
         self.current_params_widget = 0
 
         self.advanced_parameters = AdvancedParameters()
-        self.window.scrollAreaAdavancedParams.setWidget(self.advanced_parameters)
+        #self.window.scrollAreaAdavancedParams.setWidget(self.advanced_parameters)
 
         ###################################################################################
         self.find_simpl_widg = FindspotsSimplerParameterTab()
@@ -207,6 +207,41 @@ class MainObject(QObject):
         print("item_changed from Simple Param Widget")
         print("str_path, str_value: ", str_path, str_value)
 
+    def request_launch(self):
+        cmd_str = str(self.window.CmdEdit.text())
+        print("cmd_str", cmd_str)
+        nod_str = str(self.window.NumLinLst.text())
+        self.window.NumLinLst.clear()
+        nod_lst = nod_str.split(" ")
+        print("nod_lst", nod_lst)
+        cmd = {"nod_lst":nod_lst, "cmd_lst":[cmd_str]}
+        try:
+            req_get = requests.get(self.my_url, stream = True, params = cmd)
+            self.thrd = Run_n_Output(req_get)
+            self.thrd.line_out.connect(self.add_line)
+            self.thrd.finished.connect(self.request_display)
+            self.thrd.start()
+
+        except requests.exceptions.RequestException:
+            print("something went wrong with the request launch")
+
+    def request_display(self):
+        cmd = {"nod_lst":"", "cmd_lst":["display"]}
+        lst_nodes = json_data_request(self.my_url, cmd)
+        if lst_nodes is not None:
+            lst_str = self.tree_obj(lst_nod = lst_nodes)
+            lst_2d_dat = self.tree_obj.get_tree_data()
+
+            for tree_line in lst_str:
+                self.add_line(tree_line + "\n")
+
+            self.tree_scene.clear()
+            self.tree_scene.draw_tree_graph(lst_2d_dat)
+            self.tree_scene.update()
+
+        else:
+            print("something went wrong with the list of nodes")
+
     def swap_page(self):
         if self.single_params_page == True:
             self.window.StackedParamsWidget.setCurrentWidget(
@@ -228,23 +263,6 @@ class MainObject(QObject):
             self.current_next_buttons
         )
 
-    def request_display(self):
-        cmd = {"nod_lst":"", "cmd_lst":["display"]}
-        lst_nodes = json_data_request(self.my_url, cmd)
-        if lst_nodes is not None:
-            lst_str = self.tree_obj(lst_nod = lst_nodes)
-            lst_2d_dat = self.tree_obj.get_tree_data()
-
-            for tree_line in lst_str:
-                self.add_line(tree_line + "\n")
-
-            self.tree_scene.clear()
-            self.tree_scene.draw_tree_graph(lst_2d_dat)
-            self.tree_scene.update()
-
-        else:
-            print("something went wrong with the list of nodes")
-
     def request_params(self):
         self.current_params_widget += 1
         if self.current_params_widget >= len(self.lst_pw_dat):
@@ -255,28 +273,9 @@ class MainObject(QObject):
         ]
         self.advanced_parameters.build_pars(par_def)
 
-        self.window.SimpleParamStackedWidget.setCurrentIndex(
+        self.window.StackedParamsWidget.setCurrentIndex(
             self.current_params_widget
         )
-
-    def request_launch(self):
-        cmd_str = str(self.window.CmdEdit.text())
-        print("cmd_str", cmd_str)
-        nod_str = str(self.window.NumLinLst.text())
-        self.window.NumLinLst.clear()
-        nod_lst = nod_str.split(" ")
-        print("nod_lst", nod_lst)
-        cmd = {"nod_lst":nod_lst, "cmd_lst":[cmd_str]}
-        try:
-            req_get = requests.get(self.my_url, stream = True, params = cmd)
-            self.thrd = Run_n_Output(req_get)
-            self.thrd.line_out.connect(self.add_line)
-            self.thrd.finished.connect(self.request_display)
-            self.thrd.start()
-
-        except requests.exceptions.RequestException:
-            print("something went wrong with the request launch")
-
 
 
 if __name__ == "__main__":
