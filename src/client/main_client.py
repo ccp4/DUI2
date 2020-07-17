@@ -247,18 +247,6 @@ class MainObject(QObject):
         self.window.CombineSimplerScrollArea.setWidget(self.combine_simpl_widg)
 
 
-        self.lst_pw_dat = [
-            "find_spots_params"              ,
-            "index_params"                   ,
-            "refine_bravais_settings_params" ,
-            "refine_params"                  ,
-            "integrate_params"               ,
-            "symmetry_params"                ,
-            "scale_params"                   ,
-            "combine_experiments_params"
-        ]
-
-
         big_f_size = int(self.font_point_size * 1.6)
         big_font = QFont("OldEnglish", pointSize = big_f_size, italic=True)
         self.window.CurrentControlWidgetLabel.setFont(big_font)
@@ -347,7 +335,7 @@ class MainObject(QObject):
 
     def request_params(self):
         self.current_params_widget += 1
-        if self.current_params_widget >= len(self.lst_pw_dat):
+        if self.current_params_widget >= self.window.StackedParamsWidget.count():
             self.current_params_widget = 0
 
         self.window.StackedParamsWidget.setCurrentIndex(
