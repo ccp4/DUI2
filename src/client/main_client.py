@@ -107,10 +107,122 @@ class MainObject(QObject):
         self.current_next_buttons = 0
         self.current_params_widget = 0
 
-        self.advanced_parameters = AdvancedParameters()
-        #self.window.scrollAreaAdavancedParams.setWidget(self.advanced_parameters)
+        ######################################################################
 
-        ###################################################################################
+
+        cmd = {"nod_lst":"", "cmd_lst":["find_spots_params"]}
+        lst_params = json_data_request(self.my_url, cmd)
+        if lst_params is not None:
+            lin_lst = format_utils.param_tree_2_lineal(lst_params)
+            par_def = lin_lst()
+            fd_advanced_parameters = AdvancedParameters()
+            fd_advanced_parameters.build_pars(par_def)
+            self.window.FindspotsAdvancedScrollArea.setWidget(fd_advanced_parameters)
+
+        else:
+            print("something went wrong with the list of parameters")
+
+        #########################################################################################
+
+        cmd = {"nod_lst":"", "cmd_lst":["index_params"]}
+        lst_params = json_data_request(self.my_url, cmd)
+        if lst_params is not None:
+            lin_lst = format_utils.param_tree_2_lineal(lst_params)
+            par_def = lin_lst()
+            id_advanced_parameters = AdvancedParameters()
+            id_advanced_parameters.build_pars(par_def)
+            self.window.IndexAdvancedScrollArea.setWidget(id_advanced_parameters)
+
+        else:
+            print("something went wrong with the list of parameters")
+
+        #########################################################################################
+
+        cmd = {"nod_lst":"", "cmd_lst":["refine_bravais_settings_params"]}
+        lst_params = json_data_request(self.my_url, cmd)
+        if lst_params is not None:
+            lin_lst = format_utils.param_tree_2_lineal(lst_params)
+            par_def = lin_lst()
+            rb_advanced_parameters = AdvancedParameters()
+            rb_advanced_parameters.build_pars(par_def)
+            self.window.RefineBravaiAdvancedScrollArea.setWidget(rb_advanced_parameters)
+
+        else:
+            print("something went wrong with the list of parameters")
+
+        #########################################################################################
+
+        cmd = {"nod_lst":"", "cmd_lst":["refine_params"]}
+        lst_params = json_data_request(self.my_url, cmd)
+        if lst_params is not None:
+            lin_lst = format_utils.param_tree_2_lineal(lst_params)
+            par_def = lin_lst()
+            rf_advanced_parameters = AdvancedParameters()
+            rf_advanced_parameters.build_pars(par_def)
+            self.window.RefineAdvancedScrollArea.setWidget(rf_advanced_parameters)
+
+        else:
+            print("something went wrong with the list of parameters")
+
+        #########################################################################################
+
+        cmd = {"nod_lst":"", "cmd_lst":["integrate_params"]}
+        lst_params = json_data_request(self.my_url, cmd)
+        if lst_params is not None:
+            lin_lst = format_utils.param_tree_2_lineal(lst_params)
+            par_def = lin_lst()
+            it_advanced_parameters = AdvancedParameters()
+            it_advanced_parameters.build_pars(par_def)
+            self.window.IntegrateAdvancedScrollArea.setWidget(it_advanced_parameters)
+
+        else:
+            print("something went wrong with the list of parameters")
+
+        #########################################################################################
+        cmd = {"nod_lst":"", "cmd_lst":["symmetry_params"]}
+        lst_params = json_data_request(self.my_url, cmd)
+        if lst_params is not None:
+            lin_lst = format_utils.param_tree_2_lineal(lst_params)
+            par_def = lin_lst()
+            sm_advanced_parameters = AdvancedParameters()
+            sm_advanced_parameters.build_pars(par_def)
+            self.window.SymmetryAdvancedScrollArea.setWidget(sm_advanced_parameters)
+
+        else:
+            print("something went wrong with the list of parameters")
+
+        #########################################################################################
+
+        cmd = {"nod_lst":"", "cmd_lst":["scale_params"]}
+        lst_params = json_data_request(self.my_url, cmd)
+        if lst_params is not None:
+            lin_lst = format_utils.param_tree_2_lineal(lst_params)
+            par_def = lin_lst()
+            sc_advanced_parameters = AdvancedParameters()
+            sc_advanced_parameters.build_pars(par_def)
+            self.window.ScaleAdvancedScrollArea.setWidget(sc_advanced_parameters)
+
+        else:
+            print("something went wrong with the list of parameters")
+
+        #########################################################################################
+
+
+        cmd = {"nod_lst":"", "cmd_lst":["combine_experiments_params"]}
+        lst_params = json_data_request(self.my_url, cmd)
+        if lst_params is not None:
+            lin_lst = format_utils.param_tree_2_lineal(lst_params)
+            par_def = lin_lst()
+            ce_advanced_parameters = AdvancedParameters()
+            ce_advanced_parameters.build_pars(par_def)
+            self.window.CombineAdvancedScrollArea.setWidget(ce_advanced_parameters)
+
+        else:
+            print("something went wrong with the list of parameters")
+
+        #########################################################################################
+
+
         self.find_simpl_widg = FindspotsSimplerParameterTab()
         self.find_simpl_widg.item_changed.connect(self.item_changed_f_simple)
         self.window.FindspotsSimplerScrollArea.setWidget(self.find_simpl_widg)
@@ -155,27 +267,6 @@ class MainObject(QObject):
             "combine_experiments_params"
         ]
 
-
-        self.advan_param_def = {
-            "find_spots_params"               :[],
-            "index_params"                    :[],
-            "refine_bravais_settings_params"  :[],
-            "refine_params"                   :[],
-            "integrate_params"                :[],
-            "symmetry_params"                 :[],
-            "scale_params"                    :[],
-            "combine_experiments_params"      :[]
-        }
-
-        for key in self.advan_param_def:
-            cmd = {"nod_lst":"", "cmd_lst":[key]}
-            lst_params = json_data_request(self.my_url, cmd)
-            if lst_params is not None:
-                lin_lst = format_utils.param_tree_2_lineal(lst_params)
-                self.advan_param_def[key] = lin_lst()
-
-            else:
-                print("something went wrong with the list of parameters")
 
         big_f_size = int(self.font_point_size * 1.6)
         big_font = QFont("OldEnglish", pointSize = big_f_size, italic=True)
@@ -267,11 +358,6 @@ class MainObject(QObject):
         self.current_params_widget += 1
         if self.current_params_widget >= len(self.lst_pw_dat):
             self.current_params_widget = 0
-
-        par_def = self.advan_param_def[
-            self.lst_pw_dat[self.current_params_widget]
-        ]
-        self.advanced_parameters.build_pars(par_def)
 
         self.window.StackedParamsWidget.setCurrentIndex(
             self.current_params_widget
