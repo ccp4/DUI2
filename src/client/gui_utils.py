@@ -141,10 +141,6 @@ class AdvancedParameters(QWidget):
                 par_str = str(data_info["default"])
                 data_info["widget"].setText(par_str)
 
-            else:
-                print("else: ", data_info)
-
-
 def draw_quadratic_bezier_3_points(scene_obj,
                           p1x, p1y, p2x, p2y, p3x, p3y,
                           lin_pen):

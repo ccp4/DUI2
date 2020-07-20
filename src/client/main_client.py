@@ -280,8 +280,8 @@ class MainObject(QObject):
         self.param_widget_lst.append(
             {
                 "only_one"  :None,
-                "simple"    :sym_simpl_widg,
-                "advanced"  :sm_advanced_parameters
+                "simple"    :scale_simpl_widg,
+                "advanced"  :sc_advanced_parameters
             }
         )
         #########################################################################################
