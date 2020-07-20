@@ -103,10 +103,12 @@ class MainObject(QObject):
         self.window.treeView.setScene(self.tree_scene)
 
         self.my_url = 'http://localhost:8080/'
-        self.single_params_page = True
         self.current_next_buttons = 0
         self.current_params_widget = 0
 
+        #self.window.StackedParamsWidget.count()
+
+        #########################################################################################
 
         cmd = {"nod_lst":"", "cmd_lst":["find_spots_params"]}
         lst_params = json_data_request(self.my_url, cmd)
@@ -120,6 +122,11 @@ class MainObject(QObject):
         else:
             print("something went wrong with the list of parameters")
 
+        self.find_simpl_widg = FindspotsSimplerParameterTab()
+        self.find_simpl_widg.item_changed.connect(self.item_changed_f_simple)
+        self.window.FindspotsSimplerScrollArea.setWidget(self.find_simpl_widg)
+
+        #########################################################################################
 
         cmd = {"nod_lst":"", "cmd_lst":["index_params"]}
         lst_params = json_data_request(self.my_url, cmd)
@@ -133,6 +140,11 @@ class MainObject(QObject):
         else:
             print("something went wrong with the list of parameters")
 
+        self.index_simpl_widg = IndexSimplerParamTab()
+        self.index_simpl_widg.item_changed.connect(self.item_changed_f_simple)
+        self.window.IndexSimplerScrollArea.setWidget(self.index_simpl_widg)
+
+        #########################################################################################
 
         cmd = {"nod_lst":"", "cmd_lst":["refine_bravais_settings_params"]}
         lst_params = json_data_request(self.my_url, cmd)
@@ -146,6 +158,11 @@ class MainObject(QObject):
         else:
             print("something went wrong with the list of parameters")
 
+        self.refine_brava_simpl_widg = RefineBravaiSimplerParamTab()
+        self.refine_brava_simpl_widg.item_changed.connect(self.item_changed_f_simple)
+        self.window.RefineBravaiSimplerScrollArea.setWidget(self.refine_brava_simpl_widg)
+
+        #########################################################################################
 
         cmd = {"nod_lst":"", "cmd_lst":["refine_params"]}
         lst_params = json_data_request(self.my_url, cmd)
@@ -159,6 +176,11 @@ class MainObject(QObject):
         else:
             print("something went wrong with the list of parameters")
 
+        self.refine_simpl_widg = RefineSimplerParamTab()
+        self.refine_simpl_widg.item_changed.connect(self.item_changed_f_simple)
+        self.window.RefineSimplerScrollArea.setWidget(self.refine_simpl_widg)
+
+        #########################################################################################
 
         cmd = {"nod_lst":"", "cmd_lst":["integrate_params"]}
         lst_params = json_data_request(self.my_url, cmd)
@@ -172,6 +194,11 @@ class MainObject(QObject):
         else:
             print("something went wrong with the list of parameters")
 
+        self.integrate_simpl_widg = IntegrateSimplerParamTab()
+        self.integrate_simpl_widg.item_changed.connect(self.item_changed_f_simple)
+        self.window.IntegrateSimplerScrollArea.setWidget(self.integrate_simpl_widg)
+
+        #########################################################################################
 
         cmd = {"nod_lst":"", "cmd_lst":["symmetry_params"]}
         lst_params = json_data_request(self.my_url, cmd)
@@ -185,6 +212,11 @@ class MainObject(QObject):
         else:
             print("something went wrong with the list of parameters")
 
+        self.symmetry_simpl_widg = SymmetrySimplerParamTab()
+        self.symmetry_simpl_widg.item_changed.connect(self.item_changed_f_simple)
+        self.window.SymmetrySimplerScrollArea.setWidget(self.symmetry_simpl_widg)
+
+        #########################################################################################
 
         cmd = {"nod_lst":"", "cmd_lst":["scale_params"]}
         lst_params = json_data_request(self.my_url, cmd)
@@ -198,6 +230,11 @@ class MainObject(QObject):
         else:
             print("something went wrong with the list of parameters")
 
+        self.scale_simpl_widg = ScaleSimplerParamTab()
+        self.scale_simpl_widg.item_changed.connect(self.item_changed_f_simple)
+        self.window.ScaleSimplerScrollArea.setWidget(self.scale_simpl_widg)
+
+        #########################################################################################
 
         cmd = {"nod_lst":"", "cmd_lst":["combine_experiments_params"]}
         lst_params = json_data_request(self.my_url, cmd)
@@ -211,41 +248,11 @@ class MainObject(QObject):
         else:
             print("something went wrong with the list of parameters")
 
-
-
-
-        self.find_simpl_widg = FindspotsSimplerParameterTab()
-        self.find_simpl_widg.item_changed.connect(self.item_changed_f_simple)
-        self.window.FindspotsSimplerScrollArea.setWidget(self.find_simpl_widg)
-
-        self.index_simpl_widg = IndexSimplerParamTab()
-        self.index_simpl_widg.item_changed.connect(self.item_changed_f_simple)
-        self.window.IndexSimplerScrollArea.setWidget(self.index_simpl_widg)
-
-        self.refine_brava_simpl_widg = RefineBravaiSimplerParamTab()
-        self.refine_brava_simpl_widg.item_changed.connect(self.item_changed_f_simple)
-        self.window.RefineBravaiSimplerScrollArea.setWidget(self.refine_brava_simpl_widg)
-
-        self.refine_simpl_widg = RefineSimplerParamTab()
-        self.refine_simpl_widg.item_changed.connect(self.item_changed_f_simple)
-        self.window.RefineSimplerScrollArea.setWidget(self.refine_simpl_widg)
-
-        self.integrate_simpl_widg = IntegrateSimplerParamTab()
-        self.integrate_simpl_widg.item_changed.connect(self.item_changed_f_simple)
-        self.window.IntegrateSimplerScrollArea.setWidget(self.integrate_simpl_widg)
-
-        self.symmetry_simpl_widg = SymmetrySimplerParamTab()
-        self.symmetry_simpl_widg.item_changed.connect(self.item_changed_f_simple)
-        self.window.SymmetrySimplerScrollArea.setWidget(self.symmetry_simpl_widg)
-
-        self.scale_simpl_widg = ScaleSimplerParamTab()
-        self.scale_simpl_widg.item_changed.connect(self.item_changed_f_simple)
-        self.window.ScaleSimplerScrollArea.setWidget(self.scale_simpl_widg)
-
         self.combine_simpl_widg = CombineExperimentSimplerParamTab()
         self.combine_simpl_widg.item_changed.connect(self.item_changed_f_simple)
         self.window.CombineSimplerScrollArea.setWidget(self.combine_simpl_widg)
 
+        #########################################################################################
 
         big_f_size = int(self.font_point_size * 1.6)
         big_font = QFont("OldEnglish", pointSize = big_f_size, italic=True)
@@ -324,6 +331,8 @@ class MainObject(QObject):
             self.current_params_widget
         )
 
+        #print(dir(self.window.StackedParamsWidget))
+        #self.current_widget = self.window.StackedParamsWidget.currentWidget()
 
 if __name__ == "__main__":
     QCoreApplication.setAttribute(Qt.AA_ShareOpenGLContexts)

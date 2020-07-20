@@ -79,7 +79,7 @@
          <item>
           <widget class="QStackedWidget" name="StackedParamsWidget">
            <property name="currentIndex">
-            <number>1</number>
+            <number>0</number>
            </property>
            <widget class="QWidget" name="page_9">
             <layout class="QGridLayout" name="gridLayout_26">
@@ -93,8 +93,8 @@
                  <rect>
                   <x>0</x>
                   <y>0</y>
-                  <width>444</width>
-                  <height>266</height>
+                  <width>496</width>
+                  <height>265</height>
                  </rect>
                 </property>
                </widget>
@@ -124,8 +124,8 @@
                      <rect>
                       <x>0</x>
                       <y>0</y>
-                      <width>500</width>
-                      <height>212</height>
+                      <width>474</width>
+                      <height>218</height>
                      </rect>
                     </property>
                    </widget>
@@ -148,8 +148,8 @@
                      <rect>
                       <x>0</x>
                       <y>0</y>
-                      <width>500</width>
-                      <height>212</height>
+                      <width>98</width>
+                      <height>28</height>
                      </rect>
                     </property>
                    </widget>
@@ -183,8 +183,8 @@
                      <rect>
                       <x>0</x>
                       <y>0</y>
-                      <width>422</width>
-                      <height>212</height>
+                      <width>98</width>
+                      <height>28</height>
                      </rect>
                     </property>
                    </widget>
@@ -207,8 +207,8 @@
                      <rect>
                       <x>0</x>
                       <y>0</y>
-                      <width>80</width>
-                      <height>16</height>
+                      <width>98</width>
+                      <height>28</height>
                      </rect>
                     </property>
                    </widget>
@@ -242,8 +242,8 @@
                      <rect>
                       <x>0</x>
                       <y>0</y>
-                      <width>422</width>
-                      <height>212</height>
+                      <width>98</width>
+                      <height>28</height>
                      </rect>
                     </property>
                    </widget>
@@ -266,8 +266,8 @@
                      <rect>
                       <x>0</x>
                       <y>0</y>
-                      <width>80</width>
-                      <height>16</height>
+                      <width>98</width>
+                      <height>28</height>
                      </rect>
                     </property>
                    </widget>
@@ -301,8 +301,8 @@
                      <rect>
                       <x>0</x>
                       <y>0</y>
-                      <width>422</width>
-                      <height>212</height>
+                      <width>98</width>
+                      <height>28</height>
                      </rect>
                     </property>
                    </widget>
@@ -325,8 +325,8 @@
                      <rect>
                       <x>0</x>
                       <y>0</y>
-                      <width>80</width>
-                      <height>16</height>
+                      <width>98</width>
+                      <height>28</height>
                      </rect>
                     </property>
                    </widget>
@@ -360,8 +360,8 @@
                      <rect>
                       <x>0</x>
                       <y>0</y>
-                      <width>422</width>
-                      <height>212</height>
+                      <width>98</width>
+                      <height>28</height>
                      </rect>
                     </property>
                    </widget>
@@ -384,8 +384,8 @@
                      <rect>
                       <x>0</x>
                       <y>0</y>
-                      <width>422</width>
-                      <height>212</height>
+                      <width>98</width>
+                      <height>28</height>
                      </rect>
                     </property>
                    </widget>
@@ -419,8 +419,8 @@
                      <rect>
                       <x>0</x>
                       <y>0</y>
-                      <width>422</width>
-                      <height>212</height>
+                      <width>98</width>
+                      <height>28</height>
                      </rect>
                     </property>
                    </widget>
@@ -443,8 +443,8 @@
                      <rect>
                       <x>0</x>
                       <y>0</y>
-                      <width>80</width>
-                      <height>16</height>
+                      <width>98</width>
+                      <height>28</height>
                      </rect>
                     </property>
                    </widget>
@@ -478,8 +478,8 @@
                      <rect>
                       <x>0</x>
                       <y>0</y>
-                      <width>422</width>
-                      <height>212</height>
+                      <width>98</width>
+                      <height>28</height>
                      </rect>
                     </property>
                    </widget>
@@ -502,8 +502,8 @@
                      <rect>
                       <x>0</x>
                       <y>0</y>
-                      <width>80</width>
-                      <height>16</height>
+                      <width>98</width>
+                      <height>28</height>
                      </rect>
                     </property>
                    </widget>
@@ -537,8 +537,8 @@
                      <rect>
                       <x>0</x>
                       <y>0</y>
-                      <width>422</width>
-                      <height>212</height>
+                      <width>98</width>
+                      <height>28</height>
                      </rect>
                     </property>
                    </widget>
@@ -561,8 +561,8 @@
                      <rect>
                       <x>0</x>
                       <y>0</y>
-                      <width>80</width>
-                      <height>16</height>
+                      <width>98</width>
+                      <height>28</height>
                      </rect>
                     </property>
                    </widget>

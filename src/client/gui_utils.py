@@ -30,6 +30,8 @@ class AdvancedParameters(QWidget):
         self.setLayout(self.main_vbox)
 
     def clearLayout(self, layout):
+        #TODO think if this function can be entirely removed since
+        #there will be no need to remove and repopulate with widgets
         if layout is not None:
             while layout.count():
                 item = layout.takeAt(0)
@@ -41,17 +43,17 @@ class AdvancedParameters(QWidget):
                     self.clearLayout(item.layout())
 
     def build_pars(self, lst_phil_obj):
+        self.lst_par_line = lst_phil_obj
         print("Hi from build_pars")
         self.clearLayout(self.main_vbox)
-
-        for data_info in lst_phil_obj:
+        for data_info in self.lst_par_line:
             label_str = "    " * data_info["indent"]
             label_str += data_info["name"]
-            new_hbox = QHBoxLayout()
-
             new_label = QLabel(label_str)
             new_label.setAutoFillBackground(True)
             new_label.setFont(QFont("Monospace", self.font_point_size, QFont.Bold))
+            data_info["Label"] = new_label
+            new_hbox = QHBoxLayout()
 
             try:
                 default = data_info["default"]
@@ -59,6 +61,7 @@ class AdvancedParameters(QWidget):
             except KeyError:
                 default = None
 
+            data_info["widget"] = None
             if data_info["type"] == "scope":
                 new_label.setStyleSheet("color: rgba(105, 105, 105, 255)")
                 new_hbox.addWidget(new_label)
@@ -89,6 +92,7 @@ class AdvancedParameters(QWidget):
                     new_combo.setCurrentIndex(0)
 
                 new_hbox.addWidget(new_combo)
+                data_info["widget"] = new_combo
 
             elif data_info["type"] == "other(s)":
                 new_label.setStyleSheet("color: rgba(0, 0, 0, 255)")
@@ -97,6 +101,7 @@ class AdvancedParameters(QWidget):
                 new_txt_in = QLineEdit()
                 new_txt_in.setText(par_str)
                 new_hbox.addWidget(new_txt_in)
+                data_info["widget"] = new_txt_in
 
             else:
                 print("else: ", data_info)
@@ -104,6 +109,33 @@ class AdvancedParameters(QWidget):
             self.main_vbox.addLayout(new_hbox)
 
         self.main_vbox.addStretch()
+
+    def reset_pars(self):
+        print("Hi from reset_pars")
+        for data_info in self.lst_par_line:
+            try:
+                default = data_info["default"]
+
+            except KeyError:
+                default = None
+
+            if(
+                (data_info["type"] == "bool"
+                 or
+                 data_info["type"] == "choice")
+            ):
+                try:
+                    data_info["widget"].setCurrentIndex(default)
+
+                except TypeError:
+                    data_info["widget"].setCurrentIndex(0)
+
+            elif data_info["type"] == "other(s)":
+                par_str = str(data_info["default"])
+                data_info["widget"].setText(par_str)
+
+            else:
+                print("else: ", data_info)
 
 
 def draw_quadratic_bezier_3_points(scene_obj,
