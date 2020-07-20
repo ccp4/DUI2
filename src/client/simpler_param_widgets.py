@@ -31,7 +31,6 @@ from PySide2.QtWidgets import *
 from PySide2 import QtUiTools
 from PySide2.QtGui import *
 
-
 def _get_all_direct_layout_widget_children(parent):
     """Walk a widget tree and get all non-QLayout direct children
 
@@ -52,16 +51,6 @@ def _get_all_direct_layout_widget_children(parent):
 
     return children
 
-'''
-class ResetButton(QPushButton):
-    def __init__(self, parent=None):
-        super(ResetButton, self).__init__()
-        my_label = QLabel("Reset to default")
-        v_box = QVBoxLayout()
-        v_box.addWidget(my_label)
-        self.setLayout(v_box)
-        # self.show()
-'''
 
 class DefaultComboBox(QComboBox):
     """A ComboBox initialised with a list of items and keeps track of which one
@@ -184,11 +173,6 @@ class FindspotsSimplerParameterTab(SimpleParamTab):
         hbox_lay_nproc.addWidget(self.box_nproc)
         localLayout.addLayout(hbox_lay_nproc)
 
-        '''
-        self.inner_reset_btn = ResetButton()
-        localLayout.addWidget(self.inner_reset_btn)
-        '''
-
         localLayout.addStretch()
 
         self.setLayout(localLayout)
@@ -257,11 +241,6 @@ class IndexSimplerParamTab(SimpleParamTab):
         qf.addRow(unit_cell_label, unit_cell_line)
         localLayout.addLayout(qf)
 
-        '''
-        self.inner_reset_btn = ResetButton()
-        localLayout.addWidget(self.inner_reset_btn)
-        '''
-
         localLayout.addStretch()
 
         self.setLayout(localLayout)
@@ -277,8 +256,6 @@ class IndexSimplerParamTab(SimpleParamTab):
 
 
 class RefineBravaiSimplerParamTab(SimpleParamTab):
-
-
     def __init__(self, parent=None):
         super(RefineBravaiSimplerParamTab, self).__init__()
 
@@ -293,11 +270,6 @@ class RefineBravaiSimplerParamTab(SimpleParamTab):
         box_outlier_algorithm.currentIndexChanged.connect(self.combobox_changed)
         hbox_lay_outlier_algorithm.addWidget(box_outlier_algorithm)
         localLayout.addLayout(hbox_lay_outlier_algorithm)
-
-        '''
-        self.inner_reset_btn = ResetButton()
-        localLayout.addWidget(self.inner_reset_btn)
-        '''
 
         localLayout.addStretch()
 
@@ -345,11 +317,6 @@ class RefineSimplerParamTab(SimpleParamTab):
 
         hbox_lay_outlier_algorithm.addWidget(box_outlier_algorithm)
         localLayout.addLayout(hbox_lay_outlier_algorithm)
-
-        '''
-        self.inner_reset_btn = ResetButton()
-        localLayout.addWidget(self.inner_reset_btn)
-        '''
 
         localLayout.addStretch()
 
@@ -432,11 +399,6 @@ class IntegrateSimplerParamTab(SimpleParamTab):
         hbox_lay_nproc.addWidget(self.box_nproc)
         localLayout.addLayout(hbox_lay_nproc)
 
-        '''
-        self.inner_reset_btn = ResetButton()
-        localLayout.addWidget(self.inner_reset_btn)
-        '''
-
         localLayout.addStretch()
 
         self.setLayout(localLayout)
@@ -476,11 +438,6 @@ class SymmetrySimplerParamTab(SimpleParamTab):
         d_min_spn_bx.editingFinished.connect(self.spnbox_finished)
 
         localLayout.addLayout(hbox_d_min)
-
-        '''
-        self.inner_reset_btn = ResetButton()
-        localLayout.addWidget(self.inner_reset_btn)
-        '''
 
         localLayout.addStretch()
 
@@ -541,10 +498,6 @@ class ScaleSimplerParamTab(SimpleParamTab):
         localLayout.addLayout(hbox_lay_wgh_opt_err)
         localLayout.addLayout(hbox_d_min)
 
-        '''
-        self.inner_reset_btn = ResetButton()
-        localLayout.addWidget(self.inner_reset_btn)
-        '''
 
         localLayout.addStretch()
 
@@ -560,8 +513,6 @@ class ScaleSimplerParamTab(SimpleParamTab):
 
 
 class CombineExperimentSimplerParamTab(SimpleParamTab):
-
-
     def __init__(self, parent=None):
         super(CombineExperimentSimplerParamTab, self).__init__()
 
@@ -578,11 +529,6 @@ class CombineExperimentSimplerParamTab(SimpleParamTab):
         hbox_lay_dummy_1.addWidget(box_dummy_2)
         localLayout.addLayout(hbox_lay_dummy_1)
 
-        '''
-        self.inner_reset_btn = ResetButton()
-        localLayout.addWidget(self.inner_reset_btn)
-        '''
-
         localLayout.addStretch()
 
         self.setLayout(localLayout)
@@ -590,8 +536,6 @@ class CombineExperimentSimplerParamTab(SimpleParamTab):
         self.lst_var_widg = []
         self.lst_var_widg.append(box_dummy_2)
         self.lst_var_widg.append(label_dummy_1)
-
-
 
 
 
