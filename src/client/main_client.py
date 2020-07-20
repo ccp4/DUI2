@@ -313,25 +313,7 @@ class MainObject(QObject):
             print("something went wrong with the list of nodes")
 
     def swap_page(self):
-        if self.single_params_page == True:
-            self.window.StackedParamsWidget.setCurrentWidget(
-                self.window.DualTabParamsPage
-            )
-            self.single_params_page = False
-
-        else:
-            self.window.StackedParamsWidget.setCurrentWidget(
-                self.window.SingleWidgetParamsPage
-            )
-            self.single_params_page = True
-
-        self.current_next_buttons +=1
-        if self.current_next_buttons > 2:
-            self.current_next_buttons = 0
-
-        self.window.NextCommadStackedWidget.setCurrentIndex(
-            self.current_next_buttons
-        )
+        print("swap_page")
 
     def request_params(self):
         self.current_params_widget += 1
