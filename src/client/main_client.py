@@ -376,6 +376,7 @@ class MainObject(QObject):
 
     def swap_page(self):
         print("swap_page")
+        self.param_widget_lst[self.current_params_widget]["advanced"].reset_pars()
 
     def request_params(self):
         self.current_params_widget += 1
