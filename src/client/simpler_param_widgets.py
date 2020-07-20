@@ -52,7 +52,7 @@ def _get_all_direct_layout_widget_children(parent):
 
     return children
 
-
+'''
 class ResetButton(QPushButton):
     def __init__(self, parent=None):
         super(ResetButton, self).__init__()
@@ -61,6 +61,7 @@ class ResetButton(QPushButton):
         v_box.addWidget(my_label)
         self.setLayout(v_box)
         # self.show()
+'''
 
 class DefaultComboBox(QComboBox):
     """A ComboBox initialised with a list of items and keeps track of which one
@@ -183,8 +184,11 @@ class FindspotsSimplerParameterTab(SimpleParamTab):
         hbox_lay_nproc.addWidget(self.box_nproc)
         localLayout.addLayout(hbox_lay_nproc)
 
+        '''
         self.inner_reset_btn = ResetButton()
         localLayout.addWidget(self.inner_reset_btn)
+        '''
+
         localLayout.addStretch()
 
         self.setLayout(localLayout)
@@ -253,8 +257,11 @@ class IndexSimplerParamTab(SimpleParamTab):
         qf.addRow(unit_cell_label, unit_cell_line)
         localLayout.addLayout(qf)
 
+        '''
         self.inner_reset_btn = ResetButton()
         localLayout.addWidget(self.inner_reset_btn)
+        '''
+
         localLayout.addStretch()
 
         self.setLayout(localLayout)
@@ -287,8 +294,11 @@ class RefineBravaiSimplerParamTab(SimpleParamTab):
         hbox_lay_outlier_algorithm.addWidget(box_outlier_algorithm)
         localLayout.addLayout(hbox_lay_outlier_algorithm)
 
+        '''
         self.inner_reset_btn = ResetButton()
         localLayout.addWidget(self.inner_reset_btn)
+        '''
+
         localLayout.addStretch()
 
         self.setLayout(localLayout)
@@ -336,8 +346,11 @@ class RefineSimplerParamTab(SimpleParamTab):
         hbox_lay_outlier_algorithm.addWidget(box_outlier_algorithm)
         localLayout.addLayout(hbox_lay_outlier_algorithm)
 
+        '''
         self.inner_reset_btn = ResetButton()
         localLayout.addWidget(self.inner_reset_btn)
+        '''
+
         localLayout.addStretch()
 
         self.setLayout(localLayout)
@@ -419,8 +432,11 @@ class IntegrateSimplerParamTab(SimpleParamTab):
         hbox_lay_nproc.addWidget(self.box_nproc)
         localLayout.addLayout(hbox_lay_nproc)
 
+        '''
         self.inner_reset_btn = ResetButton()
         localLayout.addWidget(self.inner_reset_btn)
+        '''
+
         localLayout.addStretch()
 
         self.setLayout(localLayout)
@@ -461,8 +477,11 @@ class SymmetrySimplerParamTab(SimpleParamTab):
 
         localLayout.addLayout(hbox_d_min)
 
+        '''
         self.inner_reset_btn = ResetButton()
         localLayout.addWidget(self.inner_reset_btn)
+        '''
+
         localLayout.addStretch()
 
         self.setLayout(localLayout)
@@ -522,8 +541,11 @@ class ScaleSimplerParamTab(SimpleParamTab):
         localLayout.addLayout(hbox_lay_wgh_opt_err)
         localLayout.addLayout(hbox_d_min)
 
+        '''
         self.inner_reset_btn = ResetButton()
         localLayout.addWidget(self.inner_reset_btn)
+        '''
+
         localLayout.addStretch()
 
         self.setLayout(localLayout)
@@ -556,8 +578,11 @@ class CombineExperimentSimplerParamTab(SimpleParamTab):
         hbox_lay_dummy_1.addWidget(box_dummy_2)
         localLayout.addLayout(hbox_lay_dummy_1)
 
+        '''
         self.inner_reset_btn = ResetButton()
         localLayout.addWidget(self.inner_reset_btn)
+        '''
+
         localLayout.addStretch()
 
         self.setLayout(localLayout)

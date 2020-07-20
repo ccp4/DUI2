@@ -317,7 +317,7 @@ class MainObject(QObject):
         self.tree_scene.node_clicked.connect(self.on_node_click)
         self.window.CmdSend2server.clicked.connect(self.request_launch)
         self.window.LoadParsButton.clicked.connect(self.request_params)
-        self.window.SwapPageButton.clicked.connect(self.swap_page)
+        self.window.Reset2DefaultPushButton.clicked.connect(self.reset_param)
 
         self.tree_scene.draw_tree_graph([])
 
@@ -374,8 +374,8 @@ class MainObject(QObject):
         else:
             print("something went wrong with the list of nodes")
 
-    def swap_page(self):
-        print("swap_page")
+    def reset_param(self):
+        print("reset_param")
         self.param_widget_lst[self.current_params_widget]["advanced"].reset_pars()
 
     def request_params(self):
