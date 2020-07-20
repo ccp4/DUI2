@@ -22,6 +22,7 @@ from PySide2 import QtUiTools
 from PySide2.QtGui import *
 
 from gui_utils import TreeDirScene, AdvancedParameters
+from gui_utils import ImportTmpWidg as ImportWidget
 
 from simpler_param_widgets import (
           FindspotsSimplerParameterTab,
@@ -106,10 +107,21 @@ class MainObject(QObject):
         self.current_next_buttons = 0
         self.current_params_widget = 0
 
-        #self.window.StackedParamsWidget.count()
+
+
+        self.param_widget_lst = []
 
         #########################################################################################
-
+        imp_widg = ImportWidget()
+        self.window.ImportScrollArea.setWidget(imp_widg)
+        self.param_widget_lst.append(
+            {
+                "only_one"  :imp_widg,
+                "simple"    :None,
+                "advanced"  :None
+            }
+        )
+        #########################################################################################
         cmd = {"nod_lst":"", "cmd_lst":["find_spots_params"]}
         lst_params = json_data_request(self.my_url, cmd)
         if lst_params is not None:
@@ -122,12 +134,17 @@ class MainObject(QObject):
         else:
             print("something went wrong with the list of parameters")
 
-        self.find_simpl_widg = FindspotsSimplerParameterTab()
-        self.find_simpl_widg.item_changed.connect(self.item_changed_f_simple)
-        self.window.FindspotsSimplerScrollArea.setWidget(self.find_simpl_widg)
-
+        find_simpl_widg = FindspotsSimplerParameterTab()
+        find_simpl_widg.item_changed.connect(self.item_changed_f_simple)
+        self.window.FindspotsSimplerScrollArea.setWidget(find_simpl_widg)
+        self.param_widget_lst.append(
+            {
+                "only_one"  :None,
+                "simple"    :find_simpl_widg,
+                "advanced"  :fd_advanced_parameters
+            }
+        )
         #########################################################################################
-
         cmd = {"nod_lst":"", "cmd_lst":["index_params"]}
         lst_params = json_data_request(self.my_url, cmd)
         if lst_params is not None:
@@ -140,10 +157,16 @@ class MainObject(QObject):
         else:
             print("something went wrong with the list of parameters")
 
-        self.index_simpl_widg = IndexSimplerParamTab()
-        self.index_simpl_widg.item_changed.connect(self.item_changed_f_simple)
-        self.window.IndexSimplerScrollArea.setWidget(self.index_simpl_widg)
-
+        index_simpl_widg = IndexSimplerParamTab()
+        index_simpl_widg.item_changed.connect(self.item_changed_f_simple)
+        self.window.IndexSimplerScrollArea.setWidget(index_simpl_widg)
+        self.param_widget_lst.append(
+            {
+                "only_one"  :None,
+                "simple"    :index_simpl_widg,
+                "advanced"  :id_advanced_parameters
+            }
+        )
         #########################################################################################
 
         cmd = {"nod_lst":"", "cmd_lst":["refine_bravais_settings_params"]}
@@ -158,12 +181,17 @@ class MainObject(QObject):
         else:
             print("something went wrong with the list of parameters")
 
-        self.refine_brava_simpl_widg = RefineBravaiSimplerParamTab()
-        self.refine_brava_simpl_widg.item_changed.connect(self.item_changed_f_simple)
-        self.window.RefineBravaiSimplerScrollArea.setWidget(self.refine_brava_simpl_widg)
-
+        refi_brv_simpl_widg = RefineBravaiSimplerParamTab()
+        refi_brv_simpl_widg.item_changed.connect(self.item_changed_f_simple)
+        self.window.RefineBravaiSimplerScrollArea.setWidget(refi_brv_simpl_widg)
+        self.param_widget_lst.append(
+            {
+                "only_one"  :None,
+                "simple"    :refi_brv_simpl_widg,
+                "advanced"  :rb_advanced_parameters
+            }
+        )
         #########################################################################################
-
         cmd = {"nod_lst":"", "cmd_lst":["refine_params"]}
         lst_params = json_data_request(self.my_url, cmd)
         if lst_params is not None:
@@ -176,12 +204,17 @@ class MainObject(QObject):
         else:
             print("something went wrong with the list of parameters")
 
-        self.refine_simpl_widg = RefineSimplerParamTab()
-        self.refine_simpl_widg.item_changed.connect(self.item_changed_f_simple)
-        self.window.RefineSimplerScrollArea.setWidget(self.refine_simpl_widg)
-
+        ref_simpl_widg = RefineSimplerParamTab()
+        ref_simpl_widg.item_changed.connect(self.item_changed_f_simple)
+        self.window.RefineSimplerScrollArea.setWidget(ref_simpl_widg)
+        self.param_widget_lst.append(
+            {
+                "only_one"  :None,
+                "simple"    :ref_simpl_widg,
+                "advanced"  :rf_advanced_parameters
+            }
+        )
         #########################################################################################
-
         cmd = {"nod_lst":"", "cmd_lst":["integrate_params"]}
         lst_params = json_data_request(self.my_url, cmd)
         if lst_params is not None:
@@ -194,10 +227,16 @@ class MainObject(QObject):
         else:
             print("something went wrong with the list of parameters")
 
-        self.integrate_simpl_widg = IntegrateSimplerParamTab()
-        self.integrate_simpl_widg.item_changed.connect(self.item_changed_f_simple)
-        self.window.IntegrateSimplerScrollArea.setWidget(self.integrate_simpl_widg)
-
+        integr_simpl_widg = IntegrateSimplerParamTab()
+        integr_simpl_widg.item_changed.connect(self.item_changed_f_simple)
+        self.window.IntegrateSimplerScrollArea.setWidget(integr_simpl_widg)
+        self.param_widget_lst.append(
+            {
+                "only_one"  :None,
+                "simple"    :integr_simpl_widg,
+                "advanced"  :it_advanced_parameters
+            }
+        )
         #########################################################################################
 
         cmd = {"nod_lst":"", "cmd_lst":["symmetry_params"]}
@@ -212,12 +251,17 @@ class MainObject(QObject):
         else:
             print("something went wrong with the list of parameters")
 
-        self.symmetry_simpl_widg = SymmetrySimplerParamTab()
-        self.symmetry_simpl_widg.item_changed.connect(self.item_changed_f_simple)
-        self.window.SymmetrySimplerScrollArea.setWidget(self.symmetry_simpl_widg)
-
+        sym_simpl_widg = SymmetrySimplerParamTab()
+        sym_simpl_widg.item_changed.connect(self.item_changed_f_simple)
+        self.window.SymmetrySimplerScrollArea.setWidget(sym_simpl_widg)
+        self.param_widget_lst.append(
+            {
+                "only_one"  :None,
+                "simple"    :sym_simpl_widg,
+                "advanced"  :sm_advanced_parameters
+            }
+        )
         #########################################################################################
-
         cmd = {"nod_lst":"", "cmd_lst":["scale_params"]}
         lst_params = json_data_request(self.my_url, cmd)
         if lst_params is not None:
@@ -230,12 +274,17 @@ class MainObject(QObject):
         else:
             print("something went wrong with the list of parameters")
 
-        self.scale_simpl_widg = ScaleSimplerParamTab()
-        self.scale_simpl_widg.item_changed.connect(self.item_changed_f_simple)
-        self.window.ScaleSimplerScrollArea.setWidget(self.scale_simpl_widg)
-
+        scale_simpl_widg = ScaleSimplerParamTab()
+        scale_simpl_widg.item_changed.connect(self.item_changed_f_simple)
+        self.window.ScaleSimplerScrollArea.setWidget(scale_simpl_widg)
+        self.param_widget_lst.append(
+            {
+                "only_one"  :None,
+                "simple"    :sym_simpl_widg,
+                "advanced"  :sm_advanced_parameters
+            }
+        )
         #########################################################################################
-
         cmd = {"nod_lst":"", "cmd_lst":["combine_experiments_params"]}
         lst_params = json_data_request(self.my_url, cmd)
         if lst_params is not None:
@@ -248,10 +297,16 @@ class MainObject(QObject):
         else:
             print("something went wrong with the list of parameters")
 
-        self.combine_simpl_widg = CombineExperimentSimplerParamTab()
-        self.combine_simpl_widg.item_changed.connect(self.item_changed_f_simple)
-        self.window.CombineSimplerScrollArea.setWidget(self.combine_simpl_widg)
-
+        comb_simpl_widg = CombineExperimentSimplerParamTab()
+        comb_simpl_widg.item_changed.connect(self.item_changed_f_simple)
+        self.window.CombineSimplerScrollArea.setWidget(comb_simpl_widg)
+        self.param_widget_lst.append(
+            {
+                "only_one"  :None,
+                "simple"    :comb_simpl_widg,
+                "advanced"  :ce_advanced_parameters
+            }
+        )
         #########################################################################################
 
         big_f_size = int(self.font_point_size * 1.6)

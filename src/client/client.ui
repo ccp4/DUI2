@@ -84,7 +84,7 @@
            <widget class="QWidget" name="page_9">
             <layout class="QGridLayout" name="gridLayout_26">
              <item row="0" column="0">
-              <widget class="QScrollArea" name="scrollArea_17">
+              <widget class="QScrollArea" name="ImportScrollArea">
                <property name="widgetResizable">
                 <bool>true</bool>
                </property>
