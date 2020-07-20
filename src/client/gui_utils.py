@@ -36,23 +36,9 @@ class AdvancedParameters(QWidget):
         self.build_pars([])
         self.setLayout(self.main_vbox)
 
-    def clearLayout(self, layout):
-        #TODO think if this function can be entirely removed since
-        #there will be no need to remove and repopulate with widgets
-        if layout is not None:
-            while layout.count():
-                item = layout.takeAt(0)
-                widget = item.widget()
-                if widget is not None:
-                    widget.deleteLater()
-
-                else:
-                    self.clearLayout(item.layout())
-
     def build_pars(self, lst_phil_obj):
         self.lst_par_line = lst_phil_obj
         print("Hi from build_pars")
-        self.clearLayout(self.main_vbox)
         for data_info in self.lst_par_line:
             label_str = "    " * data_info["indent"]
             label_str += data_info["name"]

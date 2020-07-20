@@ -377,6 +377,7 @@ class MainObject(QObject):
     def reset_param(self):
         print("reset_param")
         self.param_widget_lst[self.current_params_widget]["advanced"].reset_pars()
+        self.param_widget_lst[self.current_params_widget]["simple"].reset_pars()
 
     def request_params(self):
         self.current_params_widget += 1
