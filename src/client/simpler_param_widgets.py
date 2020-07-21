@@ -110,14 +110,23 @@ class SimpleParamTab(QWidget):
 class ImportTmpWidg(QWidget):
     def __init__(self, parent = None):
         super(ImportTmpWidg, self).__init__(parent)
-        print("Hi from ImportTmpWidg")
+        sys_font = QFont()
+        self.font_point_size = sys_font.pointSize()
+
+        new_label = QLabel("Import:")
+        new_label.setFont(QFont(
+            "Monospace", self.font_point_size + 3, QFont.Bold
+        ))
+        self.imp_txt = QLineEdit()
+
         self.main_vbox = QVBoxLayout()
-        self.main_vbox.addWidget(QLabel("ImportTmpWidg"))
+        self.main_vbox.addWidget(new_label)
+        self.main_vbox.addWidget(self.imp_txt)
+        self.main_vbox.addWidget(QLabel(" "))
         self.setLayout(self.main_vbox)
 
     def reset_pars(self):
-        print("\n reset_pars (only_one) \n")
-
+        self.imp_txt.setText("")
 
 class FindspotsSimplerParameterTab(SimpleParamTab):
     """
