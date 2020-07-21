@@ -33,7 +33,6 @@ class AdvancedParameters(QWidget):
         self.main_vbox = QVBoxLayout()
         sys_font = QFont()
         self.font_point_size = sys_font.pointSize()
-        self.build_pars([])
         self.setLayout(self.main_vbox)
 
     def build_pars(self, lst_phil_obj):

@@ -116,8 +116,11 @@ class FindspotsSimplerParameterTab(SimpleParamTab):
 
     def __init__(self, parent=None):
         super(FindspotsSimplerParameterTab, self).__init__()
-        # self.param_widget_parent = parent.param_widget_parent
-        # TODO thinks about making "None equivalent to 1"
+        self.main_v_layout = QVBoxLayout()
+        self.build_pars()
+        self.setLayout(self.main_v_layout)
+
+    def build_pars(self):
         xds_gain_label = QLabel("Gain")
         xds_gain_spn_bx = QDoubleSpinBox()
         xds_gain_spn_bx.local_path = "spotfinder.threshold.dispersion.gain"
@@ -149,7 +152,6 @@ class FindspotsSimplerParameterTab(SimpleParamTab):
         )
         xds_global_threshold_spn_bx.editingFinished.connect(self.spnbox_finished)
 
-        self.main_v_layout = QVBoxLayout()
 
         xds_gain_hb = QHBoxLayout()
         xds_gain_hb.addWidget(xds_gain_label)
@@ -186,12 +188,12 @@ class FindspotsSimplerParameterTab(SimpleParamTab):
 
         self.main_v_layout.addStretch()
 
-        self.setLayout(self.main_v_layout)
 
         self.lst_var_widg = _get_all_direct_layout_widget_children(self.main_v_layout)
 
     def reset_pars(self):
         self.clearLayout(self.main_v_layout)
+        self.build_pars()
 
     def set_max_nproc(self):
         cpu_max_proc = default_max_nproc
@@ -208,9 +210,11 @@ class IndexSimplerParamTab(SimpleParamTab):
 
     def __init__(self, phl_obj=None, parent=None):
         super(IndexSimplerParamTab, self).__init__()
+        self.main_v_layout = QVBoxLayout()
+        self.build_pars()
+        self.setLayout(self.main_v_layout)
 
-        # self.param_widget_parent = parent.param_widget_parent
-        # indexing_method_check = QCheckBox("indexing.method")
+    def build_pars(self):
 
         hbox_method = QHBoxLayout()
         label_method_62 = QLabel("Indexing method")
@@ -245,7 +249,6 @@ class IndexSimplerParamTab(SimpleParamTab):
         unit_cell_line.local_path = "indexing.known_symmetry.unit_cell"
         unit_cell_line.editingFinished.connect(self.line_changed)
 
-        self.main_v_layout = QVBoxLayout()
 
         self.main_v_layout.addLayout(hbox_method)
 
@@ -257,12 +260,11 @@ class IndexSimplerParamTab(SimpleParamTab):
 
         self.main_v_layout.addStretch()
 
-        self.setLayout(self.main_v_layout)
-
         self.lst_var_widg = _get_all_direct_layout_widget_children(self.main_v_layout)
 
     def reset_pars(self):
         self.clearLayout(self.main_v_layout)
+        self.build_pars()
 
     def line_changed(self):
         sender = self.sender()
@@ -275,8 +277,11 @@ class IndexSimplerParamTab(SimpleParamTab):
 class RefineBravaiSimplerParamTab(SimpleParamTab):
     def __init__(self, parent=None):
         super(RefineBravaiSimplerParamTab, self).__init__()
-
         self.main_v_layout = QVBoxLayout()
+        self.build_pars()
+        self.setLayout(self.main_v_layout)
+
+    def build_pars(self):
         hbox_lay_outlier_algorithm = QHBoxLayout()
         label_outlier_algorithm = QLabel("Outlier rejection algorithm")
 
@@ -290,7 +295,6 @@ class RefineBravaiSimplerParamTab(SimpleParamTab):
 
         self.main_v_layout.addStretch()
 
-        self.setLayout(self.main_v_layout)
 
         self.lst_var_widg = []
         self.lst_var_widg.append(box_outlier_algorithm)
@@ -298,6 +302,7 @@ class RefineBravaiSimplerParamTab(SimpleParamTab):
 
     def reset_pars(self):
         self.clearLayout(self.main_v_layout)
+        self.build_pars()
 
 
 class RefineSimplerParamTab(SimpleParamTab):
@@ -311,6 +316,10 @@ class RefineSimplerParamTab(SimpleParamTab):
         super(RefineSimplerParamTab, self).__init__()
         # self.param_widget_parent = parent.param_widget_parent
         self.main_v_layout = QVBoxLayout()
+        self.build_pars()
+        self.setLayout(self.main_v_layout)
+
+    def build_pars(self):
 
         hbox_lay_scan_varying = QHBoxLayout()
 
@@ -340,29 +349,17 @@ class RefineSimplerParamTab(SimpleParamTab):
 
         self.main_v_layout.addStretch()
 
-        self.setLayout(self.main_v_layout)
 
         self.lst_var_widg = []
         self.lst_var_widg.append(box_scan_varying)
         self.lst_var_widg.append(label_scan_varying)
-
-        # self.lst_var_widg.append(box_beam_fix)
-        # self.lst_var_widg.append(label_beam_fix)
-
-        # self.lst_var_widg.append(box_crystal_fix)
-        # self.lst_var_widg.append(label_crystal_fix)
-
-        # self.lst_var_widg.append(box_detector_fix)
-        # self.lst_var_widg.append(label_detector_fix)
-
-        # self.lst_var_widg.append(box_goniometer_fix)
-        # self.lst_var_widg.append(label_goniometer_fix)
 
         self.lst_var_widg.append(box_outlier_algorithm)
         self.lst_var_widg.append(label_outlier_algorithm)
 
     def reset_pars(self):
         self.clearLayout(self.main_v_layout)
+        self.build_pars()
 
 
 class IntegrateSimplerParamTab(SimpleParamTab):
@@ -374,9 +371,12 @@ class IntegrateSimplerParamTab(SimpleParamTab):
 
     def __init__(self, parent=None):
         super(IntegrateSimplerParamTab, self).__init__()
-        # self.param_widget_parent = parent.param_widget_parent
-
         self.main_v_layout = QVBoxLayout()
+        self.build_pars()
+        self.setLayout(self.main_v_layout)
+
+    def build_pars(self):
+
         PrFit_lay_out = QHBoxLayout()
         label_PrFit = QLabel("Use profile fitting")
         PrFit_lay_out.addWidget(label_PrFit)
@@ -423,14 +423,12 @@ class IntegrateSimplerParamTab(SimpleParamTab):
         self.main_v_layout.addLayout(hbox_lay_nproc)
 
         self.main_v_layout.addStretch()
-
-        self.setLayout(self.main_v_layout)
         self.box_nproc.tmp_lst = None
-
         self.lst_var_widg = _get_all_direct_layout_widget_children(self.main_v_layout)
 
     def reset_pars(self):
         self.clearLayout(self.main_v_layout)
+        self.build_pars()
 
     def set_max_nproc(self):
         cpu_max_proc = default_max_nproc
@@ -447,11 +445,13 @@ class SymmetrySimplerParamTab(SimpleParamTab):
 
     def __init__(self, parent=None):
         super(SymmetrySimplerParamTab, self).__init__()
-
-        hbox_d_min = QHBoxLayout()
         self.main_v_layout = QVBoxLayout()
-        label_d_min = QLabel("High resolution limit")
+        self.build_pars()
+        self.setLayout(self.main_v_layout)
 
+    def build_pars(self):
+        label_d_min = QLabel("High resolution limit")
+        hbox_d_min = QHBoxLayout()
         hbox_d_min.addWidget(label_d_min)
 
         d_min_spn_bx = QDoubleSpinBox()
@@ -466,14 +466,13 @@ class SymmetrySimplerParamTab(SimpleParamTab):
 
         self.main_v_layout.addStretch()
 
-        self.setLayout(self.main_v_layout)
-
         self.lst_var_widg = []
         self.lst_var_widg.append(d_min_spn_bx)
         self.lst_var_widg.append(label_d_min)
 
     def reset_pars(self):
         self.clearLayout(self.main_v_layout)
+        self.build_pars()
 
 
 class ScaleSimplerParamTab(SimpleParamTab):
@@ -486,8 +485,11 @@ class ScaleSimplerParamTab(SimpleParamTab):
 
     def __init__(self, parent=None):
         super(ScaleSimplerParamTab, self).__init__()
-
         self.main_v_layout = QVBoxLayout()
+        self.build_pars()
+        self.setLayout(self.main_v_layout)
+
+    def build_pars(self):
 
         hbox_lay_mod = QHBoxLayout()
         label_mod = QLabel("Model")
@@ -529,8 +531,6 @@ class ScaleSimplerParamTab(SimpleParamTab):
 
         self.main_v_layout.addStretch()
 
-        self.setLayout(self.main_v_layout)
-
         self.lst_var_widg = []
         self.lst_var_widg.append(box_mod)
         self.lst_var_widg.append(label_mod)
@@ -541,13 +541,17 @@ class ScaleSimplerParamTab(SimpleParamTab):
 
     def reset_pars(self):
         self.clearLayout(self.main_v_layout)
+        self.build_pars()
 
 
 class CombineExperimentSimplerParamTab(SimpleParamTab):
     def __init__(self, parent=None):
         super(CombineExperimentSimplerParamTab, self).__init__()
-
         self.main_v_layout = QVBoxLayout()
+        self.build_pars()
+        self.setLayout(self.main_v_layout)
+
+    def build_pars(self):
         hbox_lay_dummy_1 = QHBoxLayout()
         label_dummy_1 = QLabel("Dummy TMP selector")
 
@@ -562,14 +566,13 @@ class CombineExperimentSimplerParamTab(SimpleParamTab):
 
         self.main_v_layout.addStretch()
 
-        self.setLayout(self.main_v_layout)
-
         self.lst_var_widg = []
         self.lst_var_widg.append(box_dummy_2)
         self.lst_var_widg.append(label_dummy_1)
 
     def reset_pars(self):
         self.clearLayout(self.main_v_layout)
+        self.build_pars()
 
 
 class TmpTstWidget(QWidget):
