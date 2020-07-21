@@ -5,14 +5,6 @@ from PySide2 import QtUiTools
 from PySide2.QtGui import *
 import numpy as np
 
-class ImportTmpWidg(QWidget):
-    def __init__(self, parent = None):
-        super(ImportTmpWidg, self).__init__(parent)
-        print("Hi from ImportTmpWidg")
-        self.main_vbox = QVBoxLayout()
-        self.main_vbox.addWidget(QLabel("ImportTmpWidg"))
-        self.setLayout(self.main_vbox)
-
 class MyQComboBox(QComboBox):
     def __init__(self, parent=None):
         super(MyQComboBox, self).__init__(parent)

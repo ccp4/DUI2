@@ -22,18 +22,14 @@ from PySide2 import QtUiTools
 from PySide2.QtGui import *
 
 from gui_utils import TreeDirScene, AdvancedParameters
-from gui_utils import ImportTmpWidg as ImportWidget
 
+from simpler_param_widgets import ImportTmpWidg as ImportWidget
 from simpler_param_widgets import (
-          FindspotsSimplerParameterTab,
-          IndexSimplerParamTab,
-          RefineBravaiSimplerParamTab,
-          RefineSimplerParamTab,
-          IntegrateSimplerParamTab,
-          SymmetrySimplerParamTab,
-          ScaleSimplerParamTab,
-          CombineExperimentSimplerParamTab
-          )
+    FindspotsSimplerParameterTab, IndexSimplerParamTab,
+    RefineBravaiSimplerParamTab, RefineSimplerParamTab,
+    IntegrateSimplerParamTab, SymmetrySimplerParamTab,
+    ScaleSimplerParamTab, CombineExperimentSimplerParamTab
+)
 
 
 def json_data_request(url, cmd):
@@ -376,8 +372,12 @@ class MainObject(QObject):
 
     def reset_param(self):
         print("reset_param")
-        self.param_widget_lst[self.current_params_widget]["advanced"].reset_pars()
-        self.param_widget_lst[self.current_params_widget]["simple"].reset_pars()
+        try:
+            self.param_widget_lst[self.current_params_widget]["only_one"].reset_pars()
+
+        except AttributeError:
+            self.param_widget_lst[self.current_params_widget]["advanced"].reset_pars()
+            self.param_widget_lst[self.current_params_widget]["simple"].reset_pars()
 
     def request_params(self):
         self.current_params_widget += 1

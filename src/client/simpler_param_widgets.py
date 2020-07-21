@@ -107,6 +107,18 @@ class SimpleParamTab(QWidget):
             self.item_changed.emit(str_path, str_value)
 
 
+class ImportTmpWidg(QWidget):
+    def __init__(self, parent = None):
+        super(ImportTmpWidg, self).__init__(parent)
+        print("Hi from ImportTmpWidg")
+        self.main_vbox = QVBoxLayout()
+        self.main_vbox.addWidget(QLabel("ImportTmpWidg"))
+        self.setLayout(self.main_vbox)
+
+    def reset_pars(self):
+        print("\n reset_pars (only_one) \n")
+
+
 class FindspotsSimplerParameterTab(SimpleParamTab):
     """
     This widget is the tool for tunning the simpler and most common parameters
