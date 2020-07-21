@@ -103,11 +103,7 @@ class MainObject(QObject):
         self.current_next_buttons = 0
         self.current_params_widget = 0
 
-
-
         self.param_widget_lst = []
-
-        #########################################################################################
         imp_widg = ImportWidget()
         self.window.ImportScrollArea.setWidget(imp_widg)
         self.param_widget_lst.append(
@@ -117,7 +113,6 @@ class MainObject(QObject):
                 "advanced"  :None
             }
         )
-        #########################################################################################
         cmd = {"nod_lst":"", "cmd_lst":["find_spots_params"]}
         lst_params = json_data_request(self.my_url, cmd)
         if lst_params is not None:
@@ -140,7 +135,6 @@ class MainObject(QObject):
                 "advanced"  :fd_advanced_parameters
             }
         )
-        #########################################################################################
         cmd = {"nod_lst":"", "cmd_lst":["index_params"]}
         lst_params = json_data_request(self.my_url, cmd)
         if lst_params is not None:
@@ -163,8 +157,6 @@ class MainObject(QObject):
                 "advanced"  :id_advanced_parameters
             }
         )
-        #########################################################################################
-
         cmd = {"nod_lst":"", "cmd_lst":["refine_bravais_settings_params"]}
         lst_params = json_data_request(self.my_url, cmd)
         if lst_params is not None:
@@ -187,7 +179,6 @@ class MainObject(QObject):
                 "advanced"  :rb_advanced_parameters
             }
         )
-        #########################################################################################
         cmd = {"nod_lst":"", "cmd_lst":["refine_params"]}
         lst_params = json_data_request(self.my_url, cmd)
         if lst_params is not None:
@@ -210,7 +201,6 @@ class MainObject(QObject):
                 "advanced"  :rf_advanced_parameters
             }
         )
-        #########################################################################################
         cmd = {"nod_lst":"", "cmd_lst":["integrate_params"]}
         lst_params = json_data_request(self.my_url, cmd)
         if lst_params is not None:
@@ -233,8 +223,6 @@ class MainObject(QObject):
                 "advanced"  :it_advanced_parameters
             }
         )
-        #########################################################################################
-
         cmd = {"nod_lst":"", "cmd_lst":["symmetry_params"]}
         lst_params = json_data_request(self.my_url, cmd)
         if lst_params is not None:
@@ -257,7 +245,6 @@ class MainObject(QObject):
                 "advanced"  :sm_advanced_parameters
             }
         )
-        #########################################################################################
         cmd = {"nod_lst":"", "cmd_lst":["scale_params"]}
         lst_params = json_data_request(self.my_url, cmd)
         if lst_params is not None:
@@ -280,7 +267,6 @@ class MainObject(QObject):
                 "advanced"  :sc_advanced_parameters
             }
         )
-        #########################################################################################
         cmd = {"nod_lst":"", "cmd_lst":["combine_experiments_params"]}
         lst_params = json_data_request(self.my_url, cmd)
         if lst_params is not None:
@@ -303,8 +289,6 @@ class MainObject(QObject):
                 "advanced"  :ce_advanced_parameters
             }
         )
-        #########################################################################################
-
         big_f_size = int(self.font_point_size * 1.6)
         big_font = QFont("OldEnglish", pointSize = big_f_size, italic=True)
         self.window.CurrentControlWidgetLabel.setFont(big_font)
@@ -314,9 +298,7 @@ class MainObject(QObject):
         self.window.CmdSend2server.clicked.connect(self.request_launch)
         self.window.LoadParsButton.clicked.connect(self.request_params)
         self.window.Reset2DefaultPushButton.clicked.connect(self.reset_param)
-
         self.tree_scene.draw_tree_graph([])
-
         self.window.show()
 
     def on_node_click(self, nod_num):
@@ -387,9 +369,6 @@ class MainObject(QObject):
         self.window.StackedParamsWidget.setCurrentIndex(
             self.current_params_widget
         )
-
-        #print(dir(self.window.StackedParamsWidget))
-        #self.current_widget = self.window.StackedParamsWidget.currentWidget()
 
 if __name__ == "__main__":
     QCoreApplication.setAttribute(Qt.AA_ShareOpenGLContexts)

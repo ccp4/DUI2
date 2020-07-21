@@ -195,9 +195,7 @@ def draw_quadratic_bezier_3_points(scene_obj,
 
 
 class TreeDirScene(QGraphicsScene):
-
     node_clicked = Signal(int)
-
     def __init__(self, parent = None):
         super(TreeDirScene, self).__init__(parent)
         fm = QFontMetrics(self.font())
@@ -245,7 +243,6 @@ class TreeDirScene(QGraphicsScene):
             Qt.white, 2, Qt.SolidLine,
             Qt.RoundCap, Qt.RoundJoin
         )
-
         self.lst_nod_pos = []
 
     def get_coords(self, row, col):
@@ -260,7 +257,6 @@ class TreeDirScene(QGraphicsScene):
             dx_sq = (nod["x_pos"] - x_ms) ** 2
             dy_sq = (nod["y_pos"] - y_ms) ** 2
             d_sq = dx_sq + dy_sq
-
             if num == 0:
                 min_d = d_sq
                 nod_num = nod["lin_num"]
@@ -280,7 +276,6 @@ class TreeDirScene(QGraphicsScene):
 
         right_x, down_y = self.get_coords(len(nod_lst), max_indent + 5)
         left_x, up_y = self.get_coords(-1, 0)
-
         dx = right_x - left_x
         dy = down_y - up_y
         self.addRect(
@@ -288,7 +283,6 @@ class TreeDirScene(QGraphicsScene):
             dx + self.f_width, dy,
             self.gray_pen, self.light_gray_brush
         )
-
         for i in range(int((len(nod_lst) - 1) / 2 + 1)):
             pos = i * 2
             my_x, my_y = self.get_coords(pos, 0)
@@ -297,7 +291,6 @@ class TreeDirScene(QGraphicsScene):
                 dx - self.f_width, self.f_height * 2,
                 self.white_pen, self.white_brush
             )
-
         for pos, obj2prn in enumerate(nod_lst):
             if len(obj2prn.par_lst) > 1:
                 my_coord_x ,my_coord_y = self.get_coords(pos, obj2prn.indent)
