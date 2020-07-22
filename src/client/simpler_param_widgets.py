@@ -107,7 +107,7 @@ class SimpleParamTab(QWidget):
             self.item_changed.emit(str_path, str_value)
 
 
-class ImportTmpWidg(QWidget):
+class ImportTmpWidg(SimpleParamTab):
     def __init__(self, parent = None):
         super(ImportTmpWidg, self).__init__(parent)
         sys_font = QFont()
@@ -118,6 +118,7 @@ class ImportTmpWidg(QWidget):
             "Monospace", self.font_point_size + 3, QFont.Bold
         ))
         self.imp_txt = QLineEdit()
+        self.imp_txt.editingFinished.connect(self.line_changed)
 
         self.main_vbox = QVBoxLayout()
         self.main_vbox.addWidget(new_label)
@@ -127,6 +128,12 @@ class ImportTmpWidg(QWidget):
 
     def reset_pars(self):
         self.imp_txt.setText("")
+
+    def line_changed(self):
+        sender = self.sender()
+        str_value = sender.text()
+        str_path = " "
+        self.item_changed.emit(str_path, str_value)
 
 class FindspotsSimplerParameterTab(SimpleParamTab):
     """

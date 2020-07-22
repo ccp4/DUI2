@@ -105,6 +105,7 @@ class MainObject(QObject):
 
         self.param_widget_lst = []
         imp_widg = ImportWidget()
+        imp_widg.item_changed.connect(self.item_changed_f_simple)
         self.window.ImportScrollArea.setWidget(imp_widg)
         self.param_widget_lst.append(
             {
@@ -315,6 +316,10 @@ class MainObject(QObject):
 
     def item_changed_f_simple(self, str_path, str_value):
         print("item_changed from Simple Param Widget")
+        print("str_path, str_value: ", str_path, str_value)
+
+    def item_changed_f_advanced(self, str_path, str_value):
+        print("item_changed from Advanced Param Widget")
         print("str_path, str_value: ", str_path, str_value)
 
     def request_launch(self):
