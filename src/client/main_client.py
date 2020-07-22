@@ -104,16 +104,19 @@ class MainObject(QObject):
         self.current_params_widget = 0
 
         self.param_widget_lst = []
+        #################################################################################################
         imp_widg = ImportWidget()
         imp_widg.item_changed.connect(self.item_changed_f_simple)
         self.window.ImportScrollArea.setWidget(imp_widg)
         self.param_widget_lst.append(
             {
+                "main_cmd"  :"dials.import",
                 "only_one"  :imp_widg,
                 "simple"    :None,
                 "advanced"  :None
             }
         )
+        #################################################################################################
         cmd = {"nod_lst":"", "cmd_lst":["find_spots_params"]}
         lst_params = json_data_request(self.my_url, cmd)
         if lst_params is not None:
@@ -132,11 +135,13 @@ class MainObject(QObject):
         self.window.FindspotsSimplerScrollArea.setWidget(find_simpl_widg)
         self.param_widget_lst.append(
             {
+                "main_cmd"  :"dials.find_spots",
                 "only_one"  :None,
                 "simple"    :find_simpl_widg,
                 "advanced"  :fd_advanced_parameters
             }
         )
+        #################################################################################################
         cmd = {"nod_lst":"", "cmd_lst":["index_params"]}
         lst_params = json_data_request(self.my_url, cmd)
         if lst_params is not None:
@@ -154,11 +159,13 @@ class MainObject(QObject):
         self.window.IndexSimplerScrollArea.setWidget(index_simpl_widg)
         self.param_widget_lst.append(
             {
+                "main_cmd"  :"dials.index",
                 "only_one"  :None,
                 "simple"    :index_simpl_widg,
                 "advanced"  :id_advanced_parameters
             }
         )
+        #################################################################################################
         cmd = {"nod_lst":"", "cmd_lst":["refine_bravais_settings_params"]}
         lst_params = json_data_request(self.my_url, cmd)
         if lst_params is not None:
@@ -176,11 +183,13 @@ class MainObject(QObject):
         self.window.RefineBravaiSimplerScrollArea.setWidget(refi_brv_simpl_widg)
         self.param_widget_lst.append(
             {
+                "main_cmd"  :"dials.refine_bravais_settings",
                 "only_one"  :None,
                 "simple"    :refi_brv_simpl_widg,
                 "advanced"  :rb_advanced_parameters
             }
         )
+        #################################################################################################
         cmd = {"nod_lst":"", "cmd_lst":["refine_params"]}
         lst_params = json_data_request(self.my_url, cmd)
         if lst_params is not None:
@@ -198,11 +207,13 @@ class MainObject(QObject):
         self.window.RefineSimplerScrollArea.setWidget(ref_simpl_widg)
         self.param_widget_lst.append(
             {
+                "main_cmd"  :"dials.refine",
                 "only_one"  :None,
                 "simple"    :ref_simpl_widg,
                 "advanced"  :rf_advanced_parameters
             }
         )
+        #################################################################################################
         cmd = {"nod_lst":"", "cmd_lst":["integrate_params"]}
         lst_params = json_data_request(self.my_url, cmd)
         if lst_params is not None:
@@ -220,11 +231,13 @@ class MainObject(QObject):
         self.window.IntegrateSimplerScrollArea.setWidget(integr_simpl_widg)
         self.param_widget_lst.append(
             {
+                "main_cmd"  :"dials.integrate",
                 "only_one"  :None,
                 "simple"    :integr_simpl_widg,
                 "advanced"  :it_advanced_parameters
             }
         )
+        #################################################################################################
         cmd = {"nod_lst":"", "cmd_lst":["symmetry_params"]}
         lst_params = json_data_request(self.my_url, cmd)
         if lst_params is not None:
@@ -242,11 +255,13 @@ class MainObject(QObject):
         self.window.SymmetrySimplerScrollArea.setWidget(sym_simpl_widg)
         self.param_widget_lst.append(
             {
+                "main_cmd"  :"dials.symmetry",
                 "only_one"  :None,
                 "simple"    :sym_simpl_widg,
                 "advanced"  :sm_advanced_parameters
             }
         )
+        #################################################################################################
         cmd = {"nod_lst":"", "cmd_lst":["scale_params"]}
         lst_params = json_data_request(self.my_url, cmd)
         if lst_params is not None:
@@ -264,11 +279,13 @@ class MainObject(QObject):
         self.window.ScaleSimplerScrollArea.setWidget(scale_simpl_widg)
         self.param_widget_lst.append(
             {
+                "main_cmd"  :"dials.scale",
                 "only_one"  :None,
                 "simple"    :scale_simpl_widg,
                 "advanced"  :sc_advanced_parameters
             }
         )
+        #################################################################################################
         cmd = {"nod_lst":"", "cmd_lst":["combine_experiments_params"]}
         lst_params = json_data_request(self.my_url, cmd)
         if lst_params is not None:
@@ -286,11 +303,13 @@ class MainObject(QObject):
         self.window.CombineSimplerScrollArea.setWidget(comb_simpl_widg)
         self.param_widget_lst.append(
             {
+                "main_cmd"  :"dials.combine_experiments",
                 "only_one"  :None,
                 "simple"    :comb_simpl_widg,
                 "advanced"  :ce_advanced_parameters
             }
         )
+        #################################################################################################
         big_f_size = int(self.font_point_size * 1.6)
         big_font = QFont("OldEnglish", pointSize = big_f_size, italic=True)
         self.window.CurrentControlWidgetLabel.setFont(big_font)
@@ -331,6 +350,9 @@ class MainObject(QObject):
         nod_lst = nod_str.split(" ")
         print("nod_lst", nod_lst)
         cmd = {"nod_lst":nod_lst, "cmd_lst":[cmd_str]}
+
+        print("main_cmd = ", self.param_widget_lst[self.current_params_widget]["main_cmd"])
+
         try:
             req_get = requests.get(self.my_url, stream = True, params = cmd)
             self.thrd = Run_n_Output(req_get)
