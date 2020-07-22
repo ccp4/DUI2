@@ -19,6 +19,9 @@ class MyQComboBox(QComboBox):
 
 
 class AdvancedParameters(QWidget):
+
+    item_changed = Signal(str, str)
+
     def __init__(self, parent = None):
         super(AdvancedParameters, self).__init__(parent)
         print("Hi from AdvancedParameters")
@@ -75,6 +78,8 @@ class AdvancedParameters(QWidget):
                 except TypeError:
                     new_combo.setCurrentIndex(0)
 
+                new_combo.local_path = data_info["full_path"]
+                new_combo.currentIndexChanged.connect(self.spnbox_changed)
                 new_hbox.addWidget(new_combo)
                 data_info["widget"] = new_combo
 
@@ -84,6 +89,8 @@ class AdvancedParameters(QWidget):
                 par_str = str(data_info["default"])
                 new_txt_in = QLineEdit()
                 new_txt_in.setText(par_str)
+                new_txt_in.local_path = data_info["full_path"]
+                new_txt_in.textChanged.connect(self.text_changed)
                 new_hbox.addWidget(new_txt_in)
                 data_info["widget"] = new_txt_in
 
@@ -93,6 +100,21 @@ class AdvancedParameters(QWidget):
             self.main_vbox.addLayout(new_hbox)
 
         self.main_vbox.addStretch()
+
+    def text_changed(self):
+        sender = self.sender()
+
+        str_path = str(sender.local_path)
+        str_value = str(sender.text())
+        self.item_changed.emit(str_path, str_value)
+
+    def spnbox_changed(self):
+        sender = self.sender()
+
+        str_path = str(sender.local_path)
+        str_value = str(sender.currentText())
+        self.item_changed.emit(str_path, str_value)
+
 
     def reset_pars(self):
         print("Hi from reset_pars")

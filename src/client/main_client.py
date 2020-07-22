@@ -121,6 +121,7 @@ class MainObject(QObject):
             par_def = lin_lst()
             fd_advanced_parameters = AdvancedParameters()
             fd_advanced_parameters.build_pars(par_def)
+            fd_advanced_parameters.item_changed.connect(self.item_changed_f_advanced)
             self.window.FindspotsAdvancedScrollArea.setWidget(fd_advanced_parameters)
 
         else:
