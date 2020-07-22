@@ -106,7 +106,7 @@ class MainObject(QObject):
         self.param_widget_lst = []
         #################################################################################################
         imp_widg = ImportWidget()
-        imp_widg.item_changed.connect(self.item_changed_f_simple)
+        imp_widg.item_changed.connect(self.item_param_changed)
         self.window.ImportScrollArea.setWidget(imp_widg)
         self.param_widget_lst.append(
             {
@@ -124,14 +124,14 @@ class MainObject(QObject):
             par_def = lin_lst()
             fd_advanced_parameters = AdvancedParameters()
             fd_advanced_parameters.build_pars(par_def)
-            fd_advanced_parameters.item_changed.connect(self.item_changed_f_advanced)
+            fd_advanced_parameters.item_changed.connect(self.item_param_changed)
             self.window.FindspotsAdvancedScrollArea.setWidget(fd_advanced_parameters)
 
         else:
             print("something went wrong with the list of parameters")
 
         find_simpl_widg = FindspotsSimplerParameterTab()
-        find_simpl_widg.item_changed.connect(self.item_changed_f_simple)
+        find_simpl_widg.item_changed.connect(self.item_param_changed)
         self.window.FindspotsSimplerScrollArea.setWidget(find_simpl_widg)
         self.param_widget_lst.append(
             {
@@ -149,13 +149,14 @@ class MainObject(QObject):
             par_def = lin_lst()
             id_advanced_parameters = AdvancedParameters()
             id_advanced_parameters.build_pars(par_def)
+            id_advanced_parameters.item_changed.connect(self.item_param_changed)
             self.window.IndexAdvancedScrollArea.setWidget(id_advanced_parameters)
 
         else:
             print("something went wrong with the list of parameters")
 
         index_simpl_widg = IndexSimplerParamTab()
-        index_simpl_widg.item_changed.connect(self.item_changed_f_simple)
+        index_simpl_widg.item_changed.connect(self.item_param_changed)
         self.window.IndexSimplerScrollArea.setWidget(index_simpl_widg)
         self.param_widget_lst.append(
             {
@@ -173,13 +174,14 @@ class MainObject(QObject):
             par_def = lin_lst()
             rb_advanced_parameters = AdvancedParameters()
             rb_advanced_parameters.build_pars(par_def)
+            rb_advanced_parameters.item_changed.connect(self.item_param_changed)
             self.window.RefineBravaiAdvancedScrollArea.setWidget(rb_advanced_parameters)
 
         else:
             print("something went wrong with the list of parameters")
 
         refi_brv_simpl_widg = RefineBravaiSimplerParamTab()
-        refi_brv_simpl_widg.item_changed.connect(self.item_changed_f_simple)
+        refi_brv_simpl_widg.item_changed.connect(self.item_param_changed)
         self.window.RefineBravaiSimplerScrollArea.setWidget(refi_brv_simpl_widg)
         self.param_widget_lst.append(
             {
@@ -197,13 +199,14 @@ class MainObject(QObject):
             par_def = lin_lst()
             rf_advanced_parameters = AdvancedParameters()
             rf_advanced_parameters.build_pars(par_def)
+            rf_advanced_parameters.item_changed.connect(self.item_param_changed)
             self.window.RefineAdvancedScrollArea.setWidget(rf_advanced_parameters)
 
         else:
             print("something went wrong with the list of parameters")
 
         ref_simpl_widg = RefineSimplerParamTab()
-        ref_simpl_widg.item_changed.connect(self.item_changed_f_simple)
+        ref_simpl_widg.item_changed.connect(self.item_param_changed)
         self.window.RefineSimplerScrollArea.setWidget(ref_simpl_widg)
         self.param_widget_lst.append(
             {
@@ -221,13 +224,14 @@ class MainObject(QObject):
             par_def = lin_lst()
             it_advanced_parameters = AdvancedParameters()
             it_advanced_parameters.build_pars(par_def)
+            it_advanced_parameters.item_changed.connect(self.item_param_changed)
             self.window.IntegrateAdvancedScrollArea.setWidget(it_advanced_parameters)
 
         else:
             print("something went wrong with the list of parameters")
 
         integr_simpl_widg = IntegrateSimplerParamTab()
-        integr_simpl_widg.item_changed.connect(self.item_changed_f_simple)
+        integr_simpl_widg.item_changed.connect(self.item_param_changed)
         self.window.IntegrateSimplerScrollArea.setWidget(integr_simpl_widg)
         self.param_widget_lst.append(
             {
@@ -245,13 +249,14 @@ class MainObject(QObject):
             par_def = lin_lst()
             sm_advanced_parameters = AdvancedParameters()
             sm_advanced_parameters.build_pars(par_def)
+            sm_advanced_parameters.item_changed.connect(self.item_param_changed)
             self.window.SymmetryAdvancedScrollArea.setWidget(sm_advanced_parameters)
 
         else:
             print("something went wrong with the list of parameters")
 
         sym_simpl_widg = SymmetrySimplerParamTab()
-        sym_simpl_widg.item_changed.connect(self.item_changed_f_simple)
+        sym_simpl_widg.item_changed.connect(self.item_param_changed)
         self.window.SymmetrySimplerScrollArea.setWidget(sym_simpl_widg)
         self.param_widget_lst.append(
             {
@@ -269,13 +274,14 @@ class MainObject(QObject):
             par_def = lin_lst()
             sc_advanced_parameters = AdvancedParameters()
             sc_advanced_parameters.build_pars(par_def)
+            sc_advanced_parameters.item_changed.connect(self.item_param_changed)
             self.window.ScaleAdvancedScrollArea.setWidget(sc_advanced_parameters)
 
         else:
             print("something went wrong with the list of parameters")
 
         scale_simpl_widg = ScaleSimplerParamTab()
-        scale_simpl_widg.item_changed.connect(self.item_changed_f_simple)
+        scale_simpl_widg.item_changed.connect(self.item_param_changed)
         self.window.ScaleSimplerScrollArea.setWidget(scale_simpl_widg)
         self.param_widget_lst.append(
             {
@@ -293,13 +299,14 @@ class MainObject(QObject):
             par_def = lin_lst()
             ce_advanced_parameters = AdvancedParameters()
             ce_advanced_parameters.build_pars(par_def)
+            ce_advanced_parameters.item_changed.connect(self.item_param_changed)
             self.window.CombineAdvancedScrollArea.setWidget(ce_advanced_parameters)
 
         else:
             print("something went wrong with the list of parameters")
 
         comb_simpl_widg = CombineExperimentSimplerParamTab()
-        comb_simpl_widg.item_changed.connect(self.item_changed_f_simple)
+        comb_simpl_widg.item_changed.connect(self.item_param_changed)
         self.window.CombineSimplerScrollArea.setWidget(comb_simpl_widg)
         self.param_widget_lst.append(
             {
@@ -310,6 +317,9 @@ class MainObject(QObject):
             }
         )
         #################################################################################################
+
+        self.params2run = []
+
         big_f_size = int(self.font_point_size * 1.6)
         big_font = QFont("OldEnglish", pointSize = big_f_size, italic=True)
         self.window.CurrentControlWidgetLabel.setFont(big_font)
@@ -334,24 +344,29 @@ class MainObject(QObject):
         self.window.incoming_text.insertPlainText(new_line)
         self.window.incoming_text.moveCursor(QTextCursor.End)
 
-    def item_changed_f_simple(self, str_path, str_value):
-        print("item_changed from Simple Param Widget")
+    def item_param_changed(self, str_path, str_value):
+        print("item paran changed")
         print("str_path, str_value: ", str_path, str_value)
-
-    def item_changed_f_advanced(self, str_path, str_value):
-        print("item_changed from Advanced Param Widget")
-        print("str_path, str_value: ", str_path, str_value)
+        self.params2run.append(str_path + "=" + str_value)
 
     def request_launch(self):
-        cmd_str = str(self.window.CmdEdit.text())
+
+        cmd2run = self.param_widget_lst[self.current_params_widget]["main_cmd"]
+        for sinlge_param in self.params2run:
+            cmd2run = cmd2run + " " + sinlge_param
+
+        print("\n main_cmd = ", cmd2run, "\n")
+        self.params2run = []
+
+        cmd_str = cmd2run
+        #cmd_str = str(self.window.CmdEdit.text())
+
         print("cmd_str", cmd_str)
         nod_str = str(self.window.NumLinLst.text())
         self.window.NumLinLst.clear()
         nod_lst = nod_str.split(" ")
         print("nod_lst", nod_lst)
         cmd = {"nod_lst":nod_lst, "cmd_lst":[cmd_str]}
-
-        print("main_cmd = ", self.param_widget_lst[self.current_params_widget]["main_cmd"])
 
         try:
             req_get = requests.get(self.my_url, stream = True, params = cmd)
@@ -362,6 +377,7 @@ class MainObject(QObject):
 
         except requests.exceptions.RequestException:
             print("something went wrong with the request launch")
+
 
     def request_display(self):
         cmd = {"nod_lst":"", "cmd_lst":["display"]}
