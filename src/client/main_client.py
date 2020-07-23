@@ -118,7 +118,7 @@ class MainObject(QObject):
         self.param_widget_lst.append({"main_cmd"  :"dials.import",
                                       "only_one"  :imp_widg,
                                       "simple"    :None,
-                                      "advanced"  :None})
+                                      "advanced"  :None })
         ########################################### find spots parameters widget
         cmd = {"nod_lst":"", "cmd_lst":["find_spots_params"]}
         lst_params = json_data_request(self.my_url, cmd)
@@ -182,7 +182,17 @@ class MainObject(QObject):
                                       "only_one"  :None,
                                       "simple"    :refi_brv_simpl_widg,
                                       "advanced"  :rb_advanced_parameters})
-        ###########################################  parameters widget
+        ########################################### re-index parameters widget
+
+        r_index_widg = CombineExperimentSimplerParamTab()
+        r_index_widg.item_changed.connect(self.item_param_changed)
+        self.window.ReindexTableScrollArea.setWidget(r_index_widg)
+        self.param_widget_lst.append({"main_cmd"  :"dials.import",
+                                      "only_one"  :r_index_widg,
+                                      "simple"    :None,
+                                      "advanced"  :None })
+
+        #################################################################################################
         cmd = {"nod_lst":"", "cmd_lst":["refine_params"]}
         lst_params = json_data_request(self.my_url, cmd)
         if lst_params is not None:
@@ -203,7 +213,7 @@ class MainObject(QObject):
                                       "only_one"  :None,
                                       "simple"    :ref_simpl_widg,
                                       "advanced"  :rf_advanced_parameters})
-        ###########################################  parameters widget
+        ########################################### integrate parameters widget
         cmd = {"nod_lst":"", "cmd_lst":["integrate_params"]}
         lst_params = json_data_request(self.my_url, cmd)
         if lst_params is not None:
@@ -224,7 +234,7 @@ class MainObject(QObject):
                                       "only_one"  :None,
                                       "simple"    :integr_simpl_widg,
                                       "advanced"  :it_advanced_parameters})
-        ###########################################  parameters widget
+        ########################################### symmetry parameters widget
         cmd = {"nod_lst":"", "cmd_lst":["symmetry_params"]}
         lst_params = json_data_request(self.my_url, cmd)
         if lst_params is not None:
@@ -245,7 +255,7 @@ class MainObject(QObject):
                                       "only_one"  :None,
                                       "simple"    :sym_simpl_widg,
                                       "advanced"  :sm_advanced_parameters})
-        ###########################################  parameters widget
+        ########################################### scale parameters widget
         cmd = {"nod_lst":"", "cmd_lst":["scale_params"]}
         lst_params = json_data_request(self.my_url, cmd)
         if lst_params is not None:
@@ -266,7 +276,7 @@ class MainObject(QObject):
                                       "only_one"  :None,
                                       "simple"    :scale_simpl_widg,
                                       "advanced"  :sc_advanced_parameters})
-        ###########################################  parameters widget
+        ########################################### combine experiments parameters widget
         cmd = {"nod_lst":"", "cmd_lst":["combine_experiments_params"]}
         lst_params = json_data_request(self.my_url, cmd)
         if lst_params is not None:
