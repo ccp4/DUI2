@@ -49,7 +49,7 @@
            <item>
             <widget class="QPushButton" name="LoadParsButton">
              <property name="text">
-              <string>Load Pars ( TMP )</string>
+              <string>Nxt Pars ( TMP )</string>
              </property>
             </widget>
            </item>
@@ -93,8 +93,8 @@
                  <rect>
                   <x>0</x>
                   <y>0</y>
-                  <width>379</width>
-                  <height>143</height>
+                  <width>399</width>
+                  <height>133</height>
                  </rect>
                 </property>
                </widget>

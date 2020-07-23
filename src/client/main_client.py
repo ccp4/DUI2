@@ -305,7 +305,7 @@ class MainObject(QObject):
 
         self.tree_scene.node_clicked.connect(self.on_node_click)
         self.window.CmdSend2server.clicked.connect(self.request_launch)
-        self.window.LoadParsButton.clicked.connect(self.request_params)
+        self.window.LoadParsButton.clicked.connect(self.next_params_widget)
         self.window.Reset2DefaultPushButton.clicked.connect(self.reset_param)
         self.tree_scene.draw_tree_graph([])
         self.window.show()
@@ -326,19 +326,16 @@ class MainObject(QObject):
         print("item paran changed")
         print("str_path, str_value: ", str_path, str_value)
         self.params2run.append(str_path + "=" + str_value)
-
-    def request_launch(self):
-
         cmd2run = self.param_widget_lst[self.current_params_widget]["main_cmd"]
         for sinlge_param in self.params2run:
             cmd2run = cmd2run + " " + sinlge_param
 
         print("\n main_cmd = ", cmd2run, "\n")
+        self.window.CmdEdit.setText(str(cmd2run))
+
+    def request_launch(self):
+        cmd_str = str(self.window.CmdEdit.text())
         self.params2run = []
-
-        cmd_str = cmd2run
-        #cmd_str = str(self.window.CmdEdit.text())
-
         print("cmd_str", cmd_str)
         nod_str = str(self.window.NumLinLst.text())
         self.window.NumLinLst.clear()
@@ -383,14 +380,12 @@ class MainObject(QObject):
             self.param_widget_lst[self.current_params_widget]["advanced"].reset_pars()
             self.param_widget_lst[self.current_params_widget]["simple"].reset_pars()
 
-    def request_params(self):
+    def next_params_widget(self):
         self.current_params_widget += 1
         if self.current_params_widget >= self.window.StackedParamsWidget.count():
             self.current_params_widget = 0
 
-        self.window.StackedParamsWidget.setCurrentIndex(
-            self.current_params_widget
-        )
+        self.window.StackedParamsWidget.setCurrentIndex(self.current_params_widget)
 
 if __name__ == "__main__":
     QCoreApplication.setAttribute(Qt.AA_ShareOpenGLContexts)
