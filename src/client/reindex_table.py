@@ -29,8 +29,8 @@ def ops_list_from_json(json_path=None):
     lst_ops = []
     for key, value in json_data.items():
         recommended_str = "  "
-        print("outer key:", key)
-        print("outer dict:", value)
+        #print("outer key:", key)
+        #print("outer dict:", value)
         for inner_key in value:
             if inner_key == "rmsd":
                 rmsd_val = value["rmsd"]
@@ -97,7 +97,8 @@ def ops_list_from_json(json_path=None):
                     recommended_str = " N"
 
             else:
-                print("Fell off end of key list with inner_key=", inner_key)
+                #print("Fell off end of key list with inner_key=", inner_key)
+                pass
 
         single_lin_lst = [
             int(key),

@@ -45,6 +45,8 @@ from PySide2.QtGui import *
 
 from gui_utils import TreeDirScene, AdvancedParameters
 
+from reindex_table import ReindexTable
+
 from simpler_param_widgets import ImportTmpWidg as ImportWidget
 from simpler_param_widgets import (
     FindspotsSimplerParameterTab, IndexSimplerParamTab,
@@ -184,8 +186,10 @@ class MainObject(QObject):
                                       "advanced"  :rb_advanced_parameters})
         ########################################### re-index parameters widget
 
-        r_index_widg = CombineExperimentSimplerParamTab()
-        r_index_widg.item_changed.connect(self.item_param_changed)
+        full_json_path = "/scratch/dui_tst/X4_wide/dui_files/bravais_summary.json"
+        r_index_widg = ReindexTable()
+        r_index_widg.add_opts_lst(json_path=full_json_path)
+
         self.window.ReindexTableScrollArea.setWidget(r_index_widg)
         self.param_widget_lst.append({"main_cmd"  :"dials.import",
                                       "only_one"  :r_index_widg,
