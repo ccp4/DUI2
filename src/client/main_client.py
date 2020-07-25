@@ -123,16 +123,13 @@ class MainObject(QObject):
         #                                                 find spots parameters widget
         cmd = {"nod_lst":"", "cmd_lst":["find_spots_params"]}
         lst_params = json_data_request(self.my_url, cmd)
-        if lst_params is not None:
-            lin_lst = format_utils.param_tree_2_lineal(lst_params)
-            par_def = lin_lst()
-            fd_advanced_parameters = AdvancedParameters()
-            fd_advanced_parameters.build_pars(par_def)
-            fd_advanced_parameters.item_changed.connect(self.item_param_changed)
-            self.window.FindspotsAdvancedScrollArea.setWidget(fd_advanced_parameters)
 
-        else:
-            print("something went wrong with the list of parameters")
+        lin_lst = format_utils.param_tree_2_lineal(lst_params)
+        par_def = lin_lst()
+        fd_advanced_parameters = AdvancedParameters()
+        fd_advanced_parameters.build_pars(par_def)
+        fd_advanced_parameters.item_changed.connect(self.item_param_changed)
+        self.window.FindspotsAdvancedScrollArea.setWidget(fd_advanced_parameters)
 
         find_simpl_widg = FindspotsSimplerParameterTab()
         find_simpl_widg.item_changed.connect(self.item_param_changed)
