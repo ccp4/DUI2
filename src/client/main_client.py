@@ -104,6 +104,15 @@ class Run_n_Output(QThread):
                 print('>>  /*EOF*/  <<')
                 self.line_out.emit(' \n /*EOF*/ \n')
                 break
+def build_advanced_params_widget(cmd_str):
+    cmd = {"nod_lst":"", "cmd_lst":[cmd_str]}
+    lst_params = json_data_request(uni_url, cmd)
+    lin_lst = format_utils.param_tree_2_lineal(lst_params)
+    par_def = lin_lst()
+    advanced_parameters = AdvancedParameters()
+    advanced_parameters.build_pars(par_def)
+    return advanced_parameters
+
 
 class MainObject(QObject):
     def __init__(self, parent = None):
@@ -121,13 +130,7 @@ class MainObject(QObject):
                                       "simple"    :None,
                                       "advanced"  :None })
         #                                                 find spots parameters widget
-        cmd = {"nod_lst":"", "cmd_lst":["find_spots_params"]}
-        lst_params = json_data_request(uni_url, cmd)
-
-        lin_lst = format_utils.param_tree_2_lineal(lst_params)
-        par_def = lin_lst()
-        fd_advanced_parameters = AdvancedParameters()
-        fd_advanced_parameters.build_pars(par_def)
+        fd_advanced_parameters = build_advanced_params_widget("find_spots_params")
         fd_advanced_parameters.item_changed.connect(self.item_param_changed)
         self.window.FindspotsAdvancedScrollArea.setWidget(fd_advanced_parameters)
 
@@ -141,7 +144,6 @@ class MainObject(QObject):
         #                                                      index parameters widget
         cmd = {"nod_lst":"", "cmd_lst":["index_params"]}
         lst_params = json_data_request(uni_url, cmd)
-
         lin_lst = format_utils.param_tree_2_lineal(lst_params)
         par_def = lin_lst()
         id_advanced_parameters = AdvancedParameters()
