@@ -55,6 +55,7 @@ from simpler_param_widgets import (
     ScaleSimplerParamTab, CombineExperimentSimplerParamTab
 )
 
+uni_url = 'http://localhost:8080/'
 
 def json_data_request(url, cmd):
     try:
@@ -110,7 +111,6 @@ class MainObject(QObject):
         ui_path = os.path.dirname(os.path.abspath(__file__))
         ui_path += os.sep + "client.ui"
         self.window = QtUiTools.QUiLoader().load(ui_path)
-        self.my_url = 'http://localhost:8080/'
         self.param_widget_lst = []
         #                                                     import parameters widget
         imp_widg = ImportWidget()
@@ -122,7 +122,7 @@ class MainObject(QObject):
                                       "advanced"  :None })
         #                                                 find spots parameters widget
         cmd = {"nod_lst":"", "cmd_lst":["find_spots_params"]}
-        lst_params = json_data_request(self.my_url, cmd)
+        lst_params = json_data_request(uni_url, cmd)
 
         lin_lst = format_utils.param_tree_2_lineal(lst_params)
         par_def = lin_lst()
@@ -140,7 +140,7 @@ class MainObject(QObject):
                                       "advanced"  :fd_advanced_parameters})
         #                                                      index parameters widget
         cmd = {"nod_lst":"", "cmd_lst":["index_params"]}
-        lst_params = json_data_request(self.my_url, cmd)
+        lst_params = json_data_request(uni_url, cmd)
 
         lin_lst = format_utils.param_tree_2_lineal(lst_params)
         par_def = lin_lst()
@@ -159,7 +159,7 @@ class MainObject(QObject):
 
         #                                   refine bravais settings parameters widget
         cmd = {"nod_lst":"", "cmd_lst":["refine_bravais_settings_params"]}
-        lst_params = json_data_request(self.my_url, cmd)
+        lst_params = json_data_request(uni_url, cmd)
 
         lin_lst = format_utils.param_tree_2_lineal(lst_params)
         par_def = lin_lst()
@@ -189,7 +189,7 @@ class MainObject(QObject):
 
         #                                                  refine parameters widget
         cmd = {"nod_lst":"", "cmd_lst":["refine_params"]}
-        lst_params = json_data_request(self.my_url, cmd)
+        lst_params = json_data_request(uni_url, cmd)
 
         lin_lst = format_utils.param_tree_2_lineal(lst_params)
         par_def = lin_lst()
@@ -208,7 +208,7 @@ class MainObject(QObject):
 
         #                                                integrate parameters widget
         cmd = {"nod_lst":"", "cmd_lst":["integrate_params"]}
-        lst_params = json_data_request(self.my_url, cmd)
+        lst_params = json_data_request(uni_url, cmd)
 
         lin_lst = format_utils.param_tree_2_lineal(lst_params)
         par_def = lin_lst()
@@ -227,7 +227,7 @@ class MainObject(QObject):
 
         #                                                  symmetry parameters widget
         cmd = {"nod_lst":"", "cmd_lst":["symmetry_params"]}
-        lst_params = json_data_request(self.my_url, cmd)
+        lst_params = json_data_request(uni_url, cmd)
 
         lin_lst = format_utils.param_tree_2_lineal(lst_params)
         par_def = lin_lst()
@@ -246,7 +246,7 @@ class MainObject(QObject):
 
         #                                                       scale parameters widget
         cmd = {"nod_lst":"", "cmd_lst":["scale_params"]}
-        lst_params = json_data_request(self.my_url, cmd)
+        lst_params = json_data_request(uni_url, cmd)
 
         lin_lst = format_utils.param_tree_2_lineal(lst_params)
         par_def = lin_lst()
@@ -265,7 +265,7 @@ class MainObject(QObject):
 
         #                                           combine experiments parameters widget
         cmd = {"nod_lst":"", "cmd_lst":["combine_experiments_params"]}
-        lst_params = json_data_request(self.my_url, cmd)
+        lst_params = json_data_request(uni_url, cmd)
 
         lin_lst = format_utils.param_tree_2_lineal(lst_params)
         par_def = lin_lst()
@@ -339,7 +339,7 @@ class MainObject(QObject):
         cmd = {"nod_lst":nod_lst, "cmd_lst":[cmd_str]}
 
         try:
-            req_get = requests.get(self.my_url, stream = True, params = cmd)
+            req_get = requests.get(uni_url, stream = True, params = cmd)
             self.thrd = Run_n_Output(req_get)
             self.thrd.line_out.connect(self.add_line)
             self.thrd.finished.connect(self.request_display)
@@ -351,7 +351,7 @@ class MainObject(QObject):
 
     def request_display(self):
         cmd = {"nod_lst":"", "cmd_lst":["display"]}
-        lst_nodes = json_data_request(self.my_url, cmd)
+        lst_nodes = json_data_request(uni_url, cmd)
         if lst_nodes is not None:
             lst_str = self.tree_obj(lst_nod = lst_nodes)
             lst_2d_dat = self.tree_obj.get_tree_data()
