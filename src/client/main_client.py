@@ -104,7 +104,6 @@ class Run_n_Output(QThread):
                 self.line_out.emit(' \n /*EOF*/ \n')
                 break
 
-
 class MainObject(QObject):
     def __init__(self, parent = None):
         super(MainObject, self).__init__(parent)
@@ -113,7 +112,7 @@ class MainObject(QObject):
         self.window = QtUiTools.QUiLoader().load(ui_path)
         self.my_url = 'http://localhost:8080/'
         self.param_widget_lst = []
-        ########################################### import parameters widget
+        #                                                     import parameters widget
         imp_widg = ImportWidget()
         imp_widg.item_changed.connect(self.item_param_changed)
         self.window.ImportScrollArea.setWidget(imp_widg)
@@ -121,7 +120,7 @@ class MainObject(QObject):
                                       "only_one"  :imp_widg,
                                       "simple"    :None,
                                       "advanced"  :None })
-        ########################################### find spots parameters widget
+        #                                                 find spots parameters widget
         cmd = {"nod_lst":"", "cmd_lst":["find_spots_params"]}
         lst_params = json_data_request(self.my_url, cmd)
         if lst_params is not None:
@@ -142,19 +141,16 @@ class MainObject(QObject):
                                       "only_one"  :None,
                                       "simple"    :find_simpl_widg,
                                       "advanced"  :fd_advanced_parameters})
-        ########################################### index parameters widget
+        #                                                      index parameters widget
         cmd = {"nod_lst":"", "cmd_lst":["index_params"]}
         lst_params = json_data_request(self.my_url, cmd)
-        if lst_params is not None:
-            lin_lst = format_utils.param_tree_2_lineal(lst_params)
-            par_def = lin_lst()
-            id_advanced_parameters = AdvancedParameters()
-            id_advanced_parameters.build_pars(par_def)
-            id_advanced_parameters.item_changed.connect(self.item_param_changed)
-            self.window.IndexAdvancedScrollArea.setWidget(id_advanced_parameters)
 
-        else:
-            print("something went wrong with the list of parameters")
+        lin_lst = format_utils.param_tree_2_lineal(lst_params)
+        par_def = lin_lst()
+        id_advanced_parameters = AdvancedParameters()
+        id_advanced_parameters.build_pars(par_def)
+        id_advanced_parameters.item_changed.connect(self.item_param_changed)
+        self.window.IndexAdvancedScrollArea.setWidget(id_advanced_parameters)
 
         index_simpl_widg = IndexSimplerParamTab()
         index_simpl_widg.item_changed.connect(self.item_param_changed)
@@ -163,19 +159,17 @@ class MainObject(QObject):
                                       "only_one"  :None,
                                       "simple"    :index_simpl_widg,
                                       "advanced"  :id_advanced_parameters})
-        ########################################### refine bravais settings parameters widget
+
+        #                                   refine bravais settings parameters widget
         cmd = {"nod_lst":"", "cmd_lst":["refine_bravais_settings_params"]}
         lst_params = json_data_request(self.my_url, cmd)
-        if lst_params is not None:
-            lin_lst = format_utils.param_tree_2_lineal(lst_params)
-            par_def = lin_lst()
-            rb_advanced_parameters = AdvancedParameters()
-            rb_advanced_parameters.build_pars(par_def)
-            rb_advanced_parameters.item_changed.connect(self.item_param_changed)
-            self.window.RefineBravaiAdvancedScrollArea.setWidget(rb_advanced_parameters)
 
-        else:
-            print("something went wrong with the list of parameters")
+        lin_lst = format_utils.param_tree_2_lineal(lst_params)
+        par_def = lin_lst()
+        rb_advanced_parameters = AdvancedParameters()
+        rb_advanced_parameters.build_pars(par_def)
+        rb_advanced_parameters.item_changed.connect(self.item_param_changed)
+        self.window.RefineBravaiAdvancedScrollArea.setWidget(rb_advanced_parameters)
 
         refi_brv_simpl_widg = RefineBravaiSimplerParamTab()
         refi_brv_simpl_widg.item_changed.connect(self.item_param_changed)
@@ -184,8 +178,8 @@ class MainObject(QObject):
                                       "only_one"  :None,
                                       "simple"    :refi_brv_simpl_widg,
                                       "advanced"  :rb_advanced_parameters})
-        ########################################### re-index parameters widget
 
+        #                                                 re-index parameters widget
         full_json_path = "/scratch/dui_tst/X4_wide/dui_files/bravais_summary.json"
         r_index_widg = ReindexTable()
         r_index_widg.add_opts_lst(json_path=full_json_path)
@@ -196,19 +190,16 @@ class MainObject(QObject):
                                       "simple"    :None,
                                       "advanced"  :None })
 
-        #################################################################################################
+        #                                                  refine parameters widget
         cmd = {"nod_lst":"", "cmd_lst":["refine_params"]}
         lst_params = json_data_request(self.my_url, cmd)
-        if lst_params is not None:
-            lin_lst = format_utils.param_tree_2_lineal(lst_params)
-            par_def = lin_lst()
-            rf_advanced_parameters = AdvancedParameters()
-            rf_advanced_parameters.build_pars(par_def)
-            rf_advanced_parameters.item_changed.connect(self.item_param_changed)
-            self.window.RefineAdvancedScrollArea.setWidget(rf_advanced_parameters)
 
-        else:
-            print("something went wrong with the list of parameters")
+        lin_lst = format_utils.param_tree_2_lineal(lst_params)
+        par_def = lin_lst()
+        rf_advanced_parameters = AdvancedParameters()
+        rf_advanced_parameters.build_pars(par_def)
+        rf_advanced_parameters.item_changed.connect(self.item_param_changed)
+        self.window.RefineAdvancedScrollArea.setWidget(rf_advanced_parameters)
 
         ref_simpl_widg = RefineSimplerParamTab()
         ref_simpl_widg.item_changed.connect(self.item_param_changed)
@@ -217,19 +208,17 @@ class MainObject(QObject):
                                       "only_one"  :None,
                                       "simple"    :ref_simpl_widg,
                                       "advanced"  :rf_advanced_parameters})
-        ########################################### integrate parameters widget
+
+        #                                                integrate parameters widget
         cmd = {"nod_lst":"", "cmd_lst":["integrate_params"]}
         lst_params = json_data_request(self.my_url, cmd)
-        if lst_params is not None:
-            lin_lst = format_utils.param_tree_2_lineal(lst_params)
-            par_def = lin_lst()
-            it_advanced_parameters = AdvancedParameters()
-            it_advanced_parameters.build_pars(par_def)
-            it_advanced_parameters.item_changed.connect(self.item_param_changed)
-            self.window.IntegrateAdvancedScrollArea.setWidget(it_advanced_parameters)
 
-        else:
-            print("something went wrong with the list of parameters")
+        lin_lst = format_utils.param_tree_2_lineal(lst_params)
+        par_def = lin_lst()
+        it_advanced_parameters = AdvancedParameters()
+        it_advanced_parameters.build_pars(par_def)
+        it_advanced_parameters.item_changed.connect(self.item_param_changed)
+        self.window.IntegrateAdvancedScrollArea.setWidget(it_advanced_parameters)
 
         integr_simpl_widg = IntegrateSimplerParamTab()
         integr_simpl_widg.item_changed.connect(self.item_param_changed)
@@ -238,19 +227,17 @@ class MainObject(QObject):
                                       "only_one"  :None,
                                       "simple"    :integr_simpl_widg,
                                       "advanced"  :it_advanced_parameters})
-        ########################################### symmetry parameters widget
+
+        #                                                  symmetry parameters widget
         cmd = {"nod_lst":"", "cmd_lst":["symmetry_params"]}
         lst_params = json_data_request(self.my_url, cmd)
-        if lst_params is not None:
-            lin_lst = format_utils.param_tree_2_lineal(lst_params)
-            par_def = lin_lst()
-            sm_advanced_parameters = AdvancedParameters()
-            sm_advanced_parameters.build_pars(par_def)
-            sm_advanced_parameters.item_changed.connect(self.item_param_changed)
-            self.window.SymmetryAdvancedScrollArea.setWidget(sm_advanced_parameters)
 
-        else:
-            print("something went wrong with the list of parameters")
+        lin_lst = format_utils.param_tree_2_lineal(lst_params)
+        par_def = lin_lst()
+        sm_advanced_parameters = AdvancedParameters()
+        sm_advanced_parameters.build_pars(par_def)
+        sm_advanced_parameters.item_changed.connect(self.item_param_changed)
+        self.window.SymmetryAdvancedScrollArea.setWidget(sm_advanced_parameters)
 
         sym_simpl_widg = SymmetrySimplerParamTab()
         sym_simpl_widg.item_changed.connect(self.item_param_changed)
@@ -259,19 +246,17 @@ class MainObject(QObject):
                                       "only_one"  :None,
                                       "simple"    :sym_simpl_widg,
                                       "advanced"  :sm_advanced_parameters})
-        ########################################### scale parameters widget
+
+        #                                                       scale parameters widget
         cmd = {"nod_lst":"", "cmd_lst":["scale_params"]}
         lst_params = json_data_request(self.my_url, cmd)
-        if lst_params is not None:
-            lin_lst = format_utils.param_tree_2_lineal(lst_params)
-            par_def = lin_lst()
-            sc_advanced_parameters = AdvancedParameters()
-            sc_advanced_parameters.build_pars(par_def)
-            sc_advanced_parameters.item_changed.connect(self.item_param_changed)
-            self.window.ScaleAdvancedScrollArea.setWidget(sc_advanced_parameters)
 
-        else:
-            print("something went wrong with the list of parameters")
+        lin_lst = format_utils.param_tree_2_lineal(lst_params)
+        par_def = lin_lst()
+        sc_advanced_parameters = AdvancedParameters()
+        sc_advanced_parameters.build_pars(par_def)
+        sc_advanced_parameters.item_changed.connect(self.item_param_changed)
+        self.window.ScaleAdvancedScrollArea.setWidget(sc_advanced_parameters)
 
         scale_simpl_widg = ScaleSimplerParamTab()
         scale_simpl_widg.item_changed.connect(self.item_param_changed)
@@ -280,19 +265,17 @@ class MainObject(QObject):
                                       "only_one"  :None,
                                       "simple"    :scale_simpl_widg,
                                       "advanced"  :sc_advanced_parameters})
-        ########################################### combine experiments parameters widget
+
+        #                                           combine experiments parameters widget
         cmd = {"nod_lst":"", "cmd_lst":["combine_experiments_params"]}
         lst_params = json_data_request(self.my_url, cmd)
-        if lst_params is not None:
-            lin_lst = format_utils.param_tree_2_lineal(lst_params)
-            par_def = lin_lst()
-            ce_advanced_parameters = AdvancedParameters()
-            ce_advanced_parameters.build_pars(par_def)
-            ce_advanced_parameters.item_changed.connect(self.item_param_changed)
-            self.window.CombineAdvancedScrollArea.setWidget(ce_advanced_parameters)
 
-        else:
-            print("something went wrong with the list of parameters")
+        lin_lst = format_utils.param_tree_2_lineal(lst_params)
+        par_def = lin_lst()
+        ce_advanced_parameters = AdvancedParameters()
+        ce_advanced_parameters.build_pars(par_def)
+        ce_advanced_parameters.item_changed.connect(self.item_param_changed)
+        self.window.CombineAdvancedScrollArea.setWidget(ce_advanced_parameters)
 
         comb_simpl_widg = CombineExperimentSimplerParamTab()
         comb_simpl_widg.item_changed.connect(self.item_param_changed)
@@ -301,7 +284,8 @@ class MainObject(QObject):
                                       "only_one"  :None,
                                       "simple"    :comb_simpl_widg,
                                       "advanced"  :ce_advanced_parameters})
-        #################################################################################################
+        ##################################################################################
+
         self.window.incoming_text.setFont(QFont("Monospace"))
         self.tree_obj = format_utils.TreeShow()
         self.tree_scene = TreeDirScene(self)
