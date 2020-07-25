@@ -141,13 +141,9 @@ class MainObject(QObject):
                                       "only_one"  :None,
                                       "simple"    :find_simpl_widg,
                                       "advanced"  :fd_advanced_parameters})
+
         #                                                      index parameters widget
-        cmd = {"nod_lst":"", "cmd_lst":["index_params"]}
-        lst_params = json_data_request(uni_url, cmd)
-        lin_lst = format_utils.param_tree_2_lineal(lst_params)
-        par_def = lin_lst()
-        id_advanced_parameters = AdvancedParameters()
-        id_advanced_parameters.build_pars(par_def)
+        id_advanced_parameters = build_advanced_params_widget("index_params")
         id_advanced_parameters.item_changed.connect(self.item_param_changed)
         self.window.IndexAdvancedScrollArea.setWidget(id_advanced_parameters)
 
@@ -160,13 +156,7 @@ class MainObject(QObject):
                                       "advanced"  :id_advanced_parameters})
 
         #                                   refine bravais settings parameters widget
-        cmd = {"nod_lst":"", "cmd_lst":["refine_bravais_settings_params"]}
-        lst_params = json_data_request(uni_url, cmd)
-
-        lin_lst = format_utils.param_tree_2_lineal(lst_params)
-        par_def = lin_lst()
-        rb_advanced_parameters = AdvancedParameters()
-        rb_advanced_parameters.build_pars(par_def)
+        rb_advanced_parameters = build_advanced_params_widget("refine_bravais_settings_params")
         rb_advanced_parameters.item_changed.connect(self.item_param_changed)
         self.window.RefineBravaiAdvancedScrollArea.setWidget(rb_advanced_parameters)
 
@@ -182,7 +172,6 @@ class MainObject(QObject):
         full_json_path = "/scratch/dui_tst/X4_wide/dui_files/bravais_summary.json"
         r_index_widg = ReindexTable()
         r_index_widg.add_opts_lst(json_path=full_json_path)
-
         self.window.ReindexTableScrollArea.setWidget(r_index_widg)
         self.param_widget_lst.append({"main_cmd"  :"dials.import",
                                       "only_one"  :r_index_widg,
@@ -190,13 +179,7 @@ class MainObject(QObject):
                                       "advanced"  :None })
 
         #                                                  refine parameters widget
-        cmd = {"nod_lst":"", "cmd_lst":["refine_params"]}
-        lst_params = json_data_request(uni_url, cmd)
-
-        lin_lst = format_utils.param_tree_2_lineal(lst_params)
-        par_def = lin_lst()
-        rf_advanced_parameters = AdvancedParameters()
-        rf_advanced_parameters.build_pars(par_def)
+        rf_advanced_parameters = build_advanced_params_widget("refine_params")
         rf_advanced_parameters.item_changed.connect(self.item_param_changed)
         self.window.RefineAdvancedScrollArea.setWidget(rf_advanced_parameters)
 
@@ -209,13 +192,7 @@ class MainObject(QObject):
                                       "advanced"  :rf_advanced_parameters})
 
         #                                                integrate parameters widget
-        cmd = {"nod_lst":"", "cmd_lst":["integrate_params"]}
-        lst_params = json_data_request(uni_url, cmd)
-
-        lin_lst = format_utils.param_tree_2_lineal(lst_params)
-        par_def = lin_lst()
-        it_advanced_parameters = AdvancedParameters()
-        it_advanced_parameters.build_pars(par_def)
+        it_advanced_parameters = build_advanced_params_widget("integrate_params")
         it_advanced_parameters.item_changed.connect(self.item_param_changed)
         self.window.IntegrateAdvancedScrollArea.setWidget(it_advanced_parameters)
 
@@ -228,13 +205,7 @@ class MainObject(QObject):
                                       "advanced"  :it_advanced_parameters})
 
         #                                                  symmetry parameters widget
-        cmd = {"nod_lst":"", "cmd_lst":["symmetry_params"]}
-        lst_params = json_data_request(uni_url, cmd)
-
-        lin_lst = format_utils.param_tree_2_lineal(lst_params)
-        par_def = lin_lst()
-        sm_advanced_parameters = AdvancedParameters()
-        sm_advanced_parameters.build_pars(par_def)
+        sm_advanced_parameters = build_advanced_params_widget("symmetry_params")
         sm_advanced_parameters.item_changed.connect(self.item_param_changed)
         self.window.SymmetryAdvancedScrollArea.setWidget(sm_advanced_parameters)
 
@@ -247,13 +218,7 @@ class MainObject(QObject):
                                       "advanced"  :sm_advanced_parameters})
 
         #                                                       scale parameters widget
-        cmd = {"nod_lst":"", "cmd_lst":["scale_params"]}
-        lst_params = json_data_request(uni_url, cmd)
-
-        lin_lst = format_utils.param_tree_2_lineal(lst_params)
-        par_def = lin_lst()
-        sc_advanced_parameters = AdvancedParameters()
-        sc_advanced_parameters.build_pars(par_def)
+        sc_advanced_parameters = build_advanced_params_widget("scale_params")
         sc_advanced_parameters.item_changed.connect(self.item_param_changed)
         self.window.ScaleAdvancedScrollArea.setWidget(sc_advanced_parameters)
 
@@ -266,13 +231,7 @@ class MainObject(QObject):
                                       "advanced"  :sc_advanced_parameters})
 
         #                                           combine experiments parameters widget
-        cmd = {"nod_lst":"", "cmd_lst":["combine_experiments_params"]}
-        lst_params = json_data_request(uni_url, cmd)
-
-        lin_lst = format_utils.param_tree_2_lineal(lst_params)
-        par_def = lin_lst()
-        ce_advanced_parameters = AdvancedParameters()
-        ce_advanced_parameters.build_pars(par_def)
+        ce_advanced_parameters = build_advanced_params_widget("combine_experiments_params")
         ce_advanced_parameters.item_changed.connect(self.item_param_changed)
         self.window.CombineAdvancedScrollArea.setWidget(ce_advanced_parameters)
 
