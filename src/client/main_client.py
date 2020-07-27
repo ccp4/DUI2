@@ -202,43 +202,33 @@ class MainObject(QObject):
                               "scale" : {"main_cmd"  :"dials.scale"},
                               "combine_experiments" : {"main_cmd"  :"dials.combine_experiments"}}
 
-        self.param_widgets["import"]["only_one"] = imp_widg
-        self.param_widgets["import"]["simple"] = None
+        self.param_widgets["import"]["simple"] = imp_widg
         self.param_widgets["import"]["advanced"] = None
 
-        self.param_widgets["find_spots"]["only_one"] = None
         self.param_widgets["find_spots"]["simple"] = find_simpl_widg
         self.param_widgets["find_spots"]["advanced"] = fd_advanced_parameters
 
-        self.param_widgets["index"]["only_one"] = None
         self.param_widgets["index"]["simple"] = index_simpl_widg
         self.param_widgets["index"]["advanced"] = id_advanced_parameters
 
-        self.param_widgets["refine_bravais_settings"]["only_one"] = None
         self.param_widgets["refine_bravais_settings"]["simple"] = refi_brv_simpl_widg
         self.param_widgets["refine_bravais_settings"]["advanced"] = rb_advanced_parameters
 
-        self.param_widgets["reindex"]["only_one"] = r_index_widg
-        self.param_widgets["reindex"]["simple"] = None
+        self.param_widgets["reindex"]["simple"] = r_index_widg
         self.param_widgets["reindex"]["advanced"] = None
 
-        self.param_widgets["refine"]["only_one"] = None
         self.param_widgets["refine"]["simple"] = ref_simpl_widg
         self.param_widgets["refine"]["advanced"] = rf_advanced_parameters
 
-        self.param_widgets["integrate"]["only_one"] = None
         self.param_widgets["integrate"]["simple"] = integr_simpl_widg
         self.param_widgets["integrate"]["advanced"] = it_advanced_parameters
 
-        self.param_widgets["symmetry"]["only_one"] = None
         self.param_widgets["symmetry"]["simple"] = sym_simpl_widg
         self.param_widgets["symmetry"]["advanced"] = sm_advanced_parameters
 
-        self.param_widgets["scale"]["only_one"] = None
         self.param_widgets["scale"]["simple"] = scale_simpl_widg
         self.param_widgets["scale"]["advanced"] = sc_advanced_parameters
 
-        self.param_widgets["combine_experiments"]["only_one"] = None
         self.param_widgets["combine_experiments"]["simple"] = comb_simpl_widg
         self.param_widgets["combine_experiments"]["advanced"] = ce_advanced_parameters
 
@@ -250,8 +240,8 @@ class MainObject(QObject):
             "reindex",
             "refine",
             "integrate",
-            "scale",
             "symmetry",
+            "scale",
             "combine_experiments",
         ]
 
@@ -343,12 +333,11 @@ class MainObject(QObject):
     def reset_param(self):
         print("reset_param")
         str_key = self.tmp_lst_key[self.current_params_widget]
+        self.param_widgets[str_key]["simple"].reset_pars()
         try:
-            self.param_widgets[str_key]["only_one"].reset_pars()
-
-        except AttributeError:
             self.param_widgets[str_key]["advanced"].reset_pars()
-            self.param_widgets[str_key]["simple"].reset_pars()
+        except AttributeError:
+            print("No advanced pars")
 
         self.params2run = []
 
