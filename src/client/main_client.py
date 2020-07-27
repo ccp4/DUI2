@@ -160,6 +160,7 @@ def build_advanced_params_widget(cmd_str):
     return advanced_parameters
 
 
+
 class MainObject(QObject):
     def __init__(self, parent = None):
         super(MainObject, self).__init__(parent)
@@ -282,7 +283,7 @@ class MainObject(QObject):
         self.tree_scene = TreeDirScene(self)
         self.window.treeView.setScene(self.tree_scene)
 
-        self.window.Next2RunLayout.addWidget(QLabel("teeeeeeest"))
+        self.window.Next2RunLayout.addWidget(QLabel("                  . . . .      "))
 
         self.current_next_buttons = 0
         self.current_params_widget = 0
@@ -300,6 +301,17 @@ class MainObject(QObject):
         self.window.Reset2DefaultPushButton.clicked.connect(self.reset_param)
         self.tree_scene.draw_tree_graph([])
         self.window.show()
+
+    def clearLayout(self, layout):
+        if layout is not None:
+            while layout.count():
+                item = layout.takeAt(0)
+                widget = item.widget()
+                if widget is not None:
+                    widget.deleteLater()
+
+                else:
+                    self.clearLayout(item.layout())
 
     def on_node_click(self, nod_num):
         print("clicked node number ", nod_num)
@@ -382,6 +394,13 @@ class MainObject(QObject):
 
         self.window.StackedParamsWidget.setCurrentIndex(self.current_params_widget)
         self.params2run = []
+
+        self.clearLayout(self.window.Next2RunLayout)
+
+        str_key = self.tmp_lst_key[self.current_params_widget]
+        for bt_labl in self.param_widgets[str_key]["nxt_widg_lst"]:
+            self.window.Next2RunLayout.addWidget(QLabel(" ..." + bt_labl + "... "))
+
 
 if __name__ == "__main__":
     QCoreApplication.setAttribute(Qt.AA_ShareOpenGLContexts)
