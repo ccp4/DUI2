@@ -120,15 +120,15 @@ class MainObject(QObject):
         ui_path = os.path.dirname(os.path.abspath(__file__))
         ui_path += os.sep + "client.ui"
         self.window = QtUiTools.QUiLoader().load(ui_path)
-        self.param_widget_lst = []
+        self.param_widgets = {}
         #                                                     import parameters widget
         imp_widg = ImportWidget()
         imp_widg.item_changed.connect(self.item_param_changed)
         self.window.ImportScrollArea.setWidget(imp_widg)
-        self.param_widget_lst.append({"main_cmd"  :"dials.import",
+        self.param_widgets["import"] = {"main_cmd"  :"dials.import",
                                       "only_one"  :imp_widg,
                                       "simple"    :None,
-                                      "advanced"  :None })
+                                      "advanced"  :None }
         #                                                 find spots parameters widget
         fd_advanced_parameters = build_advanced_params_widget("find_spots_params")
         fd_advanced_parameters.item_changed.connect(self.item_param_changed)
@@ -137,10 +137,10 @@ class MainObject(QObject):
         find_simpl_widg = FindspotsSimplerParameterTab()
         find_simpl_widg.item_changed.connect(self.item_param_changed)
         self.window.FindspotsSimplerScrollArea.setWidget(find_simpl_widg)
-        self.param_widget_lst.append({"main_cmd"  :"dials.find_spots",
+        self.param_widgets["find_spots"] = {"main_cmd"  :"dials.find_spots",
                                       "only_one"  :None,
                                       "simple"    :find_simpl_widg,
-                                      "advanced"  :fd_advanced_parameters})
+                                      "advanced"  :fd_advanced_parameters}
 
         #                                                      index parameters widget
         id_advanced_parameters = build_advanced_params_widget("index_params")
@@ -150,10 +150,10 @@ class MainObject(QObject):
         index_simpl_widg = IndexSimplerParamTab()
         index_simpl_widg.item_changed.connect(self.item_param_changed)
         self.window.IndexSimplerScrollArea.setWidget(index_simpl_widg)
-        self.param_widget_lst.append({"main_cmd"  :"dials.index",
+        self.param_widgets["index"] = {"main_cmd"  :"dials.index",
                                       "only_one"  :None,
                                       "simple"    :index_simpl_widg,
-                                      "advanced"  :id_advanced_parameters})
+                                      "advanced"  :id_advanced_parameters}
 
         #                                   refine bravais settings parameters widget
         rb_advanced_parameters = build_advanced_params_widget("refine_bravais_settings_params")
@@ -163,20 +163,20 @@ class MainObject(QObject):
         refi_brv_simpl_widg = RefineBravaiSimplerParamTab()
         refi_brv_simpl_widg.item_changed.connect(self.item_param_changed)
         self.window.RefineBravaiSimplerScrollArea.setWidget(refi_brv_simpl_widg)
-        self.param_widget_lst.append({"main_cmd"  :"dials.refine_bravais_settings",
+        self.param_widgets["refine_bravais_settings"] = {"main_cmd"  :"dials.refine_bravais_settings",
                                       "only_one"  :None,
                                       "simple"    :refi_brv_simpl_widg,
-                                      "advanced"  :rb_advanced_parameters})
+                                      "advanced"  :rb_advanced_parameters}
 
         #                                                 re-index parameters widget
         full_json_path = "/scratch/dui_tst/X4_wide/dui_files/bravais_summary.json"
         r_index_widg = ReindexTable()
         r_index_widg.add_opts_lst(json_path=full_json_path)
         self.window.ReindexTableScrollArea.setWidget(r_index_widg)
-        self.param_widget_lst.append({"main_cmd"  :"dials.import",
+        self.param_widgets["reindex"] = {"main_cmd"  :"dials.reindex",
                                       "only_one"  :r_index_widg,
                                       "simple"    :None,
-                                      "advanced"  :None })
+                                      "advanced"  :None }
 
         #                                                  refine parameters widget
         rf_advanced_parameters = build_advanced_params_widget("refine_params")
@@ -186,10 +186,10 @@ class MainObject(QObject):
         ref_simpl_widg = RefineSimplerParamTab()
         ref_simpl_widg.item_changed.connect(self.item_param_changed)
         self.window.RefineSimplerScrollArea.setWidget(ref_simpl_widg)
-        self.param_widget_lst.append({"main_cmd"  :"dials.refine",
+        self.param_widgets["refine"] = {"main_cmd"  :"dials.refine",
                                       "only_one"  :None,
                                       "simple"    :ref_simpl_widg,
-                                      "advanced"  :rf_advanced_parameters})
+                                      "advanced"  :rf_advanced_parameters}
 
         #                                                integrate parameters widget
         it_advanced_parameters = build_advanced_params_widget("integrate_params")
@@ -199,10 +199,10 @@ class MainObject(QObject):
         integr_simpl_widg = IntegrateSimplerParamTab()
         integr_simpl_widg.item_changed.connect(self.item_param_changed)
         self.window.IntegrateSimplerScrollArea.setWidget(integr_simpl_widg)
-        self.param_widget_lst.append({"main_cmd"  :"dials.integrate",
+        self.param_widgets["integrate"] = {"main_cmd"  :"dials.integrate",
                                       "only_one"  :None,
                                       "simple"    :integr_simpl_widg,
-                                      "advanced"  :it_advanced_parameters})
+                                      "advanced"  :it_advanced_parameters}
 
         #                                                  symmetry parameters widget
         sm_advanced_parameters = build_advanced_params_widget("symmetry_params")
@@ -212,10 +212,10 @@ class MainObject(QObject):
         sym_simpl_widg = SymmetrySimplerParamTab()
         sym_simpl_widg.item_changed.connect(self.item_param_changed)
         self.window.SymmetrySimplerScrollArea.setWidget(sym_simpl_widg)
-        self.param_widget_lst.append({"main_cmd"  :"dials.symmetry",
+        self.param_widgets["symmetry"] = {"main_cmd"  :"dials.symmetry",
                                       "only_one"  :None,
                                       "simple"    :sym_simpl_widg,
-                                      "advanced"  :sm_advanced_parameters})
+                                      "advanced"  :sm_advanced_parameters}
 
         #                                                       scale parameters widget
         sc_advanced_parameters = build_advanced_params_widget("scale_params")
@@ -225,10 +225,10 @@ class MainObject(QObject):
         scale_simpl_widg = ScaleSimplerParamTab()
         scale_simpl_widg.item_changed.connect(self.item_param_changed)
         self.window.ScaleSimplerScrollArea.setWidget(scale_simpl_widg)
-        self.param_widget_lst.append({"main_cmd"  :"dials.scale",
+        self.param_widgets["scale"] = {"main_cmd"  :"dials.scale",
                                       "only_one"  :None,
                                       "simple"    :scale_simpl_widg,
-                                      "advanced"  :sc_advanced_parameters})
+                                      "advanced"  :sc_advanced_parameters}
 
         #                                           combine experiments parameters widget
         ce_advanced_parameters = build_advanced_params_widget("combine_experiments_params")
@@ -238,11 +238,23 @@ class MainObject(QObject):
         comb_simpl_widg = CombineExperimentSimplerParamTab()
         comb_simpl_widg.item_changed.connect(self.item_param_changed)
         self.window.CombineSimplerScrollArea.setWidget(comb_simpl_widg)
-        self.param_widget_lst.append({"main_cmd"  :"dials.combine_experiments",
+        self.param_widgets["combine_experiments"] = {"main_cmd"  :"dials.combine_experiments",
                                       "only_one"  :None,
                                       "simple"    :comb_simpl_widg,
-                                      "advanced"  :ce_advanced_parameters})
+                                      "advanced"  :ce_advanced_parameters}
         ##################################################################################
+        self.tmp_lst_key = [
+            "import",
+            "find_spots",
+            "index",
+            "refine_bravais_settings",
+            "reindex",
+            "refine",
+            "integrate",
+            "scale",
+            "symmetry",
+            "combine_experiments",
+        ]
 
         self.window.incoming_text.setFont(QFont("Monospace"))
         self.tree_obj = format_utils.TreeShow()
@@ -282,7 +294,8 @@ class MainObject(QObject):
         print("item paran changed")
         print("str_path, str_value: ", str_path, str_value)
         self.params2run.append(str_path + "=" + str_value)
-        cmd2run = self.param_widget_lst[self.current_params_widget]["main_cmd"]
+        str_key = self.tmp_lst_key[self.current_params_widget]
+        cmd2run = self.param_widgets[str_key]["main_cmd"]
         for sinlge_param in self.params2run:
             cmd2run = cmd2run + " " + sinlge_param
 
@@ -292,14 +305,13 @@ class MainObject(QObject):
     def request_launch(self):
         cmd_str = str(self.window.CmdEdit.text())
         self.params2run = []
+        self.window.CmdEdit.clear()
         print("cmd_str", cmd_str)
         nod_str = str(self.window.NumLinLst.text())
         nod_lst = nod_str.split(" ")
+        self.window.NumLinLst.clear()
         print("nod_lst", nod_lst)
         cmd = {"nod_lst":nod_lst, "cmd_lst":[cmd_str]}
-
-        self.window.NumLinLst.clear()
-        self.window.CmdEdit.clear()
 
         try:
             req_get = requests.get(uni_url, stream = True, params = cmd)
@@ -331,12 +343,13 @@ class MainObject(QObject):
 
     def reset_param(self):
         print("reset_param")
+        str_key = self.tmp_lst_key[self.current_params_widget]
         try:
-            self.param_widget_lst[self.current_params_widget]["only_one"].reset_pars()
+            self.param_widgets[str_key]["only_one"].reset_pars()
 
         except AttributeError:
-            self.param_widget_lst[self.current_params_widget]["advanced"].reset_pars()
-            self.param_widget_lst[self.current_params_widget]["simple"].reset_pars()
+            self.param_widgets[str_key]["advanced"].reset_pars()
+            self.param_widgets[str_key]["simple"].reset_pars()
 
     def next_params_widget(self):
         self.current_params_widget += 1
