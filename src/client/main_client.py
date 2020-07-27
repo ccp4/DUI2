@@ -104,6 +104,8 @@ class Run_n_Output(QThread):
                 print('>>  /*EOF*/  <<')
                 self.line_out.emit(' \n /*EOF*/ \n')
                 break
+
+
 def build_advanced_params_widget(cmd_str):
     cmd = {"nod_lst":"", "cmd_lst":[cmd_str]}
     lst_params = json_data_request(uni_url, cmd)
@@ -120,129 +122,117 @@ class MainObject(QObject):
         ui_path = os.path.dirname(os.path.abspath(__file__))
         ui_path += os.sep + "client.ui"
         self.window = QtUiTools.QUiLoader().load(ui_path)
-        self.param_widgets = {}
-        #                                                     import parameters widget
+
+        #############################################################################################
+        #############################################################################################
         imp_widg = ImportWidget()
         imp_widg.item_changed.connect(self.item_param_changed)
         self.window.ImportScrollArea.setWidget(imp_widg)
-        self.param_widgets["import"] = {"main_cmd"  :"dials.import",
-                                      "only_one"  :imp_widg,
-                                      "simple"    :None,
-                                      "advanced"  :None }
-        #                                                 find spots parameters widget
-        fd_advanced_parameters = build_advanced_params_widget("find_spots_params")
-        fd_advanced_parameters.item_changed.connect(self.item_param_changed)
-        self.window.FindspotsAdvancedScrollArea.setWidget(fd_advanced_parameters)
 
         find_simpl_widg = FindspotsSimplerParameterTab()
         find_simpl_widg.item_changed.connect(self.item_param_changed)
         self.window.FindspotsSimplerScrollArea.setWidget(find_simpl_widg)
-        self.param_widgets["find_spots"] = {"main_cmd"  :"dials.find_spots",
-                                      "only_one"  :None,
-                                      "simple"    :find_simpl_widg,
-                                      "advanced"  :fd_advanced_parameters}
-
-        #                                                      index parameters widget
-        id_advanced_parameters = build_advanced_params_widget("index_params")
-        id_advanced_parameters.item_changed.connect(self.item_param_changed)
-        self.window.IndexAdvancedScrollArea.setWidget(id_advanced_parameters)
+        fd_advanced_parameters = build_advanced_params_widget("find_spots_params")
+        fd_advanced_parameters.item_changed.connect(self.item_param_changed)
+        self.window.FindspotsAdvancedScrollArea.setWidget(fd_advanced_parameters)
 
         index_simpl_widg = IndexSimplerParamTab()
         index_simpl_widg.item_changed.connect(self.item_param_changed)
         self.window.IndexSimplerScrollArea.setWidget(index_simpl_widg)
-        self.param_widgets["index"] = {"main_cmd"  :"dials.index",
-                                      "only_one"  :None,
-                                      "simple"    :index_simpl_widg,
-                                      "advanced"  :id_advanced_parameters}
-
-        #                                   refine bravais settings parameters widget
-        rb_advanced_parameters = build_advanced_params_widget("refine_bravais_settings_params")
-        rb_advanced_parameters.item_changed.connect(self.item_param_changed)
-        self.window.RefineBravaiAdvancedScrollArea.setWidget(rb_advanced_parameters)
+        id_advanced_parameters = build_advanced_params_widget("index_params")
+        id_advanced_parameters.item_changed.connect(self.item_param_changed)
+        self.window.IndexAdvancedScrollArea.setWidget(id_advanced_parameters)
 
         refi_brv_simpl_widg = RefineBravaiSimplerParamTab()
         refi_brv_simpl_widg.item_changed.connect(self.item_param_changed)
         self.window.RefineBravaiSimplerScrollArea.setWidget(refi_brv_simpl_widg)
-        self.param_widgets["refine_bravais_settings"] = {"main_cmd"  :"dials.refine_bravais_settings",
-                                      "only_one"  :None,
-                                      "simple"    :refi_brv_simpl_widg,
-                                      "advanced"  :rb_advanced_parameters}
+        rb_advanced_parameters = build_advanced_params_widget("refine_bravais_settings_params")
+        rb_advanced_parameters.item_changed.connect(self.item_param_changed)
+        self.window.RefineBravaiAdvancedScrollArea.setWidget(rb_advanced_parameters)
 
-        #                                                 re-index parameters widget
         full_json_path = "/scratch/dui_tst/X4_wide/dui_files/bravais_summary.json"
         r_index_widg = ReindexTable()
         r_index_widg.add_opts_lst(json_path=full_json_path)
         self.window.ReindexTableScrollArea.setWidget(r_index_widg)
-        self.param_widgets["reindex"] = {"main_cmd"  :"dials.reindex",
-                                      "only_one"  :r_index_widg,
-                                      "simple"    :None,
-                                      "advanced"  :None }
-
-        #                                                  refine parameters widget
-        rf_advanced_parameters = build_advanced_params_widget("refine_params")
-        rf_advanced_parameters.item_changed.connect(self.item_param_changed)
-        self.window.RefineAdvancedScrollArea.setWidget(rf_advanced_parameters)
 
         ref_simpl_widg = RefineSimplerParamTab()
         ref_simpl_widg.item_changed.connect(self.item_param_changed)
         self.window.RefineSimplerScrollArea.setWidget(ref_simpl_widg)
-        self.param_widgets["refine"] = {"main_cmd"  :"dials.refine",
-                                      "only_one"  :None,
-                                      "simple"    :ref_simpl_widg,
-                                      "advanced"  :rf_advanced_parameters}
-
-        #                                                integrate parameters widget
-        it_advanced_parameters = build_advanced_params_widget("integrate_params")
-        it_advanced_parameters.item_changed.connect(self.item_param_changed)
-        self.window.IntegrateAdvancedScrollArea.setWidget(it_advanced_parameters)
+        rf_advanced_parameters = build_advanced_params_widget("refine_params")
+        rf_advanced_parameters.item_changed.connect(self.item_param_changed)
+        self.window.RefineAdvancedScrollArea.setWidget(rf_advanced_parameters)
 
         integr_simpl_widg = IntegrateSimplerParamTab()
         integr_simpl_widg.item_changed.connect(self.item_param_changed)
         self.window.IntegrateSimplerScrollArea.setWidget(integr_simpl_widg)
-        self.param_widgets["integrate"] = {"main_cmd"  :"dials.integrate",
-                                      "only_one"  :None,
-                                      "simple"    :integr_simpl_widg,
-                                      "advanced"  :it_advanced_parameters}
-
-        #                                                  symmetry parameters widget
-        sm_advanced_parameters = build_advanced_params_widget("symmetry_params")
-        sm_advanced_parameters.item_changed.connect(self.item_param_changed)
-        self.window.SymmetryAdvancedScrollArea.setWidget(sm_advanced_parameters)
+        it_advanced_parameters = build_advanced_params_widget("integrate_params")
+        it_advanced_parameters.item_changed.connect(self.item_param_changed)
+        self.window.IntegrateAdvancedScrollArea.setWidget(it_advanced_parameters)
 
         sym_simpl_widg = SymmetrySimplerParamTab()
         sym_simpl_widg.item_changed.connect(self.item_param_changed)
         self.window.SymmetrySimplerScrollArea.setWidget(sym_simpl_widg)
-        self.param_widgets["symmetry"] = {"main_cmd"  :"dials.symmetry",
-                                      "only_one"  :None,
-                                      "simple"    :sym_simpl_widg,
-                                      "advanced"  :sm_advanced_parameters}
-
-        #                                                       scale parameters widget
-        sc_advanced_parameters = build_advanced_params_widget("scale_params")
-        sc_advanced_parameters.item_changed.connect(self.item_param_changed)
-        self.window.ScaleAdvancedScrollArea.setWidget(sc_advanced_parameters)
+        sm_advanced_parameters = build_advanced_params_widget("symmetry_params")
+        sm_advanced_parameters.item_changed.connect(self.item_param_changed)
+        self.window.SymmetryAdvancedScrollArea.setWidget(sm_advanced_parameters)
 
         scale_simpl_widg = ScaleSimplerParamTab()
         scale_simpl_widg.item_changed.connect(self.item_param_changed)
         self.window.ScaleSimplerScrollArea.setWidget(scale_simpl_widg)
-        self.param_widgets["scale"] = {"main_cmd"  :"dials.scale",
-                                      "only_one"  :None,
-                                      "simple"    :scale_simpl_widg,
-                                      "advanced"  :sc_advanced_parameters}
-
-        #                                           combine experiments parameters widget
-        ce_advanced_parameters = build_advanced_params_widget("combine_experiments_params")
-        ce_advanced_parameters.item_changed.connect(self.item_param_changed)
-        self.window.CombineAdvancedScrollArea.setWidget(ce_advanced_parameters)
+        sc_advanced_parameters = build_advanced_params_widget("scale_params")
+        sc_advanced_parameters.item_changed.connect(self.item_param_changed)
+        self.window.ScaleAdvancedScrollArea.setWidget(sc_advanced_parameters)
 
         comb_simpl_widg = CombineExperimentSimplerParamTab()
         comb_simpl_widg.item_changed.connect(self.item_param_changed)
         self.window.CombineSimplerScrollArea.setWidget(comb_simpl_widg)
+        ce_advanced_parameters = build_advanced_params_widget("combine_experiments_params")
+        ce_advanced_parameters.item_changed.connect(self.item_param_changed)
+        self.window.CombineAdvancedScrollArea.setWidget(ce_advanced_parameters)
+
+        #############################################################################################
+        #############################################################################################
+        self.param_widgets = {}
+        self.param_widgets["import"] = {"main_cmd"  :"dials.import",
+                                      "only_one"  :imp_widg,
+                                      "simple"    :None,
+                                      "advanced"  :None }
+        self.param_widgets["find_spots"] = {"main_cmd"  :"dials.find_spots",
+                                      "only_one"  :None,
+                                      "simple"    :find_simpl_widg,
+                                      "advanced"  :fd_advanced_parameters}
+        self.param_widgets["index"] = {"main_cmd"  :"dials.index",
+                                      "only_one"  :None,
+                                      "simple"    :index_simpl_widg,
+                                      "advanced"  :id_advanced_parameters}
+        self.param_widgets["refine_bravais_settings"] = {"main_cmd"  :"dials.refine_bravais_settings",
+                                      "only_one"  :None,
+                                      "simple"    :refi_brv_simpl_widg,
+                                      "advanced"  :rb_advanced_parameters}
+        self.param_widgets["reindex"] = {"main_cmd"  :"dials.reindex",
+                                      "only_one"  :r_index_widg,
+                                      "simple"    :None,
+                                      "advanced"  :None }
+        self.param_widgets["refine"] = {"main_cmd"  :"dials.refine",
+                                      "only_one"  :None,
+                                      "simple"    :ref_simpl_widg,
+                                      "advanced"  :rf_advanced_parameters}
+        self.param_widgets["integrate"] = {"main_cmd"  :"dials.integrate",
+                                      "only_one"  :None,
+                                      "simple"    :integr_simpl_widg,
+                                      "advanced"  :it_advanced_parameters}
+        self.param_widgets["symmetry"] = {"main_cmd"  :"dials.symmetry",
+                                      "only_one"  :None,
+                                      "simple"    :sym_simpl_widg,
+                                      "advanced"  :sm_advanced_parameters}
+        self.param_widgets["scale"] = {"main_cmd"  :"dials.scale",
+                                      "only_one"  :None,
+                                      "simple"    :scale_simpl_widg,
+                                      "advanced"  :sc_advanced_parameters}
         self.param_widgets["combine_experiments"] = {"main_cmd"  :"dials.combine_experiments",
                                       "only_one"  :None,
                                       "simple"    :comb_simpl_widg,
                                       "advanced"  :ce_advanced_parameters}
-        ##################################################################################
         self.tmp_lst_key = [
             "import",
             "find_spots",
@@ -351,12 +341,15 @@ class MainObject(QObject):
             self.param_widgets[str_key]["advanced"].reset_pars()
             self.param_widgets[str_key]["simple"].reset_pars()
 
+        self.params2run = []
+
     def next_params_widget(self):
         self.current_params_widget += 1
         if self.current_params_widget >= self.window.StackedParamsWidget.count():
             self.current_params_widget = 0
 
         self.window.StackedParamsWidget.setCurrentIndex(self.current_params_widget)
+        self.params2run = []
 
 if __name__ == "__main__":
     QCoreApplication.setAttribute(Qt.AA_ShareOpenGLContexts)
