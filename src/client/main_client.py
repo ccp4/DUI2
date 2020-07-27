@@ -368,7 +368,6 @@ class MainObject(QObject):
         except requests.exceptions.RequestException:
             print("something went wrong with the request launch")
 
-
     def request_display(self):
         cmd = {"nod_lst":"", "cmd_lst":["display"]}
         lst_nodes = json_data_request(uni_url, cmd)
@@ -403,15 +402,14 @@ class MainObject(QObject):
             self.current_params_widget = 0
 
         str_key = self.tmp_lst_key[self.current_params_widget]
-
-        self.window.StackedParamsWidget.setCurrentWidget(self.param_widgets[str_key]["main_page"])
-        #self.window.StackedParamsWidget.setCurrentIndex(self.current_params_widget)
-        self.params2run = []
-
+        self.window.StackedParamsWidget.setCurrentWidget(
+            self.param_widgets[str_key]["main_page"]
+        )
         self.clearLayout(self.window.Next2RunLayout)
-
         for bt_labl in self.param_widgets[str_key]["nxt_widg_lst"]:
             self.window.Next2RunLayout.addWidget(QLabel(" ..." + bt_labl + "... "))
+
+        self.params2run = []
 
 
 if __name__ == "__main__":
