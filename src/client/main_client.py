@@ -294,10 +294,12 @@ class MainObject(QObject):
         self.params2run = []
         print("cmd_str", cmd_str)
         nod_str = str(self.window.NumLinLst.text())
-        self.window.NumLinLst.clear()
         nod_lst = nod_str.split(" ")
         print("nod_lst", nod_lst)
         cmd = {"nod_lst":nod_lst, "cmd_lst":[cmd_str]}
+
+        self.window.NumLinLst.clear()
+        self.window.CmdEdit.clear()
 
         try:
             req_get = requests.get(uni_url, stream = True, params = cmd)
