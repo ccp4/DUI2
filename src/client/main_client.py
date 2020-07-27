@@ -191,48 +191,57 @@ class MainObject(QObject):
         self.window.CombineAdvancedScrollArea.setWidget(ce_advanced_parameters)
 
         #############################################################################################
-        #############################################################################################
-        self.param_widgets = {}
-        self.param_widgets["import"] = {"main_cmd"  :"dials.import",
-                                      "only_one"  :imp_widg,
-                                      "simple"    :None,
-                                      "advanced"  :None }
-        self.param_widgets["find_spots"] = {"main_cmd"  :"dials.find_spots",
-                                      "only_one"  :None,
-                                      "simple"    :find_simpl_widg,
-                                      "advanced"  :fd_advanced_parameters}
-        self.param_widgets["index"] = {"main_cmd"  :"dials.index",
-                                      "only_one"  :None,
-                                      "simple"    :index_simpl_widg,
-                                      "advanced"  :id_advanced_parameters}
-        self.param_widgets["refine_bravais_settings"] = {"main_cmd"  :"dials.refine_bravais_settings",
-                                      "only_one"  :None,
-                                      "simple"    :refi_brv_simpl_widg,
-                                      "advanced"  :rb_advanced_parameters}
-        self.param_widgets["reindex"] = {"main_cmd"  :"dials.reindex",
-                                      "only_one"  :r_index_widg,
-                                      "simple"    :None,
-                                      "advanced"  :None }
-        self.param_widgets["refine"] = {"main_cmd"  :"dials.refine",
-                                      "only_one"  :None,
-                                      "simple"    :ref_simpl_widg,
-                                      "advanced"  :rf_advanced_parameters}
-        self.param_widgets["integrate"] = {"main_cmd"  :"dials.integrate",
-                                      "only_one"  :None,
-                                      "simple"    :integr_simpl_widg,
-                                      "advanced"  :it_advanced_parameters}
-        self.param_widgets["symmetry"] = {"main_cmd"  :"dials.symmetry",
-                                      "only_one"  :None,
-                                      "simple"    :sym_simpl_widg,
-                                      "advanced"  :sm_advanced_parameters}
-        self.param_widgets["scale"] = {"main_cmd"  :"dials.scale",
-                                      "only_one"  :None,
-                                      "simple"    :scale_simpl_widg,
-                                      "advanced"  :sc_advanced_parameters}
-        self.param_widgets["combine_experiments"] = {"main_cmd"  :"dials.combine_experiments",
-                                      "only_one"  :None,
-                                      "simple"    :comb_simpl_widg,
-                                      "advanced"  :ce_advanced_parameters}
+        self.param_widgets = {"import" : {"main_cmd"  :"dials.import"},
+                              "find_spots" : {"main_cmd"  :"dials.find_spots"},
+                              "index" : {"main_cmd"  :"dials.index"},
+                              "refine_bravais_settings" : {"main_cmd"  :"dials.refine_bravais_settings"},
+                              "reindex" : {"main_cmd"  :"dials.reindex"},
+                              "refine" : {"main_cmd"  :"dials.refine"},
+                              "integrate" : {"main_cmd"  :"dials.integrate"},
+                              "symmetry" : {"main_cmd"  :"dials.symmetry"},
+                              "scale" : {"main_cmd"  :"dials.scale"},
+                              "combine_experiments" : {"main_cmd"  :"dials.combine_experiments"}}
+
+        self.param_widgets["import"]["only_one"] = imp_widg
+        self.param_widgets["import"]["simple"] = None
+        self.param_widgets["import"]["advanced"] = None
+
+        self.param_widgets["find_spots"]["only_one"] = None
+        self.param_widgets["find_spots"]["simple"] = find_simpl_widg
+        self.param_widgets["find_spots"]["advanced"] = fd_advanced_parameters
+
+        self.param_widgets["index"]["only_one"] = None
+        self.param_widgets["index"]["simple"] = index_simpl_widg
+        self.param_widgets["index"]["advanced"] = id_advanced_parameters
+
+        self.param_widgets["refine_bravais_settings"]["only_one"] = None
+        self.param_widgets["refine_bravais_settings"]["simple"] = refi_brv_simpl_widg
+        self.param_widgets["refine_bravais_settings"]["advanced"] = rb_advanced_parameters
+
+        self.param_widgets["reindex"]["only_one"] = r_index_widg
+        self.param_widgets["reindex"]["simple"] = None
+        self.param_widgets["reindex"]["advanced"] = None
+
+        self.param_widgets["refine"]["only_one"] = None
+        self.param_widgets["refine"]["simple"] = ref_simpl_widg
+        self.param_widgets["refine"]["advanced"] = rf_advanced_parameters
+
+        self.param_widgets["integrate"]["only_one"] = None
+        self.param_widgets["integrate"]["simple"] = integr_simpl_widg
+        self.param_widgets["integrate"]["advanced"] = it_advanced_parameters
+
+        self.param_widgets["symmetry"]["only_one"] = None
+        self.param_widgets["symmetry"]["simple"] = sym_simpl_widg
+        self.param_widgets["symmetry"]["advanced"] = sm_advanced_parameters
+
+        self.param_widgets["scale"]["only_one"] = None
+        self.param_widgets["scale"]["simple"] = scale_simpl_widg
+        self.param_widgets["scale"]["advanced"] = sc_advanced_parameters
+
+        self.param_widgets["combine_experiments"]["only_one"] = None
+        self.param_widgets["combine_experiments"]["simple"] = comb_simpl_widg
+        self.param_widgets["combine_experiments"]["advanced"] = ce_advanced_parameters
+
         self.tmp_lst_key = [
             "import",
             "find_spots",
