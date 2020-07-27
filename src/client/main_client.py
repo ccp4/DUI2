@@ -237,33 +237,43 @@ class MainObject(QObject):
 
         self.param_widgets["import"]["simple"] = imp_widg
         self.param_widgets["import"]["advanced"] = None
+        self.param_widgets["import"]["main_page"] = self.window.ImportPage
 
         self.param_widgets["find_spots"]["simple"] = find_simpl_widg
         self.param_widgets["find_spots"]["advanced"] = fd_advanced_parameters
+        self.param_widgets["find_spots"]["main_page"] = self.window.FindspotsPage
 
         self.param_widgets["index"]["simple"] = index_simpl_widg
         self.param_widgets["index"]["advanced"] = id_advanced_parameters
+        self.param_widgets["index"]["main_page"] = self.window.IndexPage
 
         self.param_widgets["refine_bravais_settings"]["simple"] = refi_brv_simpl_widg
         self.param_widgets["refine_bravais_settings"]["advanced"] = rb_advanced_parameters
+        self.param_widgets["refine_bravais_settings"]["main_page"] = self.window.RefinBrabPage
 
         self.param_widgets["reindex"]["simple"] = r_index_widg
         self.param_widgets["reindex"]["advanced"] = None
+        self.param_widgets["reindex"]["main_page"] = self.window.ReindexPage
 
         self.param_widgets["refine"]["simple"] = ref_simpl_widg
         self.param_widgets["refine"]["advanced"] = rf_advanced_parameters
+        self.param_widgets["refine"]["main_page"] = self.window.RefinePage
 
         self.param_widgets["integrate"]["simple"] = integr_simpl_widg
         self.param_widgets["integrate"]["advanced"] = it_advanced_parameters
+        self.param_widgets["integrate"]["main_page"] = self.window.IntegratePage
 
         self.param_widgets["symmetry"]["simple"] = sym_simpl_widg
         self.param_widgets["symmetry"]["advanced"] = sm_advanced_parameters
+        self.param_widgets["symmetry"]["main_page"] = self.window.SimmetryPage
 
         self.param_widgets["scale"]["simple"] = scale_simpl_widg
         self.param_widgets["scale"]["advanced"] = sc_advanced_parameters
+        self.param_widgets["scale"]["main_page"] = self.window.ScalePage
 
         self.param_widgets["combine_experiments"]["simple"] = comb_simpl_widg
         self.param_widgets["combine_experiments"]["advanced"] = ce_advanced_parameters
+        self.param_widgets["combine_experiments"]["main_page"] = self.window.CombinePage
 
         self.tmp_lst_key = [
             "import",
@@ -392,12 +402,14 @@ class MainObject(QObject):
         if self.current_params_widget >= self.window.StackedParamsWidget.count():
             self.current_params_widget = 0
 
-        self.window.StackedParamsWidget.setCurrentIndex(self.current_params_widget)
+        str_key = self.tmp_lst_key[self.current_params_widget]
+
+        self.window.StackedParamsWidget.setCurrentWidget(self.param_widgets[str_key]["main_page"])
+        #self.window.StackedParamsWidget.setCurrentIndex(self.current_params_widget)
         self.params2run = []
 
         self.clearLayout(self.window.Next2RunLayout)
 
-        str_key = self.tmp_lst_key[self.current_params_widget]
         for bt_labl in self.param_widgets[str_key]["nxt_widg_lst"]:
             self.window.Next2RunLayout.addWidget(QLabel(" ..." + bt_labl + "... "))
 
