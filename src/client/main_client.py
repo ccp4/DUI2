@@ -288,7 +288,6 @@ class MainObject(QObject):
         big_f_size = int(self.font_point_size * 1.6)
         big_font = QFont("OldEnglish", pointSize = big_f_size, italic=True)
         self.window.CurrentControlWidgetLabel.setFont(big_font)
-        self.window.CurrentControlWidgetLabel.setText("The Quick Brown Fox Jumps Over The Lazy Dog")
 
         self.tree_scene.node_clicked.connect(self.on_node_click)
         self.window.CmdSend2server.clicked.connect(self.request_launch)
@@ -386,6 +385,7 @@ class MainObject(QObject):
         self.params2run = []
 
     def change_widget(self, str_key):
+        self.window.CurrentControlWidgetLabel.setText(str_key)
         self.window.StackedParamsWidget.setCurrentWidget(
             self.param_widgets[str_key]["main_page"]
         )
