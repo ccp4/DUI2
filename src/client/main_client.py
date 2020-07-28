@@ -160,7 +160,6 @@ def build_advanced_params_widget(cmd_str):
     return advanced_parameters
 
 
-
 class MainObject(QObject):
     def __init__(self, parent = None):
         super(MainObject, self).__init__(parent)
@@ -293,7 +292,7 @@ class MainObject(QObject):
         self.tree_scene = TreeDirScene(self)
         self.window.treeView.setScene(self.tree_scene)
 
-        self.window.Next2RunLayout.addWidget(QLabel("                  . . . .      "))
+        self.window.Next2RunLayout.addWidget(QLabel("                  . . .       "))
 
         self.current_next_buttons = 0
         self.current_params_widget = 0
@@ -374,7 +373,6 @@ class MainObject(QObject):
         if lst_nodes is not None:
             lst_str = self.tree_obj(lst_nod = lst_nodes)
             lst_2d_dat = self.tree_obj.get_tree_data()
-
             for tree_line in lst_str:
                 self.add_line(tree_line + "\n")
 
@@ -391,6 +389,7 @@ class MainObject(QObject):
         self.param_widgets[str_key]["simple"].reset_pars()
         try:
             self.param_widgets[str_key]["advanced"].reset_pars()
+
         except AttributeError:
             print("No advanced pars")
 
