@@ -401,6 +401,10 @@ class MainObject(QObject):
             self.current_params_widget = 0
 
         str_key = self.tmp_lst_key[self.current_params_widget]
+        self.change_widget(str_key)
+
+    def change_widget(self, str_key):
+
         self.window.StackedParamsWidget.setCurrentWidget(
             self.param_widgets[str_key]["main_page"]
         )
@@ -415,10 +419,9 @@ class MainObject(QObject):
 
     def nxt_clicked(self):
         print("nxt_clicked")
-        snd = self.sender()
-        print("sender", snd)
-        cmd_str = snd.cmd_str
-        print("cmd_str =", cmd_str)
+        str_key = self.sender().cmd_str
+        print("str_key: ", str_key)
+        self.change_widget(str_key)
 
 
 if __name__ == "__main__":
