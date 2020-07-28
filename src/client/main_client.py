@@ -409,6 +409,7 @@ class MainObject(QObject):
             self.param_widgets[str_key]["main_page"]
         )
         self.clearLayout(self.window.Next2RunLayout)
+        self.window.Next2RunLayout.addStretch()
         for bt_labl in self.param_widgets[str_key]["nxt_widg_lst"]:
             nxt_butt = QPushButton(bt_labl)
             nxt_butt.cmd_str = bt_labl
