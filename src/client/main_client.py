@@ -406,9 +406,19 @@ class MainObject(QObject):
         )
         self.clearLayout(self.window.Next2RunLayout)
         for bt_labl in self.param_widgets[str_key]["nxt_widg_lst"]:
-            self.window.Next2RunLayout.addWidget(QLabel(" ..." + bt_labl + "... "))
+            nxt_butt = QPushButton(bt_labl)
+            nxt_butt.cmd_str = bt_labl
+            nxt_butt.clicked.connect(self.nxt_clicked)
+            self.window.Next2RunLayout.addWidget(nxt_butt)
 
         self.params2run = []
+
+    def nxt_clicked(self):
+        print("nxt_clicked")
+        snd = self.sender()
+        print("sender", snd)
+        cmd_str = snd.cmd_str
+        print("cmd_str =", cmd_str)
 
 
 if __name__ == "__main__":
