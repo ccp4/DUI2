@@ -88,15 +88,15 @@ widgets_defs = {
     },
     "symmetry" : {
         "main_cmd"  :"dials.symmetry",
-        "nxt_widg_lst"  :["scale"]
+        "nxt_widg_lst"  :["scale", "combine_experiments"]
     },
     "scale" : {
         "main_cmd"  :"dials.scale",
-        "nxt_widg_lst"  :["symmetry"]
+        "nxt_widg_lst"  :["symmetry", "combine_experiments"]
     },
     "combine_experiments" : {
         "main_cmd"  :"dials.combine_experiments",
-        "nxt_widg_lst"  :["scale", "symmetry"]
+        "nxt_widg_lst"  :["import"]
     }
 }
 
