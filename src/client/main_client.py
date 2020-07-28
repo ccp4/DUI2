@@ -274,19 +274,6 @@ class MainObject(QObject):
         self.param_widgets["combine_experiments"]["advanced"] = ce_advanced_parameters
         self.param_widgets["combine_experiments"]["main_page"] = self.window.CombinePage
 
-        self.tmp_lst_key = [
-            "import",
-            "find_spots",
-            "index",
-            "refine_bravais_settings",
-            "reindex",
-            "refine",
-            "integrate",
-            "symmetry",
-            "scale",
-            "combine_experiments",
-        ]
-
         self.window.incoming_text.setFont(QFont("Monospace"))
         self.tree_obj = format_utils.TreeShow()
         self.tree_scene = TreeDirScene(self)
@@ -295,7 +282,6 @@ class MainObject(QObject):
         self.window.Next2RunLayout.addWidget(QLabel("                  . . .       "))
 
         self.current_next_buttons = 0
-        self.current_params_widget = 0
         self.params2run = []
 
         self.font_point_size = QFont().pointSize()
@@ -306,9 +292,13 @@ class MainObject(QObject):
 
         self.tree_scene.node_clicked.connect(self.on_node_click)
         self.window.CmdSend2server.clicked.connect(self.request_launch)
-        self.window.LoadParsButton.clicked.connect(self.next_params_widget)
+        #self.window.LoadParsButton.clicked.connect(self.next_params_widget)
         self.window.Reset2DefaultPushButton.clicked.connect(self.reset_param)
         self.tree_scene.draw_tree_graph([])
+
+        self.current_params_widget = "import"
+        self.change_widget(self.current_params_widget)
+
         self.window.show()
 
     def clearLayout(self, layout):
@@ -338,7 +328,7 @@ class MainObject(QObject):
         print("item paran changed")
         print("str_path, str_value: ", str_path, str_value)
         self.params2run.append(str_path + "=" + str_value)
-        str_key = self.tmp_lst_key[self.current_params_widget]
+        str_key = self.current_params_widget
         cmd2run = self.param_widgets[str_key]["main_cmd"]
         for sinlge_param in self.params2run:
             cmd2run = cmd2run + " " + sinlge_param
@@ -385,7 +375,7 @@ class MainObject(QObject):
 
     def reset_param(self):
         print("reset_param")
-        str_key = self.tmp_lst_key[self.current_params_widget]
+        str_key = self.current_params_widget
         self.param_widgets[str_key]["simple"].reset_pars()
         try:
             self.param_widgets[str_key]["advanced"].reset_pars()
@@ -395,16 +385,7 @@ class MainObject(QObject):
 
         self.params2run = []
 
-    def next_params_widget(self):
-        self.current_params_widget += 1
-        if self.current_params_widget >= self.window.StackedParamsWidget.count():
-            self.current_params_widget = 0
-
-        str_key = self.tmp_lst_key[self.current_params_widget]
-        self.change_widget(str_key)
-
     def change_widget(self, str_key):
-
         self.window.StackedParamsWidget.setCurrentWidget(
             self.param_widgets[str_key]["main_page"]
         )
@@ -423,6 +404,7 @@ class MainObject(QObject):
         str_key = self.sender().cmd_str
         print("str_key: ", str_key)
         self.change_widget(str_key)
+        self.current_params_widget = str_key
 
 
 if __name__ == "__main__":
