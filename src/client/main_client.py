@@ -290,8 +290,9 @@ class MainObject(QObject):
         self.window.CurrentControlWidgetLabel.setFont(big_font)
 
         self.tree_scene.node_clicked.connect(self.on_node_click)
+        self.window.RetryButton.clicked.connect(self.on_retry)
         self.window.CmdSend2server.clicked.connect(self.request_launch)
-        #self.window.LoadParsButton.clicked.connect(self.next_params_widget)
+        self.window.ReqStopButton.clicked.connect(self.req_stop)
         self.window.Reset2DefaultPushButton.clicked.connect(self.reset_param)
         self.tree_scene.draw_tree_graph([])
 
@@ -299,6 +300,12 @@ class MainObject(QObject):
         self.change_widget(self.current_params_widget)
 
         self.window.show()
+
+    def on_retry(self):
+        print("on_retry")
+
+    def req_stop(self):
+        print("req_stop")
 
     def clearLayout(self, layout):
         if layout is not None:
