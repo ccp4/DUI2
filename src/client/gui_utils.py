@@ -316,8 +316,8 @@ class TreeDirScene(QGraphicsScene):
     def draw_tree_graph(self, nod_lst):
         max_indent = 0
         for node in nod_lst:
-            if node.indent > max_indent:
-                max_indent = node.indent
+            if node["indent"] > max_indent:
+                max_indent = node["indent"]
 
         right_x, down_y = self.get_coords(len(nod_lst), max_indent + 5)
         left_x, up_y = self.get_coords(-1, 0)
@@ -337,12 +337,12 @@ class TreeDirScene(QGraphicsScene):
                 self.white_pen, self.white_brush
             )
         for pos, obj2prn in enumerate(nod_lst):
-            if len(obj2prn.par_lst) > 1:
-                my_coord_x ,my_coord_y = self.get_coords(pos, obj2prn.indent)
+            if len(obj2prn["par_lst"]) > 1:
+                my_coord_x ,my_coord_y = self.get_coords(pos, obj2prn["indent"])
                 lst2connect = []
                 for par_pos, prev in enumerate(nod_lst[0:pos]):
-                    if prev.lin_num in obj2prn.par_lst:
-                        lst2connect.append((par_pos, prev.indent))
+                    if prev["lin_num"] in obj2prn["par_lst"]:
+                        lst2connect.append((par_pos, prev["indent"]))
 
                 max_pos = 0
                 for lst_item in lst2connect:
@@ -363,12 +363,12 @@ class TreeDirScene(QGraphicsScene):
                         )
 
         for pos, node in enumerate(nod_lst):
-            my_coord_x ,my_coord_y = self.get_coords(pos, node.indent)
+            my_coord_x ,my_coord_y = self.get_coords(pos, node["indent"])
             if pos > 0:
                 for inner_row, inner_node in enumerate(nod_lst):
-                    if inner_node.lin_num == node.low_par_lin_num:
+                    if inner_node["lin_num"] == node["low_par_lin_num"]:
                         my_parent_coord_x, my_parent_coord_y = self.get_coords(
-                            inner_row, node.parent_indent
+                            inner_row, node["parent_indent"]
                         )
                         draw_quadratic_bezier_3_points(
                             self,
@@ -380,15 +380,15 @@ class TreeDirScene(QGraphicsScene):
 
         self.lst_nod_pos = []
         for pos, node in enumerate(nod_lst):
-            my_coord_x ,my_coord_y = self.get_coords(pos, node.indent)
-            nod_pos = {"lin_num": node.lin_num, "x_pos": my_coord_x, "y_pos": my_coord_y}
+            my_coord_x ,my_coord_y = self.get_coords(pos, node["indent"])
+            nod_pos = {"lin_num": node["lin_num"], "x_pos": my_coord_x, "y_pos": my_coord_y}
             self.lst_nod_pos.append(nod_pos)
             elip = self.addEllipse(
                 my_coord_x - self.f_width * 1.6, my_coord_y - self.f_height * 0.6,
                 self.f_width * 3.2, self.f_height * 1.2,
                 self.blue_pen, self.cyan_brush
             )
-            text = self.addSimpleText(str(node.lin_num))
+            text = self.addSimpleText(str(node["lin_num"]))
             text.setPos(my_coord_x - self.f_width * 0.7,
                         my_coord_y - self.f_height * 0.5)
             text.setBrush(self.dark_blue_brush)
