@@ -324,6 +324,18 @@ class MainObject(QObject):
         self.window.NumLinLst.setText(
             str(prev_text + " " + str(nod_num))
         )
+        for pos, node in enumerate(self.lst_nodes):
+            if node["lin_num"] == nod_num:
+                cmd_ini = node["cmd2show"][0]
+                if cmd_ini.startswith("dials."):
+                    key2find = cmd_ini[6:]
+                    print("key2find =", key2find)
+                    try:
+                        self.change_widget(key2find)
+
+                    except KeyError:
+                        print("command widget for", key2find, "not there yet")
+
 
     def add_line(self, new_line):
         self.window.incoming_text.moveCursor(QTextCursor.End)
@@ -365,9 +377,9 @@ class MainObject(QObject):
 
     def request_display(self):
         cmd = {"nod_lst":"", "cmd_lst":["display"]}
-        lst_nodes = json_data_request(uni_url, cmd)
-        if lst_nodes is not None:
-            lst_str = self.tree_obj(lst_nod = lst_nodes)
+        self.lst_nodes = json_data_request(uni_url, cmd)
+        if self.lst_nodes is not None:
+            lst_str = self.tree_obj(lst_nod = self.lst_nodes)
             lst_2d_dat = self.tree_obj.get_tree_data()
             for tree_line in lst_str:
                 self.add_line(tree_line + "\n")
