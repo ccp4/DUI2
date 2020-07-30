@@ -336,7 +336,6 @@ class MainObject(QObject):
                     except KeyError:
                         print("command widget for", key2find, "not there yet")
 
-
     def add_line(self, new_line):
         self.window.incoming_text.moveCursor(QTextCursor.End)
         self.window.incoming_text.insertPlainText(new_line)

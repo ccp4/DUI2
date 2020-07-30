@@ -65,10 +65,9 @@ class TreeShow(object):
 
     def _add_tree(self, step=None, parent_indent = 0, indent = 0, low_par_lin_num = 0):
         '''
-            building recursively the a list of objects NodePrintData
-            which contains info about how to draw the tree
+        building recursively the a list of objects dictionaries
+        which contains info about how to draw the tree
         '''
-
         if step["status"] == "Succeeded":
             stp_prn = " S   "
 
@@ -100,8 +99,6 @@ class TreeShow(object):
             "par_lst"         : step["parent_node_lst"] ,
             "low_par_lin_num" : low_par_lin_num
         }
-
-
         self.dat_lst.append(nod_dat)
 
         new_indent = indent + 1
@@ -151,8 +148,8 @@ class TreeShow(object):
 
     def _output_connect(self):
         '''
-            inserting/editing what to print in in <stp_prn>
-            which is part of each element of <self.dat_lst>
+        inserting/editing what to print in in <stp_prn>
+        which is part of each element of <self.dat_lst>
         '''
         for pos, obj2prn in enumerate(self.dat_lst):
             if pos > 0:
