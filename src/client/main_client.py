@@ -96,6 +96,10 @@ widgets_defs = {
     },
     "combine_experiments" : {
         "main_cmd"  :"dials.combine_experiments",
+        "nxt_widg_lst"  :["import", "ls"]
+    },
+    "ls" : {
+        "main_cmd"  :"ls",
         "nxt_widg_lst"  :["import"]
     }
 }
@@ -232,6 +236,8 @@ class MainObject(QObject):
         ce_advanced_parameters.item_changed.connect(self.item_param_changed)
         self.window.CombineAdvancedScrollArea.setWidget(ce_advanced_parameters)
 
+        dummy_ls_widg = self.window.TmpLsPage
+
         self.param_widgets = widgets_defs
 
         self.param_widgets["import"]["simple"] = imp_widg
@@ -273,6 +279,12 @@ class MainObject(QObject):
         self.param_widgets["combine_experiments"]["simple"] = comb_simpl_widg
         self.param_widgets["combine_experiments"]["advanced"] = ce_advanced_parameters
         self.param_widgets["combine_experiments"]["main_page"] = self.window.CombinePage
+
+
+        self.param_widgets["ls"]["simple"] = comb_simpl_widg
+        self.param_widgets["ls"]["advanced"] = None
+        self.param_widgets["ls"]["main_page"] = self.window.TmpLsPage
+
 
         self.window.incoming_text.setFont(QFont("Monospace"))
         self.tree_obj = format_utils.TreeShow()

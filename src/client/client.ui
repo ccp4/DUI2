@@ -79,7 +79,7 @@
          <item>
           <widget class="QStackedWidget" name="StackedParamsWidget">
            <property name="currentIndex">
-            <number>0</number>
+            <number>1</number>
            </property>
            <widget class="QWidget" name="ImportPage">
             <layout class="QGridLayout" name="gridLayout_26">
@@ -93,7 +93,7 @@
                  <rect>
                   <x>0</x>
                   <y>0</y>
-                  <width>358</width>
+                  <width>322</width>
                   <height>179</height>
                  </rect>
                 </property>
@@ -101,6 +101,21 @@
               </widget>
              </item>
             </layout>
+           </widget>
+           <widget class="QWidget" name="TmpLsPage">
+            <widget class="QLabel" name="label">
+             <property name="geometry">
+              <rect>
+               <x>26</x>
+               <y>54</y>
+               <width>101</width>
+               <height>71</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Tmp LS dummy</string>
+             </property>
+            </widget>
            </widget>
            <widget class="QWidget" name="FindspotsPage">
             <layout class="QGridLayout" name="gridLayout_18">
@@ -124,8 +139,8 @@
                      <rect>
                       <x>0</x>
                       <y>0</y>
-                      <width>98</width>
-                      <height>28</height>
+                      <width>300</width>
+                      <height>132</height>
                      </rect>
                     </property>
                    </widget>
@@ -499,8 +514,8 @@
                      <rect>
                       <x>0</x>
                       <y>0</y>
-                      <width>98</width>
-                      <height>28</height>
+                      <width>300</width>
+                      <height>132</height>
                      </rect>
                     </property>
                    </widget>
@@ -558,8 +573,8 @@
                      <rect>
                       <x>0</x>
                       <y>0</y>
-                      <width>98</width>
-                      <height>28</height>
+                      <width>300</width>
+                      <height>132</height>
                      </rect>
                     </property>
                    </widget>
