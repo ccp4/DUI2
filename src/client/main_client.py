@@ -332,21 +332,36 @@ class MainObject(QObject):
 
     def on_node_click(self, nod_num):
         print("clicked node number ", nod_num)
-        prev_text = str(self.window.NumLinLst.text())
-        self.window.NumLinLst.setText(
-            str(prev_text + " " + str(nod_num))
-        )
+        if(
+            self.window.CurrentControlWidgetLabel.text() == "combine_experiments"
+            or
+            self.window.CurrentControlWidgetLabel.text() == "ls"
+        ):
+            prev_text = str(self.window.NumLinLst.text())
+            self.window.NumLinLst.setText(
+                str(prev_text + " " + str(nod_num))
+            )
+
+        else:
+            self.window.NumLinLst.setText(str(nod_num))
+
         for pos, node in enumerate(self.lst_nodes):
             if node["lin_num"] == nod_num:
                 cmd_ini = node["cmd2show"][0]
                 if cmd_ini.startswith("dials."):
                     key2find = cmd_ini[6:]
                     print("key2find =", key2find)
-                    try:
-                        self.change_widget(key2find)
 
-                    except KeyError:
-                        print("command widget for", key2find, "not there yet")
+                else:
+                    #TODO: remove this "else" then "ls" command
+                    #TODO: is no longer needed
+                    key2find = cmd_ini
+
+                try:
+                    self.change_widget(key2find)
+
+                except KeyError:
+                    print("command widget for", key2find, "not there yet")
 
     def add_line(self, new_line):
         self.window.incoming_text.moveCursor(QTextCursor.End)
