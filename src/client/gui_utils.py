@@ -28,6 +28,53 @@ from PySide2 import QtUiTools
 from PySide2.QtGui import *
 import numpy as np
 
+widgets_defs = {
+    "import" : {
+        "main_cmd"  :"dials.import",
+        "nxt_widg_lst"  :["find_spots"]
+    },
+    "find_spots" : {
+        "main_cmd"  :"dials.find_spots",
+        "nxt_widg_lst"  :["index"]
+    },
+    "index" : {
+        "main_cmd"  :"dials.index",
+        "nxt_widg_lst"  :["refine_bravais_settings", "refine"]
+    },
+    "refine_bravais_settings" : {
+        "main_cmd"  :"dials.refine_bravais_settings",
+        "nxt_widg_lst"  :["reindex"]
+    },
+    "reindex" : {
+        "main_cmd"  :"dials.reindex",
+        "nxt_widg_lst"  :["refine", "integrate"]
+    },
+    "refine" : {
+        "main_cmd"  :"dials.refine",
+        "nxt_widg_lst"  :["integrate", "refine_bravais_settings"]
+    },
+    "integrate" : {
+        "main_cmd"  :"dials.integrate",
+        "nxt_widg_lst"  :["scale", "symmetry"]
+    },
+    "symmetry" : {
+        "main_cmd"  :"dials.symmetry",
+        "nxt_widg_lst"  :["scale", "combine_experiments"]
+    },
+    "scale" : {
+        "main_cmd"  :"dials.scale",
+        "nxt_widg_lst"  :["symmetry", "combine_experiments"]
+    },
+    "combine_experiments" : {
+        "main_cmd"  :"dials.combine_experiments",
+        "nxt_widg_lst"  :["import", "ls"]
+    },
+    "ls" : {
+        "main_cmd"  :"ls",
+        "nxt_widg_lst"  :["import"]
+    }
+}
+
 class MyQComboBox(QComboBox):
     def __init__(self, parent=None):
         super(MyQComboBox, self).__init__(parent)
