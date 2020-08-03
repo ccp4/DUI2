@@ -264,6 +264,8 @@ class MainObject(QObject):
         self.current_params_widget = "import"
         self.change_widget(self.current_params_widget)
 
+        self.thrd_lst = []
+        self.req_get_lst = []
         self.window.show()
 
     def on_retry(self):
@@ -345,11 +347,13 @@ class MainObject(QObject):
         cmd = {"nod_lst":nod_lst, "cmd_lst":[cmd_str]}
 
         try:
-            req_get = requests.get(uni_url, stream = True, params = cmd)
-            self.thrd = Run_n_Output(req_get)
-            self.thrd.line_out.connect(self.add_line)
-            self.thrd.finished.connect(self.request_display)
-            self.thrd.start()
+            new_req_get = requests.get(uni_url, stream = True, params = cmd)
+            new_thrd = Run_n_Output(new_req_get)
+            self.req_get_lst.append(new_req_get)
+            new_thrd.line_out.connect(self.add_line)
+            new_thrd.finished.connect(self.request_display)
+            new_thrd.start()
+            self.thrd_lst.append(new_thrd)
 
         except requests.exceptions.RequestException:
             print("something went wrong with the request launch")
