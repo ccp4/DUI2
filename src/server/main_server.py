@@ -38,8 +38,16 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
         url_path = self.path
         url_dict = parse_qs(urlparse(url_path).query)
         print("url_dict =", url_dict)
-        tmp_cmd2lst = url_dict["cmd_lst"]
-        print("tmp_cmd2lst =", tmp_cmd2lst)
+        try:
+            tmp_cmd2lst = url_dict["cmd_lst"]
+            print("tmp_cmd2lst =", tmp_cmd2lst)
+
+        except KeyError:
+            print("no command in request (KeyError)")
+            self.wfile.write(bytes('no command in request (KeyError)', 'utf-8'))
+            self.wfile.write(bytes('/*EOF*/', 'utf-8'))
+            return
+
         cmd_lst = []
         for inner_str in tmp_cmd2lst:
             cmd_lst.append(inner_str.split(" "))
@@ -67,6 +75,7 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
 
         except BrokenPipeError:
             print("\n *** BrokenPipeError *** while sending EOF or JSON \n")
+
 
 
 if __name__ == "__main__":
