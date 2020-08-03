@@ -32,7 +32,7 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header("Content-type", "text/html")
         self.end_headers()
-        str_out = 'Running request:' + str(self) + '\n'
+        str_out = 'Received request:' + str(self) + '\n'
         self.wfile.write(bytes(str_out, 'utf-8'))
 
         url_path = self.path
@@ -44,7 +44,7 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
 
         except KeyError:
             print("no command in request (KeyError)")
-            self.wfile.write(bytes('no command in request (KeyError)', 'utf-8'))
+            self.wfile.write(bytes('no command in request (KeyError) \n', 'utf-8'))
             self.wfile.write(bytes('/*EOF*/', 'utf-8'))
             return
 

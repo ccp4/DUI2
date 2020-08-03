@@ -97,7 +97,7 @@ class Run_n_Output(QThread):
             single_char = str(tmp_dat.decode('utf-8'))
             line_str += single_char
             if single_char == '\n':
-                #print(line_str[:-1])
+                print(line_str[:-1])
                 self.line_out.emit(line_str)
                 line_str = ''
 
@@ -106,6 +106,7 @@ class Run_n_Output(QThread):
                 self.line_out.emit(' \n /*EOF*/ \n')
                 break
 
+            time.sleep(0.00001)
 
 def build_advanced_params_widget(cmd_str):
     cmd = {"nod_lst":"", "cmd_lst":[cmd_str]}
@@ -339,12 +340,13 @@ class MainObject(QObject):
         cmd_str = str(self.window.CmdEdit.text())
         self.params2run = []
         self.window.CmdEdit.clear()
-        print("cmd_str", cmd_str)
+        print("\n cmd_str", cmd_str)
         nod_str = str(self.window.NumLinLst.text())
         nod_lst = nod_str.split(" ")
         self.window.NumLinLst.clear()
-        print("nod_lst", nod_lst)
+        print("\n nod_lst", nod_lst)
         cmd = {"nod_lst":nod_lst, "cmd_lst":[cmd_str]}
+        print("cmd =", cmd)
 
         try:
             new_req_get = requests.get(uni_url, stream = True, params = cmd)
