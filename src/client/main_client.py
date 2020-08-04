@@ -97,7 +97,6 @@ class Run_n_Output(QThread):
             single_char = str(tmp_dat.decode('utf-8'))
             line_str += single_char
             if single_char == '\n':
-                print(line_str[:-1])
                 self.line_out.emit(line_str)
                 line_str = ''
 
