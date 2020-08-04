@@ -106,7 +106,7 @@ class Run_n_Output(QThread):
                 self.line_out.emit(' \n /*EOF*/ \n')
                 break
 
-            time.sleep(0.00001)
+            self.usleep(1)
 
 def build_advanced_params_widget(cmd_str):
     cmd = {"nod_lst":"", "cmd_lst":[cmd_str]}
