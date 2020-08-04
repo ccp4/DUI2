@@ -43,6 +43,7 @@ from params_2_json import get_param_list
 def fix_alias(short_in):
     pair_list = [
         ("d", "display" ),
+        ("dl", "display_log" ),
         ("fdp", "find_spots_params"                         ),
         ("idp", "index_params"                              ),
         ("rbp", "refine_bravais_settings_params"            ),
@@ -91,6 +92,7 @@ class CmdNode(object):
         self._lst_refl = []
         self.lst2run = []
         self._run_dir = ""
+        self._log_line_lst = []
 
         self.status = "Ready"
         self.child_node_lst = []
@@ -206,19 +208,22 @@ class CmdNode(object):
                 stderr = subprocess.PIPE,
                 universal_newlines = True
             )
-            line = None
+            new_line = None
+            self._log_line_lst = []
             n_Broken_Pipes = 0
-            while proc.poll() is None or line != '':
-                line = proc.stdout.readline()
+            while proc.poll() is None or new_line != '':
+                new_line = proc.stdout.readline()
                 if req_obj is not None:
                     try:
-                        req_obj.wfile.write(bytes(line , 'utf-8'))
+                        req_obj.wfile.write(bytes(new_line , 'utf-8'))
 
                     except BrokenPipeError:
                         n_Broken_Pipes += 1
 
                 else:
-                    print(line[:-1])
+                    print(new_line[:-1])
+
+                self._log_line_lst.append(new_line[:-1])
 
             if n_Broken_Pipes > 0:
                 print("\n *** BrokenPipeError *** while sending output \n")
@@ -258,9 +263,6 @@ class Runner(object):
                 if node.lin_num == lin2go:
                     tmp_parent_lst_in.append(node)
 
-        if len(tmp_parent_lst_in) > 0:
-            node2run = self._create_step(tmp_parent_lst_in)
-
         print("\n cmd_dict: ", cmd_dict, "\n")
 
         full_cmd_lst = []
@@ -271,12 +273,29 @@ class Runner(object):
 
             full_cmd_lst.append(unalias_inner_lst)
 
+        if(
+            len(tmp_parent_lst_in) > 0 and
+            ["display"] not in full_cmd_lst and
+            ["display_log"] not in full_cmd_lst
+        ):
+            node2run = self._create_step(tmp_parent_lst_in)
+
         return_list = []
         for uni_cmd in full_cmd_lst:
             if uni_cmd == ["display"]:
                 return_list = format_utils.get_lst2show(self)
                 self.tree_output(return_list)
                 self.tree_output.print_output()
+
+            elif uni_cmd == ["display_log"]:
+                for lin2go in cmd_dict["nod_lst"]:
+                    lst2add = self.step_list[lin2go]._log_line_lst
+                    print("\n" + "<" * 80)
+                    for single_line in lst2add:
+                        print(single_line)
+
+                    print(">" * 80 + "\n")
+                    return_list.append(lst2add)
 
             elif uni_cmd[0][-7:] == "_params":
                 return_list = get_param_list(uni_cmd[0])
@@ -312,6 +331,7 @@ class Runner(object):
                         "_lst_expt"            :uni._lst_expt,
                         "_lst_refl"            :uni._lst_refl,
                         "_run_dir"             :uni._run_dir,
+                        "_log_line_lst"        :uni._log_line_lst,
                         "lin_num"              :uni.lin_num,
                         "status"               :uni.status,
                         "parent_node_lst"      :uni.parent_node_lst,
@@ -340,6 +360,7 @@ class Runner(object):
             new_node._lst_expt       = uni_dic["_lst_expt"]
             new_node._lst_refl       = uni_dic["_lst_refl"]
             new_node._run_dir        = uni_dic["_run_dir"]
+            new_node._log_line_lst   = uni_dic["_log_line_lst"]
             new_node.lin_num         = uni_dic["lin_num"]
             new_node.status          = uni_dic["status"]
             new_node.child_node_lst  = uni_dic["child_node_lst"]
