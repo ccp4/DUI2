@@ -45,9 +45,9 @@ lst_cmd= [
 ]
 
 lst_dic = [
-{'nod_lst': [0], 'cmd_lst': [['ip', 'x4']]},
 {'nod_lst': [0], 'cmd_lst': [['ip', 'x41']]},
 {'nod_lst': [0], 'cmd_lst': [['ip', 'x42']]},
+{'nod_lst': [0], 'cmd_lst': [['ip', 'x43']]},
 {'nod_lst': [1], 'cmd_lst': [['gm', 'untrusted.rectangle=0,1421,1258,1312', 'output.mask=tmp_mask.pickle'], ['am', 'input.mask=tmp_mask.pickle']]},
 {'nod_lst': [2], 'cmd_lst': [['gm', 'untrusted.rectangle=0,1421,1258,1312', 'output.mask=tmp_mask.pickle'], ['am', 'input.mask=tmp_mask.pickle']]},
 {'nod_lst': [3], 'cmd_lst': [['gm', 'untrusted.rectangle=0,1421,1258,1312', 'output.mask=tmp_mask.pickle'], ['am', 'input.mask=tmp_mask.pickle']]},

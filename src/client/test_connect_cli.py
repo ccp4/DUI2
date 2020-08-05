@@ -25,9 +25,9 @@ import sys, time, json
 import requests
 
 lst_cmd = [
-            {"nod_lst":["0"], "cmd_lst":["ip x4"]},
             {"nod_lst":["0"], "cmd_lst":["ip x41"]},
             {"nod_lst":["0"], "cmd_lst":["ip x42"]},
+            {"nod_lst":["0"], "cmd_lst":["ip x43"]},
             {'nod_lst': [1], 'cmd_lst':
                  [['gm untrusted.rectangle=0,1421,1258,1312 output.mask=tmp_mask.pickle'],
                   ['am input.mask=tmp_mask.pickle']]},
