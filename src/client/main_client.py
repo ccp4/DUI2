@@ -264,8 +264,15 @@ class MainObject(QObject):
         self.current_params_widget = "import"
         self.change_widget(self.current_params_widget)
 
+
+        self.request_display()
+        '''
+        for node in self.lst_nodes:
+            self.request_display_log(node["lin_num"])
+        '''
+
         self.thrd_lst = []
-        self.req_get_lst = []
+        self.req_get_lst = [] #TODO: make sure this list is needed
         self.window.show()
 
     def on_retry(self):
@@ -299,6 +306,8 @@ class MainObject(QObject):
 
         else:
             self.window.NumLinLst.setText(str(nod_num))
+
+        self.request_display_log(nod_num)
 
         for pos, node in enumerate(self.lst_nodes):
             if node["lin_num"] == nod_num:
@@ -343,6 +352,7 @@ class MainObject(QObject):
         nod_str = str(self.window.NumLinLst.text())
         nod_lst = nod_str.split(" ")
         self.window.NumLinLst.clear()
+        self.window.incoming_text.clear()
         print("\n nod_lst", nod_lst)
         cmd = {"nod_lst":nod_lst, "cmd_lst":[cmd_str]}
         print("cmd =", cmd)
@@ -374,6 +384,13 @@ class MainObject(QObject):
 
         else:
             print("something went wrong with the list of nodes")
+
+    def request_display_log(self, nod_lst_in = 0):
+        self.window.incoming_text.clear()
+        cmd = {"nod_lst":[nod_lst_in], "cmd_lst":["display_log"]}
+        lst_log_lines = json_data_request(uni_url, cmd)
+        for log_line in lst_log_lines[0]:
+            self.add_line(log_line + "\n")
 
     def reset_param(self):
         print("reset_param")
