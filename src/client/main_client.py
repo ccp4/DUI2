@@ -116,6 +116,12 @@ def build_advanced_params_widget(cmd_str):
     advanced_parameters.build_pars(par_def)
     return advanced_parameters
 
+def copy_lst_nodes(old_lst_nodes):
+    new_lst = []
+    for node in old_lst_nodes:
+        new_lst.append(node)
+
+    return new_lst
 
 class MainObject(QObject):
     def __init__(self, parent = None):
@@ -264,12 +270,8 @@ class MainObject(QObject):
         self.current_params_widget = "import"
         self.change_widget(self.current_params_widget)
 
-
         self.request_display()
-        '''
-        for node in self.lst_nodes:
-            self.request_display_log(node["lin_num"])
-        '''
+        self.current_lin_num = 0
 
         self.thrd_lst = []
         self.req_get_lst = [] #TODO: make sure this list is needed
@@ -309,7 +311,7 @@ class MainObject(QObject):
 
         self.request_display_log(nod_num)
 
-        for pos, node in enumerate(self.lst_nodes):
+        for node in self.lst_nodes:
             if node["lin_num"] == nod_num:
                 cmd_ini = node["cmd2show"][0]
                 if cmd_ini.startswith("dials."):
@@ -326,6 +328,8 @@ class MainObject(QObject):
 
                 except KeyError:
                     print("command widget for", key2find, "not there yet")
+
+        self.current_lin_num = nod_num
 
     def add_line(self, new_line):
         self.window.incoming_text.moveCursor(QTextCursor.End)
@@ -369,21 +373,25 @@ class MainObject(QObject):
         except requests.exceptions.RequestException:
             print("something went wrong with the request launch")
 
+    def display(self, in_lst_nodes):
+        lst_str = self.tree_obj(lst_nod = in_lst_nodes)
+        lst_2d_dat = self.tree_obj.get_tree_data()
+        for tree_line in lst_str:
+            self.add_line(tree_line + "\n")
+
+        self.tree_scene.clear()
+        self.tree_scene.draw_tree_graph(lst_2d_dat)
+        self.tree_scene.update()
+
     def request_display(self):
         cmd = {"nod_lst":"", "cmd_lst":["display"]}
         self.lst_nodes = json_data_request(uni_url, cmd)
         if self.lst_nodes is not None:
-            lst_str = self.tree_obj(lst_nod = self.lst_nodes)
-            lst_2d_dat = self.tree_obj.get_tree_data()
-            for tree_line in lst_str:
-                self.add_line(tree_line + "\n")
-
-            self.tree_scene.clear()
-            self.tree_scene.draw_tree_graph(lst_2d_dat)
-            self.tree_scene.update()
+            self.display(self.lst_nodes)
 
         else:
             print("something went wrong with the list of nodes")
+
 
     def request_display_log(self, nod_lst_in = 0):
         self.window.incoming_text.clear()
@@ -425,6 +433,30 @@ class MainObject(QObject):
         print("str_key: ", str_key)
         self.change_widget(str_key)
         self.current_params_widget = str_key
+
+        tmp_nod_lst = copy_lst_nodes(self.lst_nodes)
+        max_lin_num = 0
+        for node in tmp_nod_lst:
+            if node["lin_num"] > max_lin_num:
+                max_lin_num = node["lin_num"]
+
+        new_node_lin_num = max_lin_num + 1
+
+        for pos, node in enumerate(tmp_nod_lst):
+            if node["lin_num"] == self.current_lin_num:
+                node["child_node_lst"].append(new_node_lin_num)
+
+        tmp_nod_lst.append(
+            {
+                'lin_num': new_node_lin_num,
+                'status': 'Ready',
+                'cmd2show': [str_key],
+                'child_node_lst': [],
+                'parent_node_lst': [self.current_lin_num]
+            }
+        )
+        self.current_lin_num = new_node_lin_num
+        self.display(tmp_nod_lst)
 
 
 if __name__ == "__main__":
