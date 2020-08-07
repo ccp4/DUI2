@@ -383,9 +383,6 @@ class MainObject(QObject):
     def display(self, in_lst_nodes):
         lst_str = self.tree_obj(lst_nod = in_lst_nodes)
         lst_2d_dat = self.tree_obj.get_tree_data()
-        for tree_line in lst_str:
-            self.add_line(tree_line + "\n")
-
         self.tree_scene.clear()
         self.tree_scene.draw_tree_graph(lst_2d_dat)
         self.tree_scene.update()
