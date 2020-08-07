@@ -426,7 +426,7 @@ class TreeDirScene(QGraphicsScene):
                         my_coord_y - self.f_height * 0.5)
             n_text.setBrush(self.dark_blue_brush)
 
-            stat_text = self.addSimpleText(str(node["stp_prn"][1:2]))
+            stat_text = self.addSimpleText(str(node["stp_stat"]))
             stat_text.setPos(self.f_width * 0.5, my_coord_y - self.f_height * 0.5)
             stat_text.setBrush(self.dark_blue_brush)
 

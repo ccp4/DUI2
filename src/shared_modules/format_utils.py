@@ -70,15 +70,19 @@ class TreeShow(object):
         '''
         if step["status"] == "Succeeded":
             stp_prn = " S   "
+            stp_stat = "S"
 
         elif step["status"] == "Failed":
             stp_prn = " F   "
+            stp_stat = "F"
 
         elif step["status"] == "Busy":
             stp_prn = " B   "
+            stp_stat = "B"
 
         else:
             stp_prn = " R   "
+            stp_stat = "R"
 
         str_lin_num = "(" + str(step["lin_num"]) + ")"
         diff_inde = (indent - parent_indent) * 4 - 3
@@ -97,7 +101,8 @@ class TreeShow(object):
             "lin_num"         : int(step["lin_num"]) ,
             "str_cmd"         : str_cmd ,
             "par_lst"         : step["parent_node_lst"] ,
-            "low_par_lin_num" : low_par_lin_num
+            "low_par_lin_num" : low_par_lin_num ,
+            "stp_stat"        : stp_stat
         }
         self.dat_lst.append(nod_dat)
 
