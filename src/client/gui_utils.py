@@ -294,26 +294,12 @@ class TreeDirScene(QGraphicsScene):
         self.f_width = fm.width("0")
         self.f_height = fm.height()
 
-        self.blue_brush = QBrush(
-            Qt.blue, Qt.SolidPattern,
-        )
-        self.dark_blue_brush = QBrush(
-            Qt.darkBlue, Qt.SolidPattern,
-        )
-        self.cyan_brush = QBrush(
-            Qt.cyan, Qt.SolidPattern,
-        )
-
-        self.gray_brush = QBrush(
-            Qt.gray, Qt.SolidPattern,
-        )
-
-        self.light_gray_brush = QBrush(
-            Qt.lightGray, Qt.SolidPattern,
-        )
-        self.white_brush = QBrush(
-            Qt.white, Qt.SolidPattern,
-        )
+        self.blue_brush = QBrush(Qt.blue, Qt.SolidPattern)
+        self.dark_blue_brush = QBrush(Qt.darkBlue, Qt.SolidPattern)
+        self.cyan_brush = QBrush(Qt.cyan, Qt.SolidPattern)
+        self.gray_brush = QBrush(Qt.gray, Qt.SolidPattern)
+        self.light_gray_brush = QBrush(Qt.lightGray, Qt.SolidPattern)
+        self.white_brush = QBrush(Qt.white, Qt.SolidPattern)
 
         self.blue_pen = QPen(
             Qt.blue, 1.6, Qt.SolidLine,
@@ -435,9 +421,12 @@ class TreeDirScene(QGraphicsScene):
                 self.f_width * 3.2, self.f_height * 1.2,
                 self.blue_pen, self.cyan_brush
             )
-            text = self.addSimpleText(str(node["lin_num"]))
-            text.setPos(my_coord_x - self.f_width * 0.7,
+            n_text = self.addSimpleText(str(node["lin_num"]))
+            n_text.setPos(my_coord_x - self.f_width * 0.7,
                         my_coord_y - self.f_height * 0.5)
-            text.setBrush(self.dark_blue_brush)
+            n_text.setBrush(self.dark_blue_brush)
 
+            stat_text = self.addSimpleText(str(node["stp_prn"][1:2]))
+            stat_text.setPos(self.f_width * 0.5, my_coord_y - self.f_height * 0.5)
+            stat_text.setBrush(self.dark_blue_brush)
 
