@@ -290,13 +290,17 @@ class Runner(object):
 
             elif uni_cmd == ["display_log"]:
                 for lin2go in cmd_dict["nod_lst"]:
-                    lst2add = self.step_list[lin2go]._log_line_lst
-                    print("\n" + "<" * 80)
-                    for single_line in lst2add:
-                        print(single_line)
+                    try:
+                        lst2add = self.step_list[lin2go]._log_line_lst
+                        print("\n" + "<" * 80)
+                        for single_line in lst2add:
+                            print(single_line)
 
-                    print(">" * 80 + "\n")
-                    return_list.append(lst2add)
+                        print(">" * 80 + "\n")
+                        return_list.append(lst2add)
+
+                    except IndexError:
+                        print("\n *** ERROR *** \n wrong line \n not logging")
 
             elif uni_cmd[0][-7:] == "_params":
                 return_list = get_param_list(uni_cmd[0])
@@ -306,7 +310,7 @@ class Runner(object):
                     node2run(uni_cmd, req_obj)
 
                 except UnboundLocalError:
-                    print("\n *** ERROR *** \n wrong line")
+                    print("\n *** ERROR *** \n wrong line \n not running")
 
             self._save_state()
 
