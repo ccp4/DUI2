@@ -122,7 +122,7 @@ def copy_lst_nodes(old_lst_nodes):
         new_node = {
             'lin_num': int(old_node["lin_num"]),
             'status': str(old_node["status"]),
-            'cmd2show': str(old_node["cmd2show"]),
+            'cmd2show': list(old_node["cmd2show"]),
             'child_node_lst': list(old_node["child_node_lst"]),
             'parent_node_lst': list(old_node["parent_node_lst"])
         }
@@ -278,6 +278,7 @@ class MainObject(QObject):
         self.change_widget(self.current_params_widget)
 
         self.request_display()
+        self.local_nod_lst = copy_lst_nodes(self.server_nod_lst)
         self.current_lin_num = 0
 
         self.thrd_lst = []
@@ -302,7 +303,8 @@ class MainObject(QObject):
                     self.clearLayout(item.layout())
 
     def on_node_click(self, nod_num):
-        print("clicked node number ", nod_num)
+        self.current_lin_num = nod_num
+        print("self.current_lin_num", self.current_lin_num)
         if(
             self.window.CurrentControlWidgetLabel.text() == "combine_experiments"
             or
@@ -316,28 +318,22 @@ class MainObject(QObject):
         else:
             self.window.NumLinLst.setText(str(nod_num))
 
-        self.request_display_log(nod_num)
+        try:
+            cur_nod = self.server_nod_lst[nod_num]
+            print("cur_nod[cmd2show] <<", cur_nod["cmd2show"], ">>")
+            cmd_ini = cur_nod["cmd2show"][0]
+            print("cmd_ini", cmd_ini)
+            key2find = cmd_ini[6:]
+            print("key2find =", key2find)
+            self.change_widget(key2find)
 
-        for node in self.server_nod_lst:
-            if node["lin_num"] == nod_num:
-                cmd_ini = node["cmd2show"][0]
-                if cmd_ini.startswith("dials."):
-                    key2find = cmd_ini[6:]
-                    print("key2find =", key2find)
+        except KeyError:
+            print("command widget for", key2find, "not there yet")
 
-                else:
-                    #TODO: remove this "else" then "ls" command
-                    #TODO: is no longer needed
-                    key2find = cmd_ini
+        except IndexError:
+            print("IndexError, nod_num =", nod_num)
 
-                try:
-                    self.change_widget(key2find)
 
-                except KeyError:
-                    print("command widget for", key2find, "not there yet")
-
-        self.current_lin_num = nod_num
-        print("self.current_lin_num", self.current_lin_num)
     def add_line(self, new_line):
         self.window.incoming_text.moveCursor(QTextCursor.End)
         self.window.incoming_text.insertPlainText(new_line)
