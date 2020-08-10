@@ -458,6 +458,7 @@ class MainObject(QObject):
         self.current_lin_num = new_node_lin_num
         print("self.current_lin_num", self.current_lin_num)
         self.display(self.local_nod_lst)
+        self.window.CmdEdit.setText("dials." + str(str_key))
 
 
 if __name__ == "__main__":
