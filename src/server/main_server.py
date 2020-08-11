@@ -63,7 +63,6 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
                     "cmd_lst":cmd_lst}
         print("parse_qs(urlparse(url_path).query", cmd_dict)
 
-        self.wfile.write(bytes(first_str_out, 'utf-8'))
         try:
             lst_out = []
             lst_out = cmd_tree_runner.run_dict(cmd_dict, self)

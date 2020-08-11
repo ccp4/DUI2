@@ -75,7 +75,7 @@ def json_data_request(url, cmd):
                 print('>>  /*EOF*/  <<')
                 break
 
-        json_out = json.loads(str_lst[1])
+        json_out = json.loads(str_lst[0])
 
     except requests.exceptions.RequestException:
         print("\n requests.exceptions.RequestException \n")
@@ -86,27 +86,24 @@ def json_data_request(url, cmd):
 
 class Run_n_Output(QThread):
     new_line_out = Signal(str)
-    first_line = Signal(str)
+    first_line = Signal()
     def __init__(self, request):
         super(Run_n_Output, self).__init__()
         self.request = request
 
     def run(self):
         line_str = ''
-        first_lin_done = False
+        not_yet_read = True
         while True:
             tmp_dat = self.request.raw.read(1)
             single_char = str(tmp_dat.decode('utf-8'))
             line_str += single_char
             if single_char == '\n':
-                if first_lin_done:
-                    self.new_line_out.emit(line_str)
-
-                else:
-                    self.first_line.emit(line_str)
-                    first_lin_done = True
-
+                self.new_line_out.emit(line_str)
                 line_str = ''
+                if not_yet_read:
+                    self.first_line.emit()
+                    not_yet_read = False
 
             elif line_str[-7:] == '/*EOF*/':
                 print('>>  /*EOF*/  <<')
@@ -341,6 +338,7 @@ class MainObject(QObject):
         except IndexError:
             print("IndexError, nod_num =", nod_num)
 
+        self.request_display_log(nod_num)
 
     def add_line(self, new_line):
         self.window.incoming_text.moveCursor(QTextCursor.End)
@@ -380,7 +378,7 @@ class MainObject(QObject):
             new_thrd = Run_n_Output(new_req_get)
             self.req_get_lst.append(new_req_get)
             new_thrd.new_line_out.connect(self.add_line)
-            new_thrd.first_line.connect(self.request_display) #TODO consider a small delay here
+            new_thrd.first_line.connect(self.request_display)
             new_thrd.finished.connect(self.request_display)
             new_thrd.start()
             self.thrd_lst.append(new_thrd)
@@ -395,8 +393,7 @@ class MainObject(QObject):
         self.tree_scene.draw_tree_graph(lst_2d_dat)
         self.tree_scene.update()
 
-    def request_display(self, line_in = None):
-        print("line_in =", line_in)
+    def request_display(self):
         cmd = {"nod_lst":"", "cmd_lst":["display"]}
         self.server_nod_lst = json_data_request(uni_url, cmd)
         if self.server_nod_lst is not None:
