@@ -32,8 +32,7 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header("Content-type", "text/html")
         self.end_headers()
-        str_out = 'Received request:' + str(self) + '\n'
-        self.wfile.write(bytes(str_out, 'utf-8'))
+        first_str_out = 'Received request:' + str(self) + '\n'
 
         url_path = self.path
         url_dict = parse_qs(urlparse(url_path).query)
@@ -51,6 +50,7 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
         cmd_lst = []
         for inner_str in tmp_cmd2lst:
             cmd_lst.append(inner_str.split(" "))
+
         nod_lst = []
         try:
             for inner_str in url_dict["nod_lst"]:
@@ -61,21 +61,19 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
 
         cmd_dict = {"nod_lst":nod_lst,
                     "cmd_lst":cmd_lst}
-
         print("parse_qs(urlparse(url_path).query", cmd_dict)
 
+        self.wfile.write(bytes(first_str_out, 'utf-8'))
         try:
             lst_out = []
             lst_out = cmd_tree_runner.run_dict(cmd_dict, self)
             json_str = json.dumps(lst_out) + '\n'
             self.wfile.write(bytes(json_str, 'utf-8'))
-
             print("sending /*EOF*/")
             self.wfile.write(bytes('/*EOF*/', 'utf-8'))
 
         except BrokenPipeError:
             print("\n *** BrokenPipeError *** while sending EOF or JSON \n")
-
 
 
 if __name__ == "__main__":

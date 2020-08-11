@@ -380,7 +380,7 @@ class MainObject(QObject):
             new_thrd = Run_n_Output(new_req_get)
             self.req_get_lst.append(new_req_get)
             new_thrd.new_line_out.connect(self.add_line)
-            new_thrd.first_line.connect(self.request_display)
+            new_thrd.first_line.connect(self.request_display) #TODO consider a small delay here
             new_thrd.finished.connect(self.request_display)
             new_thrd.start()
             self.thrd_lst.append(new_thrd)
