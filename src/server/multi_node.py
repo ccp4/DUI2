@@ -318,7 +318,14 @@ class Runner(object):
 
     def _create_step(self, prev_step_lst):
         new_step = CmdNode(parent_lst_in=prev_step_lst)
-        self.bigger_lin += 1
+
+        tmp_big = 0
+        for node in self.step_list:
+            if node.lin_num > tmp_big:
+                tmp_big = node.lin_num
+
+        self.bigger_lin = tmp_big + 1
+
         new_step.lin_num = self.bigger_lin
         for prev_step in prev_step_lst:
             prev_step.child_node_lst.append(new_step.lin_num)

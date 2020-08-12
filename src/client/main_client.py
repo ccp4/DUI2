@@ -124,14 +124,14 @@ def build_advanced_params_widget(cmd_str):
 def copy_lst_nodes(old_lst_nodes):
     new_lst = []
     for old_node in old_lst_nodes:
-        new_node = {
+        cp_new_node = {
             'lin_num': int(old_node["lin_num"]),
             'status': str(old_node["status"]),
             'cmd2show': list(old_node["cmd2show"]),
             'child_node_lst': list(old_node["child_node_lst"]),
             'parent_node_lst': list(old_node["parent_node_lst"])
         }
-        new_lst.append(new_node)
+        new_lst.append(cp_new_node)
 
     return new_lst
 
@@ -282,6 +282,7 @@ class MainObject(QObject):
         self.current_params_widget = "import"
         self.change_widget(self.current_params_widget)
 
+        self.new_node = None
         self.request_display()
         self.local_nod_lst = copy_lst_nodes(self.server_nod_lst)
         self.current_lin_num = 0
@@ -382,6 +383,7 @@ class MainObject(QObject):
             new_thrd.finished.connect(self.request_display)
             new_thrd.start()
             self.thrd_lst.append(new_thrd)
+            self.new_node = None
 
         except requests.exceptions.RequestException:
             print("something went wrong with the request launch")
@@ -396,12 +398,12 @@ class MainObject(QObject):
     def request_display(self):
         cmd = {"nod_lst":"", "cmd_lst":["display"]}
         self.server_nod_lst = json_data_request(uni_url, cmd)
-        if self.server_nod_lst is not None:
-            self.display(self.server_nod_lst)
+        if self.new_node is not None:
+            self.add_new_node()
+            self.display(self.local_nod_lst)
 
         else:
-            print("something went wrong with the list of nodes")
-
+            self.display(self.server_nod_lst)
 
     def request_display_log(self, nod_lst_in = 0):
         self.window.incoming_text.clear()
@@ -437,6 +439,15 @@ class MainObject(QObject):
 
         self.params2run = []
 
+    def add_new_node(self):
+        self.local_nod_lst.append(self.new_node)
+        self.current_lin_num = self.new_lin_num
+        print("self.current_lin_num", self.current_lin_num)
+        self.display(self.local_nod_lst)
+        self.window.CmdEdit.setText(
+            "dials." + str(self.new_node["cmd2show"][0])
+        )
+
     def nxt_clicked(self):
         print("nxt_clicked")
         str_key = self.sender().cmd_str
@@ -450,25 +461,20 @@ class MainObject(QObject):
             if node["lin_num"] > max_lin_num:
                 max_lin_num = node["lin_num"]
 
-        new_node_lin_num = max_lin_num + 1
+        self.new_lin_num = max_lin_num + 1
 
         for pos, node in enumerate(self.local_nod_lst):
             if node["lin_num"] == self.current_lin_num:
-                node["child_node_lst"].append(new_node_lin_num)
+                node["child_node_lst"].append(self.new_lin_num)
 
-        self.local_nod_lst.append(
-            {
-                'lin_num': new_node_lin_num,
-                'status': 'Ready',
-                'cmd2show': [str_key],
-                'child_node_lst': [],
-                'parent_node_lst': [self.current_lin_num]
-            }
-        )
-        self.current_lin_num = new_node_lin_num
-        print("self.current_lin_num", self.current_lin_num)
-        self.display(self.local_nod_lst)
-        self.window.CmdEdit.setText("dials." + str(str_key))
+        self.new_node = {
+            'lin_num': self.new_lin_num,
+            'status': 'Ready',
+            'cmd2show': [str_key],
+            'child_node_lst': [],
+            'parent_node_lst': [self.current_lin_num]
+        }
+        self.add_new_node()
 
 
 if __name__ == "__main__":
