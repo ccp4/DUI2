@@ -396,14 +396,17 @@ class MainObject(QObject):
         self.tree_scene.update()
 
     def request_display(self):
+        print("\n request_display \n")
         cmd = {"nod_lst":"", "cmd_lst":["display"]}
         self.server_nod_lst = json_data_request(uni_url, cmd)
-        if self.new_node is not None:
-            self.add_new_node()
-            self.display(self.local_nod_lst)
+        if self.new_node is None:
+            self.display(self.server_nod_lst)
+            print("self.new_node is None")
 
         else:
-            self.display(self.server_nod_lst)
+            print("self.new_node is ... NOT ... None")
+            self.local_nod_lst = copy_lst_nodes(self.server_nod_lst)
+            self.add_new_node()
 
     def request_display_log(self, nod_lst_in = 0):
         self.window.incoming_text.clear()
@@ -441,8 +444,10 @@ class MainObject(QObject):
 
     def add_new_node(self):
         self.local_nod_lst.append(self.new_node)
-        self.current_lin_num = self.new_lin_num
-        print("self.current_lin_num", self.current_lin_num)
+        for node in self.local_nod_lst:
+            if node["lin_num"] in self.new_node["parent_node_lst"]:
+                node["child_node_lst"].append(self.current_lin_num)
+
         self.display(self.local_nod_lst)
         self.window.CmdEdit.setText(
             "dials." + str(self.new_node["cmd2show"][0])
@@ -456,23 +461,20 @@ class MainObject(QObject):
         self.current_params_widget = str_key
 
         self.local_nod_lst = copy_lst_nodes(self.server_nod_lst)
+        par_lin_num = int(self.current_lin_num)
         max_lin_num = 0
         for node in self.local_nod_lst:
             if node["lin_num"] > max_lin_num:
                 max_lin_num = node["lin_num"]
 
-        self.new_lin_num = max_lin_num + 1
-
-        for pos, node in enumerate(self.local_nod_lst):
-            if node["lin_num"] == self.current_lin_num:
-                node["child_node_lst"].append(self.new_lin_num)
+        self.current_lin_num = max_lin_num + 1
 
         self.new_node = {
-            'lin_num': self.new_lin_num,
+            'lin_num': int(self.current_lin_num),
             'status': 'Ready',
-            'cmd2show': [str_key],
+            'cmd2show': [str(str_key)],
             'child_node_lst': [],
-            'parent_node_lst': [self.current_lin_num]
+            'parent_node_lst': [par_lin_num]
         }
         self.add_new_node()
 
