@@ -437,7 +437,9 @@ class MainObject(QObject):
 
         try:
             new_req_get = requests.get(uni_url, stream = True, params = cmd)
-            #TODO make sure whe client is relaunched, somehow
+            #TODO make sure when client is relaunched,
+            #TODO somehow it know about busy nodes
+
             new_thrd = Run_n_Output(new_req_get)
             new_thrd.new_line_out.connect(self.add_line)
             new_thrd.first_line.connect(self.request_display)
