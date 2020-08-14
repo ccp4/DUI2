@@ -288,7 +288,6 @@ class MainObject(QObject):
         self.current_lin_num = 0
 
         self.thrd_lst = []
-        #self.req_get_lst = [] #TODO: make sure this list is needed
         self.window.show()
 
     def on_retry(self):
@@ -431,9 +430,6 @@ class MainObject(QObject):
         nod_str = str(self.window.NumLinLst.text())
         nod_lst = nod_str.split(" ")
         self.window.NumLinLst.clear()
-        #TODO put the busy node coming from request display instead of "..."
-        #self.window.NumLinLst.setText(str(...))
-
         self.window.incoming_text.clear()
         print("\n nod_lst", nod_lst)
         cmd = {"nod_lst":nod_lst, "cmd_lst":[cmd_str]}
@@ -441,8 +437,8 @@ class MainObject(QObject):
 
         try:
             new_req_get = requests.get(uni_url, stream = True, params = cmd)
+            #TODO make sure whe client is relaunched, somehow
             new_thrd = Run_n_Output(new_req_get)
-            #self.req_get_lst.append(new_req_get)
             new_thrd.new_line_out.connect(self.add_line)
             new_thrd.first_line.connect(self.request_display)
             new_thrd.finished.connect(self.request_display)
