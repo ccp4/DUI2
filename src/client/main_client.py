@@ -426,6 +426,9 @@ class MainObject(QObject):
         )
     def lin_num_from_first_line(self, line_in):
         print("\n lin_num_from_first_line:", line_in, "\n")
+
+        nod_lin_num = int(line_in.split("=")[1])
+        print("nod_lin_num = ", nod_lin_num)
         self.request_display()
 
     def request_launch(self):
