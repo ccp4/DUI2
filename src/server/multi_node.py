@@ -212,6 +212,15 @@ class CmdNode(object):
             new_line = None
             self._log_line_lst = []
             n_Broken_Pipes = 0
+            if req_obj is not None:
+                try:
+                    str_lin_num = "node.lin_num=" + str(self.lin_num) + "\n"
+                    req_obj.wfile.write(bytes(str_lin_num , 'utf-8'))
+
+                except BrokenPipeError:
+                    print("\n *** BrokenPipeError *** while sending lin_num \n")
+
+
             while proc.poll() is None or new_line != '':
                 new_line = proc.stdout.readline()
                 if req_obj is not None:

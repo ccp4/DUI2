@@ -86,7 +86,7 @@ def json_data_request(url, cmd):
 
 class Run_n_Output(QThread):
     new_line_out = Signal(str)
-    first_line = Signal()
+    first_line = Signal(str)
     def __init__(self, request):
         super(Run_n_Output, self).__init__()
         self.request = request
@@ -99,11 +99,14 @@ class Run_n_Output(QThread):
             single_char = str(tmp_dat.decode('utf-8'))
             line_str += single_char
             if single_char == '\n':
-                self.new_line_out.emit(line_str)
-                line_str = ''
                 if not_yet_read:
-                    self.first_line.emit()
+                    self.first_line.emit(line_str)
                     not_yet_read = False
+
+                else:
+                    self.new_line_out.emit(line_str)
+
+                line_str = ''
 
             elif line_str[-7:] == '/*EOF*/':
                 print('>>  /*EOF*/  <<')
@@ -421,6 +424,9 @@ class MainObject(QObject):
         self.window.CmdEdit.setText(
             "dials." + str(self.new_node["cmd2show"][0])
         )
+    def lin_num_from_first_line(self, line_in):
+        print("\n lin_num_from_first_line:", line_in, "\n")
+        self.request_display()
 
     def request_launch(self):
         cmd_str = str(self.window.CmdEdit.text())
@@ -439,10 +445,9 @@ class MainObject(QObject):
             new_req_get = requests.get(uni_url, stream = True, params = cmd)
             #TODO make sure when client is relaunched,
             #TODO somehow it know about busy nodes
-
             new_thrd = Run_n_Output(new_req_get)
             new_thrd.new_line_out.connect(self.add_line)
-            new_thrd.first_line.connect(self.request_display)
+            new_thrd.first_line.connect(self.lin_num_from_first_line)
             new_thrd.finished.connect(self.request_display)
             new_thrd.start()
             self.thrd_lst.append(new_thrd)
