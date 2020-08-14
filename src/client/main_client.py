@@ -288,7 +288,7 @@ class MainObject(QObject):
         self.current_lin_num = 0
 
         self.thrd_lst = []
-        self.req_get_lst = [] #TODO: make sure this list is needed
+        #self.req_get_lst = [] #TODO: make sure this list is needed
         self.window.show()
 
     def on_retry(self):
@@ -358,36 +358,6 @@ class MainObject(QObject):
         print("\n main_cmd = ", cmd2run, "\n")
         self.window.CmdEdit.setText(str(cmd2run))
 
-    def request_launch(self):
-        cmd_str = str(self.window.CmdEdit.text())
-        self.params2run = []
-        self.window.CmdEdit.clear()
-        print("\n cmd_str", cmd_str)
-        nod_str = str(self.window.NumLinLst.text())
-        nod_lst = nod_str.split(" ")
-        self.window.NumLinLst.clear()
-        #TODO put the busy node coming from request display instead of "..."
-        #self.window.NumLinLst.setText(str(...))
-
-        self.window.incoming_text.clear()
-        print("\n nod_lst", nod_lst)
-        cmd = {"nod_lst":nod_lst, "cmd_lst":[cmd_str]}
-        print("cmd =", cmd)
-
-        try:
-            new_req_get = requests.get(uni_url, stream = True, params = cmd)
-            new_thrd = Run_n_Output(new_req_get)
-            self.req_get_lst.append(new_req_get)
-            new_thrd.new_line_out.connect(self.add_line)
-            new_thrd.first_line.connect(self.request_display)
-            new_thrd.finished.connect(self.request_display)
-            new_thrd.start()
-            self.thrd_lst.append(new_thrd)
-            self.new_node = None
-
-        except requests.exceptions.RequestException:
-            print("something went wrong with the request launch")
-
     def display(self, in_lst_nodes):
         lst_str = self.tree_obj(lst_nod = in_lst_nodes)
         lst_2d_dat = self.tree_obj.get_tree_data()
@@ -452,6 +422,36 @@ class MainObject(QObject):
         self.window.CmdEdit.setText(
             "dials." + str(self.new_node["cmd2show"][0])
         )
+
+    def request_launch(self):
+        cmd_str = str(self.window.CmdEdit.text())
+        self.params2run = []
+        self.window.CmdEdit.clear()
+        print("\n cmd_str", cmd_str)
+        nod_str = str(self.window.NumLinLst.text())
+        nod_lst = nod_str.split(" ")
+        self.window.NumLinLst.clear()
+        #TODO put the busy node coming from request display instead of "..."
+        #self.window.NumLinLst.setText(str(...))
+
+        self.window.incoming_text.clear()
+        print("\n nod_lst", nod_lst)
+        cmd = {"nod_lst":nod_lst, "cmd_lst":[cmd_str]}
+        print("cmd =", cmd)
+
+        try:
+            new_req_get = requests.get(uni_url, stream = True, params = cmd)
+            new_thrd = Run_n_Output(new_req_get)
+            #self.req_get_lst.append(new_req_get)
+            new_thrd.new_line_out.connect(self.add_line)
+            new_thrd.first_line.connect(self.request_display)
+            new_thrd.finished.connect(self.request_display)
+            new_thrd.start()
+            self.thrd_lst.append(new_thrd)
+            self.new_node = None
+
+        except requests.exceptions.RequestException:
+            print("something went wrong with the request launch")
 
     def nxt_clicked(self):
         print("nxt_clicked")
