@@ -401,9 +401,14 @@ class MainObject(QObject):
         self.window.incoming_text.clear()
         cmd = {"nod_lst":[nod_lst_in], "cmd_lst":["display_log"]}
         lst_log_lines = json_data_request(uni_url, cmd)
-        for single_log_line in lst_log_lines[0]:
-            self.window.incoming_text.insertPlainText(single_log_line + "\n")
-            self.window.incoming_text.moveCursor(QTextCursor.End)
+        try:
+            for single_log_line in lst_log_lines[0]:
+                self.window.incoming_text.insertPlainText(single_log_line + "\n")
+                self.window.incoming_text.moveCursor(QTextCursor.End)
+
+        except IndexError:
+            self.window.incoming_text.insertPlainText("node without log output" + "\n")
+            print("node without log output")
 
     def reset_param(self):
         print("reset_param")
@@ -512,6 +517,8 @@ class MainObject(QObject):
             'parent_node_lst': [par_lin_num]
         }
         self.add_new_node()
+        self.window.incoming_text.clear()
+        self.window.incoming_text.insertPlainText("Ready to run: ")
 
 
 if __name__ == "__main__":
