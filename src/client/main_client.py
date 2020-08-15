@@ -81,15 +81,24 @@ def json_data_request(url, cmd):
         print("\n requests.exceptions.RequestException \n")
         json_out = None
 
+    to_remove = '''
+    try:
+        print("\n json_out: \n", json_out, "\n")
+
+    except UnicodeEncodeError:
+        print("\n json_out UnicodeEncodeError \n")
+    '''
+
     return json_out
 
 
 class Run_n_Output(QThread):
-    new_line_out = Signal(str)
-    first_line = Signal(str)
+    new_line_out = Signal(str, int)
+    first_line = Signal(int)
     def __init__(self, request):
         super(Run_n_Output, self).__init__()
         self.request = request
+        self.lin_num = None
 
     def run(self):
         line_str = ''
@@ -100,20 +109,21 @@ class Run_n_Output(QThread):
             line_str += single_char
             if single_char == '\n':
                 if not_yet_read:
-                    self.first_line.emit(line_str)
                     not_yet_read = False
                     nod_lin_num = int(line_str.split("=")[1])
                     self.lin_num = nod_lin_num
                     print("\n QThread.lin_num =", self.lin_num)
+                    self.first_line.emit(self.lin_num)
 
                 else:
-                    self.new_line_out.emit(line_str)
+                    self.new_line_out.emit(line_str, self.lin_num)
 
                 line_str = ''
 
             elif line_str[-7:] == '/*EOF*/':
+                #TODO: consider a different Signal to say finished
                 print('>>  /*EOF*/  <<')
-                self.new_line_out.emit(' \n /*EOF*/ \n')
+                self.new_line_out.emit(' \n /*EOF*/ \n', self.lin_num)
                 break
 
             self.usleep(1)
@@ -289,6 +299,7 @@ class MainObject(QObject):
         self.change_widget(self.current_params_widget)
 
         self.new_node = None
+        self.lst_log_out = [] #{"lin_num": int, "log_line_lst": [str]}
         self.request_display()
         self.local_nod_lst = copy_lst_nodes(self.server_nod_lst)
         self.current_lin_num = 0
@@ -346,10 +357,26 @@ class MainObject(QObject):
 
         self.request_display_log(nod_num)
 
-    def add_line(self, new_line):
-        self.window.incoming_text.moveCursor(QTextCursor.End)
-        self.window.incoming_text.insertPlainText(new_line)
-        self.window.incoming_text.moveCursor(QTextCursor.End)
+    def add_line(self, new_line, nod_lin_num):
+        #self.lst_log_out = [] #{"lin_num": int, "log_line_lst": [str]}
+        found_lin_num = False
+        for log_node in self.lst_log_out:
+            if log_node["lin_num"] == nod_lin_num:
+                log_node["log_line_lst"].append(new_line)
+                found_lin_num = True
+
+        if not found_lin_num:
+            self.lst_log_out.append(
+                {
+                    "lin_num"       : nod_lin_num,
+                    "log_line_lst"  : [new_line]
+                }
+            )
+
+        if self.current_lin_num == nod_lin_num:
+            self.window.incoming_text.moveCursor(QTextCursor.End)
+            self.window.incoming_text.insertPlainText(new_line)
+            self.window.incoming_text.moveCursor(QTextCursor.End)
 
     def item_param_changed(self, str_path, str_value):
         print("item paran changed")
@@ -374,8 +401,9 @@ class MainObject(QObject):
         self.window.incoming_text.clear()
         cmd = {"nod_lst":[nod_lst_in], "cmd_lst":["display_log"]}
         lst_log_lines = json_data_request(uni_url, cmd)
-        for log_line in lst_log_lines[0]:
-            self.add_line(log_line + "\n")
+        for single_log_line in lst_log_lines[0]:
+            self.window.incoming_text.insertPlainText(single_log_line + "\n")
+            self.window.incoming_text.moveCursor(QTextCursor.End)
 
     def reset_param(self):
         print("reset_param")
@@ -428,6 +456,10 @@ class MainObject(QObject):
             self.local_nod_lst = copy_lst_nodes(self.server_nod_lst)
             self.add_new_node()
 
+    def line_n1_in(self, lin_num_in):
+        print("new_node(lin_num) =", lin_num_in)
+        self.request_display()
+
     def request_launch(self):
         cmd_str = str(self.window.CmdEdit.text())
         self.params2run = []
@@ -447,7 +479,7 @@ class MainObject(QObject):
             #TODO somehow it know about busy nodes
             new_thrd = Run_n_Output(new_req_get)
             new_thrd.new_line_out.connect(self.add_line)
-            new_thrd.first_line.connect(self.request_display)
+            new_thrd.first_line.connect(self.line_n1_in)
             new_thrd.finished.connect(self.request_display)
             new_thrd.start()
             self.thrd_lst.append(new_thrd)
