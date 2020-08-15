@@ -301,11 +301,6 @@ class Runner(object):
                 for lin2go in cmd_dict["nod_lst"]:
                     try:
                         lst2add = self.step_list[lin2go]._log_line_lst
-                        print("\n" + "<" * 80)
-                        for single_line in lst2add:
-                            print(single_line)
-
-                        print(">" * 80 + "\n")
                         return_list.append(lst2add)
 
                     except IndexError:
