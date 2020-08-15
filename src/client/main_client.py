@@ -102,6 +102,9 @@ class Run_n_Output(QThread):
                 if not_yet_read:
                     self.first_line.emit(line_str)
                     not_yet_read = False
+                    nod_lin_num = int(line_str.split("=")[1])
+                    self.lin_num = nod_lin_num
+                    print("\n QThread.lin_num =", self.lin_num)
 
                 else:
                     self.new_line_out.emit(line_str)
@@ -367,19 +370,6 @@ class MainObject(QObject):
         self.tree_scene.draw_tree_graph(lst_2d_dat)
         self.tree_scene.update()
 
-    def request_display(self):
-        print("\n request_display \n")
-        cmd = {"nod_lst":"", "cmd_lst":["display"]}
-        self.server_nod_lst = json_data_request(uni_url, cmd)
-        if self.new_node is None:
-            self.display(self.server_nod_lst)
-            print("self.new_node is None")
-
-        else:
-            print("self.new_node is ... NOT ... None")
-            self.local_nod_lst = copy_lst_nodes(self.server_nod_lst)
-            self.add_new_node()
-
     def request_display_log(self, nod_lst_in = 0):
         self.window.incoming_text.clear()
         cmd = {"nod_lst":[nod_lst_in], "cmd_lst":["display_log"]}
@@ -424,12 +414,19 @@ class MainObject(QObject):
         self.window.CmdEdit.setText(
             "dials." + str(self.new_node["cmd2show"][0])
         )
-    def lin_num_from_first_line(self, line_in):
-        print("\n lin_num_from_first_line:", line_in, "\n")
 
-        nod_lin_num = int(line_in.split("=")[1])
-        print("nod_lin_num = ", nod_lin_num)
-        self.request_display()
+    def request_display(self):
+        print("\n request_display \n")
+        cmd = {"nod_lst":"", "cmd_lst":["display"]}
+        self.server_nod_lst = json_data_request(uni_url, cmd)
+        if self.new_node is None:
+            self.display(self.server_nod_lst)
+            print("self.new_node is None")
+
+        else:
+            print("self.new_node is ... NOT ... None")
+            self.local_nod_lst = copy_lst_nodes(self.server_nod_lst)
+            self.add_new_node()
 
     def request_launch(self):
         cmd_str = str(self.window.CmdEdit.text())
@@ -450,7 +447,7 @@ class MainObject(QObject):
             #TODO somehow it know about busy nodes
             new_thrd = Run_n_Output(new_req_get)
             new_thrd.new_line_out.connect(self.add_line)
-            new_thrd.first_line.connect(self.lin_num_from_first_line)
+            new_thrd.first_line.connect(self.request_display)
             new_thrd.finished.connect(self.request_display)
             new_thrd.start()
             self.thrd_lst.append(new_thrd)
