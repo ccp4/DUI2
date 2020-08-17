@@ -299,7 +299,8 @@ class MainObject(QObject):
         self.change_widget(self.current_params_widget)
 
         self.new_node = None
-        self.lst_log_out = [] #{"lin_num": int, "log_line_lst": [str]}
+        self.lst_node_info_out = [] #{"lin_num": int, "log_line_lst": [str]}
+
         self.request_display()
         self.local_nod_lst = copy_lst_nodes(self.server_nod_lst)
         self.current_lin_num = 0
@@ -354,19 +355,19 @@ class MainObject(QObject):
 
         except IndexError:
             print("IndexError, nod_num =", nod_num)
+            return
 
-        self.request_display_log(nod_num)
+        self.display_log(nod_num)
 
     def add_line(self, new_line, nod_lin_num):
-        #self.lst_log_out = [] #{"lin_num": int, "log_line_lst": [str]}
         found_lin_num = False
-        for log_node in self.lst_log_out:
+        for log_node in self.lst_node_info_out:
             if log_node["lin_num"] == nod_lin_num:
-                log_node["log_line_lst"].append(new_line)
+                log_node["log_line_lst"].append(new_line[0:-1])
                 found_lin_num = True
 
         if not found_lin_num:
-            self.lst_log_out.append(
+            self.lst_node_info_out.append(
                 {
                     "lin_num"       : nod_lin_num,
                     "log_line_lst"  : [new_line]
@@ -397,18 +398,27 @@ class MainObject(QObject):
         self.tree_scene.draw_tree_graph(lst_2d_dat)
         self.tree_scene.update()
 
-    def request_display_log(self, nod_lst_in = 0):
-        self.window.incoming_text.clear()
-        cmd = {"nod_lst":[nod_lst_in], "cmd_lst":["display_log"]}
-        lst_log_lines = json_data_request(uni_url, cmd)
-        try:
-            for single_log_line in lst_log_lines[0]:
-                self.window.incoming_text.insertPlainText(single_log_line + "\n")
-                self.window.incoming_text.moveCursor(QTextCursor.End)
+    def display_log(self, nod_lin_num = 0):
+        found_lin_num = False
+        for log_node in self.lst_node_info_out:
+            if log_node["lin_num"] == nod_lin_num:
+                found_lin_num = True
+                lst_log_lines = log_node["log_line_lst"]
 
-        except IndexError:
-            self.window.incoming_text.insertPlainText("node without log output" + "\n")
-            print("node without log output")
+        if not found_lin_num:
+            cmd = {"nod_lst":[nod_lin_num], "cmd_lst":["display_log"]}
+            json_log = json_data_request(uni_url, cmd)
+            lst_log_lines = json_log[0]
+            self.lst_node_info_out.append(
+                {
+                    "lin_num"       : nod_lin_num,
+                    "log_line_lst"  : lst_log_lines
+                }
+            )
+        self.window.incoming_text.clear()
+        for single_log_line in lst_log_lines:
+            self.window.incoming_text.insertPlainText(single_log_line + "\n")
+            self.window.incoming_text.moveCursor(QTextCursor.End)
 
     def reset_param(self):
         print("reset_param")
