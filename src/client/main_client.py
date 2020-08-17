@@ -350,7 +350,7 @@ class MainObject(QObject):
             self.change_widget(key2find)
 
         except KeyError:
-            print("command widget for", key2find, "not there yet")
+            print("command widget not there yet")
 
         except IndexError:
             print("IndexError, nod_num =", nod_num)
