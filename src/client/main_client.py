@@ -310,6 +310,35 @@ class MainObject(QObject):
 
     def on_retry(self):
         print("on_retry")
+        nod2clone = self.server_nod_lst[int(self.current_lin_num)]
+        str_key = str(nod2clone["cmd2show"][0][6:])
+        print("str_key: ", str_key)
+        self.change_widget(str_key)
+        self.current_params_widget = str_key
+        #TODO put here the cloned parameters
+        self.local_nod_lst = copy_lst_nodes(self.server_nod_lst)
+        max_lin_num = 0
+        for node in self.local_nod_lst:
+            if node["lin_num"] > max_lin_num:
+                max_lin_num = node["lin_num"]
+
+        self.current_lin_num = max_lin_num + 1
+        self.new_node = {
+            'lin_num': int(self.current_lin_num),
+            'status': 'Ready',
+            'cmd2show': list(nod2clone["cmd2show"]),
+            'child_node_lst': [],
+            'parent_node_lst': list(nod2clone["parent_node_lst"])
+        }
+        self.add_new_node()
+        self.window.incoming_text.clear()
+        self.window.incoming_text.insertPlainText("Ready to run: ")
+
+        n_lst_str = ""
+        for par_nod_num in self.new_node["parent_node_lst"]:
+            n_lst_str += str(par_nod_num) + " "
+
+        self.window.NumLinLst.setText(n_lst_str)
 
     def req_stop(self):
         print("req_stop")
@@ -339,17 +368,20 @@ class MainObject(QObject):
             self.window.incoming_text.insertPlainText("Ready to run ...")
             n_lst_str = ""
             for par_nod_num in cur_nod["parent_node_lst"]:
-                n_lst_str += str(par_nod_num)
+                n_lst_str += str(par_nod_num) + " "
 
             self.window.NumLinLst.setText(n_lst_str)
+
+        cmd_ini = cur_nod["cmd2show"][0]
+        key2find = cmd_ini[6:]
+
+        try:
+            self.change_widget(key2find)
 
         except KeyError:
             print("command widget not there yet")
             return
 
-        cmd_ini = cur_nod["cmd2show"][0]
-        key2find = cmd_ini[6:]
-        self.change_widget(key2find)
 
 
         to_review_later = '''
