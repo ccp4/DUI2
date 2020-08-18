@@ -327,7 +327,32 @@ class MainObject(QObject):
 
     def on_node_click(self, nod_num):
         self.current_lin_num = nod_num
-        print("self.current_lin_num", self.current_lin_num)
+        try:
+            cur_nod = self.server_nod_lst[nod_num]
+            self.display_log(nod_num)
+            self.window.NumLinLst.setText(str(nod_num))
+
+        except IndexError:
+            print("nod_num ", nod_num, "not ran yet")
+            cur_nod = self.local_nod_lst[nod_num]
+            self.window.incoming_text.clear()
+            self.window.incoming_text.insertPlainText("Ready to run ...")
+            n_lst_str = ""
+            for par_nod_num in cur_nod["parent_node_lst"]:
+                n_lst_str += str(par_nod_num)
+
+            self.window.NumLinLst.setText(n_lst_str)
+
+        except KeyError:
+            print("command widget not there yet")
+            return
+
+        cmd_ini = cur_nod["cmd2show"][0]
+        key2find = cmd_ini[6:]
+        self.change_widget(key2find)
+
+
+        to_review_later = '''
         if(
             self.window.CurrentControlWidgetLabel.text() == "combine_experiments"
             or
@@ -340,25 +365,7 @@ class MainObject(QObject):
 
         else:
             self.window.NumLinLst.setText(str(nod_num))
-
-        try:
-            cur_nod = self.server_nod_lst[nod_num]
-            print("cur_nod[cmd2show] <<", cur_nod["cmd2show"], ">>")
-            cmd_ini = cur_nod["cmd2show"][0]
-            print("cmd_ini", cmd_ini)
-            key2find = cmd_ini[6:]
-            print("key2find =", key2find)
-            self.change_widget(key2find)
-
-        except KeyError:
-            print("command widget not there yet")
-
-        except IndexError:
-            print("IndexError, nod_num =", nod_num)
-            return
-
-        self.display_log(nod_num)
-
+        '''
     def add_line(self, new_line, nod_lin_num):
         found_lin_num = False
         for log_node in self.lst_node_info_out:
@@ -455,7 +462,7 @@ class MainObject(QObject):
 
         self.display(self.local_nod_lst)
         self.window.CmdEdit.setText(
-            "dials." + str(self.new_node["cmd2show"][0])
+            str(self.new_node["cmd2show"][0])
         )
 
     def request_display(self):
@@ -522,7 +529,7 @@ class MainObject(QObject):
         self.new_node = {
             'lin_num': int(self.current_lin_num),
             'status': 'Ready',
-            'cmd2show': [str(str_key)],
+            'cmd2show': ["dials." + str(str_key)],
             'child_node_lst': [],
             'parent_node_lst': [par_lin_num]
         }
