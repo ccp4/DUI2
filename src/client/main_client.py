@@ -338,6 +338,7 @@ class MainObject(QObject):
         for par_nod_num in self.new_node["parent_node_lst"]:
             n_lst_str += str(par_nod_num) + " "
 
+        n_lst_str = n_lst_str[:-1]
         self.window.NumLinLst.setText(n_lst_str)
 
     def req_stop(self):
@@ -370,6 +371,7 @@ class MainObject(QObject):
             for par_nod_num in cur_nod["parent_node_lst"]:
                 n_lst_str += str(par_nod_num) + " "
 
+            n_lst_str = n_lst_str[:-1]
             self.window.NumLinLst.setText(n_lst_str)
 
         cmd_ini = cur_nod["cmd2show"][0]
@@ -493,9 +495,8 @@ class MainObject(QObject):
                 node["child_node_lst"].append(self.current_lin_num)
 
         self.display(self.local_nod_lst)
-        self.window.CmdEdit.setText(
-            str(self.new_node["cmd2show"][0])
-        )
+        self.window.CmdEdit.setText(self.new_node["cmd2show"][0])
+        #TODO add parameters in self.window.CmdEdit
 
     def request_display(self):
         print("\n request_display \n")
