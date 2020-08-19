@@ -21,7 +21,7 @@ copyright (c) CCP4 - DLS
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-import subprocess
+import subprocess, psutil
 import os, sys
 import glob, json
 
@@ -42,8 +42,9 @@ from params_2_json import get_param_list
 
 def fix_alias(short_in):
     pair_list = [
-        ("d", "display" ),
-        ("dl", "display_log" ),
+        ("d", "display"                                     ),
+        ("dl", "display_log"                                ),
+        ("st", "stop"                                       ),
         ("fdp", "find_spots_params"                         ),
         ("idp", "index_params"                              ),
         ("rbp", "refine_bravais_settings_params"            ),
@@ -130,7 +131,8 @@ class CmdNode(object):
         self.set_in_fil_n_par(lst_in)
         self.set_base_dir(os.getcwd())
         self.set_run_dir(self.lin_num)
-        self.run_cmd(req_obj)
+        self.nod_req = req_obj
+        self.run_cmd(self.nod_req)
 
     def set_root(self, run_dir = "/tmp/tst/", lst_expt = "/tmp/tst/imported.expt"):
         base_dir = os.getcwd()
@@ -197,11 +199,12 @@ class CmdNode(object):
                 self.lst2run[-1].append(par)
 
     def run_cmd(self, req_obj = None):
+        self.nod_req = req_obj
         self.status = "Busy"
         try:
             inner_lst = self.lst2run[-1]
             print("\n Running:", inner_lst, "\n")
-            proc = subprocess.Popen(
+            self.my_proc = subprocess.Popen(
                 inner_lst,
                 shell = False,
                 cwd = self._run_dir,
@@ -212,20 +215,20 @@ class CmdNode(object):
             new_line = None
             self._log_line_lst = []
             n_Broken_Pipes = 0
-            if req_obj is not None:
+            if self.nod_req is not None:
                 try:
                     str_lin_num = "node.lin_num=" + str(self.lin_num) + "\n"
-                    req_obj.wfile.write(bytes(str_lin_num , 'utf-8'))
+                    self.nod_req.wfile.write(bytes(str_lin_num , 'utf-8'))
 
                 except BrokenPipeError:
                     print("\n *** BrokenPipeError *** while sending lin_num \n")
 
 
-            while proc.poll() is None or new_line != '':
-                new_line = proc.stdout.readline()
-                if req_obj is not None:
+            while self.my_proc.poll() is None or new_line != '':
+                new_line = self.my_proc.stdout.readline()
+                if self.nod_req is not None:
                     try:
-                        req_obj.wfile.write(bytes(new_line , 'utf-8'))
+                        self.nod_req.wfile.write(bytes(new_line , 'utf-8'))
 
                     except BrokenPipeError:
                         n_Broken_Pipes += 1
@@ -238,12 +241,12 @@ class CmdNode(object):
             if n_Broken_Pipes > 0:
                 print("\n *** BrokenPipeError *** while sending output \n")
 
-            proc.stdout.close()
-            if proc.poll() == 0:
+            self.my_proc.stdout.close()
+            if self.my_proc.poll() == 0:
                 print("subprocess poll 0")
 
             else:
-                print("\n  *** ERROR *** \n\n poll =", proc.poll())
+                print("\n  *** ERROR *** \n\n poll =", self.my_proc.poll())
                 self.status = "Failed"
 
             if self.status != "Failed":
@@ -252,6 +255,25 @@ class CmdNode(object):
         except BaseException as e:
             print("Failed to run subprocess \n ERR:", e)
             self.status = "Failed"
+
+    def stop_me(self):
+        print("node", self.lin_num, "status:", self.status)
+        if self.status == "Busy":
+            print("attempting to stop the execution of node", self.lin_num)
+            try:
+                self.nod_req.wfile.write(bytes("attempting to stop \n" , 'utf-8'))
+                pid_num = self.my_proc.pid
+                parent_proc = psutil.Process(pid_num)
+                for child in parent_proc.children(recursive=True):
+                    child.kill()
+
+                parent_proc.kill()
+
+            except BrokenPipeError:
+                print("Broken Pipe Error")
+
+        else:
+            print("node", self.lin_num, "not running, so not stopping it")
 
 
 class Runner(object):
@@ -283,10 +305,13 @@ class Runner(object):
 
             full_cmd_lst.append(unalias_inner_lst)
 
+        print("full_cmd_lst", full_cmd_lst)
+
         if(
             len(tmp_parent_lst_in) > 0 and
             ["display"] not in full_cmd_lst and
-            ["display_log"] not in full_cmd_lst
+            ["display_log"] not in full_cmd_lst and
+            ["stop"] not in full_cmd_lst
         ):
             node2run = self._create_step(tmp_parent_lst_in)
 
@@ -302,6 +327,16 @@ class Runner(object):
                     try:
                         lst2add = self.step_list[lin2go]._log_line_lst
                         return_list.append(lst2add)
+
+                    except IndexError:
+                        print("\n *** ERROR *** \n wrong line \n not logging")
+
+            elif uni_cmd == ["stop"]:
+                for lin2go in cmd_dict["nod_lst"]:
+                    try:
+                        stat2add = self.step_list[lin2go].status
+                        return_list.append([stat2add])
+                        self.step_list[lin2go].stop_me()
 
                     except IndexError:
                         print("\n *** ERROR *** \n wrong line \n not logging")

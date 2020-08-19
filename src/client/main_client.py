@@ -305,9 +305,6 @@ class MainObject(QObject):
         self.thrd_lst = []
         self.window.show()
 
-    def req_stop(self):
-        print("req_stop")
-
     def clearLayout(self, layout):
         if layout is not None:
             while layout.count():
@@ -403,6 +400,10 @@ class MainObject(QObject):
         self.tree_scene.draw_tree_graph(lst_2d_dat)
         self.tree_scene.update()
 
+    def line_n1_in(self, lin_num_in):
+        print("new busy node = ", lin_num_in)
+        self.request_display()
+
     def display_log(self, nod_lin_num = 0):
         found_lin_num = False
         for log_node in self.lst_node_info_out:
@@ -474,10 +475,6 @@ class MainObject(QObject):
             self.local_nod_lst = copy_lst_nodes(self.server_nod_lst)
             self.add_new_node()
             print("self.new_node =", self.new_node)
-
-    def line_n1_in(self, lin_num_in):
-        print("new busy node = ", lin_num_in)
-        self.request_display()
 
     def request_launch(self):
         cmd_str = str(self.window.CmdEdit.text())
@@ -566,6 +563,23 @@ class MainObject(QObject):
 
         n_lst_str = n_lst_str[:-1]
         self.window.NumLinLst.setText(n_lst_str)
+
+    def req_stop(self):
+        print("req_stop")
+        self.window.CmdEdit.clear()
+        self.window.NumLinLst.clear()
+        self.window.incoming_text.clear()
+        nod_lst = [str(self.current_lin_num)]
+        print("\n nod_lst", nod_lst)
+        cmd = {"nod_lst":nod_lst, "cmd_lst":["stop"]}
+        print("cmd =", cmd)
+
+        try:
+            lst_params = json_data_request(uni_url, cmd)
+
+        except requests.exceptions.RequestException:
+            print("something went wrong with the request launch")
+
 
 
 if __name__ == "__main__":
