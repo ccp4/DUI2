@@ -81,14 +81,6 @@ def json_data_request(url, cmd):
         print("\n requests.exceptions.RequestException \n")
         json_out = None
 
-    to_remove = '''
-    try:
-        print("\n json_out: \n", json_out, "\n")
-
-    except UnicodeEncodeError:
-        print("\n json_out UnicodeEncodeError \n")
-    '''
-
     return json_out
 
 
@@ -158,70 +150,75 @@ class MainObject(QObject):
         ui_path += os.sep + "client.ui"
         self.window = QtUiTools.QUiLoader().load(ui_path)
 
-        imp_widg = ImportWidget()
-        imp_widg.item_changed.connect(self.item_param_changed)
-        self.window.ImportScrollArea.setWidget(imp_widg)
+        try:
+            imp_widg = ImportWidget()
+            imp_widg.item_changed.connect(self.item_param_changed)
+            self.window.ImportScrollArea.setWidget(imp_widg)
 
-        find_simpl_widg = FindspotsSimplerParameterTab()
-        find_simpl_widg.item_changed.connect(self.item_param_changed)
-        self.window.FindspotsSimplerScrollArea.setWidget(find_simpl_widg)
-        fd_advanced_parameters = build_advanced_params_widget("find_spots_params")
-        fd_advanced_parameters.item_changed.connect(self.item_param_changed)
-        self.window.FindspotsAdvancedScrollArea.setWidget(fd_advanced_parameters)
+            find_simpl_widg = FindspotsSimplerParameterTab()
+            find_simpl_widg.item_changed.connect(self.item_param_changed)
+            self.window.FindspotsSimplerScrollArea.setWidget(find_simpl_widg)
+            fd_advanced_parameters = build_advanced_params_widget("find_spots_params")
+            fd_advanced_parameters.item_changed.connect(self.item_param_changed)
+            self.window.FindspotsAdvancedScrollArea.setWidget(fd_advanced_parameters)
 
-        index_simpl_widg = IndexSimplerParamTab()
-        index_simpl_widg.item_changed.connect(self.item_param_changed)
-        self.window.IndexSimplerScrollArea.setWidget(index_simpl_widg)
-        id_advanced_parameters = build_advanced_params_widget("index_params")
-        id_advanced_parameters.item_changed.connect(self.item_param_changed)
-        self.window.IndexAdvancedScrollArea.setWidget(id_advanced_parameters)
+            index_simpl_widg = IndexSimplerParamTab()
+            index_simpl_widg.item_changed.connect(self.item_param_changed)
+            self.window.IndexSimplerScrollArea.setWidget(index_simpl_widg)
+            id_advanced_parameters = build_advanced_params_widget("index_params")
+            id_advanced_parameters.item_changed.connect(self.item_param_changed)
+            self.window.IndexAdvancedScrollArea.setWidget(id_advanced_parameters)
 
-        refi_brv_simpl_widg = RefineBravaiSimplerParamTab()
-        refi_brv_simpl_widg.item_changed.connect(self.item_param_changed)
-        self.window.RefineBravaiSimplerScrollArea.setWidget(refi_brv_simpl_widg)
-        rb_advanced_parameters = build_advanced_params_widget("refine_bravais_settings_params")
-        rb_advanced_parameters.item_changed.connect(self.item_param_changed)
-        self.window.RefineBravaiAdvancedScrollArea.setWidget(rb_advanced_parameters)
+            refi_brv_simpl_widg = RefineBravaiSimplerParamTab()
+            refi_brv_simpl_widg.item_changed.connect(self.item_param_changed)
+            self.window.RefineBravaiSimplerScrollArea.setWidget(refi_brv_simpl_widg)
+            rb_advanced_parameters = build_advanced_params_widget("refine_bravais_settings_params")
+            rb_advanced_parameters.item_changed.connect(self.item_param_changed)
+            self.window.RefineBravaiAdvancedScrollArea.setWidget(rb_advanced_parameters)
 
-        full_json_path = "/scratch/dui_tst/X4_wide/dui_files/bravais_summary.json"
-        r_index_widg = ReindexTable()
-        r_index_widg.add_opts_lst(json_path=full_json_path)
-        self.window.ReindexTableScrollArea.setWidget(r_index_widg)
+            full_json_path = "/scratch/dui_tst/X4_wide/dui_files/bravais_summary.json"
+            r_index_widg = ReindexTable()
+            r_index_widg.add_opts_lst(json_path=full_json_path)
+            self.window.ReindexTableScrollArea.setWidget(r_index_widg)
 
-        ref_simpl_widg = RefineSimplerParamTab()
-        ref_simpl_widg.item_changed.connect(self.item_param_changed)
-        self.window.RefineSimplerScrollArea.setWidget(ref_simpl_widg)
-        rf_advanced_parameters = build_advanced_params_widget("refine_params")
-        rf_advanced_parameters.item_changed.connect(self.item_param_changed)
-        self.window.RefineAdvancedScrollArea.setWidget(rf_advanced_parameters)
+            ref_simpl_widg = RefineSimplerParamTab()
+            ref_simpl_widg.item_changed.connect(self.item_param_changed)
+            self.window.RefineSimplerScrollArea.setWidget(ref_simpl_widg)
+            rf_advanced_parameters = build_advanced_params_widget("refine_params")
+            rf_advanced_parameters.item_changed.connect(self.item_param_changed)
+            self.window.RefineAdvancedScrollArea.setWidget(rf_advanced_parameters)
 
-        integr_simpl_widg = IntegrateSimplerParamTab()
-        integr_simpl_widg.item_changed.connect(self.item_param_changed)
-        self.window.IntegrateSimplerScrollArea.setWidget(integr_simpl_widg)
-        it_advanced_parameters = build_advanced_params_widget("integrate_params")
-        it_advanced_parameters.item_changed.connect(self.item_param_changed)
-        self.window.IntegrateAdvancedScrollArea.setWidget(it_advanced_parameters)
+            integr_simpl_widg = IntegrateSimplerParamTab()
+            integr_simpl_widg.item_changed.connect(self.item_param_changed)
+            self.window.IntegrateSimplerScrollArea.setWidget(integr_simpl_widg)
+            it_advanced_parameters = build_advanced_params_widget("integrate_params")
+            it_advanced_parameters.item_changed.connect(self.item_param_changed)
+            self.window.IntegrateAdvancedScrollArea.setWidget(it_advanced_parameters)
 
-        sym_simpl_widg = SymmetrySimplerParamTab()
-        sym_simpl_widg.item_changed.connect(self.item_param_changed)
-        self.window.SymmetrySimplerScrollArea.setWidget(sym_simpl_widg)
-        sm_advanced_parameters = build_advanced_params_widget("symmetry_params")
-        sm_advanced_parameters.item_changed.connect(self.item_param_changed)
-        self.window.SymmetryAdvancedScrollArea.setWidget(sm_advanced_parameters)
+            sym_simpl_widg = SymmetrySimplerParamTab()
+            sym_simpl_widg.item_changed.connect(self.item_param_changed)
+            self.window.SymmetrySimplerScrollArea.setWidget(sym_simpl_widg)
+            sm_advanced_parameters = build_advanced_params_widget("symmetry_params")
+            sm_advanced_parameters.item_changed.connect(self.item_param_changed)
+            self.window.SymmetryAdvancedScrollArea.setWidget(sm_advanced_parameters)
 
-        scale_simpl_widg = ScaleSimplerParamTab()
-        scale_simpl_widg.item_changed.connect(self.item_param_changed)
-        self.window.ScaleSimplerScrollArea.setWidget(scale_simpl_widg)
-        sc_advanced_parameters = build_advanced_params_widget("scale_params")
-        sc_advanced_parameters.item_changed.connect(self.item_param_changed)
-        self.window.ScaleAdvancedScrollArea.setWidget(sc_advanced_parameters)
+            scale_simpl_widg = ScaleSimplerParamTab()
+            scale_simpl_widg.item_changed.connect(self.item_param_changed)
+            self.window.ScaleSimplerScrollArea.setWidget(scale_simpl_widg)
+            sc_advanced_parameters = build_advanced_params_widget("scale_params")
+            sc_advanced_parameters.item_changed.connect(self.item_param_changed)
+            self.window.ScaleAdvancedScrollArea.setWidget(sc_advanced_parameters)
 
-        comb_simpl_widg = CombineExperimentSimplerParamTab()
-        comb_simpl_widg.item_changed.connect(self.item_param_changed)
-        self.window.CombineSimplerScrollArea.setWidget(comb_simpl_widg)
-        ce_advanced_parameters = build_advanced_params_widget("combine_experiments_params")
-        ce_advanced_parameters.item_changed.connect(self.item_param_changed)
-        self.window.CombineAdvancedScrollArea.setWidget(ce_advanced_parameters)
+            comb_simpl_widg = CombineExperimentSimplerParamTab()
+            comb_simpl_widg.item_changed.connect(self.item_param_changed)
+            self.window.CombineSimplerScrollArea.setWidget(comb_simpl_widg)
+            ce_advanced_parameters = build_advanced_params_widget("combine_experiments_params")
+            ce_advanced_parameters.item_changed.connect(self.item_param_changed)
+            self.window.CombineAdvancedScrollArea.setWidget(ce_advanced_parameters)
+
+        except TypeError:
+            print("failed to connect to server")
+            sys.exit()
 
         dummy_ls_widg = self.window.TmpLsPage
 
@@ -307,39 +304,6 @@ class MainObject(QObject):
 
         self.thrd_lst = []
         self.window.show()
-
-    def on_retry(self):
-        print("on_retry")
-        nod2clone = self.server_nod_lst[int(self.current_lin_num)]
-        str_key = str(nod2clone["cmd2show"][0][6:])
-        print("str_key: ", str_key)
-        self.change_widget(str_key)
-        self.current_params_widget = str_key
-        #TODO put here the cloned parameters
-        self.local_nod_lst = copy_lst_nodes(self.server_nod_lst)
-        max_lin_num = 0
-        for node in self.local_nod_lst:
-            if node["lin_num"] > max_lin_num:
-                max_lin_num = node["lin_num"]
-
-        self.current_lin_num = max_lin_num + 1
-        self.new_node = {
-            'lin_num': int(self.current_lin_num),
-            'status': 'Ready',
-            'cmd2show': list(nod2clone["cmd2show"]),
-            'child_node_lst': [],
-            'parent_node_lst': list(nod2clone["parent_node_lst"])
-        }
-        self.add_new_node()
-        self.window.incoming_text.clear()
-        self.window.incoming_text.insertPlainText("Ready to run: ")
-
-        n_lst_str = ""
-        for par_nod_num in self.new_node["parent_node_lst"]:
-            n_lst_str += str(par_nod_num) + " "
-
-        n_lst_str = n_lst_str[:-1]
-        self.window.NumLinLst.setText(n_lst_str)
 
     def req_stop(self):
         print("req_stop")
@@ -569,6 +533,39 @@ class MainObject(QObject):
         self.add_new_node()
         self.window.incoming_text.clear()
         self.window.incoming_text.insertPlainText("Ready to run: ")
+
+    def on_retry(self):
+        print("on_retry")
+        nod2clone = dict(self.server_nod_lst[int(self.current_lin_num)])
+        str_key = str(nod2clone["cmd2show"][0][6:])
+        print("str_key: ", str_key)
+        self.change_widget(str_key)
+        self.current_params_widget = str_key
+        #TODO put here the cloned parameters
+        self.local_nod_lst = copy_lst_nodes(self.server_nod_lst)
+        max_lin_num = 0
+        for node in self.local_nod_lst:
+            if node["lin_num"] > max_lin_num:
+                max_lin_num = node["lin_num"]
+
+        self.current_lin_num = max_lin_num + 1
+        self.new_node = {
+            'lin_num': int(self.current_lin_num),
+            'status': 'Ready',
+            'cmd2show': list(nod2clone["cmd2show"]),
+            'child_node_lst': [],
+            'parent_node_lst': list(nod2clone["parent_node_lst"])
+        }
+        self.add_new_node()
+        self.window.incoming_text.clear()
+        self.window.incoming_text.insertPlainText("Ready to run: ")
+
+        n_lst_str = ""
+        for par_nod_num in self.new_node["parent_node_lst"]:
+            n_lst_str += str(par_nod_num) + " "
+
+        n_lst_str = n_lst_str[:-1]
+        self.window.NumLinLst.setText(n_lst_str)
 
 
 if __name__ == "__main__":
