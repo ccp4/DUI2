@@ -456,7 +456,7 @@ class MainObject(QObject):
         self.local_nod_lst.append(self.new_node)
         for node in self.local_nod_lst:
             if node["lin_num"] in self.new_node["parent_node_lst"]:
-                node["child_node_lst"].append(self.current_lin_num)
+                node["child_node_lst"].append(int(self.new_node["lin_num"]))
 
         self.display(self.local_nod_lst)
         self.window.CmdEdit.setText(self.new_node["cmd2show"][0])
@@ -471,12 +471,12 @@ class MainObject(QObject):
             print("self.new_node is None")
 
         else:
-            print("self.new_node is ... NOT ... None")
             self.local_nod_lst = copy_lst_nodes(self.server_nod_lst)
             self.add_new_node()
+            print("self.new_node =", self.new_node)
 
     def line_n1_in(self, lin_num_in):
-        print("new_node(lin_num) =", lin_num_in)
+        print("new busy node = ", lin_num_in)
         self.request_display()
 
     def request_launch(self):
