@@ -210,6 +210,7 @@ class AdvancedParameters(QWidget):
                 par_str = str(data_info["default"])
                 data_info["widget"].setText(par_str)
 
+
 def draw_quadratic_bezier_3_points(scene_obj,
                           p1x, p1y, p2x, p2y, p3x, p3y,
                           lin_pen):
@@ -300,6 +301,7 @@ class TreeDirScene(QGraphicsScene):
         self.gray_brush = QBrush(Qt.gray, Qt.SolidPattern)
         self.light_gray_brush = QBrush(Qt.lightGray, Qt.SolidPattern)
         self.white_brush = QBrush(Qt.white, Qt.SolidPattern)
+        self.invisible_brush = QBrush(Qt.white, Qt.NoBrush)
 
         self.blue_pen = QPen(
             Qt.blue, 1.6, Qt.SolidLine,
@@ -346,8 +348,9 @@ class TreeDirScene(QGraphicsScene):
         if nod_num is not None:
             self.node_clicked.emit(nod_num)
 
-    def draw_tree_graph(self, nod_lst):
+    def draw_tree_graph(self, nod_lst, current_lin_num = 0):
         max_indent = 0
+        current_nod_pos = 0
         for node in nod_lst:
             if node["indent"] > max_indent:
                 max_indent = node["indent"]
@@ -361,6 +364,8 @@ class TreeDirScene(QGraphicsScene):
             dx + self.f_width, dy,
             self.gray_pen, self.light_gray_brush
         )
+
+
         for i in range(int((len(nod_lst) - 1) / 2 + 1)):
             pos = i * 2
             my_x, my_y = self.get_coords(pos, 0)
@@ -430,3 +435,17 @@ class TreeDirScene(QGraphicsScene):
             stat_text.setPos(self.f_width * 0.5, my_coord_y - self.f_height * 0.5)
             stat_text.setBrush(self.dark_blue_brush)
 
+            if node["lin_num"] == current_lin_num:
+                current_nod_pos = pos
+
+        #################################################################
+        right_x1, down_y1 = self.get_coords(current_nod_pos + 0.45, max_indent + 4.8)
+        left_x1, up_y1 = self.get_coords(current_nod_pos - 0.45, 0.2)
+        dx1 = right_x1 - left_x1
+        dy1 = down_y1 - up_y1
+        self.addRect(
+            left_x1 - self.f_width, up_y1,
+            dx1 + self.f_width, dy1,
+            self.dark_blue_pen, self.invisible_brush
+        )
+        #################################################################
