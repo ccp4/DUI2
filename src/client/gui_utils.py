@@ -302,6 +302,7 @@ class TreeDirScene(QGraphicsScene):
         self.light_gray_brush = QBrush(Qt.lightGray, Qt.SolidPattern)
         self.white_brush = QBrush(Qt.white, Qt.SolidPattern)
         self.invisible_brush = QBrush(Qt.white, Qt.NoBrush)
+        self.blue_gradient_brush = QBrush(Qt.blue, Qt.RadialGradientPattern)
 
         self.blue_pen = QPen(
             Qt.blue, 1.6, Qt.SolidLine,
@@ -365,7 +366,6 @@ class TreeDirScene(QGraphicsScene):
             self.gray_pen, self.light_gray_brush
         )
 
-
         for i in range(int((len(nod_lst) - 1) / 2 + 1)):
             pos = i * 2
             my_x, my_y = self.get_coords(pos, 0)
@@ -374,6 +374,22 @@ class TreeDirScene(QGraphicsScene):
                 dx - self.f_width, self.f_height * 2,
                 self.white_pen, self.white_brush
             )
+        #################################################################
+        for pos, node in enumerate(nod_lst):
+            if node["lin_num"] == current_lin_num:
+                current_nod_pos = pos
+
+        right_x1, down_y1 = self.get_coords(current_nod_pos + 0.43, max_indent + 4.7)
+        left_x1, up_y1 = self.get_coords(current_nod_pos - 0.43, 0.3)
+        dx1 = right_x1 - left_x1
+        dy1 = down_y1 - up_y1
+        self.addRect(
+            left_x1 - self.f_width, up_y1,
+            dx1 + self.f_width, dy1,
+            self.dark_blue_pen, self.cyan_brush
+        )
+        #################################################################
+
         for pos, obj2prn in enumerate(nod_lst):
             if len(obj2prn["par_lst"]) > 1:
                 my_coord_x ,my_coord_y = self.get_coords(pos, obj2prn["indent"])
@@ -434,18 +450,3 @@ class TreeDirScene(QGraphicsScene):
             stat_text = self.addSimpleText(str(node["stp_stat"]))
             stat_text.setPos(self.f_width * 0.5, my_coord_y - self.f_height * 0.5)
             stat_text.setBrush(self.dark_blue_brush)
-
-            if node["lin_num"] == current_lin_num:
-                current_nod_pos = pos
-
-        #################################################################
-        right_x1, down_y1 = self.get_coords(current_nod_pos + 0.45, max_indent + 4.8)
-        left_x1, up_y1 = self.get_coords(current_nod_pos - 0.45, 0.2)
-        dx1 = right_x1 - left_x1
-        dy1 = down_y1 - up_y1
-        self.addRect(
-            left_x1 - self.f_width, up_y1,
-            dx1 + self.f_width, dy1,
-            self.dark_blue_pen, self.invisible_brush
-        )
-        #################################################################
