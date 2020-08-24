@@ -298,9 +298,9 @@ class MainObject(QObject):
         self.new_node = None
         self.lst_node_info_out = [] #{"lin_num": int, "log_line_lst": [str]}
 
+        self.current_lin_num = 0
         self.request_display()
         self.local_nod_lst = copy_lst_nodes(self.server_nod_lst)
-        self.current_lin_num = 0
 
         self.thrd_lst = []
         self.window.show()
@@ -346,6 +346,7 @@ class MainObject(QObject):
             return
 
 
+        self.display()
 
         to_review_later = '''
         if(
@@ -393,12 +394,21 @@ class MainObject(QObject):
         print("\n main_cmd = ", cmd2run, "\n")
         self.window.CmdEdit.setText(str(cmd2run))
 
-    def display(self, in_lst_nodes):
-        lst_str = self.tree_obj(lst_nod = in_lst_nodes)
+    def display(self, in_lst_nodes = None):
+        if in_lst_nodes is None:
+            lst_2_draw = self.last_lst_nodes
+
+        else:
+            lst_2_draw = in_lst_nodes
+
+        lst_str = self.tree_obj(lst_nod = lst_2_draw)
         lst_2d_dat = self.tree_obj.get_tree_data()
         self.tree_scene.clear()
-        self.tree_scene.draw_tree_graph(lst_2d_dat)
+        self.tree_scene.draw_tree_graph(lst_2d_dat, self.current_lin_num)
         self.tree_scene.update()
+
+        if in_lst_nodes is not None:
+            self.last_lst_nodes = in_lst_nodes
 
     def line_n1_in(self, lin_num_in):
         print("new busy node = ", lin_num_in)
@@ -579,7 +589,6 @@ class MainObject(QObject):
 
         except requests.exceptions.RequestException:
             print("something went wrong with the request launch")
-
 
 
 if __name__ == "__main__":
