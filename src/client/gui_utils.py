@@ -330,20 +330,17 @@ class TreeDirScene(QGraphicsScene):
         return col * self.f_width * 4, row  * self.f_height * 2
 
     def mouseReleaseEvent(self, event):
-        x_ms = event.scenePos().x()
         y_ms = event.scenePos().y()
         nod_num = None
         min_d = None
         for num, nod in enumerate(self.lst_nod_pos):
-            dx_sq = (nod["x_pos"] - x_ms) ** 2
-            dy_sq = (nod["y_pos"] - y_ms) ** 2
-            d_sq = dx_sq + dy_sq
+            dy = abs(nod["y_pos"] - y_ms)
             if num == 0:
-                min_d = d_sq
+                min_d = dy
                 nod_num = nod["lin_num"]
 
-            elif d_sq < min_d:
-                min_d = d_sq
+            elif dy < min_d:
+                min_d = dy
                 nod_num = nod["lin_num"]
 
         if nod_num is not None:
