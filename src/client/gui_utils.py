@@ -327,6 +327,22 @@ class TreeDirScene(QGraphicsScene):
         self.lst_nod_pos = []
         self.nod_lst = None
 
+        self.bar_pos = 1
+        timer = QTimer(self)
+        timer.timeout.connect(self.refresh_bars)
+        timer.start(333)
+
+    def refresh_bars(self):
+        do_refresh = False
+        if self.nod_lst is not None:
+            for node in self.nod_lst:
+                if node["stp_stat"] == "B":
+                    self.bar_pos += 0.33
+                    if self.bar_pos > 3:
+                        self.bar_pos = 1
+
+                    self.draw_all()
+
     def get_coords(self, row, col):
         return col * self.f_width * 4, row  * self.f_height * 2
 
@@ -433,6 +449,8 @@ class TreeDirScene(QGraphicsScene):
                             )
 
             self.lst_nod_pos = []
+
+            nod_bar_pos = self.bar_pos
             for pos, node in enumerate(self.nod_lst):
                 my_coord_x ,my_coord_y = self.get_coords(pos, node["indent"])
                 nod_pos = {"lin_num": node["lin_num"], "x_pos": my_coord_x, "y_pos": my_coord_y}
@@ -451,8 +469,6 @@ class TreeDirScene(QGraphicsScene):
                 stat_text.setPos(self.f_width * 0.5, my_coord_y - self.f_height * 0.5)
                 stat_text.setBrush(self.dark_blue_brush)
                 if str(node["stp_stat"]) == "B":
-                    my_coord_x ,my_coord_y = self.get_coords(pos, max_indent)
-
                     right_x1, down_y1 = self.get_coords(pos + 0.3, max_indent + 1)
                     left_x1, up_y1 = self.get_coords(pos - 0.3, max_indent + 4)
                     dx1 = right_x1 - left_x1
@@ -460,8 +476,25 @@ class TreeDirScene(QGraphicsScene):
                     self.addRect(
                         left_x1 - self.f_width, up_y1,
                         dx1 + self.f_width, dy1,
-                        self.dark_blue_pen, self.cyan_brush
+                        self.dark_blue_pen, self.white_brush
                     )
+
+                    right_x1, down_y1 = self.get_coords(
+                        pos + 0.3, max_indent + nod_bar_pos
+                    )
+                    left_x1, up_y1 = self.get_coords(
+                        pos - 0.3, max_indent + nod_bar_pos + 1
+                    )
+                    dx1 = right_x1 - left_x1
+                    dy1 = down_y1 - up_y1
+                    self.addRect(
+                        left_x1 - self.f_width, up_y1,
+                        dx1 + self.f_width, dy1,
+                        self.dark_blue_pen, self.dark_blue_brush
+                    )
+                    nod_bar_pos += 0.5
+                    if nod_bar_pos > 3:
+                        nod_bar_pos = 1
 
             self.update()
 
