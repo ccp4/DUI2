@@ -450,6 +450,18 @@ class TreeDirScene(QGraphicsScene):
                 stat_text = self.addSimpleText(str(node["stp_stat"]))
                 stat_text.setPos(self.f_width * 0.5, my_coord_y - self.f_height * 0.5)
                 stat_text.setBrush(self.dark_blue_brush)
+                if str(node["stp_stat"]) == "B":
+                    my_coord_x ,my_coord_y = self.get_coords(pos, max_indent)
+
+                    right_x1, down_y1 = self.get_coords(pos + 0.3, max_indent + 1)
+                    left_x1, up_y1 = self.get_coords(pos - 0.3, max_indent + 4)
+                    dx1 = right_x1 - left_x1
+                    dy1 = down_y1 - up_y1
+                    self.addRect(
+                        left_x1 - self.f_width, up_y1,
+                        dx1 + self.f_width, dy1,
+                        self.dark_blue_pen, self.cyan_brush
+                    )
 
             self.update()
 
