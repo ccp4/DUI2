@@ -325,6 +325,7 @@ class TreeDirScene(QGraphicsScene):
             Qt.RoundCap, Qt.RoundJoin
         )
         self.lst_nod_pos = []
+        self.nod_lst = None
 
     def get_coords(self, row, col):
         return col * self.f_width * 4, row  * self.f_height * 2
@@ -346,104 +347,118 @@ class TreeDirScene(QGraphicsScene):
         if nod_num is not None:
             self.node_clicked.emit(nod_num)
 
-    def draw_tree_graph(self, nod_lst, current_lin_num = 0):
-        max_indent = 0
-        current_nod_pos = 0
-        for node in nod_lst:
-            if node["indent"] > max_indent:
-                max_indent = node["indent"]
+    def draw_all(self):
+        if self.nod_lst is not None:
+            self.clear()
+            max_indent = 0
+            current_nod_pos = 0
+            for node in self.nod_lst:
+                if node["indent"] > max_indent:
+                    max_indent = node["indent"]
 
-        right_x, down_y = self.get_coords(len(nod_lst), max_indent + 5)
-        left_x, up_y = self.get_coords(-1, 0)
-        dx = right_x - left_x
-        dy = down_y - up_y
-        self.addRect(
-            left_x - self.f_width, up_y,
-            dx + self.f_width, dy,
-            self.gray_pen, self.light_gray_brush
-        )
-
-        for i in range(int((len(nod_lst) - 1) / 2 + 1)):
-            pos = i * 2
-            my_x, my_y = self.get_coords(pos, 0)
+            right_x, down_y = self.get_coords(len(self.nod_lst), max_indent + 5)
+            left_x, up_y = self.get_coords(-1, 0)
+            dx = right_x - left_x
+            dy = down_y - up_y
             self.addRect(
-                left_x, my_y - self.f_height,
-                dx - self.f_width, self.f_height * 2,
-                self.white_pen, self.white_brush
+                left_x - self.f_width, up_y,
+                dx + self.f_width, dy,
+                self.gray_pen, self.light_gray_brush
             )
-        #################################################################
-        for pos, node in enumerate(nod_lst):
-            if node["lin_num"] == current_lin_num:
-                current_nod_pos = pos
 
-        right_x1, down_y1 = self.get_coords(current_nod_pos + 0.43, max_indent + 4.7)
-        left_x1, up_y1 = self.get_coords(current_nod_pos - 0.43, 0.3)
-        dx1 = right_x1 - left_x1
-        dy1 = down_y1 - up_y1
-        self.addRect(
-            left_x1 - self.f_width, up_y1,
-            dx1 + self.f_width, dy1,
-            self.dark_blue_pen, self.cyan_brush
-        )
-        #################################################################
+            for i in range(int((len(self.nod_lst) - 1) / 2 + 1)):
+                pos = i * 2
+                my_x, my_y = self.get_coords(pos, 0)
+                self.addRect(
+                    left_x, my_y - self.f_height,
+                    dx - self.f_width, self.f_height * 2,
+                    self.white_pen, self.white_brush
+                )
+            #################################################################
+            for pos, node in enumerate(self.nod_lst):
+                if node["lin_num"] == self.current_lin_num:
+                    current_nod_pos = pos
 
-        for pos, obj2prn in enumerate(nod_lst):
-            if len(obj2prn["par_lst"]) > 1:
-                my_coord_x ,my_coord_y = self.get_coords(pos, obj2prn["indent"])
-                lst2connect = []
-                for par_pos, prev in enumerate(nod_lst[0:pos]):
-                    if prev["lin_num"] in obj2prn["par_lst"]:
-                        lst2connect.append((par_pos, prev["indent"]))
-
-                max_pos = 0
-                for lst_item in lst2connect:
-                    if lst_item[0] > max_pos:
-                        max_pos = lst_item[0]
-
-                for lst_item in lst2connect:
-                    if lst_item[0] != max_pos:
-                        my_parent_coord_x, my_parent_coord_y = self.get_coords(
-                            lst_item[0], lst_item[1]
-                        )
-                        draw_quadratic_bezier_3_points(
-                            self,
-                            my_parent_coord_x + self.f_width * 1.6, my_parent_coord_y,
-                            my_coord_x, my_parent_coord_y,
-                            my_coord_x, my_coord_y - self.f_height * 0.6,
-                            self.dark_blue_pen
-                        )
-
-        for pos, node in enumerate(nod_lst):
-            my_coord_x ,my_coord_y = self.get_coords(pos, node["indent"])
-            if pos > 0:
-                for inner_row, inner_node in enumerate(nod_lst):
-                    if inner_node["lin_num"] == node["low_par_lin_num"]:
-                        my_parent_coord_x, my_parent_coord_y = self.get_coords(
-                            inner_row, node["parent_indent"]
-                        )
-                        draw_quadratic_bezier_3_points(
-                            self,
-                            my_parent_coord_x, my_parent_coord_y + self.f_height * 0.6,
-                            my_parent_coord_x, my_coord_y,
-                            my_coord_x - self.f_width * 1.6, my_coord_y,
-                            self.dark_blue_pen
-                        )
-
-        self.lst_nod_pos = []
-        for pos, node in enumerate(nod_lst):
-            my_coord_x ,my_coord_y = self.get_coords(pos, node["indent"])
-            nod_pos = {"lin_num": node["lin_num"], "x_pos": my_coord_x, "y_pos": my_coord_y}
-            self.lst_nod_pos.append(nod_pos)
-            elip = self.addEllipse(
-                my_coord_x - self.f_width * 1.6, my_coord_y - self.f_height * 0.6,
-                self.f_width * 3.2, self.f_height * 1.2,
-                self.blue_pen, self.cyan_brush
+            right_x1, down_y1 = self.get_coords(current_nod_pos + 0.43, max_indent + 4.7)
+            left_x1, up_y1 = self.get_coords(current_nod_pos - 0.43, 0.3)
+            dx1 = right_x1 - left_x1
+            dy1 = down_y1 - up_y1
+            self.addRect(
+                left_x1 - self.f_width, up_y1,
+                dx1 + self.f_width, dy1,
+                self.dark_blue_pen, self.cyan_brush
             )
-            n_text = self.addSimpleText(str(node["lin_num"]))
-            n_text.setPos(my_coord_x - self.f_width * 0.7,
-                        my_coord_y - self.f_height * 0.5)
-            n_text.setBrush(self.dark_blue_brush)
+            #################################################################
 
-            stat_text = self.addSimpleText(str(node["stp_stat"]))
-            stat_text.setPos(self.f_width * 0.5, my_coord_y - self.f_height * 0.5)
-            stat_text.setBrush(self.dark_blue_brush)
+            for pos, obj2prn in enumerate(self.nod_lst):
+                if len(obj2prn["par_lst"]) > 1:
+                    my_coord_x ,my_coord_y = self.get_coords(pos, obj2prn["indent"])
+                    lst2connect = []
+                    for par_pos, prev in enumerate(self.nod_lst[0:pos]):
+                        if prev["lin_num"] in obj2prn["par_lst"]:
+                            lst2connect.append((par_pos, prev["indent"]))
+
+                    max_pos = 0
+                    for lst_item in lst2connect:
+                        if lst_item[0] > max_pos:
+                            max_pos = lst_item[0]
+
+                    for lst_item in lst2connect:
+                        if lst_item[0] != max_pos:
+                            my_parent_coord_x, my_parent_coord_y = self.get_coords(
+                                lst_item[0], lst_item[1]
+                            )
+                            draw_quadratic_bezier_3_points(
+                                self,
+                                my_parent_coord_x + self.f_width * 1.6, my_parent_coord_y,
+                                my_coord_x, my_parent_coord_y,
+                                my_coord_x, my_coord_y - self.f_height * 0.6,
+                                self.dark_blue_pen
+                            )
+
+            for pos, node in enumerate(self.nod_lst):
+                my_coord_x ,my_coord_y = self.get_coords(pos, node["indent"])
+                if pos > 0:
+                    for inner_row, inner_node in enumerate(self.nod_lst):
+                        if inner_node["lin_num"] == node["low_par_lin_num"]:
+                            my_parent_coord_x, my_parent_coord_y = self.get_coords(
+                                inner_row, node["parent_indent"]
+                            )
+                            draw_quadratic_bezier_3_points(
+                                self,
+                                my_parent_coord_x, my_parent_coord_y + self.f_height * 0.6,
+                                my_parent_coord_x, my_coord_y,
+                                my_coord_x - self.f_width * 1.6, my_coord_y,
+                                self.dark_blue_pen
+                            )
+
+            self.lst_nod_pos = []
+            for pos, node in enumerate(self.nod_lst):
+                my_coord_x ,my_coord_y = self.get_coords(pos, node["indent"])
+                nod_pos = {"lin_num": node["lin_num"], "x_pos": my_coord_x, "y_pos": my_coord_y}
+                self.lst_nod_pos.append(nod_pos)
+                elip = self.addEllipse(
+                    my_coord_x - self.f_width * 1.6, my_coord_y - self.f_height * 0.6,
+                    self.f_width * 3.2, self.f_height * 1.2,
+                    self.blue_pen, self.cyan_brush
+                )
+                n_text = self.addSimpleText(str(node["lin_num"]))
+                n_text.setPos(my_coord_x - self.f_width * 0.7,
+                            my_coord_y - self.f_height * 0.5)
+                n_text.setBrush(self.dark_blue_brush)
+
+                stat_text = self.addSimpleText(str(node["stp_stat"]))
+                stat_text.setPos(self.f_width * 0.5, my_coord_y - self.f_height * 0.5)
+                stat_text.setBrush(self.dark_blue_brush)
+
+            self.update()
+
+    def draw_tree_graph(self, nod_lst, current_lin_num = 0):
+        self.nod_lst = nod_lst
+        self.current_lin_num = current_lin_num
+        self.draw_all()
+
+    def new_lin_num(self, lin_num_in):
+        self.current_lin_num = lin_num_in
+        self.draw_all()
+
