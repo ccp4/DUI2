@@ -319,9 +319,11 @@ class MainObject(QObject):
     def on_node_click(self, nod_num):
 
         if(
-            self.window.CurrentControlWidgetLabel.text() == "combine_experiments"
-            or
-            self.window.CurrentControlWidgetLabel.text() == "ls"
+            self.new_node is not None
+            and
+            self.new_node["cmd2show"][0] == "dials.combine_experiments"
+            and
+            self.new_node["status"] == "Ready"
         ):
             prev_text = str(self.window.NumLinLst.text())
             self.window.NumLinLst.setText(
