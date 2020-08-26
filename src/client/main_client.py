@@ -58,6 +58,29 @@ from simpler_param_widgets import (
 uni_url = 'http://localhost:8080/'
 
 
+def build_advanced_params_widget(cmd_str):
+    cmd = {"nod_lst":"", "cmd_lst":[cmd_str]}
+    lst_params = json_data_request(uni_url, cmd)
+    lin_lst = format_utils.param_tree_2_lineal(lst_params)
+    par_def = lin_lst()
+    advanced_parameters = AdvancedParameters()
+    advanced_parameters.build_pars(par_def)
+    return advanced_parameters
+
+def copy_lst_nodes(old_lst_nodes):
+    new_lst = []
+    for old_node in old_lst_nodes:
+        cp_new_node = {
+            'lin_num': int(old_node["lin_num"]),
+            'status': str(old_node["status"]),
+            'cmd2show': list(old_node["cmd2show"]),
+            'child_node_lst': list(old_node["child_node_lst"]),
+            'parent_node_lst': list(old_node["parent_node_lst"])
+        }
+        new_lst.append(cp_new_node)
+
+    return new_lst
+
 def json_data_request(url, cmd):
     try:
         req_get = requests.get(url, stream = True, params = cmd)
@@ -119,29 +142,6 @@ class Run_n_Output(QThread):
                 break
 
             self.usleep(1)
-
-def build_advanced_params_widget(cmd_str):
-    cmd = {"nod_lst":"", "cmd_lst":[cmd_str]}
-    lst_params = json_data_request(uni_url, cmd)
-    lin_lst = format_utils.param_tree_2_lineal(lst_params)
-    par_def = lin_lst()
-    advanced_parameters = AdvancedParameters()
-    advanced_parameters.build_pars(par_def)
-    return advanced_parameters
-
-def copy_lst_nodes(old_lst_nodes):
-    new_lst = []
-    for old_node in old_lst_nodes:
-        cp_new_node = {
-            'lin_num': int(old_node["lin_num"]),
-            'status': str(old_node["status"]),
-            'cmd2show': list(old_node["cmd2show"]),
-            'child_node_lst': list(old_node["child_node_lst"]),
-            'parent_node_lst': list(old_node["parent_node_lst"])
-        }
-        new_lst.append(cp_new_node)
-
-    return new_lst
 
 class MainObject(QObject):
     def __init__(self, parent = None):
