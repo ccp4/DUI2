@@ -329,6 +329,8 @@ class MainObject(QObject):
             self.window.NumLinLst.setText(
                 str(prev_text + " " + str(nod_num))
             )
+            self.new_node["parent_node_lst"].append(nod_num)
+            self.add_new_node()
 
         else:
             self.current_lin_num = nod_num
