@@ -396,20 +396,6 @@ class MainObject(QObject):
         self.window.CmdEdit.setText(str(cmd2run))
 
     def display(self, in_lst_nodes = None):
-        old_way = '''
-        if in_lst_nodes is None:
-            lst_2_draw = self.last_lst_nodes
-
-        else:
-            lst_2_draw = in_lst_nodes
-
-        lst_str = self.tree_obj(lst_nod = lst_2_draw)
-        lst_2d_dat = self.tree_obj.get_tree_data()
-        self.tree_scene.draw_tree_graph(lst_2d_dat, self.current_lin_num)
-
-        if in_lst_nodes is not None:
-            self.last_lst_nodes = in_lst_nodes
-        '''
         if in_lst_nodes is None:
             self.tree_scene.new_lin_num(self.current_lin_num)
 
