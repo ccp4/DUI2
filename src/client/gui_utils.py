@@ -39,7 +39,11 @@ widgets_defs = {
     },
     "index" : {
         "main_cmd"  :"dials.index",
-        "nxt_widg_lst"  :["refine_bravais_settings", "refine"]
+        "nxt_widg_lst"  :[
+            "refine_bravais_settings",
+            "refine",
+            "combine_experiments"
+        ]
     },
     "refine_bravais_settings" : {
         "main_cmd"  :"dials.refine_bravais_settings",
@@ -47,7 +51,7 @@ widgets_defs = {
     },
     "reindex" : {
         "main_cmd"  :"dials.reindex",
-        "nxt_widg_lst"  :["refine", "integrate"]
+        "nxt_widg_lst"  :["refine", "integrate", "combine_experiments"]
     },
     "refine" : {
         "main_cmd"  :"dials.refine",
@@ -67,7 +71,7 @@ widgets_defs = {
     },
     "combine_experiments" : {
         "main_cmd"  :"dials.combine_experiments",
-        "nxt_widg_lst"  :["import", "ls"]
+        "nxt_widg_lst"  :["refine", "integrate"]
     },
     "ls" : {
         "main_cmd"  :"ls",

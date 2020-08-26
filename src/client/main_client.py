@@ -317,38 +317,7 @@ class MainObject(QObject):
                     self.clearLayout(item.layout())
 
     def on_node_click(self, nod_num):
-        self.current_lin_num = nod_num
-        try:
-            cur_nod = self.server_nod_lst[nod_num]
-            self.display_log(nod_num)
-            self.window.NumLinLst.setText(str(nod_num))
 
-        except IndexError:
-            print("nod_num ", nod_num, "not ran yet")
-            cur_nod = self.local_nod_lst[nod_num]
-            self.window.incoming_text.clear()
-            self.window.incoming_text.insertPlainText("Ready to run ...")
-            n_lst_str = ""
-            for par_nod_num in cur_nod["parent_node_lst"]:
-                n_lst_str += str(par_nod_num) + " "
-
-            n_lst_str = n_lst_str[:-1]
-            self.window.NumLinLst.setText(n_lst_str)
-
-        cmd_ini = cur_nod["cmd2show"][0]
-        key2find = cmd_ini[6:]
-
-        try:
-            self.change_widget(key2find)
-
-        except KeyError:
-            print("command widget not there yet")
-            return
-
-
-        self.display()
-
-        to_review_later = '''
         if(
             self.window.CurrentControlWidgetLabel.text() == "combine_experiments"
             or
@@ -360,8 +329,36 @@ class MainObject(QObject):
             )
 
         else:
-            self.window.NumLinLst.setText(str(nod_num))
-        '''
+            self.current_lin_num = nod_num
+            try:
+                cur_nod = self.server_nod_lst[nod_num]
+                self.display_log(nod_num)
+                self.window.NumLinLst.setText(str(nod_num))
+
+            except IndexError:
+                print("nod_num ", nod_num, "not ran yet")
+                cur_nod = self.local_nod_lst[nod_num]
+                self.window.incoming_text.clear()
+                self.window.incoming_text.insertPlainText("Ready to run ...")
+                n_lst_str = ""
+                for par_nod_num in cur_nod["parent_node_lst"]:
+                    n_lst_str += str(par_nod_num) + " "
+
+                n_lst_str = n_lst_str[:-1]
+                self.window.NumLinLst.setText(n_lst_str)
+
+            cmd_ini = cur_nod["cmd2show"][0]
+            key2find = cmd_ini[6:]
+
+            try:
+                self.change_widget(key2find)
+
+            except KeyError:
+                print("command widget not there yet")
+                return
+
+            self.display()
+
     def add_line(self, new_line, nod_lin_num):
         found_lin_num = False
         for log_node in self.lst_node_info_out:
