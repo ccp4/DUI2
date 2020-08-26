@@ -420,6 +420,8 @@ class MainObject(QObject):
     def line_n1_in(self, lin_num_in):
         print("new busy node = ", lin_num_in)
         self.request_display()
+        self.window.NumLinLst.clear()
+        self.window.NumLinLst.setText(str(lin_num_in))
 
     def display_log(self, nod_lin_num = 0):
         found_lin_num = False
@@ -500,7 +502,7 @@ class MainObject(QObject):
         print("\n cmd_str", cmd_str)
         nod_str = str(self.window.NumLinLst.text())
         nod_lst = nod_str.split(" ")
-        self.window.NumLinLst.clear()
+        #self.window.NumLinLst.clear()
         self.window.incoming_text.clear()
         print("\n nod_lst", nod_lst)
         cmd = {"nod_lst":nod_lst, "cmd_lst":[cmd_str]}
@@ -584,7 +586,7 @@ class MainObject(QObject):
     def req_stop(self):
         print("req_stop")
         self.window.CmdEdit.clear()
-        self.window.NumLinLst.clear()
+        #self.window.NumLinLst.clear()
         self.window.incoming_text.clear()
         nod_lst = [str(self.current_lin_num)]
         print("\n nod_lst", nod_lst)
