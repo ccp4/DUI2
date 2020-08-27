@@ -290,7 +290,6 @@ def draw_quadratic_bezier_3_points(scene_obj,
         lin_pen
     )
 
-
 class TreeDirScene(QGraphicsScene):
     node_clicked = Signal(int)
     def __init__(self, parent = None):
@@ -369,6 +368,17 @@ class TreeDirScene(QGraphicsScene):
     def get_coords(self, row, col):
         return col * self.f_width * 4, row  * self.f_height * 2
 
+    def get_pen_colour(self, stat):
+        if stat == "S":
+            pen_col = self.blue_pen
+
+        elif stat == "F":
+            pen_col = self.red_pen
+
+        else:
+            pen_col = self.dark_green_pen
+        return pen_col
+
     def mouseReleaseEvent(self, event):
         y_ms = event.scenePos().y()
         nod_num = None
@@ -390,7 +400,6 @@ class TreeDirScene(QGraphicsScene):
         if self.nod_lst is not None:
             self.clear()
             max_indent = 0
-            current_nod_pos = 0
             for node in self.nod_lst:
                 if node["indent"] > max_indent:
                     max_indent = node["indent"]
@@ -413,21 +422,25 @@ class TreeDirScene(QGraphicsScene):
                     dx - self.f_width, self.f_height * 2,
                     self.white_pen, self.white_brush
                 )
-            #################################################################
+
             for pos, node in enumerate(self.nod_lst):
                 if node["lin_num"] == self.current_lin_num:
                     current_nod_pos = pos
+                    right_x1, down_y1 = self.get_coords(
+                        current_nod_pos + 0.43, max_indent + 4.7
+                    )
+                    left_x1, up_y1 = self.get_coords(
+                        current_nod_pos - 0.43, 0.3
+                    )
+                    dx1 = right_x1 - left_x1
+                    dy1 = down_y1 - up_y1
+                    rect_border_colour = self.get_pen_colour(node["stp_stat"])
+                    self.addRect(
+                        left_x1 - self.f_width, up_y1,
+                        dx1 + self.f_width, dy1,
+                        rect_border_colour, self.cyan_brush
+                    )
 
-            right_x1, down_y1 = self.get_coords(current_nod_pos + 0.43, max_indent + 4.7)
-            left_x1, up_y1 = self.get_coords(current_nod_pos - 0.43, 0.3)
-            dx1 = right_x1 - left_x1
-            dy1 = down_y1 - up_y1
-            self.addRect(
-                left_x1 - self.f_width, up_y1,
-                dx1 + self.f_width, dy1,
-                self.dark_blue_pen, self.cyan_brush
-            )
-            #################################################################
             for pos, node in enumerate(self.nod_lst):
                 if len(node["par_lst"]) > 1:
                     my_coord_x ,my_coord_y = self.get_coords(pos, node["indent"])
@@ -446,15 +459,7 @@ class TreeDirScene(QGraphicsScene):
                             my_parent_coord_x, my_parent_coord_y = self.get_coords(
                                 lst_item[0], lst_item[1]
                             )
-                            if node["stp_stat"] == "S":
-                                arr_col = self.blue_pen
-
-                            elif node["stp_stat"] == "F":
-                                arr_col = self.red_pen
-
-                            else:
-                                arr_col = self.dark_green_pen
-
+                            arr_col = self.get_pen_colour(node["stp_stat"])
                             draw_quadratic_bezier_3_points(
                                 self,
                                 my_parent_coord_x + self.f_width * 1.6, my_parent_coord_y,
@@ -471,16 +476,7 @@ class TreeDirScene(QGraphicsScene):
                             my_parent_coord_x, my_parent_coord_y = self.get_coords(
                                 inner_row, node["parent_indent"]
                             )
-
-                            if node["stp_stat"] == "S":
-                                arr_col = self.blue_pen
-
-                            elif node["stp_stat"] == "F":
-                                arr_col = self.red_pen
-
-                            else:
-                                arr_col = self.dark_green_pen
-
+                            arr_col = self.get_pen_colour(node["stp_stat"])
                             draw_quadratic_bezier_3_points(
                                 self,
                                 my_parent_coord_x, my_parent_coord_y + self.f_height * 0.6,
@@ -490,16 +486,21 @@ class TreeDirScene(QGraphicsScene):
                             )
 
             self.lst_nod_pos = []
-
             nod_bar_pos = self.bar_pos
             for pos, node in enumerate(self.nod_lst):
                 my_coord_x ,my_coord_y = self.get_coords(pos, node["indent"])
-                nod_pos = {"lin_num": node["lin_num"], "x_pos": my_coord_x, "y_pos": my_coord_y}
+                nod_pos = {
+                    "lin_num": node["lin_num"],
+                    "x_pos": my_coord_x,
+                    "y_pos": my_coord_y
+                }
                 self.lst_nod_pos.append(nod_pos)
+                border_colour = self.get_pen_colour(node["stp_stat"])
                 elip = self.addEllipse(
-                    my_coord_x - self.f_width * 1.6, my_coord_y - self.f_height * 0.6,
+                    my_coord_x - self.f_width * 1.6,
+                    my_coord_y - self.f_height * 0.6,
                     self.f_width * 3.2, self.f_height * 1.2,
-                    self.blue_pen, self.cyan_brush
+                    border_colour, self.white_brush
                 )
                 n_text = self.addSimpleText(str(node["lin_num"]))
                 n_text.setPos(my_coord_x - self.f_width * 0.7,
@@ -507,7 +508,10 @@ class TreeDirScene(QGraphicsScene):
                 n_text.setBrush(self.dark_blue_brush)
 
                 stat_text = self.addSimpleText(str(node["stp_stat"]))
-                stat_text.setPos(self.f_width * 0.5, my_coord_y - self.f_height * 0.5)
+                stat_text.setPos(
+                    self.f_width * 0.5,
+                    my_coord_y - self.f_height * 0.5
+                )
                 stat_text.setBrush(self.dark_blue_brush)
                 if str(node["stp_stat"]) == "B":
                     right_x1, down_y1 = self.get_coords(pos + 0.3, max_indent + 1)
