@@ -308,6 +308,25 @@ class TreeDirScene(QGraphicsScene):
         self.invisible_brush = QBrush(Qt.white, Qt.NoBrush)
         self.blue_gradient_brush = QBrush(Qt.blue, Qt.RadialGradientPattern)
 
+        self.black_pen = QPen(
+            Qt.black, 1.6, Qt.SolidLine,
+            Qt.RoundCap, Qt.RoundJoin
+        )
+
+        self.green_pen = QPen(
+            Qt.green, 1.6, Qt.SolidLine,
+            Qt.RoundCap, Qt.RoundJoin
+        )
+        self.dark_green_pen = QPen(
+            Qt.darkGreen, 1.6, Qt.SolidLine,
+            Qt.RoundCap, Qt.RoundJoin
+        )
+
+        self.red_pen = QPen(
+            Qt.red, 1.6, Qt.SolidLine,
+            Qt.RoundCap, Qt.RoundJoin
+        )
+
         self.blue_pen = QPen(
             Qt.blue, 1.6, Qt.SolidLine,
             Qt.RoundCap, Qt.RoundJoin
@@ -409,13 +428,12 @@ class TreeDirScene(QGraphicsScene):
                 self.dark_blue_pen, self.cyan_brush
             )
             #################################################################
-
-            for pos, obj2prn in enumerate(self.nod_lst):
-                if len(obj2prn["par_lst"]) > 1:
-                    my_coord_x ,my_coord_y = self.get_coords(pos, obj2prn["indent"])
+            for pos, node in enumerate(self.nod_lst):
+                if len(node["par_lst"]) > 1:
+                    my_coord_x ,my_coord_y = self.get_coords(pos, node["indent"])
                     lst2connect = []
                     for par_pos, prev in enumerate(self.nod_lst[0:pos]):
-                        if prev["lin_num"] in obj2prn["par_lst"]:
+                        if prev["lin_num"] in node["par_lst"]:
                             lst2connect.append((par_pos, prev["indent"]))
 
                     max_pos = 0
@@ -428,12 +446,21 @@ class TreeDirScene(QGraphicsScene):
                             my_parent_coord_x, my_parent_coord_y = self.get_coords(
                                 lst_item[0], lst_item[1]
                             )
+                            if node["stp_stat"] == "S":
+                                arr_col = self.blue_pen
+
+                            elif node["stp_stat"] == "F":
+                                arr_col = self.red_pen
+
+                            else:
+                                arr_col = self.dark_green_pen
+
                             draw_quadratic_bezier_3_points(
                                 self,
                                 my_parent_coord_x + self.f_width * 1.6, my_parent_coord_y,
                                 my_coord_x, my_parent_coord_y,
                                 my_coord_x, my_coord_y - self.f_height * 0.6,
-                                self.dark_blue_pen
+                                arr_col
                             )
 
             for pos, node in enumerate(self.nod_lst):
@@ -444,12 +471,22 @@ class TreeDirScene(QGraphicsScene):
                             my_parent_coord_x, my_parent_coord_y = self.get_coords(
                                 inner_row, node["parent_indent"]
                             )
+
+                            if node["stp_stat"] == "S":
+                                arr_col = self.blue_pen
+
+                            elif node["stp_stat"] == "F":
+                                arr_col = self.red_pen
+
+                            else:
+                                arr_col = self.dark_green_pen
+
                             draw_quadratic_bezier_3_points(
                                 self,
                                 my_parent_coord_x, my_parent_coord_y + self.f_height * 0.6,
                                 my_parent_coord_x, my_coord_y,
                                 my_coord_x - self.f_width * 1.6, my_coord_y,
-                                self.dark_blue_pen
+                                arr_col
                             )
 
             self.lst_nod_pos = []
