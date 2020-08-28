@@ -292,8 +292,6 @@ class MainObject(QObject):
         self.window.Reset2DefaultPushButton.clicked.connect(self.reset_param)
         self.tree_scene.draw_tree_graph([])
 
-        self.current_params_widget = "import"
-        self.change_widget(self.current_params_widget)
 
         self.new_node = None
         self.lst_node_info_out = [] #{"lin_num": int, "log_line_lst": [str]}
@@ -301,6 +299,8 @@ class MainObject(QObject):
         self.current_lin_num = 0
         self.request_display()
         self.local_nod_lst = copy_lst_nodes(self.server_nod_lst)
+        self.current_params_widget = "import"
+        self.change_widget(self.current_params_widget)
 
         self.thrd_lst = []
         self.window.show()
@@ -450,12 +450,30 @@ class MainObject(QObject):
             self.param_widgets[str_key]["main_page"]
         )
         self.clearLayout(self.window.Next2RunLayout)
-        self.window.Next2RunLayout.addStretch()
-        for bt_labl in self.param_widgets[str_key]["nxt_widg_lst"]:
-            nxt_butt = QPushButton(bt_labl)
-            nxt_butt.cmd_str = bt_labl
-            nxt_butt.clicked.connect(self.nxt_clicked)
-            self.window.Next2RunLayout.addWidget(nxt_butt)
+        self.update_nxt_butt(str_key)
+
+    def check_nxt_btn(self):
+        try:
+            str_key = self.server_nod_lst[self.current_lin_num]["cmd2show"][0][6:]
+            print("str_key =", str_key)
+            self.update_nxt_butt(str_key)
+
+        except AttributeError:
+            print("NO current_lin_num")
+
+    def update_nxt_butt(self, str_key):
+        try:
+            if self.server_nod_lst[self.current_lin_num]["status"] == "Succeeded":
+                self.clearLayout(self.window.Next2RunLayout)
+                self.window.Next2RunLayout.addStretch()
+                for bt_labl in self.param_widgets[str_key]["nxt_widg_lst"]:
+                    nxt_butt = QPushButton(bt_labl)
+                    nxt_butt.cmd_str = bt_labl
+                    nxt_butt.clicked.connect(self.nxt_clicked)
+                    self.window.Next2RunLayout.addWidget(nxt_butt)
+
+        except IndexError:
+            print("no need to add next button")
 
         self.params2run = []
 
@@ -503,6 +521,7 @@ class MainObject(QObject):
             new_thrd.new_line_out.connect(self.add_line)
             new_thrd.first_line.connect(self.line_n1_in)
             new_thrd.finished.connect(self.request_display)
+            new_thrd.finished.connect(self.check_nxt_btn)
             new_thrd.start()
             self.thrd_lst.append(new_thrd)
             self.new_node = None
@@ -514,8 +533,6 @@ class MainObject(QObject):
         print("nxt_clicked")
         str_key = self.sender().cmd_str
         print("str_key: ", str_key)
-        self.change_widget(str_key)
-        self.current_params_widget = str_key
 
         self.local_nod_lst = copy_lst_nodes(self.server_nod_lst)
         par_lin_num = int(self.current_lin_num)
@@ -534,6 +551,8 @@ class MainObject(QObject):
             'parent_node_lst': [par_lin_num]
         }
         self.add_new_node()
+        self.change_widget(str_key)
+        self.current_params_widget = str_key
         self.window.incoming_text.clear()
         self.window.incoming_text.insertPlainText("Ready to run: ")
 
@@ -542,8 +561,6 @@ class MainObject(QObject):
         nod2clone = dict(self.server_nod_lst[int(self.current_lin_num)])
         str_key = str(nod2clone["cmd2show"][0][6:])
         print("str_key: ", str_key)
-        self.change_widget(str_key)
-        self.current_params_widget = str_key
         #TODO put here the cloned parameters
         self.local_nod_lst = copy_lst_nodes(self.server_nod_lst)
         max_lin_num = 0
@@ -562,6 +579,9 @@ class MainObject(QObject):
         self.add_new_node()
         self.window.incoming_text.clear()
         self.window.incoming_text.insertPlainText("Ready to run: ")
+
+        self.change_widget(str_key)
+        self.current_params_widget = str_key
 
         n_lst_str = ""
         for par_nod_num in self.new_node["parent_node_lst"]:
