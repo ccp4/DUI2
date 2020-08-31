@@ -262,7 +262,6 @@ class MainObject(QObject):
         self.param_widgets["combine_experiments"]["advanced"] = ce_advanced_parameters
         self.param_widgets["combine_experiments"]["main_page"] = self.window.CombinePage
 
-
         self.window.incoming_text.setFont(QFont("Monospace"))
         self.tree_obj = format_utils.TreeShow()
         self.tree_scene = TreeDirScene(self)
@@ -317,7 +316,14 @@ class MainObject(QObject):
             self.new_node["cmd2show"][0] == "dials.combine_experiments"
             and
             self.new_node["status"] == "Ready"
+            and
+            self.window.NodeSelecCheck.checkState()
         ):
+            '''
+            ClearParentButton
+            NodeSelecCheck
+            '''
+
             prev_text = str(self.window.NumLinLst.text())
             self.window.NumLinLst.setText(
                 str(prev_text + " " + str(nod_num))
