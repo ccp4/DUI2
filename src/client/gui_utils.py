@@ -352,14 +352,14 @@ class TreeDirScene(QGraphicsScene):
         self.bar_pos = 1
         timer = QTimer(self)
         timer.timeout.connect(self.refresh_bars)
-        timer.start(333)
+        timer.start(500)
 
     def refresh_bars(self):
         do_refresh = False
         if self.nod_lst is not None:
             for node in self.nod_lst:
                 if node["stp_stat"] == "B":
-                    self.bar_pos += 0.33
+                    self.bar_pos += 0.15
                     if self.bar_pos > 3:
                         self.bar_pos = 1
 
@@ -537,9 +537,11 @@ class TreeDirScene(QGraphicsScene):
                         dx1 + self.f_width, dy1,
                         self.dark_blue_pen, self.dark_blue_brush
                     )
-                    nod_bar_pos += 0.5
+                    to_desynchronize_bars = '''
+                    nod_bar_pos += 0.1
                     if nod_bar_pos > 3:
                         nod_bar_pos = 1
+                    #'''
 
             self.update()
 
