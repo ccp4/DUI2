@@ -407,7 +407,8 @@ class TreeDirScene(QGraphicsScene):
                     max_cmd_len = node_len
 
             right_x, down_y = self.get_coords(
-                len(self.nod_lst), int(max_indent * 1.2 + max_cmd_len * 0.3 + 6)
+                len(self.nod_lst),
+                max_indent * 1.2 + max_cmd_len * 0.3 + 6
             )
             left_x, up_y = self.get_coords(-1, 0)
             dx = right_x - left_x
@@ -431,7 +432,8 @@ class TreeDirScene(QGraphicsScene):
                 if node["lin_num"] == self.current_lin_num:
                     current_nod_pos = pos
                     right_x1, down_y1 = self.get_coords(
-                        current_nod_pos + 0.43, max_indent + 4.7
+                        current_nod_pos + 0.43,
+                        max_indent * 1.2 + max_cmd_len * 0.3 + 5.7
                     )
                     left_x1, up_y1 = self.get_coords(
                         current_nod_pos - 0.43, 0.3
