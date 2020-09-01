@@ -290,6 +290,7 @@ class TreeDirScene(QGraphicsScene):
     node_clicked = Signal(int)
     def __init__(self, parent = None):
         super(TreeDirScene, self).__init__(parent)
+        self.setFont(QFont("Monospace"))
         fm = QFontMetrics(self.font())
         self.f_width = fm.width("0")
         self.f_height = fm.height()
@@ -406,7 +407,7 @@ class TreeDirScene(QGraphicsScene):
                     max_cmd_len = node_len
 
             right_x, down_y = self.get_coords(
-                len(self.nod_lst), max_indent + int(max_cmd_len * 0.666)
+                len(self.nod_lst), int(max_indent * 1.2 + max_cmd_len * 0.3 + 6)
             )
             left_x, up_y = self.get_coords(-1, 0)
             dx = right_x - left_x

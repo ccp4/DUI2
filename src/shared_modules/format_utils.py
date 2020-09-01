@@ -184,11 +184,15 @@ class TreeShow(object):
                 lst2connect.remove(max(lst2connect))
                 inde4times = obj2prn["indent"] * 4
 
-                for raw_pos in range(min(lst2connect) + 1, pos, 1):
-                    loc_lin_str = self.dat_lst[raw_pos]["stp_prn"]
-                    left_side = loc_lin_str[0:inde4times + 5]
-                    right_side = loc_lin_str[inde4times + 6:]
-                    self.dat_lst[raw_pos]["stp_prn"] = left_side + ":" + right_side
+                try:
+                    for raw_pos in range(min(lst2connect) + 1, pos, 1):
+                        loc_lin_str = self.dat_lst[raw_pos]["stp_prn"]
+                        left_side = loc_lin_str[0:inde4times + 5]
+                        right_side = loc_lin_str[inde4times + 6:]
+                        self.dat_lst[raw_pos]["stp_prn"] = left_side + ":" + right_side
+
+                except ValueError:
+                    print("repeated parent")
 
                 for up_lin in lst2connect:
                     loc_lin_str = self.dat_lst[up_lin]["stp_prn"]
