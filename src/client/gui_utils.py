@@ -396,11 +396,18 @@ class TreeDirScene(QGraphicsScene):
         if self.nod_lst is not None:
             self.clear()
             max_indent = 0
+            max_cmd_len = 0
             for node in self.nod_lst:
                 if node["indent"] > max_indent:
                     max_indent = node["indent"]
 
-            right_x, down_y = self.get_coords(len(self.nod_lst), max_indent + 5)
+                node_len = len(node["str_cmd"])
+                if node_len > max_cmd_len:
+                    max_cmd_len = node_len
+
+            right_x, down_y = self.get_coords(
+                len(self.nod_lst), max_indent + int(max_cmd_len * 0.666)
+            )
             left_x, up_y = self.get_coords(-1, 0)
             dx = right_x - left_x
             dy = down_y - up_y
@@ -538,6 +545,12 @@ class TreeDirScene(QGraphicsScene):
                     if nod_bar_pos > 3:
                         nod_bar_pos = 1
                     #'''
+
+                cmd_text = self.addSimpleText(str(node["str_cmd"]))
+                x1, y1 = self.get_coords(pos - 0.3, max_indent + 5)
+                cmd_text.setPos(x1, y1)
+                cmd_text.setBrush(self.dark_blue_brush)
+                cmd_text.setFont(QFont("Monospace"))
 
             self.update()
 
