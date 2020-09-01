@@ -149,7 +149,7 @@ class MainObject(QObject):
         ui_path = os.path.dirname(os.path.abspath(__file__))
         ui_path += os.sep + "client.ui"
         self.window = QtUiTools.QUiLoader().load(ui_path)
-
+        self.window.setWindowTitle("CCP4 DUI Cloud")
         try:
             imp_widg = ImportWidget()
             imp_widg.item_changed.connect(self.item_param_changed)
