@@ -282,6 +282,9 @@ class MainObject(QObject):
         self.window.CmdSend2server.clicked.connect(self.request_launch)
         self.window.ReqStopButton.clicked.connect(self.req_stop)
         self.window.Reset2DefaultPushButton.clicked.connect(self.reset_param)
+
+        self.window.ClearParentButton.clicked.connect(self.clear_parent_list)
+
         self.tree_scene.draw_tree_graph([])
 
 
@@ -308,6 +311,15 @@ class MainObject(QObject):
                 else:
                     self.clearLayout(item.layout())
 
+    def clear_parent_list(self):
+        print("time to remove ", str(self.new_node["parent_node_lst"] ), " from parents lst" )
+        only_one = int(self.new_node["parent_node_lst"][0])
+        print("leaving", str(only_one), "only")
+        self.new_node["parent_node_lst"] = [only_one]
+        self.window.NumLinLst.setText(str(only_one))
+        self.local_nod_lst = copy_lst_nodes(self.server_nod_lst)
+        self.add_new_node()
+
     def on_node_click(self, nod_num):
 
         if(
@@ -319,11 +331,6 @@ class MainObject(QObject):
             and
             self.window.NodeSelecCheck.checkState()
         ):
-            '''
-            ClearParentButton
-            NodeSelecCheck
-            '''
-
             prev_text = str(self.window.NumLinLst.text())
             self.window.NumLinLst.setText(
                 str(prev_text + " " + str(nod_num))
@@ -453,12 +460,16 @@ class MainObject(QObject):
 
     def check_nxt_btn(self):
         try:
+            print("trying to << check_nxt_btn >> on node", self.current_lin_num)
             str_key = self.server_nod_lst[self.current_lin_num]["cmd2show"][0][6:]
             print("str_key =", str_key)
             self.update_nxt_butt(str_key)
 
         except AttributeError:
-            print("NO current_lin_num")
+            print("NO current_lin_num (AttributeError)")
+
+        except IndexError:
+            print("NO current_lin_num (IndexError)")
 
     def update_nxt_butt(self, str_key):
         try:
