@@ -19,12 +19,9 @@ def choice_if_decimal(num_in):
 
     return str_out
 
-def ops_list_from_json(json_path=None):
-    if json_path is None:
+def ops_list_from_json(json_data = None):
+    if json_data is None:
         return None
-
-    with open(json_path) as json_file:
-        json_data = json.load(json_file)
 
     lst_ops = []
     for key, value in json_data.items():
@@ -174,11 +171,10 @@ class ReindexTable(QTableWidget):
 
         return bst_sol
 
-    def add_opts_lst(self, lst_labels=None, json_path=None, selected_pos=None):
+    def add_opts_lst(self, lst_labels=None, json_data=None, selected_pos=None):
 
         if lst_labels is None:
-            print("json_path =", json_path)
-            self.list_labl = ops_list_from_json(json_path)
+            self.list_labl = ops_list_from_json(json_data)
 
         n_row = len(self.list_labl)
         print("n_row =", n_row)
@@ -262,8 +258,12 @@ class MainWindow(QMainWindow):
         super(MainWindow, self).__init__(parent)
 
         full_json_path = "/scratch/dui_tst/X4_wide/dui_files/bravais_summary.json"
+        with open(full_json_path) as json_file:
+            json_data = json.load(json_file)
+
+
         my_inner_table = ReindexTable()
-        my_inner_table.add_opts_lst(json_path=full_json_path)
+        my_inner_table.add_opts_lst(json_data = json_data)
 
         vbox = QVBoxLayout()
         vbox.addWidget(QLabel("\n some header info \n here \n"))

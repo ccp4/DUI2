@@ -100,6 +100,14 @@ def json_data_request(url, cmd):
 
         json_out = json.loads(str_lst[0])
 
+        to_debugg = '''
+        try:
+            print("json_out:", json_out)
+
+        except UnicodeEncodeError:
+            print("UnicodeEncodeError")
+        '''
+
     except requests.exceptions.RequestException:
         print("\n requests.exceptions.RequestException \n")
         json_out = None
@@ -176,10 +184,8 @@ class MainObject(QObject):
             rb_advanced_parameters.item_changed.connect(self.item_param_changed)
             self.window.RefineBravaiAdvancedScrollArea.setWidget(rb_advanced_parameters)
 
-            full_json_path = "/scratch/dui_tst/X4_wide/dui_files/bravais_summary.json"
-            r_index_widg = ReindexTable()
-            r_index_widg.add_opts_lst(json_path=full_json_path)
-            self.window.ReindexTableScrollArea.setWidget(r_index_widg)
+            self.r_index_widg = ReindexTable()
+            self.window.ReindexTableScrollArea.setWidget(self.r_index_widg)
 
             ref_simpl_widg = RefineSimplerParamTab()
             ref_simpl_widg.item_changed.connect(self.item_param_changed)
@@ -238,7 +244,7 @@ class MainObject(QObject):
         self.param_widgets["refine_bravais_settings"]["advanced"] = rb_advanced_parameters
         self.param_widgets["refine_bravais_settings"]["main_page"] = self.window.RefinBrabPage
 
-        self.param_widgets["reindex"]["simple"] = r_index_widg
+        self.param_widgets["reindex"]["simple"] = self.r_index_widg
         self.param_widgets["reindex"]["advanced"] = None
         self.param_widgets["reindex"]["main_page"] = self.window.ReindexPage
 
@@ -544,6 +550,15 @@ class MainObject(QObject):
         str_key = self.sender().cmd_str
         print("str_key: ", str_key)
 
+        if str_key == "reindex":
+
+            cmd = {"nod_lst":[self.current_lin_num], "cmd_lst":["get_bravais_sum"]}
+            json_data_lst = json_data_request(uni_url, cmd)
+            #print("json_data =", json_data)
+            self.r_index_widg.add_opts_lst(
+                json_data=json_data_lst[0]
+            )
+
         self.local_nod_lst = copy_lst_nodes(self.server_nod_lst)
         par_lin_num = int(self.current_lin_num)
         max_lin_num = 0
@@ -562,6 +577,7 @@ class MainObject(QObject):
         }
         self.add_new_node()
         self.change_widget(str_key)
+
         self.current_params_widget = str_key
         self.window.incoming_text.clear()
         self.window.incoming_text.insertPlainText("Ready to run: ")

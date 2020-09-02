@@ -80,7 +80,6 @@ if __name__ == "__main__":
     try:
         with open("run_data") as json_file:
             runner_data = json.load(json_file)
-            print("runner_data = ", runner_data)
 
         cmd_tree_runner = multi_node.Runner(runner_data)
 

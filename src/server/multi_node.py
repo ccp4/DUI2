@@ -44,6 +44,7 @@ def fix_alias(short_in):
     pair_list = [
         ("d", "display"                                     ),
         ("dl", "display_log"                                ),
+        ("gb", "get_bravais_sum"                            ),
         ("st", "stop"                                       ),
         ("fdp", "find_spots_params"                         ),
         ("idp", "index_params"                              ),
@@ -275,6 +276,14 @@ class CmdNode(object):
         else:
             print("node", self.lin_num, "not running, so not stopping it")
 
+    def get_bravais_summ(self):
+        brav_summ_path = str(self._run_dir + "/bravais_summary.json")
+        print("brav_summ_path:", brav_summ_path)
+        with open(brav_summ_path) as summary_file:
+            j_obj = json.load(summary_file)
+
+        return j_obj
+
 
 class Runner(object):
     def __init__(self, recovery_data):
@@ -311,6 +320,7 @@ class Runner(object):
             len(tmp_parent_lst_in) > 0 and
             ["display"] not in full_cmd_lst and
             ["display_log"] not in full_cmd_lst and
+            ["get_bravais_sum"] not in full_cmd_lst and
             ["stop"] not in full_cmd_lst
         ):
             node2run = self._create_step(tmp_parent_lst_in)
@@ -330,6 +340,16 @@ class Runner(object):
 
                     except IndexError:
                         print("\n *** ERROR *** \n wrong line \n not logging")
+
+            elif uni_cmd == ["get_bravais_sum"]:
+                for lin2go in cmd_dict["nod_lst"]:
+                    try:
+                        lst2add = self.step_list[lin2go].get_bravais_summ()
+                        return_list.append(lst2add)
+
+                    except IndexError:
+                        print("\n *** ERROR *** \n wrong line \n not logging")
+
 
             elif uni_cmd == ["stop"]:
                 for lin2go in cmd_dict["nod_lst"]:
