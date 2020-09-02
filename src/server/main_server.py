@@ -80,12 +80,23 @@ if __name__ == "__main__":
     try:
         with open("run_data") as json_file:
             runner_data = json.load(json_file)
+            print("runner_data = ", runner_data)
+
+        cmd_tree_runner = multi_node.Runner(runner_data)
+
 
     except FileNotFoundError:
-        runner_data = {'step_list': [{'_base_dir': '/tmp/dui', 'lst2run': [['Root']], '_lst_expt': [], '_lst_refl': [], '_run_dir': '/tmp/tst/', '_log_line_lst': [], 'lin_num': 0, 'status': 'Succeeded', 'parent_node_lst': [], 'child_node_lst': [1, 2, 3]}, {'_base_dir': '/tmp/dui', 'lst2run': [['dials.import', '/scratch/dui_tst/X4_wide_0_to_9/*.cbf']], '_lst_expt': [], '_lst_refl': [], '_run_dir': '/tmp/dui/run1', '_log_line_lst': ['DIALS (2018) Acta Cryst. D74, 85-97. https://doi.org/10.1107/S2059798317017235', 'DIALS 3.dev.90-g263177265', 'The following parameters have been modified:', '', 'input {', '  experiments = <image files>', '}', '', '--------------------------------------------------------------------------------', "  format: <class 'dxtbx.format.FormatCBFMiniPilatus.FormatCBFMiniPilatus'>", '  num images: 9', '  sequences:', '    still:    0', '    sweep:    1', '  num stills: 0', '--------------------------------------------------------------------------------', 'Writing experiments to imported.expt', ''], 'lin_num': 1, 'status': 'Succeeded', 'parent_node_lst': [0], 'child_node_lst': []}, {'_base_dir': '/tmp/dui', 'lst2run': [['dials.import', '/scratch/dui_tst/X4_wide_10_to_19/*.cbf']], '_lst_expt': [], '_lst_refl': [], '_run_dir': '/tmp/dui/run2', '_log_line_lst': ['DIALS (2018) Acta Cryst. D74, 85-97. https://doi.org/10.1107/S2059798317017235', 'DIALS 3.dev.90-g263177265', 'The following parameters have been modified:', '', 'input {', '  experiments = <image files>', '}', '', '--------------------------------------------------------------------------------', "  format: <class 'dxtbx.format.FormatCBFMiniPilatus.FormatCBFMiniPilatus'>", '  num images: 10', '  sequences:', '    still:    0', '    sweep:    1', '  num stills: 0', '--------------------------------------------------------------------------------', 'Writing experiments to imported.expt', ''], 'lin_num': 2, 'status': 'Succeeded', 'parent_node_lst': [0], 'child_node_lst': []}, {'_base_dir': '/tmp/dui', 'lst2run': [['dials.import', '/scratch/dui_tst/X4_wide_20_to_29/*.cbf']], '_lst_expt': [], '_lst_refl': [], '_run_dir': '/tmp/dui/run3', '_log_line_lst': ['DIALS (2018) Acta Cryst. D74, 85-97. https://doi.org/10.1107/S2059798317017235', 'DIALS 3.dev.90-g263177265', 'The following parameters have been modified:', '', 'input {', '  experiments = <image files>', '}', '', '--------------------------------------------------------------------------------', "  format: <class 'dxtbx.format.FormatCBFMiniPilatus.FormatCBFMiniPilatus'>", '  num images: 10', '  sequences:', '    still:    0', '    sweep:    1', '  num stills: 0', '--------------------------------------------------------------------------------', 'Writing experiments to imported.expt', ''], 'lin_num': 3, 'status': 'Succeeded', 'parent_node_lst': [0], 'child_node_lst': []}], 'bigger_lin': 3}
-        print("\n starting with example")
+        print("Starting from hacked multiple import")
+        #temp hack
+        lst_dic = [
+            {'nod_lst': [0], 'cmd_lst': [['ip', 'x41']]},
+            {'nod_lst': [0], 'cmd_lst': [['ip', 'x42']]},
+            {'nod_lst': [0], 'cmd_lst': [['ip', 'x43']]}
+        ]
+        cmd_tree_runner = multi_node.Runner(None)
+        for cmd_dict in lst_dic:
+            cmd_tree_runner.run_dict(cmd_dict)
 
-    cmd_tree_runner = multi_node.Runner(runner_data)
     cmd_dict = multi_node.str2dic("display")
     cmd_tree_runner.run_dict(cmd_dict)
 

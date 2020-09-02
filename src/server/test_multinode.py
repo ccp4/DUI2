@@ -69,14 +69,8 @@ if __name__ == "__main__":
     cmd_dict = str2dic("display")
     cmd_tree_runner.run_dict(cmd_dict)
 
-    #for cmd_str in lst_cmd:
     for cmd_dict in lst_dic:
         cmd_tree_runner.run_dict(cmd_dict)
-
-        '''
-        cmd_dict = str2dic(cmd_str)
-        cmd_tree_runner.run_dict(cmd_dict)
-        '''
 
         cmd_dict = str2dic("display")
         cmd_tree_runner.run_dict(cmd_dict)
