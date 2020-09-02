@@ -296,6 +296,8 @@ class TreeDirScene(QGraphicsScene):
         self.f_height = fm.height()
 
         self.blue_brush = QBrush(Qt.blue, Qt.SolidPattern)
+        self.red_brush = QBrush(Qt.red, Qt.SolidPattern)
+        self.green_brush = QBrush(Qt.darkGreen, Qt.SolidPattern)
         self.dark_blue_brush = QBrush(Qt.darkBlue, Qt.SolidPattern)
         self.cyan_brush = QBrush(Qt.cyan, Qt.SolidPattern)
         self.gray_brush = QBrush(Qt.gray, Qt.SolidPattern)
@@ -374,7 +376,20 @@ class TreeDirScene(QGraphicsScene):
 
         else:
             pen_col = self.dark_green_pen
+
         return pen_col
+
+    def get_brush_colour(self, stat):
+        if stat == "S":
+            brush_col = self.blue_brush
+
+        elif stat == "F":
+            brush_col = self.red_brush
+
+        else:
+            brush_col = self.green_brush
+
+        return brush_col
 
     def mouseReleaseEvent(self, event):
         y_ms = event.scenePos().y()
@@ -418,7 +433,6 @@ class TreeDirScene(QGraphicsScene):
                 dx + self.f_width, dy,
                 self.gray_pen, self.light_gray_brush
             )
-
             for i in range(int((len(self.nod_lst) - 1) / 2 + 1)):
                 pos = i * 2
                 my_x, my_y = self.get_coords(pos, 0)
@@ -502,6 +516,7 @@ class TreeDirScene(QGraphicsScene):
                 }
                 self.lst_nod_pos.append(nod_pos)
                 border_colour = self.get_pen_colour(node["stp_stat"])
+                brush_col = self.get_brush_colour(node["stp_stat"])
                 elip = self.addEllipse(
                     my_coord_x - self.f_width * 1.6,
                     my_coord_y - self.f_height * 0.6,
@@ -552,7 +567,7 @@ class TreeDirScene(QGraphicsScene):
                 cmd_text = self.addSimpleText(str(node["str_cmd"]))
                 x1, y1 = self.get_coords(pos - 0.3, max_indent + 5)
                 cmd_text.setPos(x1, y1)
-                cmd_text.setBrush(self.dark_blue_brush)
+                cmd_text.setBrush(brush_col)
                 cmd_text.setFont(QFont("Monospace"))
 
             self.update()
