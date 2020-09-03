@@ -156,7 +156,7 @@ class ReindexTable(QTableWidget):
 
         if self.tmp_sel == row:
             print("\n selecting opt: ", row + 1, "\n")
-            self.opt_signal.emit(row)
+            self.opt_signal.emit(row + 1)
 
         self.tmp_sel = row
 

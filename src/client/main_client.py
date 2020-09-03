@@ -290,6 +290,7 @@ class MainObject(QObject):
         self.window.Reset2DefaultPushButton.clicked.connect(self.reset_param)
 
         self.window.ClearParentButton.clicked.connect(self.clear_parent_list)
+        self.r_index_widg.opt_signal.connect(self.launch_reindex)
 
         self.tree_scene.draw_tree_graph([])
 
@@ -544,6 +545,10 @@ class MainObject(QObject):
 
         except requests.exceptions.RequestException:
             print("something went wrong with the request launch")
+
+    def launch_reindex(self, sol_rei):
+        print("reindex solution", sol_rei)
+        self.window.CmdEdit.setText("dials.reindex " + str(sol_rei))
 
     def nxt_clicked(self):
         print("nxt_clicked")
