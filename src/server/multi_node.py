@@ -95,7 +95,7 @@ class CmdNode(object):
         self._lst_refl = []
         self.lst2run = []
         self._run_dir = ""
-        self._log_line_lst = []
+        self.log_line_lst = []
 
         self.status = "Ready"
         self.child_node_lst = []
@@ -214,7 +214,7 @@ class CmdNode(object):
                 universal_newlines = True
             )
             new_line = None
-            self._log_line_lst = []
+            self.log_line_lst = []
             n_Broken_Pipes = 0
             if self.nod_req is not None:
                 try:
@@ -237,7 +237,7 @@ class CmdNode(object):
                 else:
                     print(new_line[:-1])
 
-                self._log_line_lst.append(new_line[:-1])
+                self.log_line_lst.append(new_line[:-1])
 
             if n_Broken_Pipes > 0:
                 print("\n *** BrokenPipeError *** while sending output \n")
@@ -335,7 +335,7 @@ class Runner(object):
             elif uni_cmd == ["display_log"]:
                 for lin2go in cmd_dict["nod_lst"]:
                     try:
-                        lst2add = self.step_list[lin2go]._log_line_lst
+                        lst2add = self.step_list[lin2go].log_line_lst
                         return_list.append(lst2add)
 
                     except IndexError:
@@ -402,7 +402,7 @@ class Runner(object):
                         "_lst_expt"            :uni._lst_expt,
                         "_lst_refl"            :uni._lst_refl,
                         "_run_dir"             :uni._run_dir,
-                        "_log_line_lst"        :uni._log_line_lst,
+                        "log_line_lst"         :uni.log_line_lst,
                         "lin_num"              :uni.lin_num,
                         "status"               :uni.status,
                         "parent_node_lst"      :uni.parent_node_lst,
@@ -431,7 +431,7 @@ class Runner(object):
             new_node._lst_expt       = uni_dic["_lst_expt"]
             new_node._lst_refl       = uni_dic["_lst_refl"]
             new_node._run_dir        = uni_dic["_run_dir"]
-            new_node._log_line_lst   = uni_dic["_log_line_lst"]
+            new_node.log_line_lst    = uni_dic["log_line_lst"]
             new_node.lin_num         = uni_dic["lin_num"]
             new_node.status          = uni_dic["status"]
             new_node.child_node_lst  = uni_dic["child_node_lst"]
