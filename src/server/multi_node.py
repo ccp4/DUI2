@@ -210,7 +210,7 @@ class CmdNode(object):
                 shell = False,
                 cwd = self._run_dir,
                 stdout = subprocess.PIPE,
-                stderr = subprocess.PIPE,
+                stderr = subprocess.STDOUT,
                 universal_newlines = True
             )
             new_line = None

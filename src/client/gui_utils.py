@@ -35,7 +35,7 @@ widgets_defs = {
     },
     "find_spots" : {
         "main_cmd"  :"dials.find_spots",
-        "nxt_widg_lst"  :["index"]
+        "nxt_widg_lst"  :["index", "combine_experiments"]
     },
     "index" : {
         "main_cmd"  :"dials.index",
@@ -51,7 +51,7 @@ widgets_defs = {
     },
     "reindex" : {
         "main_cmd"  :"dials.reindex",
-        "nxt_widg_lst"  :["refine", "integrate", "combine_experiments"]
+        "nxt_widg_lst"  :["refine", "integrate"]
     },
     "refine" : {
         "main_cmd"  :"dials.refine",
