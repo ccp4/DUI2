@@ -146,7 +146,6 @@ class Run_n_Output(QThread):
             elif line_str[-7:] == '/*EOF*/':
                 #TODO: consider a different Signal to say finished
                 print('>>  /*EOF*/  <<')
-                self.new_line_out.emit(' \n /*EOF*/ \n', self.lin_num)
                 break
 
             self.usleep(1)
