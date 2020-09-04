@@ -319,13 +319,15 @@ class MainObject(QObject):
                     self.clearLayout(item.layout())
 
     def clear_parent_list(self):
-        print("time to remove ", str(self.new_node["parent_node_lst"] ), " from parents lst" )
-        only_one = int(self.new_node["parent_node_lst"][0])
-        print("leaving", str(only_one), "only")
-        self.new_node["parent_node_lst"] = [only_one]
-        self.window.NumLinLst.setText(str(only_one))
-        self.local_nod_lst = copy_lst_nodes(self.server_nod_lst)
-        self.add_new_node()
+        try:
+            only_one = int(self.new_node["parent_node_lst"][0])
+            self.new_node["parent_node_lst"] = [only_one]
+            self.window.NumLinLst.setText(str(only_one))
+            self.local_nod_lst = copy_lst_nodes(self.server_nod_lst)
+            self.add_new_node()
+
+        except TypeError:
+            print("should NOT clear parents from already combined experiments")
 
     def on_node_click(self, nod_num):
 
