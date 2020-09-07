@@ -349,7 +349,6 @@ class MainObject(QObject):
 
         cmd_ini = cur_nod["cmd2show"][0]
         key2find = cmd_ini[6:]
-
         try:
             self.change_widget(key2find)
 
@@ -362,19 +361,14 @@ class MainObject(QObject):
     def clicked_4_combine(self, nod_num):
         prev_text = str(self.window.NumLinLst.text())
         prev_text_lst = list(map(int, prev_text.split(" ")))
-        print("prev_text_lst =", prev_text_lst)
-        print("nod_num =", nod_num)
         if nod_num in prev_text_lst:
             if len(prev_text_lst) > 1:
-                print("time to remove node #", nod_num, "from parents")
                 new_par_lst = []
                 new_prev_text = ""
                 for in_nod_num in prev_text_lst:
                     if in_nod_num != nod_num:
                         new_par_lst.append(in_nod_num)
                         new_prev_text += str(in_nod_num) + " "
-
-                print("new_prev_text =", new_prev_text)
 
                 self.new_node["parent_node_lst"] = new_par_lst
                 self.window.NumLinLst.setText(new_prev_text[:-1])
