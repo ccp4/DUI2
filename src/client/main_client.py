@@ -44,7 +44,6 @@ from PySide2 import QtUiTools
 from PySide2.QtGui import *
 
 from gui_utils import TreeDirScene, AdvancedParameters, widgets_defs
-
 from reindex_table import ReindexTable
 
 from simpler_param_widgets import ImportTmpWidg as ImportWidget
@@ -54,9 +53,7 @@ from simpler_param_widgets import (
     IntegrateSimplerParamTab, SymmetrySimplerParamTab,
     ScaleSimplerParamTab, CombineExperimentSimplerParamTab
 )
-
 uni_url = 'http://localhost:8080/'
-
 
 def build_advanced_params_widget(cmd_str):
     cmd = {"nod_lst":"", "cmd_lst":[cmd_str]}
@@ -273,7 +270,6 @@ class MainObject(QObject):
         self.window.treeView.setScene(self.tree_scene)
 
         self.window.Next2RunLayout.addWidget(QLabel("                  . . .       "))
-
         self.current_next_buttons = 0
         self.params2run = []
 
@@ -287,22 +283,17 @@ class MainObject(QObject):
         self.window.CmdSend2server.clicked.connect(self.request_launch)
         self.window.ReqStopButton.clicked.connect(self.req_stop)
         self.window.Reset2DefaultPushButton.clicked.connect(self.reset_param)
-
         self.window.ClearParentButton.clicked.connect(self.clear_parent_list)
         self.r_index_widg.opt_signal.connect(self.launch_reindex)
 
         self.tree_scene.draw_tree_graph([])
-
-
         self.new_node = None
         self.lst_node_info_out = [] #{"lin_num": int, "log_line_lst": [str]}
-
         self.current_lin_num = 0
         self.request_display()
         self.local_nod_lst = copy_lst_nodes(self.server_nod_lst)
         self.current_params_widget = "import"
         self.change_widget(self.current_params_widget)
-
         self.thrd_lst = []
         self.window.show()
 
@@ -395,19 +386,23 @@ class MainObject(QObject):
             self.add_new_node()
 
     def on_node_click(self, nod_num):
-        if(
-            self.new_node is not None
-            and
-            self.new_node["cmd2show"][0] == "dials.combine_experiments"
-            and
-            self.new_node["status"] == "Ready"
-            and
-            self.window.NodeSelecCheck.checkState()
-        ):
-            self.clicked_4_combine(nod_num)
+        if nod_num != self.current_lin_num:
+            if(
+                self.new_node is not None
+                and
+                self.new_node["cmd2show"][0] == "dials.combine_experiments"
+                and
+                self.new_node["status"] == "Ready"
+                and
+                self.window.NodeSelecCheck.checkState()
+            ):
+                self.clicked_4_combine(nod_num)
+
+            else:
+                self.clicked_4_navigation(nod_num)
 
         else:
-            self.clicked_4_navigation(nod_num)
+            print("clicked current node, no need to do anything")
 
     def add_line(self, new_line, nod_lin_num):
         found_lin_num = False
