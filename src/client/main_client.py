@@ -361,11 +361,37 @@ class MainObject(QObject):
 
     def clicked_4_combine(self, nod_num):
         prev_text = str(self.window.NumLinLst.text())
-        prev_text_lst = map(int, prev_text.split(" "))
+        prev_text_lst = list(map(int, prev_text.split(" ")))
         print("prev_text_lst =", prev_text_lst)
         print("nod_num =", nod_num)
         if nod_num in prev_text_lst:
-            pass
+            if len(prev_text_lst) > 1:
+                print("time to remove node #", nod_num, "from parents")
+                new_par_lst = []
+                new_prev_text = ""
+                for in_nod_num in prev_text_lst:
+                    if in_nod_num != nod_num:
+                        new_par_lst.append(in_nod_num)
+                        new_prev_text += str(in_nod_num) + " "
+
+                print("new_prev_text =", new_prev_text)
+
+                self.new_node["parent_node_lst"] = new_par_lst
+                self.window.NumLinLst.setText(new_prev_text[:-1])
+                for node in self.local_nod_lst:
+                    for pos, in_nod_num in enumerate(node["child_node_lst"]):
+                        if(
+                            in_nod_num == self.current_lin_num and
+                            node["lin_num"] == nod_num
+                        ):
+                            left = node["child_node_lst"][:pos]
+                            right = node["child_node_lst"][pos+1:]
+                            node["child_node_lst"] =  left + right
+
+                self.display(self.local_nod_lst)
+
+            else:
+                print("not removing only parent node")
 
         else:
             self.window.NumLinLst.setText(
