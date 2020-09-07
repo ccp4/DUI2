@@ -328,8 +328,46 @@ class MainObject(QObject):
         except TypeError:
             print("should NOT clear parents from already combined experiments")
 
-    def on_node_click(self, nod_num):
+    def clicked_4_navigation(self, nod_num):
+        self.current_lin_num = nod_num
+        try:
+            cur_nod = self.server_nod_lst[nod_num]
+            self.display_log(nod_num)
+            self.window.NumLinLst.setText(str(nod_num))
 
+        except IndexError:
+            print("nod_num ", nod_num, "not ran yet")
+            cur_nod = self.local_nod_lst[nod_num]
+            self.window.incoming_text.clear()
+            self.window.incoming_text.insertPlainText("Ready to run ...")
+            n_lst_str = ""
+            for par_nod_num in cur_nod["parent_node_lst"]:
+                n_lst_str += str(par_nod_num) + " "
+
+            n_lst_str = n_lst_str[:-1]
+            self.window.NumLinLst.setText(n_lst_str)
+
+        cmd_ini = cur_nod["cmd2show"][0]
+        key2find = cmd_ini[6:]
+
+        try:
+            self.change_widget(key2find)
+
+        except KeyError:
+            print("command widget not there yet")
+            return
+
+        self.display()
+
+    def clicked_4_combine(self, nod_num):
+        prev_text = str(self.window.NumLinLst.text())
+        self.window.NumLinLst.setText(
+            str(prev_text + " " + str(nod_num))
+        )
+        self.new_node["parent_node_lst"].append(nod_num)
+        self.add_new_node()
+
+    def on_node_click(self, nod_num):
         if(
             self.new_node is not None
             and
@@ -339,43 +377,10 @@ class MainObject(QObject):
             and
             self.window.NodeSelecCheck.checkState()
         ):
-            prev_text = str(self.window.NumLinLst.text())
-            self.window.NumLinLst.setText(
-                str(prev_text + " " + str(nod_num))
-            )
-            self.new_node["parent_node_lst"].append(nod_num)
-            self.add_new_node()
+            self.clicked_4_combine(nod_num)
 
         else:
-            self.current_lin_num = nod_num
-            try:
-                cur_nod = self.server_nod_lst[nod_num]
-                self.display_log(nod_num)
-                self.window.NumLinLst.setText(str(nod_num))
-
-            except IndexError:
-                print("nod_num ", nod_num, "not ran yet")
-                cur_nod = self.local_nod_lst[nod_num]
-                self.window.incoming_text.clear()
-                self.window.incoming_text.insertPlainText("Ready to run ...")
-                n_lst_str = ""
-                for par_nod_num in cur_nod["parent_node_lst"]:
-                    n_lst_str += str(par_nod_num) + " "
-
-                n_lst_str = n_lst_str[:-1]
-                self.window.NumLinLst.setText(n_lst_str)
-
-            cmd_ini = cur_nod["cmd2show"][0]
-            key2find = cmd_ini[6:]
-
-            try:
-                self.change_widget(key2find)
-
-            except KeyError:
-                print("command widget not there yet")
-                return
-
-            self.display()
+            self.clicked_4_navigation(nod_num)
 
     def add_line(self, new_line, nod_lin_num):
         found_lin_num = False
