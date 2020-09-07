@@ -361,11 +361,18 @@ class MainObject(QObject):
 
     def clicked_4_combine(self, nod_num):
         prev_text = str(self.window.NumLinLst.text())
-        self.window.NumLinLst.setText(
-            str(prev_text + " " + str(nod_num))
-        )
-        self.new_node["parent_node_lst"].append(nod_num)
-        self.add_new_node()
+        prev_text_lst = map(int, prev_text.split(" "))
+        print("prev_text_lst =", prev_text_lst)
+        print("nod_num =", nod_num)
+        if nod_num in prev_text_lst:
+            pass
+
+        else:
+            self.window.NumLinLst.setText(
+                str(prev_text + " " + str(nod_num))
+            )
+            self.new_node["parent_node_lst"].append(nod_num)
+            self.add_new_node()
 
     def on_node_click(self, nod_num):
         if(
