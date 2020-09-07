@@ -101,6 +101,7 @@ class CmdNode(object):
         self.child_node_lst = []
         self.lin_num = 0
 
+
         try:
             for single_parent in parent_lst_in:
                 self.set_base_dir(single_parent._base_dir)
@@ -115,10 +116,10 @@ class CmdNode(object):
                     self._lst_expt.append(json_2_add)
 
                 if len(self._lst_expt) == 0:
-                    self._lst_expt = single_parent._lst_expt
+                    self._lst_expt += single_parent._lst_expt
 
                 if len(self._lst_refl) == 0:
-                    self._lst_refl = single_parent._lst_refl
+                    self._lst_refl += single_parent._lst_refl
 
             print("self._lst_expt: ", self._lst_expt)
             print("self._lst_refl: ", self._lst_refl)
@@ -203,6 +204,7 @@ class CmdNode(object):
         self.nod_req = req_obj
         self.status = "Busy"
         try:
+            print("\n self.lst2run =", self.lst2run, "\n")
             inner_lst = self.lst2run[-1]
             print("\n Running:", inner_lst, "\n")
             self.my_proc = subprocess.Popen(
