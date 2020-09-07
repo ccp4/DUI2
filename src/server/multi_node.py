@@ -115,14 +115,11 @@ class CmdNode(object):
                 for json_2_add in lst_json:
                     self._lst_expt.append(json_2_add)
 
-                if len(self._lst_expt) == 0:
+                if len(self._lst_expt) < len(self._lst_refl):
                     self._lst_expt += single_parent._lst_expt
 
                 if len(self._lst_refl) == 0:
                     self._lst_refl += single_parent._lst_refl
-
-            print("self._lst_expt: ", self._lst_expt)
-            print("self._lst_refl: ", self._lst_refl)
 
         except TypeError:
             print("parent_lst_in =", parent_lst_in, "tmp empty; ", end='')
