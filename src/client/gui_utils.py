@@ -71,7 +71,7 @@ widgets_defs = {
     },
     "combine_experiments" : {
         "main_cmd"  :"dials.combine_experiments",
-        "nxt_widg_lst"  :["refine", "integrate"]
+        "nxt_widg_lst"  :["index", "refine", "integrate"]
     }
 }
 
