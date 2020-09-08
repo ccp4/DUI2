@@ -211,9 +211,15 @@ class AdvancedParameters(QWidget):
                 data_info["widget"].setText(par_str)
 
 
-def draw_quadratic_bezier_3_points(scene_obj,
-                          p1x, p1y, p2x, p2y, p3x, p3y,
-                          lin_pen):
+def draw_quadratic_bezier_3_points(
+        scene_obj, p1x, p1y, p2x, p2y, p3x, p3y,
+        lin_pen, row_size, col_size
+    ):
+
+    vert_lin_y = p3y - row_size
+
+    horz_lin_x = p1x + col_size
+
     n_points = 45
 
     dx12 = (p2x - p1x) / n_points
@@ -460,7 +466,7 @@ class TreeDirScene(QGraphicsScene):
                         dx1 + self.f_width, dy1,
                         rect_border_colour, self.cyan_brush
                     )
-
+            row_size, col_size = self.get_coords(1, 1)
             for pos, node in enumerate(self.nod_lst):
                 if len(node["par_lst"]) > 1:
                     my_coord_x ,my_coord_y = self.get_coords(pos, node["indent"])
@@ -485,7 +491,7 @@ class TreeDirScene(QGraphicsScene):
                                 my_parent_coord_x + self.f_width * 1.6, my_parent_coord_y,
                                 my_coord_x, my_parent_coord_y,
                                 my_coord_x, my_coord_y - self.f_height * 0.6,
-                                arr_col
+                                arr_col, row_size, col_size
                             )
 
             for pos, node in enumerate(self.nod_lst):
@@ -502,7 +508,7 @@ class TreeDirScene(QGraphicsScene):
                                 my_parent_coord_x, my_parent_coord_y + self.f_height * 0.6,
                                 my_parent_coord_x, my_coord_y,
                                 my_coord_x - self.f_width * 1.6, my_coord_y,
-                                arr_col
+                                arr_col, row_size, col_size
                             )
 
             self.lst_nod_pos = []
