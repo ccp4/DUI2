@@ -216,23 +216,50 @@ def draw_quadratic_bezier_3_points(
         lin_pen, row_size, col_size
     ):
 
-    vert_lin_y = p3y - row_size
+    if p1x == p2x:
+        vert_lin_y = p3y - row_size
+        vert_lin_x = p1x
+        scene_obj.addLine(vert_lin_x, p1y, vert_lin_x, vert_lin_y, lin_pen)
+        horz_lin_x = p1x + col_size
+        scene_obj.addLine(p3x, p3y, horz_lin_x, p3y, lin_pen)
 
-    horz_lin_x = p1x + col_size
+        curv_p1x = vert_lin_x
+        curv_p1y = vert_lin_y
+        curv_p2x = p2x
+        curv_p2y = p2y
+        curv_p3x = horz_lin_x
+        curv_p3y = p3y
+
+    else:
+        vert_lin_x = p3x
+        vert_lin_y = p1y + row_size
+        scene_obj.addLine(p2x, vert_lin_y, vert_lin_x, p3y, lin_pen)
+        horz_lin_x = p3x - col_size
+        scene_obj.addLine(p1x, p1y, horz_lin_x, p1y, lin_pen)
+
+        curv_p1x = vert_lin_x
+        curv_p1y = vert_lin_y
+        curv_p2x = p2x
+        curv_p2y = p2y
+        curv_p3x = horz_lin_x
+        curv_p3y = p1y
+
+    #scene_obj.addLine(p1x, p1y, p2x, p2y, lin_pen)
+    #scene_obj.addLine(p2x, p2y, p3x, p3y, lin_pen)
 
     n_points = 45
 
-    dx12 = (p2x - p1x) / n_points
-    dx23 = (p3x - p2x) / n_points
+    dx12 = (curv_p2x - curv_p1x) / n_points
+    dx23 = (curv_p3x - curv_p2x) / n_points
 
-    dy12 = (p2y - p1y) / n_points
-    dy23 = (p3y - p2y) / n_points
+    dy12 = (curv_p2y - curv_p1y) / n_points
+    dy23 = (curv_p3y - curv_p2y) / n_points
 
     for pos in range(n_points + 1):
-        x1 = p1x + dx12 * float(pos)
-        y1 = p1y + dy12 * float(pos)
-        x2 = p2x + dx23 * float(pos)
-        y2 = p2y + dy23 * float(pos)
+        x1 = curv_p1x + dx12 * float(pos)
+        y1 = curv_p1y + dy12 * float(pos)
+        x2 = curv_p2x + dx23 * float(pos)
+        y2 = curv_p2y + dy23 * float(pos)
 
         dx1 = (x2 - x1) / n_points
         dy1 = (y2 - y1) / n_points
@@ -280,6 +307,7 @@ def draw_quadratic_bezier_3_points(
     y_base_2 = arrow_tip_y - dy2 * scale
 
     #drawing arrowheads
+    '''
     scene_obj.addLine(
         arrow_tip_x, arrow_tip_y,
         x_base_2, y_base_2,
@@ -291,6 +319,7 @@ def draw_quadratic_bezier_3_points(
         arrow_tip_x, arrow_tip_y,
         lin_pen
     )
+    '''
 
 class TreeDirScene(QGraphicsScene):
     node_clicked = Signal(int)
@@ -310,7 +339,7 @@ class TreeDirScene(QGraphicsScene):
         self.light_gray_brush = QBrush(Qt.lightGray, Qt.SolidPattern)
         self.white_brush = QBrush(Qt.white, Qt.SolidPattern)
         self.invisible_brush = QBrush(Qt.white, Qt.NoBrush)
-        self.blue_gradient_brush = QBrush(Qt.blue, Qt.RadialGradientPattern)
+        self.blue_gradient_brush = QBrush(Qt.blue, Qt.SolidPattern)
 
         self.black_pen = QPen(
             Qt.black, 1.6, Qt.SolidLine,
@@ -466,7 +495,7 @@ class TreeDirScene(QGraphicsScene):
                         dx1 + self.f_width, dy1,
                         rect_border_colour, self.cyan_brush
                     )
-            row_size, col_size = self.get_coords(1, 1)
+            row_size, col_size = self.get_coords(0.5, 0.5)
             for pos, node in enumerate(self.nod_lst):
                 if len(node["par_lst"]) > 1:
                     my_coord_x ,my_coord_y = self.get_coords(pos, node["indent"])
