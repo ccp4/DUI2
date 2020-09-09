@@ -272,6 +272,8 @@ class MainObject(QObject):
         self.window.Next2RunLayout.addWidget(QLabel("                  . . .       "))
         self.current_next_buttons = 0
         self.params2run = []
+        self.cmd2run_str = ""
+        self.parent_nums_str = ""
 
         self.font_point_size = QFont().pointSize()
         big_f_size = int(self.font_point_size * 1.6)
@@ -285,6 +287,7 @@ class MainObject(QObject):
         self.window.Reset2DefaultPushButton.clicked.connect(self.reset_param)
         self.window.ClearParentButton.clicked.connect(self.clear_parent_list)
         self.r_index_widg.opt_signal.connect(self.launch_reindex)
+
 
         self.tree_scene.draw_tree_graph([])
         self.new_node = None
@@ -312,7 +315,7 @@ class MainObject(QObject):
         try:
             only_one = int(self.new_node["parent_node_lst"][0])
             self.new_node["parent_node_lst"] = [only_one]
-            self.window.NumLinLst.setText(str(only_one))
+            self.parent_nums_str = str(only_one)
             self.local_nod_lst = copy_lst_nodes(self.server_nod_lst)
             self.add_new_node()
 
@@ -324,7 +327,7 @@ class MainObject(QObject):
         try:
             cur_nod = self.server_nod_lst[nod_num]
             self.display_log(nod_num)
-            self.window.NumLinLst.setText(str(nod_num))
+            self.parent_nums_str = str(nod_num)
 
         except IndexError:
             print("nod_num ", nod_num, "not ran yet")
@@ -336,7 +339,7 @@ class MainObject(QObject):
                 n_lst_str += str(par_nod_num) + " "
 
             n_lst_str = n_lst_str[:-1]
-            self.window.NumLinLst.setText(n_lst_str)
+            self.parent_nums_str = n_lst_str
 
         cmd_ini = cur_nod["cmd2show"][0]
         key2find = cmd_ini[6:]
@@ -350,7 +353,7 @@ class MainObject(QObject):
         self.display()
 
     def clicked_4_combine(self, nod_num):
-        prev_text = str(self.window.NumLinLst.text())
+        prev_text = self.parent_nums_str
         prev_text_lst = list(map(int, prev_text.split(" ")))
         if nod_num in prev_text_lst:
             if len(prev_text_lst) > 1:
@@ -362,7 +365,8 @@ class MainObject(QObject):
                         new_prev_text += str(in_nod_num) + " "
 
                 self.new_node["parent_node_lst"] = new_par_lst
-                self.window.NumLinLst.setText(new_prev_text[:-1])
+                self.parent_nums_str = new_prev_text[:-1]
+
                 for node in self.local_nod_lst:
                     for pos, in_nod_num in enumerate(node["child_node_lst"]):
                         if(
@@ -379,9 +383,8 @@ class MainObject(QObject):
                 print("not removing only parent node")
 
         else:
-            self.window.NumLinLst.setText(
-                str(prev_text + " " + str(nod_num))
-            )
+            self.parent_nums_str = str(prev_text + " " + str(nod_num))
+
             self.new_node["parent_node_lst"].append(nod_num)
             self.add_new_node()
 
@@ -433,8 +436,8 @@ class MainObject(QObject):
         for sinlge_param in self.params2run:
             cmd2run = cmd2run + " " + sinlge_param
 
-        print("\n main_cmd = ", cmd2run, "\n")
-        self.window.CmdEdit.setText(str(cmd2run))
+        self.cmd2run_str = str(cmd2run)
+        print("\n cmd2run_str = ", self.cmd2run_str, "\n")
 
     def display(self, in_lst_nodes = None):
         if in_lst_nodes is None:
@@ -448,8 +451,7 @@ class MainObject(QObject):
     def line_n1_in(self, lin_num_in):
         print("new busy node = ", lin_num_in)
         self.request_display()
-        self.window.NumLinLst.clear()
-        self.window.NumLinLst.setText(str(lin_num_in))
+        self.parent_nums_str = str(lin_num_in)
 
     def display_log(self, nod_lin_num = 0):
         found_lin_num = False
@@ -529,8 +531,9 @@ class MainObject(QObject):
                 node["child_node_lst"].append(int(self.new_node["lin_num"]))
 
         self.display(self.local_nod_lst)
-        self.window.CmdEdit.setText(self.new_node["cmd2show"][0])
-        #TODO add parameters in self.window.CmdEdit
+        self.cmd2run_str = self.new_node["cmd2show"][0]
+        print("\n cmd2run_str =", self.cmd2run_str, "\n")
+
 
     def request_display(self):
         print("\n request_display \n")
@@ -546,13 +549,14 @@ class MainObject(QObject):
             print("self.new_node =", self.new_node)
 
     def request_launch(self):
-        cmd_str = str(self.window.CmdEdit.text())
+        cmd_str = self.cmd2run_str
+
         self.params2run = []
-        self.window.CmdEdit.clear()
+        self.cmd2run_str = ""
+        print("\n cmd2run_str =", self.cmd2run_str, "\n")
         print("\n cmd_str", cmd_str)
-        nod_str = str(self.window.NumLinLst.text())
+        nod_str = self.parent_nums_str
         nod_lst = nod_str.split(" ")
-        #self.window.NumLinLst.clear()
         self.window.incoming_text.clear()
         print("\n nod_lst", nod_lst)
         cmd = {"nod_lst":nod_lst, "cmd_lst":[cmd_str]}
@@ -576,7 +580,8 @@ class MainObject(QObject):
 
     def launch_reindex(self, sol_rei):
         print("reindex solution", sol_rei)
-        self.window.CmdEdit.setText("dials.reindex " + str(sol_rei))
+        self.cmd2run_str = "dials.reindex " + str(sol_rei)
+        print("\n cmd2run_str =", self.cmd2run_str, "\n")
 
     def nxt_clicked(self):
         print("nxt_clicked")
@@ -647,12 +652,13 @@ class MainObject(QObject):
             n_lst_str += str(par_nod_num) + " "
 
         n_lst_str = n_lst_str[:-1]
-        self.window.NumLinLst.setText(n_lst_str)
+        self.parent_nums_str = n_lst_str
 
     def req_stop(self):
         print("req_stop")
-        self.window.CmdEdit.clear()
-        #self.window.NumLinLst.clear()
+        self.cmd2run_str = ""
+        print("\n cmd2run_str =", self.cmd2run_str, "\n")
+
         self.window.incoming_text.clear()
         nod_lst = [str(self.current_lin_num)]
         print("\n nod_lst", nod_lst)
