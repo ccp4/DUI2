@@ -25,9 +25,9 @@
         <enum>Qt::Vertical</enum>
        </property>
        <widget class="QGraphicsView" name="treeView"/>
-       <widget class="QGroupBox" name="groupBox">
+       <widget class="QGroupBox" name="BoxControlWidget">
         <property name="title">
-         <string>GroupBox</string>
+         <string>...</string>
         </property>
         <layout class="QGridLayout" name="gridLayout_2">
          <item row="0" column="0">
@@ -56,13 +56,6 @@
               </widget>
              </item>
             </layout>
-           </item>
-           <item>
-            <widget class="QLabel" name="CurrentControlWidgetLabel">
-             <property name="text">
-              <string>...</string>
-             </property>
-            </widget>
            </item>
            <item>
             <widget class="QStackedWidget" name="StackedParamsWidget">
@@ -370,7 +363,7 @@
                         <x>0</x>
                         <y>0</y>
                         <width>322</width>
-                        <height>125</height>
+                        <height>146</height>
                        </rect>
                       </property>
                      </widget>
@@ -394,7 +387,7 @@
                         <x>0</x>
                         <y>0</y>
                         <width>322</width>
-                        <height>125</height>
+                        <height>146</height>
                        </rect>
                       </property>
                      </widget>
