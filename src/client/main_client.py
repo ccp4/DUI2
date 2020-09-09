@@ -278,7 +278,8 @@ class MainObject(QObject):
         self.font_point_size = QFont().pointSize()
         big_f_size = int(self.font_point_size * 1.6)
         big_font = QFont("OldEnglish", pointSize = big_f_size, italic=True)
-        #self.window.CurrentControlWidgetLabel.setFont(big_font)
+
+        #self.window.BoxControlWidget.setFont(big_font)
 
         self.tree_scene.node_clicked.connect(self.on_node_click)
         self.window.RetryButton.clicked.connect(self.on_retry)

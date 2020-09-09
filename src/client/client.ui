@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout_30">
+   <layout class="QGridLayout" name="gridLayout_27">
     <item row="0" column="0">
      <widget class="QSplitter" name="splitter_2">
       <property name="orientation">
@@ -25,604 +25,610 @@
         <enum>Qt::Vertical</enum>
        </property>
        <widget class="QGraphicsView" name="treeView"/>
-       <widget class="QGroupBox" name="BoxControlWidget">
-        <property name="title">
-         <string>...</string>
-        </property>
-        <layout class="QGridLayout" name="gridLayout_2">
-         <item row="0" column="0">
-          <layout class="QVBoxLayout" name="verticalLayout">
+       <widget class="QWidget" name="">
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
            <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_2">
-             <item>
-              <widget class="QPushButton" name="RetryButton">
-               <property name="text">
-                <string>Retry</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="CmdSend2server">
-               <property name="text">
-                <string>Run</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="ReqStopButton">
-               <property name="text">
-                <string>Stop</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <widget class="QStackedWidget" name="StackedParamsWidget">
-             <property name="currentIndex">
-              <number>6</number>
+            <widget class="QPushButton" name="RetryButton">
+             <property name="text">
+              <string>Retry</string>
              </property>
-             <widget class="QWidget" name="ImportPage">
-              <layout class="QGridLayout" name="gridLayout_26">
-               <item row="1" column="0">
-                <widget class="QScrollArea" name="ImportScrollArea">
-                 <property name="widgetResizable">
-                  <bool>true</bool>
-                 </property>
-                 <widget class="QWidget" name="scrollAreaWidgetContents_17">
-                  <property name="geometry">
-                   <rect>
-                    <x>0</x>
-                    <y>0</y>
-                    <width>98</width>
-                    <height>28</height>
-                   </rect>
-                  </property>
-                 </widget>
-                </widget>
-               </item>
-              </layout>
-             </widget>
-             <widget class="QWidget" name="FindspotsPage">
-              <layout class="QGridLayout" name="gridLayout_18">
-               <item row="0" column="0">
-                <widget class="QTabWidget" name="tabWidget">
-                 <property name="currentIndex">
-                  <number>0</number>
-                 </property>
-                 <widget class="QWidget" name="tab_simple">
-                  <attribute name="title">
-                   <string>Simple</string>
-                  </attribute>
-                  <layout class="QGridLayout" name="gridLayout">
-                   <item row="0" column="0">
-                    <widget class="QScrollArea" name="FindspotsSimplerScrollArea">
-                     <property name="widgetResizable">
-                      <bool>true</bool>
-                     </property>
-                     <widget class="QWidget" name="scrollAreaWidgetContents">
-                      <property name="geometry">
-                       <rect>
-                        <x>0</x>
-                        <y>0</y>
-                        <width>98</width>
-                        <height>28</height>
-                       </rect>
-                      </property>
-                     </widget>
-                    </widget>
-                   </item>
-                  </layout>
-                 </widget>
-                 <widget class="QWidget" name="tab_advanced">
-                  <attribute name="title">
-                   <string>Advanced</string>
-                  </attribute>
-                  <layout class="QGridLayout" name="gridLayout_3">
-                   <item row="0" column="0">
-                    <widget class="QScrollArea" name="FindspotsAdvancedScrollArea">
-                     <property name="widgetResizable">
-                      <bool>true</bool>
-                     </property>
-                     <widget class="QWidget" name="scrollAreaWidgetContents_2">
-                      <property name="geometry">
-                       <rect>
-                        <x>0</x>
-                        <y>0</y>
-                        <width>98</width>
-                        <height>28</height>
-                       </rect>
-                      </property>
-                     </widget>
-                    </widget>
-                   </item>
-                  </layout>
-                 </widget>
-                </widget>
-               </item>
-              </layout>
-             </widget>
-             <widget class="QWidget" name="IndexPage">
-              <layout class="QGridLayout" name="gridLayout_19">
-               <item row="0" column="0">
-                <widget class="QTabWidget" name="tabWidget_2">
-                 <property name="currentIndex">
-                  <number>0</number>
-                 </property>
-                 <widget class="QWidget" name="tab_simple_2">
-                  <attribute name="title">
-                   <string>Simple</string>
-                  </attribute>
-                  <layout class="QGridLayout" name="gridLayout_4">
-                   <item row="0" column="0">
-                    <widget class="QScrollArea" name="IndexSimplerScrollArea">
-                     <property name="widgetResizable">
-                      <bool>true</bool>
-                     </property>
-                     <widget class="QWidget" name="scrollAreaWidgetContents_3">
-                      <property name="geometry">
-                       <rect>
-                        <x>0</x>
-                        <y>0</y>
-                        <width>98</width>
-                        <height>28</height>
-                       </rect>
-                      </property>
-                     </widget>
-                    </widget>
-                   </item>
-                  </layout>
-                 </widget>
-                 <widget class="QWidget" name="tab_advanced_2">
-                  <attribute name="title">
-                   <string>Advanced</string>
-                  </attribute>
-                  <layout class="QGridLayout" name="gridLayout_5">
-                   <item row="0" column="0">
-                    <widget class="QScrollArea" name="IndexAdvancedScrollArea">
-                     <property name="widgetResizable">
-                      <bool>true</bool>
-                     </property>
-                     <widget class="QWidget" name="scrollAreaWidgetContents_4">
-                      <property name="geometry">
-                       <rect>
-                        <x>0</x>
-                        <y>0</y>
-                        <width>98</width>
-                        <height>28</height>
-                       </rect>
-                      </property>
-                     </widget>
-                    </widget>
-                   </item>
-                  </layout>
-                 </widget>
-                </widget>
-               </item>
-              </layout>
-             </widget>
-             <widget class="QWidget" name="RefinBrabPage">
-              <layout class="QGridLayout" name="gridLayout_20">
-               <item row="0" column="0">
-                <widget class="QTabWidget" name="tabWidget_3">
-                 <property name="currentIndex">
-                  <number>0</number>
-                 </property>
-                 <widget class="QWidget" name="tab_simple_3">
-                  <attribute name="title">
-                   <string>Simple</string>
-                  </attribute>
-                  <layout class="QGridLayout" name="gridLayout_6">
-                   <item row="0" column="0">
-                    <widget class="QScrollArea" name="RefineBravaiSimplerScrollArea">
-                     <property name="widgetResizable">
-                      <bool>true</bool>
-                     </property>
-                     <widget class="QWidget" name="scrollAreaWidgetContents_5">
-                      <property name="geometry">
-                       <rect>
-                        <x>0</x>
-                        <y>0</y>
-                        <width>98</width>
-                        <height>28</height>
-                       </rect>
-                      </property>
-                     </widget>
-                    </widget>
-                   </item>
-                  </layout>
-                 </widget>
-                 <widget class="QWidget" name="tab_advanced_3">
-                  <attribute name="title">
-                   <string>Advanced</string>
-                  </attribute>
-                  <layout class="QGridLayout" name="gridLayout_7">
-                   <item row="0" column="0">
-                    <widget class="QScrollArea" name="RefineBravaiAdvancedScrollArea">
-                     <property name="widgetResizable">
-                      <bool>true</bool>
-                     </property>
-                     <widget class="QWidget" name="scrollAreaWidgetContents_6">
-                      <property name="geometry">
-                       <rect>
-                        <x>0</x>
-                        <y>0</y>
-                        <width>98</width>
-                        <height>28</height>
-                       </rect>
-                      </property>
-                     </widget>
-                    </widget>
-                   </item>
-                  </layout>
-                 </widget>
-                </widget>
-               </item>
-              </layout>
-             </widget>
-             <widget class="QWidget" name="ReindexPage">
-              <layout class="QGridLayout" name="gridLayout_28">
-               <item row="0" column="0">
-                <widget class="QScrollArea" name="ReindexTableScrollArea">
-                 <property name="widgetResizable">
-                  <bool>true</bool>
-                 </property>
-                 <widget class="QWidget" name="scrollAreaWidgetContents_18">
-                  <property name="geometry">
-                   <rect>
-                    <x>0</x>
-                    <y>0</y>
-                    <width>98</width>
-                    <height>28</height>
-                   </rect>
-                  </property>
-                 </widget>
-                </widget>
-               </item>
-              </layout>
-             </widget>
-             <widget class="QWidget" name="RefinePage">
-              <layout class="QGridLayout" name="gridLayout_21">
-               <item row="0" column="0">
-                <widget class="QTabWidget" name="tabWidget_4">
-                 <property name="currentIndex">
-                  <number>0</number>
-                 </property>
-                 <widget class="QWidget" name="tab_simple_4">
-                  <attribute name="title">
-                   <string>Simple</string>
-                  </attribute>
-                  <layout class="QGridLayout" name="gridLayout_8">
-                   <item row="0" column="0">
-                    <widget class="QScrollArea" name="RefineSimplerScrollArea">
-                     <property name="widgetResizable">
-                      <bool>true</bool>
-                     </property>
-                     <widget class="QWidget" name="scrollAreaWidgetContents_7">
-                      <property name="geometry">
-                       <rect>
-                        <x>0</x>
-                        <y>0</y>
-                        <width>98</width>
-                        <height>28</height>
-                       </rect>
-                      </property>
-                     </widget>
-                    </widget>
-                   </item>
-                  </layout>
-                 </widget>
-                 <widget class="QWidget" name="tab_advanced_4">
-                  <attribute name="title">
-                   <string>Advanced</string>
-                  </attribute>
-                  <layout class="QGridLayout" name="gridLayout_9">
-                   <item row="0" column="0">
-                    <widget class="QScrollArea" name="RefineAdvancedScrollArea">
-                     <property name="widgetResizable">
-                      <bool>true</bool>
-                     </property>
-                     <widget class="QWidget" name="scrollAreaWidgetContents_8">
-                      <property name="geometry">
-                       <rect>
-                        <x>0</x>
-                        <y>0</y>
-                        <width>98</width>
-                        <height>28</height>
-                       </rect>
-                      </property>
-                     </widget>
-                    </widget>
-                   </item>
-                  </layout>
-                 </widget>
-                </widget>
-               </item>
-              </layout>
-             </widget>
-             <widget class="QWidget" name="IntegratePage">
-              <layout class="QGridLayout" name="gridLayout_22">
-               <item row="0" column="0">
-                <widget class="QTabWidget" name="tabWidget_5">
-                 <property name="currentIndex">
-                  <number>1</number>
-                 </property>
-                 <widget class="QWidget" name="tab_simple_5">
-                  <attribute name="title">
-                   <string>Simple</string>
-                  </attribute>
-                  <layout class="QGridLayout" name="gridLayout_10">
-                   <item row="0" column="0">
-                    <widget class="QScrollArea" name="IntegrateSimplerScrollArea">
-                     <property name="widgetResizable">
-                      <bool>true</bool>
-                     </property>
-                     <widget class="QWidget" name="scrollAreaWidgetContents_9">
-                      <property name="geometry">
-                       <rect>
-                        <x>0</x>
-                        <y>0</y>
-                        <width>322</width>
-                        <height>146</height>
-                       </rect>
-                      </property>
-                     </widget>
-                    </widget>
-                   </item>
-                  </layout>
-                 </widget>
-                 <widget class="QWidget" name="tab_advanced_5">
-                  <attribute name="title">
-                   <string>Advanced</string>
-                  </attribute>
-                  <layout class="QGridLayout" name="gridLayout_11">
-                   <item row="0" column="0">
-                    <widget class="QScrollArea" name="IntegrateAdvancedScrollArea">
-                     <property name="widgetResizable">
-                      <bool>true</bool>
-                     </property>
-                     <widget class="QWidget" name="scrollAreaWidgetContents_10">
-                      <property name="geometry">
-                       <rect>
-                        <x>0</x>
-                        <y>0</y>
-                        <width>322</width>
-                        <height>146</height>
-                       </rect>
-                      </property>
-                     </widget>
-                    </widget>
-                   </item>
-                  </layout>
-                 </widget>
-                </widget>
-               </item>
-              </layout>
-             </widget>
-             <widget class="QWidget" name="SimmetryPage">
-              <layout class="QGridLayout" name="gridLayout_23">
-               <item row="0" column="0">
-                <widget class="QTabWidget" name="tabWidget_6">
-                 <property name="currentIndex">
-                  <number>0</number>
-                 </property>
-                 <widget class="QWidget" name="tab_simple_6">
-                  <attribute name="title">
-                   <string>Simple</string>
-                  </attribute>
-                  <layout class="QGridLayout" name="gridLayout_12">
-                   <item row="0" column="0">
-                    <widget class="QScrollArea" name="SymmetrySimplerScrollArea">
-                     <property name="widgetResizable">
-                      <bool>true</bool>
-                     </property>
-                     <widget class="QWidget" name="scrollAreaWidgetContents_11">
-                      <property name="geometry">
-                       <rect>
-                        <x>0</x>
-                        <y>0</y>
-                        <width>98</width>
-                        <height>28</height>
-                       </rect>
-                      </property>
-                     </widget>
-                    </widget>
-                   </item>
-                  </layout>
-                 </widget>
-                 <widget class="QWidget" name="tab_advanced_6">
-                  <attribute name="title">
-                   <string>Advanced</string>
-                  </attribute>
-                  <layout class="QGridLayout" name="gridLayout_13">
-                   <item row="0" column="0">
-                    <widget class="QScrollArea" name="SymmetryAdvancedScrollArea">
-                     <property name="widgetResizable">
-                      <bool>true</bool>
-                     </property>
-                     <widget class="QWidget" name="scrollAreaWidgetContents_12">
-                      <property name="geometry">
-                       <rect>
-                        <x>0</x>
-                        <y>0</y>
-                        <width>98</width>
-                        <height>28</height>
-                       </rect>
-                      </property>
-                     </widget>
-                    </widget>
-                   </item>
-                  </layout>
-                 </widget>
-                </widget>
-               </item>
-              </layout>
-             </widget>
-             <widget class="QWidget" name="ScalePage">
-              <layout class="QGridLayout" name="gridLayout_24">
-               <item row="0" column="0">
-                <widget class="QTabWidget" name="tabWidget_7">
-                 <property name="currentIndex">
-                  <number>0</number>
-                 </property>
-                 <widget class="QWidget" name="tab_simple_7">
-                  <attribute name="title">
-                   <string>Simple</string>
-                  </attribute>
-                  <layout class="QGridLayout" name="gridLayout_14">
-                   <item row="0" column="0">
-                    <widget class="QScrollArea" name="ScaleSimplerScrollArea">
-                     <property name="widgetResizable">
-                      <bool>true</bool>
-                     </property>
-                     <widget class="QWidget" name="scrollAreaWidgetContents_13">
-                      <property name="geometry">
-                       <rect>
-                        <x>0</x>
-                        <y>0</y>
-                        <width>98</width>
-                        <height>28</height>
-                       </rect>
-                      </property>
-                     </widget>
-                    </widget>
-                   </item>
-                  </layout>
-                 </widget>
-                 <widget class="QWidget" name="tab_advanced_7">
-                  <attribute name="title">
-                   <string>Advanced</string>
-                  </attribute>
-                  <layout class="QGridLayout" name="gridLayout_15">
-                   <item row="0" column="0">
-                    <widget class="QScrollArea" name="ScaleAdvancedScrollArea">
-                     <property name="widgetResizable">
-                      <bool>true</bool>
-                     </property>
-                     <widget class="QWidget" name="scrollAreaWidgetContents_14">
-                      <property name="geometry">
-                       <rect>
-                        <x>0</x>
-                        <y>0</y>
-                        <width>98</width>
-                        <height>28</height>
-                       </rect>
-                      </property>
-                     </widget>
-                    </widget>
-                   </item>
-                  </layout>
-                 </widget>
-                </widget>
-               </item>
-              </layout>
-             </widget>
-             <widget class="QWidget" name="CombinePage">
-              <layout class="QGridLayout" name="gridLayout_25">
-               <item row="2" column="0" colspan="3">
-                <widget class="QTabWidget" name="tabWidget_8">
-                 <property name="currentIndex">
-                  <number>0</number>
-                 </property>
-                 <widget class="QWidget" name="tab_simple_8">
-                  <attribute name="title">
-                   <string>Simple</string>
-                  </attribute>
-                  <layout class="QGridLayout" name="gridLayout_16">
-                   <item row="0" column="0">
-                    <widget class="QScrollArea" name="CombineSimplerScrollArea">
-                     <property name="widgetResizable">
-                      <bool>true</bool>
-                     </property>
-                     <widget class="QWidget" name="scrollAreaWidgetContents_15">
-                      <property name="geometry">
-                       <rect>
-                        <x>0</x>
-                        <y>0</y>
-                        <width>98</width>
-                        <height>28</height>
-                       </rect>
-                      </property>
-                     </widget>
-                    </widget>
-                   </item>
-                  </layout>
-                 </widget>
-                 <widget class="QWidget" name="tab_advanced_8">
-                  <attribute name="title">
-                   <string>Advanced</string>
-                  </attribute>
-                  <layout class="QGridLayout" name="gridLayout_17">
-                   <item row="0" column="0">
-                    <widget class="QScrollArea" name="CombineAdvancedScrollArea">
-                     <property name="widgetResizable">
-                      <bool>true</bool>
-                     </property>
-                     <widget class="QWidget" name="scrollAreaWidgetContents_16">
-                      <property name="geometry">
-                       <rect>
-                        <x>0</x>
-                        <y>0</y>
-                        <width>98</width>
-                        <height>28</height>
-                       </rect>
-                      </property>
-                     </widget>
-                    </widget>
-                   </item>
-                  </layout>
-                 </widget>
-                </widget>
-               </item>
-               <item row="0" column="0">
-                <widget class="QCheckBox" name="NodeSelecCheck">
-                 <property name="text">
-                  <string>Select Parents</string>
-                 </property>
-                 <property name="checked">
-                  <bool>true</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="1" colspan="2">
-                <widget class="QPushButton" name="ClearParentButton">
-                 <property name="text">
-                  <string>Clear Parent List</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </widget>
             </widget>
            </item>
            <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_4">
-             <item>
-              <widget class="QPushButton" name="Reset2DefaultPushButton">
-               <property name="text">
-                <string>   Reset to default    </string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <spacer name="horizontalSpacer">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-            </layout>
+            <widget class="QPushButton" name="CmdSend2server">
+             <property name="text">
+              <string>Run</string>
+             </property>
+            </widget>
            </item>
            <item>
-            <layout class="QHBoxLayout" name="Next2RunLayout"/>
+            <widget class="QPushButton" name="ReqStopButton">
+             <property name="text">
+              <string>Stop</string>
+             </property>
+            </widget>
            </item>
           </layout>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="BoxControlWidget">
+           <property name="title">
+            <string>...</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_2">
+            <item row="0" column="0">
+             <layout class="QVBoxLayout" name="verticalLayout">
+              <item>
+               <widget class="QStackedWidget" name="StackedParamsWidget">
+                <property name="currentIndex">
+                 <number>0</number>
+                </property>
+                <widget class="QWidget" name="ImportPage">
+                 <layout class="QGridLayout" name="gridLayout_26">
+                  <item row="1" column="0">
+                   <widget class="QScrollArea" name="ImportScrollArea">
+                    <property name="widgetResizable">
+                     <bool>true</bool>
+                    </property>
+                    <widget class="QWidget" name="scrollAreaWidgetContents_17">
+                     <property name="geometry">
+                      <rect>
+                       <x>0</x>
+                       <y>0</y>
+                       <width>335</width>
+                       <height>183</height>
+                      </rect>
+                     </property>
+                    </widget>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+                <widget class="QWidget" name="FindspotsPage">
+                 <layout class="QGridLayout" name="gridLayout_18">
+                  <item row="0" column="0">
+                   <widget class="QTabWidget" name="tabWidget">
+                    <property name="currentIndex">
+                     <number>0</number>
+                    </property>
+                    <widget class="QWidget" name="tab_simple">
+                     <attribute name="title">
+                      <string>Simple</string>
+                     </attribute>
+                     <layout class="QGridLayout" name="gridLayout">
+                      <item row="0" column="0">
+                       <widget class="QScrollArea" name="FindspotsSimplerScrollArea">
+                        <property name="widgetResizable">
+                         <bool>true</bool>
+                        </property>
+                        <widget class="QWidget" name="scrollAreaWidgetContents">
+                         <property name="geometry">
+                          <rect>
+                           <x>0</x>
+                           <y>0</y>
+                           <width>313</width>
+                           <height>136</height>
+                          </rect>
+                         </property>
+                        </widget>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
+                    <widget class="QWidget" name="tab_advanced">
+                     <attribute name="title">
+                      <string>Advanced</string>
+                     </attribute>
+                     <layout class="QGridLayout" name="gridLayout_3">
+                      <item row="0" column="0">
+                       <widget class="QScrollArea" name="FindspotsAdvancedScrollArea">
+                        <property name="widgetResizable">
+                         <bool>true</bool>
+                        </property>
+                        <widget class="QWidget" name="scrollAreaWidgetContents_2">
+                         <property name="geometry">
+                          <rect>
+                           <x>0</x>
+                           <y>0</y>
+                           <width>66</width>
+                           <height>16</height>
+                          </rect>
+                         </property>
+                        </widget>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+                <widget class="QWidget" name="IndexPage">
+                 <layout class="QGridLayout" name="gridLayout_19">
+                  <item row="0" column="0">
+                   <widget class="QTabWidget" name="tabWidget_2">
+                    <property name="currentIndex">
+                     <number>0</number>
+                    </property>
+                    <widget class="QWidget" name="tab_simple_2">
+                     <attribute name="title">
+                      <string>Simple</string>
+                     </attribute>
+                     <layout class="QGridLayout" name="gridLayout_4">
+                      <item row="0" column="0">
+                       <widget class="QScrollArea" name="IndexSimplerScrollArea">
+                        <property name="widgetResizable">
+                         <bool>true</bool>
+                        </property>
+                        <widget class="QWidget" name="scrollAreaWidgetContents_3">
+                         <property name="geometry">
+                          <rect>
+                           <x>0</x>
+                           <y>0</y>
+                           <width>313</width>
+                           <height>136</height>
+                          </rect>
+                         </property>
+                        </widget>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
+                    <widget class="QWidget" name="tab_advanced_2">
+                     <attribute name="title">
+                      <string>Advanced</string>
+                     </attribute>
+                     <layout class="QGridLayout" name="gridLayout_5">
+                      <item row="0" column="0">
+                       <widget class="QScrollArea" name="IndexAdvancedScrollArea">
+                        <property name="widgetResizable">
+                         <bool>true</bool>
+                        </property>
+                        <widget class="QWidget" name="scrollAreaWidgetContents_4">
+                         <property name="geometry">
+                          <rect>
+                           <x>0</x>
+                           <y>0</y>
+                           <width>66</width>
+                           <height>16</height>
+                          </rect>
+                         </property>
+                        </widget>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+                <widget class="QWidget" name="RefinBrabPage">
+                 <layout class="QGridLayout" name="gridLayout_20">
+                  <item row="0" column="0">
+                   <widget class="QTabWidget" name="tabWidget_3">
+                    <property name="currentIndex">
+                     <number>0</number>
+                    </property>
+                    <widget class="QWidget" name="tab_simple_3">
+                     <attribute name="title">
+                      <string>Simple</string>
+                     </attribute>
+                     <layout class="QGridLayout" name="gridLayout_6">
+                      <item row="0" column="0">
+                       <widget class="QScrollArea" name="RefineBravaiSimplerScrollArea">
+                        <property name="widgetResizable">
+                         <bool>true</bool>
+                        </property>
+                        <widget class="QWidget" name="scrollAreaWidgetContents_5">
+                         <property name="geometry">
+                          <rect>
+                           <x>0</x>
+                           <y>0</y>
+                           <width>313</width>
+                           <height>136</height>
+                          </rect>
+                         </property>
+                        </widget>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
+                    <widget class="QWidget" name="tab_advanced_3">
+                     <attribute name="title">
+                      <string>Advanced</string>
+                     </attribute>
+                     <layout class="QGridLayout" name="gridLayout_7">
+                      <item row="0" column="0">
+                       <widget class="QScrollArea" name="RefineBravaiAdvancedScrollArea">
+                        <property name="widgetResizable">
+                         <bool>true</bool>
+                        </property>
+                        <widget class="QWidget" name="scrollAreaWidgetContents_6">
+                         <property name="geometry">
+                          <rect>
+                           <x>0</x>
+                           <y>0</y>
+                           <width>66</width>
+                           <height>16</height>
+                          </rect>
+                         </property>
+                        </widget>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+                <widget class="QWidget" name="ReindexPage">
+                 <layout class="QGridLayout" name="gridLayout_28">
+                  <item row="0" column="0">
+                   <widget class="QScrollArea" name="ReindexTableScrollArea">
+                    <property name="widgetResizable">
+                     <bool>true</bool>
+                    </property>
+                    <widget class="QWidget" name="scrollAreaWidgetContents_18">
+                     <property name="geometry">
+                      <rect>
+                       <x>0</x>
+                       <y>0</y>
+                       <width>335</width>
+                       <height>183</height>
+                      </rect>
+                     </property>
+                    </widget>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+                <widget class="QWidget" name="RefinePage">
+                 <layout class="QGridLayout" name="gridLayout_21">
+                  <item row="0" column="0">
+                   <widget class="QTabWidget" name="tabWidget_4">
+                    <property name="currentIndex">
+                     <number>0</number>
+                    </property>
+                    <widget class="QWidget" name="tab_simple_4">
+                     <attribute name="title">
+                      <string>Simple</string>
+                     </attribute>
+                     <layout class="QGridLayout" name="gridLayout_8">
+                      <item row="0" column="0">
+                       <widget class="QScrollArea" name="RefineSimplerScrollArea">
+                        <property name="widgetResizable">
+                         <bool>true</bool>
+                        </property>
+                        <widget class="QWidget" name="scrollAreaWidgetContents_7">
+                         <property name="geometry">
+                          <rect>
+                           <x>0</x>
+                           <y>0</y>
+                           <width>313</width>
+                           <height>136</height>
+                          </rect>
+                         </property>
+                        </widget>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
+                    <widget class="QWidget" name="tab_advanced_4">
+                     <attribute name="title">
+                      <string>Advanced</string>
+                     </attribute>
+                     <layout class="QGridLayout" name="gridLayout_9">
+                      <item row="0" column="0">
+                       <widget class="QScrollArea" name="RefineAdvancedScrollArea">
+                        <property name="widgetResizable">
+                         <bool>true</bool>
+                        </property>
+                        <widget class="QWidget" name="scrollAreaWidgetContents_8">
+                         <property name="geometry">
+                          <rect>
+                           <x>0</x>
+                           <y>0</y>
+                           <width>66</width>
+                           <height>16</height>
+                          </rect>
+                         </property>
+                        </widget>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+                <widget class="QWidget" name="IntegratePage">
+                 <layout class="QGridLayout" name="gridLayout_22">
+                  <item row="0" column="0">
+                   <widget class="QTabWidget" name="tabWidget_5">
+                    <property name="currentIndex">
+                     <number>0</number>
+                    </property>
+                    <widget class="QWidget" name="tab_simple_5">
+                     <attribute name="title">
+                      <string>Simple</string>
+                     </attribute>
+                     <layout class="QGridLayout" name="gridLayout_10">
+                      <item row="0" column="0">
+                       <widget class="QScrollArea" name="IntegrateSimplerScrollArea">
+                        <property name="widgetResizable">
+                         <bool>true</bool>
+                        </property>
+                        <widget class="QWidget" name="scrollAreaWidgetContents_9">
+                         <property name="geometry">
+                          <rect>
+                           <x>0</x>
+                           <y>0</y>
+                           <width>313</width>
+                           <height>136</height>
+                          </rect>
+                         </property>
+                        </widget>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
+                    <widget class="QWidget" name="tab_advanced_5">
+                     <attribute name="title">
+                      <string>Advanced</string>
+                     </attribute>
+                     <layout class="QGridLayout" name="gridLayout_11">
+                      <item row="0" column="0">
+                       <widget class="QScrollArea" name="IntegrateAdvancedScrollArea">
+                        <property name="widgetResizable">
+                         <bool>true</bool>
+                        </property>
+                        <widget class="QWidget" name="scrollAreaWidgetContents_10">
+                         <property name="geometry">
+                          <rect>
+                           <x>0</x>
+                           <y>0</y>
+                           <width>313</width>
+                           <height>136</height>
+                          </rect>
+                         </property>
+                        </widget>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+                <widget class="QWidget" name="SimmetryPage">
+                 <layout class="QGridLayout" name="gridLayout_23">
+                  <item row="0" column="0">
+                   <widget class="QTabWidget" name="tabWidget_6">
+                    <property name="currentIndex">
+                     <number>0</number>
+                    </property>
+                    <widget class="QWidget" name="tab_simple_6">
+                     <attribute name="title">
+                      <string>Simple</string>
+                     </attribute>
+                     <layout class="QGridLayout" name="gridLayout_12">
+                      <item row="0" column="0">
+                       <widget class="QScrollArea" name="SymmetrySimplerScrollArea">
+                        <property name="widgetResizable">
+                         <bool>true</bool>
+                        </property>
+                        <widget class="QWidget" name="scrollAreaWidgetContents_11">
+                         <property name="geometry">
+                          <rect>
+                           <x>0</x>
+                           <y>0</y>
+                           <width>313</width>
+                           <height>136</height>
+                          </rect>
+                         </property>
+                        </widget>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
+                    <widget class="QWidget" name="tab_advanced_6">
+                     <attribute name="title">
+                      <string>Advanced</string>
+                     </attribute>
+                     <layout class="QGridLayout" name="gridLayout_13">
+                      <item row="0" column="0">
+                       <widget class="QScrollArea" name="SymmetryAdvancedScrollArea">
+                        <property name="widgetResizable">
+                         <bool>true</bool>
+                        </property>
+                        <widget class="QWidget" name="scrollAreaWidgetContents_12">
+                         <property name="geometry">
+                          <rect>
+                           <x>0</x>
+                           <y>0</y>
+                           <width>66</width>
+                           <height>16</height>
+                          </rect>
+                         </property>
+                        </widget>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+                <widget class="QWidget" name="ScalePage">
+                 <layout class="QGridLayout" name="gridLayout_24">
+                  <item row="0" column="0">
+                   <widget class="QTabWidget" name="tabWidget_7">
+                    <property name="currentIndex">
+                     <number>0</number>
+                    </property>
+                    <widget class="QWidget" name="tab_simple_7">
+                     <attribute name="title">
+                      <string>Simple</string>
+                     </attribute>
+                     <layout class="QGridLayout" name="gridLayout_14">
+                      <item row="0" column="0">
+                       <widget class="QScrollArea" name="ScaleSimplerScrollArea">
+                        <property name="widgetResizable">
+                         <bool>true</bool>
+                        </property>
+                        <widget class="QWidget" name="scrollAreaWidgetContents_13">
+                         <property name="geometry">
+                          <rect>
+                           <x>0</x>
+                           <y>0</y>
+                           <width>313</width>
+                           <height>136</height>
+                          </rect>
+                         </property>
+                        </widget>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
+                    <widget class="QWidget" name="tab_advanced_7">
+                     <attribute name="title">
+                      <string>Advanced</string>
+                     </attribute>
+                     <layout class="QGridLayout" name="gridLayout_15">
+                      <item row="0" column="0">
+                       <widget class="QScrollArea" name="ScaleAdvancedScrollArea">
+                        <property name="widgetResizable">
+                         <bool>true</bool>
+                        </property>
+                        <widget class="QWidget" name="scrollAreaWidgetContents_14">
+                         <property name="geometry">
+                          <rect>
+                           <x>0</x>
+                           <y>0</y>
+                           <width>66</width>
+                           <height>16</height>
+                          </rect>
+                         </property>
+                        </widget>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+                <widget class="QWidget" name="CombinePage">
+                 <layout class="QGridLayout" name="gridLayout_25">
+                  <item row="2" column="0" colspan="3">
+                   <widget class="QTabWidget" name="tabWidget_8">
+                    <property name="currentIndex">
+                     <number>0</number>
+                    </property>
+                    <widget class="QWidget" name="tab_simple_8">
+                     <attribute name="title">
+                      <string>Simple</string>
+                     </attribute>
+                     <layout class="QGridLayout" name="gridLayout_16">
+                      <item row="0" column="0">
+                       <widget class="QScrollArea" name="CombineSimplerScrollArea">
+                        <property name="widgetResizable">
+                         <bool>true</bool>
+                        </property>
+                        <widget class="QWidget" name="scrollAreaWidgetContents_15">
+                         <property name="geometry">
+                          <rect>
+                           <x>0</x>
+                           <y>0</y>
+                           <width>313</width>
+                           <height>107</height>
+                          </rect>
+                         </property>
+                        </widget>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
+                    <widget class="QWidget" name="tab_advanced_8">
+                     <attribute name="title">
+                      <string>Advanced</string>
+                     </attribute>
+                     <layout class="QGridLayout" name="gridLayout_17">
+                      <item row="0" column="0">
+                       <widget class="QScrollArea" name="CombineAdvancedScrollArea">
+                        <property name="widgetResizable">
+                         <bool>true</bool>
+                        </property>
+                        <widget class="QWidget" name="scrollAreaWidgetContents_16">
+                         <property name="geometry">
+                          <rect>
+                           <x>0</x>
+                           <y>0</y>
+                           <width>66</width>
+                           <height>16</height>
+                          </rect>
+                         </property>
+                        </widget>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
+                   </widget>
+                  </item>
+                  <item row="0" column="0">
+                   <widget class="QCheckBox" name="NodeSelecCheck">
+                    <property name="text">
+                     <string>Select Parents</string>
+                    </property>
+                    <property name="checked">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="1" colspan="2">
+                   <widget class="QPushButton" name="ClearParentButton">
+                    <property name="text">
+                     <string>Clear Parent List</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </widget>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_4">
+                <item>
+                 <widget class="QPushButton" name="Reset2DefaultPushButton">
+                  <property name="text">
+                   <string>   Reset to default    </string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="horizontalSpacer">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="Next2RunLayout"/>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
          </item>
         </layout>
        </widget>
