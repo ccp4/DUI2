@@ -64,6 +64,7 @@ def build_advanced_params_widget(cmd_str):
     advanced_parameters.build_pars(par_def)
     return advanced_parameters
 
+
 def copy_lst_nodes(old_lst_nodes):
     new_lst = []
     for old_node in old_lst_nodes:
@@ -77,6 +78,7 @@ def copy_lst_nodes(old_lst_nodes):
         new_lst.append(cp_new_node)
 
     return new_lst
+
 
 def json_data_request(url, cmd):
     try:
@@ -146,6 +148,7 @@ class Run_n_Output(QThread):
                 break
 
             self.usleep(1)
+
 
 class MainObject(QObject):
     def __init__(self, parent = None):
@@ -276,10 +279,6 @@ class MainObject(QObject):
         self.parent_nums_str = ""
 
         self.font_point_size = QFont().pointSize()
-        big_f_size = int(self.font_point_size * 1.6)
-        big_font = QFont("OldEnglish", pointSize = big_f_size, italic=True)
-
-        #self.window.BoxControlWidget.setFont(big_font)
 
         self.tree_scene.node_clicked.connect(self.on_node_click)
         self.window.RetryButton.clicked.connect(self.on_retry)
@@ -288,7 +287,6 @@ class MainObject(QObject):
         self.window.Reset2DefaultPushButton.clicked.connect(self.reset_param)
         self.window.ClearParentButton.clicked.connect(self.clear_parent_list)
         self.r_index_widg.opt_signal.connect(self.launch_reindex)
-
 
         self.tree_scene.draw_tree_graph([])
         self.new_node = None
@@ -385,7 +383,6 @@ class MainObject(QObject):
 
         else:
             self.parent_nums_str = str(prev_text + " " + str(nod_num))
-
             self.new_node["parent_node_lst"].append(nod_num)
             self.add_new_node()
 
@@ -510,6 +507,8 @@ class MainObject(QObject):
             print("NO current_lin_num (IndexError)")
 
     def update_nxt_butt(self, str_key):
+        small_f_size = int(self.font_point_size * 0.85)
+        small_font = QFont("OldEnglish", pointSize = small_f_size, italic=True)
         try:
             if self.server_nod_lst[self.current_lin_num]["status"] == "Succeeded":
                 self.clearLayout(self.window.Next2RunLayout)
@@ -517,6 +516,7 @@ class MainObject(QObject):
                 for bt_labl in self.param_widgets[str_key]["nxt_widg_lst"]:
                     nxt_butt = QPushButton(bt_labl)
                     nxt_butt.cmd_str = bt_labl
+                    nxt_butt.setFont(small_font)
                     nxt_butt.clicked.connect(self.nxt_clicked)
                     self.window.Next2RunLayout.addWidget(nxt_butt)
 
