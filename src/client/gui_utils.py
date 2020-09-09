@@ -216,6 +216,9 @@ def draw_quadratic_bezier_3_points(
         lin_pen, row_size, col_size
     ):
 
+    #scene_obj.addLine(p1x, p1y, p2x, p2y, lin_pen)
+    #scene_obj.addLine(p2x, p2y, p3x, p3y, lin_pen)
+    #'''
     if p1x == p2x:
         vert_lin_y = p3y - row_size
         vert_lin_x = p1x
@@ -229,6 +232,13 @@ def draw_quadratic_bezier_3_points(
         curv_p2y = p2y
         curv_p3x = horz_lin_x
         curv_p3y = p3y
+
+        scene_obj.addLine(
+            p3x, p3y, p3x - col_size / 3, p3y - row_size / 3, lin_pen
+        )
+        scene_obj.addLine(
+            p3x, p3y, p3x - col_size / 3, p3y + row_size / 3, lin_pen
+        )
 
     else:
         vert_lin_x = p3x
@@ -244,10 +254,14 @@ def draw_quadratic_bezier_3_points(
         curv_p3x = horz_lin_x
         curv_p3y = p1y
 
-    #scene_obj.addLine(p1x, p1y, p2x, p2y, lin_pen)
-    #scene_obj.addLine(p2x, p2y, p3x, p3y, lin_pen)
+        scene_obj.addLine(
+            p3x, p3y, p3x - col_size / 3, p3y - row_size / 3, lin_pen
+        )
+        scene_obj.addLine(
+            p3x, p3y, p3x + col_size / 3, p3y - row_size / 3, lin_pen
+        )
 
-    n_points = 45
+    n_points = 15
 
     dx12 = (curv_p2x - curv_p1x) / n_points
     dx23 = (curv_p3x - curv_p2x) / n_points
@@ -270,56 +284,9 @@ def draw_quadratic_bezier_3_points(
         if pos > 0:
             scene_obj.addLine(x, y, gx1, gy1, lin_pen)
 
-        if pos == n_points - 5:
-            arrow_base_x = x
-            arrow_base_y = y
-
-        elif pos == n_points:
-            arrow_tip_x = gx1
-            arrow_tip_y = gy1
-
         x = gx1
         y = gy1
 
-    dx = arrow_tip_x - arrow_base_x
-    dy = arrow_tip_y - arrow_base_y
-
-    # temporal non scaled arrowhead positions
-    x_base_1 = arrow_base_x + dy / 2.0
-    y_base_1 = arrow_base_y - dx / 2.0
-    x_base_2 = arrow_base_x - dy / 2.0
-    y_base_2 = arrow_base_y + dx / 2.0
-
-    #scaling arrowheads
-    dx1 = arrow_tip_x - x_base_1
-    dy1 = arrow_tip_y - y_base_1
-    dx2 = arrow_tip_x - x_base_2
-    dy2 = arrow_tip_y - y_base_2
-
-    size = np.sqrt((dx1 + dx2) ** 2.0 + (dy1 + dy2) ** 2.0) / 2.0
-
-    scale = 7.0 / size
-
-    x_base_1 = arrow_tip_x - dx1 * scale
-    y_base_1 = arrow_tip_y - dy1 * scale
-
-    x_base_2 = arrow_tip_x - dx2 * scale
-    y_base_2 = arrow_tip_y - dy2 * scale
-
-    #drawing arrowheads
-    '''
-    scene_obj.addLine(
-        arrow_tip_x, arrow_tip_y,
-        x_base_2, y_base_2,
-        lin_pen
-    )
-
-    scene_obj.addLine(
-        x_base_1, y_base_1,
-        arrow_tip_x, arrow_tip_y,
-        lin_pen
-    )
-    '''
 
 class TreeDirScene(QGraphicsScene):
     node_clicked = Signal(int)
