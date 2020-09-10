@@ -276,7 +276,7 @@ class MainObject(QObject):
         self.current_next_buttons = 0
         self.params2run = []
         self.cmd2run_str = ""
-        self.parent_nums_str = ""
+        self.parent_nums_lst = []
 
         self.font_point_size = QFont().pointSize()
 
@@ -314,7 +314,7 @@ class MainObject(QObject):
         try:
             only_one = int(self.new_node["parent_node_lst"][0])
             self.new_node["parent_node_lst"] = [only_one]
-            self.parent_nums_str = str(only_one)
+            self.parent_nums_lst = [only_one]
             self.local_nod_lst = copy_lst_nodes(self.server_nod_lst)
             self.add_new_node()
 
@@ -326,19 +326,17 @@ class MainObject(QObject):
         try:
             cur_nod = self.server_nod_lst[nod_num]
             self.display_log(nod_num)
-            self.parent_nums_str = str(nod_num)
+            self.parent_nums_lst = [nod_num]
 
         except IndexError:
             print("nod_num ", nod_num, "not ran yet")
             cur_nod = self.local_nod_lst[nod_num]
             self.window.incoming_text.clear()
             self.window.incoming_text.insertPlainText("Ready to run ...")
-            n_lst_str = ""
+            self.parent_nums_lst = []
             for par_nod_num in cur_nod["parent_node_lst"]:
-                n_lst_str += str(par_nod_num) + " "
+                self.parent_nums_lst.append(int(par_nod_num))
 
-            n_lst_str = n_lst_str[:-1]
-            self.parent_nums_str = n_lst_str
 
         cmd_ini = cur_nod["cmd2show"][0]
         key2find = cmd_ini[6:]
@@ -352,19 +350,17 @@ class MainObject(QObject):
         self.display()
 
     def clicked_4_combine(self, nod_num):
-        prev_text = self.parent_nums_str
-        prev_text_lst = list(map(int, prev_text.split(" ")))
-        if nod_num in prev_text_lst:
-            if len(prev_text_lst) > 1:
+        prev_lst = self.parent_nums_lst
+        print("\n prev_lst =", prev_lst)
+        if nod_num in prev_lst:
+            if len(prev_lst) > 1:
                 new_par_lst = []
-                new_prev_text = ""
-                for in_nod_num in prev_text_lst:
+                for in_nod_num in prev_lst:
                     if in_nod_num != nod_num:
                         new_par_lst.append(in_nod_num)
-                        new_prev_text += str(in_nod_num) + " "
 
                 self.new_node["parent_node_lst"] = new_par_lst
-                self.parent_nums_str = new_prev_text[:-1]
+                self.parent_nums_lst = new_par_lst
 
                 for node in self.local_nod_lst:
                     for pos, in_nod_num in enumerate(node["child_node_lst"]):
@@ -382,9 +378,11 @@ class MainObject(QObject):
                 print("not removing only parent node")
 
         else:
-            self.parent_nums_str = str(prev_text + " " + str(nod_num))
-            self.new_node["parent_node_lst"].append(nod_num)
+            self.parent_nums_lst.append(nod_num)
+            self.new_node["parent_node_lst"] = list(self.parent_nums_lst)
             self.add_new_node()
+
+        print("self.parent_nums_lst =", self.parent_nums_lst, "\n")
 
     def on_node_click(self, nod_num):
         if nod_num != self.current_lin_num:
@@ -449,7 +447,7 @@ class MainObject(QObject):
     def line_n1_in(self, lin_num_in):
         print("new busy node = ", lin_num_in)
         self.request_display()
-        self.parent_nums_str = str(lin_num_in)
+        self.parent_nums_lst = [lin_num_in]
 
     def display_log(self, nod_lin_num = 0):
         found_lin_num = False
@@ -556,12 +554,14 @@ class MainObject(QObject):
         self.cmd2run_str = ""
         print("\n cmd2run_str =", self.cmd2run_str, "\n")
         print("\n cmd_str", cmd_str)
-        nod_str = self.parent_nums_str
-        nod_lst = nod_str.split(" ")
-        self.window.incoming_text.clear()
-        print("\n nod_lst", nod_lst)
-        cmd = {"nod_lst":nod_lst, "cmd_lst":[cmd_str]}
+        nod_lst = self.parent_nums_lst
+        lst_of_node_str = []
+        for nod_num in nod_lst:
+            lst_of_node_str.append(str(nod_num))
+
+        cmd = {"nod_lst":lst_of_node_str, "cmd_lst":[cmd_str]}
         print("cmd =", cmd)
+        self.window.incoming_text.clear()
 
         try:
             new_req_get = requests.get(uni_url, stream = True, params = cmd)
@@ -590,10 +590,8 @@ class MainObject(QObject):
         print("str_key: ", str_key)
 
         if str_key == "reindex":
-
             cmd = {"nod_lst":[self.current_lin_num], "cmd_lst":["get_bravais_sum"]}
             json_data_lst = json_data_request(uni_url, cmd)
-            #print("json_data =", json_data)
             self.r_index_widg.add_opts_lst(
                 json_data=json_data_lst[0]
             )
@@ -616,7 +614,6 @@ class MainObject(QObject):
         }
         self.add_new_node()
         self.change_widget(str_key)
-
         self.current_params_widget = str_key
         self.window.incoming_text.clear()
         self.window.incoming_text.insertPlainText("Ready to run: ")
@@ -647,13 +644,10 @@ class MainObject(QObject):
 
         self.change_widget(str_key)
         self.current_params_widget = str_key
-
-        n_lst_str = ""
+        self.parent_nums_lst = []
         for par_nod_num in self.new_node["parent_node_lst"]:
-            n_lst_str += str(par_nod_num) + " "
+            self.parent_nums_lst.append(int(par_nod_num))
 
-        n_lst_str = n_lst_str[:-1]
-        self.parent_nums_str = n_lst_str
 
     def req_stop(self):
         print("req_stop")
