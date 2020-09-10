@@ -54,12 +54,16 @@ lst_dic = [
 {'nod_lst': [4], 'cmd_lst': [['fd', 'nproc=9']]},
 {'nod_lst': [5], 'cmd_lst': [['fd', 'nproc=9']]},
 {'nod_lst': [6], 'cmd_lst': [['fd', 'nproc=9']]},
+{'nod_lst': [7, 8, 9], 'cmd_lst': [['ce']]},
+{'nod_lst': [10], 'cmd_lst': [['id']]},
 {'nod_lst': [7], 'cmd_lst': [['id']]},
 {'nod_lst': [8], 'cmd_lst': [['id']]},
 {'nod_lst': [9], 'cmd_lst': [['id']]},
-{'nod_lst': [10, 11, 12], 'cmd_lst': [['ce']]},
-{'nod_lst': [13], 'cmd_lst': [['rf']]},
-{'nod_lst': [14], 'cmd_lst': [['it', 'nproc=3']]},
+{'nod_lst': [12, 13, 14], 'cmd_lst': [['ce']]},
+{'nod_lst': [15], 'cmd_lst': [['rf']]},
+{'nod_lst': [16], 'cmd_lst': [['it', 'nproc=3']]},
+{'nod_lst': [11], 'cmd_lst': [['rf']]},
+{'nod_lst': [18], 'cmd_lst': [['it', 'nproc=3']]},
 ]
 
 if __name__ == "__main__":
