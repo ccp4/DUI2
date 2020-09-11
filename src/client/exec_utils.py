@@ -11,8 +11,8 @@ except ModuleNotFoundError:
     This trick to import the format_utils module can be
     removed once the project gets properly packaged
     '''
-    comm_path = os.path.abspath(__file__)[0:-21] + "shared_modules"
-    print("comm_path: ", comm_path)
+    comm_path = os.path.abspath(__file__)[0:-20] + "shared_modules"
+    print("comm_path: ", comm_path, "\n")
     sys.path.insert(1, comm_path)
     import format_utils
 
@@ -110,5 +110,31 @@ class Run_n_Output(QThread):
 
             self.usleep(1)
 
+
+class CommandParamControl:
+    '''
+    keeps track of command to run with parameters included
+    '''
+    def __init__(self, main_command = None, param_list = []):
+        self.cmd = str(main_command)
+        self.par_lst = list(param_list)
+
+
+    def set_parameter(self, param, value):
+        self.par_lst.append([param, value])
+
+    def get_full_command_list(self):
+        str_out = self.cmd + " "
+        for par in self.par_lst:
+            par_str = par[0] + "=" + par[1]
+            str_out += par_str
+
+        return str_out
+
+
+if __name__ == "__main__":
+    tst_cmd = CommandParamControl("my_cmd")
+    tst_cmd.set_parameter("new_param", "new_value")
+    print("cmd_lst =", tst_cmd.get_full_command_list())
 
 
