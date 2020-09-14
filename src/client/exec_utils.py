@@ -16,7 +16,6 @@ except ModuleNotFoundError:
     sys.path.insert(1, comm_path)
     import format_utils
 
-
 uni_url = 'http://localhost:8080/'
 
 def build_advanced_params_widget(cmd_str):
@@ -119,7 +118,9 @@ class CommandParamControl:
     def __init__(self, main_command = None, param_list = []):
         self.cmd = str(main_command)
         self.par_lst = list(param_list)
-
+        self.custm_param = None
+        print("\n New 'CommandParamControl':")
+        print("(cmd, par_lst) =", self.cmd, self.par_lst, "\n")
 
     def set_parameter(self, new_name, new_value):
         already_here = False
@@ -131,11 +132,17 @@ class CommandParamControl:
         if not already_here:
             self.par_lst.append({"name":new_name, "value":new_value})
 
-    def get_full_command_list(self):
+    def set_custom_parameter(self, new_custom_parameter):
+        self.custm_param = new_custom_parameter
+
+    def get_full_command_string(self):
         str_out = self.cmd
         for par in self.par_lst:
             par_str = " " + par["name"] + "=" + par["value"]
             str_out += par_str
+
+        if self.custm_param is not None:
+            str_out += " " + str(self.custm_param)
 
         return str_out
 
@@ -144,15 +151,17 @@ if __name__ == "__main__":
     tst_cmd = CommandParamControl("my_cmd")
 
     tst_cmd.set_parameter("new_param", "new_value")
-    print("cmd_lst =", tst_cmd.get_full_command_list())
+    print("cmd_lst =", tst_cmd.get_full_command_string())
     tst_cmd.set_parameter("new_param_2", "new_value_2")
-    print("cmd_lst =", tst_cmd.get_full_command_list())
+    print("cmd_lst =", tst_cmd.get_full_command_string())
     tst_cmd.set_parameter("random_param_n", "random_value_n")
-    print("cmd_lst =", tst_cmd.get_full_command_list())
+    print("cmd_lst =", tst_cmd.get_full_command_string())
 
     tst_cmd.set_parameter("new_param", "value_2")
-    print("cmd_lst =", tst_cmd.get_full_command_list())
+    print("cmd_lst =", tst_cmd.get_full_command_string())
     tst_cmd.set_parameter("new_param_2", "value_3")
-    print("cmd_lst =", tst_cmd.get_full_command_list())
+    print("cmd_lst =", tst_cmd.get_full_command_string())
     tst_cmd.set_parameter("random_param_n", "value_4")
-    print("cmd_lst =", tst_cmd.get_full_command_list())
+    print("cmd_lst =", tst_cmd.get_full_command_string())
+    tst_cmd.set_custom_parameter("random_custom command _5")
+    print("cmd_lst =", tst_cmd.get_full_command_string())

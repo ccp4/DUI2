@@ -48,6 +48,7 @@ from exec_utils import (
     copy_lst_nodes,
     json_data_request,
     Run_n_Output,
+    CommandParamControl,
     uni_url
 )
 
@@ -184,8 +185,6 @@ class MainObject(QObject):
 
         self.window.Next2RunLayout.addWidget(QLabel("                  . . .       "))
         self.current_next_buttons = 0
-        self.params2run = []
-        self.cmd2run_str = ""
         self.parent_nums_lst = []
 
         self.font_point_size = QFont().pointSize()
@@ -336,14 +335,9 @@ class MainObject(QObject):
     def item_param_changed(self, str_path, str_value):
         print("item paran changed")
         print("str_path, str_value: ", str_path, str_value)
-        self.params2run.append(str_path + "=" + str_value)
         str_key = self.current_params_widget
         cmd2run = self.param_widgets[str_key]["main_cmd"]
-        for sinlge_param in self.params2run:
-            cmd2run = cmd2run + " " + sinlge_param
-
-        self.cmd2run_str = str(cmd2run)
-        print("\n cmd2run_str = ", self.cmd2run_str, "\n")
+        self.cmd_par.set_parameter(str_path, str_value)
 
     def display(self, in_lst_nodes = None):
         if in_lst_nodes is None:
@@ -391,7 +385,7 @@ class MainObject(QObject):
         except AttributeError:
             print("No advanced pars")
 
-        self.params2run = []
+        #TODO reset the variable "self.cmd_par"
 
     def change_widget(self, str_key):
         self.window.BoxControlWidget.setTitle(str_key)
@@ -431,8 +425,6 @@ class MainObject(QObject):
         except IndexError:
             print("no need to add next button")
 
-        self.params2run = []
-
     def add_new_node(self):
         self.local_nod_lst.append(self.new_node)
         for node in self.local_nod_lst:
@@ -440,9 +432,7 @@ class MainObject(QObject):
                 node["child_node_lst"].append(int(self.new_node["lin_num"]))
 
         self.display(self.local_nod_lst)
-        self.cmd2run_str = self.new_node["cmd2show"][0]
-        print("\n cmd2run_str =", self.cmd2run_str, "\n")
-
+        self.cmd_par = CommandParamControl(self.new_node["cmd2show"][0])
 
     def request_display(self):
         print("\n request_display \n")
@@ -458,11 +448,7 @@ class MainObject(QObject):
             print("self.new_node =", self.new_node)
 
     def request_launch(self):
-        cmd_str = self.cmd2run_str
-
-        self.params2run = []
-        self.cmd2run_str = ""
-        print("\n cmd2run_str =", self.cmd2run_str, "\n")
+        cmd_str = self.cmd_par.get_full_command_string()
         print("\n cmd_str", cmd_str)
         nod_lst = self.parent_nums_lst
         lst_of_node_str = []
@@ -491,8 +477,7 @@ class MainObject(QObject):
 
     def launch_reindex(self, sol_rei):
         print("reindex solution", sol_rei)
-        self.cmd2run_str = "dials.reindex " + str(sol_rei)
-        print("\n cmd2run_str =", self.cmd2run_str, "\n")
+        self.cmd_par.set_custom_parameter(str(sol_rei))
 
     def nxt_clicked(self):
         print("nxt_clicked")
@@ -561,9 +546,6 @@ class MainObject(QObject):
 
     def req_stop(self):
         print("req_stop")
-        self.cmd2run_str = ""
-        print("\n cmd2run_str =", self.cmd2run_str, "\n")
-
         self.window.incoming_text.clear()
         nod_lst = [str(self.current_lin_num)]
         print("\n nod_lst", nod_lst)
