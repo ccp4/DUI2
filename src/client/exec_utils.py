@@ -16,6 +16,7 @@ except ModuleNotFoundError:
     sys.path.insert(1, comm_path)
     import format_utils
 
+
 uni_url = 'http://localhost:8080/'
 
 def build_advanced_params_widget(cmd_str):
