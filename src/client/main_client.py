@@ -333,11 +333,13 @@ class MainObject(QObject):
             self.window.incoming_text.moveCursor(QTextCursor.End)
 
     def item_param_changed(self, str_path, str_value):
+        sender = self.sender()
         print("item paran changed")
         print("str_path, str_value: ", str_path, str_value)
         str_key = self.current_params_widget
         cmd2run = self.param_widgets[str_key]["main_cmd"]
         self.cmd_par.set_parameter(str_path, str_value)
+        sender.update_param(str_path, str_value)
 
     def display(self, in_lst_nodes = None):
         if in_lst_nodes is None:

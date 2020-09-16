@@ -59,7 +59,7 @@ class DefaultComboBox(QComboBox):
     def __init__(self, local_path, items, default_index=0):
         super(DefaultComboBox, self).__init__()
         self.local_path = local_path
-        self.tmp_lst = items
+        self.item_list = items
         self.default_index = default_index
         for item in items:
             self.addItem(item)
@@ -84,6 +84,42 @@ class SimpleParamTab(QWidget):
                 else:
                     self.clearLayout(item.layout())
 
+    def update_param(self, param_in, value_in):
+        print("\n update_param", param_in, value_in)
+
+        for widget in self.children():
+            widget_path = None
+            if isinstance(widget, QLineEdit):
+                widget_path = widget.local_path
+                widget_value = str(widget.text())
+
+            if isinstance(widget, QDoubleSpinBox) or isinstance(widget, QSpinBox):
+                widget_path = widget.local_path
+                widget_value = str(widget.value())
+
+            if isinstance(widget, DefaultComboBox):
+                widget_path = widget.local_path
+                widget_value = str(widget.currentText())
+
+            if widget_path == param_in:
+                print("widget_path, value = ", widget_path, value_in, "\n")
+                if widget_value == value_in:
+                    print("No need to change parameter (same value)")
+
+                else:
+                    if isinstance(widget, QLineEdit):
+                        widget.setText(str(value_in))
+
+                    if isinstance(widget, QDoubleSpinBox) or isinstance(widget, QSpinBox):
+                        widget.setValue(float(value_in))
+
+                    if isinstance(widget, DefaultComboBox):
+                        widget.setCurrentText(str(value_in))
+
+
+
+
+
     def spnbox_finished(self):
         print("spnbox_finished")
         sender = self.sender()
@@ -98,7 +134,7 @@ class SimpleParamTab(QWidget):
     def combobox_changed(self, value):
         print("combobox_changed")
         sender = self.sender()
-        str_value = str(sender.tmp_lst[value])
+        str_value = str(sender.item_list[value])
         str_path = str(sender.local_path)
 
         if sender.currentIndex() == sender.default_index:
@@ -451,7 +487,7 @@ class IntegrateSimplerParamTab(SimpleParamTab):
         self.main_v_layout.addLayout(hbox_lay_nproc)
 
         self.main_v_layout.addStretch()
-        self.box_nproc.tmp_lst = None
+        #self.box_nproc.item_list = None
         self.lst_var_widg = _get_all_direct_layout_widget_children(self.main_v_layout)
 
     def reset_pars(self):
