@@ -94,7 +94,7 @@ class AdvancedParameters(QWidget):
 
     def __init__(self, parent = None):
         super(AdvancedParameters, self).__init__(parent)
-        print("Hi from AdvancedParameters")
+        self.do_emit = True
         self.main_vbox = QVBoxLayout()
         sys_font = QFont()
         self.font_point_size = sys_font.pointSize()
@@ -171,19 +171,57 @@ class AdvancedParameters(QWidget):
 
         self.main_vbox.addStretch()
 
+    def do_emit_signal(self, str_path, str_value):
+        if self.do_emit:
+            self.item_changed.emit(str_path, str_value)
+
+        else:
+            print("There is no need to emit 'item changed'")
+
+        self.do_emit = True
+
+    def update_param(self, param_in, value_in):
+        print("\n update_param (Advanced)", param_in, value_in)
+
+        for widget in self.children():
+            widget_path = None
+            if isinstance(widget, QLineEdit):
+                widget_path = widget.local_path
+                widget_value = str(widget.text())
+
+            if isinstance(widget, MyQComboBox):
+                widget_path = widget.local_path
+                widget_value = str(widget.currentText())
+
+            if widget_path == param_in:
+                print("widget_path, value = ", widget_path, value_in, "\n")
+                if widget_value == value_in:
+                    print("No need to change parameter (same value)")
+
+                else:
+                    self.do_emit = False
+                    if isinstance(widget, QLineEdit):
+                        widget.setText(str(value_in))
+
+                    if isinstance(widget, MyQComboBox):
+                        widget.setCurrentText(str(value_in))
+
+                    self.do_emit = True
+
+
     def text_changed(self):
         sender = self.sender()
 
         str_path = str(sender.local_path)
         str_value = str(sender.text())
-        self.item_changed.emit(str_path, str_value)
+        self.do_emit_signal(str_path, str_value)
 
     def spnbox_changed(self):
         sender = self.sender()
 
         str_path = str(sender.local_path)
         str_value = str(sender.currentText())
-        self.item_changed.emit(str_path, str_value)
+        self.do_emit_signal(str_path, str_value)
 
 
     def reset_pars(self):

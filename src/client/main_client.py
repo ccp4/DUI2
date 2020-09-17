@@ -80,6 +80,9 @@ class MainObject(QObject):
             fd_advanced_parameters.item_changed.connect(self.item_param_changed)
             self.window.FindspotsAdvancedScrollArea.setWidget(fd_advanced_parameters)
 
+            fd_advanced_parameters.twin_widg = find_simpl_widg
+            find_simpl_widg.twin_widg = fd_advanced_parameters
+
             index_simpl_widg = IndexSimplerParamTab()
             index_simpl_widg.item_changed.connect(self.item_param_changed)
             self.window.IndexSimplerScrollArea.setWidget(index_simpl_widg)
@@ -333,13 +336,13 @@ class MainObject(QObject):
             self.window.incoming_text.moveCursor(QTextCursor.End)
 
     def item_param_changed(self, str_path, str_value):
-        sender = self.sender()
+        sender_twin = self.sender().twin_widg
+        sender_twin.update_param(str_path, str_value)
         print("item paran changed")
         print("str_path, str_value: ", str_path, str_value)
         str_key = self.current_params_widget
         cmd2run = self.param_widgets[str_key]["main_cmd"]
         self.cmd_par.set_parameter(str_path, str_value)
-        sender.update_param(str_path, str_value)
 
     def display(self, in_lst_nodes = None):
         if in_lst_nodes is None:

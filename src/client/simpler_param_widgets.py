@@ -84,8 +84,9 @@ class SimpleParamTab(QWidget):
                 else:
                     self.clearLayout(item.layout())
 
+
     def update_param(self, param_in, value_in):
-        print("\n update_param", param_in, value_in)
+        print("\n update_param (Simple)", param_in, value_in)
 
         for widget in self.children():
             widget_path = None
@@ -107,6 +108,7 @@ class SimpleParamTab(QWidget):
                     print("No need to change parameter (same value)")
 
                 else:
+                    self.do_emit = False
                     if isinstance(widget, QLineEdit):
                         widget.setText(str(value_in))
 
@@ -116,9 +118,17 @@ class SimpleParamTab(QWidget):
                     if isinstance(widget, DefaultComboBox):
                         widget.setCurrentText(str(value_in))
 
+                    self.do_emit = True
 
 
+    def do_emit_signal(self, str_path, str_value):
+        if self.do_emit:
+            self.item_changed.emit(str_path, str_value)
 
+        else:
+            print("There is no need to emit 'item changed'")
+
+        self.do_emit = True
 
     def spnbox_finished(self):
         print("spnbox_finished")
@@ -127,9 +137,10 @@ class SimpleParamTab(QWidget):
         str_path = str(sender.local_path)
         if sender.specialValueText() and value == sender.minimum():
             self.item_to_remove.emit(str_path)
+
         else:
             str_value = str(value)
-            self.item_changed.emit(str_path, str_value)
+            self.do_emit_signal(str_path, str_value)
 
     def combobox_changed(self, value):
         print("combobox_changed")
@@ -140,12 +151,20 @@ class SimpleParamTab(QWidget):
         if sender.currentIndex() == sender.default_index:
             self.item_to_remove.emit(str_path)
         else:
-            self.item_changed.emit(str_path, str_value)
+            self.do_emit_signal(str_path, str_value)
+
+    def line_changed(self):
+        sender = self.sender()
+        str_value = sender.text()
+        str_path = str(sender.local_path)
+
+        self.do_emit_signal(str_path, str_value)
 
 
 class ImportTmpWidg(SimpleParamTab):
     def __init__(self, parent = None):
         super(ImportTmpWidg, self).__init__(parent)
+        self.do_emit = True
         sys_font = QFont()
         self.font_point_size = sys_font.pointSize()
 
@@ -162,6 +181,7 @@ class ImportTmpWidg(SimpleParamTab):
         self.main_vbox.addWidget(QLabel(" "))
         self.setLayout(self.main_vbox)
 
+
     def reset_pars(self):
         self.imp_txt.setText("")
 
@@ -170,6 +190,7 @@ class ImportTmpWidg(SimpleParamTab):
         str_value = sender.text()
         str_path = " "
         self.item_changed.emit(str_path, str_value)
+
 
 class FindspotsSimplerParameterTab(SimpleParamTab):
     """
@@ -180,6 +201,7 @@ class FindspotsSimplerParameterTab(SimpleParamTab):
 
     def __init__(self, parent=None):
         super(FindspotsSimplerParameterTab, self).__init__()
+        self.do_emit = True
         self.main_v_layout = QVBoxLayout()
         self.build_pars()
         self.setLayout(self.main_v_layout)
@@ -274,6 +296,7 @@ class IndexSimplerParamTab(SimpleParamTab):
 
     def __init__(self, phl_obj=None, parent=None):
         super(IndexSimplerParamTab, self).__init__()
+        self.do_emit = True
         self.main_v_layout = QVBoxLayout()
         self.build_pars()
         self.setLayout(self.main_v_layout)
@@ -330,17 +353,11 @@ class IndexSimplerParamTab(SimpleParamTab):
         self.clearLayout(self.main_v_layout)
         self.build_pars()
 
-    def line_changed(self):
-        sender = self.sender()
-        str_value = sender.text()
-        str_path = str(sender.local_path)
-
-        self.item_changed.emit(str_path, str_value)
-
 
 class RefineBravaiSimplerParamTab(SimpleParamTab):
     def __init__(self, parent=None):
         super(RefineBravaiSimplerParamTab, self).__init__()
+        self.do_emit = True
         self.main_v_layout = QVBoxLayout()
         self.build_pars()
         self.setLayout(self.main_v_layout)
@@ -378,7 +395,7 @@ class RefineSimplerParamTab(SimpleParamTab):
 
     def __init__(self, parent=None):
         super(RefineSimplerParamTab, self).__init__()
-        # self.param_widget_parent = parent.param_widget_parent
+        self.do_emit = True
         self.main_v_layout = QVBoxLayout()
         self.build_pars()
         self.setLayout(self.main_v_layout)
@@ -435,6 +452,7 @@ class IntegrateSimplerParamTab(SimpleParamTab):
 
     def __init__(self, parent=None):
         super(IntegrateSimplerParamTab, self).__init__()
+        self.do_emit = True
         self.main_v_layout = QVBoxLayout()
         self.build_pars()
         self.setLayout(self.main_v_layout)
@@ -509,6 +527,7 @@ class SymmetrySimplerParamTab(SimpleParamTab):
 
     def __init__(self, parent=None):
         super(SymmetrySimplerParamTab, self).__init__()
+        self.do_emit = True
         self.main_v_layout = QVBoxLayout()
         self.build_pars()
         self.setLayout(self.main_v_layout)
@@ -549,6 +568,7 @@ class ScaleSimplerParamTab(SimpleParamTab):
 
     def __init__(self, parent=None):
         super(ScaleSimplerParamTab, self).__init__()
+        self.do_emit = True
         self.main_v_layout = QVBoxLayout()
         self.build_pars()
         self.setLayout(self.main_v_layout)
@@ -611,6 +631,7 @@ class ScaleSimplerParamTab(SimpleParamTab):
 class CombineExperimentSimplerParamTab(SimpleParamTab):
     def __init__(self, parent=None):
         super(CombineExperimentSimplerParamTab, self).__init__()
+        self.do_emit = True
         self.main_v_layout = QVBoxLayout()
         self.build_pars()
         self.setLayout(self.main_v_layout)
@@ -642,7 +663,7 @@ class CombineExperimentSimplerParamTab(SimpleParamTab):
 class TmpTstWidget(QWidget):
     def __init__(self, parent=None):
         super(TmpTstWidget, self).__init__()
-        # self.param_widget_parent = self
+        self.do_emit = True
 
         #my_widget = FindspotsSimplerParameterTab(self)
         #my_widget = IndexSimplerParamTab(self)
