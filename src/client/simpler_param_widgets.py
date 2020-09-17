@@ -260,7 +260,7 @@ class FindspotsSimplerParameterTab(SimpleParamTab):
         self.main_v_layout.addLayout(xds_global_threshold_hb)
 
         hbox_lay_nproc = QHBoxLayout()
-        label_nproc = QLabel("Number of jobs")
+        label_nproc = QLabel("Number of Processes")
         # label_nproc.setPalette(palette_object)
         # label_nproc.setFont( QFont("Monospace", 10))
         hbox_lay_nproc.addWidget(label_nproc)
@@ -493,7 +493,7 @@ class IntegrateSimplerParamTab(SimpleParamTab):
         self.main_v_layout.addLayout(hbox_d_min)
 
         hbox_lay_nproc = QHBoxLayout()
-        label_nproc = QLabel("Number of jobs")
+        label_nproc = QLabel("Number of Processes")
         # label_nproc.setFont( QFont("Monospace", 10))
         hbox_lay_nproc.addWidget(label_nproc)
 

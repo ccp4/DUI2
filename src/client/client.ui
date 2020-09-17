@@ -32,7 +32,7 @@
            <item>
             <widget class="QPushButton" name="RetryButton">
              <property name="text">
-              <string>Retry</string>
+              <string>Clone</string>
              </property>
             </widget>
            </item>
@@ -89,8 +89,8 @@
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>335</width>
-                       <height>171</height>
+                       <width>332</width>
+                       <height>161</height>
                       </rect>
                      </property>
                     </widget>
@@ -120,8 +120,8 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>313</width>
-                           <height>124</height>
+                           <width>98</width>
+                           <height>28</height>
                           </rect>
                          </property>
                         </widget>
@@ -144,8 +144,8 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>313</width>
-                           <height>124</height>
+                           <width>98</width>
+                           <height>28</height>
                           </rect>
                          </property>
                         </widget>
@@ -681,7 +681,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>20</height>
+     <height>27</height>
     </rect>
    </property>
   </widget>
