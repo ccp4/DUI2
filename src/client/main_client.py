@@ -90,12 +90,18 @@ class MainObject(QObject):
             id_advanced_parameters.item_changed.connect(self.item_param_changed)
             self.window.IndexAdvancedScrollArea.setWidget(id_advanced_parameters)
 
+            id_advanced_parameters.twin_widg = index_simpl_widg
+            index_simpl_widg.twin_widg = id_advanced_parameters
+
             refi_brv_simpl_widg = RefineBravaiSimplerParamTab()
             refi_brv_simpl_widg.item_changed.connect(self.item_param_changed)
             self.window.RefineBravaiSimplerScrollArea.setWidget(refi_brv_simpl_widg)
             rb_advanced_parameters = build_advanced_params_widget("refine_bravais_settings_params")
             rb_advanced_parameters.item_changed.connect(self.item_param_changed)
             self.window.RefineBravaiAdvancedScrollArea.setWidget(rb_advanced_parameters)
+
+            rb_advanced_parameters.twin_widg = refi_brv_simpl_widg
+            refi_brv_simpl_widg.twin_widg = rb_advanced_parameters
 
             self.r_index_widg = ReindexTable()
             self.window.ReindexTableScrollArea.setWidget(self.r_index_widg)
@@ -107,12 +113,18 @@ class MainObject(QObject):
             rf_advanced_parameters.item_changed.connect(self.item_param_changed)
             self.window.RefineAdvancedScrollArea.setWidget(rf_advanced_parameters)
 
+            rf_advanced_parameters.twin_widg = ref_simpl_widg
+            ref_simpl_widg.twin_widg = rf_advanced_parameters
+
             integr_simpl_widg = IntegrateSimplerParamTab()
             integr_simpl_widg.item_changed.connect(self.item_param_changed)
             self.window.IntegrateSimplerScrollArea.setWidget(integr_simpl_widg)
             it_advanced_parameters = build_advanced_params_widget("integrate_params")
             it_advanced_parameters.item_changed.connect(self.item_param_changed)
             self.window.IntegrateAdvancedScrollArea.setWidget(it_advanced_parameters)
+
+            it_advanced_parameters.twin_widg = integr_simpl_widg
+            integr_simpl_widg.twin_widg = it_advanced_parameters
 
             sym_simpl_widg = SymmetrySimplerParamTab()
             sym_simpl_widg.item_changed.connect(self.item_param_changed)
@@ -121,6 +133,9 @@ class MainObject(QObject):
             sm_advanced_parameters.item_changed.connect(self.item_param_changed)
             self.window.SymmetryAdvancedScrollArea.setWidget(sm_advanced_parameters)
 
+            sm_advanced_parameters.twin_widg = sym_simpl_widg
+            sym_simpl_widg.twin_widg = sm_advanced_parameters
+
             scale_simpl_widg = ScaleSimplerParamTab()
             scale_simpl_widg.item_changed.connect(self.item_param_changed)
             self.window.ScaleSimplerScrollArea.setWidget(scale_simpl_widg)
@@ -128,12 +143,18 @@ class MainObject(QObject):
             sc_advanced_parameters.item_changed.connect(self.item_param_changed)
             self.window.ScaleAdvancedScrollArea.setWidget(sc_advanced_parameters)
 
+            sc_advanced_parameters.twin_widg = scale_simpl_widg
+            scale_simpl_widg.twin_widg = sc_advanced_parameters
+
             comb_simpl_widg = CombineExperimentSimplerParamTab()
             comb_simpl_widg.item_changed.connect(self.item_param_changed)
             self.window.CombineSimplerScrollArea.setWidget(comb_simpl_widg)
             ce_advanced_parameters = build_advanced_params_widget("combine_experiments_params")
             ce_advanced_parameters.item_changed.connect(self.item_param_changed)
             self.window.CombineAdvancedScrollArea.setWidget(ce_advanced_parameters)
+
+            ce_advanced_parameters.twin_widg = comb_simpl_widg
+            comb_simpl_widg.twin_widg = ce_advanced_parameters
 
         except TypeError:
             print("failed to connect to server")
