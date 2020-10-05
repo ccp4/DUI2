@@ -135,6 +135,22 @@ class CommandParamControl:
     def set_custom_parameter(self, new_custom_parameter):
         self.custm_param = new_custom_parameter
 
+    def clone_from(self, lst_par_in):
+        self.par_lst = []
+        print("lst_par_in =", lst_par_in)
+        lst_par = []
+        for str_elem in lst_par_in:
+            if "=" in str_elem:
+                lst_par.append(str_elem)
+
+        for str_elem in lst_par:
+            tmp_lst = str_elem.split("=")
+            self.par_lst.append(
+                {"name":str(tmp_lst[0]), "value":str(tmp_lst[1])}
+            )
+
+        print("lst_par =", lst_par)
+
     def get_full_command_string(self):
         str_out = self.cmd
         for par in self.par_lst:

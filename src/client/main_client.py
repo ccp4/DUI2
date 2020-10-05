@@ -545,7 +545,7 @@ class MainObject(QObject):
         nod2clone = dict(self.server_nod_lst[int(self.current_lin_num)])
         str_key = str(nod2clone["cmd2show"][0][6:])
         print("str_key: ", str_key)
-        #TODO put here the cloned parameters
+
         self.local_nod_lst = copy_lst_nodes(self.server_nod_lst)
         max_lin_num = 0
         for node in self.local_nod_lst:
@@ -561,6 +561,7 @@ class MainObject(QObject):
             'parent_node_lst': list(nod2clone["parent_node_lst"])
         }
         self.add_new_node()
+        self.cmd_par.clone_from(nod2clone["cmd2show"])
         self.window.incoming_text.clear()
         self.window.incoming_text.insertPlainText("Ready to run: ")
 
