@@ -412,6 +412,7 @@ class MainObject(QObject):
             print("No advanced pars")
 
         #TODO reset the variable "self.cmd_par"
+        #self.cmd_par = CommandParamControl(self.new_node["cmd2show"][0])
 
     def change_widget(self, str_key):
         self.window.BoxControlWidget.setTitle(str_key)

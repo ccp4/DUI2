@@ -113,7 +113,15 @@ class SimpleParamTab(QWidget):
                         widget.setText(str(value_in))
 
                     if isinstance(widget, QDoubleSpinBox) or isinstance(widget, QSpinBox):
-                        widget.setValue(float(value_in))
+
+                        try:
+                            widget.setValue(float(value_in))
+
+                        except ValueError:
+                            print("\n param_in =", param_in)
+                            print("value_in =", value_in, "\n")
+                            print("skipping attempt to convert string to float \n")
+
 
                     if isinstance(widget, DefaultComboBox):
                         widget.setCurrentText(str(value_in))
@@ -210,7 +218,7 @@ class FindspotsSimplerParameterTab(SimpleParamTab):
         xds_gain_label = QLabel("Gain")
         xds_gain_spn_bx = QDoubleSpinBox()
         xds_gain_spn_bx.local_path = "spotfinder.threshold.dispersion.gain"
-        xds_gain_spn_bx.setSpecialValueText("None")
+        #xds_gain_spn_bx.setSpecialValueText("None")
         xds_gain_spn_bx.setValue(1.0)
         xds_gain_spn_bx.editingFinished.connect(self.spnbox_finished)
 
