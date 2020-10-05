@@ -218,7 +218,6 @@ class FindspotsSimplerParameterTab(SimpleParamTab):
         xds_gain_label = QLabel("Gain")
         xds_gain_spn_bx = QDoubleSpinBox()
         xds_gain_spn_bx.local_path = "spotfinder.threshold.dispersion.gain"
-        #xds_gain_spn_bx.setSpecialValueText("None")
         xds_gain_spn_bx.setValue(1.0)
         xds_gain_spn_bx.editingFinished.connect(self.spnbox_finished)
 
