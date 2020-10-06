@@ -424,16 +424,15 @@ class MainObject(QObject):
         tmp_cmd_par = CommandParamControl(cur_nod["cmd2show"][0])
         tmp_cmd_par.clone_from(cur_nod["cmd2show"])
 
-        self.param_widgets[str_key]["simple"].update_pars(
+        self.param_widgets[str_key]["simple"].update_all_pars(
             tmp_cmd_par.get_all_params()
         )
         try:
-            self.param_widgets[str_key]["advanced"].update_pars(
+            self.param_widgets[str_key]["advanced"].update_all_pars(
                 tmp_cmd_par.get_all_params()
             )
         except AttributeError:
             print("No advanced pars")
-
 
     def change_widget(self, str_key):
         self.window.BoxControlWidget.setTitle(str_key)

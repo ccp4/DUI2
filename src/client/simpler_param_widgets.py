@@ -130,9 +130,10 @@ class SimpleParamTab(QWidget):
 
                     self.do_emit = True
 
-    def update_pars(self, tup_lst_pars):
+    def update_all_pars(self, tup_lst_pars):
         print("\n (Simple Widget) \n time to update par to:", tup_lst_pars, "\n")
-
+        for par_dic in tup_lst_pars[0]:
+            self.update_param(par_dic["name"], par_dic["value"])
 
     def do_emit_signal(self, str_path, str_value):
         if self.do_emit:

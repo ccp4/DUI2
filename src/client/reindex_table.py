@@ -245,6 +245,9 @@ class ReindexTable(QTableWidget):
 
         self.resizeColumnsToContents()
 
+    def update_all_pars(self, tup_lst_pars):
+        print("\n (ReindexTable) \n time to update par to:", tup_lst_pars, "\n")
+
     def del_opts_lst(self):
 
         print("del_opts_lst")
