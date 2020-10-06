@@ -208,6 +208,10 @@ class AdvancedParameters(QWidget):
 
                     self.do_emit = True
 
+    def update_all_pars(self, tup_lst_pars):
+        print("\n (Advanced Widget) \n time to update par to:", tup_lst_pars, "\n")
+        for par_dic in tup_lst_pars[0]:
+            self.update_param(par_dic["name"], par_dic["value"])
 
     def text_changed(self):
         sender = self.sender()
@@ -247,9 +251,6 @@ class AdvancedParameters(QWidget):
             elif data_info["type"] == "other(s)":
                 par_str = str(data_info["default"])
                 data_info["widget"].setText(par_str)
-
-    def update_all_pars(self, tup_lst_pars):
-        print("\n (Advanced Widget) \n time to update par to:", tup_lst_pars, "\n")
 
 
 def draw_quadratic_bezier_3_points(
