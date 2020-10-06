@@ -150,6 +150,7 @@ class CommandParamControl:
             )
 
         print("lst_par =", lst_par)
+        #TODO remember to handle "self.custm_param"
 
     def get_full_command_string(self):
         str_out = self.cmd

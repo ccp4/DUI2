@@ -336,7 +336,7 @@ class MainObject(QObject):
         else:
             print("clicked current node, no need to do anything")
 
-    def add_line(self, new_line, nod_lin_num):
+    def add_log_line(self, new_line, nod_lin_num):
         found_lin_num = False
         for log_node in self.lst_node_info_out:
             if log_node["lin_num"] == nod_lin_num:
@@ -491,7 +491,7 @@ class MainObject(QObject):
             #TODO make sure when client is relaunched,
             #TODO somehow it know about busy nodes
             new_thrd = Run_n_Output(new_req_get)
-            new_thrd.new_line_out.connect(self.add_line)
+            new_thrd.new_line_out.connect(self.add_log_line)
             new_thrd.first_line.connect(self.line_n1_in)
             new_thrd.finished.connect(self.request_display)
             new_thrd.finished.connect(self.check_nxt_btn)
