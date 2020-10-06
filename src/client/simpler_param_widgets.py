@@ -112,8 +112,10 @@ class SimpleParamTab(QWidget):
                     if isinstance(widget, QLineEdit):
                         widget.setText(str(value_in))
 
-                    if isinstance(widget, QDoubleSpinBox) or isinstance(widget, QSpinBox):
-
+                    if(
+                        isinstance(widget, QDoubleSpinBox) or
+                        isinstance(widget, QSpinBox)
+                    ):
                         try:
                             widget.setValue(float(value_in))
 
@@ -127,6 +129,9 @@ class SimpleParamTab(QWidget):
                         widget.setCurrentText(str(value_in))
 
                     self.do_emit = True
+
+    def update_pars(self, tup_lst_pars):
+        print("\n (Simple Widget) \n time to update par to:", tup_lst_pars, "\n")
 
 
     def do_emit_signal(self, str_path, str_value):

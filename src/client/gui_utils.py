@@ -248,6 +248,9 @@ class AdvancedParameters(QWidget):
                 par_str = str(data_info["default"])
                 data_info["widget"].setText(par_str)
 
+    def update_pars(self, tup_lst_pars):
+        print("\n (Advanced Widget) \n time to update par to:", tup_lst_pars, "\n")
+
 
 def draw_quadratic_bezier_3_points(
         scene_obj, p1x, p1y, p2x, p2y, p3x, p3y,

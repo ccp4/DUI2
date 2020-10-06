@@ -366,8 +366,6 @@ class MainObject(QObject):
         cmd2run = self.param_widgets[str_key]["main_cmd"]
         self.cmd_par.set_parameter(str_path, str_value)
 
-    def update_all_param(self, cur_nod):
-        print("Time to update all params to:", cur_nod["cmd2show"][1:])
 
     def display(self, in_lst_nodes = None):
         if in_lst_nodes is None:
@@ -405,8 +403,7 @@ class MainObject(QObject):
             self.window.incoming_text.insertPlainText(single_log_line + "\n")
             self.window.incoming_text.moveCursor(QTextCursor.End)
 
-    def reset_param(self):
-        print("reset_param")
+    def reset_param_widget(self):
         str_key = self.current_widget_key
         self.param_widgets[str_key]["simple"].reset_pars()
         try:
@@ -415,8 +412,28 @@ class MainObject(QObject):
         except AttributeError:
             print("No advanced pars")
 
+    def reset_param(self):
+        print("reset_param")
         #TODO reset the variable "self.cmd_par"
+        self.reset_param_widget()
         self.cmd_par = CommandParamControl(self.new_node["cmd2show"][0])
+
+    def update_all_param(self, cur_nod):
+        self.reset_param_widget()
+        str_key = str(cur_nod["cmd2show"][0][6:])
+        tmp_cmd_par = CommandParamControl(cur_nod["cmd2show"][0])
+        tmp_cmd_par.clone_from(cur_nod["cmd2show"])
+
+        self.param_widgets[str_key]["simple"].update_pars(
+            tmp_cmd_par.get_all_params()
+        )
+        try:
+            self.param_widgets[str_key]["advanced"].update_pars(
+                tmp_cmd_par.get_all_params()
+            )
+        except AttributeError:
+            print("No advanced pars")
+
 
     def change_widget(self, str_key):
         self.window.BoxControlWidget.setTitle(str_key)
