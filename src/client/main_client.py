@@ -227,8 +227,8 @@ class MainObject(QObject):
         self.current_lin_num = 0
         self.request_display()
         self.local_nod_lst = copy_lst_nodes(self.server_nod_lst)
-        self.current_params_widget = "import"
-        self.change_widget(self.current_params_widget)
+        self.current_widget_key = "import"
+        self.change_widget(self.current_widget_key)
         self.thrd_lst = []
         self.window.show()
 
@@ -275,6 +275,7 @@ class MainObject(QObject):
         key2find = cmd_ini[6:]
         try:
             self.change_widget(key2find)
+            self.update_all_param(cur_nod)
 
         except KeyError:
             print("command widget not there yet")
@@ -361,9 +362,12 @@ class MainObject(QObject):
         sender_twin.update_param(str_path, str_value)
         print("item paran changed")
         print("str_path, str_value: ", str_path, str_value)
-        str_key = self.current_params_widget
+        str_key = self.current_widget_key
         cmd2run = self.param_widgets[str_key]["main_cmd"]
         self.cmd_par.set_parameter(str_path, str_value)
+
+    def update_all_param(self, cur_nod):
+        print("Time to update all params to:", cur_nod["cmd2show"][1:])
 
     def display(self, in_lst_nodes = None):
         if in_lst_nodes is None:
@@ -403,7 +407,7 @@ class MainObject(QObject):
 
     def reset_param(self):
         print("reset_param")
-        str_key = self.current_params_widget
+        str_key = self.current_widget_key
         self.param_widgets[str_key]["simple"].reset_pars()
         try:
             self.param_widgets[str_key]["advanced"].reset_pars()
@@ -536,7 +540,7 @@ class MainObject(QObject):
         }
         self.add_new_node()
         self.change_widget(str_key)
-        self.current_params_widget = str_key
+        self.current_widget_key = str_key
         self.window.incoming_text.clear()
         self.window.incoming_text.insertPlainText("Ready to run: ")
 
@@ -566,7 +570,7 @@ class MainObject(QObject):
         self.window.incoming_text.insertPlainText("Ready to run: ")
 
         self.change_widget(str_key)
-        self.current_params_widget = str_key
+        self.current_widget_key = str_key
         self.parent_nums_lst = []
         for par_nod_num in self.new_node["parent_node_lst"]:
             self.parent_nums_lst.append(int(par_nod_num))
