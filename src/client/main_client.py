@@ -217,7 +217,7 @@ class MainObject(QObject):
         self.window.RetryButton.clicked.connect(self.on_retry)
         self.window.CmdSend2server.clicked.connect(self.request_launch)
         self.window.ReqStopButton.clicked.connect(self.req_stop)
-        self.window.Reset2DefaultPushButton.clicked.connect(self.reset_param)
+        self.window.Reset2DefaultPushButton.clicked.connect(self.reset_param_all)
         self.window.ClearParentButton.clicked.connect(self.clear_parent_list)
         self.r_index_widg.opt_signal.connect(self.launch_reindex)
 
@@ -412,8 +412,8 @@ class MainObject(QObject):
         except AttributeError:
             print("No advanced pars")
 
-    def reset_param(self):
-        print("reset_param")
+    def reset_param_all(self):
+        print("reset_param_all")
         #TODO reset the variable "self.cmd_par"
         self.reset_param_widget()
         self.cmd_par = CommandParamControl(self.new_node["cmd2show"][0])
@@ -556,6 +556,7 @@ class MainObject(QObject):
         }
         self.add_new_node()
         self.change_widget(str_key)
+        self.reset_param_all()
         self.current_widget_key = str_key
         self.window.incoming_text.clear()
         self.window.incoming_text.insertPlainText("Ready to run: ")
