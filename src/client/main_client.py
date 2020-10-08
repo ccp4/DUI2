@@ -557,9 +557,9 @@ class MainObject(QObject):
         self.add_new_node()
         self.change_widget(str_key)
         self.current_widget_key = str_key
-        self.reset_param_all()
         self.window.incoming_text.clear()
         self.window.incoming_text.insertPlainText("Ready to run: ")
+        self.reset_param_all()
 
     def on_retry(self):
         print("on_retry")
