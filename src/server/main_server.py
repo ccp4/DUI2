@@ -99,7 +99,7 @@ if __name__ == "__main__":
 
         #'''
 
-    cmd_tree_runner.run_dict({'nod_lst': [0], 'cmd_lst': [['ip', 'x41']]})
+    #cmd_tree_runner.run_dict({'nod_lst': [0], 'cmd_lst': [['ip', 'x41']]})
     cmd_dict = multi_node.str2dic("display")
     cmd_tree_runner.run_dict(cmd_dict)
 

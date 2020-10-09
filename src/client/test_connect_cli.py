@@ -45,6 +45,13 @@ lst_cmd = [
             {'nod_lst': ["7", "8", "9"], 'cmd_lst': ['ce']},
             {"nod_lst":[""], "cmd_lst":["d"]},
             {'nod_lst': ["10"], 'cmd_lst': ["id"]},
+
+            {'nod_lst': ['11'], 'cmd_lst': ['dials.refine_bravais_settings']},
+            {'nod_lst': ['12'], 'cmd_lst': ['dials.reindex 9']},
+            {"nod_lst":[""], "cmd_lst":["d"]}
+          ]
+
+'''
             {"nod_lst": ["7"], "cmd_lst": ["id"]},
             {"nod_lst": ["8"], "cmd_lst": ["id"]},
             {"nod_lst": ["9"], "cmd_lst": ["id"]},
@@ -56,7 +63,7 @@ lst_cmd = [
             {"nod_lst": ["11"], "cmd_lst": ["rf"]},
             {"nod_lst": ["18"], "cmd_lst": ["it nproc=3"]},
             {"nod_lst":[""], "cmd_lst":["d"]},
-          ]
+'''
 
 
 if __name__ == "__main__":
