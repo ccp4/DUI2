@@ -26,11 +26,14 @@ import json
 def get_lst2show(main_obj):
     lst_nod = []
     for uni in main_obj.step_list:
+        print("\n\n uni.lst2run =", uni.lst2run, "\n\n")
+
         if uni.lst2run == []:
             cmd2show = ["None"]
 
         else:
             cmd2show = uni.lst2run[-1]
+
 
         node = {"lin_num"           :uni.lin_num,
                 "status"            :uni.status,

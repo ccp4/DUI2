@@ -87,7 +87,7 @@ if __name__ == "__main__":
     except FileNotFoundError:
         print("Starting from hacked multiple import")
         cmd_tree_runner = multi_node.Runner(None)
-        #'''
+        '''
         #temp hack
         lst_dic = [
             {'nod_lst': [0], 'cmd_lst': [['ip', 'x41']]},
@@ -99,7 +99,7 @@ if __name__ == "__main__":
 
         #'''
 
-    #cmd_tree_runner.run_dict({'nod_lst': [0], 'cmd_lst': [['ip', 'x41']]})
+    cmd_tree_runner.run_dict({'nod_lst': [0], 'cmd_lst': [['ip', 'x41']]})
     cmd_dict = multi_node.str2dic("display")
     cmd_tree_runner.run_dict(cmd_dict)
 

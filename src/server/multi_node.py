@@ -157,10 +157,9 @@ class CmdNode(object):
             print("assuming the command should run in same dir")
 
     def set_in_fil_n_par(self, lst_in):
+        #print("\n\n self.full_cmd_lst =", self.full_cmd_lst, " \n\n")
         for inner_lst in self.full_cmd_lst:
             self.lst2run.append(list(inner_lst))
-
-        print("lst2run =", self.lst2run)
 
         if self.full_cmd_lst[-1][0] == "dials.reindex":
             try:
@@ -189,6 +188,8 @@ class CmdNode(object):
                         if str2comp in file_str:
                             self._lst_expt = [str(file_str)]
 
+                    self.lst2run[-1].append(" " + str(sol_num))
+
             except KeyError:
                 print("KeyError from attempting to reindex")
 
@@ -202,12 +203,14 @@ class CmdNode(object):
         if self.full_cmd_lst[-1][0] != "dials.reindex":
             for par in lst_in[1:]:
                 self.full_cmd_lst[-1].append(par)
+                self.lst2run[-1].append(par)
+
+        #print("lst2run =", self.lst2run)
 
     def run_cmd(self, req_obj = None):
         self.nod_req = req_obj
         self.status = "Busy"
         try:
-            print("\n self.full_cmd_lst =", self.full_cmd_lst, "\n")
             inner_lst = self.full_cmd_lst[-1]
             print("\n Running:", inner_lst, "\n")
             self.my_proc = subprocess.Popen(
