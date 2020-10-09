@@ -64,6 +64,9 @@ lst_dic = [
 {'nod_lst': [16], 'cmd_lst': [['it', 'nproc=3']]},
 {'nod_lst': [11], 'cmd_lst': [['rf']]},
 {'nod_lst': [18], 'cmd_lst': [['it', 'nproc=3']]},
+{'nod_lst': [11], 'cmd_lst': [['dials.refine_bravais_settings']]},
+{'nod_lst': [20], 'cmd_lst': [['dials.reindex', '9']]},
+{'nod_lst': [21], 'cmd_lst': [['dials.refine']]},
 ]
 
 if __name__ == "__main__":

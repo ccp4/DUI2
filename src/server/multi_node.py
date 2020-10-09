@@ -94,6 +94,7 @@ class CmdNode(object):
         self._lst_expt = []
         self._lst_refl = []
         self.lst2run = []
+        self.full_cmd_lst = []
         self._run_dir = ""
         self.log_line_lst = []
 
@@ -126,7 +127,7 @@ class CmdNode(object):
 
     def __call__(self, lst_in, req_obj = None):
         print("\n lst_in =", lst_in)
-        self.lst2run.append([lst_in[0]])
+        self.full_cmd_lst.append([lst_in[0]])
         self.set_in_fil_n_par(lst_in)
         self.set_base_dir(os.getcwd())
         self.set_run_dir(self.lin_num)
@@ -139,7 +140,7 @@ class CmdNode(object):
         self._run_dir = run_dir
         self._lst_expt = []
         self._lst_refl = []
-        self.lst2run = [['Root']]
+        self.full_cmd_lst = [['Root']]
         self.status = "Succeeded"
 
     def set_base_dir(self, dir_in = None):
@@ -156,7 +157,12 @@ class CmdNode(object):
             print("assuming the command should run in same dir")
 
     def set_in_fil_n_par(self, lst_in):
-        if self.lst2run[-1][0] == "dials.reindex":
+        for inner_lst in self.full_cmd_lst:
+            self.lst2run.append(list(inner_lst))
+
+        print("lst2run =", self.lst2run)
+
+        if self.full_cmd_lst[-1][0] == "dials.reindex":
             try:
                 try:
                     sol_num = int(lst_in[1])
@@ -177,7 +183,7 @@ class CmdNode(object):
 
                     change_of_basis_op = j_obj[str(sol_num)]["cb_op"]
                     input_str = "change_of_basis_op=" + str(change_of_basis_op)
-                    self.lst2run[-1].append(input_str)
+                    self.full_cmd_lst[-1].append(input_str)
                     str2comp = "bravais_setting_" + str(sol_num) + ".expt"
                     for file_str in self._lst_expt:
                         if str2comp in file_str:
@@ -188,21 +194,21 @@ class CmdNode(object):
 
         else:
             for expt_2_add in self._lst_expt:
-                self.lst2run[-1].append(expt_2_add)
+                self.full_cmd_lst[-1].append(expt_2_add)
 
         for refl_2_add in self._lst_refl:
-            self.lst2run[-1].append(refl_2_add)
+            self.full_cmd_lst[-1].append(refl_2_add)
 
-        if self.lst2run[-1][0] != "dials.reindex":
+        if self.full_cmd_lst[-1][0] != "dials.reindex":
             for par in lst_in[1:]:
-                self.lst2run[-1].append(par)
+                self.full_cmd_lst[-1].append(par)
 
     def run_cmd(self, req_obj = None):
         self.nod_req = req_obj
         self.status = "Busy"
         try:
-            print("\n self.lst2run =", self.lst2run, "\n")
-            inner_lst = self.lst2run[-1]
+            print("\n self.full_cmd_lst =", self.full_cmd_lst, "\n")
+            inner_lst = self.full_cmd_lst[-1]
             print("\n Running:", inner_lst, "\n")
             self.my_proc = subprocess.Popen(
                 inner_lst,
@@ -397,7 +403,7 @@ class Runner(object):
         for uni in self.step_list:
             node = {
                         "_base_dir"            :uni._base_dir,
-                        "lst2run"              :uni.lst2run,
+                        "full_cmd_lst"         :uni.full_cmd_lst,
                         "_lst_expt"            :uni._lst_expt,
                         "_lst_refl"            :uni._lst_refl,
                         "_run_dir"             :uni._run_dir,
@@ -426,7 +432,7 @@ class Runner(object):
         for uni_dic in lst_nod:
             new_node = CmdNode()
             new_node._base_dir       = uni_dic["_base_dir"]
-            new_node.lst2run         = uni_dic["lst2run"]
+            new_node.full_cmd_lst    = uni_dic["full_cmd_lst"]
             new_node._lst_expt       = uni_dic["_lst_expt"]
             new_node._lst_refl       = uni_dic["_lst_refl"]
             new_node._run_dir        = uni_dic["_run_dir"]
