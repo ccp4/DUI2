@@ -68,22 +68,7 @@ lst_cmd = [
             {'nod_lst': ['18'], 'cmd_lst': ['rf']},
             {'nod_lst': ['23'], 'cmd_lst': ['it nproc=4']},
             {"nod_lst":[""], "cmd_lst":["d"]},
-
           ]
-'''
-
-            {"nod_lst": ["7"], "cmd_lst": ["id"]},
-            {"nod_lst": ["8"], "cmd_lst": ["id"]},
-            {"nod_lst": ["9"], "cmd_lst": ["id"]},
-            {"nod_lst":[""], "cmd_lst":["d"]},
-            {"nod_lst": ["12", "13", "14"], "cmd_lst": ["ce"]},
-            {"nod_lst":[""], "cmd_lst":["d"]},
-            {"nod_lst": ["15"], "cmd_lst": ["rf"]},
-            {"nod_lst": ["16"], "cmd_lst": ["it nproc=3"]},
-            {"nod_lst": ["11"], "cmd_lst": ["rf"]},
-            {"nod_lst": ["18"], "cmd_lst": ["it nproc=3"]},
-            {"nod_lst":[""], "cmd_lst":["d"]},
-'''
 
 
 if __name__ == "__main__":
