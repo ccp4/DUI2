@@ -277,6 +277,18 @@ class MainObject(QObject):
             self.change_widget(key2find)
             self.update_all_param(cur_nod)
 
+            if key2find == "reindex":
+                cmd = {
+                    "nod_lst":cur_nod["parent_node_lst"],
+                    "cmd_lst":["get_bravais_sum"]
+                }
+                json_data_lst = json_data_request(uni_url, cmd)
+                self.r_index_widg.add_opts_lst(
+                    json_data=json_data_lst[0]
+                )
+
+
+
         except KeyError:
             print("command widget not there yet")
             return
