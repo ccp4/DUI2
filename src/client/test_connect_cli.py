@@ -37,55 +37,47 @@ lst_cmd = [
             {'nod_lst': [4], 'cmd_lst':
                  [['gm untrusted.rectangle=0,1421,1258,1312 output.mask=tmp_mask.pickle'],
                   ['am input.mask=tmp_mask.pickle']]},
-            {"nod_lst":[""], "cmd_lst":["d"]},
             {"nod_lst":["5"], "cmd_lst":["fd nproc=9"]},
             {"nod_lst":["6"], "cmd_lst":["fd nproc=9"]},
             {"nod_lst":["7"], "cmd_lst":["fd nproc=9"]},
-            {"nod_lst":[""], "cmd_lst":["d"]},
             {'nod_lst': ["8", "9", "10"], 'cmd_lst': ['ce']},
-            {"nod_lst":[""], "cmd_lst":["d"]},
             {'nod_lst': ["11"], 'cmd_lst': ["id"]},
-            {"nod_lst":[""], "cmd_lst":["d"]},
-
             {'nod_lst': ['12'], 'cmd_lst': ['dials.refine_bravais_settings']},
             {'nod_lst': ['13'], 'cmd_lst': ['dials.reindex 9']},
-            {"nod_lst":[""], "cmd_lst":["d"]},
-
             {'nod_lst': ["8"], 'cmd_lst': ["id"]},
             {'nod_lst': ["9"], 'cmd_lst': ["id"]},
             {'nod_lst': ["10"], 'cmd_lst': ["id"]},
             {'nod_lst': ["15", "16", "17"], 'cmd_lst': ['ce']},
-
             {"nod_lst":["1"], "cmd_lst":["fd nproc=9"]},
-            {"nod_lst":[""], "cmd_lst":["d"]},
             {'nod_lst': ["19"], 'cmd_lst': ["id"]},
-            {"nod_lst":[""], "cmd_lst":["d"]},
             {'nod_lst': ['20'], 'cmd_lst': ['dials.refine_bravais_settings']},
             {'nod_lst': ['21'], 'cmd_lst': ['dials.reindex 9']},
-            {"nod_lst":[""], "cmd_lst":["d"]},
             {'nod_lst': ['22'], 'cmd_lst': ['rf']},
-            {"nod_lst":[""], "cmd_lst":["d"]},
             {'nod_lst': ['18'], 'cmd_lst': ['rf']},
             {'nod_lst': ['23'], 'cmd_lst': ['it nproc=4']},
-            {"nod_lst":[""], "cmd_lst":["d"]},
           ]
 
 
 if __name__ == "__main__":
     for cmd in lst_cmd:
-        req_get = requests.get('http://localhost:8080/', stream = True, params = cmd)
-        line_str = ''
-        while True:
-            tmp_dat = req_get.raw.read(1)
-            single_char = str(tmp_dat.decode('utf-8'))
-            line_str += single_char
-            if single_char == '\n':
-                print(line_str[:-1])
-                line_str = ''
+        for do_this in [{"nod_lst":[""], "cmd_lst":["d"]}, None]:
+            if do_this == None:
+                my_cmd = cmd
 
-            elif line_str[-7:] == '/*EOF*/':
-                print('>>  /*EOF*/  <<')
-                break
+            else:
+                my_cmd = do_this
 
+            req_get = requests.get('http://localhost:8080/', stream = True, params = my_cmd)
+            line_str = ''
+            while True:
+                tmp_dat = req_get.raw.read(1)
+                single_char = str(tmp_dat.decode('utf-8'))
+                line_str += single_char
+                if single_char == '\n':
+                    print(line_str[:-1])
+                    line_str = ''
 
+                elif line_str[-7:] == '/*EOF*/':
+                    print('>>  /*EOF*/  <<')
+                    break
 
