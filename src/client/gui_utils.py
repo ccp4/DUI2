@@ -194,7 +194,6 @@ class AdvancedParameters(QWidget):
                 widget_value = str(widget.currentText())
 
             if widget_path == param_in:
-                print("widget_path, value = ", widget_path, value_in, "\n")
                 if widget_value == value_in:
                     print("No need to change parameter (same value)")
 

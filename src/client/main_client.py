@@ -297,7 +297,6 @@ class MainObject(QObject):
 
     def clicked_4_combine(self, nod_num):
         prev_lst = self.parent_nums_lst
-        print("\n prev_lst =", prev_lst)
         if nod_num in prev_lst:
             if len(prev_lst) > 1:
                 new_par_lst = []
@@ -372,12 +371,13 @@ class MainObject(QObject):
     def item_param_changed(self, str_path, str_value):
         sender_twin = self.sender().twin_widg
         sender_twin.update_param(str_path, str_value)
-        print("item paran changed")
-        print("str_path, str_value: ", str_path, str_value)
         str_key = self.current_widget_key
         cmd2run = self.param_widgets[str_key]["main_cmd"]
-        self.cmd_par.set_parameter(str_path, str_value)
+        try:
+            self.cmd_par.set_parameter(str_path, str_value)
 
+        except AttributeError:
+            print("no command parameter in memory yet")
 
     def display(self, in_lst_nodes = None):
         if in_lst_nodes is None:
@@ -389,7 +389,6 @@ class MainObject(QObject):
             self.tree_scene.draw_tree_graph(lst_2d_dat, self.current_lin_num)
 
     def line_n1_in(self, lin_num_in):
-        print("new busy node = ", lin_num_in)
         self.request_display()
         self.parent_nums_lst = [lin_num_in]
 
@@ -415,8 +414,8 @@ class MainObject(QObject):
             self.window.incoming_text.insertPlainText(single_log_line + "\n")
             self.window.incoming_text.moveCursor(QTextCursor.End)
 
-    def reset_param_widget(self):
-        str_key = self.current_widget_key
+    def reset_param_widget(self, str_key):
+        self.current_widget_key = str_key
         self.param_widgets[str_key]["simple"].reset_pars()
         try:
             self.param_widgets[str_key]["advanced"].reset_pars()
@@ -427,13 +426,14 @@ class MainObject(QObject):
     def reset_param_all(self):
         print("reset_param_all")
         #TODO reset the variable "self.cmd_par"
-        self.reset_param_widget()
+        str_key = self.current_widget_key
         self.cmd_par = CommandParamControl(self.new_node["cmd2show"][0])
+        self.reset_param_widget(str_key)
 
     def update_all_param(self, cur_nod):
-        self.reset_param_widget()
         str_key = str(cur_nod["cmd2show"][0][6:])
         tmp_cmd_par = CommandParamControl(cur_nod["cmd2show"][0])
+        self.reset_param_widget(str_key)
         tmp_cmd_par.clone_from(cur_nod["cmd2show"])
 
         self.param_widgets[str_key]["simple"].update_all_pars(
@@ -494,7 +494,6 @@ class MainObject(QObject):
         self.cmd_par = CommandParamControl(self.new_node["cmd2show"][0])
 
     def request_display(self):
-        print("\n request_display \n")
         cmd = {"nod_lst":"", "cmd_lst":["display"]}
         self.server_nod_lst = json_data_request(uni_url, cmd)
         if self.new_node is None:
