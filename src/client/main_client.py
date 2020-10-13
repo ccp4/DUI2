@@ -243,17 +243,6 @@ class MainObject(QObject):
                 else:
                     self.clearLayout(item.layout())
 
-    def clear_parent_list(self):
-        try:
-            only_one = int(self.new_node["parent_node_lst"][0])
-            self.new_node["parent_node_lst"] = [only_one]
-            self.parent_nums_lst = [only_one]
-            self.local_nod_lst = copy_lst_nodes(self.server_nod_lst)
-            self.add_new_node()
-
-        except TypeError:
-            print("should NOT clear parents from already combined experiments")
-
     def clicked_4_navigation(self, nod_num):
         self.current_lin_num = nod_num
         try:
@@ -294,6 +283,17 @@ class MainObject(QObject):
             return
 
         self.display()
+
+    def clear_parent_list(self):
+        try:
+            only_one = int(self.new_node["parent_node_lst"][0])
+            self.new_node["parent_node_lst"] = [only_one]
+            self.parent_nums_lst = [only_one]
+            self.local_nod_lst = copy_lst_nodes(self.server_nod_lst)
+            self.add_new_node()
+
+        except TypeError:
+            print("should NOT clear parents from already combined experiments")
 
     def clicked_4_combine(self, nod_num):
         prev_lst = self.parent_nums_lst
