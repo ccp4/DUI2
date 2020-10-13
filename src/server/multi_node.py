@@ -407,6 +407,7 @@ class Runner(object):
             node = {
                         "_base_dir"            :uni._base_dir,
                         "full_cmd_lst"         :uni.full_cmd_lst,
+                        "lst2run"              :uni.lst2run,
                         "_lst_expt"            :uni._lst_expt,
                         "_lst_refl"            :uni._lst_refl,
                         "_run_dir"             :uni._run_dir,
@@ -436,6 +437,7 @@ class Runner(object):
             new_node = CmdNode()
             new_node._base_dir       = uni_dic["_base_dir"]
             new_node.full_cmd_lst    = uni_dic["full_cmd_lst"]
+            new_node.lst2run         = uni_dic["lst2run"]
             new_node._lst_expt       = uni_dic["_lst_expt"]
             new_node._lst_refl       = uni_dic["_lst_refl"]
             new_node._run_dir        = uni_dic["_run_dir"]
