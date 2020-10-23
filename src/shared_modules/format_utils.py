@@ -26,8 +26,6 @@ import json
 def get_lst2show(main_obj):
     lst_nod = []
     for uni in main_obj.step_list:
-        print("\n\n uni.lst2run =", uni.lst2run, "\n\n")
-
         if uni.lst2run == []:
             cmd2show = ["None"]
 

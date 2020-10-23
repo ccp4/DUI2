@@ -136,6 +136,7 @@ class CommandParamControl:
         self.custm_param = new_custom_parameter
 
     def clone_from(self, lst_par_in):
+        print("\n************************\n Clone_from")
         self.par_lst = []
         print("lst_par_in =", lst_par_in)
         lst_par = []
@@ -150,6 +151,7 @@ class CommandParamControl:
             )
 
         print("lst_par =", lst_par)
+        print("self.par_lst =", self.par_lst)
         #TODO remember to handle "self.custm_param"
 
     def get_all_params(self):
@@ -157,12 +159,15 @@ class CommandParamControl:
 
     def get_full_command_string(self):
         str_out = self.cmd
+        print("\n *** get_full_command_string \n self.par_lst =", self.par_lst)
         for par in self.par_lst:
             par_str = " " + par["name"] + "=" + par["value"]
             str_out += par_str
 
         if self.custm_param is not None:
             str_out += " " + str(self.custm_param)
+
+        print("\n str_out =", str_out, "\n***********\n")
 
         return str_out
 

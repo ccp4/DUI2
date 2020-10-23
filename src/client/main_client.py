@@ -603,7 +603,6 @@ class MainObject(QObject):
         for par_nod_num in self.new_node["parent_node_lst"]:
             self.parent_nums_lst.append(int(par_nod_num))
 
-
     def req_stop(self):
         print("req_stop")
         self.window.incoming_text.clear()
