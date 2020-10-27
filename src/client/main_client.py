@@ -346,9 +346,12 @@ class MainObject(QObject):
             self.gui_state["parent_nums_lst"].append(nod_num)
             self.gui_state["new_node"]["parent_node_lst"] = list(self.gui_state["parent_nums_lst"])
             self.add_new_node()
+
+        tmp_off = '''
         print("-" * 60)
         print_dict(self.gui_state)
         print("-" * 60)
+        '''
 
     def on_node_click(self, nod_num):
         if nod_num != self.gui_state["current_lin_num"]:
@@ -530,16 +533,22 @@ class MainObject(QObject):
         self.server_nod_lst = json_data_request(uni_url, cmd)
         if self.gui_state["new_node"] is None:
             self.display(self.server_nod_lst)
+
+            tmp_off = '''
             print("-" * 60)
             print_dict(self.gui_state)
             print("-" * 60)
+            '''
 
         else:
             self.gui_state["local_nod_lst"] = copy_lst_nodes(self.server_nod_lst)
             self.add_new_node()
+
+            tmp_off = '''
             print("-" * 60)
             print_dict(self.gui_state)
             print("-" * 60)
+            '''
 
     def request_launch(self):
         cmd_str = self.cmd_par.get_full_command_string()
@@ -633,15 +642,15 @@ class MainObject(QObject):
             'parent_node_lst': list(nod2clone["parent_node_lst"])
         }
         self.add_new_node()
-        self.cmd_par.clone_from(nod2clone["cmd2show"])
         self.window.incoming_text.clear()
         self.window.incoming_text.insertPlainText("Ready to run: ")
-
         self.change_widget(str_key)
         self.gui_state["current_widget_key"] = str_key
         self.gui_state["parent_nums_lst"] = []
         for par_nod_num in self.gui_state["new_node"]["parent_node_lst"]:
             self.gui_state["parent_nums_lst"].append(int(par_nod_num))
+
+        self.cmd_par.clone_from(nod2clone["cmd2show"])
 
     def req_stop(self):
         print("req_stop")
