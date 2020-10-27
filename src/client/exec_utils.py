@@ -120,7 +120,10 @@ class CommandParamControl:
         self.par_lst = list(param_list)
         self.custm_param = None
         print("\n New 'CommandParamControl':")
-        print("(cmd, par_lst) =", self.cmd, self.par_lst, "\n")
+        print(
+            "(cmd, par_lst) =",
+            self.cmd, self.par_lst, " --------- \n"
+        )
 
     def set_parameter(self, new_name, new_value):
         already_here = False
@@ -136,7 +139,7 @@ class CommandParamControl:
         self.custm_param = new_custom_parameter
 
     def clone_from(self, lst_par_in):
-        print("\n", "*" * 40, "\n Clone_from")
+        print(" Clone_from ------------")
         self.par_lst = []
         print("lst_par_in =", lst_par_in)
         lst_par = []
@@ -168,7 +171,7 @@ class CommandParamControl:
         if self.custm_param is not None:
             str_out += " " + str(self.custm_param)
 
-        print("\n str_out =", str_out, "\n","*" * 40, "\n")
+        print("\n str_out =", str_out, "\n")
 
         return str_out
 

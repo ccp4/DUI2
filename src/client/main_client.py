@@ -525,8 +525,8 @@ class MainObject(QObject):
             if node["lin_num"] in self.gui_state["new_node"]["parent_node_lst"]:
                 node["child_node_lst"].append(int(self.gui_state["new_node"]["lin_num"]))
 
-        self.display(self.gui_state["local_nod_lst"])
         self.cmd_par = CommandParamControl(self.gui_state["new_node"]["cmd2show"][0])
+        self.display(self.gui_state["local_nod_lst"])
 
     def request_display(self):
         cmd = {"nod_lst":"", "cmd_lst":["display"]}
@@ -618,7 +618,7 @@ class MainObject(QObject):
         self.reset_param_all()
 
     def on_retry(self):
-        print("on_retry")
+        print("on_retry", "*" * 50)
         nod2clone = dict(
             self.server_nod_lst[int(
                 self.gui_state["current_lin_num"]
@@ -651,6 +651,7 @@ class MainObject(QObject):
             self.gui_state["parent_nums_lst"].append(int(par_nod_num))
 
         self.cmd_par.clone_from(nod2clone["cmd2show"])
+        print("End retry", "*" * 50)
 
     def req_stop(self):
         print("req_stop")
