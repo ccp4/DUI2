@@ -32,21 +32,18 @@ widgets_defs = {
     "import" : {
         "tooltip": "dials.import ...",
         "icon": "resources/import.png",
-        "icon_disabled": "resources/import_grayed.png",
         "main_cmd"  :"dials.import",
         "nxt_widg_lst"  :["find_spots"]
     },
     "find_spots" : {
         "tooltip": "dials.find_spots ...",
         "icon": "resources/find_spots.png",
-        "icon_disabled": "resources/find_spots_grayed.png",
         "main_cmd"  :"dials.find_spots",
         "nxt_widg_lst"  :["index", "combine_experiments"]
     },
     "index" : {
         "tooltip": "dials.index ...",
         "icon": "resources/index.png",
-        "icon_disabled": "resources/index_grayed.png",
         "main_cmd"  :"dials.index",
         "nxt_widg_lst"  :[
             "refine_bravais_settings",
@@ -57,50 +54,43 @@ widgets_defs = {
     "refine_bravais_settings" : {
         "tooltip": "dials.refine_bravais_settings ...",
         "icon": "resources/reindex.png",
-        "icon_disabled": "resources/reindex_grayed.png",
         "main_cmd"  :"dials.refine_bravais_settings",
         "nxt_widg_lst"  :["reindex"]
     },
     "reindex" : {
         "tooltip": "dials.reindex ...",
         "icon": "resources/reindex.png",
-        "icon_disabled": "resources/reindex_grayed.png",
         "main_cmd"  :"dials.reindex",
         "nxt_widg_lst"  :["refine", "integrate"]
     },
     "refine" : {
         "tooltip": "dials.refine ...",
         "icon": "resources/refine.png",
-        "icon_disabled": "resources/refine_grayed.png",
         "main_cmd"  :"dials.refine",
         "nxt_widg_lst"  :["integrate", "refine_bravais_settings"]
     },
     "integrate" : {
         "tooltip": "dials.integrate ...",
         "icon": "resources/integrate.png",
-        "icon_disabled": "resources/integrate_grayed.png",
         "main_cmd"  :"dials.integrate",
         "nxt_widg_lst"  :["scale", "symmetry"]
     },
     "symmetry" : {
         "tooltip": "dials.symmetry ...",
         "icon": "resources/symmetry.png",
-        "icon_disabled": "resources/symmetry_grayed.png",
         "main_cmd"  :"dials.symmetry",
         "nxt_widg_lst"  :["scale", "combine_experiments"]
     },
     "scale" : {
         "tooltip": "dials.scale ...",
         "icon": "resources/scale.png",
-        "icon_disabled": "resources/scale_grayed.png",
         "main_cmd"  :"dials.scale",
         "nxt_widg_lst"  :["symmetry", "combine_experiments"]
     },
     #TODO put a proper icon instead of reuse
     "combine_experiments" : {
         "tooltip": "dials.combine_experiments ...",
-        "icon": "resources/export.png",
-        "icon_disabled": "resources/export_grayed.png",
+        "icon": "resources/combine.png",
         "main_cmd"  :"dials.combine_experiments",
         "nxt_widg_lst"  :["index", "refine", "integrate"]
     }
