@@ -528,19 +528,11 @@ class MainObject(QObject):
         self.cmd_par = CommandParamControl(self.gui_state["new_node"]["cmd2show"][0])
         self.display(self.gui_state["local_nod_lst"])
 
-    def thread_ended(self):
-        nod2clone = dict(
-            self.gui_state["local_nod_lst"][int(
-                self.gui_state["current_lin_num"]
-            )]
-        )
-        self.request_display()
-        self.cmd_par.clone_from(nod2clone["cmd2show"])
-
     def request_display(self):
+
         cmd = {"nod_lst":"", "cmd_lst":["display"]}
-        self.server_nod_lst = json_data_request(uni_url, cmd)
         if self.gui_state["new_node"] is None:
+            self.server_nod_lst = json_data_request(uni_url, cmd)
             self.display(self.server_nod_lst)
 
             tmp_off = '''
@@ -550,7 +542,10 @@ class MainObject(QObject):
             '''
 
         else:
+            nod2clone = dict(self.gui_state["new_node"])
+            self.server_nod_lst = json_data_request(uni_url, cmd)
             self.gui_state["local_nod_lst"] = copy_lst_nodes(self.server_nod_lst)
+            self.cmd_par.clone_from(nod2clone["cmd2show"])
             self.add_new_node()
 
             tmp_off = '''
@@ -578,7 +573,7 @@ class MainObject(QObject):
             new_thrd = Run_n_Output(new_req_get)
             new_thrd.new_line_out.connect(self.add_log_line)
             new_thrd.first_line.connect(self.line_n1_in)
-            new_thrd.finished.connect(self.thread_ended)
+            new_thrd.finished.connect(self.request_display)
             new_thrd.finished.connect(self.check_nxt_btn)
             new_thrd.start()
             self.thrd_lst.append(new_thrd)
