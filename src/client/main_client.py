@@ -405,6 +405,13 @@ class MainObject(QObject):
         except AttributeError:
             print("no command parameter in memory yet")
 
+    def gray_n_ungray(self):
+        print(
+            "<" * 70 + "\n Gray_n_Ungray on line: " +
+            str(self.gui_state["current_lin_num"]) +
+            "\n" + ">" * 70
+        )
+
     def display(self, in_lst_nodes = None):
         if in_lst_nodes is None:
             self.tree_scene.new_lin_num(self.gui_state["current_lin_num"])
@@ -415,6 +422,8 @@ class MainObject(QObject):
             self.tree_scene.draw_tree_graph(
                 lst_2d_dat, self.gui_state["current_lin_num"]
             )
+
+        self.gray_n_ungray()
 
     def line_n1_in(self, lin_num_in):
         self.request_display()
@@ -506,7 +515,10 @@ class MainObject(QObject):
         small_f_size = int(self.font_point_size * 0.85)
         small_font = QFont("OldEnglish", pointSize = small_f_size, italic=True)
         try:
-            if self.server_nod_lst[self.gui_state["current_lin_num"]]["status"] == "Succeeded":
+            if(
+                self.server_nod_lst[self.gui_state["current_lin_num"]]["status"]
+                == "Succeeded"
+            ):
                 self.clearLayout(self.window.Next2RunLayout)
                 self.window.Next2RunLayout.addStretch()
                 for bt_labl in self.param_widgets[str_key]["nxt_widg_lst"]:
