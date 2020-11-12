@@ -416,7 +416,19 @@ class MainObject(QObject):
         except IndexError:
             tmp_state = self.gui_state["local_nod_lst"][self.gui_state["current_lin_num"]]["status"]
 
-        print("state = " + tmp_state + "\n" + ">" * 70)
+        if tmp_state == "Succeeded":
+            print("only clone (S)")
+
+        elif tmp_state == "Failed":
+            print("only clone (F)")
+
+        elif tmp_state == "Ready":
+            print("only run (R)")
+
+        elif tmp_state == "Busy":
+            print("only clone or stop (B)")
+
+        print("\n" + ">" * 70)
 
     def display(self, in_lst_nodes = None):
         if in_lst_nodes is None:
