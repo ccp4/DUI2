@@ -406,29 +406,28 @@ class MainObject(QObject):
             print("no command parameter in memory yet")
 
     def gray_n_ungray(self):
-        print(
-            "<" * 70 + "\n Gray_n_Ungray on line: " +
-            str(self.gui_state["current_lin_num"])
-        )
         try:
             tmp_state = self.server_nod_lst[self.gui_state["current_lin_num"]]["status"]
 
         except IndexError:
             tmp_state = self.gui_state["local_nod_lst"][self.gui_state["current_lin_num"]]["status"]
 
-        if tmp_state == "Succeeded":
-            print("only clone (S)")
+        self.window.RetryButton.setEnabled(False)
+        self.window.CmdSend2server.setEnabled(False)
+        self.window.ReqStopButton.setEnabled(False)
 
-        elif tmp_state == "Failed":
-            print("only clone (F)")
-
-        elif tmp_state == "Ready":
+        if tmp_state == "Ready":
             print("only run (R)")
+            self.window.CmdSend2server.setEnabled(True)
 
         elif tmp_state == "Busy":
             print("only clone or stop (B)")
+            self.window.RetryButton.setEnabled(True)
+            self.window.ReqStopButton.setEnabled(True)
 
-        print("\n" + ">" * 70)
+        else:
+            print("only clone (F or S)")
+            self.window.RetryButton.setEnabled(True)
 
     def display(self, in_lst_nodes = None):
         if in_lst_nodes is None:
