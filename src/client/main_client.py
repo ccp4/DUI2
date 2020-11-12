@@ -408,9 +408,15 @@ class MainObject(QObject):
     def gray_n_ungray(self):
         print(
             "<" * 70 + "\n Gray_n_Ungray on line: " +
-            str(self.gui_state["current_lin_num"]) +
-            "\n" + ">" * 70
+            str(self.gui_state["current_lin_num"])
         )
+        try:
+            tmp_state = self.server_nod_lst[self.gui_state["current_lin_num"]]["status"]
+
+        except IndexError:
+            tmp_state = self.gui_state["local_nod_lst"][self.gui_state["current_lin_num"]]["status"]
+
+        print("state = " + tmp_state + "\n" + ">" * 70)
 
     def display(self, in_lst_nodes = None):
         if in_lst_nodes is None:
