@@ -73,8 +73,10 @@ def print_dict(dict_in):
 class MainObject(QObject):
     def __init__(self, parent = None):
         super(MainObject, self).__init__(parent)
-        ui_path = os.path.dirname(os.path.abspath(__file__))
-        ui_path += os.sep + "client.ui"
+        self.ui_dir_path = os.path.dirname(os.path.abspath(__file__))
+        ui_path = self.ui_dir_path + os.sep + "client.ui"
+        print("ui_path =", ui_path)
+
         self.window = QtUiTools.QUiLoader().load(ui_path)
         self.window.setWindowTitle("CCP4 DUI Cloud")
         self.gui_state = {}
@@ -225,12 +227,29 @@ class MainObject(QObject):
         self.font_point_size = QFont().pointSize()
 
         self.tree_scene.node_clicked.connect(self.on_node_click)
-        self.window.RetryButton.clicked.connect(self.on_retry)
-        self.window.CmdSend2server.clicked.connect(self.request_launch)
-        self.window.ReqStopButton.clicked.connect(self.req_stop)
         self.window.Reset2DefaultPushButton.clicked.connect(self.reset_param_all)
         self.window.ClearParentButton.clicked.connect(self.clear_parent_list)
         self.r_index_widg.opt_signal.connect(self.launch_reindex)
+
+        re_try_icon = QIcon()
+        rt_icon_path = self.ui_dir_path + os.sep + "resources" \
+            + os.sep + "re_try.png"
+        re_try_icon.addFile(rt_icon_path, mode = QIcon.Normal)
+        self.window.RetryButton.setIcon(re_try_icon)
+        run_icon = QIcon()
+        rn_icon_path = self.ui_dir_path + os.sep + "resources" \
+            + os.sep + "DIALS_Logo_smaller_centred.png"
+        run_icon.addFile(rn_icon_path, mode = QIcon.Normal)
+        self.window.CmdSend2server.setIcon(run_icon)
+        stop_icon = QIcon()
+        st_icon_path = self.ui_dir_path + os.sep + "resources" \
+            + os.sep + "stop.png"
+        stop_icon.addFile(st_icon_path, mode = QIcon.Normal)
+        self.window.ReqStopButton.setIcon(stop_icon)
+
+        self.window.RetryButton.clicked.connect(self.on_retry)
+        self.window.CmdSend2server.clicked.connect(self.request_launch)
+        self.window.ReqStopButton.clicked.connect(self.req_stop)
 
         self.tree_scene.draw_tree_graph([])
 
@@ -274,7 +293,6 @@ class MainObject(QObject):
             for par_nod_num in cur_nod["parent_node_lst"]:
                 self.gui_state["parent_nums_lst"].append(int(par_nod_num))
 
-
         cmd_ini = cur_nod["cmd2show"][0]
         key2find = cmd_ini[6:]
         try:
@@ -290,8 +308,6 @@ class MainObject(QObject):
                 self.r_index_widg.add_opts_lst(
                     json_data=json_data_lst[0]
                 )
-
-
 
         except KeyError:
             print("command widget not there yet")
@@ -546,8 +562,12 @@ class MainObject(QObject):
                     self.window.Next2RunLayout.addWidget(nxt_butt)
 
                     nxt_ico = QIcon()
+
+                    icon_path = self.ui_dir_path + os.sep + \
+                        self.param_widgets[bt_labl]["icon"]
+
                     nxt_ico.addFile(
-                        self.param_widgets[bt_labl]["icon"],
+                        icon_path,
                         mode=QIcon.Normal
                     )
                     nxt_butt.setIcon(nxt_ico)

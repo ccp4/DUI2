@@ -34,10 +34,6 @@
              <property name="text">
               <string> Clone</string>
              </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>resources/re_try.png</normaloff>resources/re_try.png</iconset>
-             </property>
              <property name="iconSize">
               <size>
                <width>32</width>
@@ -51,10 +47,6 @@
              <property name="text">
               <string> Run</string>
              </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>resources/DIALS_Logo_smaller_centred.png</normaloff>resources/DIALS_Logo_smaller_centred.png</iconset>
-             </property>
              <property name="iconSize">
               <size>
                <width>32</width>
@@ -67,10 +59,6 @@
             <widget class="QPushButton" name="ReqStopButton">
              <property name="text">
               <string> Stop</string>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>resources/stop.png</normaloff>resources/stop.png</iconset>
              </property>
              <property name="iconSize">
               <size>
@@ -120,7 +108,7 @@
                        <x>0</x>
                        <y>0</y>
                        <width>381</width>
-                       <height>278</height>
+                       <height>293</height>
                       </rect>
                      </property>
                     </widget>
