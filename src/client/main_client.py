@@ -251,6 +251,7 @@ class MainObject(QObject):
         self.window.CmdSend2server.clicked.connect(self.request_launch)
         self.window.ReqStopButton.clicked.connect(self.req_stop)
 
+        self.gui_state["current_widget_key"] = "import"
         self.tree_scene.draw_tree_graph([])
 
         self.gui_state["new_node"] = None
@@ -260,7 +261,6 @@ class MainObject(QObject):
         self.request_display()
 
         self.gui_state["local_nod_lst"] = copy_lst_nodes(self.server_nod_lst)
-        self.gui_state["current_widget_key"] = "import"
         self.change_widget(self.gui_state["current_widget_key"])
         self.thrd_lst = []
         self.window.show()
@@ -428,6 +428,14 @@ class MainObject(QObject):
         except IndexError:
             tmp_state = self.gui_state["local_nod_lst"][self.gui_state["current_lin_num"]]["status"]
 
+        str_key = self.gui_state["current_widget_key"]
+        self.param_widgets[str_key]["simple"].setEnabled(False)
+        try:
+            self.param_widgets[str_key]["advanced"].setEnabled(False)
+
+        except AttributeError:
+            print("no need to gray 'None' widget")
+
         self.window.RetryButton.setEnabled(False)
         self.window.CmdSend2server.setEnabled(False)
         self.window.ReqStopButton.setEnabled(False)
@@ -435,6 +443,13 @@ class MainObject(QObject):
         if tmp_state == "Ready":
             print("only run (R)")
             self.window.CmdSend2server.setEnabled(True)
+            self.param_widgets[str_key]["simple"].setEnabled(True)
+            try:
+                self.param_widgets[str_key]["advanced"].setEnabled(True)
+
+            except AttributeError:
+                print("no need to un-gray 'None' widget")
+
 
         elif tmp_state == "Busy":
             print("only clone or stop (B)")
