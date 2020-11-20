@@ -494,9 +494,9 @@ class TreeDirScene(QGraphicsScene):
 
             right_x, down_y = self.get_coords(
                 len(self.nod_lst),
-                max_indent * 1.2 + max_cmd_len * 0.3 + 6
+                max_indent * 1.2 + max_cmd_len * 0.3 + 7
             )
-            left_x, up_y = self.get_coords(-1, -1)                      #############
+            left_x, up_y = self.get_coords(-1, -1)
             dx = right_x - left_x
             dy = down_y - up_y
             self.addRect(
@@ -506,7 +506,7 @@ class TreeDirScene(QGraphicsScene):
             )
             for i in range(int((len(self.nod_lst) - 1) / 2 + 1)):
                 pos = i * 2
-                my_x, my_y = self.get_coords(pos, -1)                   ##############
+                my_x, my_y = self.get_coords(pos, -1)
                 self.addRect(
                     left_x, my_y - self.f_height,
                     dx - self.f_width, self.f_height * 2,
@@ -518,11 +518,11 @@ class TreeDirScene(QGraphicsScene):
                     current_nod_pos = pos
                     right_x1, down_y1 = self.get_coords(
                         current_nod_pos + 0.43,
-                        max_indent * 1.2 + max_cmd_len * 0.3 + 5.7
+                        max_indent * 1.2 + max_cmd_len * 0.3 + 6.7
                     )
                     left_x1, up_y1 = self.get_coords(
                         current_nod_pos - 0.43, -0.7
-                    )                                                 ##############
+                    )
                     dx1 = right_x1 - left_x1
                     dy1 = down_y1 - up_y1
                     rect_border_colour = self.get_pen_colour(node["stp_stat"])
@@ -599,6 +599,16 @@ class TreeDirScene(QGraphicsScene):
                 n_text.setPos(my_coord_x - self.f_width * 0.7,
                             my_coord_y - self.f_height * 0.5)
                 n_text.setBrush(self.dark_blue_brush)
+
+
+                my_coord_x ,my_coord_y = self.get_coords(
+                    pos, max_indent * 1.2 + max_cmd_len * 0.3 + 6.1
+                )
+                n_text = self.addSimpleText(str(node["lin_num"]))
+                n_text.setPos(my_coord_x - self.f_width * 0.7,
+                            my_coord_y - self.f_height * 0.5)
+                n_text.setBrush(self.dark_blue_brush)
+
 
                 stat_text = self.addSimpleText(str(node["stp_stat"]))
                 stat_text.setPos(
