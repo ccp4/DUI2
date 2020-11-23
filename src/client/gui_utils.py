@@ -366,6 +366,11 @@ class TreeDirScene(QGraphicsScene):
         self.f_width = fm.width("0")
         self.f_height = fm.height()
 
+        tmp_px_map1 = QPixmap("/scratch/DUI2/src/client/resources/combine.png")
+        siz = QSize(45, 25)
+        self.px_map1 = tmp_px_map1.scaled(siz)
+        print("_____________________________________________\n vali=", siz.isValid())
+
         self.blue_brush = QBrush(Qt.blue, Qt.SolidPattern)
         self.red_brush = QBrush(Qt.red, Qt.SolidPattern)
         self.green_brush = QBrush(Qt.darkGreen, Qt.SolidPattern)
@@ -480,6 +485,9 @@ class TreeDirScene(QGraphicsScene):
             self.node_clicked.emit(nod_num)
 
     def draw_all(self):
+
+        print("\n" + "_" * 80 + "draw_all")
+
         if self.nod_lst is not None:
             self.clear()
             max_indent = 0
@@ -588,12 +596,17 @@ class TreeDirScene(QGraphicsScene):
                 self.lst_nod_pos.append(nod_pos)
                 border_colour = self.get_pen_colour(node["stp_stat"])
                 brush_col = self.get_brush_colour(node["stp_stat"])
+                '''
                 elip = self.addEllipse(
                     my_coord_x - self.f_width * 1.6,
                     my_coord_y - self.f_height * 0.6,
                     self.f_width * 3.2, self.f_height * 1.2,
                     border_colour, self.white_brush
                 )
+                '''
+                tmp_pxm = self.addPixmap(self.px_map1)
+                tmp_pxm.setPos(my_coord_x, my_coord_y)
+
                 my_coord_x ,my_coord_y = self.get_coords(pos, -0.6)
                 n_text = self.addSimpleText(str(node["lin_num"]))
                 n_text.setPos(my_coord_x - self.f_width * 0.7,
