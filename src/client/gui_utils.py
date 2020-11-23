@@ -21,7 +21,7 @@ copyright (c) CCP4 - DLS
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-import sys
+import sys, os
 from PySide2.QtCore import *
 from PySide2.QtWidgets import *
 from PySide2 import QtUiTools
@@ -87,7 +87,6 @@ widgets_defs = {
         "main_cmd"  :"dials.scale",
         "nxt_widg_lst"  :["symmetry", "combine_experiments"]
     },
-    #TODO put a proper icon instead of reuse
     "combine_experiments" : {
         "tooltip": "dials.combine_experiments ...",
         "icon": "resources/combine.png",
@@ -366,10 +365,13 @@ class TreeDirScene(QGraphicsScene):
         self.f_width = fm.width("0")
         self.f_height = fm.height()
 
-        tmp_px_map1 = QPixmap("/scratch/DUI2/src/client/resources/combine.png")
+
+        ui_dir_path = os.path.dirname(os.path.abspath(__file__))
+        icon_path = ui_dir_path + os.sep + widgets_defs["find_spots"]["icon"]
+        tmp_px_map1 = QPixmap(icon_path)
         siz = QSize(45, 25)
         self.px_map1 = tmp_px_map1.scaled(siz)
-        print("_____________________________________________\n vali=", siz.isValid())
+
 
         self.blue_brush = QBrush(Qt.blue, Qt.SolidPattern)
         self.red_brush = QBrush(Qt.red, Qt.SolidPattern)
