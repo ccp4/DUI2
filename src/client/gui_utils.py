@@ -369,7 +369,7 @@ class TreeDirScene(QGraphicsScene):
         ui_dir_path = os.path.dirname(os.path.abspath(__file__))
         icon_path = ui_dir_path + os.sep + widgets_defs["find_spots"]["icon"]
         tmp_px_map1 = QPixmap(icon_path)
-        siz = QSize(45, 25)
+        siz = QSize(30, 25)
         self.px_map1 = tmp_px_map1.scaled(siz)
 
 
@@ -487,9 +487,6 @@ class TreeDirScene(QGraphicsScene):
             self.node_clicked.emit(nod_num)
 
     def draw_all(self):
-
-        print("\n" + "_" * 80 + "draw_all")
-
         if self.nod_lst is not None:
             self.clear()
             max_indent = 0
@@ -607,7 +604,10 @@ class TreeDirScene(QGraphicsScene):
                 )
                 '''
                 tmp_pxm = self.addPixmap(self.px_map1)
-                tmp_pxm.setPos(my_coord_x, my_coord_y)
+                tmp_pxm.setPos(
+                    my_coord_x - self.f_width * 2.6,
+                    my_coord_y - self.f_height * 0.9
+                )
 
                 my_coord_x ,my_coord_y = self.get_coords(pos, -0.6)
                 n_text = self.addSimpleText(str(node["lin_num"]))
