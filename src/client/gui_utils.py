@@ -371,7 +371,7 @@ class TreeDirScene(QGraphicsScene):
         for key_str, def_item in widgets_defs.items():
             icon_path = ui_dir_path + os.sep + def_item["icon"]
             tmp_px_map = QPixmap(icon_path)
-            siz = QSize(30, 25)
+            siz = QSize(self.f_width * 4.1, self.f_height * 1.6)
             self.px_map[key_str] = tmp_px_map.scaled(siz)
 
 
@@ -562,9 +562,11 @@ class TreeDirScene(QGraphicsScene):
                             arr_col = self.get_pen_colour(node["stp_stat"])
                             draw_quadratic_bezier_3_points(
                                 self,
-                                my_parent_coord_x + self.f_width * 1.6, my_parent_coord_y,
-                                my_coord_x, my_parent_coord_y,
-                                my_coord_x, my_coord_y - self.f_height * 0.6,
+                                my_parent_coord_x + self.f_width * 2.7, my_parent_coord_y,
+                                my_coord_x + self.f_width * 0.5,
+                                my_parent_coord_y,
+                                my_coord_x + self.f_width * 0.5,
+                                my_coord_y - self.f_height * 0.95,
                                 arr_col, row_size, col_size
                             )
 
@@ -579,9 +581,11 @@ class TreeDirScene(QGraphicsScene):
                             arr_col = self.get_pen_colour(node["stp_stat"])
                             draw_quadratic_bezier_3_points(
                                 self,
-                                my_parent_coord_x, my_parent_coord_y + self.f_height * 0.6,
+                                my_parent_coord_x,
+                                my_parent_coord_y + self.f_height * 0.9,
                                 my_parent_coord_x, my_coord_y,
-                                my_coord_x - self.f_width * 1.6, my_coord_y,
+                                my_coord_x - self.f_width * 1.6,
+                                my_coord_y,
                                 arr_col, row_size, col_size
                             )
 
@@ -597,23 +601,23 @@ class TreeDirScene(QGraphicsScene):
                 self.lst_nod_pos.append(nod_pos)
                 border_colour = self.get_pen_colour(node["stp_stat"])
                 brush_col = self.get_brush_colour(node["stp_stat"])
-                '''
-                elip = self.addEllipse(
-                    my_coord_x - self.f_width * 1.6,
-                    my_coord_y - self.f_height * 0.6,
-                    self.f_width * 3.2, self.f_height * 1.2,
+                elip = self.addRect(
+                    my_coord_x - self.f_width * 1.4,
+                    my_coord_y - self.f_height * 0.9,
+                    self.f_width * 3.6,
+                    self.f_height * 1.8,
                     border_colour, self.white_brush
                 )
-                '''
                 try:
                     tmp_pxm = self.addPixmap(self.px_map[node["str_cmd"]])
                     tmp_pxm.setPos(
-                        my_coord_x - self.f_width * 2.6,
-                        my_coord_y - self.f_height * 0.9
+                        my_coord_x - self.f_width * 2.6 + self.f_width * 0.9,
+                        my_coord_y - self.f_height * 0.9 + self.f_height * 0.1
                     )
 
                 except KeyError:
-                    print("One node without 'str_cmd' ")
+                    #print("One node without 'str_cmd' ")
+                    pass
 
                 my_coord_x ,my_coord_y = self.get_coords(pos, -0.6)
                 n_text = self.addSimpleText(str(node["lin_num"]))
