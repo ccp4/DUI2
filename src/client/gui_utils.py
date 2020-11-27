@@ -95,6 +95,7 @@ widgets_defs = {
     }
 }
 
+
 class MyQComboBox(QComboBox):
     def __init__(self, parent=None):
         super(MyQComboBox, self).__init__(parent)
@@ -310,7 +311,6 @@ def draw_quadratic_bezier_3_points(
             curv_p3x = horz_lin_x
             curv_p3y = p3y
 
-
         else:
             vert_lin_x = p3x
             vert_lin_y = p1y + row_size
@@ -324,7 +324,6 @@ def draw_quadratic_bezier_3_points(
             curv_p2y = p2y
             curv_p3x = horz_lin_x
             curv_p3y = p1y
-
 
         n_points = 15
 
@@ -356,6 +355,7 @@ def draw_quadratic_bezier_3_points(
         scene_obj.addLine(p1x, p1y, p2x, p2y, lin_pen)
         scene_obj.addLine(p2x, p2y, p3x, p3y, lin_pen)
 
+
 class TreeDirScene(QGraphicsScene):
     node_clicked = Signal(int)
     def __init__(self, parent = None):
@@ -365,7 +365,6 @@ class TreeDirScene(QGraphicsScene):
         self.f_width = fm.width("0")
         self.f_height = fm.height()
 
-
         ui_dir_path = os.path.dirname(os.path.abspath(__file__))
         self.px_map = {}
         for key_str, def_item in widgets_defs.items():
@@ -373,7 +372,6 @@ class TreeDirScene(QGraphicsScene):
             tmp_px_map = QPixmap(icon_path)
             siz = QSize(self.f_width * 4.1, self.f_height * 1.6)
             self.px_map[key_str] = tmp_px_map.scaled(siz)
-
 
         self.blue_brush = QBrush(Qt.blue, Qt.SolidPattern)
         self.red_brush = QBrush(Qt.red, Qt.SolidPattern)
@@ -540,6 +538,7 @@ class TreeDirScene(QGraphicsScene):
                         dx1 + self.f_width, dy1,
                         rect_border_colour, self.cyan_brush
                     )
+
             row_size, col_size = self.get_coords(0.5, 0.5)
             for pos, node in enumerate(self.nod_lst):
                 if len(node["par_lst"]) > 1:
@@ -625,7 +624,6 @@ class TreeDirScene(QGraphicsScene):
                             my_coord_y - self.f_height * 0.5)
                 n_text.setBrush(self.dark_blue_brush)
 
-
                 my_coord_x ,my_coord_y = self.get_coords(
                     pos, max_indent * 1.2 + max_cmd_len * 0.3 + 6.1
                 )
@@ -633,7 +631,6 @@ class TreeDirScene(QGraphicsScene):
                 n_text.setPos(my_coord_x - self.f_width * 0.7,
                             my_coord_y - self.f_height * 0.5)
                 n_text.setBrush(self.dark_blue_brush)
-
 
                 stat_text = self.addSimpleText(str(node["stp_stat"]))
                 stat_text.setPos(
