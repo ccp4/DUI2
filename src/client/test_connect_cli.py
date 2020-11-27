@@ -71,7 +71,7 @@ if __name__ == "__main__":
             line_str = ''
             while True:
                 tmp_dat = req_get.raw.read(1)
-                single_char = str(tmp_dat.decode('utf-8'))
+                single_char = str(tmp_dat.decode('ascii'))
                 line_str += single_char
                 if single_char == '\n':
                     print(line_str[:-1])

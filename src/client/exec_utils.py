@@ -49,7 +49,7 @@ def json_data_request(url, cmd):
         line_str = ''
         while True:
             tmp_dat = req_get.raw.read(1)
-            single_char = str(tmp_dat.decode('utf-8'))
+            single_char = str(tmp_dat.decode('ascii'))
             line_str += single_char
             if single_char == '\n':
                 str_lst.append(line_str[:-1])
@@ -88,7 +88,7 @@ class Run_n_Output(QThread):
         not_yet_read = True
         while True:
             tmp_dat = self.request.raw.read(1)
-            single_char = str(tmp_dat.decode('utf-8'))
+            single_char = str(tmp_dat.decode('ascii'))
             line_str += single_char
             if single_char == '\n':
                 if not_yet_read:

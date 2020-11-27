@@ -43,8 +43,8 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
 
         except KeyError:
             print("no command in request (KeyError)")
-            self.wfile.write(bytes('no command in request (KeyError) \n', 'utf-8'))
-            self.wfile.write(bytes('/*EOF*/', 'utf-8'))
+            self.wfile.write(bytes('no command in request (KeyError) \n', 'ascii'))
+            self.wfile.write(bytes('/*EOF*/', 'ascii'))
             return
 
         cmd_lst = []
@@ -67,9 +67,9 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
             lst_out = []
             lst_out = cmd_tree_runner.run_dict(cmd_dict, self)
             json_str = json.dumps(lst_out) + '\n'
-            self.wfile.write(bytes(json_str, 'utf-8'))
+            self.wfile.write(bytes(json_str, 'ascii'))
             print("sending /*EOF*/")
-            self.wfile.write(bytes('/*EOF*/', 'utf-8'))
+            self.wfile.write(bytes('/*EOF*/', 'ascii'))
 
         except BrokenPipeError:
             print("\n *** BrokenPipeError *** while sending EOF or JSON \n")
@@ -99,7 +99,7 @@ if __name__ == "__main__":
 
         #'''
 
-    cmd_tree_runner.run_dict({'nod_lst': [0], 'cmd_lst': [['ip', 'x41']]})
+    cmd_tree_runner.run_dict({'nod_lst': [0], 'cmd_lst': [['ip', 'x4']]})
     cmd_dict = multi_node.str2dic("display")
     cmd_tree_runner.run_dict(cmd_dict)
 

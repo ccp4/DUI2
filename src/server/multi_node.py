@@ -227,7 +227,7 @@ class CmdNode(object):
             if self.nod_req is not None:
                 try:
                     str_lin_num = "node.lin_num=" + str(self.lin_num) + "\n"
-                    self.nod_req.wfile.write(bytes(str_lin_num , 'utf-8'))
+                    self.nod_req.wfile.write(bytes(str_lin_num , 'ascii'))
 
                 except BrokenPipeError:
                     print("\n *** BrokenPipeError *** while sending lin_num \n")
@@ -237,7 +237,7 @@ class CmdNode(object):
                 new_line = self.my_proc.stdout.readline()
                 if self.nod_req is not None:
                     try:
-                        self.nod_req.wfile.write(bytes(new_line , 'utf-8'))
+                        self.nod_req.wfile.write(bytes(new_line , 'ascii'))
 
                     except BrokenPipeError:
                         n_Broken_Pipes += 1
@@ -270,7 +270,7 @@ class CmdNode(object):
         if self.status == "Busy":
             print("attempting to stop the execution of node", self.lin_num)
             try:
-                self.nod_req.wfile.write(bytes("attempting to stop \n" , 'utf-8'))
+                self.nod_req.wfile.write(bytes("attempting to stop \n" , 'ascii'))
                 pid_num = self.my_proc.pid
                 parent_proc = psutil.Process(pid_num)
                 for child in parent_proc.children(recursive=True):
