@@ -605,7 +605,7 @@ class TreeDirScene(QGraphicsScene):
                     my_coord_y - self.f_height * 0.9,
                     self.f_width * 3.6,
                     self.f_height * 1.8,
-                    border_colour, self.white_brush
+                    border_colour, self.invisible_brush
                 )
                 try:
                     tmp_pxm = self.addPixmap(self.px_map[node["str_cmd"]])
