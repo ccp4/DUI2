@@ -43,8 +43,10 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
 
         except KeyError:
             print("no command in request (KeyError)")
-            self.wfile.write(bytes('no command in request (KeyError) \n', 'ascii'))
-            self.wfile.write(bytes('/*EOF*/', 'ascii'))
+            self.wfile.write(bytes(
+                'no command in request (KeyError) \n', 'ascii', 'ignore'
+            ))
+            self.wfile.write(bytes('/*EOF*/', 'ascii', 'ignore'))
             return
 
         cmd_lst = []
@@ -67,9 +69,9 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
             lst_out = []
             lst_out = cmd_tree_runner.run_dict(cmd_dict, self)
             json_str = json.dumps(lst_out) + '\n'
-            self.wfile.write(bytes(json_str, 'ascii'))
+            self.wfile.write(bytes(json_str, 'ascii', 'ignore'))
             print("sending /*EOF*/")
-            self.wfile.write(bytes('/*EOF*/', 'ascii'))
+            self.wfile.write(bytes('/*EOF*/', 'ascii', 'ignore'))
 
         except BrokenPipeError:
             print("\n *** BrokenPipeError *** while sending EOF or JSON \n")
