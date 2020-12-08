@@ -210,60 +210,54 @@ class CmdNode(object):
     def run_cmd(self, req_obj = None):
         self.nod_req = req_obj
         self.status = "Busy"
-        try:
-            inner_lst = self.full_cmd_lst[-1]
-            print("\n Running:", inner_lst, "\n")
-            self.my_proc = subprocess.Popen(
-                inner_lst,
-                shell = False,
-                cwd = self._run_dir,
-                stdout = subprocess.PIPE,
-                stderr = subprocess.STDOUT,
-                universal_newlines = True
-            )
-            new_line = None
-            self.log_line_lst = []
-            n_Broken_Pipes = 0
+        inner_lst = self.full_cmd_lst[-1]
+        print("\n Running:", inner_lst, "\n")
+        self.my_proc = subprocess.Popen(
+            inner_lst,
+            shell = False,
+            cwd = self._run_dir,
+            stdout = subprocess.PIPE,
+            stderr = subprocess.STDOUT,
+            universal_newlines = True
+        )
+        new_line = None
+        self.log_line_lst = []
+        n_Broken_Pipes = 0
+        if self.nod_req is not None:
+            try:
+                str_lin_num = "node.lin_num=" + str(self.lin_num) + "\n"
+                self.nod_req.wfile.write(bytes(str_lin_num , 'ascii', 'ignore'))
+
+            except BrokenPipeError:
+                print("\n *** BrokenPipeError *** while sending lin_num \n")
+
+        while self.my_proc.poll() is None or new_line != '':
+            new_line = self.my_proc.stdout.readline()
             if self.nod_req is not None:
                 try:
-                    str_lin_num = "node.lin_num=" + str(self.lin_num) + "\n"
-                    self.nod_req.wfile.write(bytes(str_lin_num , 'ascii', 'ignore'))
+                    self.nod_req.wfile.write(bytes(new_line , 'ascii', 'ignore'))
 
                 except BrokenPipeError:
-                    print("\n *** BrokenPipeError *** while sending lin_num \n")
-
-
-            while self.my_proc.poll() is None or new_line != '':
-                new_line = self.my_proc.stdout.readline()
-                if self.nod_req is not None:
-                    try:
-                        self.nod_req.wfile.write(bytes(new_line , 'ascii', 'ignore'))
-
-                    except BrokenPipeError:
-                        n_Broken_Pipes += 1
-
-                else:
-                    print(new_line[:-1])
-
-                self.log_line_lst.append(new_line[:-1])
-
-            if n_Broken_Pipes > 0:
-                print("\n *** BrokenPipeError *** while sending output \n")
-
-            self.my_proc.stdout.close()
-            if self.my_proc.poll() == 0:
-                print("subprocess poll 0")
+                    n_Broken_Pipes += 1
 
             else:
-                print("\n  *** ERROR *** \n\n poll =", self.my_proc.poll())
-                self.status = "Failed"
+                print(new_line[:-1])
 
-            if self.status != "Failed":
-                self.status = "Succeeded"
+            self.log_line_lst.append(new_line[:-1])
 
-        except BaseException as e:
-            print("Failed to run subprocess \n ERR:", e)
+        if n_Broken_Pipes > 0:
+            print("\n *** BrokenPipeError *** while sending output \n")
+
+        self.my_proc.stdout.close()
+        if self.my_proc.poll() == 0:
+            print("subprocess poll 0")
+
+        else:
+            print("\n  *** ERROR *** \n\n poll =", self.my_proc.poll())
             self.status = "Failed"
+
+        if self.status != "Failed":
+            self.status = "Succeeded"
 
     def stop_me(self):
         print("node", self.lin_num, "status:", self.status)
@@ -360,7 +354,6 @@ class Runner(object):
                     except IndexError:
                         print("\n *** ERROR *** \n wrong line \n not logging")
 
-
             elif uni_cmd == ["stop"]:
                 for lin2go in cmd_dict["nod_lst"]:
                     try:
@@ -394,13 +387,11 @@ class Runner(object):
                 tmp_big = node.lin_num
 
         self.bigger_lin = tmp_big + 1
-
         new_step.lin_num = self.bigger_lin
         for prev_step in prev_step_lst:
             prev_step.child_node_lst.append(new_step.lin_num)
 
         self.step_list.append(new_step)
-
         return new_step
 
     def _save_state(self):
@@ -450,6 +441,7 @@ class Runner(object):
             new_node.parent_node_lst = uni_dic["parent_node_lst"]
 
             self.step_list.append(new_node)
+
 
 def str2dic(cmd_str):
     print("cmd_str =", cmd_str, "\n")
