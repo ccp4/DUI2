@@ -97,6 +97,7 @@ class CmdNode(object):
         self.full_cmd_lst = []
         self._run_dir = ""
         self.log_line_lst = []
+        self.log_file_path = None
 
         self.status = "Ready"
         self.child_node_lst = []
@@ -222,6 +223,7 @@ class CmdNode(object):
         )
         new_line = None
         self.log_line_lst = []
+        self.log_file_path = self._run_dir + "/out.log"
         n_Broken_Pipes = 0
         if self.nod_req is not None:
             try:
@@ -259,8 +261,7 @@ class CmdNode(object):
         if self.status != "Failed":
             self.status = "Succeeded"
 
-        log_out_path = self._run_dir + "/out.log"
-        lof_file = open(log_out_path, "w")
+        lof_file = open(self.log_file_path, "w")
         for log_line in self.log_line_lst:
             wrstring = log_line + "\n"
             lof_file.write(wrstring)
@@ -348,8 +349,17 @@ class Runner(object):
             elif uni_cmd == ["display_log"]:
                 for lin2go in cmd_dict["nod_lst"]:
                     try:
-                        lst2add = self.step_list[lin2go].log_line_lst
+                        #lst2add = self.step_list[lin2go].log_line_lst
+                        #return_list.append(lst2add)
+
+                        lof_file = open(
+                            self.step_list[lin2go].log_file_path, "r"
+                        )
+                        lst2add = lof_file.readlines()
+                        lof_file.close()
+
                         return_list.append(lst2add)
+
 
                     except IndexError:
                         print("\n *** ERROR *** \n wrong line \n not logging")
@@ -407,17 +417,18 @@ class Runner(object):
         lst_nod = []
         for uni in self.step_list:
             node = {
-                        "_base_dir"            :uni._base_dir,
-                        "full_cmd_lst"         :uni.full_cmd_lst,
-                        "lst2run"              :uni.lst2run,
-                        "_lst_expt"            :uni._lst_expt,
-                        "_lst_refl"            :uni._lst_refl,
-                        "_run_dir"             :uni._run_dir,
-                        "log_line_lst"         :uni.log_line_lst,
-                        "lin_num"              :uni.lin_num,
-                        "status"               :uni.status,
-                        "parent_node_lst"      :uni.parent_node_lst,
-                        "child_node_lst"       :uni.child_node_lst
+                        "_base_dir"             :uni._base_dir,
+                        "full_cmd_lst"          :uni.full_cmd_lst,
+                        "lst2run"               :uni.lst2run,
+                        "_lst_expt"             :uni._lst_expt,
+                        "_lst_refl"             :uni._lst_refl,
+                        "_run_dir"              :uni._run_dir,
+                        "log_line_lst"          :uni.log_line_lst,
+                        "log_file_path"         :uni.log_file_path,
+                        "lin_num"               :uni.lin_num,
+                        "status"                :uni.status,
+                        "parent_node_lst"       :uni.parent_node_lst,
+                        "child_node_lst"        :uni.child_node_lst
                     }
 
             lst_nod.append(node)
@@ -444,6 +455,7 @@ class Runner(object):
             new_node._lst_refl       = uni_dic["_lst_refl"]
             new_node._run_dir        = uni_dic["_run_dir"]
             new_node.log_line_lst    = uni_dic["log_line_lst"]
+            new_node.log_file_path   = uni_dic["log_file_path"]
             new_node.lin_num         = uni_dic["lin_num"]
             new_node.status          = uni_dic["status"]
             new_node.child_node_lst  = uni_dic["child_node_lst"]

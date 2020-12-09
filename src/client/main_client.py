@@ -394,7 +394,8 @@ class MainObject(QObject):
         found_lin_num = False
         for log_node in self.gui_state["lst_node_info_out"]:
             if log_node["lin_num"] == nod_lin_num:
-                log_node["log_line_lst"].append(new_line[0:-1])
+                #log_node["log_line_lst"].append(new_line[0:-1])
+                log_node["log_line_lst"].append(new_line)
                 found_lin_num = True
 
         if not found_lin_num:
@@ -496,7 +497,7 @@ class MainObject(QObject):
             )
         self.window.incoming_text.clear()
         for single_log_line in lst_log_lines:
-            self.window.incoming_text.insertPlainText(single_log_line + "\n")
+            self.window.incoming_text.insertPlainText(single_log_line)
             self.window.incoming_text.moveCursor(QTextCursor.End)
 
     def reset_param_widget(self, str_key):
