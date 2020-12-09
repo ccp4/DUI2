@@ -259,6 +259,15 @@ class CmdNode(object):
         if self.status != "Failed":
             self.status = "Succeeded"
 
+        log_out_path = self._run_dir + "/out.log"
+        lof_file = open(log_out_path, "w")
+        for log_line in self.log_line_lst:
+            wrstring = log_line + "\n"
+            lof_file.write(wrstring)
+
+        lof_file.close()
+
+
     def stop_me(self):
         print("node", self.lin_num, "status:", self.status)
         if self.status == "Busy":
