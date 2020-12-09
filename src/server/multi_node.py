@@ -96,7 +96,6 @@ class CmdNode(object):
         self.lst2run = []
         self.full_cmd_lst = []
         self._run_dir = ""
-        self.log_line_lst = []
         self.log_file_path = None
 
         self.status = "Ready"
@@ -222,7 +221,7 @@ class CmdNode(object):
             universal_newlines = True
         )
         new_line = None
-        self.log_line_lst = []
+        log_line_lst = []
         self.log_file_path = self._run_dir + "/out.log"
         n_Broken_Pipes = 0
         if self.nod_req is not None:
@@ -245,7 +244,7 @@ class CmdNode(object):
             else:
                 print(new_line[:-1])
 
-            self.log_line_lst.append(new_line[:-1])
+            log_line_lst.append(new_line[:-1])
 
         if n_Broken_Pipes > 0:
             print("\n *** BrokenPipeError *** while sending output \n")
@@ -262,7 +261,7 @@ class CmdNode(object):
             self.status = "Succeeded"
 
         lof_file = open(self.log_file_path, "w")
-        for log_line in self.log_line_lst:
+        for log_line in log_line_lst:
             wrstring = log_line + "\n"
             lof_file.write(wrstring)
 
@@ -349,9 +348,6 @@ class Runner(object):
             elif uni_cmd == ["display_log"]:
                 for lin2go in cmd_dict["nod_lst"]:
                     try:
-                        #lst2add = self.step_list[lin2go].log_line_lst
-                        #return_list.append(lst2add)
-
                         lof_file = open(
                             self.step_list[lin2go].log_file_path, "r"
                         )
@@ -423,7 +419,6 @@ class Runner(object):
                         "_lst_expt"             :uni._lst_expt,
                         "_lst_refl"             :uni._lst_refl,
                         "_run_dir"              :uni._run_dir,
-                        "log_line_lst"          :uni.log_line_lst,
                         "log_file_path"         :uni.log_file_path,
                         "lin_num"               :uni.lin_num,
                         "status"                :uni.status,
@@ -454,7 +449,6 @@ class Runner(object):
             new_node._lst_expt       = uni_dic["_lst_expt"]
             new_node._lst_refl       = uni_dic["_lst_refl"]
             new_node._run_dir        = uni_dic["_run_dir"]
-            new_node.log_line_lst    = uni_dic["log_line_lst"]
             new_node.log_file_path   = uni_dic["log_file_path"]
             new_node.lin_num         = uni_dic["lin_num"]
             new_node.status          = uni_dic["status"]
