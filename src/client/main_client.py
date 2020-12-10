@@ -62,7 +62,7 @@ from simpler_param_widgets import (
 
 def print_dict(dict_in):
     for key2print in dict_in:
-        if key2print != "lst_node_info_out":
+        if key2print != "lst_node_log_out":
             if dict_in[key2print] is dict:
                 print_dict(dict_in[key2print])
 
@@ -255,7 +255,7 @@ class MainObject(QObject):
         self.tree_scene.draw_tree_graph([])
 
         self.gui_state["new_node"] = None
-        self.gui_state["lst_node_info_out"] = []
+        self.gui_state["lst_node_log_out"] = []
         self.gui_state["current_lin_num"] = 0
 
         self.request_display()
@@ -392,14 +392,13 @@ class MainObject(QObject):
 
     def add_log_line(self, new_line, nod_lin_num):
         found_lin_num = False
-        for log_node in self.gui_state["lst_node_info_out"]:
+        for log_node in self.gui_state["lst_node_log_out"]:
             if log_node["lin_num"] == nod_lin_num:
-                #log_node["log_line_lst"].append(new_line[0:-1])
                 log_node["log_line_lst"].append(new_line)
                 found_lin_num = True
 
         if not found_lin_num:
-            self.gui_state["lst_node_info_out"].append(
+            self.gui_state["lst_node_log_out"].append(
                 {
                     "lin_num"       : nod_lin_num,
                     "log_line_lst"  : [new_line]
@@ -409,7 +408,6 @@ class MainObject(QObject):
         if self.gui_state["current_lin_num"] == nod_lin_num:
             self.window.incoming_text.moveCursor(QTextCursor.End)
             self.window.incoming_text.insertPlainText(new_line)
-            self.window.incoming_text.moveCursor(QTextCursor.End)
 
     def item_param_changed(self, str_path, str_value):
         sender_twin = self.sender().twin_widg
@@ -480,7 +478,7 @@ class MainObject(QObject):
 
     def display_log(self, nod_lin_num = 0):
         found_lin_num = False
-        for log_node in self.gui_state["lst_node_info_out"]:
+        for log_node in self.gui_state["lst_node_log_out"]:
             if log_node["lin_num"] == nod_lin_num:
                 found_lin_num = True
                 lst_log_lines = log_node["log_line_lst"]
@@ -489,7 +487,7 @@ class MainObject(QObject):
             cmd = {"nod_lst":[nod_lin_num], "cmd_lst":["display_log"]}
             json_log = json_data_request(uni_url, cmd)
             lst_log_lines = json_log[0]
-            self.gui_state["lst_node_info_out"].append(
+            self.gui_state["lst_node_log_out"].append(
                 {
                     "lin_num"       : nod_lin_num,
                     "log_line_lst"  : lst_log_lines

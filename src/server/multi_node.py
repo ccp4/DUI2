@@ -353,9 +353,7 @@ class Runner(object):
                         )
                         lst2add = lof_file.readlines()
                         lof_file.close()
-
                         return_list.append(lst2add)
-
 
                     except IndexError:
                         print("\n *** ERROR *** \n wrong line \n not logging")
