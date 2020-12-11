@@ -68,8 +68,18 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
         try:
             lst_out = []
             lst_out = cmd_tree_runner.run_dict(cmd_dict, self)
-            json_str = json.dumps(lst_out) + '\n'
-            self.wfile.write(bytes(json_str, 'ascii', 'ignore'))
+
+            if type(lst_out) is list:
+                json_str = json.dumps(lst_out) + '\n'
+                print("type(lst_out) =", type(lst_out))
+                self.wfile.write(bytes(json_str, 'ascii', 'ignore'))
+
+            else:
+                print("type(lst_out) =", type(lst_out))
+                html_file = open(lst_out, 'rb')
+                self.wfile.write(html_file.read())
+                f.close()
+
             print("sending /*EOF*/")
             self.wfile.write(bytes('/*EOF*/', 'ascii', 'ignore'))
 
