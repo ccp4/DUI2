@@ -44,6 +44,7 @@ def fix_alias(short_in):
     pair_list = [
         ("d", "display"                                     ),
         ("dl", "display_log"                                ),
+        ("gr", "get_report"                                 ),
         ("gb", "get_bravais_sum"                            ),
         ("st", "stop"                                       ),
         ("fdp", "find_spots_params"                         ),
@@ -353,6 +354,7 @@ class Runner(object):
             len(tmp_parent_lst_in) > 0 and
             ["display"] not in full_cmd_lst and
             ["display_log"] not in full_cmd_lst and
+            ["get_report"] not in full_cmd_lst and
             ["get_bravais_sum"] not in full_cmd_lst and
             ["stop"] not in full_cmd_lst
         ):
@@ -377,6 +379,14 @@ class Runner(object):
 
                     except IndexError:
                         print("\n *** ERROR *** \n wrong line \n not logging")
+
+            elif uni_cmd == ["get_report"]:
+                for lin2go in cmd_dict["nod_lst"]:
+                    print(
+                        "#" * 70 + "\n HTML report in: " +
+                        str(self.step_list[lin2go]._html_rep) +
+                        "\n" + "#" * 70
+                    )
 
             elif uni_cmd == ["get_bravais_sum"]:
                 for lin2go in cmd_dict["nod_lst"]:
