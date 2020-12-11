@@ -93,6 +93,7 @@ class CmdNode(object):
 
         self._lst_expt = []
         self._lst_refl = []
+        self._html_rep = None
         self.lst2run = []
         self.full_cmd_lst = []
         self._run_dir = ""
@@ -267,6 +268,25 @@ class CmdNode(object):
 
         lof_file.close()
 
+        # running HTML report generation
+        lst_dat_in = ['dials.report']
+        for expt_2_add in glob.glob(self._run_dir + "/*.expt"):
+            lst_dat_in.append(expt_2_add)
+
+        for refl_2_add in glob.glob(self._run_dir + "/*.refl"):
+            lst_dat_in.append(refl_2_add)
+
+        print("\n running:", lst_dat_in, "\n")
+
+        rep_proc = subprocess.run(
+            lst_dat_in,
+            shell = False,
+            cwd = self._run_dir
+        )
+
+        tmp_html_path = self._run_dir + "/dials.report.html"
+        if os.path.exists(tmp_html_path):
+            self._html_rep = tmp_html_path
 
     def stop_me(self):
         print("node", self.lin_num, "status:", self.status)
