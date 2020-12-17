@@ -382,10 +382,10 @@ class Runner(object):
 
             elif uni_cmd == ["get_report"]:
                 for lin2go in cmd_dict["nod_lst"]:
+                    return_list = str(self.step_list[lin2go]._html_rep)
                     print(
                         "#" * 70 + "\n HTML report in: " +
-                        str(self.step_list[lin2go]._html_rep) +
-                        "\n" + "#" * 70
+                        return_list + "\n" + "#" * 70
                     )
 
             elif uni_cmd == ["get_bravais_sum"]:

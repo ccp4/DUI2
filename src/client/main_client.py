@@ -229,8 +229,12 @@ class MainObject(QObject):
         self.font_point_size = QFont().pointSize()
 
         self.tree_scene.node_clicked.connect(self.on_node_click)
-        self.window.Reset2DefaultPushButton.clicked.connect(self.reset_param_all)
-        self.window.ClearParentButton.clicked.connect(self.clear_parent_list)
+        self.window.Reset2DefaultPushButton.clicked.connect(
+            self.reset_param_all
+        )
+        self.window.ClearParentButton.clicked.connect(
+            self.clear_parent_list
+        )
         self.r_index_widg.opt_signal.connect(self.launch_reindex)
 
         re_try_icon = QIcon()
@@ -289,10 +293,14 @@ class MainObject(QObject):
 
     def load_html(self):
         print("load_html ... Start \n")
-        r_g = requests.get(
-            'http://localhost:8182/', stream = True, params = "a"
-        )
 
+        cmd = {
+            "nod_lst":[self.gui_state["current_lin_num"]],
+            "cmd_lst":["get_report"]
+         }
+        r_g = requests.get(
+            'http://localhost:8080/', stream = True, params = cmd
+        )
         full_file = ''
         line_str = ''
         while True:
