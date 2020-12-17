@@ -41,6 +41,8 @@ from PySide2.QtWidgets import *
 from PySide2 import QtUiTools
 from PySide2.QtGui import *
 
+from PySide2.QtWebEngineWidgets import QWebEngineView
+
 from gui_utils import TreeDirScene, widgets_defs
 from reindex_table import ReindexTable
 from exec_utils import (
@@ -251,6 +253,14 @@ class MainObject(QObject):
         self.window.CmdSend2server.clicked.connect(self.request_launch)
         self.window.ReqStopButton.clicked.connect(self.req_stop)
 
+
+        #Temp connect
+        self.window.TmpLoadButton.clicked.connect(self.load_html)
+
+
+        self.webEngineView = QWebEngineView()
+        self.window.HtmlReportLayout.addWidget(self.webEngineView)
+
         self.gui_state["current_widget_key"] = "import"
         self.tree_scene.draw_tree_graph([])
 
@@ -276,6 +286,31 @@ class MainObject(QObject):
 
                 else:
                     self.clearLayout(item.layout())
+
+    def load_html(self):
+        print("load_html ... Start \n")
+        r_g = requests.get(
+            'http://localhost:8182/', stream = True, params = "a"
+        )
+
+        full_file = ''
+        line_str = ''
+        while True:
+            tmp_dat = r_g.raw.read(1)
+            single_char = str(tmp_dat.decode('utf-8'))
+            line_str += single_char
+            if single_char == '\n':
+                full_file += line_str
+                line_str = ''
+
+            elif line_str[-7:] == '/*EOF*/':
+                print('/*EOF*/ received')
+                break
+
+        print("html:", full_file)
+        self.webEngineView.setHtml(full_file)
+        print("\n load_html ... End")
+
 
     def clicked_4_navigation(self, nod_num):
         self.gui_state["current_lin_num"] = nod_num
