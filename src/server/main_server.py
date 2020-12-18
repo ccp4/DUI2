@@ -75,23 +75,19 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
                 self.wfile.write(bytes(json_str, 'ascii', 'ignore'))
 
             else:
+                try:
+                    f = open(lst_out, "r")
+                    str_lst = f.readlines()
+                    f.close()
 
-                f = open(lst_out, "r")
-                str_lst = f.readlines()
-                f.close()
+                    for lin in str_lst:
+                        self.wfile.write(bytes(lin, 'utf-8'))
 
-                for lin in str_lst:
-                    self.wfile.write(bytes(lin, 'utf-8'))
-
-                for lin in str_lst:
                     self.wfile.write(bytes("/*EOF*/", 'utf-8'))
 
-                '''
-                print("type(lst_out) =", type(lst_out))
-                html_file = open(lst_out, 'rb')
-                self.wfile.write(html_file.read())
-                f.close()
-                '''
+                except FileNotFoundError:
+                    self.wfile.write(bytes("/*EOF*/", 'utf-8'))
+
 
             print("sending /*EOF*/")
             self.wfile.write(bytes('/*EOF*/', 'ascii', 'ignore'))

@@ -447,6 +447,7 @@ class Runner(object):
                         "_lst_expt"             :uni._lst_expt,
                         "_lst_refl"             :uni._lst_refl,
                         "_run_dir"              :uni._run_dir,
+                        "_html_rep"             :uni._html_rep,
                         "log_file_path"         :uni.log_file_path,
                         "lin_num"               :uni.lin_num,
                         "status"                :uni.status,
@@ -477,6 +478,7 @@ class Runner(object):
             new_node._lst_expt       = uni_dic["_lst_expt"]
             new_node._lst_refl       = uni_dic["_lst_refl"]
             new_node._run_dir        = uni_dic["_run_dir"]
+            new_node._html_rep       = uni_dic["_html_rep"]
             new_node.log_file_path   = uni_dic["log_file_path"]
             new_node.lin_num         = uni_dic["lin_num"]
             new_node.status          = uni_dic["status"]
