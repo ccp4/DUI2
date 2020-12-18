@@ -47,27 +47,19 @@ def json_data_request(url, cmd):
         req_get = requests.get(url, stream = True, params = cmd)
         str_lst = []
         line_str = ''
-        while True:
-            tmp_dat = req_get.raw.read(1)
-            single_char = str(tmp_dat.decode('ascii'))
-            line_str += single_char
-            if single_char == '\n':
-                str_lst.append(line_str[:-1])
-                line_str = ''
 
-            elif line_str[-7:] == '/*EOF*/':
-                print('>>  /*EOF*/  <<')
+        str_lst = []
+        while True:
+            tmp_dat = req_get.raw.readline()
+            line_str = str(tmp_dat.decode('utf-8'))
+            if line_str[-7:] == '/*EOF*/':
+                print('/*EOF*/ received')
                 break
 
+            else:
+                str_lst.append(line_str)
+
         json_out = json.loads(str_lst[0])
-
-        to_debugg = '''
-        try:
-            print("json_out:", json_out)
-
-        except UnicodeEncodeError:
-            print("UnicodeEncodeError")
-        '''
 
     except requests.exceptions.RequestException:
         print("\n requests.exceptions.RequestException \n")
@@ -84,29 +76,26 @@ class Run_n_Output(QThread):
         self.lin_num = None
 
     def run(self):
+
         line_str = ''
         not_yet_read = True
         while True:
-            tmp_dat = self.request.raw.read(1)
-            single_char = str(tmp_dat.decode('ascii'))
-            line_str += single_char
-            if single_char == '\n':
-                if not_yet_read:
-                    not_yet_read = False
-                    nod_lin_num = int(line_str.split("=")[1])
-                    self.lin_num = nod_lin_num
-                    print("\n QThread.lin_num =", self.lin_num)
-                    self.first_line.emit(self.lin_num)
-
-                else:
-                    self.new_line_out.emit(line_str, self.lin_num)
-
-                line_str = ''
-
-            elif line_str[-7:] == '/*EOF*/':
+            tmp_dat = self.request.raw.readline()
+            line_str = str(tmp_dat.decode('utf-8'))
+            if line_str[-7:] == '/*EOF*/':
                 #TODO: consider a different Signal to say finished
                 print('>>  /*EOF*/  <<')
                 break
+
+            if not_yet_read:
+                not_yet_read = False
+                nod_lin_num = int(line_str.split("=")[1])
+                self.lin_num = nod_lin_num
+                print("\n QThread.lin_num =", self.lin_num)
+                self.first_line.emit(self.lin_num)
+
+            else:
+                self.new_line_out.emit(line_str, self.lin_num)
 
             self.usleep(1)
 

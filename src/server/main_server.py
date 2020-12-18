@@ -44,9 +44,9 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
         except KeyError:
             print("no command in request (KeyError)")
             self.wfile.write(bytes(
-                'no command in request (KeyError) \n', 'ascii', 'ignore'
+                'no command in request (KeyError) \n', 'utf-8'
             ))
-            self.wfile.write(bytes('/*EOF*/', 'ascii', 'ignore'))
+            self.wfile.write(bytes('/*EOF*/', 'utf-8'))
             return
 
         cmd_lst = []
@@ -72,7 +72,7 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
             if type(lst_out) is list:
                 json_str = json.dumps(lst_out) + '\n'
                 print("type(lst_out) =", type(lst_out))
-                self.wfile.write(bytes(json_str, 'ascii', 'ignore'))
+                self.wfile.write(bytes(json_str, 'utf-8'))
 
             else:
                 try:
@@ -90,7 +90,7 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
 
 
             print("sending /*EOF*/")
-            self.wfile.write(bytes('/*EOF*/', 'ascii', 'ignore'))
+            self.wfile.write(bytes('/*EOF*/', 'utf-8'))
 
         except BrokenPipeError:
             print("\n *** BrokenPipeError *** while sending EOF or JSON \n")

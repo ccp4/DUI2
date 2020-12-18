@@ -67,17 +67,18 @@ if __name__ == "__main__":
             else:
                 my_cmd = do_this
 
-            req_get = requests.get('http://localhost:8080/', stream = True, params = my_cmd)
-            line_str = ''
-            while True:
-                tmp_dat = req_get.raw.read(1)
-                single_char = str(tmp_dat.decode('ascii'))
-                line_str += single_char
-                if single_char == '\n':
-                    print(line_str[:-1])
-                    line_str = ''
+            req_get = requests.get(
+                'http://localhost:8080/', stream = True, params = my_cmd
+            )
 
-                elif line_str[-7:] == '/*EOF*/':
-                    print('>>  /*EOF*/  <<')
+            while True:
+                tmp_dat = req_get.raw.readline()
+                line_str = str(tmp_dat.decode('utf-8'))
+
+                if line_str[-7:] == '/*EOF*/':
+                    print('/*EOF*/ received')
                     break
+
+                else:
+                    print(line_str[:-1])
 
