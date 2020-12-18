@@ -302,18 +302,15 @@ class MainObject(QObject):
             'http://localhost:8080/', stream = True, params = cmd
         )
         full_file = ''
-        line_str = ''
         while True:
-            tmp_dat = r_g.raw.read(1)
-            single_char = str(tmp_dat.decode('utf-8'))
-            line_str += single_char
-            if single_char == '\n':
-                full_file += line_str
-                line_str = ''
-
-            elif line_str[-7:] == '/*EOF*/':
+            tmp_dat = r_g.raw.readline()
+            line_str = str(tmp_dat.decode('utf-8'))
+            if line_str[-7:] == '/*EOF*/':
                 print('/*EOF*/ received')
                 break
+
+            else:
+                full_file += line_str
 
         print("html:", full_file)
         self.webEngineView.setHtml(full_file)
