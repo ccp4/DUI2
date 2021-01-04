@@ -261,10 +261,6 @@ class MainObject(QObject):
         #Temp connect
         self.window.TmpLoadButton.clicked.connect(self.load_html)
 
-
-        self.webEngineView = QWebEngineView()
-        self.window.HtmlReportLayout.addWidget(self.webEngineView)
-
         self.gui_state["current_widget_key"] = "import"
         self.tree_scene.draw_tree_graph([])
 
@@ -312,8 +308,8 @@ class MainObject(QObject):
             else:
                 full_file += line_str
 
-        print("html:", full_file)
-        self.webEngineView.setHtml(full_file)
+        #print("html:", full_file)
+        self.window.HtmlReport.setHtml(full_file)
         print("\n load_html ... End")
 
 
