@@ -257,8 +257,16 @@ class MainObject(QObject):
         self.window.CmdSend2server.clicked.connect(self.request_launch)
         self.window.ReqStopButton.clicked.connect(self.req_stop)
 
+        self.dummy_html = """<html>
+            <head>
+            <title>A Sample Page</title>
+            </head>
+            <body>
+            <h3>There is no report available for this step.</h3>
+            </body>
+            </html>"""
+        self.window.HtmlReport.setHtml(self.dummy_html)
 
-        #Temp connect
         self.window.TmpLoadButton.clicked.connect(self.load_html)
 
         self.gui_state["current_widget_key"] = "import"
@@ -308,10 +316,14 @@ class MainObject(QObject):
             else:
                 full_file += line_str
 
-        #print("html:", full_file)
-        self.window.HtmlReport.setHtml(full_file)
-        print("\n load_html ... End")
+        print("html:", full_file)
+        if full_file == '':
+            self.window.HtmlReport.setHtml(self.dummy_html)
 
+        else:
+            self.window.HtmlReport.setHtml(full_file)
+
+        print("\n load_html ... End")
 
     def clicked_4_navigation(self, nod_num):
         self.gui_state["current_lin_num"] = nod_num
