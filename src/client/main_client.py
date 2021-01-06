@@ -75,6 +75,7 @@ def print_dict(dict_in):
 class MainObject(QObject):
     def __init__(self, parent = None):
         super(MainObject, self).__init__(parent)
+        self.parent_app = parent
         self.ui_dir_path = os.path.dirname(os.path.abspath(__file__))
         ui_path = self.ui_dir_path + os.sep + "client.ui"
         print("ui_path =", ui_path)
@@ -297,11 +298,12 @@ class MainObject(QObject):
 
     def load_html(self):
         print("load_html ... Start \n")
-
+        self.window.OutuputStatLabel.setText('Loading')
+        self.parent_app.processEvents()
         cmd = {
             "nod_lst":[self.gui_state["current_lin_num"]],
             "cmd_lst":["get_report"]
-         }
+        }
         r_g = requests.get(
             'http://localhost:8080/', stream = True, params = cmd
         )
@@ -316,7 +318,7 @@ class MainObject(QObject):
             else:
                 full_file += line_str
 
-        print("html:", full_file)
+        #print("html:", full_file)
         if full_file == '':
             self.window.HtmlReport.setHtml(self.dummy_html)
 
@@ -324,6 +326,7 @@ class MainObject(QObject):
             self.window.HtmlReport.setHtml(full_file)
 
         print("\n load_html ... End")
+        self.window.OutuputStatLabel.setText ('Ready')
 
     def clicked_4_navigation(self, nod_num):
         self.gui_state["current_lin_num"] = nod_num
@@ -796,6 +799,6 @@ class MainObject(QObject):
 if __name__ == "__main__":
     QCoreApplication.setAttribute(Qt.AA_ShareOpenGLContexts)
     app = QApplication(sys.argv)
-    m_obj = MainObject()
+    m_obj = MainObject(parent = app)
     sys.exit(app.exec_())
 

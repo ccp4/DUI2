@@ -711,6 +711,13 @@
           </property>
          </widget>
         </item>
+        <item>
+         <widget class="QLabel" name="OutuputStatLabel">
+          <property name="text">
+           <string>Ready</string>
+          </property>
+         </widget>
+        </item>
        </layout>
       </widget>
      </widget>
