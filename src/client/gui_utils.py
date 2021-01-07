@@ -35,6 +35,12 @@ widgets_defs = {
         "main_cmd"  :"dials.import",
         "nxt_widg_lst"  :["find_spots"]
     },
+    "apply_mask" : {
+        "tooltip": "dials.apply_mask ...",
+        "icon": "resources/mask.png",
+        "main_cmd"  :"dials.apply_mask",
+        "nxt_widg_lst"  :["find_spots"]
+    },
     "find_spots" : {
         "tooltip": "dials.find_spots ...",
         "icon": "resources/find_spots.png",
