@@ -1,5 +1,5 @@
 """
-DUI's command simple stacked widgets
+DUI2's Main window on client side
 
 Author: Luis Fuentes-Montero (Luiso)
 With strong help from DIALS and CCP4 teams

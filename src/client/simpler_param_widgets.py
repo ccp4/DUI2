@@ -1,5 +1,5 @@
 """
-DUI's command simple stacked widgets
+DUI2's simpler parameters widgets
 
 Author: Luis Fuentes-Montero (Luiso)
 With strong help from DIALS and CCP4 teams
@@ -678,13 +678,13 @@ class TmpTstWidget(QWidget):
         self.do_emit = True
 
         #my_widget = FindspotsSimplerParameterTab(self)
-        #my_widget = IndexSimplerParamTab(self)
+        my_widget = IndexSimplerParamTab(self)
         #my_widget = RefineBravaiSimplerParamTab(self)
         #my_widget = RefineSimplerParamTab(self)
         #my_widget = IntegrateSimplerParamTab(self)
         #my_widget = SymmetrySimplerParamTab(self)
         #my_widget = ScaleSimplerParamTab(self)
-        my_widget = CombineExperimentSimplerParamTab(self)
+        #my_widget = CombineExperimentSimplerParamTab(self)
 
 
         my_box = QVBoxLayout()
