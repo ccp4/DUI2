@@ -33,7 +33,7 @@ widgets_defs = {
         "tooltip": "dials.import ...",
         "icon": "resources/import.png",
         "main_cmd"  :"dials.import",
-        "nxt_widg_lst"  :["find_spots"]
+        "nxt_widg_lst"  :["find_spots", "apply_mask"]
     },
     "apply_mask" : {
         "tooltip": "dials.apply_mask ...",

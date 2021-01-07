@@ -55,6 +55,7 @@ from exec_utils import (
 )
 
 from simpler_param_widgets import ImportTmpWidg as ImportWidget
+from simpler_param_widgets import MaskTmpWidg as MaskWidget
 from simpler_param_widgets import (
     FindspotsSimplerParameterTab, IndexSimplerParamTab,
     RefineBravaiSimplerParamTab, RefineSimplerParamTab,
@@ -88,6 +89,11 @@ class MainObject(QObject):
             imp_widg = ImportWidget()
             imp_widg.item_changed.connect(self.item_param_changed)
             self.window.ImportScrollArea.setWidget(imp_widg)
+
+            mask_widg = MaskWidget()
+            #mask_widg.item_changed.connect(self.item_param_changed)
+            self.window.MaskScrollArea.setWidget(mask_widg)
+
 
             find_simpl_widg = FindspotsSimplerParameterTab()
             find_simpl_widg.item_changed.connect(self.item_param_changed)
@@ -185,6 +191,10 @@ class MainObject(QObject):
         self.param_widgets["find_spots"]["simple"] = find_simpl_widg
         self.param_widgets["find_spots"]["advanced"] = fd_advanced_parameters
         self.param_widgets["find_spots"]["main_page"] = self.window.FindspotsPage
+
+        self.param_widgets["apply_mask"]["simple"] = mask_widg
+        self.param_widgets["apply_mask"]["advanced"] = None
+        self.param_widgets["apply_mask"]["main_page"] = self.window.MaskPage
 
         self.param_widgets["index"]["simple"] = index_simpl_widg
         self.param_widgets["index"]["advanced"] = id_advanced_parameters

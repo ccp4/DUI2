@@ -179,11 +179,11 @@ class ImportTmpWidg(SimpleParamTab):
         super(ImportTmpWidg, self).__init__(parent)
         self.do_emit = True
         sys_font = QFont()
-        self.font_point_size = sys_font.pointSize()
+        font_point_size = sys_font.pointSize()
 
         new_label = QLabel("Import:")
         new_label.setFont(QFont(
-            "Monospace", self.font_point_size + 3, QFont.Bold
+            "Monospace", font_point_size + 3, QFont.Bold
         ))
         self.imp_txt = QLineEdit()
         self.imp_txt.editingFinished.connect(self.line_changed)
@@ -203,6 +203,28 @@ class ImportTmpWidg(SimpleParamTab):
         str_value = sender.text()
         str_path = " "
         self.item_changed.emit(str_path, str_value)
+
+
+class MaskTmpWidg(SimpleParamTab):
+    def __init__(self, parent = None):
+        super(MaskTmpWidg, self).__init__(parent)
+        self.do_emit = True
+        sys_font = QFont()
+        font_point_size = sys_font.pointSize()
+
+        new_label = QLabel(" ...  (TMP)   Apply Mask:    ")
+        new_label.setFont(QFont(
+            "Monospace", font_point_size + 3, QFont.Bold
+        ))
+
+        self.main_vbox = QVBoxLayout()
+        self.main_vbox.addWidget(QLabel(" "))
+        self.main_vbox.addWidget(new_label)
+        self.main_vbox.addWidget(QLabel(" "))
+        self.setLayout(self.main_vbox)
+
+    def reset_pars(self):
+        print("\n reset_pars(MaskTmpWidg) \n")
 
 
 class FindspotsSimplerParameterTab(SimpleParamTab):
@@ -677,8 +699,10 @@ class TmpTstWidget(QWidget):
         super(TmpTstWidget, self).__init__()
         self.do_emit = True
 
+        #my_widget = MaskTmpWidg(self)
+        my_widget = ImportTmpWidg(self)
         #my_widget = FindspotsSimplerParameterTab(self)
-        my_widget = IndexSimplerParamTab(self)
+        #my_widget = IndexSimplerParamTab(self)
         #my_widget = RefineBravaiSimplerParamTab(self)
         #my_widget = RefineSimplerParamTab(self)
         #my_widget = IntegrateSimplerParamTab(self)
