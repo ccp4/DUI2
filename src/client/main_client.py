@@ -292,6 +292,14 @@ class MainObject(QObject):
         self.gui_state["local_nod_lst"] = copy_lst_nodes(self.server_nod_lst)
         self.change_widget(self.gui_state["current_widget_key"])
         self.thrd_lst = []
+
+        self.window.MainHSplitter.setStretchFactor(0, 1)
+        self.window.MainHSplitter.setStretchFactor(1, 2)
+
+        self.window.LeftVSplitter.setStretchFactor(0, 3)
+        self.window.LeftVSplitter.setStretchFactor(1, 1)
+
+
         self.window.show()
         print('self.gui_state =', self.gui_state, '\n')
 
