@@ -268,7 +268,7 @@ class MainObject(QObject):
         self.window.CmdSend2server.clicked.connect(self.request_launch)
         self.window.ReqStopButton.clicked.connect(self.req_stop)
 
-        self.dummy_html = """<html>
+        self.not_avail_html = """<html>
             <head>
             <title>A Sample Page</title>
             </head>
@@ -276,7 +276,8 @@ class MainObject(QObject):
             <h3>There is no report available for this step.</h3>
             </body>
             </html>"""
-        self.window.HtmlReport.setHtml(self.dummy_html)
+
+        self.window.HtmlReport.setHtml(self.not_avail_html)
 
         self.window.TmpLoadButton.clicked.connect(self.load_html)
 
@@ -338,7 +339,7 @@ class MainObject(QObject):
 
         #print("html:", full_file)
         if full_file == '':
-            self.window.HtmlReport.setHtml(self.dummy_html)
+            self.window.HtmlReport.setHtml(self.not_avail_html)
 
         else:
             self.window.HtmlReport.setHtml(full_file)
