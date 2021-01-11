@@ -276,10 +276,10 @@ class MainObject(QObject):
             <h3>There is no report available for this step.</h3>
             </body>
             </html>"""
-
         self.window.HtmlReport.setHtml(self.not_avail_html)
 
         self.window.TmpLoadButton.clicked.connect(self.load_html)
+        self.window.OutputTabWidget.currentChanged.connect(self.tab_changed)
 
         self.gui_state["current_widget_key"] = "import"
         self.tree_scene.draw_tree_graph([])
@@ -347,11 +347,35 @@ class MainObject(QObject):
         print("\n load_html ... End")
         self.window.OutuputStatLabel.setText ('Ready')
 
+    def set_output_as_ready(self):
+        self.window.incoming_text.clear()
+        self.window.incoming_text.insertPlainText("Ready to run: ")
+        self.window.HtmlReport.setHtml(self.not_avail_html)
+
+    def if_needed_html(self):
+        tab_index = self.window.OutputTabWidget.currentIndex()
+        if tab_index == 1:
+            print("updating html report ")
+            self.load_html()
+
+    def tab_changed(self, tab_index):
+        print("tab_index =", tab_index)
+        if tab_index == 0:
+            self.display_log(self.gui_state["current_lin_num"])
+
+        elif tab_index == 1:
+            self.load_html()
+
     def clicked_4_navigation(self, nod_num):
         self.gui_state["current_lin_num"] = nod_num
         try:
             cur_nod = self.server_nod_lst[nod_num]
-            self.display_log(nod_num)
+            if self.window.OutputTabWidget.currentIndex() == 0:
+                self.display_log(nod_num)
+
+            else:
+                self.load_html()
+
             self.gui_state["parent_nums_lst"] = [nod_num]
 
         except IndexError:
@@ -716,6 +740,7 @@ class MainObject(QObject):
             new_thrd.first_line.connect(self.line_n1_in)
             new_thrd.finished.connect(self.request_display)
             new_thrd.finished.connect(self.check_nxt_btn)
+            new_thrd.finished.connect(self.if_needed_html)
             new_thrd.start()
             self.thrd_lst.append(new_thrd)
             self.gui_state["new_node"] = None
@@ -758,8 +783,7 @@ class MainObject(QObject):
         self.add_new_node()
         self.change_widget(str_key)
         self.gui_state["current_widget_key"] = str_key
-        self.window.incoming_text.clear()
-        self.window.incoming_text.insertPlainText("Ready to run: ")
+        self.set_output_as_ready()
         self.reset_param_all()
 
     def on_retry(self):
@@ -787,8 +811,7 @@ class MainObject(QObject):
             'parent_node_lst': list(nod2clone["parent_node_lst"])
         }
         self.add_new_node()
-        self.window.incoming_text.clear()
-        self.window.incoming_text.insertPlainText("Ready to run: ")
+        self.set_output_as_ready()
         self.change_widget(str_key)
         self.gui_state["current_widget_key"] = str_key
         self.gui_state["parent_nums_lst"] = []
