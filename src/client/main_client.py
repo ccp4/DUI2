@@ -381,8 +381,7 @@ class MainObject(QObject):
         except IndexError:
             print("nod_num ", nod_num, "not ran yet")
             cur_nod = self.gui_state["local_nod_lst"][nod_num]
-            self.window.incoming_text.clear()
-            self.window.incoming_text.insertPlainText("Ready to run ...")
+            self.set_output_as_ready()
             self.gui_state["parent_nums_lst"] = []
             for par_nod_num in cur_nod["parent_node_lst"]:
                 self.gui_state["parent_nums_lst"].append(int(par_nod_num))
@@ -577,20 +576,24 @@ class MainObject(QObject):
                 found_lin_num = True
                 lst_log_lines = log_node["log_line_lst"]
 
-        if not found_lin_num:
-            cmd = {"nod_lst":[nod_lin_num], "cmd_lst":["display_log"]}
-            json_log = json_data_request(uni_url, cmd)
-            lst_log_lines = json_log[0]
-            self.gui_state["lst_node_log_out"].append(
-                {
-                    "lin_num"       : nod_lin_num,
-                    "log_line_lst"  : lst_log_lines
-                }
-            )
-        self.window.incoming_text.clear()
-        for single_log_line in lst_log_lines:
-            self.window.incoming_text.insertPlainText(single_log_line)
-            self.window.incoming_text.moveCursor(QTextCursor.End)
+        try:
+            if not found_lin_num:
+                cmd = {"nod_lst":[nod_lin_num], "cmd_lst":["display_log"]}
+                json_log = json_data_request(uni_url, cmd)
+                lst_log_lines = json_log[0]
+                self.gui_state["lst_node_log_out"].append(
+                    {
+                        "lin_num"       : nod_lin_num,
+                        "log_line_lst"  : lst_log_lines
+                    }
+                )
+            self.window.incoming_text.clear()
+            for single_log_line in lst_log_lines:
+                self.window.incoming_text.insertPlainText(single_log_line)
+                self.window.incoming_text.moveCursor(QTextCursor.End)
+
+        except IndexError:
+            print('\n no need to reload "ready" log')
 
     def reset_param_widget(self, str_key):
         self.gui_state["current_widget_key"] = str_key
