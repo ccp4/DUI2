@@ -278,12 +278,23 @@ class CmdNode(object):
             lst_dat_in.append(refl_2_add)
 
         print("\n running:", lst_dat_in, "\n")
+        lst_rep_out = []
 
-        rep_proc = subprocess.run(
+        rep_proc = subprocess.Popen(
             lst_dat_in,
             shell = False,
-            cwd = self._run_dir
+            cwd = self._run_dir,
+            stdout = subprocess.PIPE,
+            stderr = subprocess.STDOUT,
+            universal_newlines = True
         )
+        while rep_proc.poll() is None or new_line != '':
+            new_line = rep_proc.stdout.readline()
+            lst_rep_out.append(new_line)
+
+        rep_proc.stdout.close()
+        # in case needed there is the output of the report here:
+        #print("report stdout <<< \n", lst_rep_out, "\n >>>")
 
         tmp_html_path = self._run_dir + "/dials.report.html"
         if os.path.exists(tmp_html_path):
