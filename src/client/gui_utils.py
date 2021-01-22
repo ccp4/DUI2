@@ -59,7 +59,7 @@ widgets_defs = {
     },
     "refine_bravais_settings" : {
         "tooltip": "dials.refine_bravais_settings ...",
-        "icon": "resources/reindex.png",
+        "icon": "resources/refine_bv_set.png",
         "main_cmd"  :"dials.refine_bravais_settings",
         "nxt_widg_lst"  :["reindex"]
     },
