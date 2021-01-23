@@ -149,7 +149,12 @@ class CommandParamControl:
             self.par_lst.append({"name":new_name, "value":new_value})
 
     def set_custom_parameter(self, new_custom_parameter):
+        is_same = False
+        if new_custom_parameter == self.custm_param:
+            is_same = True
+
         self.custm_param = new_custom_parameter
+        return is_same
 
     def clone_from(self, lst_par_in):
         print(" Clone_from ------------")
@@ -205,5 +210,6 @@ if __name__ == "__main__":
     print("cmd_lst =", tst_cmd.get_full_command_string())
     tst_cmd.set_parameter("random_param_n", "value_4")
     print("cmd_lst =", tst_cmd.get_full_command_string())
-    tst_cmd.set_custom_parameter("random_custom command _5")
+    same = tst_cmd.set_custom_parameter("random_custom command _5")
     print("cmd_lst =", tst_cmd.get_full_command_string())
+    print("same =", same)

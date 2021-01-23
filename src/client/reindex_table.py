@@ -153,7 +153,7 @@ class ReindexTable(QTableWidget):
         self.v_sliderBar = self.verticalScrollBar()
         self.h_sliderBar = self.horizontalScrollBar()
 
-        self.tmp_sel = None
+        #self.tmp_sel = None
 
         sys_font = QFont()
         self.sys_font_point_size = sys_font.pointSize()
@@ -176,10 +176,11 @@ class ReindexTable(QTableWidget):
         self.opt_pick(self.tmp_sel)
 
     def opt_pick(self, row):
-
+        '''
         if self.tmp_sel == row:
             print("\n selecting opt: ", row + 1, "\n")
-            self.opt_signal.emit(row + 1)
+        '''
+        self.opt_signal.emit(row + 1)
 
         self.tmp_sel = row
 
