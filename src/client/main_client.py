@@ -670,10 +670,7 @@ class MainObject(QObject):
                     nxt_butt.cmd_str = bt_labl
                     nxt_butt.setFont(small_font)
                     nxt_butt.clicked.connect(self.nxt_clicked)
-                    self.window.Next2RunLayout.addWidget(nxt_butt)
-
                     nxt_ico = QIcon()
-
                     icon_path = self.ui_dir_path + os.sep + \
                         self.param_widgets[bt_labl]["icon"]
 
@@ -683,6 +680,8 @@ class MainObject(QObject):
                     )
                     nxt_butt.setIcon(nxt_ico)
                     nxt_butt.setIconSize(QSize(38, 42))
+
+                    self.window.Next2RunLayout.addWidget(nxt_butt)
 
         except IndexError:
             print("no need to add next button")
