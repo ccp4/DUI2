@@ -66,12 +66,13 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
         print("parse_qs(urlparse(url_path).query", cmd_dict)
 
         try:
-            lst_out = []
+            #lst_out = []
             lst_out = cmd_tree_runner.run_dict(cmd_dict, self)
 
             if type(lst_out) is list:
                 json_str = json.dumps(lst_out) + '\n'
-                print("type(lst_out) =", type(lst_out))
+                #print("type(json_str) =", type(json_str))
+                #print("type(lst_out) =", type(lst_out))
                 self.wfile.write(bytes(json_str, 'utf-8'))
 
             else:
@@ -117,7 +118,6 @@ if __name__ == "__main__":
         ]
         for cmd_dict in lst_dic:
             cmd_tree_runner.run_dict(cmd_dict)
-
         #'''
 
     cmd_tree_runner.run_dict({'nod_lst': [0], 'cmd_lst': [['ip', 'x41']]})

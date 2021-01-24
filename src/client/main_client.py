@@ -329,7 +329,9 @@ class MainObject(QObject):
         full_file = ''
         while True:
             tmp_dat = r_g.raw.readline()
-            line_str = str(tmp_dat.decode('utf-8'))
+            #line_str = str(tmp_dat.decode('utf-8'))
+            line_str = tmp_dat.decode('utf-8')
+            #.encode('utf-8'
             if line_str[-7:] == '/*EOF*/':
                 print('/*EOF*/ received')
                 break
