@@ -53,7 +53,6 @@ from exec_utils import (
     CommandParamControl,
     uni_url
 )
-
 from simpler_param_widgets import ImportTmpWidg as ImportWidget
 from simpler_param_widgets import MaskTmpWidg as MaskWidget
 from simpler_param_widgets import (
@@ -300,7 +299,6 @@ class MainObject(QObject):
         self.window.LeftVSplitter.setStretchFactor(0, 3)
         self.window.LeftVSplitter.setStretchFactor(1, 1)
 
-
         self.window.show()
         print('self.gui_state =', self.gui_state, '\n')
 
@@ -331,7 +329,6 @@ class MainObject(QObject):
             tmp_dat = r_g.raw.readline()
             #line_str = str(tmp_dat.decode('utf-8'))
             line_str = tmp_dat.decode('utf-8')
-            #.encode('utf-8'
             if line_str[-7:] == '/*EOF*/':
                 print('/*EOF*/ received')
                 break
@@ -339,7 +336,6 @@ class MainObject(QObject):
             else:
                 full_file += line_str
 
-        #print("html:", full_file)
         if full_file == '':
             self.window.HtmlReport.setHtml(self.not_avail_html)
 
@@ -393,7 +389,6 @@ class MainObject(QObject):
         try:
             self.change_widget(key2find)
             self.update_all_param(cur_nod)
-
             if key2find == "reindex":
                 cmd = {
                     "nod_lst":cur_nod["parent_node_lst"],
@@ -533,7 +528,6 @@ class MainObject(QObject):
         self.window.RetryButton.setEnabled(False)
         self.window.CmdSend2server.setEnabled(False)
         self.window.ReqStopButton.setEnabled(False)
-
         if tmp_state == "Ready":
             print("only run (R)")
             self.window.CmdSend2server.setEnabled(True)
@@ -543,7 +537,6 @@ class MainObject(QObject):
 
             except AttributeError:
                 print("no need to un-gray 'None' widget")
-
 
         elif tmp_state == "Busy":
             print("only clone or stop (B)")
@@ -698,12 +691,10 @@ class MainObject(QObject):
         self.display(self.gui_state["local_nod_lst"])
 
     def request_display(self):
-
         cmd = {"nod_lst":"", "cmd_lst":["display"]}
         if self.gui_state["new_node"] is None:
             self.server_nod_lst = json_data_request(uni_url, cmd)
             self.display(self.server_nod_lst)
-
             tmp_off = '''
             print("-" * 60)
             print_dict(self.gui_state)
@@ -716,7 +707,6 @@ class MainObject(QObject):
             self.gui_state["local_nod_lst"] = copy_lst_nodes(self.server_nod_lst)
             self.cmd_par.clone_from(nod2clone["cmd2show"])
             self.add_new_node()
-
             tmp_off = '''
             print("-" * 60)
             print_dict(self.gui_state)
@@ -763,14 +753,12 @@ class MainObject(QObject):
         print("nxt_clicked")
         str_key = self.sender().cmd_str
         print("str_key: ", str_key)
-
         if str_key == "reindex":
             cmd = {"nod_lst":[self.gui_state["current_lin_num"]], "cmd_lst":["get_bravais_sum"]}
             json_data_lst = json_data_request(uni_url, cmd)
             self.r_index_widg.add_opts_lst(
                 json_data = json_data_lst[0]
             )
-
         self.gui_state["local_nod_lst"] = copy_lst_nodes(self.server_nod_lst)
         par_lin_num = int(self.gui_state["current_lin_num"])
         max_lin_num = 0
@@ -779,7 +767,6 @@ class MainObject(QObject):
                 max_lin_num = node["lin_num"]
 
         self.gui_state["current_lin_num"] = max_lin_num + 1
-
         self.gui_state["new_node"] = {
             'lin_num': int(self.gui_state["current_lin_num"]),
             'status': 'Ready',
@@ -835,7 +822,6 @@ class MainObject(QObject):
         print("\n nod_lst", nod_lst)
         cmd = {"nod_lst":nod_lst, "cmd_lst":["stop"]}
         print("cmd =", cmd)
-
         try:
             lst_params = json_data_request(uni_url, cmd)
 
