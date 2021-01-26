@@ -275,7 +275,17 @@ class MainObject(QObject):
             <h3>There is no report available for this step.</h3>
             </body>
             </html>"""
+        self.loading_html = """<html>
+            <head>
+            <title>A Sample Page</title>
+            </head>
+            <body>
+            <h3>  Loading ...</h3>
+            </body>
+            </html>"""
+
         self.window.HtmlReport.setHtml(self.not_avail_html)
+        self.lst_html = []
 
         self.window.TmpLoadButton.clicked.connect(self.load_html)
         self.window.OutputTabWidget.currentChanged.connect(self.tab_changed)
@@ -315,26 +325,59 @@ class MainObject(QObject):
 
     def load_html(self):
         print("load_html ... Start \n")
-        self.window.OutuputStatLabel.setText('Loading')
-        self.parent_app.processEvents()
-        cmd = {
-            "nod_lst":[self.gui_state["current_lin_num"]],
-            "cmd_lst":["get_report"]
-        }
-        r_g = requests.get(
-            'http://localhost:8080/', stream = True, params = cmd
-        )
-        full_file = ''
-        while True:
-            tmp_dat = r_g.raw.readline()
-            #line_str = str(tmp_dat.decode('utf-8'))
-            line_str = tmp_dat.decode('utf-8')
-            if line_str[-7:] == '/*EOF*/':
-                print('/*EOF*/ received')
-                break
+        nod_lin_num = self.gui_state["current_lin_num"]
+        found_html = False
+        for html_info in self.lst_html:
+            if(
+                html_info["lin_num"] == nod_lin_num
+                and
+                len(html_info["html_report"]) > 5
+            ):
+                found_html = True
+                full_file = html_info["html_report"]
 
-            else:
-                full_file += line_str
+        if not found_html:
+            self.window.HtmlReport.setHtml(self.loading_html)
+
+            #print("dir(self.window.HtmlReport) =", dir(self.window.HtmlReport))
+
+            self.parent_app.processEvents()
+            self.window.OutuputStatLabel.setText('Loading')
+            self.parent_app.processEvents()
+            cmd = {
+                "nod_lst":[nod_lin_num],
+                "cmd_lst":["get_report"]
+            }
+            r_g = requests.get(
+                'http://localhost:8080/', stream = True, params = cmd
+            )
+            full_file = ''
+            while True:
+                tmp_dat = r_g.raw.readline()
+                #line_str = str(tmp_dat.decode('utf-8'))
+                line_str = tmp_dat.decode('utf-8')
+                if line_str[-7:] == '/*EOF*/':
+                    print('/*EOF*/ received')
+                    break
+
+                else:
+                    full_file += line_str
+
+            found_html = False
+            for html_info in self.lst_html:
+                if(
+                    html_info["lin_num"] == nod_lin_num
+                ):
+                    found_html = True
+                    html_info["html_report"] = full_file
+
+            if not found_html:
+                self.lst_html.append(
+                    {
+                        "lin_num"       :nod_lin_num,
+                        "html_report"   :full_file
+                    }
+                )
 
         if full_file == '':
             self.window.HtmlReport.setHtml(self.not_avail_html)
