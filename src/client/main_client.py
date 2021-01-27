@@ -93,7 +93,6 @@ class DoLoadHTML(QObject):
 
         if not found_html:
             self.main_obj.window.HtmlReport.setHtml(self.main_obj.loading_html)
-            self.main_obj.parent_app.processEvents()
             self.main_obj.window.OutuputStatLabel.setText('Loading')
             self.main_obj.parent_app.processEvents()
             cmd = {
@@ -138,16 +137,22 @@ class DoLoadHTML(QObject):
             self.main_obj.window.HtmlReport.setHtml(full_file)
 
         print("\n load_html ... End")
-        self.main_obj.window.OutuputStatLabel.setText ('Ready')
 
     def load_started(self):
+        self.main_obj.window.OutuputStatLabel.setText('Loading')
+        self.main_obj.parent_app.processEvents()
         print("load_started")
 
     def load_progress(self, progress):
+        self.main_obj.window.OutuputStatLabel.setText(
+            'Loading: ' + str(progress) + " %"
+        )
+        self.main_obj.parent_app.processEvents()
         print("load_progress:", progress)
 
     def load_finished(self):
         print("load_finished")
+        self.main_obj.window.OutuputStatLabel.setText('Ready')
 
     def connect_loads(self):
         self.main_obj.window.HtmlReport.loadStarted.connect(self.load_started)
