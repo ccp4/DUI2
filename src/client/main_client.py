@@ -75,12 +75,14 @@ def print_dict(dict_in):
 class DoLoadHTML(QObject):
     def __init__(self, parent = None):
         super(DoLoadHTML, self).__init__(parent)
-        main_obj = parent
+        self.main_obj = parent
+        self.connect_loads()
 
+    def __call__(self):
         print("load_html ... Start \n")
-        nod_lin_num = main_obj.gui_state["current_lin_num"]
+        nod_lin_num = self.main_obj.gui_state["current_lin_num"]
         found_html = False
-        for html_info in main_obj.lst_html:
+        for html_info in self.main_obj.lst_html:
             if(
                 html_info["lin_num"] == nod_lin_num
                 and
@@ -90,10 +92,10 @@ class DoLoadHTML(QObject):
                 full_file = html_info["html_report"]
 
         if not found_html:
-            main_obj.window.HtmlReport.setHtml(main_obj.loading_html)
-            main_obj.parent_app.processEvents()
-            main_obj.window.OutuputStatLabel.setText('Loading')
-            main_obj.parent_app.processEvents()
+            self.main_obj.window.HtmlReport.setHtml(self.main_obj.loading_html)
+            self.main_obj.parent_app.processEvents()
+            self.main_obj.window.OutuputStatLabel.setText('Loading')
+            self.main_obj.parent_app.processEvents()
             cmd = {
                 "nod_lst":[nod_lin_num],
                 "cmd_lst":["get_report"]
@@ -114,7 +116,7 @@ class DoLoadHTML(QObject):
                     full_file += line_str
 
             found_html = False
-            for html_info in main_obj.lst_html:
+            for html_info in self.main_obj.lst_html:
                 if(
                     html_info["lin_num"] == nod_lin_num
                 ):
@@ -122,7 +124,7 @@ class DoLoadHTML(QObject):
                     html_info["html_report"] = full_file
 
             if not found_html:
-                main_obj.lst_html.append(
+                self.main_obj.lst_html.append(
                     {
                         "lin_num"       :nod_lin_num,
                         "html_report"   :full_file
@@ -130,13 +132,27 @@ class DoLoadHTML(QObject):
                 )
 
         if full_file == '':
-            main_obj.window.HtmlReport.setHtml(main_obj.not_avail_html)
+            self.main_obj.window.HtmlReport.setHtml(self.main_obj.not_avail_html)
 
         else:
-            main_obj.window.HtmlReport.setHtml(full_file)
+            self.main_obj.window.HtmlReport.setHtml(full_file)
 
         print("\n load_html ... End")
-        main_obj.window.OutuputStatLabel.setText ('Ready')
+        self.main_obj.window.OutuputStatLabel.setText ('Ready')
+
+    def load_started(self):
+        print("load_started")
+
+    def load_progress(self, progress):
+        print("load_progress:", progress)
+
+    def load_finished(self):
+        print("load_finished")
+
+    def connect_loads(self):
+        self.main_obj.window.HtmlReport.loadStarted.connect(self.load_started)
+        self.main_obj.window.HtmlReport.loadProgress.connect(self.load_progress)
+        self.main_obj.window.HtmlReport.loadFinished.connect(self.load_finished)
 
 
 class MainObject(QObject):
@@ -351,6 +367,7 @@ class MainObject(QObject):
             </body>
             </html>"""
 
+        self.do_load_html = DoLoadHTML(self)
         self.window.HtmlReport.setHtml(self.not_avail_html)
         self.lst_html = []
 
@@ -391,7 +408,7 @@ class MainObject(QObject):
                     self.clearLayout(item.layout())
 
     def load_html(self):
-        DoLoadHTML(self)
+        self.do_load_html()
 
     def set_output_as_ready(self):
         self.window.incoming_text.clear()
