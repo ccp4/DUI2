@@ -389,7 +389,16 @@ class Runner(object):
                         return_list.append(lst2add)
 
                     except IndexError:
-                        print("\n *** ERROR *** \n wrong line \n not logging")
+                        print(
+                            "\n *** ERROR (IndexError) *** \n" +
+                            "wrong line \n not logging"
+                        )
+
+                    except TypeError:
+                        print(
+                            "\n *** ERROR (TypeError) *** \n" +
+                            "wrong line \n not logging"
+                        )
 
             elif uni_cmd == ["get_report"]:
                 for lin2go in cmd_dict["nod_lst"]:
