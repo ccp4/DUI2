@@ -68,12 +68,14 @@ def copy_lst_nodes(old_lst_nodes):
 
 def json_data_request(url, cmd):
     try:
-        req_get = requests.get(url, stream = True, params = cmd)
-        str_lst = []
+        req_get = requests.get(url, stream = True, params = cmd, timeout = 3)
+        str_lst = ''
         line_str = ''
 
-        str_lst = []
-        while True:
+        #while True:
+        times_loop = 10
+        json_out = ""
+        for count_times in range(times_loop):
             tmp_dat = req_get.raw.readline()
             line_str = str(tmp_dat.decode('utf-8'))
             if line_str[-7:] == '/*EOF*/':
@@ -81,9 +83,18 @@ def json_data_request(url, cmd):
                 break
 
             else:
-                str_lst.append(line_str)
+                str_lst = line_str
 
-        json_out = json.loads(str_lst[0])
+            if count_times == times_loop - 1:
+                print('to many "lines" in http response')
+                json_out = None
+
+        if json_out is not None:
+            json_out = json.loads(str_lst)
+
+    except ConnectionError:
+        print("\n ConnectionError \n")
+        json_out = None
 
     except requests.exceptions.RequestException:
         print("\n requests.exceptions.RequestException \n")

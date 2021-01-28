@@ -645,13 +645,18 @@ class MainObject(QObject):
             if not found_lin_num:
                 cmd = {"nod_lst":[nod_lin_num], "cmd_lst":["display_log"]}
                 json_log = json_data_request(uni_url, cmd)
-                lst_log_lines = json_log[0]
-                self.gui_state["lst_node_log_out"].append(
-                    {
-                        "lin_num"       : nod_lin_num,
-                        "log_line_lst"  : lst_log_lines
-                    }
-                )
+                try:
+                    lst_log_lines = json_log[0]
+                    self.gui_state["lst_node_log_out"].append(
+                        {
+                            "lin_num"       : nod_lin_num,
+                            "log_line_lst"  : lst_log_lines
+                        }
+                    )
+
+                except TypeError:
+                    lst_log_lines = ["Nothing here"]
+
             self.window.incoming_text.clear()
             for single_log_line in lst_log_lines:
                 self.window.incoming_text.insertPlainText(single_log_line)
