@@ -43,7 +43,7 @@ from PySide2.QtGui import *
 
 from PySide2.QtWebEngineWidgets import QWebEngineView
 
-from gui_utils import TreeDirScene, widgets_defs
+from gui_utils import TreeDirScene, widgets_defs, DoLoadHTML
 from reindex_table import ReindexTable
 from exec_utils import (
     build_advanced_params_widget,
@@ -71,93 +71,6 @@ def print_dict(dict_in):
             else:
                 print(key2print, " : ", dict_in[key2print])
 
-
-class DoLoadHTML(QObject):
-    def __init__(self, parent = None):
-        super(DoLoadHTML, self).__init__(parent)
-        self.main_obj = parent
-        self.connect_loads()
-
-    def __call__(self):
-        print("load_html ... Start \n")
-        nod_lin_num = self.main_obj.gui_state["current_lin_num"]
-        found_html = False
-        for html_info in self.main_obj.lst_html:
-            if(
-                html_info["lin_num"] == nod_lin_num
-                and
-                len(html_info["html_report"]) > 5
-            ):
-                found_html = True
-                full_file = html_info["html_report"]
-
-        if not found_html:
-            self.main_obj.window.HtmlReport.setHtml(self.main_obj.loading_html)
-            self.main_obj.window.OutuputStatLabel.setText('Loading')
-            self.main_obj.parent_app.processEvents()
-            cmd = {
-                "nod_lst":[nod_lin_num],
-                "cmd_lst":["get_report"]
-            }
-            r_g = requests.get(
-                'http://localhost:8080/', stream = True, params = cmd
-            )
-            full_file = ''
-            while True:
-                tmp_dat = r_g.raw.readline()
-                #line_str = str(tmp_dat.decode('utf-8'))
-                line_str = tmp_dat.decode('utf-8')
-                if line_str[-7:] == '/*EOF*/':
-                    print('/*EOF*/ received')
-                    break
-
-                else:
-                    full_file += line_str
-
-            found_html = False
-            for html_info in self.main_obj.lst_html:
-                if(
-                    html_info["lin_num"] == nod_lin_num
-                ):
-                    found_html = True
-                    html_info["html_report"] = full_file
-
-            if not found_html:
-                self.main_obj.lst_html.append(
-                    {
-                        "lin_num"       :nod_lin_num,
-                        "html_report"   :full_file
-                    }
-                )
-
-        if full_file == '':
-            self.main_obj.window.HtmlReport.setHtml(self.main_obj.not_avail_html)
-
-        else:
-            self.main_obj.window.HtmlReport.setHtml(full_file)
-
-        print("\n load_html ... End")
-
-    def load_started(self):
-        self.main_obj.window.OutuputStatLabel.setText('Loading')
-        self.main_obj.parent_app.processEvents()
-        print("load_started")
-
-    def load_progress(self, progress):
-        self.main_obj.window.OutuputStatLabel.setText(
-            'Loading: ' + str(progress) + " %"
-        )
-        self.main_obj.parent_app.processEvents()
-        print("load_progress:", progress)
-
-    def load_finished(self):
-        print("load_finished")
-        self.main_obj.window.OutuputStatLabel.setText('Ready')
-
-    def connect_loads(self):
-        self.main_obj.window.HtmlReport.loadStarted.connect(self.load_started)
-        self.main_obj.window.HtmlReport.loadProgress.connect(self.load_progress)
-        self.main_obj.window.HtmlReport.loadFinished.connect(self.load_finished)
 
 
 class MainObject(QObject):
@@ -355,25 +268,9 @@ class MainObject(QObject):
         self.window.CmdSend2server.clicked.connect(self.request_launch)
         self.window.ReqStopButton.clicked.connect(self.req_stop)
 
-        self.not_avail_html = """<html>
-            <head>
-            <title>A Sample Page</title>
-            </head>
-            <body>
-            <h3>There is no report available for this step.</h3>
-            </body>
-            </html>"""
-        self.loading_html = """<html>
-            <head>
-            <title>A Sample Page</title>
-            </head>
-            <body>
-            <h3>  Loading ...</h3>
-            </body>
-            </html>"""
 
         self.do_load_html = DoLoadHTML(self)
-        self.window.HtmlReport.setHtml(self.not_avail_html)
+        self.window.HtmlReport.setHtml(self.do_load_html.not_avail_html)
         self.lst_html = []
 
         self.window.TmpLoadButton.clicked.connect(self.load_html)
@@ -418,7 +315,7 @@ class MainObject(QObject):
     def set_output_as_ready(self):
         self.window.incoming_text.clear()
         self.window.incoming_text.insertPlainText("Ready to run: ")
-        self.window.HtmlReport.setHtml(self.not_avail_html)
+        self.window.HtmlReport.setHtml(self.do_load_html.not_avail_html)
 
     def if_needed_html(self):
         tab_index = self.window.OutputTabWidget.currentIndex()

@@ -21,7 +21,7 @@ copyright (c) CCP4 - DLS
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-import sys, os
+import sys, os, requests
 from PySide2.QtCore import *
 from PySide2.QtWidgets import *
 from PySide2 import QtUiTools
@@ -100,6 +100,110 @@ widgets_defs = {
         "nxt_widg_lst"  :["index", "refine", "integrate"]
     }
 }
+
+class DoLoadHTML(QObject):
+    def __init__(self, parent = None):
+        super(DoLoadHTML, self).__init__(parent)
+        self.main_obj = parent
+        self.connect_loads()
+
+        self.not_avail_html = """<html>
+            <head>
+            <title>A Sample Page</title>
+            </head>
+            <body>
+            <h3>There is no report available for this step.</h3>
+            </body>
+            </html>"""
+        self.loading_html = """<html>
+            <head>
+            <title>A Sample Page</title>
+            </head>
+            <body>
+            <h3>  Loading ...</h3>
+            </body>
+            </html>"""
+
+    def __call__(self):
+        print("load_html ... Start \n")
+        nod_lin_num = self.main_obj.gui_state["current_lin_num"]
+        found_html = False
+        for html_info in self.main_obj.lst_html:
+            if(
+                html_info["lin_num"] == nod_lin_num
+                and
+                len(html_info["html_report"]) > 5
+            ):
+                found_html = True
+                full_file = html_info["html_report"]
+
+        if not found_html:
+            self.main_obj.window.HtmlReport.setHtml(self.loading_html)
+            self.main_obj.window.OutuputStatLabel.setText('Loading')
+            self.main_obj.parent_app.processEvents()
+            cmd = {
+                "nod_lst":[nod_lin_num],
+                "cmd_lst":["get_report"]
+            }
+            r_g = requests.get(
+                'http://localhost:8080/', stream = True, params = cmd
+            )
+            full_file = ''
+            while True:
+                tmp_dat = r_g.raw.readline()
+                #line_str = str(tmp_dat.decode('utf-8'))
+                line_str = tmp_dat.decode('utf-8')
+                if line_str[-7:] == '/*EOF*/':
+                    print('/*EOF*/ received')
+                    break
+
+                else:
+                    full_file += line_str
+
+            found_html = False
+            for html_info in self.main_obj.lst_html:
+                if(
+                    html_info["lin_num"] == nod_lin_num
+                ):
+                    found_html = True
+                    html_info["html_report"] = full_file
+
+            if not found_html:
+                self.main_obj.lst_html.append(
+                    {
+                        "lin_num"       :nod_lin_num,
+                        "html_report"   :full_file
+                    }
+                )
+
+        if full_file == '':
+            self.main_obj.window.HtmlReport.setHtml(self.not_avail_html)
+
+        else:
+            self.main_obj.window.HtmlReport.setHtml(full_file)
+
+        print("\n load_html ... End")
+
+    def load_started(self):
+        self.main_obj.window.OutuputStatLabel.setText('Loading')
+        self.main_obj.parent_app.processEvents()
+        print("load_started")
+
+    def load_progress(self, progress):
+        self.main_obj.window.OutuputStatLabel.setText(
+            'Loading: ' + str(progress) + " %"
+        )
+        self.main_obj.parent_app.processEvents()
+        print("load_progress:", progress)
+
+    def load_finished(self):
+        print("load_finished")
+        self.main_obj.window.OutuputStatLabel.setText('Ready')
+
+    def connect_loads(self):
+        self.main_obj.window.HtmlReport.loadStarted.connect(self.load_started)
+        self.main_obj.window.HtmlReport.loadProgress.connect(self.load_progress)
+        self.main_obj.window.HtmlReport.loadFinished.connect(self.load_finished)
 
 
 class MyQComboBox(QComboBox):
