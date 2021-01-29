@@ -87,7 +87,7 @@ class CmdNode(object):
         self.parent_node_lst = []
         try:
             for single_parent in parent_lst_in:
-                self.parent_node_lst.append(single_parent.lin_num)
+                self.parent_node_lst.append(single_parent.number)
 
         except TypeError:
             self.parent_node_lst = []
@@ -102,7 +102,7 @@ class CmdNode(object):
 
         self.status = "Ready"
         self.child_node_lst = []
-        self.lin_num = 0
+        self.number = 0
 
 
         try:
@@ -132,7 +132,7 @@ class CmdNode(object):
         self.full_cmd_lst.append([lst_in[0]])
         self.set_in_fil_n_par(lst_in)
         self.set_base_dir(os.getcwd())
-        self.set_run_dir(self.lin_num)
+        self.set_run_dir(self.number)
         self.nod_req = req_obj
         self.run_cmd(self.nod_req)
 
@@ -228,11 +228,11 @@ class CmdNode(object):
         n_Broken_Pipes = 0
         if self.nod_req is not None:
             try:
-                str_lin_num = "node.lin_num=" + str(self.lin_num) + "\n"
-                self.nod_req.wfile.write(bytes(str_lin_num , 'utf-8'))
+                str_nod_num = "node.number=" + str(self.number) + "\n"
+                self.nod_req.wfile.write(bytes(str_nod_num , 'utf-8'))
 
             except BrokenPipeError:
-                print("\n *** BrokenPipeError *** while sending lin_num \n")
+                print("\n *** BrokenPipeError *** while sending nod_num \n")
 
         while self.my_proc.poll() is None or new_line != '':
             new_line = self.my_proc.stdout.readline()
@@ -301,9 +301,9 @@ class CmdNode(object):
             self._html_rep = tmp_html_path
 
     def stop_me(self):
-        print("node", self.lin_num, "status:", self.status)
+        print("node", self.number, "status:", self.status)
         if self.status == "Busy":
-            print("attempting to stop the execution of node", self.lin_num)
+            print("attempting to stop the execution of node", self.number)
             try:
                 self.nod_req.wfile.write(
                     bytes("attempting to stop \n" , 'utf-8')
@@ -319,7 +319,7 @@ class CmdNode(object):
                 print("Broken Pipe Error")
 
         else:
-            print("node", self.lin_num, "not running, so not stopping it")
+            print("node", self.number, "not running, so not stopping it")
 
     def get_bravais_summ(self):
         brav_summ_path = str(self._run_dir + "/bravais_summary.json")
@@ -346,7 +346,7 @@ class Runner(object):
         tmp_parent_lst_in = []
         for lin2go in cmd_dict["nod_lst"]:
             for node in self.step_list:
-                if node.lin_num == lin2go:
+                if node.number == lin2go:
                     tmp_parent_lst_in.append(node)
 
         print("\n cmd_dict: ", cmd_dict, "\n")
@@ -452,13 +452,13 @@ class Runner(object):
 
         tmp_big = 0
         for node in self.step_list:
-            if node.lin_num > tmp_big:
-                tmp_big = node.lin_num
+            if node.number > tmp_big:
+                tmp_big = node.number
 
         self.bigger_lin = tmp_big + 1
-        new_step.lin_num = self.bigger_lin
+        new_step.number = self.bigger_lin
         for prev_step in prev_step_lst:
-            prev_step.child_node_lst.append(new_step.lin_num)
+            prev_step.child_node_lst.append(new_step.number)
 
         self.step_list.append(new_step)
         return new_step
@@ -475,7 +475,7 @@ class Runner(object):
                         "_run_dir"              :uni._run_dir,
                         "_html_rep"             :uni._html_rep,
                         "log_file_path"         :uni.log_file_path,
-                        "lin_num"               :uni.lin_num,
+                        "number"               :uni.number,
                         "status"                :uni.status,
                         "parent_node_lst"       :uni.parent_node_lst,
                         "child_node_lst"        :uni.child_node_lst
@@ -506,7 +506,7 @@ class Runner(object):
             new_node._run_dir        = uni_dic["_run_dir"]
             new_node._html_rep       = uni_dic["_html_rep"]
             new_node.log_file_path   = uni_dic["log_file_path"]
-            new_node.lin_num         = uni_dic["lin_num"]
+            new_node.number         = uni_dic["number"]
             new_node.status          = uni_dic["status"]
             new_node.child_node_lst  = uni_dic["child_node_lst"]
             new_node.parent_node_lst = uni_dic["parent_node_lst"]

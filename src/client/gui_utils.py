@@ -126,11 +126,11 @@ class DoLoadHTML(QObject):
 
     def __call__(self):
         print("load_html ... Start \n")
-        nod_lin_num = self.main_obj.gui_state["current_lin_num"]
+        nod_p_num = self.main_obj.gui_state["current_nod_num"]
         found_html = False
         for html_info in self.main_obj.lst_html:
             if(
-                html_info["lin_num"] == nod_lin_num
+                html_info["number"] == nod_p_num
                 and
                 len(html_info["html_report"]) > 5
             ):
@@ -142,7 +142,7 @@ class DoLoadHTML(QObject):
             self.main_obj.window.OutuputStatLabel.setText('Loading')
             self.main_obj.parent_app.processEvents()
             cmd = {
-                "nod_lst":[nod_lin_num],
+                "nod_lst":[nod_p_num],
                 "cmd_lst":["get_report"]
             }
             r_g = requests.get(
@@ -163,7 +163,7 @@ class DoLoadHTML(QObject):
             found_html = False
             for html_info in self.main_obj.lst_html:
                 if(
-                    html_info["lin_num"] == nod_lin_num
+                    html_info["number"] == nod_p_num
                 ):
                     found_html = True
                     html_info["html_report"] = full_file
@@ -171,7 +171,7 @@ class DoLoadHTML(QObject):
             if not found_html:
                 self.main_obj.lst_html.append(
                     {
-                        "lin_num"       :nod_lin_num,
+                        "number"       :nod_p_num,
                         "html_report"   :full_file
                     }
                 )
@@ -587,11 +587,11 @@ class TreeDirScene(QGraphicsScene):
             dy = abs(nod["y_pos"] - y_ms)
             if num == 0:
                 min_d = dy
-                node_numb = nod["lin_num"]
+                node_numb = nod["number"]
 
             elif dy < min_d:
                 min_d = dy
-                node_numb = nod["lin_num"]
+                node_numb = nod["number"]
 
         if node_numb is not None:
             self.node_clicked.emit(node_numb)
@@ -631,7 +631,7 @@ class TreeDirScene(QGraphicsScene):
                 )
 
             for pos, node in enumerate(self.nod_lst):
-                if node["lin_num"] == self.current_lin_num:
+                if node["number"] == self.current_nod_num:
                     current_nod_pos = pos
                     right_x1, down_y1 = self.get_coords(
                         current_nod_pos + 0.43,
@@ -655,7 +655,7 @@ class TreeDirScene(QGraphicsScene):
                     my_coord_x ,my_coord_y = self.get_coords(pos, node["indent"])
                     lst2connect = []
                     for par_pos, prev in enumerate(self.nod_lst[0:pos]):
-                        if prev["lin_num"] in node["par_lst"]:
+                        if prev["number"] in node["par_lst"]:
                             lst2connect.append((par_pos, prev["indent"]))
 
                     max_pos = 0
@@ -683,7 +683,7 @@ class TreeDirScene(QGraphicsScene):
                 my_coord_x ,my_coord_y = self.get_coords(pos, node["indent"])
                 if pos > 0:
                     for inner_row, inner_node in enumerate(self.nod_lst):
-                        if inner_node["lin_num"] == node["low_par_lin_num"]:
+                        if inner_node["number"] == node["low_par_nod_num"]:
                             my_parent_coord_x, my_parent_coord_y = self.get_coords(
                                 inner_row, node["parent_indent"]
                             )
@@ -703,7 +703,7 @@ class TreeDirScene(QGraphicsScene):
             for pos, node in enumerate(self.nod_lst):
                 my_coord_x ,my_coord_y = self.get_coords(pos, node["indent"])
                 nod_pos = {
-                    "lin_num": node["lin_num"],
+                    "number": node["number"],
                     "x_pos": my_coord_x,
                     "y_pos": my_coord_y
                 }
@@ -729,7 +729,7 @@ class TreeDirScene(QGraphicsScene):
                     pass
 
                 my_coord_x ,my_coord_y = self.get_coords(pos, -0.6)
-                n_text = self.addSimpleText(str(node["lin_num"]))
+                n_text = self.addSimpleText(str(node["number"]))
                 n_text.setPos(my_coord_x - self.f_width * 0.7,
                             my_coord_y - self.f_height * 0.5)
                 n_text.setBrush(self.dark_blue_brush)
@@ -737,7 +737,7 @@ class TreeDirScene(QGraphicsScene):
                 my_coord_x ,my_coord_y = self.get_coords(
                     pos, max_indent * 1.2 + max_cmd_len * 0.3 + 6.1
                 )
-                n_text = self.addSimpleText(str(node["lin_num"]))
+                n_text = self.addSimpleText(str(node["number"]))
                 n_text.setPos(my_coord_x - self.f_width * 0.7,
                             my_coord_y - self.f_height * 0.5)
                 n_text.setBrush(self.dark_blue_brush)
@@ -786,12 +786,12 @@ class TreeDirScene(QGraphicsScene):
 
             self.update()
 
-    def draw_tree_graph(self, nod_lst, current_lin_num = 0):
+    def draw_tree_graph(self, nod_lst, current_nod_num = 0):
         self.nod_lst = nod_lst
-        self.current_lin_num = current_lin_num
+        self.current_nod_num = current_nod_num
         self.draw_all()
 
-    def new_lin_num(self, lin_num_in):
-        self.current_lin_num = lin_num_in
+    def new_nod_num(self, nod_num_in):
+        self.current_nod_num = nod_num_in
         self.draw_all()
 

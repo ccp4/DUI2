@@ -33,7 +33,7 @@ def get_lst2show(main_obj):
             cmd2show = uni.lst2run[-1]
 
 
-        node = {"lin_num"           :uni.lin_num,
+        node = {"number"           :uni.number,
                 "status"            :uni.status,
                 "cmd2show"          :cmd2show,
                 "child_node_lst"    :uni.child_node_lst,
@@ -64,7 +64,7 @@ class TreeShow(object):
         self._output_connect()
         return self.lst_out
 
-    def _add_tree(self, step=None, parent_indent = 0, indent = 0, low_par_lin_num = 0):
+    def _add_tree(self, step=None, parent_indent = 0, indent = 0, low_par_nod_num = 0):
         '''
         building recursively the a list of objects dictionaries
         which contains info about how to draw the tree
@@ -85,11 +85,11 @@ class TreeShow(object):
             stp_prn = " R   "
             stp_stat = "R"
 
-        str_lin_num = "(" + str(step["lin_num"]) + ")"
+        str_nod_num = "(" + str(step["number"]) + ")"
         diff_inde = (indent - parent_indent) * 4 - 3
         stp_prn += self.ind_spc * (parent_indent) + "\\" + r"_" * diff_inde
 
-        stp_prn += str_lin_num
+        stp_prn += str_nod_num
         str_cmd = str(step["cmd2show"][0])
 
         if str_cmd[:6] == "dials.":
@@ -99,10 +99,10 @@ class TreeShow(object):
             "stp_prn"         : stp_prn ,
             "indent"          : indent ,
             "parent_indent"   : parent_indent ,
-            "lin_num"         : int(step["lin_num"]) ,
+            "number"         : int(step["number"]) ,
             "str_cmd"         : str_cmd ,
             "par_lst"         : step["parent_node_lst"] ,
-            "low_par_lin_num" : low_par_lin_num ,
+            "low_par_nod_num" : low_par_nod_num ,
             "stp_stat"        : stp_stat
         }
         self.dat_lst.append(nod_dat)
@@ -114,8 +114,8 @@ class TreeShow(object):
                 are already in <self.lst_nod>
             '''
             for node in self.lst_nod:
-                if node["lin_num"] in step["child_node_lst"]:
-                    lst_num = [emt["lin_num"] for emt in self.dat_lst]
+                if node["number"] in step["child_node_lst"]:
+                    lst_num = [emt["number"] for emt in self.dat_lst]
                     found_parents = True
                     for node_pos in node["parent_node_lst"]:
                         if node_pos not in lst_num:
@@ -123,13 +123,13 @@ class TreeShow(object):
 
                     if(
                         found_parents == True and
-                        node["lin_num"] not in lst_num
+                        node["number"] not in lst_num
                     ):
                         if len(node["parent_node_lst"]) > 1:
                             #finding top parent and bottom parent
                             lst_par_pos = []
                             for tmp_pos, tmp_elem in enumerate(self.dat_lst):
-                                if tmp_elem["lin_num"] in node["parent_node_lst"]:
+                                if tmp_elem["number"] in node["parent_node_lst"]:
                                     lst_par_pos.append(tmp_pos)
 
                             for elem in self.dat_lst[min(lst_par_pos):]:
@@ -138,14 +138,14 @@ class TreeShow(object):
 
                         elif len(node["parent_node_lst"]) == 1:
                             for tmp_elem in self.dat_lst:
-                                if tmp_elem["lin_num"] == node["parent_node_lst"][0]:
+                                if tmp_elem["number"] == node["parent_node_lst"][0]:
                                     new_indent = tmp_elem["indent"] + 1
 
                         self._add_tree(
                             step=node,
                             parent_indent = indent,
                             indent = new_indent,
-                            low_par_lin_num = step["lin_num"]
+                            low_par_nod_num = step["number"]
                             )
 
         else:
@@ -179,7 +179,7 @@ class TreeShow(object):
             if len(obj2prn["par_lst"]) > 1:
                 lst2connect = []
                 for par_pos, prev in enumerate(self.dat_lst[0:pos]):
-                    if prev["lin_num"] in obj2prn["par_lst"]:
+                    if prev["number"] in obj2prn["par_lst"]:
                         lst2connect.append(par_pos)
 
                 lst2connect.remove(max(lst2connect))

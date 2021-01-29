@@ -281,7 +281,7 @@ class MainObject(QObject):
 
         self.gui_state["new_node"] = None
         self.gui_state["lst_node_log_out"] = []
-        self.gui_state["current_lin_num"] = 0
+        self.gui_state["current_nod_num"] = 0
 
         self.request_display()
 
@@ -326,13 +326,13 @@ class MainObject(QObject):
     def tab_changed(self, tab_index):
         print("tab_index =", tab_index)
         if tab_index == 0:
-            self.display_log(self.gui_state["current_lin_num"])
+            self.display_log(self.gui_state["current_nod_num"])
 
         elif tab_index == 1:
             self.load_html()
 
     def clicked_4_navigation(self, node_numb):
-        self.gui_state["current_lin_num"] = node_numb
+        self.gui_state["current_nod_num"] = node_numb
         try:
             cur_nod = self.server_nod_lst[node_numb]
             if self.window.OutputTabWidget.currentIndex() == 0:
@@ -402,9 +402,9 @@ class MainObject(QObject):
                 for node in self.gui_state["local_nod_lst"]:
                     for pos, in_node_numb in enumerate(node["child_node_lst"]):
                         if(
-                            in_node_numb == self.gui_state["current_lin_num"]
+                            in_node_numb == self.gui_state["current_nod_num"]
                              and
-                            node["lin_num"] == node_numb
+                            node["number"] == node_numb
                         ):
                             left = node["child_node_lst"][:pos]
                             right = node["child_node_lst"][pos+1:]
@@ -427,7 +427,7 @@ class MainObject(QObject):
         '''
 
     def on_node_click(self, node_numb):
-        if node_numb != self.gui_state["current_lin_num"]:
+        if node_numb != self.gui_state["current_nod_num"]:
             if(
                 self.gui_state["new_node"] is not None
                 and
@@ -447,22 +447,22 @@ class MainObject(QObject):
         else:
             print("clicked current node, no need to do anything")
 
-    def add_log_line(self, new_line, nod_lin_num):
-        found_lin_num = False
+    def add_log_line(self, new_line, nod_p_num):
+        found_nod_num = False
         for log_node in self.gui_state["lst_node_log_out"]:
-            if log_node["lin_num"] == nod_lin_num:
+            if log_node["number"] == nod_p_num:
                 log_node["log_line_lst"].append(new_line)
-                found_lin_num = True
+                found_nod_num = True
 
-        if not found_lin_num:
+        if not found_nod_num:
             self.gui_state["lst_node_log_out"].append(
                 {
-                    "lin_num"       : nod_lin_num,
+                    "number"       : nod_p_num,
                     "log_line_lst"  : [new_line]
                 }
             )
 
-        if self.gui_state["current_lin_num"] == nod_lin_num:
+        if self.gui_state["current_nod_num"] == nod_p_num:
             self.window.incoming_text.moveCursor(QTextCursor.End)
             self.window.incoming_text.insertPlainText(new_line)
 
@@ -479,10 +479,10 @@ class MainObject(QObject):
 
     def gray_n_ungray(self):
         try:
-            tmp_state = self.server_nod_lst[self.gui_state["current_lin_num"]]["status"]
+            tmp_state = self.server_nod_lst[self.gui_state["current_nod_num"]]["status"]
 
         except IndexError:
-            tmp_state = self.gui_state["local_nod_lst"][self.gui_state["current_lin_num"]]["status"]
+            tmp_state = self.gui_state["local_nod_lst"][self.gui_state["current_nod_num"]]["status"]
 
         str_key = self.gui_state["current_widget_key"]
         self.param_widgets[str_key]["simple"].setEnabled(False)
@@ -516,37 +516,37 @@ class MainObject(QObject):
 
     def display(self, in_lst_nodes = None):
         if in_lst_nodes is None:
-            self.tree_scene.new_lin_num(self.gui_state["current_lin_num"])
+            self.tree_scene.new_nod_num(self.gui_state["current_nod_num"])
 
         else:
             lst_str = self.tree_obj(lst_nod = in_lst_nodes)
             lst_2d_dat = self.tree_obj.get_tree_data()
             self.tree_scene.draw_tree_graph(
-                lst_2d_dat, self.gui_state["current_lin_num"]
+                lst_2d_dat, self.gui_state["current_nod_num"]
             )
 
         self.gray_n_ungray()
 
-    def line_n1_in(self, lin_num_in):
+    def line_n1_in(self, nod_num_in):
         self.request_display()
-        self.gui_state["parent_nums_lst"] = [lin_num_in]
+        self.gui_state["parent_nums_lst"] = [nod_num_in]
 
-    def display_log(self, nod_lin_num = 0):
-        found_lin_num = False
+    def display_log(self, nod_p_num = 0):
+        found_nod_num = False
         for log_node in self.gui_state["lst_node_log_out"]:
-            if log_node["lin_num"] == nod_lin_num:
-                found_lin_num = True
+            if log_node["number"] == nod_p_num:
+                found_nod_num = True
                 lst_log_lines = log_node["log_line_lst"]
 
         try:
-            if not found_lin_num:
-                cmd = {"nod_lst":[nod_lin_num], "cmd_lst":["display_log"]}
+            if not found_nod_num:
+                cmd = {"nod_lst":[nod_p_num], "cmd_lst":["display_log"]}
                 json_log = json_data_request(uni_url, cmd)
                 try:
                     lst_log_lines = json_log[0]
                     self.gui_state["lst_node_log_out"].append(
                         {
-                            "lin_num"       : nod_lin_num,
+                            "number"       : nod_p_num,
                             "log_line_lst"  : lst_log_lines
                         }
                     )
@@ -608,26 +608,26 @@ class MainObject(QObject):
         try:
             print(
                 "trying to << check_nxt_btn >> on node",
-                self.gui_state["current_lin_num"]
+                self.gui_state["current_nod_num"]
             )
             str_key = self.server_nod_lst[
-                self.gui_state["current_lin_num"]
+                self.gui_state["current_nod_num"]
             ]["cmd2show"][0][6:]
             print("str_key =", str_key)
             self.update_nxt_butt(str_key)
 
         except AttributeError:
-            print("NO current_lin_num (AttributeError)")
+            print("NO current_nod_num (AttributeError)")
 
         except IndexError:
-            print("NO current_lin_num (IndexError)")
+            print("NO current_nod_num (IndexError)")
 
     def update_nxt_butt(self, str_key):
         small_f_size = int(self.font_point_size * 0.85)
         small_font = QFont("OldEnglish", pointSize = small_f_size, italic=True)
         try:
             if(
-                self.server_nod_lst[self.gui_state["current_lin_num"]]["status"]
+                self.server_nod_lst[self.gui_state["current_nod_num"]]["status"]
                 == "Succeeded"
             ):
                 self.clearLayout(self.window.Next2RunLayout)
@@ -656,8 +656,8 @@ class MainObject(QObject):
     def add_new_node(self):
         self.gui_state["local_nod_lst"].append(self.gui_state["new_node"])
         for node in self.gui_state["local_nod_lst"]:
-            if node["lin_num"] in self.gui_state["new_node"]["parent_node_lst"]:
-                node["child_node_lst"].append(int(self.gui_state["new_node"]["lin_num"]))
+            if node["number"] in self.gui_state["new_node"]["parent_node_lst"]:
+                node["child_node_lst"].append(int(self.gui_state["new_node"]["number"]))
 
         self.cmd_par = CommandParamControl(self.gui_state["new_node"]["cmd2show"][0])
         self.display(self.gui_state["local_nod_lst"])
@@ -726,25 +726,25 @@ class MainObject(QObject):
         str_key = self.sender().cmd_str
         print("str_key: ", str_key)
         if str_key == "reindex":
-            cmd = {"nod_lst":[self.gui_state["current_lin_num"]], "cmd_lst":["get_bravais_sum"]}
+            cmd = {"nod_lst":[self.gui_state["current_nod_num"]], "cmd_lst":["get_bravais_sum"]}
             json_data_lst = json_data_request(uni_url, cmd)
             self.r_index_widg.add_opts_lst(
                 json_data = json_data_lst[0]
             )
         self.gui_state["local_nod_lst"] = copy_lst_nodes(self.server_nod_lst)
-        par_lin_num = int(self.gui_state["current_lin_num"])
-        max_lin_num = 0
+        par_nod_num = int(self.gui_state["current_nod_num"])
+        max_nod_num = 0
         for node in self.gui_state["local_nod_lst"]:
-            if node["lin_num"] > max_lin_num:
-                max_lin_num = node["lin_num"]
+            if node["number"] > max_nod_num:
+                max_nod_num = node["number"]
 
-        self.gui_state["current_lin_num"] = max_lin_num + 1
+        self.gui_state["current_nod_num"] = max_nod_num + 1
         self.gui_state["new_node"] = {
-            'lin_num': int(self.gui_state["current_lin_num"]),
-            'status': 'Ready',
-            'cmd2show': ["dials." + str(str_key)],
-            'child_node_lst': [],
-            'parent_node_lst': [par_lin_num]
+            "number": int(self.gui_state["current_nod_num"]),
+            "status": 'Ready',
+            "cmd2show": ["dials." + str(str_key)],
+            "child_node_lst": [],
+            "parent_node_lst": [par_nod_num]
         }
         self.add_new_node()
         self.change_widget(str_key)
@@ -756,25 +756,25 @@ class MainObject(QObject):
         print("on_retry", "*" * 50)
         nod2clone = dict(
             self.server_nod_lst[int(
-                self.gui_state["current_lin_num"]
+                self.gui_state["current_nod_num"]
             )]
         )
         str_key = str(nod2clone["cmd2show"][0][6:])
         print("str_key: ", str_key)
 
         self.gui_state["local_nod_lst"] = copy_lst_nodes(self.server_nod_lst)
-        max_lin_num = 0
+        max_nod_num = 0
         for node in self.gui_state["local_nod_lst"]:
-            if node["lin_num"] > max_lin_num:
-                max_lin_num = node["lin_num"]
+            if node["number"] > max_nod_num:
+                max_nod_num = node["number"]
 
-        self.gui_state["current_lin_num"] = max_lin_num + 1
+        self.gui_state["current_nod_num"] = max_nod_num + 1
         self.gui_state["new_node"] = {
-            'lin_num': int(self.gui_state["current_lin_num"]),
-            'status': 'Ready',
-            'cmd2show': list(nod2clone["cmd2show"]),
-            'child_node_lst': [],
-            'parent_node_lst': list(nod2clone["parent_node_lst"])
+            "number": int(self.gui_state["current_nod_num"]),
+            "status": 'Ready',
+            "cmd2show": list(nod2clone["cmd2show"]),
+            "child_node_lst": [],
+            "parent_node_lst": list(nod2clone["parent_node_lst"])
         }
         self.add_new_node()
         self.set_output_as_ready()
@@ -790,7 +790,7 @@ class MainObject(QObject):
     def req_stop(self):
         print("req_stop")
         self.window.incoming_text.clear()
-        nod_lst = [str(self.gui_state["current_lin_num"])]
+        nod_lst = [str(self.gui_state["current_nod_num"])]
         print("\n nod_lst", nod_lst)
         cmd = {"nod_lst":nod_lst, "cmd_lst":["stop"]}
         print("cmd =", cmd)

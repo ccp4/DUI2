@@ -56,11 +56,11 @@ def copy_lst_nodes(old_lst_nodes):
     new_lst = []
     for old_node in old_lst_nodes:
         cp_new_node = {
-            'lin_num': int(old_node["lin_num"]),
-            'status': str(old_node["status"]),
-            'cmd2show': list(old_node["cmd2show"]),
-            'child_node_lst': list(old_node["child_node_lst"]),
-            'parent_node_lst': list(old_node["parent_node_lst"])
+            "number": int(old_node["number"]),
+            "status": str(old_node["status"]),
+            "cmd2show": list(old_node["cmd2show"]),
+            "child_node_lst": list(old_node["child_node_lst"]),
+            "parent_node_lst": list(old_node["parent_node_lst"])
         }
         new_lst.append(cp_new_node)
 
@@ -108,7 +108,7 @@ class Run_n_Output(QThread):
     def __init__(self, request):
         super(Run_n_Output, self).__init__()
         self.request = request
-        self.lin_num = None
+        self.number = None
 
     def run(self):
 
@@ -124,13 +124,13 @@ class Run_n_Output(QThread):
 
             if not_yet_read:
                 not_yet_read = False
-                nod_lin_num = int(line_str.split("=")[1])
-                self.lin_num = nod_lin_num
-                print("\n QThread.lin_num =", self.lin_num)
-                self.first_line.emit(self.lin_num)
+                nod_p_num = int(line_str.split("=")[1])
+                self.number = nod_p_num
+                print("\n QThread.number =", self.number)
+                self.first_line.emit(self.number)
 
             else:
-                self.new_line_out.emit(line_str, self.lin_num)
+                self.new_line_out.emit(line_str, self.number)
 
             self.usleep(1)
 
