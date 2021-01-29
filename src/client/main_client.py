@@ -331,25 +331,25 @@ class MainObject(QObject):
         elif tab_index == 1:
             self.load_html()
 
-    def clicked_4_navigation(self, nod_num):
-        self.gui_state["current_lin_num"] = nod_num
+    def clicked_4_navigation(self, node_numb):
+        self.gui_state["current_lin_num"] = node_numb
         try:
-            cur_nod = self.server_nod_lst[nod_num]
+            cur_nod = self.server_nod_lst[node_numb]
             if self.window.OutputTabWidget.currentIndex() == 0:
-                self.display_log(nod_num)
+                self.display_log(node_numb)
 
             else:
                 self.load_html()
 
-            self.gui_state["parent_nums_lst"] = [nod_num]
+            self.gui_state["parent_nums_lst"] = [node_numb]
 
         except IndexError:
-            print("nod_num ", nod_num, "not ran yet")
-            cur_nod = self.gui_state["local_nod_lst"][nod_num]
+            print("node_numb ", node_numb, "not ran yet")
+            cur_nod = self.gui_state["local_nod_lst"][node_numb]
             self.set_output_as_ready()
             self.gui_state["parent_nums_lst"] = []
-            for par_nod_num in cur_nod["parent_node_lst"]:
-                self.gui_state["parent_nums_lst"].append(int(par_nod_num))
+            for par_node_numb in cur_nod["parent_node_lst"]:
+                self.gui_state["parent_nums_lst"].append(int(par_node_numb))
 
         cmd_ini = cur_nod["cmd2show"][0]
         key2find = cmd_ini[6:]
@@ -387,24 +387,24 @@ class MainObject(QObject):
                 "should NOT clear parents from already combined experiments"
             )
 
-    def clicked_4_combine(self, nod_num):
+    def clicked_4_combine(self, node_numb):
         prev_lst = self.gui_state["parent_nums_lst"]
-        if nod_num in prev_lst:
+        if node_numb in prev_lst:
             if len(prev_lst) > 1:
                 new_par_lst = []
-                for in_nod_num in prev_lst:
-                    if in_nod_num != nod_num:
-                        new_par_lst.append(in_nod_num)
+                for in_node_numb in prev_lst:
+                    if in_node_numb != node_numb:
+                        new_par_lst.append(in_node_numb)
 
                 self.gui_state["new_node"]["parent_node_lst"] = new_par_lst
                 self.gui_state["parent_nums_lst"] = new_par_lst
 
                 for node in self.gui_state["local_nod_lst"]:
-                    for pos, in_nod_num in enumerate(node["child_node_lst"]):
+                    for pos, in_node_numb in enumerate(node["child_node_lst"]):
                         if(
-                            in_nod_num == self.gui_state["current_lin_num"]
+                            in_node_numb == self.gui_state["current_lin_num"]
                              and
-                            node["lin_num"] == nod_num
+                            node["lin_num"] == node_numb
                         ):
                             left = node["child_node_lst"][:pos]
                             right = node["child_node_lst"][pos+1:]
@@ -416,7 +416,7 @@ class MainObject(QObject):
                 print("not removing only parent node")
 
         else:
-            self.gui_state["parent_nums_lst"].append(nod_num)
+            self.gui_state["parent_nums_lst"].append(node_numb)
             self.gui_state["new_node"]["parent_node_lst"] = list(self.gui_state["parent_nums_lst"])
             self.add_new_node()
 
@@ -426,8 +426,8 @@ class MainObject(QObject):
         print("-" * 60)
         '''
 
-    def on_node_click(self, nod_num):
-        if nod_num != self.gui_state["current_lin_num"]:
+    def on_node_click(self, node_numb):
+        if node_numb != self.gui_state["current_lin_num"]:
             if(
                 self.gui_state["new_node"] is not None
                 and
@@ -439,10 +439,10 @@ class MainObject(QObject):
                 and
                 self.window.NodeSelecCheck.checkState()
             ):
-                self.clicked_4_combine(nod_num)
+                self.clicked_4_combine(node_numb)
 
             else:
-                self.clicked_4_navigation(nod_num)
+                self.clicked_4_navigation(node_numb)
 
         else:
             print("clicked current node, no need to do anything")
@@ -690,8 +690,8 @@ class MainObject(QObject):
         print("\n cmd_str", cmd_str)
         nod_lst = self.gui_state["parent_nums_lst"]
         lst_of_node_str = []
-        for nod_num in nod_lst:
-            lst_of_node_str.append(str(nod_num))
+        for node_numb in nod_lst:
+            lst_of_node_str.append(str(node_numb))
 
         cmd = {"nod_lst":lst_of_node_str, "cmd_lst":[cmd_str]}
         print("cmd =", cmd)
@@ -781,8 +781,8 @@ class MainObject(QObject):
         self.change_widget(str_key)
         self.gui_state["current_widget_key"] = str_key
         self.gui_state["parent_nums_lst"] = []
-        for par_nod_num in self.gui_state["new_node"]["parent_node_lst"]:
-            self.gui_state["parent_nums_lst"].append(int(par_nod_num))
+        for par_node_numb in self.gui_state["new_node"]["parent_node_lst"]:
+            self.gui_state["parent_nums_lst"].append(int(par_node_numb))
 
         self.cmd_par.clone_from(nod2clone["cmd2show"])
         print("End retry", "*" * 50)

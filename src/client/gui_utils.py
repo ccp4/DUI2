@@ -581,20 +581,20 @@ class TreeDirScene(QGraphicsScene):
 
     def mouseReleaseEvent(self, event):
         y_ms = event.scenePos().y()
-        nod_num = None
+        node_numb = None
         min_d = None
         for num, nod in enumerate(self.lst_nod_pos):
             dy = abs(nod["y_pos"] - y_ms)
             if num == 0:
                 min_d = dy
-                nod_num = nod["lin_num"]
+                node_numb = nod["lin_num"]
 
             elif dy < min_d:
                 min_d = dy
-                nod_num = nod["lin_num"]
+                node_numb = nod["lin_num"]
 
-        if nod_num is not None:
-            self.node_clicked.emit(nod_num)
+        if node_numb is not None:
+            self.node_clicked.emit(node_numb)
 
     def draw_all(self):
         if self.nod_lst is not None:
