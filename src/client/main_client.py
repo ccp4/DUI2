@@ -171,7 +171,9 @@ class MainObject(QObject):
             comb_simpl_widg = CombineExperimentSimplerParamTab()
             comb_simpl_widg.item_changed.connect(self.item_param_changed)
             self.window.CombineSimplerScrollArea.setWidget(comb_simpl_widg)
-            ce_advanced_parameters = build_advanced_params_widget("combine_experiments_params")
+            ce_advanced_parameters = build_advanced_params_widget(
+                "combine_experiments_params"
+            )
             ce_advanced_parameters.item_changed.connect(self.item_param_changed)
             self.window.CombineAdvancedScrollArea.setWidget(ce_advanced_parameters)
 
@@ -233,7 +235,9 @@ class MainObject(QObject):
         self.tree_scene = TreeDirScene(self)
         self.window.treeView.setScene(self.tree_scene)
 
-        self.window.Next2RunLayout.addWidget(QLabel("                  . . .       "))
+        self.window.Next2RunLayout.addWidget(
+            QLabel("                  . . .       ")
+        )
         self.current_next_buttons = 0
         self.gui_state["parent_nums_lst"] = []
 
@@ -273,8 +277,7 @@ class MainObject(QObject):
         self.window.HtmlReport.setHtml(self.do_load_html.not_avail_html)
         self.lst_html = []
 
-        self.window.TmpLoadButton.clicked.connect(self.load_html)
-        self.window.OutputTabWidget.currentChanged.connect(self.tab_changed)
+=        self.window.OutputTabWidget.currentChanged.connect(self.tab_changed)
 
         self.gui_state["current_widget_key"] = "import"
         self.tree_scene.draw_tree_graph([])
