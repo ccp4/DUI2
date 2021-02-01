@@ -275,7 +275,6 @@ class MainObject(QObject):
 
         self.do_load_html = DoLoadHTML(self)
         self.window.HtmlReport.setHtml(self.do_load_html.not_avail_html)
-        self.lst_html = []
 
         self.window.OutputTabWidget.currentChanged.connect(self.tab_changed)
 

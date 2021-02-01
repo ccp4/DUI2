@@ -106,6 +106,7 @@ class DoLoadHTML(QObject):
         super(DoLoadHTML, self).__init__(parent)
         self.main_obj = parent
         self.connect_loads()
+        self.lst_html = []
 
         self.not_avail_html = """<html>
             <head>
@@ -128,7 +129,7 @@ class DoLoadHTML(QObject):
         print("load_html ... Start \n")
         nod_p_num = self.main_obj.gui_state["current_nod_num"]
         found_html = False
-        for html_info in self.main_obj.lst_html:
+        for html_info in self.lst_html:
             if(
                 html_info["number"] == nod_p_num
                 and
@@ -161,7 +162,7 @@ class DoLoadHTML(QObject):
                     full_file += line_str
 
             found_html = False
-            for html_info in self.main_obj.lst_html:
+            for html_info in self.lst_html:
                 if(
                     html_info["number"] == nod_p_num
                 ):
@@ -169,7 +170,7 @@ class DoLoadHTML(QObject):
                     html_info["html_report"] = full_file
 
             if not found_html:
-                self.main_obj.lst_html.append(
+                self.lst_html.append(
                     {
                         "number"       :nod_p_num,
                         "html_report"   :full_file
