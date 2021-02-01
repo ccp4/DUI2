@@ -277,7 +277,7 @@ class MainObject(QObject):
         self.window.HtmlReport.setHtml(self.do_load_html.not_avail_html)
         self.lst_html = []
 
-=        self.window.OutputTabWidget.currentChanged.connect(self.tab_changed)
+        self.window.OutputTabWidget.currentChanged.connect(self.tab_changed)
 
         self.gui_state["current_widget_key"] = "import"
         self.tree_scene.draw_tree_graph([])
@@ -312,9 +312,6 @@ class MainObject(QObject):
                 else:
                     self.clearLayout(item.layout())
 
-    def load_html(self):
-        self.do_load_html()
-
     def set_output_as_ready(self):
         self.window.incoming_text.clear()
         self.window.incoming_text.insertPlainText("Ready to run: ")
@@ -324,7 +321,7 @@ class MainObject(QObject):
         tab_index = self.window.OutputTabWidget.currentIndex()
         if tab_index == 1:
             print("updating html report ")
-            self.load_html()
+            self.do_load_html()
 
     def tab_changed(self, tab_index):
         print("tab_index =", tab_index)
@@ -332,7 +329,7 @@ class MainObject(QObject):
             self.display_log(self.gui_state["current_nod_num"])
 
         elif tab_index == 1:
-            self.load_html()
+            self.do_load_html()
 
     def clicked_4_navigation(self, node_numb):
         self.gui_state["current_nod_num"] = node_numb
@@ -342,7 +339,7 @@ class MainObject(QObject):
                 self.display_log(node_numb)
 
             else:
-                self.load_html()
+                self.do_load_html()
 
             self.gui_state["parent_nums_lst"] = [node_numb]
 
