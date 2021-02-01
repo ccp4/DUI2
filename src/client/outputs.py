@@ -105,7 +105,7 @@ class DoLoadHTML(QObject):
                     }
                 )
 
-        if full_file == '':
+        if len(full_file) < 5:
             self.main_obj.window.HtmlReport.setHtml(self.not_avail_html)
 
         else:
