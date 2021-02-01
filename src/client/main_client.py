@@ -303,11 +303,6 @@ class MainObject(QObject):
                 else:
                     self.clearLayout(item.layout())
 
-    def set_output_as_ready(self):
-        self.window.incoming_text.clear()
-        self.window.incoming_text.insertPlainText("Ready to run: ")
-        self.window.HtmlReport.setHtml(self.do_load_html.not_avail_html)
-
     def if_needed_html(self):
         tab_index = self.window.OutputTabWidget.currentIndex()
         if tab_index == 1:
@@ -337,7 +332,7 @@ class MainObject(QObject):
         except IndexError:
             print("node_numb ", node_numb, "not ran yet")
             cur_nod = self.gui_state["local_nod_lst"][node_numb]
-            self.set_output_as_ready()
+            self.do_load_html.set_output_as_ready()
             self.gui_state["parent_nums_lst"] = []
             for par_node_numb in cur_nod["parent_node_lst"]:
                 self.gui_state["parent_nums_lst"].append(int(par_node_numb))
@@ -631,7 +626,7 @@ class MainObject(QObject):
             #TODO make sure when client is relaunched,
             #TODO somehow it know about busy nodes
             new_thrd = Run_n_Output(new_req_get)
-            new_thrd.new_line_out.connect(self.log_show.add_log_line)
+            new_thrd.new_line_out.connect(self.log_show.add_line)
             new_thrd.first_line.connect(self.line_n1_in)
             new_thrd.finished.connect(self.request_display)
             new_thrd.finished.connect(self.check_nxt_btn)
@@ -678,7 +673,7 @@ class MainObject(QObject):
         self.add_new_node()
         self.change_widget(str_key)
         self.gui_state["current_widget_key"] = str_key
-        self.set_output_as_ready()
+        self.do_load_html.set_output_as_ready()
         self.reset_param_all()
 
     def on_retry(self):
@@ -706,7 +701,7 @@ class MainObject(QObject):
             "parent_node_lst": list(nod2clone["parent_node_lst"])
         }
         self.add_new_node()
-        self.set_output_as_ready()
+        self.do_load_html.set_output_as_ready()
         self.change_widget(str_key)
         self.gui_state["current_widget_key"] = str_key
         self.gui_state["parent_nums_lst"] = []
@@ -718,7 +713,7 @@ class MainObject(QObject):
 
     def req_stop(self):
         print("req_stop")
-        self.window.incoming_text.clear()
+        #self.window.incoming_text.clear()
         nod_lst = [str(self.gui_state["current_nod_num"])]
         print("\n nod_lst", nod_lst)
         cmd = {"nod_lst":nod_lst, "cmd_lst":["stop"]}

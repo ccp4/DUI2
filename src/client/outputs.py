@@ -134,17 +134,22 @@ class DoLoadHTML(QObject):
         self.main_obj.window.HtmlReport.loadProgress.connect(self.load_progress)
         self.main_obj.window.HtmlReport.loadFinished.connect(self.load_finished)
 
+    def set_output_as_ready(self):
+        self.main_obj.window.incoming_text.clear()
+        self.main_obj.window.incoming_text.insertPlainText("Ready to run: ")
+        self.main_obj.window.HtmlReport.setHtml(self.not_avail_html)
+
 
 class ShowLog(QObject):
     def __init__(self, parent = None):
         super(ShowLog, self).__init__(parent)
         self.main_obj = parent
-        self.main_obj.gui_state["lst_node_log_out"] = []
+        self.lst_node_log_out = []
 
 
     def __call__(self, nod_p_num = 0):
         found_nod_num = False
-        for log_node in self.main_obj.gui_state["lst_node_log_out"]:
+        for log_node in self.lst_node_log_out:
             if log_node["number"] == nod_p_num:
                 found_nod_num = True
                 lst_log_lines = log_node["log_line_lst"]
@@ -155,7 +160,7 @@ class ShowLog(QObject):
                 json_log = json_data_request(uni_url, cmd)
                 try:
                     lst_log_lines = json_log[0]
-                    self.main_obj.gui_state["lst_node_log_out"].append(
+                    self.lst_node_log_out.append(
                         {
                             "number"       : nod_p_num,
                             "log_line_lst"  : lst_log_lines
@@ -173,15 +178,15 @@ class ShowLog(QObject):
         except IndexError:
             print('\n no need to reload "ready" log')
 
-    def add_log_line(self, new_line, nod_p_num):
+    def add_line(self, new_line, nod_p_num):
         found_nod_num = False
-        for log_node in self.main_obj.gui_state["lst_node_log_out"]:
+        for log_node in self.lst_node_log_out:
             if log_node["number"] == nod_p_num:
                 log_node["log_line_lst"].append(new_line)
                 found_nod_num = True
 
         if not found_nod_num:
-            self.main_obj.gui_state["lst_node_log_out"].append(
+            self.lst_node_log_out.append(
                 {
                     "number"       : nod_p_num,
                     "log_line_lst"  : [new_line]
