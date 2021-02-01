@@ -173,3 +173,24 @@ class ShowLog(QObject):
         except IndexError:
             print('\n no need to reload "ready" log')
 
+    def add_log_line(self, new_line, nod_p_num):
+        found_nod_num = False
+        for log_node in self.main_obj.gui_state["lst_node_log_out"]:
+            if log_node["number"] == nod_p_num:
+                log_node["log_line_lst"].append(new_line)
+                found_nod_num = True
+
+        if not found_nod_num:
+            self.main_obj.gui_state["lst_node_log_out"].append(
+                {
+                    "number"       : nod_p_num,
+                    "log_line_lst"  : [new_line]
+                }
+            )
+
+        if self.main_obj.gui_state["current_nod_num"] == nod_p_num:
+            self.main_obj.window.incoming_text.moveCursor(QTextCursor.End)
+            self.main_obj.window.incoming_text.insertPlainText(new_line)
+
+
+

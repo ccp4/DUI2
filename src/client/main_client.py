@@ -433,25 +433,6 @@ class MainObject(QObject):
         else:
             print("clicked current node, no need to do anything")
 
-    def add_log_line(self, new_line, nod_p_num):
-        found_nod_num = False
-        for log_node in self.gui_state["lst_node_log_out"]:
-            if log_node["number"] == nod_p_num:
-                log_node["log_line_lst"].append(new_line)
-                found_nod_num = True
-
-        if not found_nod_num:
-            self.gui_state["lst_node_log_out"].append(
-                {
-                    "number"       : nod_p_num,
-                    "log_line_lst"  : [new_line]
-                }
-            )
-
-        if self.gui_state["current_nod_num"] == nod_p_num:
-            self.window.incoming_text.moveCursor(QTextCursor.End)
-            self.window.incoming_text.insertPlainText(new_line)
-
     def item_param_changed(self, str_path, str_value):
         sender_twin = self.sender().twin_widg
         sender_twin.update_param(str_path, str_value)
@@ -650,7 +631,7 @@ class MainObject(QObject):
             #TODO make sure when client is relaunched,
             #TODO somehow it know about busy nodes
             new_thrd = Run_n_Output(new_req_get)
-            new_thrd.new_line_out.connect(self.add_log_line)
+            new_thrd.new_line_out.connect(self.log_show.add_log_line)
             new_thrd.first_line.connect(self.line_n1_in)
             new_thrd.finished.connect(self.request_display)
             new_thrd.finished.connect(self.check_nxt_btn)
