@@ -27,6 +27,7 @@ from PySide2.QtWidgets import *
 from PySide2 import QtUiTools
 from PySide2.QtGui import *
 
+from exec_utils import json_data_request, uni_url
 
 class DoLoadHTML(QObject):
     def __init__(self, parent = None):
@@ -132,4 +133,43 @@ class DoLoadHTML(QObject):
         self.main_obj.window.HtmlReport.loadStarted.connect(self.load_started)
         self.main_obj.window.HtmlReport.loadProgress.connect(self.load_progress)
         self.main_obj.window.HtmlReport.loadFinished.connect(self.load_finished)
+
+
+class ShowLog(QObject):
+    def __init__(self, parent = None):
+        super(ShowLog, self).__init__(parent)
+        self.main_obj = parent
+        self.main_obj.gui_state["lst_node_log_out"] = []
+
+
+    def __call__(self, nod_p_num = 0):
+        found_nod_num = False
+        for log_node in self.main_obj.gui_state["lst_node_log_out"]:
+            if log_node["number"] == nod_p_num:
+                found_nod_num = True
+                lst_log_lines = log_node["log_line_lst"]
+
+        try:
+            if not found_nod_num:
+                cmd = {"nod_lst":[nod_p_num], "cmd_lst":["display_log"]}
+                json_log = json_data_request(uni_url, cmd)
+                try:
+                    lst_log_lines = json_log[0]
+                    self.main_obj.gui_state["lst_node_log_out"].append(
+                        {
+                            "number"       : nod_p_num,
+                            "log_line_lst"  : lst_log_lines
+                        }
+                    )
+
+                except TypeError:
+                    lst_log_lines = ["Nothing here"]
+
+            self.main_obj.window.incoming_text.clear()
+            for single_log_line in lst_log_lines:
+                self.main_obj.window.incoming_text.insertPlainText(single_log_line)
+                self.main_obj.window.incoming_text.moveCursor(QTextCursor.End)
+
+        except IndexError:
+            print('\n no need to reload "ready" log')
 

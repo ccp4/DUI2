@@ -44,7 +44,7 @@ from PySide2.QtGui import *
 from PySide2.QtWebEngineWidgets import QWebEngineView
 
 from gui_utils import TreeDirScene, widgets_defs
-from outputs import DoLoadHTML
+from outputs import DoLoadHTML, ShowLog
 from reindex_table import ReindexTable
 from exec_utils import (
     build_advanced_params_widget,
@@ -62,15 +62,6 @@ from simpler_param_widgets import (
     IntegrateSimplerParamTab, SymmetrySimplerParamTab,
     ScaleSimplerParamTab, CombineExperimentSimplerParamTab
 )
-
-def print_dict(dict_in):
-    for key2print in dict_in:
-        if key2print != "lst_node_log_out":
-            if dict_in[key2print] is dict:
-                print_dict(dict_in[key2print])
-
-            else:
-                print(key2print, " : ", dict_in[key2print])
 
 
 
@@ -277,13 +268,13 @@ class MainObject(QObject):
         self.do_load_html = DoLoadHTML(self)
         self.window.HtmlReport.setHtml(self.do_load_html.not_avail_html)
 
+        self.log_show = ShowLog(self)
+
         self.window.OutputTabWidget.currentChanged.connect(self.tab_changed)
 
         self.gui_state["current_widget_key"] = "import"
         self.tree_scene.draw_tree_graph([])
-
         self.gui_state["new_node"] = None
-        self.gui_state["lst_node_log_out"] = []
         self.gui_state["current_nod_num"] = 0
 
         self.request_display()
@@ -420,11 +411,6 @@ class MainObject(QObject):
             self.gui_state["new_node"]["parent_node_lst"] = list(self.gui_state["parent_nums_lst"])
             self.add_new_node()
 
-        tmp_off = '''
-        print("-" * 60)
-        print_dict(self.gui_state)
-        print("-" * 60)
-        '''
 
     def on_node_click(self, node_numb):
         if node_numb != self.gui_state["current_nod_num"]:
@@ -532,35 +518,7 @@ class MainObject(QObject):
         self.gui_state["parent_nums_lst"] = [nod_num_in]
 
     def display_log(self, nod_p_num = 0):
-        found_nod_num = False
-        for log_node in self.gui_state["lst_node_log_out"]:
-            if log_node["number"] == nod_p_num:
-                found_nod_num = True
-                lst_log_lines = log_node["log_line_lst"]
-
-        try:
-            if not found_nod_num:
-                cmd = {"nod_lst":[nod_p_num], "cmd_lst":["display_log"]}
-                json_log = json_data_request(uni_url, cmd)
-                try:
-                    lst_log_lines = json_log[0]
-                    self.gui_state["lst_node_log_out"].append(
-                        {
-                            "number"       : nod_p_num,
-                            "log_line_lst"  : lst_log_lines
-                        }
-                    )
-
-                except TypeError:
-                    lst_log_lines = ["Nothing here"]
-
-            self.window.incoming_text.clear()
-            for single_log_line in lst_log_lines:
-                self.window.incoming_text.insertPlainText(single_log_line)
-                self.window.incoming_text.moveCursor(QTextCursor.End)
-
-        except IndexError:
-            print('\n no need to reload "ready" log')
+        self.log_show(nod_p_num)
 
     def reset_param_widget(self, str_key):
         self.gui_state["current_widget_key"] = str_key
@@ -667,11 +625,6 @@ class MainObject(QObject):
         if self.gui_state["new_node"] is None:
             self.server_nod_lst = json_data_request(uni_url, cmd)
             self.display(self.server_nod_lst)
-            tmp_off = '''
-            print("-" * 60)
-            print_dict(self.gui_state)
-            print("-" * 60)
-            '''
 
         else:
             nod2clone = dict(self.gui_state["new_node"])
@@ -679,11 +632,6 @@ class MainObject(QObject):
             self.gui_state["local_nod_lst"] = copy_lst_nodes(self.server_nod_lst)
             self.cmd_par.clone_from(nod2clone["cmd2show"])
             self.add_new_node()
-            tmp_off = '''
-            print("-" * 60)
-            print_dict(self.gui_state)
-            print("-" * 60)
-            '''
 
     def request_launch(self):
         cmd_str = self.cmd_par.get_full_command_string()
