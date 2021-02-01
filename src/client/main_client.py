@@ -43,7 +43,8 @@ from PySide2.QtGui import *
 
 from PySide2.QtWebEngineWidgets import QWebEngineView
 
-from gui_utils import TreeDirScene, widgets_defs, DoLoadHTML
+from gui_utils import TreeDirScene, widgets_defs
+from outputs import DoLoadHTML
 from reindex_table import ReindexTable
 from exec_utils import (
     build_advanced_params_widget,
