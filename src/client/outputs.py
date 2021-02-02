@@ -68,7 +68,10 @@ class DoLoadHTML(QObject):
 
         if not found_html:
             self.main_obj.window.HtmlReport.setHtml(self.loading_html)
-            self.main_obj.window.OutuputStatLabel.setText('Loading')
+            self.main_obj.window.OutuputStatLabel.setStyleSheet(
+                "QLabel { background-color : green; color : yellow; }"
+            )
+            self.main_obj.window.OutuputStatLabel.setText('  Loading  ')
             self.main_obj.parent_app.processEvents()
             cmd = {
                 "nod_lst":[nod_p_num],
@@ -114,19 +117,28 @@ class DoLoadHTML(QObject):
         print("network load_html ... End")
 
     def load_started(self):
-        self.main_obj.window.OutuputStatLabel.setText('Loading')
+        self.main_obj.window.OutuputStatLabel.setStyleSheet(
+            "QLabel { background-color : green; color : yellow; }"
+        )
+        self.main_obj.window.OutuputStatLabel.setText('  Loading  ')
         self.main_obj.parent_app.processEvents()
         print("RAM load_started")
 
     def load_progress(self, progress):
+        self.main_obj.window.OutuputStatLabel.setStyleSheet(
+            "QLabel { background-color : green; color : yellow; }"
+        )
         self.main_obj.window.OutuputStatLabel.setText(
-            'Loading: ' + str(progress) + " %"
+            '  Loading: ' + str(progress) + " %  "
         )
         self.main_obj.parent_app.processEvents()
 
     def load_finished(self):
         print("RAM load_finished")
-        self.main_obj.window.OutuputStatLabel.setText('Ready')
+        self.main_obj.window.OutuputStatLabel.setStyleSheet(
+            "QLabel { background-color : white; color : blue; }"
+        )
+        self.main_obj.window.OutuputStatLabel.setText('  Ready  ')
 
     def connect_loads(self):
         self.main_obj.window.HtmlReport.loadStarted.connect(self.load_started)
