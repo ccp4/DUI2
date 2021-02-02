@@ -290,7 +290,6 @@ class MainObject(QObject):
         self.window.LeftVSplitter.setStretchFactor(1, 1)
 
         self.window.show()
-        print('self.gui_state =', self.gui_state, '\n')
 
     def clearLayout(self, layout):
         if layout is not None:

@@ -54,7 +54,7 @@ class DoLoadHTML(QObject):
             </html>"""
 
     def __call__(self):
-        print("load_html ... Start \n")
+        print("network load_html ... Start")
         nod_p_num = self.main_obj.gui_state["current_nod_num"]
         found_html = False
         for html_info in self.lst_html:
@@ -111,22 +111,21 @@ class DoLoadHTML(QObject):
         else:
             self.main_obj.window.HtmlReport.setHtml(full_file)
 
-        print("\n load_html ... End")
+        print("network load_html ... End")
 
     def load_started(self):
         self.main_obj.window.OutuputStatLabel.setText('Loading')
         self.main_obj.parent_app.processEvents()
-        print("load_started")
+        print("RAM load_started")
 
     def load_progress(self, progress):
         self.main_obj.window.OutuputStatLabel.setText(
             'Loading: ' + str(progress) + " %"
         )
         self.main_obj.parent_app.processEvents()
-        print("load_progress:", progress)
 
     def load_finished(self):
-        print("load_finished")
+        print("RAM load_finished")
         self.main_obj.window.OutuputStatLabel.setText('Ready')
 
     def connect_loads(self):
