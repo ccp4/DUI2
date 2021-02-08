@@ -598,8 +598,13 @@ class MainObject(QObject):
     def request_display(self):
         cmd = {"nod_lst":"", "cmd_lst":["display"]}
         if self.gui_state["new_node"] is None:
-            self.server_nod_lst = json_data_request(uni_url, cmd)
-            self.display(self.server_nod_lst)
+            node_load_test = json_data_request(uni_url, cmd)
+            if node_load_test is not None:
+                self.server_nod_lst = node_load_test
+                self.display(self.server_nod_lst)
+
+            else:
+                print("node as << None >>, not displaying")
 
         else:
             nod2clone = dict(self.gui_state["new_node"])
