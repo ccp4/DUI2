@@ -207,6 +207,3 @@ class ShowLog(QObject):
         if self.main_obj.gui_state["current_nod_num"] == nod_p_num:
             self.main_obj.window.incoming_text.moveCursor(QTextCursor.End)
             self.main_obj.window.incoming_text.insertPlainText(new_line)
-
-
-
