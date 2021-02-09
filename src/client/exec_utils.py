@@ -93,7 +93,7 @@ def json_data_request(url, cmd):
             json_out = json.loads(str_lst)
 
     except ConnectionError:
-        print("\n ConnectionError \n")
+        print("\n ConnectionError (json_data_request) \n")
         json_out = None
 
     except requests.exceptions.RequestException:
