@@ -53,6 +53,15 @@ class DoLoadHTML(QObject):
             </body>
             </html>"""
 
+        self.failed_html = """<html>
+            <head>
+            <title>A Sample Page</title>
+            </head>
+            <body>
+            <h3>  Failed Connection</h3>
+            </body>
+            </html>"""
+
     def __call__(self):
         print("network load_html ... Start")
         nod_p_num = self.main_obj.gui_state["current_nod_num"]
@@ -114,7 +123,7 @@ class DoLoadHTML(QObject):
 
             except requests.exceptions.RequestException:
                 print("\n requests.exceptions.RequestException (DoLoadHTML) \n")
-                full_file = ''
+                full_file = self.failed_html
 
         if len(full_file) < 5:
             self.main_obj.window.HtmlReport.setHtml(self.not_avail_html)
