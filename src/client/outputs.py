@@ -36,31 +36,28 @@ class DoLoadHTML(QObject):
         self.connect_loads()
         self.lst_html = []
 
-        self.not_avail_html = """<html>
+        first_half = """<html>
             <head>
             <title>A Sample Page</title>
             </head>
             <body>
-            <h3>There is no report available for this step.</h3>
-            </body>
-            </html>"""
-        self.loading_html = """<html>
-            <head>
-            <title>A Sample Page</title>
-            </head>
-            <body>
-            <h3>  Loading ...</h3>
+            <h3>"""
+
+        second_half = """</h3>
             </body>
             </html>"""
 
-        self.failed_html = """<html>
-            <head>
-            <title>A Sample Page</title>
-            </head>
-            <body>
-            <h3>  Failed Connection</h3>
-            </body>
-            </html>"""
+        self.not_avail_html = first_half \
+        + "There is no report available for this step." \
+        + second_half
+
+        self.loading_html = first_half \
+        + "  Loading ..." \
+        + second_half
+
+        self.failed_html = first_half \
+        + "  Failed Connection" \
+        + second_half
 
     def __call__(self):
         print("network load_html ... Start")
