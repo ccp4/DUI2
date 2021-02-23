@@ -317,6 +317,7 @@ class MainObject(QObject):
             self.do_load_html()
 
     def clicked_4_navigation(self, node_numb):
+        print("\n clicked_4_navigation\n  node_numb =", node_numb)
         self.gui_state["current_nod_num"] = node_numb
         try:
             cur_nod = self.server_nod_lst[node_numb]
@@ -514,17 +515,19 @@ class MainObject(QObject):
         self.reset_param_widget(str_key)
 
     def update_all_param(self, cur_nod):
+        print("update_all_param:\n cur_nod =", cur_nod)
         str_key = str(cur_nod["cmd2show"][0][6:])
-        tmp_cmd_par = CommandParamControl(cur_nod["cmd2show"][0])
+        self.cmd_par = CommandParamControl(cur_nod["cmd2show"][0])
         self.reset_param_widget(str_key)
-        tmp_cmd_par.clone_from(cur_nod["cmd2show"])
+        self.cmd_par.clone_from(cur_nod["cmd2show"])
+        print("self.cmd_par:", self.cmd_par.get_all_params())
 
         self.param_widgets[str_key]["simple"].update_all_pars(
-            tmp_cmd_par.get_all_params()
+            self.cmd_par.get_all_params()
         )
         try:
             self.param_widgets[str_key]["advanced"].update_all_pars(
-                tmp_cmd_par.get_all_params()
+                self.cmd_par.get_all_params()
             )
         except AttributeError:
             print("No advanced pars")
@@ -587,6 +590,7 @@ class MainObject(QObject):
             print("no need to add next button")
 
     def add_new_node(self):
+        print("\n add_new_node \n")
         self.gui_state["local_nod_lst"].append(self.gui_state["new_node"])
         for node in self.gui_state["local_nod_lst"]:
             if node["number"] in self.gui_state["new_node"]["parent_node_lst"]:
@@ -598,6 +602,7 @@ class MainObject(QObject):
     def request_display(self):
         cmd = {"nod_lst":"", "cmd_lst":["display"]}
         if self.gui_state["new_node"] is None:
+            print('request_display(gui_state["new_node"] = None)')
             node_load_test = json_data_request(uni_url, cmd)
             if node_load_test is not None:
                 self.server_nod_lst = node_load_test
@@ -607,6 +612,10 @@ class MainObject(QObject):
                 print("node as << None >>, not displaying")
 
         else:
+            print(
+                'request_display(gui_state["new_node"] = ',
+                gui_state["new_node"]
+            )
             nod2clone = dict(self.gui_state["new_node"])
             self.server_nod_lst = json_data_request(uni_url, cmd)
             self.gui_state["local_nod_lst"] = copy_lst_nodes(self.server_nod_lst)

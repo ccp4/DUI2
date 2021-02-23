@@ -150,6 +150,7 @@ class CommandParamControl:
         )
 
     def set_parameter(self, new_name, new_value):
+        print(" par_lst(set_parameter) ini =", self.par_lst)
         already_here = False
         for single_par in self.par_lst:
             if single_par["name"] == new_name:
@@ -158,6 +159,7 @@ class CommandParamControl:
 
         if not already_here:
             self.par_lst.append({"name":new_name, "value":new_value})
+        print(" par_lst(set_parameter) end =", self.par_lst)
 
     def set_custom_parameter(self, new_custom_parameter):
         is_same = False
@@ -169,7 +171,7 @@ class CommandParamControl:
 
     def clone_from(self, lst_par_in):
         print(" Clone_from ------------")
-        self.par_lst = []
+        self.par_lst = list([])
         print("lst_par_in =", lst_par_in)
         lst_par = []
         for str_elem in lst_par_in:
