@@ -148,6 +148,7 @@ class CommandParamControl:
             "(cmd, par_lst) =",
             self.cmd, self.par_lst, " --------- \n"
         )
+        print(" par_lst(__init__) =", self.par_lst)
 
     def set_parameter(self, new_name, new_value):
         print(" par_lst(set_parameter) ini =", self.par_lst)
@@ -169,8 +170,8 @@ class CommandParamControl:
         self.custm_param = new_custom_parameter
         return is_same
 
-    def clone_from(self, lst_par_in):
-        print(" Clone_from ------------")
+    def clone_from_list(self, lst_par_in):
+        print(" clone_from_list ------------")
         self.par_lst = list([])
         print("lst_par_in =", lst_par_in)
         lst_par = []

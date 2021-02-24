@@ -337,6 +337,8 @@ class MainObject(QObject):
             for par_node_numb in cur_nod["parent_node_lst"]:
                 self.gui_state["parent_nums_lst"].append(int(par_node_numb))
 
+        print("\n cur_nod = ", cur_nod, "\n")
+
         cmd_ini = cur_nod["cmd2show"][0]
         key2find = cmd_ini[6:]
         try:
@@ -403,7 +405,9 @@ class MainObject(QObject):
 
         else:
             self.gui_state["parent_nums_lst"].append(node_numb)
-            self.gui_state["new_node"]["parent_node_lst"] = list(self.gui_state["parent_nums_lst"])
+            self.gui_state["new_node"]["parent_node_lst"] = list(
+                self.gui_state["parent_nums_lst"]
+            )
             self.add_new_node()
 
 
@@ -519,7 +523,7 @@ class MainObject(QObject):
         str_key = str(cur_nod["cmd2show"][0][6:])
         self.cmd_par = CommandParamControl(cur_nod["cmd2show"][0])
         self.reset_param_widget(str_key)
-        self.cmd_par.clone_from(cur_nod["cmd2show"])
+        self.cmd_par.clone_from_list(cur_nod["cmd2show"])
         print("self.cmd_par:", self.cmd_par.get_all_params())
 
         self.param_widgets[str_key]["simple"].update_all_pars(
@@ -619,7 +623,7 @@ class MainObject(QObject):
             nod2clone = dict(self.gui_state["new_node"])
             self.server_nod_lst = json_data_request(uni_url, cmd)
             self.gui_state["local_nod_lst"] = copy_lst_nodes(self.server_nod_lst)
-            self.cmd_par.clone_from(nod2clone["cmd2show"])
+            self.cmd_par.clone_from_list(nod2clone["cmd2show"])
             self.add_new_node()
 
     def request_launch(self):
@@ -721,7 +725,7 @@ class MainObject(QObject):
         for par_node_numb in self.gui_state["new_node"]["parent_node_lst"]:
             self.gui_state["parent_nums_lst"].append(int(par_node_numb))
 
-        self.cmd_par.clone_from(nod2clone["cmd2show"])
+        self.cmd_par.clone_from_list(nod2clone["cmd2show"])
         print("End retry", "*" * 50)
 
     def req_stop(self):
