@@ -170,6 +170,20 @@ class CommandParamControl:
         self.custm_param = new_custom_parameter
         return is_same
 
+    def clone_from_command_param(self, cmd_par_obj):
+        self.cmd = str(cmd_par_obj.cmd)
+        self.par_lst = []
+        for elem in cmd_par_obj.par_lst:
+            self.par_lst.append(
+                {"name":str(elem["name"]), "value":str(elem["value"])}
+            )
+        self.set_custom_parameter(cmd_par_obj.custm_param)
+
+        print(
+            "\n cloning with:\n", self.cmd, "\n",
+            self.par_lst, "\n", self.custm_param
+        )
+
     def clone_from_list(self, lst_par_in):
         print(" clone_from_list ------------")
         self.par_lst = list([])

@@ -439,6 +439,8 @@ class MainObject(QObject):
         cmd2run = self.param_widgets[str_key]["main_cmd"]
         try:
             self.cmd_par.set_parameter(str_path, str_value)
+            self.new_cmd_par = CommandParamControl()
+            self.new_cmd_par.clone_from_command_param(self.cmd_par)
 
         except AttributeError:
             print("no command parameter in memory yet")
@@ -516,14 +518,19 @@ class MainObject(QObject):
         self.cmd_par = CommandParamControl(
             self.gui_state["new_node"]["cmd2show"][0]
         )
-        self.reset_param_widget(str_key)
+        self.new_cmd_par = CommandParamControl()
+        self.new_cmd_par.clone_from_command_param(self.cmd_par)
 
     def update_all_param(self, cur_nod):
         print("update_all_param:\n cur_nod =", cur_nod)
         str_key = str(cur_nod["cmd2show"][0][6:])
         self.cmd_par = CommandParamControl(cur_nod["cmd2show"][0])
         self.reset_param_widget(str_key)
-        self.cmd_par.clone_from_list(cur_nod["cmd2show"])
+        if cur_nod["status"] == 'Ready':
+            self.cmd_par.clone_from_command_param(self.new_cmd_par)
+        else:
+            self.cmd_par.clone_from_list(cur_nod["cmd2show"])
+
         print("self.cmd_par:", self.cmd_par.get_all_params())
 
         self.param_widgets[str_key]["simple"].update_all_pars(
@@ -602,6 +609,9 @@ class MainObject(QObject):
 
         self.cmd_par = CommandParamControl(self.gui_state["new_node"]["cmd2show"][0])
         self.display(self.gui_state["local_nod_lst"])
+        self.new_cmd_par = CommandParamControl()
+        self.new_cmd_par.clone_from_command_param(self.cmd_par)
+
 
     def request_display(self):
         cmd = {"nod_lst":"", "cmd_lst":["display"]}
@@ -726,6 +736,9 @@ class MainObject(QObject):
             self.gui_state["parent_nums_lst"].append(int(par_node_numb))
 
         self.cmd_par.clone_from_list(nod2clone["cmd2show"])
+        self.new_cmd_par = CommandParamControl()
+        self.new_cmd_par.clone_from_command_param(self.cmd_par)
+
         print("End retry", "*" * 50)
 
     def req_stop(self):
