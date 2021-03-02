@@ -56,6 +56,11 @@ def generate_bunches(arr_in, n_times):
         plt.imshow(new_arr_2d, interpolation = "nearest")
         plt.show()
 
+    new_arr_2d[0, 0:y_size] = arr_in[0, 0:y_size]
+    new_arr_2d[0:x_size, 0] = arr_in[0:x_size, 0]
+    plt.imshow(new_arr_2d, interpolation = "nearest")
+    plt.show()
+
 
 if __name__ == "__main__":
     img_arr = img_arr_gen(25, 50)
