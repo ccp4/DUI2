@@ -26,10 +26,12 @@ def generate_bunches(arr_in, n_times):
     step_lst.reverse()
 
     print("step_lst:", step_lst)
-
+    '''
     ini = 0
     ini_stp = (ini, int(step_lst[0]))
     lst_ini_stp = [ini_stp]
+    '''
+    lst_ini_stp = []
     for loop_step in step_lst:
         ini = int(loop_step / 2)
         ini_stp = (ini, loop_step)
@@ -44,7 +46,7 @@ def generate_bunches(arr_in, n_times):
 
     print("new_arr_2d =\n", new_arr_2d)
 
-    for pos, ini_stp in enumerate(lst_ini_stp):
+    for ini_stp in lst_ini_stp:
         print("ini_stp", ini_stp)
         for x in range(ini_stp[0], x_size, ini_stp[1]):
             for y in range(ini_stp[0], y_size, ini_stp[1]):
@@ -63,9 +65,9 @@ def generate_bunches(arr_in, n_times):
 
 
 if __name__ == "__main__":
-    img_arr = img_arr_gen(250, 500)
+    img_arr = img_arr_gen(25, 50)
     print("img_arr =\n", img_arr)
     plt.imshow(img_arr, interpolation = "nearest")
     plt.show()
-    generate_bunches(img_arr, 8)
+    generate_bunches(img_arr, 5)
 
