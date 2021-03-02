@@ -17,7 +17,7 @@ def img_arr_gen(x_size, y_size):
     return arr_2d
 
 
-def generate_bunches(arr_in, n_times):
+def generate_ini_n_steps(n_times):
     lst_ini_stp = []
     for times in range(n_times):
         step = 2 ** (times + 1)
@@ -27,7 +27,9 @@ def generate_bunches(arr_in, n_times):
 
     lst_ini_stp.reverse()
     print("lst_ini_stp:", lst_ini_stp)
+    return lst_ini_stp
 
+def generate_bunches(arr_in, lst_ini_stp):
     x_size = len(arr_in[:,0])
     y_size = len(arr_in[0,:])
     new_arr_2d = np.zeros(
@@ -67,5 +69,7 @@ if __name__ == "__main__":
     print("img_arr =\n", img_arr)
     plt.imshow(img_arr, interpolation = "nearest")
     plt.show()
-    generate_bunches(img_arr, 5)
+
+    lst_ini_stp = generate_ini_n_steps(5)
+    generate_bunches(img_arr, lst_ini_stp)
 
