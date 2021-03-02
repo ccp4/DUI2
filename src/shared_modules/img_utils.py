@@ -44,12 +44,19 @@ def generate_bunches(arr_in, n_times):
 
     print("new_arr_2d =\n", new_arr_2d)
 
-    for ini_stp in lst_ini_stp:
+    for pos, ini_stp in enumerate(lst_ini_stp):
         print("ini_stp", ini_stp)
         for x in range(ini_stp[0], x_size, ini_stp[1]):
             for y in range(ini_stp[0], y_size, ini_stp[1]):
-                #new_arr_2d[x, y] = arr_in[x, y]
                 new_arr_2d[x, y] = 1.0
+        if pos > 0:
+            for x in range(lst_ini_stp[pos - 1][0], x_size, ini_stp[1]):
+                for y in range(ini_stp[0], y_size, ini_stp[1]):
+                    new_arr_2d[x, y] = 1.0
+
+            for x in range(ini_stp[0], x_size, ini_stp[1]):
+                for y in range(lst_ini_stp[pos - 1][0], y_size, ini_stp[1]):
+                    new_arr_2d[x, y] = 1.0
 
         print("new_arr_2d =\n", new_arr_2d)
 
