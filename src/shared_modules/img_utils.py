@@ -52,8 +52,12 @@ def generate_bunches(arr_in, n_times):
         plt.imshow(new_arr_2d, interpolation = "nearest")
         plt.show()
 
-    new_arr_2d[0, 0:y_size] = arr_in[0, 0:y_size]
-    new_arr_2d[0:x_size, 0] = arr_in[0:x_size, 0]
+    y_row = arr_in[0, 0:y_size]
+    print("y_row =", y_row)
+    new_arr_2d[0, 0:y_size] = y_row
+    x_col = arr_in[0:x_size, 0]
+    print("x_col =", x_col)
+    new_arr_2d[0:x_size, 0] = x_col
     plt.imshow(new_arr_2d, interpolation = "nearest")
     plt.show()
 
