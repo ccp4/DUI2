@@ -63,11 +63,9 @@ def generate_bunches(arr_in, n_times):
 
 
 if __name__ == "__main__":
-
     img_arr = img_arr_gen(250, 500)
     print("img_arr =\n", img_arr)
     plt.imshow(img_arr, interpolation = "nearest")
     plt.show()
     generate_bunches(img_arr, 8)
-
 
