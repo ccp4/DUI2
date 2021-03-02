@@ -48,25 +48,26 @@ def generate_bunches(arr_in, n_times):
         print("ini_stp", ini_stp)
         for x in range(ini_stp[0], x_size, ini_stp[1]):
             for y in range(ini_stp[0], y_size, ini_stp[1]):
-                new_arr_2d[x, y] = 1.0
-        if pos > 0:
-            for x in range(lst_ini_stp[pos - 1][0], x_size, ini_stp[1]):
-                for y in range(ini_stp[0], y_size, ini_stp[1]):
-                    new_arr_2d[x, y] = 1.0
+                new_arr_2d[x, y] = arr_in[x, y]
 
-            for x in range(ini_stp[0], x_size, ini_stp[1]):
-                for y in range(lst_ini_stp[pos - 1][0], y_size, ini_stp[1]):
-                    new_arr_2d[x, y] = 1.0
+        for x in range(int(ini_stp[0] * 2), x_size, ini_stp[1]):
+            for y in range(ini_stp[0], y_size, ini_stp[1]):
+                new_arr_2d[x, y] = arr_in[x, y]
 
-        print("new_arr_2d =\n", new_arr_2d)
+        for x in range(ini_stp[0], x_size, ini_stp[1]):
+            for y in range(int(ini_stp[0] * 2), y_size, ini_stp[1]):
+                new_arr_2d[x, y] = arr_in[x, y]
+
+        plt.imshow(new_arr_2d, interpolation = "nearest")
+        plt.show()
 
 
 if __name__ == "__main__":
 
-    img_arr = img_arr_gen(18, 14)
+    img_arr = img_arr_gen(250, 500)
     print("img_arr =\n", img_arr)
-    #plt.imshow(img_arr, interpolation = "nearest")
-    #plt.show()
-    generate_bunches(img_arr, 3)
+    plt.imshow(img_arr, interpolation = "nearest")
+    plt.show()
+    generate_bunches(img_arr, 8)
 
 
