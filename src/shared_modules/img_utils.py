@@ -36,17 +36,22 @@ def generate_bunches(arr_in, n_times):
         lst_ini_stp.append(ini_stp)
 
     print("lst_ini_stp:", lst_ini_stp)
-
+    x_size = len(arr_in[:,0])
+    y_size = len(arr_in[0,:])
     new_arr_2d = np.zeros(
-            (len(arr_in[:,0]), len(arr_in[0,:])),
-            dtype=np.float64, order='C'
+            (x_size, y_size), dtype=np.float64, order='C'
         )
 
     print("new_arr_2d =\n", new_arr_2d)
 
     for ini_stp in lst_ini_stp:
         print("ini_stp", ini_stp)
+        for x in range(ini_stp[0], x_size, ini_stp[1]):
+            for y in range(ini_stp[0], y_size, ini_stp[1]):
+                #new_arr_2d[x, y] = arr_in[x, y]
+                new_arr_2d[x, y] = 1.0
 
+        print("new_arr_2d =\n", new_arr_2d)
 
 
 if __name__ == "__main__":
