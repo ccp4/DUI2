@@ -20,17 +20,11 @@ def img_arr_gen(x_size, y_size):
 def generate_bunches(arr_in, n_times):
     step_lst = []
     for times in range(n_times):
-        local_step = times + 1
-        step_lst.append(2 ** local_step)
+        step_lst.append(2 ** (times + 1))
 
     step_lst.reverse()
-
     print("step_lst:", step_lst)
-    '''
-    ini = 0
-    ini_stp = (ini, int(step_lst[0]))
-    lst_ini_stp = [ini_stp]
-    '''
+
     lst_ini_stp = []
     for loop_step in step_lst:
         ini = int(loop_step / 2)
@@ -43,7 +37,6 @@ def generate_bunches(arr_in, n_times):
     new_arr_2d = np.zeros(
             (x_size, y_size), dtype=np.float64, order='C'
         )
-
     print("new_arr_2d =\n", new_arr_2d)
 
     for ini_stp in lst_ini_stp:
