@@ -30,16 +30,20 @@ def generate_ini_n_steps(n_times):
     return lst_ini_stp
 
 def generate_bunches(arr_in, lst_ini_stp):
+    lst_data_out = []
     x_size = len(arr_in[:,0])
     y_size = len(arr_in[0,:])
+    print("x_size, y_size: ", (x_size, y_size))
+    lst_data_out.append("x_size, y_size: " + str((x_size, y_size)) )
     new_arr_2d = np.zeros(
             (x_size, y_size), dtype=np.float64, order='C'
         )
-    print("new_arr_2d =\n", new_arr_2d)
+
     # This connected loops need to be reproduced
     # just identically in the client side
     for ini_stp in lst_ini_stp:
-        print("ini_stp", ini_stp)
+        print("ini_stp:", ini_stp)
+        lst_data_out.append("ini_stp:" + str(ini_stp))
         arr_str = "I(x,y):["
         for x in range(ini_stp[0], x_size, ini_stp[1]):
             for y in range(ini_stp[0], y_size, ini_stp[1]):
@@ -48,8 +52,10 @@ def generate_bunches(arr_in, lst_ini_stp):
 
         arr_str += "]"
         print(arr_str)
+        lst_data_out.append(arr_str)
 
-        print("ini_stp", ini_stp)
+        print("ini_stp:", ini_stp)
+        lst_data_out.append("ini_stp:" + str(ini_stp))
         arr_str = "I(x-u/2,y):["
         for x in range(int(ini_stp[0] * 2), x_size, ini_stp[1]):
             for y in range(ini_stp[0], y_size, ini_stp[1]):
@@ -58,8 +64,10 @@ def generate_bunches(arr_in, lst_ini_stp):
 
         arr_str += "]"
         print(arr_str)
+        lst_data_out.append(arr_str)
 
-        print("ini_stp", ini_stp)
+        print("ini_stp:", ini_stp)
+        lst_data_out.append("ini_stp:" + str(ini_stp))
         arr_str = "I(x,y-u/2):["
         for x in range(ini_stp[0], x_size, ini_stp[1]):
             for y in range(int(ini_stp[0] * 2), y_size, ini_stp[1]):
@@ -68,9 +76,10 @@ def generate_bunches(arr_in, lst_ini_stp):
 
         arr_str += "]"
         print(arr_str)
+        lst_data_out.append(arr_str)
 
-        plt.imshow(new_arr_2d, interpolation = "nearest")
-        plt.show()
+        #plt.imshow(new_arr_2d, interpolation = "nearest")
+        #plt.show()
 
     y_row = arr_in[0, 0:y_size]
     print("y_row =", y_row)
@@ -78,9 +87,14 @@ def generate_bunches(arr_in, lst_ini_stp):
     x_col = arr_in[0:x_size, 0]
     print("x_col =", x_col)
     new_arr_2d[0:x_size, 0] = x_col
-    plt.imshow(new_arr_2d, interpolation = "nearest")
-    plt.show()
+    #plt.imshow(new_arr_2d, interpolation = "nearest")
+    #plt.show()
+    return lst_data_out
 
+
+def from_stream_to_arr(lst_data_in):
+    for lin_str in lst_data_in:
+        print(lin_str, "\n")
 
 if __name__ == "__main__":
     img_arr = img_arr_gen(25, 50)
@@ -89,5 +103,6 @@ if __name__ == "__main__":
     plt.show()
 
     lst_ini_stp = generate_ini_n_steps(5)
-    generate_bunches(img_arr, lst_ini_stp)
+    lst_bun = generate_bunches(img_arr, lst_ini_stp)
+    from_stream_to_arr(lst_bun)
 
