@@ -33,7 +33,7 @@ def generate_bunches(arr_in, lst_ini_stp):
     lst_data_out = []
     x_size = len(arr_in[:,0])
     y_size = len(arr_in[0,:])
-    print("x_size, y_size: ", (x_size, y_size))
+    #print("x_size, y_size: ", (x_size, y_size))
     lst_data_out.append("x_size, y_size: " + str((x_size, y_size)) )
     new_arr_2d = np.zeros(
             (x_size, y_size), dtype=np.float64, order='C'
@@ -42,7 +42,7 @@ def generate_bunches(arr_in, lst_ini_stp):
     # This connected loops need to be reproduced
     # just identically in the client side
     for ini_stp in lst_ini_stp:
-        print("ini_stp:", ini_stp)
+        #print("ini_stp:", ini_stp)
         lst_data_out.append("ini_stp:" + str(ini_stp))
         arr_str = "I(x,y):["
         for x in range(ini_stp[0], x_size, ini_stp[1]):
@@ -51,10 +51,10 @@ def generate_bunches(arr_in, lst_ini_stp):
                 arr_str += str(arr_in[x, y]) + ","
 
         arr_str += "]"
-        print(arr_str)
+        #print(arr_str)
         lst_data_out.append(arr_str)
 
-        print("ini_stp:", ini_stp)
+        #print("ini_stp:", ini_stp)
         lst_data_out.append("ini_stp:" + str(ini_stp))
         arr_str = "I(x-u/2,y):["
         for x in range(int(ini_stp[0] * 2), x_size, ini_stp[1]):
@@ -63,10 +63,10 @@ def generate_bunches(arr_in, lst_ini_stp):
                 arr_str += str(arr_in[x, y]) + ","
 
         arr_str += "]"
-        print(arr_str)
+        #print(arr_str)
         lst_data_out.append(arr_str)
 
-        print("ini_stp:", ini_stp)
+        #print("ini_stp:", ini_stp)
         lst_data_out.append("ini_stp:" + str(ini_stp))
         arr_str = "I(x,y-u/2):["
         for x in range(ini_stp[0], x_size, ini_stp[1]):
@@ -75,7 +75,7 @@ def generate_bunches(arr_in, lst_ini_stp):
                 arr_str += str(arr_in[x, y]) + ","
 
         arr_str += "]"
-        print(arr_str)
+        #print(arr_str)
         lst_data_out.append(arr_str)
 
         #plt.imshow(new_arr_2d, interpolation = "nearest")
@@ -93,6 +93,7 @@ def generate_bunches(arr_in, lst_ini_stp):
 
 
 def from_stream_to_arr(lst_data_in):
+    print("#" * 72 + "\n")
     for lin_str in lst_data_in:
         print(lin_str, "\n")
 
