@@ -36,7 +36,8 @@ def generate_bunches(arr_in, lst_ini_stp):
             (x_size, y_size), dtype=np.float64, order='C'
         )
     print("new_arr_2d =\n", new_arr_2d)
-
+    # This connected loops need to be reproduced
+    # just identically in the client side
     for ini_stp in lst_ini_stp:
         print("ini_stp", ini_stp)
         for x in range(ini_stp[0], x_size, ini_stp[1]):
