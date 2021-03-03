@@ -40,17 +40,34 @@ def generate_bunches(arr_in, lst_ini_stp):
     # just identically in the client side
     for ini_stp in lst_ini_stp:
         print("ini_stp", ini_stp)
+        arr_str = "I(x,y):["
         for x in range(ini_stp[0], x_size, ini_stp[1]):
             for y in range(ini_stp[0], y_size, ini_stp[1]):
                 new_arr_2d[x, y] = arr_in[x, y]
+                arr_str += str(arr_in[x, y]) + ","
 
+        arr_str += "]"
+        print(arr_str)
+
+        print("ini_stp", ini_stp)
+        arr_str = "I(x-u/2,y):["
         for x in range(int(ini_stp[0] * 2), x_size, ini_stp[1]):
             for y in range(ini_stp[0], y_size, ini_stp[1]):
                 new_arr_2d[x, y] = arr_in[x, y]
+                arr_str += str(arr_in[x, y]) + ","
 
+        arr_str += "]"
+        print(arr_str)
+
+        print("ini_stp", ini_stp)
+        arr_str = "I(x,y-u/2):["
         for x in range(ini_stp[0], x_size, ini_stp[1]):
             for y in range(int(ini_stp[0] * 2), y_size, ini_stp[1]):
                 new_arr_2d[x, y] = arr_in[x, y]
+                arr_str += str(arr_in[x, y]) + ","
+
+        arr_str += "]"
+        print(arr_str)
 
         plt.imshow(new_arr_2d, interpolation = "nearest")
         plt.show()
