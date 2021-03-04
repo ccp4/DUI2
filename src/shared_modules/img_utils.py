@@ -40,10 +40,11 @@ def generate_bunches(arr_in, lst_ini_stp):
         )
 
     lst_data_out.append("len(lst_ini_stp)=" + str(len(lst_ini_stp)))
+    first_loop = True
     for ini_stp in lst_ini_stp:
         lst_data_out.append("ini_stp=" + str(ini_stp))
         arr_str = "I(x,y)=["
-        # This 3 double connected loops need to be reproduced
+        # This 4 double connected loops need to be reproduced
         # just identically in the client side
         for x in range(ini_stp[0], x_size, ini_stp[1]):
             for y in range(ini_stp[0], y_size, ini_stp[1]):
@@ -54,7 +55,7 @@ def generate_bunches(arr_in, lst_ini_stp):
         lst_data_out.append(arr_str)
 
         lst_data_out.append("ini_stp=" + str(ini_stp))
-        arr_str = "I(x-u/2,y)=["
+        arr_str = "I(x+u/2,y)=["
         for x in range(int(ini_stp[0] * 2), x_size, ini_stp[1]):
             for y in range(ini_stp[0], y_size, ini_stp[1]):
                 new_arr_2d[x, y] = arr_in[x, y]
@@ -64,7 +65,7 @@ def generate_bunches(arr_in, lst_ini_stp):
         lst_data_out.append(arr_str)
 
         lst_data_out.append("ini_stp=" + str(ini_stp))
-        arr_str = "I(x,y-u/2)=["
+        arr_str = "I(x,y+u/2)=["
         for x in range(ini_stp[0], x_size, ini_stp[1]):
             for y in range(int(ini_stp[0] * 2), y_size, ini_stp[1]):
                 new_arr_2d[x, y] = arr_in[x, y]
@@ -72,9 +73,20 @@ def generate_bunches(arr_in, lst_ini_stp):
 
         arr_str += "]"
         lst_data_out.append(arr_str)
+        if first_loop:
+            first_loop = False
+            lst_data_out.append("ini_stp=" + str(ini_stp))
+            arr_str = "I(x+u/2,y+u/2)=["
+            for x in range(int(ini_stp[0] * 2), x_size, ini_stp[1]):
+                for y in range(int(ini_stp[0] * 2), y_size, ini_stp[1]):
+                    new_arr_2d[x, y] = arr_in[x, y]
+                    arr_str += str(arr_in[x, y]) + ","
 
-        #plt.imshow(new_arr_2d, interpolation = "nearest")
-        #plt.show()
+            arr_str += "]"
+            lst_data_out.append(arr_str)
+
+        plt.imshow(new_arr_2d, interpolation = "nearest")
+        plt.show()
 
     y_row = arr_in[0, 0:y_size]
     new_arr_2d[0, 0:y_size] = y_row
@@ -114,8 +126,8 @@ def str2tup(str_in):
 
 def from_stream_to_arr(lst_data_in):
     print("#" * 72 + "\n")
-    for lin_str in lst_data_in:
-        print(lin_str, "\n")
+    #for lin_str in lst_data_in:
+    #    print(lin_str, "\n")
 
     print("#" * 72 + "\n")
 
@@ -141,6 +153,7 @@ def from_stream_to_arr(lst_data_in):
         lst_len = int(lin2[17:])
         pos_lst = 2
 
+        first_loop = True
         for times in range(lst_len):
             lin_n_str = lst_data_in[pos_lst]
             pos_lst += 1
@@ -155,10 +168,10 @@ def from_stream_to_arr(lst_data_in):
 
             lin_n_str = lst_data_in[pos_lst]
             pos_lst += 1
-            print("lin_n_str =", lin_n_str)
+            #print("lin_n_str =", lin_n_str)
             if lin_n_str[0:8] == "I(x,y)=[":
                 dat_tup = tuple(lin_n_str[8:-2].split(","))
-                print("dat_tup =", dat_tup)
+                #print("dat_tup =", dat_tup)
 
             else:
                 print(" *** ERROR #4 *** ")
@@ -188,10 +201,10 @@ def from_stream_to_arr(lst_data_in):
 
             lin_n_str = lst_data_in[pos_lst]
             pos_lst += 1
-            print("lin_n_str =", lin_n_str)
-            if lin_n_str[0:12] == "I(x-u/2,y)=[":
+            #print("lin_n_str =", lin_n_str)
+            if lin_n_str[0:12] == "I(x+u/2,y)=[":
                 dat_tup = tuple(lin_n_str[12:-2].split(","))
-                print("dat_tup =", dat_tup)
+                #print("dat_tup =", dat_tup)
 
             else:
                 print(" *** ERROR #6 *** ")
@@ -220,10 +233,10 @@ def from_stream_to_arr(lst_data_in):
 
             lin_n_str = lst_data_in[pos_lst]
             pos_lst += 1
-            print("lin_n_str =", lin_n_str)
-            if lin_n_str[0:12] == "I(x,y-u/2)=[":
+            #print("lin_n_str =", lin_n_str)
+            if lin_n_str[0:12] == "I(x,y+u/2)=[":
                 dat_tup = tuple(lin_n_str[12:-2].split(","))
-                print("dat_tup =", dat_tup)
+                #print("dat_tup =", dat_tup)
 
             else:
                 print(" *** ERROR #8 *** ")
@@ -238,10 +251,44 @@ def from_stream_to_arr(lst_data_in):
                         tup_pos += 1
                         img_i_2d[x, y] = i
 
+            #######################################################################
+            if first_loop:
+                first_loop = False
+
+                lin_n_str = lst_data_in[pos_lst]
+                pos_lst += 1
+                if lin_n_str[0:9] == "ini_stp=(":
+                    print("lin_n_str =", lin_n_str)
+                    ini_stp = str2tup(lin_n_str[8:])
+
+                else:
+                    print(" *** ERROR #7 *** ")
+                    print("lin_n_str =", lin_n_str)
+                    return
+
+                lin_n_str = lst_data_in[pos_lst]
+                pos_lst += 1
+                #print("lin_n_str =", lin_n_str)
+                if lin_n_str[0:16] == "I(x+u/2,y+u/2)=[":
+                    dat_tup = tuple(lin_n_str[16:-2].split(","))
+                    #print("dat_tup =", dat_tup)
+
+                else:
+                    print(" *** ERROR #8 *** ")
+                    print("lin_n_str =", lin_n_str)
+                    return
+
+                if len(dat_tup) > 0:
+                    tup_pos = 0
+                    for x in range(int(ini_stp[0] * 2), x_size, ini_stp[1]):
+                        for y in range(int(ini_stp[0] * 2), y_size, ini_stp[1]):
+                            i = float(dat_tup[tup_pos])
+                            tup_pos += 1
+                            img_i_2d[x, y] = i
+
             plt.imshow(img_i_2d, interpolation = "nearest")
             plt.show()
             #######################################################################
-
 
     else:
         print(" *** ERROR #2 *** ")
@@ -249,10 +296,9 @@ def from_stream_to_arr(lst_data_in):
         return
 
 
-
 if __name__ == "__main__":
-    img_arr = img_arr_gen(20, 35)
-    print("img_arr =\n", img_arr)
+    img_arr = img_arr_gen(250, 450)
+    #print("img_arr =\n", img_arr)
     plt.imshow(img_arr, interpolation = "nearest")
     plt.show()
 
