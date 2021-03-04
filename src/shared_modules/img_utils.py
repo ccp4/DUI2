@@ -34,7 +34,7 @@ def generate_bunches(arr_in, lst_ini_stp):
     x_size = len(arr_in[:,0])
     y_size = len(arr_in[0,:])
     #print("x_size, y_size: ", (x_size, y_size))
-    lst_data_out.append("x_size, y_size: " + str((x_size, y_size)) )
+    lst_data_out.append("x_size, y_size=" + str((x_size, y_size)) )
     new_arr_2d = np.zeros(
             (x_size, y_size), dtype=np.float64, order='C'
         )
@@ -100,10 +100,36 @@ def generate_bunches(arr_in, lst_ini_stp):
     return lst_data_out
 
 
+def str2tup(str_in):
+    cut_str = str_in[1:-1]
+    print("str_in(cut) =", cut_str)
+    lst_str = cut_str.split(",")
+    tmp_lst_num = []
+    for singl_str in lst_str:
+        tmp_lst_num.append(int(singl_str))
+
+    return tuple(tmp_lst_num)
+
+
 def from_stream_to_arr(lst_data_in):
     print("#" * 72 + "\n")
     for lin_str in lst_data_in:
         print(lin_str, "\n")
+
+    lin1 = lst_data_in[0]
+    if lin1[0:15] == "x_size, y_size=":
+        print("lin1 OK")
+        tup_str = lin1[15:]
+        print("tup_str =", tup_str)
+        tup_dat = str2tup(tup_str)
+        x_size = tup_dat[0]
+        y_size = tup_dat[1]
+        img_i_2d = np.zeros(
+                (x_size, y_size), dtype=np.float64, order='C'
+            )
+
+        print("img_i_2d =\n", img_i_2d)
+
 
 if __name__ == "__main__":
     img_arr = img_arr_gen(25, 50)
