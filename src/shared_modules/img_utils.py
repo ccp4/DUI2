@@ -42,65 +42,56 @@ def generate_bunches(arr_in, lst_ini_stp):
     # This connected loops need to be reproduced
     # just identically in the client side
     for ini_stp in lst_ini_stp:
-        #print("ini_stp:", ini_stp)
-        lst_data_out.append("ini_stp:" + str(ini_stp))
-        arr_str = "I(x,y):["
+        lst_data_out.append("ini_stp=" + str(ini_stp))
+        arr_str = "I(x,y)=["
         for x in range(ini_stp[0], x_size, ini_stp[1]):
             for y in range(ini_stp[0], y_size, ini_stp[1]):
                 new_arr_2d[x, y] = arr_in[x, y]
                 arr_str += str(arr_in[x, y]) + ","
 
         arr_str += "]"
-        #print(arr_str)
         lst_data_out.append(arr_str)
 
-        #print("ini_stp:", ini_stp)
-        lst_data_out.append("ini_stp:" + str(ini_stp))
-        arr_str = "I(x-u/2,y):["
+        lst_data_out.append("ini_stp=" + str(ini_stp))
+        arr_str = "I(x-u/2,y)=["
         for x in range(int(ini_stp[0] * 2), x_size, ini_stp[1]):
             for y in range(ini_stp[0], y_size, ini_stp[1]):
                 new_arr_2d[x, y] = arr_in[x, y]
                 arr_str += str(arr_in[x, y]) + ","
 
         arr_str += "]"
-        #print(arr_str)
         lst_data_out.append(arr_str)
 
-        #print("ini_stp:", ini_stp)
-        lst_data_out.append("ini_stp:" + str(ini_stp))
-        arr_str = "I(x,y-u/2):["
+        lst_data_out.append("ini_stp=" + str(ini_stp))
+        arr_str = "I(x,y-u/2)=["
         for x in range(ini_stp[0], x_size, ini_stp[1]):
             for y in range(int(ini_stp[0] * 2), y_size, ini_stp[1]):
                 new_arr_2d[x, y] = arr_in[x, y]
                 arr_str += str(arr_in[x, y]) + ","
 
         arr_str += "]"
-        #print(arr_str)
         lst_data_out.append(arr_str)
 
         #plt.imshow(new_arr_2d, interpolation = "nearest")
         #plt.show()
 
-    '''
     y_row = arr_in[0, 0:y_size]
-    print("y_row =", y_row)
     new_arr_2d[0, 0:y_size] = y_row
     x_col = arr_in[0:x_size, 0]
-    print("x_col =", x_col)
     new_arr_2d[0:x_size, 0] = x_col
+
     #plt.imshow(new_arr_2d, interpolation = "nearest")
     #plt.show()
-    '''
 
-    arr_str = "I(0,:):["
-    for i_y in arr_in[0, 0:y_size]:
+    arr_str = "I(0,:)=["
+    for i_y in y_row:
         arr_str += str(i_y) + ","
 
     arr_str += "]"
     lst_data_out.append(arr_str)
 
-    arr_str = "I(:,0):["
-    for i_x in arr_in[0:x_size, 0]:
+    arr_str = "I(:,0)=["
+    for i_x in x_col:
         arr_str += str(i_x) + ","
 
     arr_str += "]"
