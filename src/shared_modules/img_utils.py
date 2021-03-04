@@ -81,6 +81,7 @@ def generate_bunches(arr_in, lst_ini_stp):
         #plt.imshow(new_arr_2d, interpolation = "nearest")
         #plt.show()
 
+    '''
     y_row = arr_in[0, 0:y_size]
     print("y_row =", y_row)
     new_arr_2d[0, 0:y_size] = y_row
@@ -89,6 +90,22 @@ def generate_bunches(arr_in, lst_ini_stp):
     new_arr_2d[0:x_size, 0] = x_col
     #plt.imshow(new_arr_2d, interpolation = "nearest")
     #plt.show()
+    '''
+
+    arr_str = "I(0,:):["
+    for i_y in arr_in[0, 0:y_size]:
+        arr_str += str(i_y) + ","
+
+    arr_str += "]"
+    lst_data_out.append(arr_str)
+
+    arr_str = "I(:,0):["
+    for i_x in arr_in[0:x_size, 0]:
+        arr_str += str(i_x) + ","
+
+    arr_str += "]"
+    lst_data_out.append(arr_str)
+
     return lst_data_out
 
 
