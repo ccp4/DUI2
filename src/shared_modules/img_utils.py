@@ -7,7 +7,7 @@ def img_arr_gen(x_size, y_size):
     for x in range(x_size):
         for y in range(y_size):
             h = abs(xmid - x) + abs(ymid - y)
-            arr_2d[x, y] = h
+            arr_2d[x, y] = h * 5
 
     arr_2d[
         int(x_size / 10):int(x_size - x_size / 10),
@@ -85,16 +85,16 @@ def generate_bunches(arr_in, lst_ini_stp):
             arr_str += "]"
             lst_data_out.append(arr_str)
 
-        plt.imshow(new_arr_2d, interpolation = "nearest")
-        plt.show()
+        #plt.imshow(new_arr_2d, interpolation = "nearest")
+        #plt.show()
 
     y_row = arr_in[0, 0:y_size]
     new_arr_2d[0, 0:y_size] = y_row
     x_col = arr_in[0:x_size, 0]
     new_arr_2d[0:x_size, 0] = x_col
 
-    #plt.imshow(new_arr_2d, interpolation = "nearest")
-    #plt.show()
+    plt.imshow(new_arr_2d, interpolation = "nearest")
+    plt.show()
 
     arr_str = "I(0,:)=["
     for i_y in y_row:
@@ -187,7 +187,6 @@ def from_stream_to_arr(lst_data_in):
                         img_i_2d[x, y] = i
 
             ########################################################################
-
             lin_n_str = lst_data_in[pos_lst]
             pos_lst += 1
             if lin_n_str[0:9] == "ini_stp=(":
@@ -288,7 +287,25 @@ def from_stream_to_arr(lst_data_in):
 
             plt.imshow(img_i_2d, interpolation = "nearest")
             plt.show()
-            #######################################################################
+
+        lin_n_str = lst_data_in[pos_lst]
+        pos_lst += 1
+        if lin_n_str[0:8] == "I(0,:)=[":
+            dat_tup = tuple(lin_n_str[8:-2].split(","))
+
+        for y, i in enumerate(dat_tup):
+            img_i_2d[0, y] = float(i)
+
+        lin_n_str = lst_data_in[pos_lst]
+        pos_lst += 1
+        if lin_n_str[0:8] == "I(:,0)=[":
+            dat_tup = tuple(lin_n_str[8:-2].split(","))
+
+        for x, i in enumerate(dat_tup):
+            img_i_2d[x, 0] = float(i)
+
+        plt.imshow(img_i_2d, interpolation = "nearest")
+        plt.show()
 
     else:
         print(" *** ERROR #2 *** ")
@@ -297,11 +314,7 @@ def from_stream_to_arr(lst_data_in):
 
 
 if __name__ == "__main__":
-    img_arr = img_arr_gen(250, 450)
-    #print("img_arr =\n", img_arr)
-    plt.imshow(img_arr, interpolation = "nearest")
-    plt.show()
-
+    img_arr = img_arr_gen(35, 65)
     lst_ini_stp = generate_ini_n_steps(5)
     lst_bun = generate_bunches(img_arr, lst_ini_stp)
     from_stream_to_arr(lst_bun)
