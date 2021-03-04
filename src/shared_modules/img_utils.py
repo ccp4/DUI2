@@ -131,8 +131,6 @@ def from_stream_to_arr(lst_data_in):
                 (x_size, y_size), dtype=np.float64, order='C'
             )
 
-        print("img_i_2d =\n", img_i_2d)
-
     else:
         print(" *** ERROR #1 *** ")
         print("lin1 =", lin1)
@@ -167,7 +165,7 @@ def from_stream_to_arr(lst_data_in):
                 print("lin_n_str =", lin_n_str)
                 return
 
-            if len(dat_tup) > 1:
+            if len(dat_tup) > 0:
                 tup_pos = 0
                 for x in range(ini_stp[0], x_size, ini_stp[1]):
                     for y in range(ini_stp[0], y_size, ini_stp[1]):
@@ -175,8 +173,6 @@ def from_stream_to_arr(lst_data_in):
                         tup_pos += 1
                         img_i_2d[x, y] = i
 
-            plt.imshow(img_i_2d, interpolation = "nearest")
-            plt.show()
             ########################################################################
 
             lin_n_str = lst_data_in[pos_lst]
@@ -202,7 +198,7 @@ def from_stream_to_arr(lst_data_in):
                 print("lin_n_str =", lin_n_str)
                 return
 
-            if len(dat_tup) > 1:
+            if len(dat_tup) > 0:
                 tup_pos = 0
                 for x in range(int(ini_stp[0] * 2), x_size, ini_stp[1]):
                     for y in range(ini_stp[0], y_size, ini_stp[1]):
@@ -210,8 +206,6 @@ def from_stream_to_arr(lst_data_in):
                         tup_pos += 1
                         img_i_2d[x, y] = i
 
-            plt.imshow(img_i_2d, interpolation = "nearest")
-            plt.show()
             #######################################################################
             lin_n_str = lst_data_in[pos_lst]
             pos_lst += 1
@@ -236,7 +230,7 @@ def from_stream_to_arr(lst_data_in):
                 print("lin_n_str =", lin_n_str)
                 return
 
-            if len(dat_tup) > 1:
+            if len(dat_tup) > 0:
                 tup_pos = 0
                 for x in range(ini_stp[0], x_size, ini_stp[1]):
                     for y in range(int(ini_stp[0] * 2), y_size, ini_stp[1]):
