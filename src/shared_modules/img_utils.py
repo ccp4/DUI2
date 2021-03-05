@@ -35,9 +35,6 @@ def generate_bunches(arr_in, lst_ini_stp):
     y_size = len(arr_in[0,:])
     arr_str = "x_size, y_size=" + str( (x_size, y_size) )
     lst_data_out.append(arr_str)
-    new_arr_2d = np.zeros(
-            (x_size, y_size), dtype=np.float64, order='C'
-        )
 
     lst_data_out.append("len(lst_ini_stp)=" + str(len(lst_ini_stp)))
     first_loop = True
@@ -48,7 +45,6 @@ def generate_bunches(arr_in, lst_ini_stp):
         # just identically in the client side
         for x in range(ini_stp[0], x_size, ini_stp[1]):
             for y in range(ini_stp[0], y_size, ini_stp[1]):
-                new_arr_2d[x, y] = arr_in[x, y]
                 arr_str += str(arr_in[x, y]) + ","
 
         arr_str += "]"
@@ -58,7 +54,6 @@ def generate_bunches(arr_in, lst_ini_stp):
         arr_str = "I(x+u/2,y)=["
         for x in range(int(ini_stp[0] * 2), x_size, ini_stp[1]):
             for y in range(ini_stp[0], y_size, ini_stp[1]):
-                new_arr_2d[x, y] = arr_in[x, y]
                 arr_str += str(arr_in[x, y]) + ","
 
         arr_str += "]"
@@ -68,7 +63,6 @@ def generate_bunches(arr_in, lst_ini_stp):
         arr_str = "I(x,y+u/2)=["
         for x in range(ini_stp[0], x_size, ini_stp[1]):
             for y in range(int(ini_stp[0] * 2), y_size, ini_stp[1]):
-                new_arr_2d[x, y] = arr_in[x, y]
                 arr_str += str(arr_in[x, y]) + ","
 
         arr_str += "]"
@@ -79,22 +73,13 @@ def generate_bunches(arr_in, lst_ini_stp):
             arr_str = "I(x+u/2,y+u/2)=["
             for x in range(int(ini_stp[0] * 2), x_size, ini_stp[1]):
                 for y in range(int(ini_stp[0] * 2), y_size, ini_stp[1]):
-                    new_arr_2d[x, y] = arr_in[x, y]
                     arr_str += str(arr_in[x, y]) + ","
 
             arr_str += "]"
             lst_data_out.append(arr_str)
 
-        #plt.imshow(new_arr_2d, interpolation = "nearest")
-        #plt.show()
-
     y_row = arr_in[0, 0:y_size]
-    new_arr_2d[0, 0:y_size] = y_row
     x_col = arr_in[0:x_size, 0]
-    new_arr_2d[0:x_size, 0] = x_col
-
-    plt.imshow(new_arr_2d, interpolation = "nearest")
-    plt.show()
 
     arr_str = "I(0,:)=["
     for i_y in y_row:
@@ -184,7 +169,7 @@ def from_stream_to_arr(lst_data_in):
                     for y in range(ini_stp[0], y_size, ini_stp[1]):
                         i = float(dat_tup[tup_pos])
                         tup_pos += 1
-                        img_i_2d[x, y] = i
+                        img_i_2d[x-ini_stp[0] + 1:x + 1, y-ini_stp[0] + 1:y + 1] = i
 
             ########################################################################
             lin_n_str = lst_data_in[pos_lst]
@@ -216,7 +201,7 @@ def from_stream_to_arr(lst_data_in):
                     for y in range(ini_stp[0], y_size, ini_stp[1]):
                         i = float(dat_tup[tup_pos])
                         tup_pos += 1
-                        img_i_2d[x, y] = i
+                        img_i_2d[x-ini_stp[0] + 1:x + 1, y-ini_stp[0] + 1:y + 1] = i
 
             #######################################################################
             lin_n_str = lst_data_in[pos_lst]
@@ -248,7 +233,7 @@ def from_stream_to_arr(lst_data_in):
                     for y in range(int(ini_stp[0] * 2), y_size, ini_stp[1]):
                         i = float(dat_tup[tup_pos])
                         tup_pos += 1
-                        img_i_2d[x, y] = i
+                        img_i_2d[x-ini_stp[0] + 1:x + 1, y-ini_stp[0] + 1:y + 1] = i
 
             #######################################################################
             if first_loop:
@@ -283,7 +268,9 @@ def from_stream_to_arr(lst_data_in):
                         for y in range(int(ini_stp[0] * 2), y_size, ini_stp[1]):
                             i = float(dat_tup[tup_pos])
                             tup_pos += 1
-                            img_i_2d[x, y] = i
+                            img_i_2d[x-ini_stp[0] + 1:x + 1, y-ini_stp[0] + 1:y + 1] = i
+
+                #######################################################################
 
             plt.imshow(img_i_2d, interpolation = "nearest")
             plt.show()
@@ -314,8 +301,10 @@ def from_stream_to_arr(lst_data_in):
 
 
 if __name__ == "__main__":
-    img_arr = img_arr_gen(35, 65)
-    lst_ini_stp = generate_ini_n_steps(5)
+    img_arr = img_arr_gen(350, 550)
+    plt.imshow(img_arr, interpolation = "nearest")
+    plt.show()
+    lst_ini_stp = generate_ini_n_steps(8)
     lst_bun = generate_bunches(img_arr, lst_ini_stp)
     from_stream_to_arr(lst_bun)
 
