@@ -1,5 +1,9 @@
 import numpy as np
 from matplotlib import pyplot as plt
+
+import time
+
+
 def img_arr_gen(x_size, y_size):
     arr_2d = np.zeros((x_size, y_size), dtype=np.float64, order='C')
     xmid = x_size / 2
@@ -35,47 +39,106 @@ def generate_bunches(arr_in, lst_ini_stp):
     y_size = len(arr_in[0,:])
     arr_str = "x_size, y_size=" + str( (x_size, y_size) )
     lst_data_out.append(arr_str)
-
     lst_data_out.append("len(lst_ini_stp)=" + str(len(lst_ini_stp)))
+
+    start = time.time()
+
+    #old timing =  2.291943073272705 ############################################
+
+    # mocking loops just to count size of array
+    lst_ini_stp_arr = []
     first_loop = True
     for ini_stp in lst_ini_stp:
-        lst_data_out.append("ini_stp=" + str(ini_stp))
+        ini_stp_arr_s = [ini_stp[0], ini_stp[1]]
+        size = 0
+        for x in range(ini_stp[0], x_size, ini_stp[1]):
+            for y in range(ini_stp[0], y_size, ini_stp[1]):
+                size += 1
+
+        ini_stp_arr_s.append(
+            np.zeros(size, dtype=np.float64, order='C')
+        )
+
+        size = 0
+        for x in range(int(ini_stp[0] * 2), x_size, ini_stp[1]):
+            for y in range(ini_stp[0], y_size, ini_stp[1]):
+                size += 1
+
+        ini_stp_arr_s.append(
+            np.zeros(size, dtype=np.float64, order='C')
+        )
+
+        size = 0
+        for x in range(ini_stp[0], x_size, ini_stp[1]):
+            for y in range(int(ini_stp[0] * 2), y_size, ini_stp[1]):
+                size += 1
+
+        ini_stp_arr_s.append(
+            np.zeros(size, dtype=np.float64, order='C')
+        )
+
+        size = 0
+        if first_loop:
+            first_loop = False
+            for x in range(int(ini_stp[0] * 2), x_size, ini_stp[1]):
+                for y in range(int(ini_stp[0] * 2), y_size, ini_stp[1]):
+                    size += 1
+
+            ini_stp_arr_s.append(
+                np.zeros(size, dtype=np.float64, order='C')
+            )
+
+        ini_stp_arr_s.append(None)
+
+
+    #############################################################################
+
+    for ini_stp_arr in lst_ini_stp_arr:
+        lst_data_out.append("ini_stp=" + str(ini_stp[0:2]))
         arr_str = "I(x,y)=["
         # This 4 double connected loops need to be reproduced
         # just identically in the client side
-        for x in range(ini_stp[0], x_size, ini_stp[1]):
-            for y in range(ini_stp[0], y_size, ini_stp[1]):
-                arr_str += str(arr_in[x, y]) + ","
+        pos = 0
+        for x in range(ini_stp_arr[0], x_size, ini_stp_arr[1]):
+            for y in range(ini_stp_arr[0], y_size, ini_stp_arr[1]):
+                ini_stp_arr[2][pos] = arr_in[x, y]
+                pos += 1
+                #arr_str += str(arr_in[x, y]) + ","
 
-        arr_str += "]"
+        arr_str += str(ini_stp_arr[2]) + "]"
         lst_data_out.append(arr_str)
 
-        lst_data_out.append("ini_stp=" + str(ini_stp))
+        lst_data_out.append("ini_stp=" + str(ini_stp[0:2]))
         arr_str = "I(x+u/2,y)=["
-        for x in range(int(ini_stp[0] * 2), x_size, ini_stp[1]):
-            for y in range(ini_stp[0], y_size, ini_stp[1]):
-                arr_str += str(arr_in[x, y]) + ","
+        for x in range(int(ini_stp_arr[0] * 2), x_size, ini_stp_arr[1]):
+            for y in range(ini_stp_arr[0], y_size, ini_stp_arr[1]):
+                ini_stp_arr[3][pos] = arr_in[x, y]
+                pos += 1
+                #arr_str += str(arr_in[x, y]) + ","
 
-        arr_str += "]"
+        arr_str += str(ini_stp_arr[3]) + "]"
         lst_data_out.append(arr_str)
 
-        lst_data_out.append("ini_stp=" + str(ini_stp))
+        lst_data_out.append("ini_stp=" + str(ini_stp[0:2]))
         arr_str = "I(x,y+u/2)=["
-        for x in range(ini_stp[0], x_size, ini_stp[1]):
-            for y in range(int(ini_stp[0] * 2), y_size, ini_stp[1]):
-                arr_str += str(arr_in[x, y]) + ","
+        for x in range(ini_stp_arr[0], x_size, ini_stp_arr[1]):
+            for y in range(int(ini_stp_arr[0] * 2), y_size, ini_stp_arr[1]):
+                ini_stp_arr[4][pos] = arr_in[x, y]
+                pos += 1
+                #arr_str += str(arr_in[x, y]) + ","
 
-        arr_str += "]"
+        arr_str += str(ini_stp_arr[4]) + "]"
         lst_data_out.append(arr_str)
-        if first_loop:
-            first_loop = False
-            lst_data_out.append("ini_stp=" + str(ini_stp))
+        if ini_stp_arr[5][pos] is not None:
+            lst_data_out.append("ini_stp=" + str(ini_stp[0:2]))
             arr_str = "I(x+u/2,y+u/2)=["
-            for x in range(int(ini_stp[0] * 2), x_size, ini_stp[1]):
-                for y in range(int(ini_stp[0] * 2), y_size, ini_stp[1]):
-                    arr_str += str(arr_in[x, y]) + ","
+            for x in range(int(ini_stp_arr[0] * 2), x_size, ini_stp_arr[1]):
+                for y in range(int(ini_stp_arr[0] * 2), y_size, ini_stp_arr[1]):
+                    ini_stp_arr[5][pos] = arr_in[x, y]
+                    pos += 1
+                    #arr_str += str(arr_in[x, y]) + ","
 
-            arr_str += "]"
+            arr_str += str(ini_stp_arr[5]) + "]"
             lst_data_out.append(arr_str)
 
     y_row = arr_in[0, 0:y_size]
@@ -94,6 +157,11 @@ def generate_bunches(arr_in, lst_ini_stp):
 
     arr_str += "]"
     lst_data_out.append(arr_str)
+
+
+    end = time.time()
+    print("timing = ", end - start)
+
 
     return lst_data_out
 
@@ -272,8 +340,8 @@ def from_stream_to_arr(lst_data_in):
 
                 #######################################################################
 
-            plt.imshow(img_i_2d, interpolation = "nearest")
-            plt.show()
+            #plt.imshow(img_i_2d, interpolation = "nearest")
+            #plt.show()
 
         lin_n_str = lst_data_in[pos_lst]
         pos_lst += 1
@@ -301,10 +369,10 @@ def from_stream_to_arr(lst_data_in):
 
 
 if __name__ == "__main__":
-    img_arr = img_arr_gen(350, 550)
+    img_arr = img_arr_gen(1500, 3500)
     plt.imshow(img_arr, interpolation = "nearest")
     plt.show()
-    lst_ini_stp = generate_ini_n_steps(8)
+    lst_ini_stp = generate_ini_n_steps(3)
     lst_bun = generate_bunches(img_arr, lst_ini_stp)
-    from_stream_to_arr(lst_bun)
+    #from_stream_to_arr(lst_bun)
 
