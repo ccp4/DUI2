@@ -221,9 +221,6 @@ def from_stream_to_arr(lst_data_in):
     if lin2[0:17] == "len(lst_ini_stp)=":
         lst_len = int(lin2[17:])
         pos_lst = 2
-
-        #first_loop = True
-
         for times in range(lst_len):
             print("times =", times)
             lin_n_str = lst_data_in[pos_lst]
@@ -322,8 +319,6 @@ def from_stream_to_arr(lst_data_in):
                         img_i_2d[x-ini_stp[0] + 1:x + 1, y-ini_stp[0] + 1:y + 1] = i
 
             #######################################################################
-            #if first_loop:
-            #    first_loop = False
 
             lin_n_str = lst_data_in[pos_lst]
             pos_lst += 1
@@ -390,7 +385,7 @@ def from_stream_to_arr(lst_data_in):
 
 
 if __name__ == "__main__":
-    img_arr = img_arr_gen(5, 10)
+    img_arr = img_arr_gen(40, 70)
     #img_arr = img_arr_gen(1500, 3500)
     plt.imshow(img_arr, interpolation = "nearest")
     plt.show()
