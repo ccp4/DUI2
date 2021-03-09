@@ -93,14 +93,12 @@ def generate_bunches(arr_in, lst_ini_stp):
 
         lst_ini_stp_arr.append(ini_stp_arr_s)
     print("len(lst_ini_stp_arr[0]) =", len(lst_ini_stp_arr[0]))
-
-
-    print("\n\n lst_ini_stp_arr =", lst_ini_stp_arr, "\n\n")
+    #print("\n\n lst_ini_stp_arr =", lst_ini_stp_arr, "\n\n")
     #############################################################################
-    #first_loop = True
+
     for ini_stp_arr in lst_ini_stp_arr:
         lst_data_out.append("ini_stp=" + str(ini_stp_arr[0:2]))
-        arr_str = "I(x,y)="
+        lst_data_out.append("I(x,y)=")
         # This 4 double connected loops need to be reproduced
         # just identically in the client side
         pos = 0
@@ -109,72 +107,56 @@ def generate_bunches(arr_in, lst_ini_stp):
                 ini_stp_arr[2][pos] = arr_in[x, y]
                 pos += 1
 
-        arr_str += np.array2string(ini_stp_arr[2], separator = ",")
-        lst_data_out.append(arr_str)
+        lst_data_out.append(ini_stp_arr[2])
 
         lst_data_out.append("ini_stp=" + str(ini_stp_arr[0:2]))
-        arr_str = "I(x+u/2,y)="
+        lst_data_out.append("I(x+u/2,y)=")
         pos = 0
         for x in range(int(ini_stp_arr[0] * 2), x_size, ini_stp_arr[1]):
             for y in range(ini_stp_arr[0], y_size, ini_stp_arr[1]):
                 ini_stp_arr[3][pos] = arr_in[x, y]
                 pos += 1
 
-        arr_str += np.array2string(ini_stp_arr[3], separator = ",")
-        lst_data_out.append(arr_str)
+        lst_data_out.append(ini_stp_arr[3])
 
         lst_data_out.append("ini_stp=" + str(ini_stp_arr[0:2]))
-        arr_str = "I(x,y+u/2)="
+        lst_data_out.append("I(x,y+u/2)=")
         pos = 0
         for x in range(ini_stp_arr[0], x_size, ini_stp_arr[1]):
             for y in range(int(ini_stp_arr[0] * 2), y_size, ini_stp_arr[1]):
                 ini_stp_arr[4][pos] = arr_in[x, y]
                 pos += 1
 
-        arr_str += np.array2string(ini_stp_arr[4], separator = ",")
-        lst_data_out.append(arr_str)
+        lst_data_out.append(ini_stp_arr[4])
 
-        #if first_loop:
-        #    first_loop = False
         if ini_stp_arr[5] is not None:
             lst_data_out.append("ini_stp=" + str(ini_stp_arr[0:2]))
-            arr_str = "I(x+u/2,y+u/2)="
+            lst_data_out.append("I(x+u/2,y+u/2)=")
             pos = 0
             for x in range(int(ini_stp_arr[0] * 2), x_size, ini_stp_arr[1]):
                 for y in range(int(ini_stp_arr[0] * 2), y_size, ini_stp_arr[1]):
                     ini_stp_arr[5][pos] = arr_in[x, y]
                     pos += 1
 
-            arr_str += np.array2string(ini_stp_arr[5], separator = ",")
-            lst_data_out.append(arr_str)
+            lst_data_out.append(ini_stp_arr[5])
 
         else:
             lst_data_out.append("I(x+u/2,y+u/2)=None")
 
-
-
     y_row = arr_in[0, 0:y_size]
     x_col = arr_in[0:x_size, 0]
 
-    arr_str = "I(0,:)=["
-    for i_y in y_row:
-        arr_str += str(i_y) + ","
+    lst_data_out.append("I(0,:)=")
+    lst_data_out.append(y_row)
 
-    arr_str += "]"
-    lst_data_out.append(arr_str)
-
-    arr_str = "I(:,0)=["
-    for i_x in x_col:
-        arr_str += str(i_x) + ","
-
-    arr_str += "]"
-    lst_data_out.append(arr_str)
-
+    lst_data_out.append("I(:,0)=")
+    lst_data_out.append(x_col)
 
     end = time.time()
     print("timing = ", end - start)
+
     '''
-    print("lst_data_out =\n")
+    print("\n *********** \n lst_data_out =\n")
     for single_line in lst_data_out:
         print(single_line)
     '''
@@ -184,7 +166,7 @@ def generate_bunches(arr_in, lst_ini_stp):
 
 def str2tup(str_in):
     cut_str = str_in[1:-1]
-    print("str_in(cut) =", cut_str)
+    #print("str_in(cut) =", cut_str)
     lst_str = cut_str.split(",")
     tmp_lst_num = []
     for singl_str in lst_str:
@@ -226,7 +208,6 @@ def from_stream_to_arr(lst_data_in):
             lin_n_str = lst_data_in[pos_lst]
             pos_lst += 1
             if lin_n_str[0:9] == "ini_stp=[":
-                print("lin_n_str =", lin_n_str)
                 ini_stp = str2tup(lin_n_str[8:])
 
             else:
@@ -237,28 +218,28 @@ def from_stream_to_arr(lst_data_in):
             lin_n_str = lst_data_in[pos_lst]
             pos_lst += 1
             #print("lin_n_str =", lin_n_str)
-            if lin_n_str[0:8] == "I(x,y)=[":
-                dat_tup = tuple(lin_n_str[8:-2].split(","))
-                #print("dat_tup =", dat_tup)
+            if lin_n_str == "I(x,y)=":
+                dat_arr = lst_data_in[pos_lst]
+                pos_lst += 1
 
             else:
                 print(" *** ERROR #4 *** ")
                 print("lin_n_str =", lin_n_str)
                 return
 
-            if len(dat_tup) > 0:
-                tup_pos = 0
+            if len(dat_arr) > 0:
+                arr_pos = 0
                 for x in range(ini_stp[0], x_size, ini_stp[1]):
                     for y in range(ini_stp[0], y_size, ini_stp[1]):
-                        i = float(dat_tup[tup_pos])
-                        tup_pos += 1
+                        i = float(dat_arr[arr_pos])
+                        arr_pos += 1
                         img_i_2d[x-ini_stp[0] + 1:x + 1, y-ini_stp[0] + 1:y + 1] = i
 
             ########################################################################
             lin_n_str = lst_data_in[pos_lst]
             pos_lst += 1
             if lin_n_str[0:9] == "ini_stp=[":
-                print("lin_n_str =", lin_n_str)
+                #print("lin_n_str =", lin_n_str)
                 ini_stp = str2tup(lin_n_str[8:])
 
             else:
@@ -269,28 +250,28 @@ def from_stream_to_arr(lst_data_in):
             lin_n_str = lst_data_in[pos_lst]
             pos_lst += 1
             #print("lin_n_str =", lin_n_str)
-            if lin_n_str[0:12] == "I(x+u/2,y)=[":
-                dat_tup = tuple(lin_n_str[12:-2].split(","))
-                #print("dat_tup =", dat_tup)
+            if lin_n_str == "I(x+u/2,y)=":
+                dat_arr = lst_data_in[pos_lst]
+                pos_lst += 1
 
             else:
                 print(" *** ERROR #6 *** ")
                 print("lin_n_str =", lin_n_str)
                 return
 
-            if len(dat_tup) > 0:
-                tup_pos = 0
+            if len(dat_arr) > 0:
+                arr_pos = 0
                 for x in range(int(ini_stp[0] * 2), x_size, ini_stp[1]):
                     for y in range(ini_stp[0], y_size, ini_stp[1]):
-                        i = float(dat_tup[tup_pos])
-                        tup_pos += 1
+                        i = float(dat_arr[arr_pos])
+                        arr_pos += 1
                         img_i_2d[x-ini_stp[0] + 1:x + 1, y-ini_stp[0] + 1:y + 1] = i
 
             #######################################################################
             lin_n_str = lst_data_in[pos_lst]
             pos_lst += 1
             if lin_n_str[0:9] == "ini_stp=[":
-                print("lin_n_str =", lin_n_str)
+                #print("lin_n_str =", lin_n_str)
                 ini_stp = str2tup(lin_n_str[8:])
 
             else:
@@ -301,21 +282,21 @@ def from_stream_to_arr(lst_data_in):
             lin_n_str = lst_data_in[pos_lst]
             pos_lst += 1
             #print("lin_n_str =", lin_n_str)
-            if lin_n_str[0:12] == "I(x,y+u/2)=[":
-                dat_tup = tuple(lin_n_str[12:-2].split(","))
-                #print("dat_tup =", dat_tup)
+            if lin_n_str == "I(x,y+u/2)=":
+                dat_arr = lst_data_in[pos_lst]
+                pos_lst += 1
 
             else:
                 print(" *** ERROR #8 *** ")
                 print("lin_n_str =", lin_n_str)
                 return
 
-            if len(dat_tup) > 0:
-                tup_pos = 0
+            if len(dat_arr) > 0:
+                arr_pos = 0
                 for x in range(ini_stp[0], x_size, ini_stp[1]):
                     for y in range(int(ini_stp[0] * 2), y_size, ini_stp[1]):
-                        i = float(dat_tup[tup_pos])
-                        tup_pos += 1
+                        i = float(dat_arr[arr_pos])
+                        arr_pos += 1
                         img_i_2d[x-ini_stp[0] + 1:x + 1, y-ini_stp[0] + 1:y + 1] = i
 
             #######################################################################
@@ -323,27 +304,27 @@ def from_stream_to_arr(lst_data_in):
             lin_n_str = lst_data_in[pos_lst]
             pos_lst += 1
             if lin_n_str[0:9] == "ini_stp=[":
-                print("lin_n_str =", lin_n_str)
+                #print("lin_n_str =", lin_n_str)
                 ini_stp = str2tup(lin_n_str[8:])
 
                 lin_n_str = lst_data_in[pos_lst]
                 pos_lst += 1
                 #print("lin_n_str =", lin_n_str)
-                if lin_n_str[0:16] == "I(x+u/2,y+u/2)=[":
-                    dat_tup = tuple(lin_n_str[16:-2].split(","))
-                    #print("dat_tup =", dat_tup)
+                if lin_n_str == "I(x+u/2,y+u/2)=":
+                    dat_arr = lst_data_in[pos_lst]
+                    pos_lst += 1
 
                 else:
-                    print(" *** ERROR #8 *** ")
+                    print(" *** ERROR #9 *** ")
                     print("lin_n_str =", lin_n_str)
                     return
 
-                if len(dat_tup) > 0:
-                    tup_pos = 0
+                if len(dat_arr) > 0:
+                    arr_pos = 0
                     for x in range(int(ini_stp[0] * 2), x_size, ini_stp[1]):
                         for y in range(int(ini_stp[0] * 2), y_size, ini_stp[1]):
-                            i = float(dat_tup[tup_pos])
-                            tup_pos += 1
+                            i = float(dat_arr[arr_pos])
+                            arr_pos += 1
                             img_i_2d[x-ini_stp[0] + 1:x + 1, y-ini_stp[0] + 1:y + 1] = i
 
             elif lin_n_str == "I(x+u/2,y+u/2)=None":
@@ -361,18 +342,20 @@ def from_stream_to_arr(lst_data_in):
 
         lin_n_str = lst_data_in[pos_lst]
         pos_lst += 1
-        if lin_n_str[0:8] == "I(0,:)=[":
-            dat_tup = tuple(lin_n_str[8:-2].split(","))
+        if lin_n_str == "I(0,:)=":
+            dat_arr = lst_data_in[pos_lst]
+            pos_lst += 1
 
-        for y, i in enumerate(dat_tup):
+        for y, i in enumerate(dat_arr):
             img_i_2d[0, y] = float(i)
 
         lin_n_str = lst_data_in[pos_lst]
         pos_lst += 1
-        if lin_n_str[0:8] == "I(:,0)=[":
-            dat_tup = tuple(lin_n_str[8:-2].split(","))
+        if lin_n_str == "I(:,0)=":
+            dat_arr = lst_data_in[pos_lst]
+            pos_lst += 1
 
-        for x, i in enumerate(dat_tup):
+        for x, i in enumerate(dat_arr):
             img_i_2d[x, 0] = float(i)
 
         plt.imshow(img_i_2d, interpolation = "nearest")
@@ -385,11 +368,11 @@ def from_stream_to_arr(lst_data_in):
 
 
 if __name__ == "__main__":
-    img_arr = img_arr_gen(40, 70)
+    img_arr = img_arr_gen(250, 350)
     #img_arr = img_arr_gen(1500, 3500)
     plt.imshow(img_arr, interpolation = "nearest")
     plt.show()
-    lst_ini_stp = generate_ini_n_steps(3)
+    lst_ini_stp = generate_ini_n_steps(6)
     lst_bun = generate_bunches(img_arr, lst_ini_stp)
     from_stream_to_arr(lst_bun)
 
