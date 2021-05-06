@@ -148,6 +148,7 @@ class SimpleParamTab(QWidget):
         sender = self.sender()
         value = sender.value()
         str_path = str(sender.local_path)
+        #TODO find out why there is a "item_to_remove" signal
         if sender.specialValueText() and value == sender.minimum():
             self.item_to_remove.emit(str_path)
 
@@ -161,6 +162,7 @@ class SimpleParamTab(QWidget):
         str_value = str(sender.item_list[value])
         str_path = str(sender.local_path)
 
+        #TODO find out why there is a "item_to_remove" signal
         if sender.currentIndex() == sender.default_index:
             self.item_to_remove.emit(str_path)
         else:

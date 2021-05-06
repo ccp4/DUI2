@@ -28,6 +28,21 @@ from PySide2 import QtUiTools
 from PySide2.QtGui import *
 import numpy as np
 
+
+try:
+    from shared_modules import format_utils
+
+except ModuleNotFoundError:
+    '''
+    This trick to import the format_utils module can be
+    removed once the project gets properly packaged
+    '''
+    comm_path = os.path.abspath(__file__)[0:-19] + "shared_modules"
+    print("comm_path: ", comm_path)
+    sys.path.insert(1, comm_path)
+    import format_utils
+
+
 widgets_defs = {
     "import" : {
         "tooltip": "dials.import ...",
@@ -432,6 +447,8 @@ class TreeDirScene(QGraphicsScene):
         self.lst_nod_pos = []
         self.nod_lst = None
 
+        self.tree_obj = format_utils.TreeShow()
+
         self.bar_pos = 1
         timer = QTimer(self)
         timer.timeout.connect(self.refresh_bars)
@@ -682,8 +699,11 @@ class TreeDirScene(QGraphicsScene):
 
             self.update()
 
-    def draw_tree_graph(self, nod_lst, current_nod_num = 0):
-        self.nod_lst = nod_lst
+    def draw_tree_graph(self, nod_lst_in, current_nod_num = 0):
+        lst_str = self.tree_obj(lst_nod = nod_lst_in)
+        lst_2d_dat = self.tree_obj.get_tree_data()
+
+        self.nod_lst = lst_2d_dat
         self.current_nod_num = current_nod_num
         self.draw_all()
 

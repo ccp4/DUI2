@@ -23,19 +23,6 @@ copyright (c) CCP4 - DLS
 
 import os, sys, requests
 
-try:
-    from shared_modules import format_utils
-
-except ModuleNotFoundError:
-    '''
-    This trick to import the format_utils module can be
-    removed once the project gets properly packaged
-    '''
-    comm_path = os.path.abspath(__file__)[0:-21] + "shared_modules"
-    print("comm_path: ", comm_path)
-    sys.path.insert(1, comm_path)
-    import format_utils
-
 from PySide2.QtCore import *
 from PySide2.QtWidgets import *
 from PySide2 import QtUiTools
@@ -75,7 +62,6 @@ class MainObject(QObject):
 
         self.window = QtUiTools.QUiLoader().load(ui_path)
         self.window.setWindowTitle("CCP4 DUI Cloud")
-        self.gui_state = {}
 
         try:
             imp_widg = ImportWidget()
@@ -223,7 +209,6 @@ class MainObject(QObject):
         self.param_widgets["combine_experiments"]["main_page"] = self.window.CombinePage
 
         self.window.incoming_text.setFont(QFont("Monospace"))
-        self.tree_obj = format_utils.TreeShow()
         self.tree_scene = TreeDirScene(self)
         self.window.treeView.setScene(self.tree_scene)
 
@@ -231,7 +216,7 @@ class MainObject(QObject):
             QLabel("                  . . .       ")
         )
         self.current_next_buttons = 0
-        self.gui_state["parent_nums_lst"] = []
+        self.parent_nums_lst = []
 
         self.font_point_size = QFont().pointSize()
 
@@ -260,9 +245,12 @@ class MainObject(QObject):
         stop_icon.addFile(st_icon_path, mode = QIcon.Normal)
         self.window.ReqStopButton.setIcon(stop_icon)
 
-        self.window.RetryButton.clicked.connect(self.on_retry)
+        self.window.RetryButton.clicked.connect(self.on_clone)
         self.window.CmdSend2server.clicked.connect(self.request_launch)
         self.window.ReqStopButton.clicked.connect(self.req_stop)
+        self.window.RetryButton.setEnabled(True)
+        self.window.CmdSend2server.setEnabled(True)
+        self.window.ReqStopButton.setEnabled(True)
 
 
         self.do_load_html = DoLoadHTML(self)
@@ -272,15 +260,14 @@ class MainObject(QObject):
 
         self.window.OutputTabWidget.currentChanged.connect(self.tab_changed)
 
-        self.gui_state["current_widget_key"] = "import"
-        self.tree_scene.draw_tree_graph([])
-        self.gui_state["new_node"] = None
-        self.gui_state["current_nod_num"] = 0
+        self.current_widget_key = "import"
+        self.new_node = None
+        self.current_nod_num = 0
 
+        self.server_nod_lst = []
         self.request_display()
 
-        self.gui_state["local_nod_lst"] = copy_lst_nodes(self.server_nod_lst)
-        self.change_widget(self.gui_state["current_widget_key"])
+        self.change_widget(self.current_widget_key)
         self.thrd_lst = []
 
         self.window.MainHSplitter.setStretchFactor(0, 1)
@@ -290,6 +277,32 @@ class MainObject(QObject):
         self.window.LeftVSplitter.setStretchFactor(1, 1)
 
         self.window.show()
+
+    def item_param_changed(self, str_path, str_value):
+        sender_twin = self.sender().twin_widg
+        sender_twin.update_param(str_path, str_value)
+
+    def launch_reindex(self, sol_rei):
+        print("reindex solution", sol_rei)
+        is_same = self.cmd_par.set_custom_parameter(str(sol_rei))
+        if is_same:
+            print("clicked twice same row, launching reindex")
+            self.request_launch()
+
+
+    def on_node_click(self, node_numb):
+        #if node_numb != self.current_nod_num:
+        #    if(
+        #        self.window.NodeSelecCheck.checkState()
+        #    ):
+        #        self.clicked_4_combine(node_numb)
+        #
+        #    else:
+        #        self.clicked_4_navigation(node_numb)
+        #
+        #else:
+        #    print("clicked current node, no need to do anything")
+        self.clicked_4_navigation(node_numb)
 
     def clearLayout(self, layout):
         if layout is not None:
@@ -302,264 +315,13 @@ class MainObject(QObject):
                 else:
                     self.clearLayout(item.layout())
 
-    def if_needed_html(self):
-        tab_index = self.window.OutputTabWidget.currentIndex()
-        if tab_index == 1:
-            print("updating html report ")
-            self.do_load_html()
-
-    def tab_changed(self, tab_index):
-        print("tab_index =", tab_index)
-        if tab_index == 0:
-            self.display_log(self.gui_state["current_nod_num"])
-
-        elif tab_index == 1:
-            self.do_load_html()
-
-    def clicked_4_navigation(self, node_numb):
-        print("\n clicked_4_navigation\n  node_numb =", node_numb)
-        self.gui_state["current_nod_num"] = node_numb
-        try:
-            cur_nod = self.server_nod_lst[node_numb]
-            if self.window.OutputTabWidget.currentIndex() == 0:
-                self.display_log(node_numb)
-
-            else:
-                self.do_load_html()
-
-            self.gui_state["parent_nums_lst"] = [node_numb]
-
-        except IndexError:
-            print("node_numb ", node_numb, "not ran yet")
-            cur_nod = self.gui_state["local_nod_lst"][node_numb]
-            self.do_load_html.set_output_as_ready()
-            self.gui_state["parent_nums_lst"] = []
-            for par_node_numb in cur_nod["parent_node_lst"]:
-                self.gui_state["parent_nums_lst"].append(int(par_node_numb))
-
-        print("\n cur_nod = ", cur_nod, "\n")
-
-        cmd_ini = cur_nod["cmd2show"][0]
-        key2find = cmd_ini[6:]
-        try:
-            self.change_widget(key2find)
-            self.update_all_param(cur_nod)
-            if key2find == "reindex":
-                cmd = {
-                    "nod_lst":cur_nod["parent_node_lst"],
-                    "cmd_lst":["get_bravais_sum"]
-                }
-                json_data_lst = json_data_request(uni_url, cmd)
-                self.r_index_widg.add_opts_lst(
-                    json_data=json_data_lst[0]
-                )
-
-        except KeyError:
-            print("command widget not there yet")
-            return
-
-        self.display()
-
-    def clear_parent_list(self):
-        try:
-            only_one = int(self.gui_state["new_node"]["parent_node_lst"][0])
-            self.gui_state["new_node"]["parent_node_lst"] = [only_one]
-            self.gui_state["parent_nums_lst"] = [only_one]
-            self.gui_state["local_nod_lst"] = copy_lst_nodes(
-                self.server_nod_lst
-            )
-            self.add_new_node()
-
-        except TypeError:
-            print(
-                "should NOT clear parents from already combined experiments"
-            )
-
-    def clicked_4_combine(self, node_numb):
-        prev_lst = self.gui_state["parent_nums_lst"]
-        if node_numb in prev_lst:
-            if len(prev_lst) > 1:
-                new_par_lst = []
-                for in_node_numb in prev_lst:
-                    if in_node_numb != node_numb:
-                        new_par_lst.append(in_node_numb)
-
-                self.gui_state["new_node"]["parent_node_lst"] = new_par_lst
-                self.gui_state["parent_nums_lst"] = new_par_lst
-
-                for node in self.gui_state["local_nod_lst"]:
-                    for pos, in_node_numb in enumerate(node["child_node_lst"]):
-                        if(
-                            in_node_numb == self.gui_state["current_nod_num"]
-                             and
-                            node["number"] == node_numb
-                        ):
-                            left = node["child_node_lst"][:pos]
-                            right = node["child_node_lst"][pos+1:]
-                            node["child_node_lst"] =  left + right
-
-                self.display(self.gui_state["local_nod_lst"])
-
-            else:
-                print("not removing only parent node")
-
-        else:
-            self.gui_state["parent_nums_lst"].append(node_numb)
-            self.gui_state["new_node"]["parent_node_lst"] = list(
-                self.gui_state["parent_nums_lst"]
-            )
-            self.add_new_node()
-
-
-    def on_node_click(self, node_numb):
-        if node_numb != self.gui_state["current_nod_num"]:
-            if(
-                self.gui_state["new_node"] is not None
-                and
-                self.gui_state["new_node"]["cmd2show"][0]
-                 ==
-                "dials.combine_experiments"
-                and
-                self.gui_state["new_node"]["status"] == "Ready"
-                and
-                self.window.NodeSelecCheck.checkState()
-            ):
-                self.clicked_4_combine(node_numb)
-
-            else:
-                self.clicked_4_navigation(node_numb)
-
-        else:
-            print("clicked current node, no need to do anything")
-
-    def item_param_changed(self, str_path, str_value):
-        sender_twin = self.sender().twin_widg
-        sender_twin.update_param(str_path, str_value)
-        str_key = self.gui_state["current_widget_key"]
-        cmd2run = self.param_widgets[str_key]["main_cmd"]
-        try:
-            self.cmd_par.set_parameter(str_path, str_value)
-            self.new_cmd_par = CommandParamControl()
-            self.new_cmd_par.clone_from_command_param(self.cmd_par)
-
-        except AttributeError:
-            print("no command parameter in memory yet")
-
-    def gray_n_ungray(self):
-        try:
-            tmp_state = self.server_nod_lst[self.gui_state["current_nod_num"]]["status"]
-
-        except IndexError:
-            tmp_state = self.gui_state["local_nod_lst"][self.gui_state["current_nod_num"]]["status"]
-
-        str_key = self.gui_state["current_widget_key"]
-        self.param_widgets[str_key]["simple"].setEnabled(False)
-        try:
-            self.param_widgets[str_key]["advanced"].setEnabled(False)
-
-        except AttributeError:
-            print("no need to gray 'None' widget")
-
-        self.window.RetryButton.setEnabled(False)
-        self.window.CmdSend2server.setEnabled(False)
-        self.window.ReqStopButton.setEnabled(False)
-        if tmp_state == "Ready":
-            print("only run (R)")
-            self.window.CmdSend2server.setEnabled(True)
-            self.param_widgets[str_key]["simple"].setEnabled(True)
-            try:
-                self.param_widgets[str_key]["advanced"].setEnabled(True)
-
-            except AttributeError:
-                print("no need to un-gray 'None' widget")
-
-        elif tmp_state == "Busy":
-            print("only clone or stop (B)")
-            self.window.RetryButton.setEnabled(True)
-            self.window.ReqStopButton.setEnabled(True)
-
-        else:
-            print("only clone (F or S)")
-            self.window.RetryButton.setEnabled(True)
-
-    def display(self, in_lst_nodes = None):
-        if in_lst_nodes is None:
-            self.tree_scene.new_nod_num(self.gui_state["current_nod_num"])
-
-        else:
-            lst_str = self.tree_obj(lst_nod = in_lst_nodes)
-            lst_2d_dat = self.tree_obj.get_tree_data()
-            self.tree_scene.draw_tree_graph(
-                lst_2d_dat, self.gui_state["current_nod_num"]
-            )
-
-        self.gray_n_ungray()
-
-    def line_n1_in(self, nod_num_in):
-        self.request_display()
-        self.gui_state["parent_nums_lst"] = [nod_num_in]
-
-    def display_log(self, nod_p_num = 0):
-        self.log_show(nod_p_num)
-
-    def reset_param_widget(self, str_key):
-        self.gui_state["current_widget_key"] = str_key
-        self.param_widgets[str_key]["simple"].reset_pars()
-        try:
-            self.param_widgets[str_key]["advanced"].reset_pars()
-
-        except AttributeError:
-            print("No advanced pars")
-
-    def reset_param_all(self):
-        print("reset_param_all")
-        #TODO reset the variable "self.cmd_par"
-        str_key = self.gui_state["current_widget_key"]
-        self.cmd_par = CommandParamControl(
-            self.gui_state["new_node"]["cmd2show"][0]
-        )
-        self.new_cmd_par = CommandParamControl()
-        self.new_cmd_par.clone_from_command_param(self.cmd_par)
-
-    def update_all_param(self, cur_nod):
-        print("update_all_param:\n cur_nod =", cur_nod)
-        str_key = str(cur_nod["cmd2show"][0][6:])
-        self.cmd_par = CommandParamControl(cur_nod["cmd2show"][0])
-        self.reset_param_widget(str_key)
-        if cur_nod["status"] == 'Ready':
-            self.cmd_par.clone_from_command_param(self.new_cmd_par)
-        else:
-            self.cmd_par.clone_from_list(cur_nod["cmd2show"])
-
-        print("self.cmd_par:", self.cmd_par.get_all_params())
-
-        self.param_widgets[str_key]["simple"].update_all_pars(
-            self.cmd_par.get_all_params()
-        )
-        try:
-            self.param_widgets[str_key]["advanced"].update_all_pars(
-                self.cmd_par.get_all_params()
-            )
-        except AttributeError:
-            print("No advanced pars")
-
-    def change_widget(self, str_key):
-        self.window.BoxControlWidget.setTitle(str_key)
-        self.window.StackedParamsWidget.setCurrentWidget(
-            self.param_widgets[str_key]["main_page"]
-        )
-        self.clearLayout(self.window.Next2RunLayout)
-        self.update_nxt_butt(str_key)
-
     def check_nxt_btn(self):
         try:
             print(
                 "trying to << check_nxt_btn >> on node",
-                self.gui_state["current_nod_num"]
+                self.current_nod_num
             )
-            str_key = self.server_nod_lst[
-                self.gui_state["current_nod_num"]
-            ]["cmd2show"][0][6:]
+            str_key = self.server_nod_lst[self.current_nod_num]["cmd2show"][0][6:]
             print("str_key =", str_key)
             self.update_nxt_butt(str_key)
 
@@ -574,7 +336,7 @@ class MainObject(QObject):
         small_font = QFont("OldEnglish", pointSize = small_f_size, italic=True)
         try:
             if(
-                self.server_nod_lst[self.gui_state["current_nod_num"]]["status"]
+                self.server_nod_lst[self.current_nod_num]["status"]
                 == "Succeeded"
             ):
                 self.clearLayout(self.window.Next2RunLayout)
@@ -600,58 +362,148 @@ class MainObject(QObject):
         except IndexError:
             print("no need to add next button")
 
+    def nxt_clicked(self):
+        print("nxt_clicked")
+        str_key = self.sender().cmd_str
+        print("str_key: ", str_key)
+        if str_key == "reindex":
+            cmd = {"nod_lst":[self.current_nod_num], "cmd_lst":["get_bravais_sum"]}
+            json_data_lst = json_data_request(uni_url, cmd)
+            self.r_index_widg.add_opts_lst(
+                json_data = json_data_lst[0]
+            )
+
+        par_nod_num = int(self.current_nod_num)
+
+        self.add_new_node()
+        self.change_widget(str_key)
+        self.current_widget_key = str_key
+        self.do_load_html.set_output_as_ready()
+        self.reset_param_all()
+
+    def change_widget(self, str_key):
+        self.window.BoxControlWidget.setTitle(str_key)
+        self.window.StackedParamsWidget.setCurrentWidget(
+            self.param_widgets[str_key]["main_page"]
+        )
+        self.clearLayout(self.window.Next2RunLayout)
+        self.update_nxt_butt(str_key)
+
+    def if_needed_html(self):
+        tab_index = self.window.OutputTabWidget.currentIndex()
+        if tab_index == 1:
+            print("updating html report ")
+            self.do_load_html()
+
+    def tab_changed(self, tab_index):
+        print("tab_index =", tab_index)
+        if tab_index == 0:
+            self.display_log(self.current_nod_num)
+
+        elif tab_index == 1:
+            self.do_load_html()
+
+    def clear_parent_list(self):
+        print("clear_parent_list")
+
+    def clicked_4_navigation(self, node_numb):
+        print("\n clicked_4_navigation\n  node_numb =", node_numb)
+        self.current_nod_num = node_numb
+        ##############################################################
+
+        cur_nod = self.server_nod_lst[node_numb]
+        if self.window.OutputTabWidget.currentIndex() == 0:
+            self.display_log(node_numb)
+
+        else:
+            self.do_load_html()
+
+        #self.parent_nums_lst"] = [node_numb]
+
+        print("\n cur_nod = ", cur_nod, "\n")
+
+        cmd_ini = cur_nod["cmd2show"][0]
+        key2find = cmd_ini[6:]
+        try:
+            self.change_widget(key2find)
+            #self.update_all_param(cur_nod)
+            if key2find == "reindex":
+                cmd = {
+                    "nod_lst":cur_nod["parent_node_lst"],
+                    "cmd_lst":["get_bravais_sum"]
+                }
+                json_data_lst = json_data_request(uni_url, cmd)
+                self.r_index_widg.add_opts_lst(
+                    json_data=json_data_lst[0]
+                )
+
+        except KeyError:
+            print("command widget not there yet")
+            return
+
+
+        ##############################################################
+        self.display()
+
+    def clicked_4_combine(self, node_numb):
+        print("\n clicked_4_combine\n  node_numb =", node_numb)
+        self.display()
+
+    def line_n1_in(self, nod_num_in):
+        self.request_display()
+        #self.parent_nums_lst = [nod_num_in]
+
+    def reset_param_all(self):
+        print("reset_param_all")
+
     def add_new_node(self):
-        print("\n add_new_node \n")
-        self.gui_state["local_nod_lst"].append(self.gui_state["new_node"])
-        for node in self.gui_state["local_nod_lst"]:
-            if node["number"] in self.gui_state["new_node"]["parent_node_lst"]:
-                node["child_node_lst"].append(int(self.gui_state["new_node"]["number"]))
+        print("add_new_node")
 
-        self.cmd_par = CommandParamControl(self.gui_state["new_node"]["cmd2show"][0])
-        self.display(self.gui_state["local_nod_lst"])
-        self.new_cmd_par = CommandParamControl()
-        self.new_cmd_par.clone_from_command_param(self.cmd_par)
+    def reset_param_widget(self, str_key):
+        self.current_widget_key = str_key
+        self.param_widgets[str_key]["simple"].reset_pars()
+        try:
+            self.param_widgets[str_key]["advanced"].reset_pars()
 
+        except AttributeError:
+            print("No advanced pars")
+
+    def display_log(self, nod_p_num = 0):
+        self.log_show(nod_p_num)
+
+    def display(self):
+        self.tree_scene.draw_tree_graph(self.server_nod_lst)
+        self.tree_scene.new_nod_num(self.current_nod_num)
 
     def request_display(self):
         cmd = {"nod_lst":"", "cmd_lst":["display"]}
-        if self.gui_state["new_node"] is None:
-            print('request_display(gui_state["new_node"] = None)')
-            node_load_test = json_data_request(uni_url, cmd)
-            if node_load_test is not None:
-                self.server_nod_lst = node_load_test
-                self.display(self.server_nod_lst)
+        self.server_nod_lst = json_data_request(uni_url, cmd)
+        print(self.server_nod_lst)
+        self.display()
 
-            else:
-                print("node as << None >>, not displaying")
-
-        else:
-            print(
-                'request_display(gui_state["new_node"] = ',
-                gui_state["new_node"]
-            )
-            nod2clone = dict(self.gui_state["new_node"])
-            self.server_nod_lst = json_data_request(uni_url, cmd)
-            self.gui_state["local_nod_lst"] = copy_lst_nodes(self.server_nod_lst)
-            self.cmd_par.clone_from_list(nod2clone["cmd2show"])
-            self.add_new_node()
+    def on_clone(self):
+        print("on_clone", "*" * 50)
 
     def request_launch(self):
+        '''
         cmd_str = self.cmd_par.get_full_command_string()
         print("\n cmd_str", cmd_str)
-        nod_lst = self.gui_state["parent_nums_lst"]
+        nod_lst = self.parent_nums_lst
         lst_of_node_str = []
         for node_numb in nod_lst:
             lst_of_node_str.append(str(node_numb))
 
         cmd = {"nod_lst":lst_of_node_str, "cmd_lst":[cmd_str]}
+        '''
+        cmd_str = "dials." + self.current_widget_key
+        cmd = {'nod_lst': [self.current_nod_num], 'cmd_lst': [cmd_str]}
         print("cmd =", cmd)
         self.window.incoming_text.clear()
 
         try:
             new_req_get = requests.get(uni_url, stream = True, params = cmd)
             #TODO make sure when client is relaunched,
-            #TODO somehow it know about busy nodes
+            #TODO somehow it should know about busy nodes
             new_thrd = Run_n_Output(new_req_get)
             new_thrd.new_line_out.connect(self.log_show.add_line)
             new_thrd.first_line.connect(self.line_n1_in)
@@ -660,91 +512,15 @@ class MainObject(QObject):
             new_thrd.finished.connect(self.if_needed_html)
             new_thrd.start()
             self.thrd_lst.append(new_thrd)
-            self.gui_state["new_node"] = None
+            self.new_node = None
 
         except requests.exceptions.RequestException:
             print("something went wrong with the request launch")
 
-    def launch_reindex(self, sol_rei):
-        print("reindex solution", sol_rei)
-        is_same = self.cmd_par.set_custom_parameter(str(sol_rei))
-        if is_same:
-            print("clicked twice same row, launching reindex")
-            self.request_launch()
-
-    def nxt_clicked(self):
-        print("nxt_clicked")
-        str_key = self.sender().cmd_str
-        print("str_key: ", str_key)
-        if str_key == "reindex":
-            cmd = {"nod_lst":[self.gui_state["current_nod_num"]], "cmd_lst":["get_bravais_sum"]}
-            json_data_lst = json_data_request(uni_url, cmd)
-            self.r_index_widg.add_opts_lst(
-                json_data = json_data_lst[0]
-            )
-        self.gui_state["local_nod_lst"] = copy_lst_nodes(self.server_nod_lst)
-        par_nod_num = int(self.gui_state["current_nod_num"])
-        max_nod_num = 0
-        for node in self.gui_state["local_nod_lst"]:
-            if node["number"] > max_nod_num:
-                max_nod_num = node["number"]
-
-        self.gui_state["current_nod_num"] = max_nod_num + 1
-        self.gui_state["new_node"] = {
-            "number": int(self.gui_state["current_nod_num"]),
-            "status": 'Ready',
-            "cmd2show": ["dials." + str(str_key)],
-            "child_node_lst": [],
-            "parent_node_lst": [par_nod_num]
-        }
-        self.add_new_node()
-        self.change_widget(str_key)
-        self.gui_state["current_widget_key"] = str_key
-        self.do_load_html.set_output_as_ready()
-        self.reset_param_all()
-
-    def on_retry(self):
-        print("on_retry", "*" * 50)
-        nod2clone = dict(
-            self.server_nod_lst[int(
-                self.gui_state["current_nod_num"]
-            )]
-        )
-        str_key = str(nod2clone["cmd2show"][0][6:])
-        print("str_key: ", str_key)
-
-        self.gui_state["local_nod_lst"] = copy_lst_nodes(self.server_nod_lst)
-        max_nod_num = 0
-        for node in self.gui_state["local_nod_lst"]:
-            if node["number"] > max_nod_num:
-                max_nod_num = node["number"]
-
-        self.gui_state["current_nod_num"] = max_nod_num + 1
-        self.gui_state["new_node"] = {
-            "number": int(self.gui_state["current_nod_num"]),
-            "status": 'Ready',
-            "cmd2show": list(nod2clone["cmd2show"]),
-            "child_node_lst": [],
-            "parent_node_lst": list(nod2clone["parent_node_lst"])
-        }
-        self.add_new_node()
-        self.do_load_html.set_output_as_ready()
-        self.change_widget(str_key)
-        self.gui_state["current_widget_key"] = str_key
-        self.gui_state["parent_nums_lst"] = []
-        for par_node_numb in self.gui_state["new_node"]["parent_node_lst"]:
-            self.gui_state["parent_nums_lst"].append(int(par_node_numb))
-
-        self.cmd_par.clone_from_list(nod2clone["cmd2show"])
-        self.new_cmd_par = CommandParamControl()
-        self.new_cmd_par.clone_from_command_param(self.cmd_par)
-
-        print("End retry", "*" * 50)
-
     def req_stop(self):
         print("req_stop")
         #self.window.incoming_text.clear()
-        nod_lst = [str(self.gui_state["current_nod_num"])]
+        nod_lst = [str(self.current_nod_num)]
         print("\n nod_lst", nod_lst)
         cmd = {"nod_lst":nod_lst, "cmd_lst":["stop"]}
         print("cmd =", cmd)

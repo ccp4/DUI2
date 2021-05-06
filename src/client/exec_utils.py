@@ -124,10 +124,15 @@ class Run_n_Output(QThread):
 
             if not_yet_read:
                 not_yet_read = False
-                nod_p_num = int(line_str.split("=")[1])
-                self.number = nod_p_num
-                print("\n QThread.number =", self.number)
-                self.first_line.emit(self.number)
+                try:
+                    nod_p_num = int(line_str.split("=")[1])
+                    self.number = nod_p_num
+                    print("\n QThread.number =", self.number)
+                    self.first_line.emit(self.number)
+
+                except IndexError:
+                    print("Run_n_Output ... IndexError")
+                    not_yet_read = True
 
             else:
                 self.new_line_out.emit(line_str, self.number)
