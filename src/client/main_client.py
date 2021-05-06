@@ -31,7 +31,7 @@ except ModuleNotFoundError:
     This trick to import the format_utils module can be
     removed once the project gets properly packaged
     '''
-    comm_path = os.path.abspath(__file__)[0:-25] + "shared_modules"
+    comm_path = os.path.abspath(__file__)[0:-21] + "shared_modules"
     print("comm_path: ", comm_path)
     sys.path.insert(1, comm_path)
     import format_utils
