@@ -441,9 +441,9 @@ class MainObject(QObject):
 
         par_nod_num = int(self.current_nod_num)
 
-        self.add_new_node()
-        self.change_widget(str_key)
         self.current_widget_key = str_key
+        self.change_widget(str_key)
+        self.add_new_node()
         self.do_load_html.set_output_as_ready()
         self.reset_param_all()
 
@@ -457,6 +457,10 @@ class MainObject(QObject):
 
     def add_new_node(self):
         print("add_new_node")
+
+        self.new_node = CommandParamControl(
+            self.param_widgets[self.current_widget_key]["main_cmd"]
+        )
 
     def reset_param_widget(self, str_key):
         self.current_widget_key = str_key
@@ -494,8 +498,7 @@ class MainObject(QObject):
         cmd = {"nod_lst":lst_of_node_str, "cmd_lst":[cmd_str]}
         '''
 
-        cmd_str = self.param_widgets[self.current_widget_key]["main_cmd"]
-        #cmd_str = "dials." + self.current_widget_key
+        cmd_str = self.new_node.get_full_command_string()
 
         cmd = {'nod_lst': [self.current_nod_num], 'cmd_lst': [cmd_str]}
         print("cmd =", cmd)
