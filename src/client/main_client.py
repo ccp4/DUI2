@@ -289,6 +289,72 @@ class MainObject(QObject):
             print("clicked twice same row, launching reindex")
             self.request_launch()
 
+    def clicked_4_combine(self, node_numb):
+        print("\n clicked_4_combine\n  node_numb =", node_numb)
+        self.display()
+
+    def if_needed_html(self):
+        tab_index = self.window.OutputTabWidget.currentIndex()
+        if tab_index == 1:
+            print("updating html report ")
+            self.do_load_html()
+
+    def tab_changed(self, tab_index):
+        print("tab_index =", tab_index)
+        if tab_index == 0:
+            self.display_log(self.current_nod_num)
+
+        elif tab_index == 1:
+            self.do_load_html()
+
+    def line_n1_in(self, nod_num_in):
+        self.request_display()
+        #self.parent_nums_lst = [nod_num_in]
+
+    def reset_param_all(self):
+        print("reset_param_all")
+
+
+    def clear_parent_list(self):
+        print("clear_parent_list")
+
+    def clicked_4_navigation(self, node_numb):
+        print("\n clicked_4_navigation\n  node_numb =", node_numb)
+        self.current_nod_num = node_numb
+        ##############################################################
+
+        cur_nod = self.server_nod_lst[node_numb]
+        if self.window.OutputTabWidget.currentIndex() == 0:
+            self.display_log(node_numb)
+
+        else:
+            self.do_load_html()
+
+        #self.parent_nums_lst"] = [node_numb]
+
+        print("\n cur_nod = ", cur_nod, "\n")
+
+        cmd_ini = cur_nod["cmd2show"][0]
+        key2find = cmd_ini[6:]
+        try:
+            self.change_widget(key2find)
+            #self.update_all_param(cur_nod)
+            if key2find == "reindex":
+                cmd = {
+                    "nod_lst":cur_nod["parent_node_lst"],
+                    "cmd_lst":["get_bravais_sum"]
+                }
+                json_data_lst = json_data_request(uni_url, cmd)
+                self.r_index_widg.add_opts_lst(
+                    json_data=json_data_lst[0]
+                )
+
+        except KeyError:
+            print("command widget not there yet")
+            return
+
+        ##############################################################
+        self.display()
 
     def on_node_click(self, node_numb):
         #if node_numb != self.current_nod_num:
@@ -389,73 +455,6 @@ class MainObject(QObject):
         self.clearLayout(self.window.Next2RunLayout)
         self.update_nxt_butt(str_key)
 
-    def if_needed_html(self):
-        tab_index = self.window.OutputTabWidget.currentIndex()
-        if tab_index == 1:
-            print("updating html report ")
-            self.do_load_html()
-
-    def tab_changed(self, tab_index):
-        print("tab_index =", tab_index)
-        if tab_index == 0:
-            self.display_log(self.current_nod_num)
-
-        elif tab_index == 1:
-            self.do_load_html()
-
-    def clear_parent_list(self):
-        print("clear_parent_list")
-
-    def clicked_4_navigation(self, node_numb):
-        print("\n clicked_4_navigation\n  node_numb =", node_numb)
-        self.current_nod_num = node_numb
-        ##############################################################
-
-        cur_nod = self.server_nod_lst[node_numb]
-        if self.window.OutputTabWidget.currentIndex() == 0:
-            self.display_log(node_numb)
-
-        else:
-            self.do_load_html()
-
-        #self.parent_nums_lst"] = [node_numb]
-
-        print("\n cur_nod = ", cur_nod, "\n")
-
-        cmd_ini = cur_nod["cmd2show"][0]
-        key2find = cmd_ini[6:]
-        try:
-            self.change_widget(key2find)
-            #self.update_all_param(cur_nod)
-            if key2find == "reindex":
-                cmd = {
-                    "nod_lst":cur_nod["parent_node_lst"],
-                    "cmd_lst":["get_bravais_sum"]
-                }
-                json_data_lst = json_data_request(uni_url, cmd)
-                self.r_index_widg.add_opts_lst(
-                    json_data=json_data_lst[0]
-                )
-
-        except KeyError:
-            print("command widget not there yet")
-            return
-
-
-        ##############################################################
-        self.display()
-
-    def clicked_4_combine(self, node_numb):
-        print("\n clicked_4_combine\n  node_numb =", node_numb)
-        self.display()
-
-    def line_n1_in(self, nod_num_in):
-        self.request_display()
-        #self.parent_nums_lst = [nod_num_in]
-
-    def reset_param_all(self):
-        print("reset_param_all")
-
     def add_new_node(self):
         print("add_new_node")
 
@@ -478,7 +477,6 @@ class MainObject(QObject):
     def request_display(self):
         cmd = {"nod_lst":"", "cmd_lst":["display"]}
         self.server_nod_lst = json_data_request(uni_url, cmd)
-        print(self.server_nod_lst)
         self.display()
 
     def on_clone(self):
@@ -495,7 +493,10 @@ class MainObject(QObject):
 
         cmd = {"nod_lst":lst_of_node_str, "cmd_lst":[cmd_str]}
         '''
-        cmd_str = "dials." + self.current_widget_key
+
+        cmd_str = self.param_widgets[self.current_widget_key]["main_cmd"]
+        #cmd_str = "dials." + self.current_widget_key
+
         cmd = {'nod_lst': [self.current_nod_num], 'cmd_lst': [cmd_str]}
         print("cmd =", cmd)
         self.window.incoming_text.clear()
