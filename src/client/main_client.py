@@ -222,7 +222,7 @@ class MainObject(QObject):
 
         self.tree_scene.node_clicked.connect(self.on_node_click)
         self.window.Reset2DefaultPushButton.clicked.connect(
-            self.reset_param_all
+            self.reset_param
         )
         self.window.ClearParentButton.clicked.connect(
             self.clear_parent_list
@@ -278,10 +278,6 @@ class MainObject(QObject):
 
         self.window.show()
 
-    def item_param_changed(self, str_path, str_value):
-        sender_twin = self.sender().twin_widg
-        sender_twin.update_param(str_path, str_value)
-
     def launch_reindex(self, sol_rei):
         print("reindex solution", sol_rei)
         is_same = self.cmd_par.set_custom_parameter(str(sol_rei))
@@ -310,10 +306,6 @@ class MainObject(QObject):
     def line_n1_in(self, nod_num_in):
         self.request_display()
         #self.parent_nums_lst = [nod_num_in]
-
-    def reset_param_all(self):
-        print("reset_param_all")
-
 
     def clear_parent_list(self):
         print("clear_parent_list")
@@ -429,23 +421,21 @@ class MainObject(QObject):
             print("no need to add next button")
 
     def nxt_clicked(self):
-        print("nxt_clicked")
         str_key = self.sender().cmd_str
-        print("str_key: ", str_key)
+        print("nxt_clicked ... str_key: ", str_key)
         if str_key == "reindex":
-            cmd = {"nod_lst":[self.current_nod_num], "cmd_lst":["get_bravais_sum"]}
+            cmd = {
+                "nod_lst":[self.current_nod_num],
+                "cmd_lst":["get_bravais_sum"]
+            }
             json_data_lst = json_data_request(uni_url, cmd)
             self.r_index_widg.add_opts_lst(
                 json_data = json_data_lst[0]
             )
-
-        par_nod_num = int(self.current_nod_num)
-
-        self.current_widget_key = str_key
         self.change_widget(str_key)
+        self.reset_param()
         self.add_new_node()
         self.do_load_html.set_output_as_ready()
-        self.reset_param_all()
 
     def change_widget(self, str_key):
         self.window.BoxControlWidget.setTitle(str_key)
@@ -454,22 +444,25 @@ class MainObject(QObject):
         )
         self.clearLayout(self.window.Next2RunLayout)
         self.update_nxt_butt(str_key)
-
-    def add_new_node(self):
-        print("add_new_node")
-
-        self.new_node = CommandParamControl(
-            self.param_widgets[self.current_widget_key]["main_cmd"]
-        )
-
-    def reset_param_widget(self, str_key):
         self.current_widget_key = str_key
-        self.param_widgets[str_key]["simple"].reset_pars()
+
+    def reset_param(self):
+        self.param_widgets[self.current_widget_key]["simple"].reset_pars()
         try:
-            self.param_widgets[str_key]["advanced"].reset_pars()
+            self.param_widgets[self.current_widget_key]["advanced"].reset_pars()
 
         except AttributeError:
             print("No advanced pars")
+
+    def item_param_changed(self, str_path, str_value):
+        sender_twin = self.sender().twin_widg
+        sender_twin.update_param(str_path, str_value)
+
+    def add_new_node(self):
+        print("add_new_node")
+        self.new_node = CommandParamControl(
+            self.param_widgets[self.current_widget_key]["main_cmd"]
+        )
 
     def display_log(self, nod_p_num = 0):
         self.log_show(nod_p_num)
