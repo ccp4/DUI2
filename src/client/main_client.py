@@ -455,8 +455,8 @@ class MainObject(QObject):
             print("No advanced pars")
 
     def item_param_changed(self, str_path, str_value):
-        sender_twin = self.sender().twin_widg
-        sender_twin.update_param(str_path, str_value)
+        self.sender().twin_widg.update_param(str_path, str_value)
+        self.new_node.set_parameter(str_path, str_value)
 
     def add_new_node(self):
         print("add_new_node")
