@@ -445,6 +445,7 @@ class MainObject(QObject):
         self.clearLayout(self.window.Next2RunLayout)
         self.update_nxt_butt(str_key)
         self.current_widget_key = str_key
+        self.update_all_param()
 
     def reset_param(self):
         self.param_widgets[self.current_widget_key]["simple"].reset_pars()
@@ -456,20 +457,45 @@ class MainObject(QObject):
 
     def item_param_changed(self, str_path, str_value):
         self.sender().twin_widg.update_param(str_path, str_value)
-        self.new_node.set_parameter(str_path, str_value)
+        #TODO this << if >> should be more clever consider self.current_nod_num
+        if self.new_node is not None:
+            self.new_node.set_parameter(str_path, str_value)
 
     def add_new_node(self):
         print("add_new_node")
         self.new_node = CommandParamControl(
             self.param_widgets[self.current_widget_key]["main_cmd"]
         )
+        self.new_node.set_connections(
+            self.server_nod_lst, [self.current_nod_num]
+        )
+        self.current_nod_num = self.new_node.number
+
+    def update_all_param(self):
+        tmp_cmd_par = CommandParamControl()
+        tmp_cmd_par.clone_from_list(
+            self.server_nod_lst[self.current_nod_num]["cmd2show"]
+        )
+        self.reset_param()
+        self.param_widgets[self.current_widget_key]["simple"].update_all_pars(
+            tmp_cmd_par.get_all_params()
+        )
+        try:
+            self.param_widgets[self.current_widget_key]["advanced"].update_all_pars(
+                tmp_cmd_par.get_all_params()
+            )
+        except AttributeError:
+            print("No advanced pars")
 
     def display_log(self, nod_p_num = 0):
         self.log_show(nod_p_num)
 
     def display(self):
-        self.tree_scene.draw_tree_graph(self.server_nod_lst)
-        self.tree_scene.new_nod_num(self.current_nod_num)
+        self.tree_scene.draw_tree_graph(
+            nod_lst_in = self.server_nod_lst,
+            current_nod_num = self.current_nod_num,
+            new_node = None
+        )
 
     def request_display(self):
         cmd = {"nod_lst":"", "cmd_lst":["display"]}
@@ -480,20 +506,10 @@ class MainObject(QObject):
         print("on_clone", "*" * 50)
 
     def request_launch(self):
-        '''
-        cmd_str = self.cmd_par.get_full_command_string()
-        print("\n cmd_str", cmd_str)
-        nod_lst = self.parent_nums_lst
-        lst_of_node_str = []
-        for node_numb in nod_lst:
-            lst_of_node_str.append(str(node_numb))
-
-        cmd = {"nod_lst":lst_of_node_str, "cmd_lst":[cmd_str]}
-        '''
-
         cmd_str = self.new_node.get_full_command_string()
+        lst_of_node_str = self.new_node.parent_node_lst
 
-        cmd = {'nod_lst': [self.current_nod_num], 'cmd_lst': [cmd_str]}
+        cmd = {'nod_lst': lst_of_node_str, 'cmd_lst': [cmd_str]}
         print("cmd =", cmd)
         self.window.incoming_text.clear()
 

@@ -175,6 +175,24 @@ class CommandParamControl:
         self.custm_param = new_custom_parameter
         return is_same
 
+    def set_connections(self, nod_lst, parent_s):
+        max_nod_num = 0
+        for node in nod_lst:
+            if node["number"] > max_nod_num:
+                max_nod_num = node["number"]
+
+        self.number = max_nod_num + 1
+        self.parent_node_lst = parent_s
+
+        to_study = '''
+        cp_new_node = {
+            "number": int(old_node["number"]),
+            "status": str(old_node["status"]),
+            "cmd2show": list(old_node["cmd2show"]),
+            "child_node_lst": list(old_node["child_node_lst"]),
+            "parent_node_lst": list(old_node["parent_node_lst"])
+        }'''
+
     def clone_from_command_param(self, cmd_par_obj):
         self.cmd = str(cmd_par_obj.cmd)
         self.par_lst = []

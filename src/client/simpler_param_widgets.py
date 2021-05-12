@@ -138,7 +138,7 @@ class SimpleParamTab(QWidget):
         if self.do_emit:
             self.item_changed.emit(str_path, str_value)
 
-        self.do_emit = True
+        self.do_emit = True #TODO: find out if this line is needed
 
     def spnbox_finished(self):
         print("spnbox_finished")

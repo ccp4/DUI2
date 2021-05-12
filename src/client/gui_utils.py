@@ -696,7 +696,24 @@ class TreeDirScene(QGraphicsScene):
 
             self.update()
 
-    def draw_tree_graph(self, nod_lst_in, current_nod_num = 0):
+    def draw_tree_graph(
+            self, nod_lst_in = [], current_nod_num = 0, new_node = None
+        ):
+        '''
+        for node in self.gui_state["local_nod_lst"]:
+            if node["number"] in self.gui_state["new_node"]["parent_node_lst"]:
+                node["child_node_lst"].append(int(self.gui_state["new_node"]["number"]))
+
+
+        self.gui_state["new_node"] = {
+            "number": int(self.gui_state["current_nod_num"]),
+            "status": 'Ready',
+            "cmd2show": ["dials." + str(str_key)],
+            "child_node_lst": [],
+            "parent_node_lst": [par_nod_num]
+        }
+        '''
+
         lst_str = self.tree_obj(lst_nod = nod_lst_in)
         lst_2d_dat = self.tree_obj.get_tree_data()
 
