@@ -294,7 +294,7 @@ class AdvancedParameters(QWidget):
 def draw_quadratic_bezier_3_points(
         scene_obj, p1x, p1y, p2x, p2y, p3x, p3y,
         lin_pen, row_size, col_size
-    ):
+):
     arrow_head = True
     curved_corners = True
 
@@ -372,6 +372,66 @@ def draw_quadratic_bezier_3_points(
     else:
         scene_obj.addLine(p1x, p1y, p2x, p2y, lin_pen)
         scene_obj.addLine(p2x, p2y, p3x, p3y, lin_pen)
+
+
+def copy_lst_nodes(old_lst_nodes):
+    new_lst = []
+    for old_node in old_lst_nodes:
+        cp_new_node = {
+            "number": int(old_node["number"]),
+            "status": str(old_node["status"]),
+            "cmd2show": list(old_node["cmd2show"]),
+        }
+        new_child_node_lst = []
+        for child_node in old_node["child_node_lst"]:
+            new_child_node_lst.append(int(child_node))
+
+        cp_new_node["child_node_lst"] = new_child_node_lst
+
+        new_parent_node_lst = []
+        for parent_node in old_node["parent_node_lst"]:
+            new_parent_node_lst.append(int(parent_node))
+
+        cp_new_node["parent_node_lst"] = new_parent_node_lst
+
+        new_cmd_lst = []
+        for cmd in old_node["cmd2show"]:
+            new_cmd_lst.append(str(cmd))
+
+        cp_new_node["cmd2show"] = new_cmd_lst
+
+        new_lst.append(cp_new_node)
+
+    return new_lst
+
+
+def add_ready_node(old_lst_nodes, com_par):
+    try:
+        cp_new_node = {
+            "number": int(com_par.number),
+            "status": str(com_par.status),
+            "cmd2show": [str(com_par.cmd)],
+        }
+        new_parent_node_lst = []
+        for parent_node in com_par.parent_node_lst:
+            new_parent_node_lst.append(int(parent_node))
+
+        cp_new_node["parent_node_lst"] = new_parent_node_lst
+        cp_new_node["child_node_lst"] = []
+
+        new_lst = []
+        for singl_node in old_lst_nodes:
+            if singl_node["number"] in cp_new_node["parent_node_lst"]:
+                singl_node["child_node_lst"].append(int(com_par.number))
+
+            new_lst.append(singl_node)
+
+        new_lst.append(cp_new_node)
+
+        return new_lst
+
+    except AttributeError:
+        return old_lst_nodes
 
 
 class TreeDirScene(QGraphicsScene):
@@ -698,23 +758,10 @@ class TreeDirScene(QGraphicsScene):
 
     def draw_tree_graph(
             self, nod_lst_in = [], current_nod_num = 0, new_node = None
-        ):
-        '''
-        for node in self.gui_state["local_nod_lst"]:
-            if node["number"] in self.gui_state["new_node"]["parent_node_lst"]:
-                node["child_node_lst"].append(int(self.gui_state["new_node"]["number"]))
-
-
-        self.gui_state["new_node"] = {
-            "number": int(self.gui_state["current_nod_num"]),
-            "status": 'Ready',
-            "cmd2show": ["dials." + str(str_key)],
-            "child_node_lst": [],
-            "parent_node_lst": [par_nod_num]
-        }
-        '''
-
-        lst_str = self.tree_obj(lst_nod = nod_lst_in)
+    ):
+        tmp_local_lst = copy_lst_nodes(nod_lst_in)
+        self.paint_nod_lst = add_ready_node(tmp_local_lst, new_node)
+        lst_str = self.tree_obj(lst_nod = self.paint_nod_lst)
         lst_2d_dat = self.tree_obj.get_tree_data()
 
         self.nod_lst = lst_2d_dat

@@ -35,7 +35,6 @@ from outputs import DoLoadHTML, ShowLog
 from reindex_table import ReindexTable
 from exec_utils import (
     build_advanced_params_widget,
-    copy_lst_nodes,
     json_data_request,
     Run_n_Output,
     CommandParamControl,
@@ -303,10 +302,6 @@ class MainObject(QObject):
         elif tab_index == 1:
             self.do_load_html()
 
-    def line_n1_in(self, nod_num_in):
-        self.request_display()
-        #self.parent_nums_lst = [nod_num_in]
-
     def clear_parent_list(self):
         print("clear_parent_list")
 
@@ -314,8 +309,12 @@ class MainObject(QObject):
         print("\n clicked_4_navigation\n  node_numb =", node_numb)
         self.current_nod_num = node_numb
         ##############################################################
+        try:
+            cur_nod = self.server_nod_lst[node_numb]
 
-        cur_nod = self.server_nod_lst[node_numb]
+        except IndexError:
+            cur_nod = self.tree_scene.paint_nod_lst[node_numb]
+
         if self.window.OutputTabWidget.currentIndex() == 0:
             self.display_log(node_numb)
 
@@ -457,8 +456,7 @@ class MainObject(QObject):
 
     def item_param_changed(self, str_path, str_value):
         self.sender().twin_widg.update_param(str_path, str_value)
-        #TODO this << if >> should be more clever consider self.current_nod_num
-        if self.new_node is not None:
+        if self.current_nod_num == self.new_node.number:
             self.new_node.set_parameter(str_path, str_value)
 
     def add_new_node(self):
@@ -470,12 +468,18 @@ class MainObject(QObject):
             self.server_nod_lst, [self.current_nod_num]
         )
         self.current_nod_num = self.new_node.number
+        self.display()
 
     def update_all_param(self):
         tmp_cmd_par = CommandParamControl()
-        tmp_cmd_par.clone_from_list(
-            self.server_nod_lst[self.current_nod_num]["cmd2show"]
-        )
+        try:
+            tmp_cmd_par.clone_from_list(
+                self.server_nod_lst[self.current_nod_num]["cmd2show"]
+            )
+
+        except IndexError:
+            tmp_cmd_par = self.new_node
+
         self.reset_param()
         self.param_widgets[self.current_widget_key]["simple"].update_all_pars(
             tmp_cmd_par.get_all_params()
@@ -494,7 +498,7 @@ class MainObject(QObject):
         self.tree_scene.draw_tree_graph(
             nod_lst_in = self.server_nod_lst,
             current_nod_num = self.current_nod_num,
-            new_node = None
+            new_node = self.new_node
         )
 
     def request_display(self):
@@ -525,10 +529,16 @@ class MainObject(QObject):
             new_thrd.finished.connect(self.if_needed_html)
             new_thrd.start()
             self.thrd_lst.append(new_thrd)
-            self.new_node = None
 
         except requests.exceptions.RequestException:
             print("something went wrong with the request launch")
+            #TODO: put inside this << except >> some way to kill << new_thrd >>
+
+    def line_n1_in(self, nod_num_in):
+        self.request_display()
+        print("line_n1_in(nod_num_in) = ", nod_num_in)
+        #TODO: consider if this line goes in << request_launch >>
+        self.new_node = None
 
     def req_stop(self):
         print("req_stop")

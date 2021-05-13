@@ -52,20 +52,6 @@ def build_advanced_params_widget(cmd_str):
     return advanced_parameters
 
 
-def copy_lst_nodes(old_lst_nodes):
-    new_lst = []
-    for old_node in old_lst_nodes:
-        cp_new_node = {
-            "number": int(old_node["number"]),
-            "status": str(old_node["status"]),
-            "cmd2show": list(old_node["cmd2show"]),
-            "child_node_lst": list(old_node["child_node_lst"]),
-            "parent_node_lst": list(old_node["parent_node_lst"])
-        }
-        new_lst.append(cp_new_node)
-
-    return new_lst
-
 def json_data_request(url, cmd):
     try:
         req_get = requests.get(url, stream = True, params = cmd, timeout = 3)
@@ -182,16 +168,8 @@ class CommandParamControl:
                 max_nod_num = node["number"]
 
         self.number = max_nod_num + 1
-        self.parent_node_lst = parent_s
-
-        to_study = '''
-        cp_new_node = {
-            "number": int(old_node["number"]),
-            "status": str(old_node["status"]),
-            "cmd2show": list(old_node["cmd2show"]),
-            "child_node_lst": list(old_node["child_node_lst"]),
-            "parent_node_lst": list(old_node["parent_node_lst"])
-        }'''
+        self.status = 'Ready'
+        self.parent_node_lst = list(parent_s)
 
     def clone_from_command_param(self, cmd_par_obj):
         self.cmd = str(cmd_par_obj.cmd)
