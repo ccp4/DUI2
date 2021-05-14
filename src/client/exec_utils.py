@@ -141,6 +141,10 @@ class CommandParamControl:
         )
         print(" par_lst(__init__) =", self.par_lst)
 
+    def reset_all_params(self):
+        self.par_lst = []
+        self.custm_param = None
+
     def set_parameter(self, new_name, new_value):
         print(" par_lst(set_parameter) ini =", self.par_lst)
         already_here = False

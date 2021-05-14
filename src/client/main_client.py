@@ -222,7 +222,7 @@ class MainObject(QObject):
 
         self.tree_scene.node_clicked.connect(self.on_node_click)
         self.window.Reset2DefaultPushButton.clicked.connect(
-            self.reset_param
+            self.reset_new_node
         )
         self.window.ClearParentButton.clicked.connect(
             self.clear_parent_list
@@ -443,7 +443,6 @@ class MainObject(QObject):
         self.clearLayout(self.window.Next2RunLayout)
         self.update_nxt_butt(str_key)
         self.current_widget_key = str_key
-        #self.update_all_param()
 
     def reset_param(self):
         self.reseting = True
@@ -454,6 +453,10 @@ class MainObject(QObject):
         except AttributeError:
             print("No advanced pars")
         self.reseting = False
+
+    def reset_new_node(self):
+        self.new_node.reset_all_params()
+        self.reset_param()
 
     def item_param_changed(self, str_path, str_value):
         self.sender().twin_widg.update_param(str_path, str_value)
