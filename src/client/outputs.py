@@ -202,6 +202,8 @@ class ShowLog(QObject):
 
         except IndexError:
             print('\n no need to reload "ready" log')
+            self.main_obj.window.incoming_text.clear()
+            self.main_obj.window.incoming_text.insertPlainText("Ready to run: ")
 
     def add_line(self, new_line, nod_p_num):
         found_nod_num = False

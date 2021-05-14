@@ -62,6 +62,7 @@ class MainObject(QObject):
         self.window = QtUiTools.QUiLoader().load(ui_path)
         self.window.setWindowTitle("CCP4 DUI Cloud")
 
+        self.reseting = False
         try:
             imp_widg = ImportWidget()
             imp_widg.item_changed.connect(self.item_param_changed)
@@ -321,15 +322,13 @@ class MainObject(QObject):
         else:
             self.do_load_html()
 
-        #self.parent_nums_lst"] = [node_numb]
-
         print("\n cur_nod = ", cur_nod, "\n")
 
         cmd_ini = cur_nod["cmd2show"][0]
         key2find = cmd_ini[6:]
         try:
             self.change_widget(key2find)
-            #self.update_all_param(cur_nod)
+            self.update_all_param()
             if key2find == "reindex":
                 cmd = {
                     "nod_lst":cur_nod["parent_node_lst"],
@@ -444,19 +443,21 @@ class MainObject(QObject):
         self.clearLayout(self.window.Next2RunLayout)
         self.update_nxt_butt(str_key)
         self.current_widget_key = str_key
-        self.update_all_param()
+        #self.update_all_param()
 
     def reset_param(self):
+        self.reseting = True
         self.param_widgets[self.current_widget_key]["simple"].reset_pars()
         try:
             self.param_widgets[self.current_widget_key]["advanced"].reset_pars()
 
         except AttributeError:
             print("No advanced pars")
+        self.reseting = False
 
     def item_param_changed(self, str_path, str_value):
         self.sender().twin_widg.update_param(str_path, str_value)
-        if self.current_nod_num == self.new_node.number:
+        if self.current_nod_num == self.new_node.number and not self.reseting:
             self.new_node.set_parameter(str_path, str_value)
 
     def add_new_node(self):
@@ -472,6 +473,7 @@ class MainObject(QObject):
 
     def update_all_param(self):
         tmp_cmd_par = CommandParamControl()
+        self.reset_param()
         try:
             tmp_cmd_par.clone_from_list(
                 self.server_nod_lst[self.current_nod_num]["cmd2show"]
@@ -480,7 +482,6 @@ class MainObject(QObject):
         except IndexError:
             tmp_cmd_par = self.new_node
 
-        self.reset_param()
         self.param_widgets[self.current_widget_key]["simple"].update_all_pars(
             tmp_cmd_par.get_all_params()
         )
