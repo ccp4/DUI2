@@ -175,6 +175,18 @@ class CommandParamControl:
         self.status = 'Ready'
         self.parent_node_lst = list(parent_s)
 
+    def add_or_remove_parent(self, nod_num):
+        print("New node to add or remove:", nod_num)
+
+        if nod_num not in self.parent_node_lst:
+            self.parent_node_lst.append(nod_num)
+
+        elif len(self.parent_node_lst) > 1:
+            self.parent_node_lst.remove(nod_num)
+
+        else:
+            print("Unable to remove unique parent")
+
     def clone_from_command_param(self, cmd_par_obj):
         self.cmd = str(cmd_par_obj.cmd)
         self.par_lst = []

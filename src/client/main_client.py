@@ -287,6 +287,7 @@ class MainObject(QObject):
 
     def clicked_4_combine(self, node_numb):
         print("\n clicked_4_combine\n  node_numb =", node_numb)
+        self.new_node.add_or_remove_parent(node_numb)
         self.display()
 
     def if_needed_html(self):
@@ -347,18 +348,15 @@ class MainObject(QObject):
         self.display()
 
     def on_node_click(self, node_numb):
-        #if node_numb != self.current_nod_num:
-        #    if(
-        #        self.window.NodeSelecCheck.checkState()
-        #    ):
-        #        self.clicked_4_combine(node_numb)
-        #
-        #    else:
-        #        self.clicked_4_navigation(node_numb)
-        #
-        #else:
-        #    print("clicked current node, no need to do anything")
-        self.clicked_4_navigation(node_numb)
+        if (
+            node_numb != self.current_nod_num and
+            self.window.NodeSelecCheck.checkState() and
+            self.current_widget_key == "combine_experiments"
+        ):
+                self.clicked_4_combine(node_numb)
+
+        else:
+            self.clicked_4_navigation(node_numb)
 
     def clearLayout(self, layout):
         if layout is not None:
