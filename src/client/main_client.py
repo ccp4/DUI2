@@ -349,6 +349,7 @@ class MainObject(QObject):
 
     def on_node_click(self, node_numb):
         if (
+            self.new_node is not None and
             node_numb != self.current_nod_num and
             self.window.NodeSelecCheck.checkState() and
             self.current_widget_key == "combine_experiments"
