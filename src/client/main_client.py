@@ -280,7 +280,7 @@ class MainObject(QObject):
 
     def launch_reindex(self, sol_rei):
         print("reindex solution", sol_rei)
-        is_same = self.cmd_par.set_custom_parameter(str(sol_rei))
+        is_same = self.new_node.set_custom_parameter(str(sol_rei))
         if is_same:
             print("clicked twice same row, launching reindex")
             self.request_launch()
