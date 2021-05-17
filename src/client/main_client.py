@@ -420,6 +420,7 @@ class MainObject(QObject):
     def nxt_clicked(self):
         str_key = self.sender().cmd_str
         print("nxt_clicked ... str_key: ", str_key)
+
         if str_key == "reindex":
             cmd = {
                 "nod_lst":[self.current_nod_num],
@@ -510,7 +511,22 @@ class MainObject(QObject):
         self.display()
 
     def on_clone(self):
-        print("on_clone", "*" * 50)
+        print("on_clone")
+
+        self.new_node = CommandParamControl(
+            self.param_widgets[self.current_widget_key]["main_cmd"]
+        )
+        self.new_node.set_connections(
+            self.server_nod_lst,
+            self.server_nod_lst[self.current_nod_num]["parent_node_lst"]
+        )
+        self.new_node.clone_from_list(
+            self.server_nod_lst[self.current_nod_num]["cmd2show"]
+        )
+
+        self.current_nod_num = self.new_node.number
+        self.display()
+        self.do_load_html.set_output_as_ready()
 
     def request_launch(self):
         cmd_str = self.new_node.get_full_command_string()
