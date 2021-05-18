@@ -374,19 +374,12 @@ class MainObject(QObject):
         self.clearLayout(self.window.Next2RunLayout)
         self.window.Next2RunLayout.addStretch()
         try:
-            print(
-                "trying to << check_nxt_btn >> on node",
-                self.current_nod_num
-            )
             str_key = self.server_nod_lst[self.current_nod_num]["cmd2show"][0][6:]
             print("str_key =", str_key)
             self.update_nxt_butt(str_key)
 
-        except AttributeError:
-            print("NO current_nod_num (AttributeError)")
-
-        except IndexError:
-            print("NO current_nod_num (IndexError)")
+        except (IndexError, AttributeError):
+            print("NO current_nod_num")
 
     def update_nxt_butt(self, str_key):
         small_f_size = int(self.font_point_size * 0.85)
