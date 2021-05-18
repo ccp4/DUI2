@@ -371,6 +371,8 @@ class MainObject(QObject):
                     self.clearLayout(item.layout())
 
     def check_nxt_btn(self):
+        self.clearLayout(self.window.Next2RunLayout)
+        self.window.Next2RunLayout.addStretch()
         try:
             print(
                 "trying to << check_nxt_btn >> on node",
@@ -394,8 +396,6 @@ class MainObject(QObject):
                 self.server_nod_lst[self.current_nod_num]["status"]
                 == "Succeeded"
             ):
-                self.clearLayout(self.window.Next2RunLayout)
-                self.window.Next2RunLayout.addStretch()
                 for bt_labl in self.param_widgets[str_key]["nxt_widg_lst"]:
                     nxt_butt = QPushButton(bt_labl)
                     nxt_butt.cmd_str = bt_labl
@@ -414,7 +414,7 @@ class MainObject(QObject):
 
                     self.window.Next2RunLayout.addWidget(nxt_butt)
 
-        except IndexError:
+        except (IndexError, KeyError):
             print("no need to add next button")
 
     def nxt_clicked(self):
@@ -440,8 +440,7 @@ class MainObject(QObject):
         self.window.StackedParamsWidget.setCurrentWidget(
             self.param_widgets[str_key]["main_page"]
         )
-        self.clearLayout(self.window.Next2RunLayout)
-        self.update_nxt_butt(str_key)
+        self.check_nxt_btn()
         self.current_widget_key = str_key
 
     def reset_param(self):
@@ -498,12 +497,50 @@ class MainObject(QObject):
     def display_log(self, nod_p_num = 0):
         self.log_show(nod_p_num)
 
+    def gray_n_ungray(self):
+        try:
+            tmp_state = self.server_nod_lst[self.current_nod_num]["status"]
+
+        except IndexError:
+            tmp_state = "Ready"
+
+        str_key = self.current_widget_key
+        self.param_widgets[str_key]["simple"].setEnabled(False)
+        try:
+            self.param_widgets[str_key]["advanced"].setEnabled(False)
+
+        except AttributeError:
+            print("no need to gray 'None' widget")
+
+        self.window.RetryButton.setEnabled(False)
+        self.window.CmdSend2server.setEnabled(False)
+        self.window.ReqStopButton.setEnabled(False)
+        if tmp_state == "Ready":
+            print("only run (R)")
+            self.window.CmdSend2server.setEnabled(True)
+            self.param_widgets[str_key]["simple"].setEnabled(True)
+            try:
+                self.param_widgets[str_key]["advanced"].setEnabled(True)
+
+            except AttributeError:
+                print("no need to un-gray 'None' widget")
+
+        elif tmp_state == "Busy":
+            print("only clone or stop (B)")
+            self.window.RetryButton.setEnabled(True)
+            self.window.ReqStopButton.setEnabled(True)
+
+        else:
+            print("only clone (F or S)")
+            self.window.RetryButton.setEnabled(True)
+
     def display(self):
         self.tree_scene.draw_tree_graph(
             nod_lst_in = self.server_nod_lst,
             current_nod_num = self.current_nod_num,
             new_node = self.new_node
         )
+        self.gray_n_ungray()
 
     def request_display(self):
         cmd = {"nod_lst":"", "cmd_lst":["display"]}
