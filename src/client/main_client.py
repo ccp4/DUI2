@@ -433,6 +433,7 @@ class MainObject(QObject):
         self.change_widget(str_key)
         self.reset_param()
         self.add_new_node()
+        self.check_nxt_btn()
         self.do_load_html.set_output_as_ready()
 
     def change_widget(self, str_key):
@@ -560,9 +561,9 @@ class MainObject(QObject):
         self.new_node.clone_from_list(
             self.server_nod_lst[self.current_nod_num]["cmd2show"]
         )
-
         self.current_nod_num = self.new_node.number
         self.display()
+        self.check_nxt_btn()
         self.do_load_html.set_output_as_ready()
 
     def request_launch(self):
