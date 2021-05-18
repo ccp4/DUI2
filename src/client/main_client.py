@@ -509,6 +509,8 @@ class MainObject(QObject):
         self.window.RetryButton.setEnabled(False)
         self.window.CmdSend2server.setEnabled(False)
         self.window.ReqStopButton.setEnabled(False)
+        self.window.Reset2DefaultPushButton.setEnabled(False)
+
         if tmp_state == "Ready":
             print("only run (R)")
             self.window.CmdSend2server.setEnabled(True)
@@ -518,6 +520,8 @@ class MainObject(QObject):
 
             except AttributeError:
                 print("no need to un-gray 'None' widget")
+
+            self.window.Reset2DefaultPushButton.setEnabled(True)
 
         elif tmp_state == "Busy":
             print("only clone or stop (B)")
