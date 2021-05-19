@@ -300,7 +300,8 @@ class MainObject(QObject):
             self.do_load_html()
 
     def clear_parent_list(self):
-        print("clear_parent_list")
+        self.new_node.clear_parents()
+        self.display()
 
     def clicked_4_navigation(self, node_numb):
         print("\n clicked_4_navigation\n  node_numb =", node_numb)
@@ -502,6 +503,8 @@ class MainObject(QObject):
         except AttributeError:
             print("no need to gray 'None' widget")
 
+        self.window.ClearParentButton.setEnabled(False)
+
         self.window.RetryButton.setEnabled(False)
         self.window.CmdSend2server.setEnabled(False)
         self.window.ReqStopButton.setEnabled(False)
@@ -511,6 +514,7 @@ class MainObject(QObject):
             print("only run (R)")
             self.window.CmdSend2server.setEnabled(True)
             self.param_widgets[str_key]["simple"].setEnabled(True)
+            self.window.ClearParentButton.setEnabled(True)
             try:
                 self.param_widgets[str_key]["advanced"].setEnabled(True)
 

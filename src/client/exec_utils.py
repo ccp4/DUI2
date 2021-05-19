@@ -187,6 +187,11 @@ class CommandParamControl:
         else:
             print("Unable to remove unique parent")
 
+    def clear_parents(self):
+        print("old parent_node_lst =", self.parent_node_lst)
+        self.parent_node_lst = [int(max(self.parent_node_lst))]
+        print("new parent_node_lst =", self.parent_node_lst)
+
     def clone_from_command_param(self, cmd_par_obj):
         self.cmd = str(cmd_par_obj.cmd)
         self.par_lst = []
