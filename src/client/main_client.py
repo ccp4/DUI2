@@ -285,12 +285,6 @@ class MainObject(QObject):
             print("clicked twice same row, launching reindex")
             self.request_launch()
 
-    def if_needed_html(self):
-        tab_index = self.window.OutputTabWidget.currentIndex()
-        if tab_index == 1:
-            print("updating html report ")
-            self.do_load_html()
-
     def tab_changed(self, tab_index):
         print("tab_index =", tab_index)
         if tab_index == 0:
@@ -312,12 +306,7 @@ class MainObject(QObject):
         except IndexError:
             cur_nod = self.tree_scene.paint_nod_lst[node_numb]
 
-        if self.window.OutputTabWidget.currentIndex() == 0:
-            self.display_log(node_numb)
-
-        else:
-            self.do_load_html()
-
+        self.tab_changed(self.window.OutputTabWidget.currentIndex())
         cmd_ini = cur_nod["cmd2show"][0]
         key2find = cmd_ini[6:]
         try:
@@ -536,6 +525,7 @@ class MainObject(QObject):
             new_node = self.new_node
         )
         self.gray_n_ungray()
+        self.tab_changed(self.window.OutputTabWidget.currentIndex())
 
     def request_display(self):
         cmd = {"nod_lst":"", "cmd_lst":["display"]}
@@ -577,7 +567,6 @@ class MainObject(QObject):
             new_thrd.first_line.connect(self.line_n1_in)
             new_thrd.finished.connect(self.request_display)
             new_thrd.finished.connect(self.check_nxt_btn)
-            new_thrd.finished.connect(self.if_needed_html)
             new_thrd.start()
             self.thrd_lst.append(new_thrd)
 
