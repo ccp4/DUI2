@@ -285,11 +285,6 @@ class MainObject(QObject):
             print("clicked twice same row, launching reindex")
             self.request_launch()
 
-    def clicked_4_combine(self, node_numb):
-        print("\n clicked_4_combine\n  node_numb =", node_numb)
-        self.new_node.add_or_remove_parent(node_numb)
-        self.display()
-
     def if_needed_html(self):
         tab_index = self.window.OutputTabWidget.currentIndex()
         if tab_index == 1:
@@ -354,7 +349,8 @@ class MainObject(QObject):
             self.window.NodeSelecCheck.checkState() and
             self.current_widget_key == "combine_experiments"
         ):
-                self.clicked_4_combine(node_numb)
+                self.new_node.add_or_remove_parent(node_numb)
+                self.display()
 
         else:
             self.clicked_4_navigation(node_numb)
