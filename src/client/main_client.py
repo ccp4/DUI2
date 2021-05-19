@@ -287,11 +287,16 @@ class MainObject(QObject):
 
     def tab_changed(self, tab_index):
         print("tab_index =", tab_index)
+        fnd_cur_nod = False
+        for node in self.server_nod_lst:
+            if node["number"] == self.current_nod_num:
+                fnd_cur_nod = True
+
         if tab_index == 0:
-            self.display_log(self.current_nod_num)
+            self.log_show(self.current_nod_num, do_request = fnd_cur_nod)
 
         elif tab_index == 1:
-            self.do_load_html()
+            self.do_load_html(do_request = fnd_cur_nod)
 
     def clear_parent_list(self):
         self.new_node.clear_parents()
@@ -470,9 +475,6 @@ class MainObject(QObject):
             )
         except AttributeError:
             print("No advanced pars")
-
-    def display_log(self, nod_p_num = 0):
-        self.log_show(nod_p_num)
 
     def gray_n_ungray(self):
         try:
