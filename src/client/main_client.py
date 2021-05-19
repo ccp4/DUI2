@@ -306,7 +306,6 @@ class MainObject(QObject):
     def clicked_4_navigation(self, node_numb):
         print("\n clicked_4_navigation\n  node_numb =", node_numb)
         self.current_nod_num = node_numb
-        ##############################################################
         try:
             cur_nod = self.server_nod_lst[node_numb]
 
@@ -318,8 +317,6 @@ class MainObject(QObject):
 
         else:
             self.do_load_html()
-
-        print("\n cur_nod = ", cur_nod, "\n")
 
         cmd_ini = cur_nod["cmd2show"][0]
         key2find = cmd_ini[6:]
@@ -340,7 +337,6 @@ class MainObject(QObject):
             print("command widget not there yet")
             return
 
-        ##############################################################
         self.display()
 
     def on_node_click(self, node_numb):
@@ -372,11 +368,11 @@ class MainObject(QObject):
         self.window.Next2RunLayout.addStretch()
         try:
             str_key = self.server_nod_lst[self.current_nod_num]["cmd2show"][0][6:]
-            print("str_key =", str_key)
+            print("update_nxt_butt(", str_key, ")")
             self.update_nxt_butt(str_key)
 
         except (IndexError, AttributeError):
-            print("NO current_nod_num")
+            print("NO need to run << update_nxt_butt >>")
 
     def update_nxt_butt(self, str_key):
         small_f_size = int(self.font_point_size * 0.85)
@@ -442,6 +438,7 @@ class MainObject(QObject):
 
         except AttributeError:
             print("No advanced pars")
+
         self.reseting = False
 
     def reset_new_node(self):
