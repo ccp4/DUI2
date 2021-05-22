@@ -164,11 +164,6 @@ class DoLoadHTML(QObject):
         self.main_obj.window.HtmlReport.loadProgress.connect(self.load_progress)
         self.main_obj.window.HtmlReport.loadFinished.connect(self.load_finished)
 
-    def set_output_as_ready(self):
-        self.main_obj.window.incoming_text.clear()
-        self.main_obj.window.incoming_text.insertPlainText("Ready to run: ")
-        self.main_obj.window.HtmlReport.setHtml(self.not_avail_html)
-
 
 class ShowLog(QObject):
     def __init__(self, parent = None):
@@ -233,7 +228,6 @@ class ShowLog(QObject):
 
     def show_ready_log(self):
         print('\n no need to reload "ready" log')
-        self.main_obj.window.incoming_text.clear()
         self.main_obj.window.incoming_text.clear()
         self.main_obj.window.incoming_text.insertPlainText("Ready to run: ")
 

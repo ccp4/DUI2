@@ -285,7 +285,10 @@ class MainObject(QObject):
             print("clicked twice same row, launching reindex")
             self.request_launch()
 
-    def tab_changed(self, tab_index):
+    def tab_changed(self, tab_index = None):
+        if tab_index == None:
+            tab_index = self.window.OutputTabWidget.currentIndex()
+
         print("tab_index =", tab_index)
         fnd_cur_nod = False
         for node in self.server_nod_lst:
@@ -311,7 +314,7 @@ class MainObject(QObject):
         except IndexError:
             cur_nod = self.tree_scene.paint_nod_lst[node_numb]
 
-        self.tab_changed(self.window.OutputTabWidget.currentIndex())
+        self.tab_changed()
         cmd_ini = cur_nod["cmd2show"][0]
         key2find = cmd_ini[6:]
         try:
@@ -414,7 +417,6 @@ class MainObject(QObject):
         self.reset_param()
         self.add_new_node()
         self.check_nxt_btn()
-        self.do_load_html.set_output_as_ready()
 
     def change_widget(self, str_key):
         self.window.BoxControlWidget.setTitle(str_key)
@@ -454,6 +456,7 @@ class MainObject(QObject):
         )
         self.current_nod_num = self.new_node.number
         self.display()
+        self.tab_changed()
 
     def update_all_param(self):
         tmp_cmd_par = CommandParamControl()
@@ -527,7 +530,6 @@ class MainObject(QObject):
             new_node = self.new_node
         )
         self.gray_n_ungray()
-        self.tab_changed(self.window.OutputTabWidget.currentIndex())
 
     def request_display(self):
         cmd = {"nod_lst":"", "cmd_lst":["display"]}
@@ -550,7 +552,7 @@ class MainObject(QObject):
         self.current_nod_num = self.new_node.number
         self.display()
         self.check_nxt_btn()
-        self.do_load_html.set_output_as_ready()
+        self.tab_changed()
 
     def request_launch(self):
         cmd_str = self.new_node.get_full_command_string()
@@ -569,6 +571,7 @@ class MainObject(QObject):
             new_thrd.first_line.connect(self.line_n1_in)
             new_thrd.finished.connect(self.request_display)
             new_thrd.finished.connect(self.check_nxt_btn)
+            new_thrd.finished.connect(self.tab_changed)
             new_thrd.start()
             self.thrd_lst.append(new_thrd)
 
