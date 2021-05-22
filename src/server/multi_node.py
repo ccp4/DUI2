@@ -388,15 +388,9 @@ class Runner(object):
                         lof_file.close()
                         return_list.append(lst2add)
 
-                    except IndexError:
+                    except (IndexError, TypeError, FileNotFoundError) as my_er:
                         print(
-                            "\n *** ERROR (IndexError) *** \n" +
-                            "wrong line \n not logging"
-                        )
-
-                    except TypeError:
-                        print(
-                            "\n *** ERROR (TypeError) *** \n" +
+                            "\n *** ERROR *** \n", my_er, "\n *** \n" +
                             "wrong line \n not logging"
                         )
 
