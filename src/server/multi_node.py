@@ -38,7 +38,7 @@ except ModuleNotFoundError:
     import format_utils
 
 from params_2_json import get_param_list
-
+from img_uploader import flex_arr_2_json
 
 def fix_alias(short_in):
     pair_list = [
@@ -93,9 +93,11 @@ class CmdNode(object):
         except TypeError:
             self.parent_node_lst = []
 
-        self._lst_expt = []
-        self._lst_refl = []
+        self._lst_expt_in = []
+        self._lst_refl_in = []
         self._html_rep = None
+        self._lst_expt_out = []
+        self._lst_refl_out = []
         self.lst2run = []
         self.full_cmd_lst = []
         self._run_dir = ""
@@ -110,20 +112,20 @@ class CmdNode(object):
             for single_parent in parent_lst_in:
                 self.set_base_dir(single_parent._base_dir)
                 for expt_2_add in glob.glob(single_parent._run_dir + "/*.expt"):
-                    self._lst_expt.append(expt_2_add)
+                    self._lst_expt_in.append(expt_2_add)
 
                 for refl_2_add in glob.glob(single_parent._run_dir + "/*.refl"):
-                    self._lst_refl.append(refl_2_add)
+                    self._lst_refl_in.append(refl_2_add)
 
                 lst_json = glob.glob(single_parent._run_dir + "/*.json")
                 for json_2_add in lst_json:
-                    self._lst_expt.append(json_2_add)
+                    self._lst_expt_in.append(json_2_add)
 
-                if len(self._lst_expt) < len(self._lst_refl):
-                    self._lst_expt += single_parent._lst_expt
+                if len(self._lst_expt_in) < len(self._lst_refl_in):
+                    self._lst_expt_in += single_parent._lst_expt_in
 
-                if len(self._lst_refl) == 0:
-                    self._lst_refl += single_parent._lst_refl
+                if len(self._lst_refl_in) == 0:
+                    self._lst_refl_in += single_parent._lst_refl_in
 
         except TypeError:
             print("parent_lst_in =", parent_lst_in, "tmp empty; ", end='')
@@ -141,8 +143,8 @@ class CmdNode(object):
         base_dir = os.getcwd()
         self.set_base_dir(base_dir)
         self._run_dir = run_dir
-        self._lst_expt = []
-        self._lst_refl = []
+        self._lst_expt_in = []
+        self._lst_refl_in = []
         self.full_cmd_lst = [['Root']]
         self.status = "Succeeded"
 
@@ -175,7 +177,7 @@ class CmdNode(object):
                     sol_num = 1
 
                 json_file_tmp = None
-                for file_str in self._lst_expt:
+                for file_str in self._lst_expt_in:
                     if "bravais_summary" in file_str:
                         json_file_tmp = str(file_str)
 
@@ -187,9 +189,9 @@ class CmdNode(object):
                     input_str = "change_of_basis_op=" + str(change_of_basis_op)
                     self.full_cmd_lst[-1].append(input_str)
                     str2comp = "bravais_setting_" + str(sol_num) + ".expt"
-                    for file_str in self._lst_expt:
+                    for file_str in self._lst_expt_in:
                         if str2comp in file_str:
-                            self._lst_expt = [str(file_str)]
+                            self._lst_expt_in = [str(file_str)]
 
                     self.lst2run[-1].append(" " + str(sol_num))
 
@@ -197,10 +199,10 @@ class CmdNode(object):
                 print("KeyError from attempting to reindex")
 
         else:
-            for expt_2_add in self._lst_expt:
+            for expt_2_add in self._lst_expt_in:
                 self.full_cmd_lst[-1].append(expt_2_add)
 
-        for refl_2_add in self._lst_refl:
+        for refl_2_add in self._lst_refl_in:
             self.full_cmd_lst[-1].append(refl_2_add)
 
         if self.full_cmd_lst[-1][0] != "dials.reindex":
@@ -272,10 +274,12 @@ class CmdNode(object):
 
         # running HTML report generation
         lst_dat_in = ['dials.report']
-        for expt_2_add in glob.glob(self._run_dir + "/*.expt"):
+        self._lst_expt_out = glob.glob(self._run_dir + "/*.expt")
+        for expt_2_add in self._lst_expt_out:
             lst_dat_in.append(expt_2_add)
 
-        for refl_2_add in glob.glob(self._run_dir + "/*.refl"):
+        self._lst_refl_out = glob.glob(self._run_dir + "/*.refl")
+        for refl_2_add in self._lst_refl_out:
             lst_dat_in.append(refl_2_add)
 
         print("\n running:", lst_dat_in, "\n")
@@ -410,16 +414,22 @@ class Runner(object):
                             " \n sending empty html"
                         )
 
-            ########################################################### IMAGE start
-
             elif uni_cmd[0] == "get_image":
                 for lin2go in cmd_dict["nod_lst"]:
-                    print(
-                        "generating image JSON data for line:", lin2go,
-                        " image:", int(uni_cmd[1])
-                    )
+                    try:
+                        print(
+                            "generating image JSON data for line:", lin2go,
+                            " image:", int(uni_cmd[1])
+                        )
+                        #TODO remember to check if the list is empty
+                        lst2add = flex_arr_2_json.get_json(
+                            self.step_list[lin2go]._lst_expt_out,
+                            int(uni_cmd[1])
+                        )
+                        return_list.append(lst2add)
 
-            ########################################################### IMAGE end
+                    except (IndexError, AttributeError):
+                        print("\n *** ERROR *** \n wrong line \n not sending IMG")
 
             elif uni_cmd == ["get_bravais_sum"]:
                 for lin2go in cmd_dict["nod_lst"]:
@@ -448,7 +458,7 @@ class Runner(object):
                     node2run(uni_cmd, req_obj)
 
                 except UnboundLocalError:
-                    print("\n *** ERROR *** \n wrong line ULE \n not running")
+                    print("\n *** ERROR *** \n wrong line \n not running")
                     print("uni_cmd =", uni_cmd)
 
             self._save_state()
@@ -478,12 +488,12 @@ class Runner(object):
                         "_base_dir"             :uni._base_dir,
                         "full_cmd_lst"          :uni.full_cmd_lst,
                         "lst2run"               :uni.lst2run,
-                        "_lst_expt"             :uni._lst_expt,
-                        "_lst_refl"             :uni._lst_refl,
+                        "_lst_expt_in"          :uni._lst_expt_in,
+                        "_lst_refl_in"          :uni._lst_refl_in,
                         "_run_dir"              :uni._run_dir,
                         "_html_rep"             :uni._html_rep,
                         "log_file_path"         :uni.log_file_path,
-                        "number"               :uni.number,
+                        "number"                :uni.number,
                         "status"                :uni.status,
                         "parent_node_lst"       :uni.parent_node_lst,
                         "child_node_lst"        :uni.child_node_lst
@@ -509,12 +519,12 @@ class Runner(object):
             new_node._base_dir       = uni_dic["_base_dir"]
             new_node.full_cmd_lst    = uni_dic["full_cmd_lst"]
             new_node.lst2run         = uni_dic["lst2run"]
-            new_node._lst_expt       = uni_dic["_lst_expt"]
-            new_node._lst_refl       = uni_dic["_lst_refl"]
+            new_node._lst_expt_in    = uni_dic["_lst_expt_in"]
+            new_node._lst_refl_in    = uni_dic["_lst_refl_in"]
             new_node._run_dir        = uni_dic["_run_dir"]
             new_node._html_rep       = uni_dic["_html_rep"]
             new_node.log_file_path   = uni_dic["log_file_path"]
-            new_node.number         = uni_dic["number"]
+            new_node.number          = uni_dic["number"]
             new_node.status          = uni_dic["status"]
             new_node.child_node_lst  = uni_dic["child_node_lst"]
             new_node.parent_node_lst = uni_dic["parent_node_lst"]
