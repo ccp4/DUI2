@@ -45,6 +45,7 @@ def fix_alias(short_in):
         ("d", "display"                                     ),
         ("dl", "display_log"                                ),
         ("gr", "get_report"                                 ),
+        ("gi", "get_image"                                  ),
         ("gb", "get_bravais_sum"                            ),
         ("st", "stop"                                       ),
         ("fdp", "find_spots_params"                         ),
@@ -366,6 +367,7 @@ class Runner(object):
             ["display"] not in full_cmd_lst and
             ["display_log"] not in full_cmd_lst and
             ["get_report"] not in full_cmd_lst and
+            "get_image" not in full_cmd_lst[0] and
             ["get_bravais_sum"] not in full_cmd_lst and
             ["stop"] not in full_cmd_lst
         ):
@@ -408,6 +410,17 @@ class Runner(object):
                             " \n sending empty html"
                         )
 
+            ########################################################### IMAGE start
+
+            elif uni_cmd[0] == "get_image":
+                for lin2go in cmd_dict["nod_lst"]:
+                    print(
+                        "generating image JSON data for line:", lin2go,
+                        " image:", int(uni_cmd[1])
+                    )
+
+            ########################################################### IMAGE end
+
             elif uni_cmd == ["get_bravais_sum"]:
                 for lin2go in cmd_dict["nod_lst"]:
                     try:
@@ -435,7 +448,8 @@ class Runner(object):
                     node2run(uni_cmd, req_obj)
 
                 except UnboundLocalError:
-                    print("\n *** ERROR *** \n wrong line \n not running")
+                    print("\n *** ERROR *** \n wrong line ULE \n not running")
+                    print("uni_cmd =", uni_cmd)
 
             self._save_state()
 
