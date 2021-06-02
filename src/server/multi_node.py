@@ -490,6 +490,8 @@ class Runner(object):
                         "lst2run"               :uni.lst2run,
                         "_lst_expt_in"          :uni._lst_expt_in,
                         "_lst_refl_in"          :uni._lst_refl_in,
+                        "_lst_expt_out"         :uni._lst_expt_out,
+                        "_lst_refl_out"         :uni._lst_refl_out,
                         "_run_dir"              :uni._run_dir,
                         "_html_rep"             :uni._html_rep,
                         "log_file_path"         :uni.log_file_path,
@@ -497,14 +499,13 @@ class Runner(object):
                         "status"                :uni.status,
                         "parent_node_lst"       :uni.parent_node_lst,
                         "child_node_lst"        :uni.child_node_lst
-                    }
-
+            }
             lst_nod.append(node)
 
         all_dat = {
                 "step_list"             :lst_nod,
                 "bigger_lin"            :self.bigger_lin,
-            }
+        }
 
         with open("run_data", "w") as fp:
             json.dump(all_dat, fp, indent=4)
@@ -521,6 +522,8 @@ class Runner(object):
             new_node.lst2run         = uni_dic["lst2run"]
             new_node._lst_expt_in    = uni_dic["_lst_expt_in"]
             new_node._lst_refl_in    = uni_dic["_lst_refl_in"]
+            new_node._lst_expt_out    = uni_dic["_lst_expt_out"]
+            new_node._lst_refl_out    = uni_dic["_lst_refl_out"]
             new_node._run_dir        = uni_dic["_run_dir"]
             new_node._html_rep       = uni_dic["_html_rep"]
             new_node.log_file_path   = uni_dic["log_file_path"]
@@ -528,7 +531,6 @@ class Runner(object):
             new_node.status          = uni_dic["status"]
             new_node.child_node_lst  = uni_dic["child_node_lst"]
             new_node.parent_node_lst = uni_dic["parent_node_lst"]
-
             self.step_list.append(new_node)
 
 

@@ -96,6 +96,9 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
         except BrokenPipeError:
             print("\n *** BrokenPipeError *** while sending EOF or JSON \n")
 
+        except ConnectionResetError:
+            print("\n *** ConnectionResetError *** while sending EOF or JSON \n")
+
 
 if __name__ == "__main__":
 
