@@ -89,7 +89,6 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
                 except FileNotFoundError:
                     self.wfile.write(bytes("/*EOF*/", 'utf-8'))
 
-
             print("sending /*EOF*/")
             self.wfile.write(bytes('/*EOF*/', 'utf-8'))
 
@@ -107,7 +106,6 @@ if __name__ == "__main__":
             runner_data = json.load(json_file)
 
         cmd_tree_runner = multi_node.Runner(runner_data)
-
 
     except FileNotFoundError:
         print("Starting from hacked multiple import")
