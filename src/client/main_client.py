@@ -296,9 +296,12 @@ class MainObject(QObject):
                 fnd_cur_nod = True
 
         if tab_index == 0:
-            self.log_show(self.current_nod_num, do_request = fnd_cur_nod)
+            print("IMG request ...")
 
         elif tab_index == 1:
+            self.log_show(self.current_nod_num, do_request = fnd_cur_nod)
+
+        elif tab_index == 2:
             self.do_load_html(do_request = fnd_cur_nod)
 
     def clear_parent_list(self):

@@ -107,8 +107,8 @@
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>447</width>
-                       <height>326</height>
+                       <width>439</width>
+                       <height>316</height>
                       </rect>
                      </property>
                     </widget>
@@ -697,6 +697,16 @@
           <property name="currentIndex">
            <number>0</number>
           </property>
+          <widget class="QWidget" name="ImageTab">
+           <attribute name="title">
+            <string>Image</string>
+           </attribute>
+           <layout class="QGridLayout" name="gridLayout_32">
+            <item row="0" column="0">
+             <widget class="QGraphicsView" name="imageView"/>
+            </item>
+           </layout>
+          </widget>
           <widget class="QWidget" name="LogOutPutTab">
            <attribute name="title">
             <string>Log</string>
@@ -761,7 +771,7 @@
      <x>0</x>
      <y>0</y>
      <width>1024</width>
-     <height>20</height>
+     <height>27</height>
     </rect>
    </property>
   </widget>
