@@ -186,6 +186,43 @@ def load_json_w_str():
     return np_array_out
 
 
+class DoImageView(QObject):
+    def __init__(self, parent = None):
+        super(DoImageView, self).__init__(parent)
+        self.main_obj = parent
+        self.my_scene = QGraphicsScene()
+        self.main_obj.window.imageView.setScene(self.my_scene)
+
+        self.bmp_heat = np2bmp_heat()
+        self.bmp_m_cro = np2bmp_monocrome()
+
+    def __call__(self, nod_num):
+        my_cmd = {"nod_lst":[nod_num], "cmd_lst":["gi 6"]}
+        req_get = requests.get(
+            'http://localhost:8080/', stream = True, params = my_cmd
+        )
+        compresed = req_get.content
+        dic_str = zlib.decompress(compresed)
+        arr_dic = json.loads(dic_str)
+        d1 = arr_dic["d1"]
+        d2 = arr_dic["d2"]
+        str_data = arr_dic["str_data"]
+        print("d1, d2 =", d1, d2)
+        arr_1d = np.fromstring(str_data, dtype = float, sep = ',')
+        np_array_img = arr_1d.reshape(d1, d2)
+        rgb_np = self.bmp_m_cro.img_2d_rgb(
+            data2d = np_array_img, invert = False, i_min_max = [-2, 50]
+        )
+        q_img = QImage(
+            rgb_np.data,
+            np.size(rgb_np[0:1, :, 0:1]),
+            np.size(rgb_np[:, 0:1, 0:1]),
+            QImage.Format_ARGB32
+        )
+        tmp_pixmap = QPixmap.fromImage(q_img)
+        self.my_scene.addPixmap(tmp_pixmap)
+
+
 class Form(QObject):
 
     def __init__(self, parent=None):
@@ -219,6 +256,7 @@ class Form(QObject):
         )
         tmp_pixmap = QPixmap.fromImage(q_img)
         self.my_scene_1.addPixmap(tmp_pixmap)
+
 
 
 if __name__ == '__main__':

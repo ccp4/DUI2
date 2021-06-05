@@ -32,6 +32,7 @@ from PySide2.QtWebEngineWidgets import QWebEngineView
 
 from gui_utils import TreeDirScene, widgets_defs
 from outputs import DoLoadHTML, ShowLog
+from img_view import DoImageView
 from reindex_table import ReindexTable
 from exec_utils import (
     build_advanced_params_widget,
@@ -258,6 +259,8 @@ class MainObject(QObject):
 
         self.log_show = ShowLog(self)
 
+        self.do_image_view = DoImageView(self)
+
         self.window.OutputTabWidget.currentChanged.connect(self.tab_changed)
 
         self.current_widget_key = "import"
@@ -297,25 +300,7 @@ class MainObject(QObject):
 
         if tab_index == 0:
             print("IMG request ...")
-
-            import zlib, json
-            import numpy as np
-
-            my_cmd = {"nod_lst":[1], "cmd_lst":["gi 6"]}
-            req_get = requests.get(
-                'http://localhost:8080/', stream = True, params = my_cmd
-            )
-            compresed = req_get.content
-            dic_str = zlib.decompress(compresed)
-            arr_dic = json.loads(dic_str)
-            d1 = arr_dic["d1"]
-            d2 = arr_dic["d2"]
-            str_data = arr_dic["str_data"]
-            print("d1, d2 =", d1, d2)
-            arr_1d = np.fromstring(str_data, dtype = float, sep = ',')
-            np_array_out = arr_1d.reshape(d1, d2)
-            print("np_array_out =", np_array_out)
-
+            self.do_image_view(self.current_nod_num)
 
         elif tab_index == 1:
             self.log_show(self.current_nod_num, do_request = fnd_cur_nod)
