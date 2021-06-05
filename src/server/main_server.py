@@ -24,6 +24,7 @@ copyright (c) CCP4 - DLS
 import http.server, socketserver
 from urllib.parse import urlparse, parse_qs
 import json
+import zlib
 
 import multi_node
 
@@ -71,9 +72,11 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
 
             if type(lst_out) is list:
                 json_str = json.dumps(lst_out) + '\n'
-                #print("type(json_str) =", type(json_str))
-                #print("type(lst_out) =", type(lst_out))
                 self.wfile.write(bytes(json_str, 'utf-8'))
+
+            elif type(lst_out) is bytes:
+                byt_data = zlib.compress(lst_out)
+                self.wfile.write(bytes(byt_data))
 
             else:
                 try:
