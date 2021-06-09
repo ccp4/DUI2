@@ -192,6 +192,7 @@ class DoImageView(QObject):
         self.main_obj = parent
         self.my_scene = QGraphicsScene()
         self.main_obj.window.imageView.setScene(self.my_scene)
+        self.main_obj.window.imageView.setDragMode(QGraphicsView.ScrollHandDrag)
 
         self.bmp_heat = np2bmp_heat()
         self.bmp_m_cro = np2bmp_monocrome()
@@ -224,7 +225,10 @@ class DoImageView(QObject):
 
 
 class Form(QObject):
-
+    '''
+    This class should only be use when testing,
+    is just a quick way to show/load images
+    '''
     def __init__(self, parent=None):
         super(Form, self).__init__(parent)
         self.window = QtUiTools.QUiLoader().load("client.ui")
