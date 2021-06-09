@@ -2,8 +2,7 @@ import img_stream_ext
 import numpy as np
 from dials.array_family import flex
 from matplotlib import pyplot as plt
-import json
-import time
+import json, time, zlib
 from dxtbx.model.experiment_list import ExperimentListFactory
 
 
@@ -11,21 +10,21 @@ def draw_pyplot(img_arr):
     plt.imshow(img_arr, interpolation = "nearest")
     plt.show()
 
+
 def save_json_w_str(flex_array_in):
-    d1, d2 = flex_array_in.all()
-    print("d1, d2 =", d1, d2)
     start_tm = time.time()
     str_data = img_stream_ext.img_arr_2_str(flex_array_in)
     end_tm = time.time()
+    print("str_data[0:80] =", str_data[0:80])
+    print("str_data[-80:] =", str_data[-80:])
     print("C++ bit took ", end_tm - start_tm)
 
-    #print("str_data =", str_data)
-    arr_dic = {"d1": d1, "d2": d2, "str_data": str_data}
-    #print("\narr_dic =", arr_dic)
+    byt_data = bytes(str_data.encode('utf-8'))
+    byt_data = zlib.compress(byt_data)
 
-    print("saving in json file")
-    with open("arr_img.json", "w") as fp:
-        json.dump(arr_dic, fp, indent=4)
+    with open("arr_img.json.zip", 'wb') as file_out:
+        file_out.write(byt_data)
+
 
 if __name__ == "__main__":
     experiments_path = "/scratch/dui_tst/dui_server_run/run1/imported.expt"
