@@ -162,27 +162,31 @@ class np2bmp_monocrome(object):
 
 def load_json_w_str(nod_num_lst = [1], img_num = 0):
     my_cmd = {"nod_lst":nod_num_lst, "cmd_lst":["gi 6"]}
-
     start_tm = time.time()
-    req_get = requests.get(
-        'http://localhost:8080/', stream = True, params = my_cmd
-    )
+    try:
+        req_get = requests.get(
+            'http://localhost:8080/', stream = True, params = my_cmd
+        )
 
-    compresed = req_get.content
+        compresed = req_get.content
 
-    dic_str = zlib.decompress(compresed)
-    arr_dic = json.loads(dic_str)
+        dic_str = zlib.decompress(compresed)
+        arr_dic = json.loads(dic_str)
+        end_tm = time.time()
+        print("request took ", end_tm - start_tm, "\n converting to dict ...")
 
-    end_tm = time.time()
-    print("request took ", end_tm - start_tm, "\n converting to dict ...")
+        d1 = arr_dic["d1"]
+        d2 = arr_dic["d2"]
+        str_data = arr_dic["str_data"]
+        print("d1, d2 =", d1, d2)
+        arr_1d = np.fromstring(str_data, dtype = float, sep = ',')
+        np_array_out = arr_1d.reshape(d1, d2)
+        print("np_array_out =", np_array_out)
 
-    d1 = arr_dic["d1"]
-    d2 = arr_dic["d2"]
-    str_data = arr_dic["str_data"]
-    print("d1, d2 =", d1, d2)
-    arr_1d = np.fromstring(str_data, dtype = float, sep = ',')
-    np_array_out = arr_1d.reshape(d1, d2)
-    print("np_array_out =", np_array_out)
+    except zlib.error:
+        print("zlib.error(load_json_w_str)")
+        return None
+
     return np_array_out
 
 
@@ -199,17 +203,22 @@ class DoImageView(QObject):
 
     def __call__(self, nod_num):
         np_array_img = load_json_w_str(nod_num_lst = [nod_num], img_num = 0)
-        rgb_np = self.bmp_m_cro.img_2d_rgb(
-            data2d = np_array_img, invert = False, i_min_max = [-2, 50]
-        )
-        q_img = QImage(
-            rgb_np.data,
-            np.size(rgb_np[0:1, :, 0:1]),
-            np.size(rgb_np[:, 0:1, 0:1]),
-            QImage.Format_ARGB32
-        )
-        tmp_pixmap = QPixmap.fromImage(q_img)
-        self.my_scene.addPixmap(tmp_pixmap)
+        try:
+            rgb_np = self.bmp_m_cro.img_2d_rgb(
+                data2d = np_array_img, invert = False, i_min_max = [-2, 50]
+            )
+            q_img = QImage(
+                rgb_np.data,
+                np.size(rgb_np[0:1, :, 0:1]),
+                np.size(rgb_np[:, 0:1, 0:1]),
+                QImage.Format_ARGB32
+            )
+            tmp_pixmap = QPixmap.fromImage(q_img)
+            self.my_scene.addPixmap(tmp_pixmap)
+
+        except TypeError:
+            print("None np_array_img")
+
 
 
 class Form(QObject):
