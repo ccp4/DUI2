@@ -262,6 +262,8 @@ class MainObject(QObject):
         self.do_image_view = DoImageView(self)
 
         self.window.OutputTabWidget.currentChanged.connect(self.tab_changed)
+        self.img_num = self.window.ImgNumSpinBox.value()
+        self.window.ImgNumSpinBox.valueChanged.connect(self.img_num_changed)
 
         self.current_widget_key = "import"
         self.new_node = None
@@ -288,6 +290,10 @@ class MainObject(QObject):
             print("clicked twice same row, launching reindex")
             self.request_launch()
 
+    def img_num_changed(self, new_img_num):
+        self.img_num = new_img_num
+        self.tab_changed()
+
     def tab_changed(self, tab_index = None):
         if tab_index == None:
             tab_index = self.window.OutputTabWidget.currentIndex()
@@ -300,7 +306,7 @@ class MainObject(QObject):
 
         if tab_index == 0:
             print("IMG request ...")
-            self.do_image_view(self.current_nod_num)
+            self.do_image_view(self.current_nod_num, self.img_num)
 
         elif tab_index == 1:
             self.log_show(self.current_nod_num, do_request = fnd_cur_nod)

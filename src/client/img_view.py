@@ -161,7 +161,8 @@ class np2bmp_monocrome(object):
 
 
 def load_json_w_str(nod_num_lst = [1], img_num = 0):
-    my_cmd = {"nod_lst":nod_num_lst, "cmd_lst":["gi 6"]}
+    my_cmd_lst = ["gi " + str(img_num)]
+    my_cmd = {"nod_lst":nod_num_lst, "cmd_lst":my_cmd_lst}
     start_tm = time.time()
     try:
         req_get = requests.get(
@@ -211,8 +212,10 @@ class DoImageView(QObject):
         self.bmp_heat = np2bmp_heat()
         self.bmp_m_cro = np2bmp_monocrome()
 
-    def __call__(self, nod_num):
-        np_array_img = load_json_w_str(nod_num_lst = [nod_num], img_num = 0)
+    def __call__(self, nod_num, in_img_num):
+        np_array_img = load_json_w_str(
+            nod_num_lst = [nod_num], img_num = in_img_num
+        )
         try:
             rgb_np = self.bmp_m_cro.img_2d_rgb(
                 data2d = np_array_img, invert = False, i_min_max = [-2, 50]
