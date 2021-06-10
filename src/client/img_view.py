@@ -181,11 +181,21 @@ def load_json_w_str(nod_num_lst = [1], img_num = 0):
         print("d1, d2 =", d1, d2)
         arr_1d = np.fromstring(str_data, dtype = float, sep = ',')
         np_array_out = arr_1d.reshape(d1, d2)
-        print("np_array_out =", np_array_out)
 
     except zlib.error:
         print("zlib.error(load_json_w_str)")
         return None
+
+
+    except ConnectionError:
+        print("\n ConnectionError (load_json_w_str) \n")
+        return None
+
+    except requests.exceptions.RequestException:
+        print("\n requests.exceptions.RequestException (load_json_w_str) \n")
+        return None
+
+
 
     return np_array_out
 

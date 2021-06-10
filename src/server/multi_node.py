@@ -162,7 +162,6 @@ class CmdNode(object):
             print("assuming the command should run in same dir")
 
     def set_in_fil_n_par(self, lst_in):
-        #print("\n\n self.full_cmd_lst =", self.full_cmd_lst, " \n\n")
         for inner_lst in self.full_cmd_lst:
             self.lst2run.append(list(inner_lst))
 
@@ -209,8 +208,6 @@ class CmdNode(object):
             for par in lst_in[1:]:
                 self.full_cmd_lst[-1].append(par)
                 self.lst2run[-1].append(par)
-
-        #print("lst2run =", self.lst2run)
 
     def run_cmd(self, req_obj = None):
         self.nod_req = req_obj
@@ -272,13 +269,21 @@ class CmdNode(object):
 
         lof_file.close()
 
+        self._lst_expt_out = glob.glob(self._run_dir + "/*.expt")
+        #TODO reconsider if the next if is needed for failed steps
+        if self._lst_expt_out == []:
+            self._lst_expt_out = list(self._lst_expt_in)
+
+        self._lst_refl_out = glob.glob(self._run_dir + "/*.refl")
+        #TODO reconsider if the next if is needed for failed steps
+        if self._lst_refl_out == []:
+            self._lst_refl_out = list(self._lst_refl_in)
+
         # running HTML report generation
         lst_dat_in = ['dials.report']
-        self._lst_expt_out = glob.glob(self._run_dir + "/*.expt")
         for expt_2_add in self._lst_expt_out:
             lst_dat_in.append(expt_2_add)
 
-        self._lst_refl_out = glob.glob(self._run_dir + "/*.refl")
         for refl_2_add in self._lst_refl_out:
             lst_dat_in.append(refl_2_add)
 
