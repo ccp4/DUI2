@@ -160,8 +160,8 @@ class np2bmp_monocrome(object):
         return img_array
 
 
-def load_json_w_str():
-    my_cmd = {"nod_lst":[1], "cmd_lst":["gi 6"]}
+def load_json_w_str(nod_num_lst = [1], img_num = 0):
+    my_cmd = {"nod_lst":nod_num_lst, "cmd_lst":["gi 6"]}
 
     start_tm = time.time()
     req_get = requests.get(
@@ -198,19 +198,7 @@ class DoImageView(QObject):
         self.bmp_m_cro = np2bmp_monocrome()
 
     def __call__(self, nod_num):
-        my_cmd = {"nod_lst":[nod_num], "cmd_lst":["gi 6"]}
-        req_get = requests.get(
-            'http://localhost:8080/', stream = True, params = my_cmd
-        )
-        compresed = req_get.content
-        dic_str = zlib.decompress(compresed)
-        arr_dic = json.loads(dic_str)
-        d1 = arr_dic["d1"]
-        d2 = arr_dic["d2"]
-        str_data = arr_dic["str_data"]
-        print("d1, d2 =", d1, d2)
-        arr_1d = np.fromstring(str_data, dtype = float, sep = ',')
-        np_array_img = arr_1d.reshape(d1, d2)
+        np_array_img = load_json_w_str(nod_num_lst = [nod_num], img_num = 0)
         rgb_np = self.bmp_m_cro.img_2d_rgb(
             data2d = np_array_img, invert = False, i_min_max = [-2, 50]
         )
@@ -243,7 +231,7 @@ class Form(QObject):
     def btn_clk(self):
         np_array_img = load_json_w_str()
 
-        '''
+        #'''
         rgb_np = self.bmp_heat.img_2d_rgb(
             data2d = np_array_img, invert = False, i_min_max = [-2, 25]
         )
@@ -252,6 +240,7 @@ class Form(QObject):
         rgb_np = self.bmp_m_cro.img_2d_rgb(
             data2d = np_array_img, invert = False, i_min_max = [-2, 50]
         )
+        '''
         q_img = QImage(
             rgb_np.data,
             np.size(rgb_np[0:1, :, 0:1]),
