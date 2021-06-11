@@ -273,7 +273,7 @@ class Form(QObject):
             self.my_scene_1.addPixmap(tmp_pixmap)
 
         except TypeError:
-            print("Must have a server running with iport done already")
+            print("Must have a server running with import already done")
 
 
 if __name__ == '__main__':
