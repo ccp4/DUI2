@@ -252,26 +252,28 @@ class Form(QObject):
 
     def btn_clk(self):
         np_array_img = load_json_w_str()
+        try:
+            #'''
+            rgb_np = self.bmp_heat.img_2d_rgb(
+                data2d = np_array_img, invert = False, i_min_max = [-2, 25]
+            )
 
-        #'''
-        rgb_np = self.bmp_heat.img_2d_rgb(
-            data2d = np_array_img, invert = False, i_min_max = [-2, 25]
-        )
+            '''
+            rgb_np = self.bmp_m_cro.img_2d_rgb(
+                data2d = np_array_img, invert = False, i_min_max = [-2, 50]
+            )
+            '''
+            q_img = QImage(
+                rgb_np.data,
+                np.size(rgb_np[0:1, :, 0:1]),
+                np.size(rgb_np[:, 0:1, 0:1]),
+                QImage.Format_ARGB32
+            )
+            tmp_pixmap = QPixmap.fromImage(q_img)
+            self.my_scene_1.addPixmap(tmp_pixmap)
 
-        '''
-        rgb_np = self.bmp_m_cro.img_2d_rgb(
-            data2d = np_array_img, invert = False, i_min_max = [-2, 50]
-        )
-        '''
-        q_img = QImage(
-            rgb_np.data,
-            np.size(rgb_np[0:1, :, 0:1]),
-            np.size(rgb_np[:, 0:1, 0:1]),
-            QImage.Format_ARGB32
-        )
-        tmp_pixmap = QPixmap.fromImage(q_img)
-        self.my_scene_1.addPixmap(tmp_pixmap)
-
+        except TypeError:
+            print("Must have a server running with iport done already")
 
 
 if __name__ == '__main__':
