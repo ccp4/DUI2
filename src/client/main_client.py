@@ -262,7 +262,9 @@ class MainObject(QObject):
         self.do_image_view = DoImageView(self)
 
         self.window.OutputTabWidget.currentChanged.connect(self.tab_changed)
-        self.window.ImgNumSpinBox.valueChanged.connect(self.img_num_changed)
+
+        #self.window.ImgNumSpinBox.valueChanged.connect(self.img_num_changed)
+        self.window.ImgNumEdit.textChanged.connect(self.img_num_changed)
 
         self.current_widget_key = "import"
         self.new_node = None
@@ -305,7 +307,7 @@ class MainObject(QObject):
 
         if tab_index == 0:
             print("IMG request ...")
-            img_num = self.window.ImgNumSpinBox.value()
+            img_num = int(self.window.ImgNumEdit.text())
             self.do_image_view(self.current_nod_num, img_num)
 
         elif tab_index == 1:
