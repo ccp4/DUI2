@@ -308,7 +308,13 @@ class MainObject(QObject):
         if tab_index == 0:
             print("IMG request ...")
             img_num = int(self.window.ImgNumEdit.text())
-            self.do_image_view(self.current_nod_num, img_num)
+            if fnd_cur_nod:
+                nod_num_2_show = self.current_nod_num
+
+            else:
+                nod_num_2_show = self.new_node.parent_node_lst[0]
+
+            self.do_image_view(nod_num_2_show, img_num)
 
         elif tab_index == 1:
             self.log_show(self.current_nod_num, do_request = fnd_cur_nod)
