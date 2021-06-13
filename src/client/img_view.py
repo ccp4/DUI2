@@ -196,8 +196,6 @@ def load_json_w_str(nod_num_lst = [1], img_num = 0):
         print("\n requests.exceptions.RequestException (load_json_w_str) \n")
         return None
 
-
-
     return np_array_out
 
 
@@ -211,27 +209,35 @@ class DoImageView(QObject):
 
         self.bmp_heat = np2bmp_heat()
         self.bmp_m_cro = np2bmp_monocrome()
+        self.cur_img_num = None
+        self.cur_nod_num = None
 
     def __call__(self, nod_num, in_img_num):
-        np_array_img = load_json_w_str(
-            nod_num_lst = [nod_num], img_num = in_img_num
-        )
-        try:
-            rgb_np = self.bmp_m_cro.img_2d_rgb(
-                data2d = np_array_img, invert = False, i_min_max = [-2, 50]
+        if(
+            self.cur_nod_num != nod_num or
+            self.cur_img_num != in_img_num
+        ):
+            np_array_img = load_json_w_str(
+                nod_num_lst = [nod_num], img_num = in_img_num
             )
-            q_img = QImage(
-                rgb_np.data,
-                np.size(rgb_np[0:1, :, 0:1]),
-                np.size(rgb_np[:, 0:1, 0:1]),
-                QImage.Format_ARGB32
-            )
-            tmp_pixmap = QPixmap.fromImage(q_img)
-            self.my_scene.addPixmap(tmp_pixmap)
+            try:
+                rgb_np = self.bmp_m_cro.img_2d_rgb(
+                    data2d = np_array_img, invert = False, i_min_max = [-2, 50]
+                )
+                q_img = QImage(
+                    rgb_np.data,
+                    np.size(rgb_np[0:1, :, 0:1]),
+                    np.size(rgb_np[:, 0:1, 0:1]),
+                    QImage.Format_ARGB32
+                )
+                tmp_pixmap = QPixmap.fromImage(q_img)
+                self.my_scene.addPixmap(tmp_pixmap)
 
-        except TypeError:
-            print("None np_array_img")
+            except TypeError:
+                print("None np_array_img")
 
+        self.cur_nod_num = nod_num
+        self.cur_img_num = in_img_num
 
 
 class Form(QObject):
