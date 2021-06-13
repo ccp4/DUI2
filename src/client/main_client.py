@@ -261,10 +261,10 @@ class MainObject(QObject):
 
         self.do_image_view = DoImageView(self)
 
-        self.window.OutputTabWidget.currentChanged.connect(self.tab_changed)
-
-        #self.window.ImgNumSpinBox.valueChanged.connect(self.img_num_changed)
+        self.window.OutputTabWidget.currentChanged.connect(self.refresh_output)
         self.window.ImgNumEdit.textChanged.connect(self.img_num_changed)
+        self.window.PrevImgButton.clicked.connect(self.prev_img)
+        self.window.NextImgButton.clicked.connect(self.next_img)
 
         self.current_widget_key = "import"
         self.new_node = None
@@ -293,9 +293,22 @@ class MainObject(QObject):
 
     def img_num_changed(self, new_img_num):
         print("should load IMG num:", new_img_num)
-        self.tab_changed()
+        self.refresh_output()
 
-    def tab_changed(self, tab_index = None):
+    def shift_img_num(self, sh_num):
+        img_num = int(self.window.ImgNumEdit.text())
+        img_num += sh_num
+        self.window.ImgNumEdit.setText(str(img_num))
+
+    def prev_img(self):
+        print("prev_img")
+        self.shift_img_num(-1)
+
+    def next_img(self):
+        print("next_img")
+        self.shift_img_num(1)
+
+    def refresh_output(self, tab_index = None):
         if tab_index == None:
             tab_index = self.window.OutputTabWidget.currentIndex()
 
@@ -333,7 +346,7 @@ class MainObject(QObject):
         except IndexError:
             cur_nod = self.tree_scene.paint_nod_lst[node_numb]
 
-        self.tab_changed()
+        self.refresh_output()
         cmd_ini = cur_nod["cmd2show"][0]
         key2find = cmd_ini[6:]
         try:
@@ -475,7 +488,7 @@ class MainObject(QObject):
         )
         self.current_nod_num = self.new_node.number
         self.display()
-        self.tab_changed()
+        self.refresh_output()
 
     def update_all_param(self):
         tmp_cmd_par = CommandParamControl()
@@ -571,7 +584,7 @@ class MainObject(QObject):
         self.current_nod_num = self.new_node.number
         self.display()
         self.check_nxt_btn()
-        self.tab_changed()
+        self.refresh_output()
 
     def request_launch(self):
         cmd_str = self.new_node.get_full_command_string()
@@ -590,7 +603,7 @@ class MainObject(QObject):
             new_thrd.first_line.connect(self.line_n1_in)
             new_thrd.finished.connect(self.request_display)
             new_thrd.finished.connect(self.check_nxt_btn)
-            new_thrd.finished.connect(self.tab_changed)
+            new_thrd.finished.connect(self.refresh_output)
             new_thrd.start()
             self.thrd_lst.append(new_thrd)
 
