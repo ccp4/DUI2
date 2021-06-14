@@ -25,6 +25,8 @@ import subprocess, psutil
 import os, sys
 import glob, json
 
+from dxtbx.model.experiment_list import ExperimentListFactory
+
 try:
     from shared_modules import format_utils
 
@@ -45,6 +47,7 @@ def fix_alias(short_in):
         ("d", "display"                                     ),
         ("dl", "display_log"                                ),
         ("gr", "get_report"                                 ),
+        ("gt", "get_template"                                 ),
         ("gi", "get_image"                                  ),
         ("gb", "get_bravais_sum"                            ),
         ("st", "stop"                                       ),
@@ -376,6 +379,7 @@ class Runner(object):
             ["display"] not in full_cmd_lst and
             ["display_log"] not in full_cmd_lst and
             ["get_report"] not in full_cmd_lst and
+            ["get_template"] not in full_cmd_lst and
             "get_image" not in full_cmd_lst[0] and
             ["get_bravais_sum"] not in full_cmd_lst and
             ["stop"] not in full_cmd_lst
@@ -419,6 +423,24 @@ class Runner(object):
                             " \n sending empty html"
                         )
 
+            elif uni_cmd == ["get_template"]:
+                for lin2go in cmd_dict["nod_lst"]:
+                    try:
+                        #TODO check if the first element is enough
+                        exp_path = self.step_list[lin2go]._lst_expt_out[0]
+                        experiments = ExperimentListFactory.from_json_file(
+                            exp_path
+                        )
+                        my_sweep = experiments.imagesets()[0]
+                        str_json = my_sweep.get_template()
+                        return_list = [str_json]
+
+                    except IndexError:
+                        print(
+                            "\n *** ERROR *** \n wrong line" +
+                            " \n not sending template string"
+                        )
+
             elif uni_cmd[0] == "get_image":
                 for lin2go in cmd_dict["nod_lst"]:
                     try:
@@ -433,7 +455,6 @@ class Runner(object):
                         )
 
                         byt_data = bytes(str_json.encode('utf-8'))
-
                         return_list = byt_data
 
                     except (IndexError, AttributeError):
@@ -530,8 +551,8 @@ class Runner(object):
             new_node.lst2run         = uni_dic["lst2run"]
             new_node._lst_expt_in    = uni_dic["_lst_expt_in"]
             new_node._lst_refl_in    = uni_dic["_lst_refl_in"]
-            new_node._lst_expt_out    = uni_dic["_lst_expt_out"]
-            new_node._lst_refl_out    = uni_dic["_lst_refl_out"]
+            new_node._lst_expt_out   = uni_dic["_lst_expt_out"]
+            new_node._lst_refl_out   = uni_dic["_lst_refl_out"]
             new_node._run_dir        = uni_dic["_run_dir"]
             new_node._html_rep       = uni_dic["_html_rep"]
             new_node.log_file_path   = uni_dic["log_file_path"]
