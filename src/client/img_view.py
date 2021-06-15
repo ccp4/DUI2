@@ -9,10 +9,11 @@ import json
 import zlib
 import time
 import requests
-
+'''
 from dials_viewer_ext import rgb_img
 from dials.array_family import flex
-
+'''
+from exec_utils import json_data_request, uni_url
 
 class np2bmp_heat(object):
     def __init__(self):
@@ -211,11 +212,17 @@ class DoImageView(QObject):
         self.bmp_m_cro = np2bmp_monocrome()
         self.cur_img_num = None
         self.cur_nod_num = None
+        self.cur_templ = None
 
     def __call__(self, nod_num, in_img_num):
+        cmd = {'nod_lst': [nod_num], 'cmd_lst': ["gt"]}
+        json_data_lst = json_data_request(uni_url, cmd)
+        new_templ = json_data_lst[0]
+        print("new_templ =", new_templ)
+
         if(
-            self.cur_nod_num != nod_num or
-            self.cur_img_num != in_img_num
+            self.cur_img_num != in_img_num or
+            self.cur_templ != new_templ
         ):
             np_array_img = load_json_w_str(
                 nod_num_lst = [nod_num], img_num = in_img_num
@@ -238,7 +245,7 @@ class DoImageView(QObject):
 
         self.cur_nod_num = nod_num
         self.cur_img_num = in_img_num
-
+        self.cur_templ = new_templ
 
 class Form(QObject):
     '''
