@@ -135,14 +135,14 @@ class build_json_data(object):
 
 def get_param_list(cmd_str):
     connect_dict = {
-            "find_spots_params"                 :phil_scope_find_spots.objects    ,
-            "index_params"                      :phil_scope_index.objects         ,
-            "refine_bravais_settings_params"    :phil_scope_r_b_settings.objects  ,
-            "refine_params"                     :phil_scope_refine.objects        ,
-            "integrate_params"                  :phil_scope_integrate.objects     ,
-            "symmetry_params"                   :phil_scope_symmetry.objects      ,
-            "scale_params"                      :phil_scope_scale.objects         ,
-            "combine_experiments_params"        :phil_scope_combine_params.objects,
+            "find_spots_params"              :phil_scope_find_spots.objects    ,
+            "index_params"                   :phil_scope_index.objects         ,
+            "refine_bravais_settings_params" :phil_scope_r_b_settings.objects  ,
+            "refine_params"                  :phil_scope_refine.objects        ,
+            "integrate_params"               :phil_scope_integrate.objects     ,
+            "symmetry_params"                :phil_scope_symmetry.objects      ,
+            "scale_params"                   :phil_scope_scale.objects         ,
+            "combine_experiments_params"     :phil_scope_combine_params.objects,
         }
 
     lst_dict = build_json_data(connect_dict[cmd_str])

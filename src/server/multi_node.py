@@ -449,7 +449,7 @@ class Runner(object):
                             " image:", int(uni_cmd[1])
                         )
                         #TODO remember to check if the list is empty
-                        str_json = flex_arr_2_json.get_json(
+                        str_json = flex_arr_2_json.get_json_w_img_2d(
                             self.step_list[lin2go]._lst_expt_out,
                             int(uni_cmd[1])
                         )
