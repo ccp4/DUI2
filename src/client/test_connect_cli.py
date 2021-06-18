@@ -59,6 +59,10 @@ lst_cmd = [
             {'nod_lst': [22], 'cmd_lst': ['rf']},
             {'nod_lst': [18], 'cmd_lst': ['rf']},
             {'nod_lst': [23], 'cmd_lst': ['it nproc=4']},
+            {'nod_lst': [15], 'cmd_lst': ["grl 0"]},
+            {'nod_lst': [16], 'cmd_lst': ["grl 1"]},
+            {'nod_lst': [17], 'cmd_lst': ["grl 2"]},
+            {'nod_lst': [23], 'cmd_lst': ["grl 3"]},
           ]
 
 
