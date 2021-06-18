@@ -67,17 +67,22 @@ def get_refl_lst(expt_path, refl_path, img_num):
     data_xy_flex = my_sweep.get_raw_data(0)[0].as_double()
     print("\n refl_path =", refl_path)
     table = flex.reflection_table.from_file(refl_path[0])
-    pos_col = list(map(list, table["xyzcal.px"]))
-    hkl_col = list(map(str, table["miller_index"]))
-    pan_col = list(map(int, table["panel"]))
+    try:
+        pos_col = list(map(list, table["xyzcal.px"]))
+        hkl_col = list(map(str, table["miller_index"]))
+        pan_col = list(map(int, table["panel"]))
 
-    n_imgs = len(my_sweep.indices())
-    pred_spt_flat_data_lst = []
-    if n_imgs > 0:
-        pred_spt_flat_data_lst = list_p_arrange(
-            pos_col, hkl_col, pan_col, n_imgs
-        )
-    return pred_spt_flat_data_lst[img_num]
+        n_imgs = len(my_sweep.indices())
+        pred_spt_flat_data_lst = []
+        if n_imgs > 0:
+            pred_spt_flat_data_lst = list_p_arrange(
+                pos_col, hkl_col, pan_col, n_imgs
+            )
+        return pred_spt_flat_data_lst[img_num]
+
+    except KeyError:
+        print("NOT found << xyzcal >> col")
+        return []
 
 
 def get_json_w_img_2d(experiments_list_path, img_num):

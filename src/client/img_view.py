@@ -163,9 +163,7 @@ def load_json_w_str(nod_num_lst = [1], img_num = 0):
     my_cmd = {"nod_lst":nod_num_lst, "cmd_lst":my_cmd_lst}
     start_tm = time.time()
     try:
-        req_get = requests.get(
-            'http://localhost:8080/', stream = True, params = my_cmd
-        )
+        req_get = requests.get(uni_url, stream = True, params = my_cmd)
 
         compresed = req_get.content
 
@@ -237,6 +235,32 @@ class DoImageView(QObject):
 
             except TypeError:
                 print("None np_array_img")
+
+            ###############################################################
+
+            my_cmd = {
+                'nod_lst': [nod_num], 'cmd_lst': ["grl " + str(in_img_num)]
+            }
+            json_lst = json_data_request(uni_url, my_cmd)
+            try:
+                for inner_list in json_lst[:15]:
+                    print("\n inner_list =", inner_list)
+                    lst_str1 = inner_list[0].split(',')
+                    print("lst_str1 =", lst_str1)
+                    x_ini = float(lst_str1[0])
+                    y_ini = float(lst_str1[1])
+                    xrs_size = int(lst_str1[2])
+                    size2 = int(lst_str1[3])
+                    local_hkl = str(inner_list[1])
+                    print("x_ini =     ", x_ini    )
+                    print("y_ini =     ", y_ini    )
+                    print("xrs_size =  ", xrs_size )
+                    print("size2 =     ", size2    )
+                    print("local_hkl = ", local_hkl)
+
+            except TypeError:
+                print("No calculated reflection list")
+
 
         self.cur_nod_num = nod_num
         self.cur_img_num = in_img_num
