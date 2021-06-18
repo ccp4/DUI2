@@ -62,16 +62,11 @@ def list_p_arrange(pos_col, hkl_col, pan_col, n_imgs):
 
 
 def get_refl_lst(expt_path, refl_path, img_num):
-    experiments = ExperimentListFactory.from_json_file(expt_path)
+    experiments = ExperimentListFactory.from_json_file(expt_path[0])
     my_sweep = experiments.imagesets()[0]
-    print("\n my_sweep.paths               ", my_sweep.paths())
     data_xy_flex = my_sweep.get_raw_data(0)[0].as_double()
-    print("type(data_xy_flex) =", type(data_xy_flex))
-    print("data_xy_flex.all() =", data_xy_flex.all())
-
     print("\n refl_path =", refl_path)
-
-    table = flex.reflection_table.from_file(refl_path)
+    table = flex.reflection_table.from_file(refl_path[0])
     pos_col = list(map(list, table["xyzcal.px"]))
     hkl_col = list(map(str, table["miller_index"]))
     pan_col = list(map(int, table["panel"]))

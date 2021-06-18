@@ -47,8 +47,9 @@ def fix_alias(short_in):
         ("d", "display"                                     ),
         ("dl", "display_log"                                ),
         ("gr", "get_report"                                 ),
-        ("gt", "get_template"                                 ),
+        ("gt", "get_template"                               ),
         ("gi", "get_image"                                  ),
+        ("grl", "get_reflection_list"                       ),
         ("gb", "get_bravais_sum"                            ),
         ("st", "stop"                                       ),
         ("fdp", "find_spots_params"                         ),
@@ -381,6 +382,7 @@ class Runner(object):
             ["get_report"] not in full_cmd_lst and
             ["get_template"] not in full_cmd_lst and
             "get_image" not in full_cmd_lst[0] and
+            "get_reflection_list" not in full_cmd_lst[0] and
             ["get_bravais_sum"] not in full_cmd_lst and
             ["stop"] not in full_cmd_lst
         ):
@@ -459,6 +461,25 @@ class Runner(object):
 
                     except (IndexError, AttributeError):
                         print("\n *** ERROR *** \n wrong line \n not sending IMG")
+
+
+            elif uni_cmd[0] == "get_reflection_list":
+                    try:
+                        print(
+                            "generating reflection list for line:", lin2go,
+                            " image:", int(uni_cmd[1])
+                        )
+                        refl_lst = flex_arr_2_json.get_refl_lst(
+                            self.step_list[lin2go]._lst_expt_out,
+                            self.step_list[lin2go]._lst_refl_out,
+                            int(uni_cmd[1])
+                        )
+                        print()
+                        return_list = refl_lst
+
+                    except (IndexError, AttributeError):
+                        print("\n *** ERROR *** \n wrong line \n not sending reflection list")
+
 
             elif uni_cmd == ["get_bravais_sum"]:
                 for lin2go in cmd_dict["nod_lst"]:
