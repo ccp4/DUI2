@@ -238,11 +238,11 @@ class DoImageView(QObject):
         cmd = {'nod_lst': [nod_num], 'cmd_lst': ["gt"]}
         json_data_lst = json_data_request(uni_url, cmd)
         new_templ = json_data_lst[0]
+        new_pixmap = None
         if(
             self.cur_img_num != in_img_num or
             self.cur_templ != new_templ
         ):
-            new_pixmap = None
             np_array_img = load_json_w_str(
                 nod_num_lst = [nod_num], img_num = in_img_num
             )
