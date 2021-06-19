@@ -236,8 +236,7 @@ class DoImageView(QObject):
             except TypeError:
                 print("None np_array_img")
 
-            ###############################################################
-
+        if self.cur_nod_num != nod_num:
             my_cmd = {
                 'nod_lst': [nod_num], 'cmd_lst': ["grl " + str(in_img_num)]
             }
@@ -261,56 +260,8 @@ class DoImageView(QObject):
             except TypeError:
                 print("No calculated reflection list")
 
-
         self.cur_nod_num = nod_num
         self.cur_img_num = in_img_num
         self.cur_templ = new_templ
 
-
-class Form(QObject):
-    '''
-    This class should only be use when testing,
-    is just a quick way to show/load images
-    '''
-    def __init__(self, parent=None):
-        super(Form, self).__init__(parent)
-        self.window = QtUiTools.QUiLoader().load("client.ui")
-        self.my_scene_1 = QGraphicsScene()
-        self.bmp_heat = np2bmp_heat()
-        self.bmp_m_cro = np2bmp_monocrome()
-        self.window.imageView.setScene(self.my_scene_1)
-        self.window.imageView.setDragMode(QGraphicsView.ScrollHandDrag)
-        self.window.CmdSend2server.clicked.connect(self.btn_clk)
-        self.window.show()
-
-    def btn_clk(self):
-        np_array_img = load_json_w_str()
-        try:
-            #'''
-            rgb_np = self.bmp_heat.img_2d_rgb(
-                data2d = np_array_img, invert = False, i_min_max = [-2, 25]
-            )
-
-            '''
-            rgb_np = self.bmp_m_cro.img_2d_rgb(
-                data2d = np_array_img, invert = False, i_min_max = [-2, 50]
-            )
-            '''
-            q_img = QImage(
-                rgb_np.data,
-                np.size(rgb_np[0:1, :, 0:1]),
-                np.size(rgb_np[:, 0:1, 0:1]),
-                QImage.Format_ARGB32
-            )
-            tmp_pixmap = QPixmap.fromImage(q_img)
-            self.my_scene_1.addPixmap(tmp_pixmap)
-
-        except TypeError:
-            print("Must have a server running with import already done")
-
-
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    form = Form()
-    sys.exit(app.exec_())
 
