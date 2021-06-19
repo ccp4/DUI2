@@ -200,12 +200,19 @@ class ImgGraphicsScene(QGraphicsScene):
         self.main_obj = parent
         self.curr_pixmap = None
 
-    def __call__(self, new_pixmap):
+    def __call__(self, new_pixmap, refl_list):
         self.clear()
         if new_pixmap is not None:
             self.curr_pixmap = new_pixmap
 
         self.addPixmap(self.curr_pixmap)
+
+        for refl in refl_list[:5]:
+            print("x_ini =      ", refl["x_ini"]     )
+            print("y_ini =      ", refl["y_ini"]     )
+            print("xrs_size =   ", refl["xrs_size"]  )
+            print("size2 =      ", refl["size2"]     )
+            print("local_hkl =  ", refl["local_hkl"] )
 
     def wheelEvent(self, event):
         int_delta = int(event.delta())
@@ -235,6 +242,7 @@ class DoImageView(QObject):
             self.cur_img_num != in_img_num or
             self.cur_templ != new_templ
         ):
+            new_pixmap = None
             np_array_img = load_json_w_str(
                 nod_num_lst = [nod_num], img_num = in_img_num
             )
@@ -252,18 +260,15 @@ class DoImageView(QObject):
 
             except TypeError:
                 print("None np_array_img")
-                new_pixmap = None
 
-        else:
-            new_pixmap = None
-
+        refl_list = []
         if self.cur_nod_num != nod_num:
             my_cmd = {
                 'nod_lst': [nod_num], 'cmd_lst': ["grl " + str(in_img_num)]
             }
             json_lst = json_data_request(uni_url, my_cmd)
             try:
-                for inner_list in json_lst[:15]:
+                for inner_list in json_lst:
                     #print("\n inner_list =", inner_list)
                     lst_str1 = inner_list[0].split(',')
                     #print("lst_str1 =", lst_str1)
@@ -272,16 +277,20 @@ class DoImageView(QObject):
                     xrs_size = int(lst_str1[2])
                     size2 = int(lst_str1[3])
                     local_hkl = str(inner_list[1])
-                    #print("x_ini =     ", x_ini    )
-                    #print("y_ini =     ", y_ini    )
-                    #print("xrs_size =  ", xrs_size )
-                    #print("size2 =     ", size2    )
-                    #print("local_hkl = ", local_hkl)
+                    refl_list.append(
+                       {
+                         "x_ini"       : x_ini     ,
+                         "y_ini"       : y_ini     ,
+                         "xrs_size"    : xrs_size  ,
+                         "size2"       : size2     ,
+                         "local_hkl"   : local_hkl ,
+                       }
+                    )
 
             except TypeError:
                 print("No calculated reflection list")
 
-        self.my_scene(new_pixmap)
+        self.my_scene(new_pixmap, refl_list)
 
         self.cur_nod_num = nod_num
         self.cur_img_num = in_img_num
