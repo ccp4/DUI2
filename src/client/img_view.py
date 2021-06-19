@@ -194,12 +194,21 @@ def load_json_w_str(nod_num_lst = [1], img_num = 0):
 
     return np_array_out
 
+class ImgGraphicsScene(QGraphicsScene):
+    def __init__(self, parent = None):
+        super(ImgGraphicsScene, self).__init__(parent)
+        self.main_obj = parent
+        self.curr_pixmap = None
+
+    def __call__(self, new_pixmap):
+        self.addPixmap(new_pixmap)
+
 
 class DoImageView(QObject):
     def __init__(self, parent = None):
         super(DoImageView, self).__init__(parent)
         self.main_obj = parent
-        self.my_scene = QGraphicsScene()
+        self.my_scene = ImgGraphicsScene(self)
         self.main_obj.window.imageView.setScene(self.my_scene)
         self.main_obj.window.imageView.setDragMode(QGraphicsView.ScrollHandDrag)
 
@@ -231,7 +240,7 @@ class DoImageView(QObject):
                     QImage.Format_ARGB32
                 )
                 tmp_pixmap = QPixmap.fromImage(q_img)
-                self.my_scene.addPixmap(tmp_pixmap)
+                self.my_scene(tmp_pixmap)
 
             except TypeError:
                 print("None np_array_img")
