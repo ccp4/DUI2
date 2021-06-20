@@ -164,9 +164,7 @@ def load_json_w_str(nod_num_lst = [1], img_num = 0):
     start_tm = time.time()
     try:
         req_get = requests.get(uni_url, stream = True, params = my_cmd)
-
         compresed = req_get.content
-
         dic_str = zlib.decompress(compresed)
         arr_dic = json.loads(dic_str)
         end_tm = time.time()
@@ -194,6 +192,7 @@ def load_json_w_str(nod_num_lst = [1], img_num = 0):
 
     return np_array_out
 
+
 class ImgGraphicsScene(QGraphicsScene):
     def __init__(self, parent = None):
         super(ImgGraphicsScene, self).__init__(parent)
@@ -207,12 +206,22 @@ class ImgGraphicsScene(QGraphicsScene):
 
         self.addPixmap(self.curr_pixmap)
 
-        for refl in refl_list[:5]:
+        for refl in refl_list:
+            '''
             print("x_ini =      ", refl["x_ini"]     )
             print("y_ini =      ", refl["y_ini"]     )
             print("xrs_size =   ", refl["xrs_size"]  )
             print("size2 =      ", refl["size2"]     )
             print("local_hkl =  ", refl["local_hkl"] )
+            '''
+            self.addLine(
+                refl["x_ini"] + 1 + refl["xrs_size"], refl["y_ini"] + 1,
+                refl["x_ini"] + 1 - refl["xrs_size"], refl["y_ini"] + 1
+            )
+            self.addLine(
+                refl["x_ini"] + 1, refl["y_ini"] + 1 + refl["xrs_size"],
+                refl["x_ini"] + 1, refl["y_ini"] + 1 - refl["xrs_size"]
+            )
 
     def wheelEvent(self, event):
         int_delta = int(event.delta())
