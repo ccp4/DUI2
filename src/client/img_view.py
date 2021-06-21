@@ -214,13 +214,19 @@ class ImgGraphicsScene(QGraphicsScene):
             print("size2 =      ", refl["size2"]     )
             print("local_hkl =  ", refl["local_hkl"] )
             '''
+            green_pen = QPen(
+                Qt.green, 1.6, Qt.SolidLine,
+                Qt.RoundCap, Qt.RoundJoin
+            )
             self.addLine(
                 refl["x_ini"] + 1 + refl["xrs_size"], refl["y_ini"] + 1,
-                refl["x_ini"] + 1 - refl["xrs_size"], refl["y_ini"] + 1
+                refl["x_ini"] + 1 - refl["xrs_size"], refl["y_ini"] + 1,
+                green_pen
             )
             self.addLine(
                 refl["x_ini"] + 1, refl["y_ini"] + 1 + refl["xrs_size"],
-                refl["x_ini"] + 1, refl["y_ini"] + 1 - refl["xrs_size"]
+                refl["x_ini"] + 1, refl["y_ini"] + 1 - refl["xrs_size"],
+                green_pen
             )
 
     def wheelEvent(self, event):
@@ -271,7 +277,7 @@ class DoImageView(QObject):
                 print("None np_array_img")
 
         refl_list = []
-        if self.cur_nod_num != nod_num:
+        if self.cur_img_num != in_img_num or self.cur_nod_num != nod_num:
             my_cmd = {
                 'nod_lst': [nod_num], 'cmd_lst': ["grl " + str(in_img_num)]
             }
