@@ -10,13 +10,36 @@ import time
 
 from dxtbx.model.experiment_list import ExperimentListFactory
 
-def list_p_arrange(pos_col, hkl_col, pan_col, n_imgs):
+def list_p_arrange_exp(bbox_col, pan_col, n_imgs):
+    img_lst = []
+    for time in range(n_imgs):
+        img_lst.append([])
+
+    txt_lab = "updating Observed Reflections Data:"
+    for i, ref_box in enumerate(bbox_col):
+        x_ini = ref_box[0]
+        y_ini = ref_box[2] + pan_col[i] * 213
+        width = ref_box[1] - ref_box[0]
+        height = ref_box[3] - ref_box[2]
+
+        box_dat = []
+        box_dat.append(x_ini)
+        box_dat.append(y_ini)
+        box_dat.append(width)
+        box_dat.append(height)
+
+        for idx in range(ref_box[4], ref_box[5]):
+            if idx >= 0 and idx < n_imgs:
+                img_lst[idx].append(box_dat)
+
+    return img_lst
+
+
+def list_p_arrange_pre(pos_col, hkl_col, pan_col, n_imgs):
     img_lst = []
     for times in range(n_imgs):
         img_lst.append([])
 
-    txt_lab = "updating Predicted Reflections Data:"
-    #my_bar = ProgBarBox(min_val=0, max_val=len(pos_col), text=txt_lab)
     print(" len(pos_col) = ", len(pos_col))
 
     for i, pos_tri in enumerate(pos_col):
@@ -68,17 +91,24 @@ def get_refl_lst(expt_path, refl_path, img_num):
     print("\n refl_path =", refl_path)
     table = flex.reflection_table.from_file(refl_path[0])
     try:
-        pos_col = list(map(list, table["xyzcal.px"]))
-        hkl_col = list(map(str, table["miller_index"]))
+        #pos_col = list(map(list, table["xyzcal.px"]))
+        #hkl_col = list(map(str, table["miller_index"]))
         pan_col = list(map(int, table["panel"]))
+        bbox_col = list(map(list, table["bbox"]))
 
         n_imgs = len(my_sweep.indices())
-        pred_spt_flat_data_lst = []
+        spt_flat_data_lst = []
         if n_imgs > 0:
-            pred_spt_flat_data_lst = list_p_arrange(
+            '''
+            spt_flat_data_lst = list_p_arrange_pre(
                 pos_col, hkl_col, pan_col, n_imgs
             )
-        return pred_spt_flat_data_lst[img_num]
+            '''
+            spt_flat_data_lst = list_p_arrange_exp(
+                bbox_col, pan_col, n_imgs
+            )
+
+        return spt_flat_data_lst[img_num]
 
     except KeyError:
         print("NOT found << xyzcal >> col")

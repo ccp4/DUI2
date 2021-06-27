@@ -206,18 +206,17 @@ class ImgGraphicsScene(QGraphicsScene):
 
         self.addPixmap(self.curr_pixmap)
 
+        green_pen = QPen(
+            Qt.green, 1.6, Qt.SolidLine,
+            Qt.RoundCap, Qt.RoundJoin
+        )
         for refl in refl_list:
-            '''
-            print("x_ini =      ", refl["x_ini"]     )
-            print("y_ini =      ", refl["y_ini"]     )
-            print("xrs_size =   ", refl["xrs_size"]  )
-            print("size2 =      ", refl["size2"]     )
-            print("local_hkl =  ", refl["local_hkl"] )
-            '''
-            green_pen = QPen(
-                Qt.green, 1.6, Qt.SolidLine,
-                Qt.RoundCap, Qt.RoundJoin
+            rectangle = QRectF(
+                refl["x"], refl["y"], refl["width"], refl["height"]
             )
+            self.addRect(rectangle, green_pen)
+
+            '''
             self.addLine(
                 refl["x_ini"] + 1 + refl["xrs_size"], refl["y_ini"] + 1,
                 refl["x_ini"] + 1 - refl["xrs_size"], refl["y_ini"] + 1,
@@ -228,6 +227,7 @@ class ImgGraphicsScene(QGraphicsScene):
                 refl["x_ini"] + 1, refl["y_ini"] + 1 - refl["xrs_size"],
                 green_pen
             )
+            '''
 
     def wheelEvent(self, event):
         int_delta = int(event.delta())
@@ -285,6 +285,7 @@ class DoImageView(QObject):
             try:
                 for inner_list in json_lst:
                     #print("\n inner_list =", inner_list)
+                    '''
                     lst_str1 = inner_list[0].split(',')
                     #print("lst_str1 =", lst_str1)
                     x_ini = float(lst_str1[0])
@@ -300,6 +301,15 @@ class DoImageView(QObject):
                          "size2"       : size2     ,
                          "local_hkl"   : local_hkl ,
                        }
+                    )
+                    '''
+                    refl_list.append(
+                        {
+                            "x"      : float(inner_list[0]),
+                            "y"      : float(inner_list[1]),
+                            "width"  : float(inner_list[2]),
+                            "height" : float(inner_list[3]),
+                        }
                     )
 
             except TypeError:
