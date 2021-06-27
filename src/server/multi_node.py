@@ -474,7 +474,6 @@ class Runner(object):
                             self.step_list[lin2go]._lst_refl_out,
                             int(uni_cmd[1])
                         )
-                        print()
                         return_list = refl_lst
 
                     except (IndexError, AttributeError):

@@ -15,7 +15,6 @@ def list_p_arrange_exp(bbox_col, pan_col, n_imgs):
     for time in range(n_imgs):
         img_lst.append([])
 
-    txt_lab = "updating Observed Reflections Data:"
     for i, ref_box in enumerate(bbox_col):
         x_ini = ref_box[0]
         y_ini = ref_box[2] + pan_col[i] * 213
@@ -88,7 +87,7 @@ def get_refl_lst(expt_path, refl_path, img_num):
     experiments = ExperimentListFactory.from_json_file(expt_path[0])
     my_sweep = experiments.imagesets()[0]
     data_xy_flex = my_sweep.get_raw_data(0)[0].as_double()
-    print("\n refl_path =", refl_path)
+    print("\n refl_path =", refl_path, "\n")
     table = flex.reflection_table.from_file(refl_path[0])
     try:
         #pos_col = list(map(list, table["xyzcal.px"]))
@@ -97,6 +96,7 @@ def get_refl_lst(expt_path, refl_path, img_num):
         bbox_col = list(map(list, table["bbox"]))
 
         n_imgs = len(my_sweep.indices())
+        print("n_imgs =", n_imgs)
         spt_flat_data_lst = []
         if n_imgs > 0:
             '''

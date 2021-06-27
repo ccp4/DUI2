@@ -475,8 +475,16 @@ class MainObject(QObject):
 
     def item_param_changed(self, str_path, str_value):
         self.sender().twin_widg.update_param(str_path, str_value)
-        if self.current_nod_num == self.new_node.number and not self.reseting:
-            self.new_node.set_parameter(str_path, str_value)
+        try:
+            if(
+                self.current_nod_num == self.new_node.number
+                and
+                not self.reseting
+            ):
+                self.new_node.set_parameter(str_path, str_value)
+
+        except AttributeError:
+            print("No need to update parameters for non existent green node")
 
     def add_new_node(self):
         print("add_new_node")
