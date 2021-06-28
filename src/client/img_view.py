@@ -252,7 +252,12 @@ class DoImageView(QObject):
     def __call__(self, nod_num, in_img_num):
         cmd = {'nod_lst': [nod_num], 'cmd_lst': ["gt"]}
         json_data_lst = json_data_request(uni_url, cmd)
-        new_templ = json_data_lst[0]
+        try:
+            new_templ = json_data_lst[0]
+
+        except IndexError:
+            new_templ = None
+
         new_pixmap = None
         if(
             self.cur_img_num != in_img_num or
@@ -277,7 +282,11 @@ class DoImageView(QObject):
                 print("None np_array_img")
 
         refl_list = []
-        if self.cur_img_num != in_img_num or self.cur_nod_num != nod_num:
+        if(
+            self.cur_img_num != in_img_num or
+            self.cur_nod_num != nod_num or
+            self.cur_templ != new_templ
+        ):
             my_cmd = {
                 'nod_lst': [nod_num], 'cmd_lst': ["grl " + str(in_img_num)]
             }
