@@ -323,7 +323,7 @@ class MainObject(QObject):
             nod_num_2_show = self.new_node.parent_node_lst[0]
 
         if tab_index == 0:
-            print("IMG request ...")
+            print("\n IMG request, nod_num_2_show =", nod_num_2_show, "\n")
             img_num = int(self.window.ImgNumEdit.text())
             self.do_image_view(nod_num_2_show, img_num)
 

@@ -254,80 +254,76 @@ class DoImageView(QObject):
         json_data_lst = json_data_request(uni_url, cmd)
         try:
             new_templ = json_data_lst[0]
+            new_pixmap = None
+            if(
+                self.cur_img_num != in_img_num or
+                self.cur_templ != new_templ
+            ):
+                np_array_img = load_json_w_str(
+                    nod_num_lst = [nod_num], img_num = in_img_num
+                )
+                try:
+                    rgb_np = self.bmp_m_cro.img_2d_rgb(
+                        data2d = np_array_img, invert = False, i_min_max = [-2, 50]
+                    )
+                    q_img = QImage(
+                        rgb_np.data,
+                        np.size(rgb_np[0:1, :, 0:1]),
+                        np.size(rgb_np[:, 0:1, 0:1]),
+                        QImage.Format_ARGB32
+                    )
+                    new_pixmap = QPixmap.fromImage(q_img)
+
+                except TypeError:
+                    print("None np_array_img")
+
+            self.cur_templ = new_templ
 
         except IndexError:
-            new_templ = None
+            self.cur_templ = None
+            new_pixmap = None
 
-        new_pixmap = None
-        if(
-            self.cur_img_num != in_img_num or
-            self.cur_templ != new_templ
-        ):
-            np_array_img = load_json_w_str(
-                nod_num_lst = [nod_num], img_num = in_img_num
-            )
-            try:
-                rgb_np = self.bmp_m_cro.img_2d_rgb(
-                    data2d = np_array_img, invert = False, i_min_max = [-2, 50]
-                )
-                q_img = QImage(
-                    rgb_np.data,
-                    np.size(rgb_np[0:1, :, 0:1]),
-                    np.size(rgb_np[:, 0:1, 0:1]),
-                    QImage.Format_ARGB32
-                )
-                new_pixmap = QPixmap.fromImage(q_img)
-
-            except TypeError:
-                print("None np_array_img")
-
+        ################################ refl_list work
+        my_cmd = {
+            'nod_lst': [nod_num], 'cmd_lst': ["grl " + str(in_img_num)]
+        }
+        json_lst = json_data_request(uni_url, my_cmd)
         refl_list = []
-        if(
-            self.cur_img_num != in_img_num or
-            self.cur_nod_num != nod_num or
-            self.cur_templ != new_templ
-        ):
-            my_cmd = {
-                'nod_lst': [nod_num], 'cmd_lst': ["grl " + str(in_img_num)]
-            }
-            json_lst = json_data_request(uni_url, my_cmd)
-            try:
-                for inner_list in json_lst:
-                    #print("\n inner_list =", inner_list)
-                    '''
-                    lst_str1 = inner_list[0].split(',')
-                    #print("lst_str1 =", lst_str1)
-                    x_ini = float(lst_str1[0])
-                    y_ini = float(lst_str1[1])
-                    xrs_size = int(lst_str1[2])
-                    size2 = int(lst_str1[3])
-                    local_hkl = str(inner_list[1])
-                    refl_list.append(
-                       {
-                         "x_ini"       : x_ini     ,
-                         "y_ini"       : y_ini     ,
-                         "xrs_size"    : xrs_size  ,
-                         "size2"       : size2     ,
-                         "local_hkl"   : local_hkl ,
-                       }
-                    )
-                    '''
-                    refl_list.append(
-                        {
-                            "x"      : float(inner_list[0]),
-                            "y"      : float(inner_list[1]),
-                            "width"  : float(inner_list[2]),
-                            "height" : float(inner_list[3]),
-                        }
-                    )
+        try:
+            for inner_list in json_lst:
+                #print("\n inner_list =", inner_list)
+                '''
+                lst_str1 = inner_list[0].split(',')
+                #print("lst_str1 =", lst_str1)
+                x_ini = float(lst_str1[0])
+                y_ini = float(lst_str1[1])
+                xrs_size = int(lst_str1[2])
+                size2 = int(lst_str1[3])
+                local_hkl = str(inner_list[1])
+                refl_list.append(
+                   {
+                     "x_ini"       : x_ini     ,
+                     "y_ini"       : y_ini     ,
+                     "xrs_size"    : xrs_size  ,
+                     "size2"       : size2     ,
+                     "local_hkl"   : local_hkl ,
+                   }
+                )
+                '''
+                refl_list.append(
+                    {
+                        "x"      : float(inner_list[0]),
+                        "y"      : float(inner_list[1]),
+                        "width"  : float(inner_list[2]),
+                        "height" : float(inner_list[3]),
+                    }
+                )
 
-            except TypeError:
-                print("No calculated reflection list")
+        except TypeError:
+            print("No reflection list to show")
 
         self.my_scene(new_pixmap, refl_list)
-
         self.cur_nod_num = nod_num
         self.cur_img_num = in_img_num
-        self.cur_templ = new_templ
 
 
