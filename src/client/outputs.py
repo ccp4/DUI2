@@ -116,6 +116,7 @@ class DoLoadHTML(QObject):
                                 "html_report"   :full_file
                             }
                         )
+
                 except ConnectionError:
                     print("\n ConnectionError (DoLoadHTML) \n")
                     full_file = ''
@@ -129,11 +130,11 @@ class DoLoadHTML(QObject):
 
             else:
                 self.main_obj.window.HtmlReport.setHtml(full_file)
+
             print("network load_html ... End")
 
         else:
             self.main_obj.window.HtmlReport.setHtml(self.not_avail_html)
-
 
     def load_started(self):
         self.main_obj.window.OutuputStatLabel.setStyleSheet(

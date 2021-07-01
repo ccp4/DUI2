@@ -181,7 +181,6 @@ def load_json_w_str(nod_num_lst = [1], img_num = 0):
         print("zlib.error(load_json_w_str)")
         return None
 
-
     except ConnectionError:
         print("\n ConnectionError (load_json_w_str) \n")
         return None
@@ -241,7 +240,9 @@ class DoImageView(QObject):
         self.main_obj = parent
         self.my_scene = ImgGraphicsScene(self)
         self.main_obj.window.imageView.setScene(self.my_scene)
-        self.main_obj.window.imageView.setDragMode(QGraphicsView.ScrollHandDrag)
+        self.main_obj.window.imageView.setDragMode(
+            QGraphicsView.ScrollHandDrag
+        )
 
         self.bmp_heat = np2bmp_heat()
         self.bmp_m_cro = np2bmp_monocrome()
@@ -264,7 +265,8 @@ class DoImageView(QObject):
                 )
                 try:
                     rgb_np = self.bmp_m_cro.img_2d_rgb(
-                        data2d = np_array_img, invert = False, i_min_max = [-2, 50]
+                        data2d = np_array_img, invert = False,
+                        i_min_max = [-2, 50]
                     )
                     q_img = QImage(
                         rgb_np.data,
