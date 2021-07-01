@@ -250,7 +250,13 @@ class DoImageView(QObject):
         self.cur_nod_num = None
         self.cur_templ = None
 
-    def __call__(self, nod_num, in_img_num):
+    def __call__(self, in_img_num, nod_in_lst):
+        if nod_in_lst:
+            nod_num = self.main_obj.current_nod_num
+
+        else:
+            nod_num = self.main_obj.new_node.parent_node_lst[0]
+
         cmd = {'nod_lst': [nod_num], 'cmd_lst': ["gt"]}
         json_data_lst = json_data_request(uni_url, cmd)
         try:
@@ -282,47 +288,52 @@ class DoImageView(QObject):
             self.cur_templ = new_templ
 
         except IndexError:
-            self.cur_templ = None
             new_pixmap = None
+            #TODO check what happens here if the user navigates
+            #     to a different dataset
 
         ################################ refl_list work
-        my_cmd = {
-            'nod_lst': [nod_num], 'cmd_lst': ["grl " + str(in_img_num)]
-        }
-        json_lst = json_data_request(uni_url, my_cmd)
         refl_list = []
-        try:
-            for inner_list in json_lst:
-                #print("\n inner_list =", inner_list)
-                '''
-                lst_str1 = inner_list[0].split(',')
-                #print("lst_str1 =", lst_str1)
-                x_ini = float(lst_str1[0])
-                y_ini = float(lst_str1[1])
-                xrs_size = int(lst_str1[2])
-                size2 = int(lst_str1[3])
-                local_hkl = str(inner_list[1])
-                refl_list.append(
-                   {
-                     "x_ini"       : x_ini     ,
-                     "y_ini"       : y_ini     ,
-                     "xrs_size"    : xrs_size  ,
-                     "size2"       : size2     ,
-                     "local_hkl"   : local_hkl ,
-                   }
-                )
-                '''
-                refl_list.append(
-                    {
-                        "x"      : float(inner_list[0]),
-                        "y"      : float(inner_list[1]),
-                        "width"  : float(inner_list[2]),
-                        "height" : float(inner_list[3]),
-                    }
-                )
+        if nod_in_lst:
+            my_cmd = {
+                'nod_lst': [nod_num], 'cmd_lst': ["grl " + str(in_img_num)]
+            }
+            json_lst = json_data_request(uni_url, my_cmd)
+            try:
+                for inner_list in json_lst:
+                    #print("\n inner_list =", inner_list)
+                    '''
+                    lst_str1 = inner_list[0].split(',')
+                    #print("lst_str1 =", lst_str1)
+                    x_ini = float(lst_str1[0])
+                    y_ini = float(lst_str1[1])
+                    xrs_size = int(lst_str1[2])
+                    size2 = int(lst_str1[3])
+                    local_hkl = str(inner_list[1])
+                    refl_list.append(
+                       {
+                         "x_ini"       : x_ini     ,
+                         "y_ini"       : y_ini     ,
+                         "xrs_size"    : xrs_size  ,
+                         "size2"       : size2     ,
+                         "local_hkl"   : local_hkl ,
+                       }
+                    )
+                    '''
+                    refl_list.append(
+                        {
+                            "x"      : float(inner_list[0]),
+                            "y"      : float(inner_list[1]),
+                            "width"  : float(inner_list[2]),
+                            "height" : float(inner_list[3]),
+                        }
+                    )
 
-        except TypeError:
-            print("No reflection list to show")
+            except TypeError:
+                print("No reflection list to show (TypeError except)")
+
+        else:
+            print("No reflection list to show (known not to be)")
 
         self.my_scene(new_pixmap, refl_list)
         self.cur_nod_num = nod_num

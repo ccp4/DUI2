@@ -316,16 +316,11 @@ class MainObject(QObject):
         fnd_cur_nod = False
         for node in self.server_nod_lst:
             if node["number"] == self.current_nod_num:
-                nod_num_2_show = self.current_nod_num
                 fnd_cur_nod = True
 
-        if not fnd_cur_nod:
-            nod_num_2_show = self.new_node.parent_node_lst[0]
-
         if tab_index == 0:
-            print("\n IMG request, nod_num_2_show =", nod_num_2_show, "\n")
             img_num = int(self.window.ImgNumEdit.text())
-            self.do_image_view(nod_num_2_show, img_num)
+            self.do_image_view(in_img_num = img_num, nod_in_lst = fnd_cur_nod)
 
         elif tab_index == 1:
             self.log_show(self.current_nod_num, do_request = fnd_cur_nod)
