@@ -42,13 +42,9 @@ def list_p_arrange_pre(pos_col, hkl_col, pan_col, n_imgs):
     print(" len(pos_col) = ", len(pos_col))
 
     for i, pos_tri in enumerate(pos_col):
-        #my_bar(i)
 
         x_ini = '{:.2f}'.format(pos_tri[0] - 1)
         y_ini = '{:.2f}'.format((pos_tri[1] - 1) + pan_col[i] * 213)
-
-        #x_ini = pos_tri[0] - 1
-        #y_ini = (pos_tri[1] - 1) + pan_col[i] * 213
 
         if len(hkl_col) <= 1:
             local_hkl = ""
@@ -78,41 +74,60 @@ def list_p_arrange_pre(pos_col, hkl_col, pan_col, n_imgs):
             if idx >= 0 and idx < n_imgs:
                 img_lst[idx].append(dat_to_append)
 
-    #my_bar.ended()
-
     return img_lst
 
 
 def get_refl_lst(expt_path, refl_path, img_num):
-    experiments = ExperimentListFactory.from_json_file(expt_path[0])
-    my_sweep = experiments.imagesets()[0]
-    data_xy_flex = my_sweep.get_raw_data(0)[0].as_double()
-    print("\n refl_path =", refl_path, "\n")
-    table = flex.reflection_table.from_file(refl_path[0])
     try:
-        #pos_col = list(map(list, table["xyzcal.px"]))
-        #hkl_col = list(map(str, table["miller_index"]))
+        experiments = ExperimentListFactory.from_json_file(expt_path[0])
+        my_sweep = experiments.imagesets()[0]
+        #data_xy_flex = my_sweep.get_raw_data(0)[0].as_double()
+        print("refl_path =", refl_path)
+        table = flex.reflection_table.from_file(refl_path[0])
+
+    except IndexError:
+        print(
+            "\n sending empty reflection list as no reflection list there \n"
+        )
+        return [ [], [] ]
+
+    for_ddebugg_only = '''
+    print("\n table.keys =", table.keys(), "\n")
+    for nkey, key in enumerate(table.keys()):
+        print("key n", nkey, " = ", key)
+    '''
+
+    try:
         pan_col = list(map(int, table["panel"]))
         bbox_col = list(map(list, table["bbox"]))
 
         n_imgs = len(my_sweep.indices())
         print("n_imgs =", n_imgs)
-        spt_flat_data_lst = []
+        box_flat_data_lst = []
+        plus_flat_data_lst = []
         if n_imgs > 0:
-            '''
-            spt_flat_data_lst = list_p_arrange_pre(
-                pos_col, hkl_col, pan_col, n_imgs
-            )
-            '''
-            spt_flat_data_lst = list_p_arrange_exp(
+            box_flat_data_lst = list_p_arrange_exp(
                 bbox_col, pan_col, n_imgs
             )
 
-        return spt_flat_data_lst[img_num]
+            ############################################ xyzcal
+            try:
+                pos_col = list(map(list, table["xyzcal.px"]))
+                hkl_col = list(map(str, table["miller_index"]))
+                plus_flat_data_lst = list_p_arrange_pre(
+                    pos_col, hkl_col, pan_col, n_imgs
+                )
+
+            except KeyError:
+                print("NOT found << xyzcal >> col")
+                return [box_flat_data_lst[img_num], []]
+
+
+        return [box_flat_data_lst[img_num], plus_flat_data_lst[img_num]]
 
     except KeyError:
-        print("NOT found << xyzcal >> col")
-        return []
+        print("NOT found << bbox_col >> col")
+        return [ [], [] ]
 
 
 def get_json_w_img_2d(experiments_list_path, img_num):

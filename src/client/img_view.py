@@ -198,7 +198,7 @@ class ImgGraphicsScene(QGraphicsScene):
         self.main_obj = parent
         self.curr_pixmap = None
 
-    def __call__(self, new_pixmap, refl_list):
+    def __call__(self, new_pixmap, refl_list0, refl_list1):
         self.clear()
         if new_pixmap is not None:
             self.curr_pixmap = new_pixmap
@@ -209,13 +209,13 @@ class ImgGraphicsScene(QGraphicsScene):
             Qt.green, 1.6, Qt.SolidLine,
             Qt.RoundCap, Qt.RoundJoin
         )
-        for refl in refl_list:
+        for refl in refl_list0:
             rectangle = QRectF(
                 refl["x"], refl["y"], refl["width"], refl["height"]
             )
             self.addRect(rectangle, green_pen)
 
-            '''
+        for refl in refl_list1:
             self.addLine(
                 refl["x_ini"] + 1 + refl["xrs_size"], refl["y_ini"] + 1,
                 refl["x_ini"] + 1 - refl["xrs_size"], refl["y_ini"] + 1,
@@ -226,7 +226,6 @@ class ImgGraphicsScene(QGraphicsScene):
                 refl["x_ini"] + 1, refl["y_ini"] + 1 - refl["xrs_size"],
                 green_pen
             )
-            '''
 
     def wheelEvent(self, event):
         int_delta = int(event.delta())
@@ -292,35 +291,17 @@ class DoImageView(QObject):
             #TODO check what happens here if the user navigates
             #     to a different dataset
 
-        ################################ refl_list work
-        refl_list = []
+        ################################ refl_list 0/1 work
+        refl_list0 = []
+        refl_list1 = []
         if nod_in_lst:
             my_cmd = {
                 'nod_lst': [nod_num], 'cmd_lst': ["grl " + str(in_img_num)]
             }
             json_lst = json_data_request(uni_url, my_cmd)
             try:
-                for inner_list in json_lst:
-                    #print("\n inner_list =", inner_list)
-                    '''
-                    lst_str1 = inner_list[0].split(',')
-                    #print("lst_str1 =", lst_str1)
-                    x_ini = float(lst_str1[0])
-                    y_ini = float(lst_str1[1])
-                    xrs_size = int(lst_str1[2])
-                    size2 = int(lst_str1[3])
-                    local_hkl = str(inner_list[1])
-                    refl_list.append(
-                       {
-                         "x_ini"       : x_ini     ,
-                         "y_ini"       : y_ini     ,
-                         "xrs_size"    : xrs_size  ,
-                         "size2"       : size2     ,
-                         "local_hkl"   : local_hkl ,
-                       }
-                    )
-                    '''
-                    refl_list.append(
+                for inner_list in json_lst[0]:
+                    refl_list0.append(
                         {
                             "x"      : float(inner_list[0]),
                             "y"      : float(inner_list[1]),
@@ -329,13 +310,31 @@ class DoImageView(QObject):
                         }
                     )
 
+                for inner_list in json_lst[1]:
+                    lst_str1 = inner_list[0].split(',')
+                    x_ini = float(lst_str1[0])
+                    y_ini = float(lst_str1[1])
+                    xrs_size = int(lst_str1[2])
+                    size2 = int(lst_str1[3])
+                    local_hkl = str(inner_list[1])
+                    refl_list1.append(
+                       {
+                         "x_ini"       : x_ini     ,
+                         "y_ini"       : y_ini     ,
+                         "xrs_size"    : xrs_size  ,
+                         "size2"       : size2     ,
+                         "local_hkl"   : local_hkl ,
+                       }
+                    )
+
+
             except TypeError:
                 print("No reflection list to show (TypeError except)")
 
         else:
             print("No reflection list to show (known not to be)")
 
-        self.my_scene(new_pixmap, refl_list)
+        self.my_scene(new_pixmap, refl_list0, refl_list1)
         self.cur_nod_num = nod_num
         self.cur_img_num = in_img_num
 

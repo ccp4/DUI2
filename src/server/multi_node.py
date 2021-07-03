@@ -476,8 +476,12 @@ class Runner(object):
                         )
                         return_list = refl_lst
 
-                    except (IndexError, AttributeError):
-                        print("\n *** ERROR *** \n wrong line \n not sending reflection list")
+                    except AttributeError:
+                        print(
+                            "\n *** ERROR *** \n AttributeError" +
+                            "\n not sending reflection list"
+                        )
+                        return_list = [ [], [] ]
 
 
             elif uni_cmd == ["get_bravais_sum"]:
