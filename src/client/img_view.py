@@ -197,6 +197,7 @@ class ImgGraphicsScene(QGraphicsScene):
         super(ImgGraphicsScene, self).__init__(parent)
         self.main_obj = parent
         self.curr_pixmap = None
+        print("\n dir(QGraphicsScene): \n", dir(self))
 
     def __call__(self, new_pixmap, refl_list0, refl_list1):
         self.clear()
@@ -243,6 +244,11 @@ class DoImageView(QObject):
             QGraphicsView.ScrollHandDrag
         )
 
+        print(
+            "\n dir(QGraphicsView): \n", dir(self.main_obj.window.imageView)
+        )
+
+
         self.bmp_heat = np2bmp_heat()
         self.bmp_m_cro = np2bmp_monocrome()
         self.cur_img_num = None
@@ -258,6 +264,11 @@ class DoImageView(QObject):
 
         cmd = {'nod_lst': [nod_num], 'cmd_lst': ["gt"]}
         json_data_lst = json_data_request(uni_url, cmd)
+
+
+        print("\n my_scene.width =", self.my_scene.width())
+        print("my_scene.height =", self.my_scene.height(),"\n")
+
         try:
             new_templ = json_data_lst[0]
             new_pixmap = None
@@ -338,4 +349,44 @@ class DoImageView(QObject):
         self.cur_nod_num = nod_num
         self.cur_img_num = in_img_num
 
+        print(
+            "imageView.frameRect   ",
+            self.main_obj.window.imageView.frameRect()
+            )
+        print(
+            "imageView.rect        ",
+            self.main_obj.window.imageView.rect()
+            )
+        print(
+            "imageView.contentsRect",
+            self.main_obj.window.imageView.contentsRect()
+            )
+        print(
+            "imageView.childrenRect",
+            self.main_obj.window.imageView.childrenRect()
+            )
 
+
+        print(
+            "imageView.frameGeometry",
+            self.main_obj.window.imageView.frameGeometry()
+            )
+
+        print(
+            "imageView.geometry",
+            self.main_obj.window.imageView.geometry()
+            )
+
+        print(
+            "imageView.normalGeometry",
+            self.main_obj.window.imageView.normalGeometry()
+            )
+
+
+        print(
+            "\n my_scene.itemsBoundingRect =",
+            self.my_scene.itemsBoundingRect()
+        )
+
+        print("\n my_scene.width =", self.my_scene.width())
+        print("my_scene.height =", self.my_scene.height(),"\n")
