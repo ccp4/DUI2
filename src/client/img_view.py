@@ -243,10 +243,12 @@ class DoImageView(QObject):
         self.main_obj.window.imageView.setDragMode(
             QGraphicsView.ScrollHandDrag
         )
-
+        '''
         print(
             "\n dir(QGraphicsView): \n", dir(self.main_obj.window.imageView)
         )
+        '''
+        self.main_obj.window.TmpButton.clicked.connect(self.show_win_coords)
 
 
         self.bmp_heat = np2bmp_heat()
@@ -390,3 +392,18 @@ class DoImageView(QObject):
 
         print("\n my_scene.width =", self.my_scene.width())
         print("my_scene.height =", self.my_scene.height(),"\n")
+
+    def show_win_coords(self):
+        print("show_win_coords")
+
+        viewport_rect = QRect(
+            0, 0, self.main_obj.window.imageView.viewport().width(),
+            self.main_obj.window.imageView.viewport().height()
+        )
+
+        visibleSceneRect = self.main_obj.window.imageView.mapToScene(
+            viewport_rect
+        ).boundingRect()
+
+        print("\n viewport_rect =", viewport_rect)
+        print("visibleSceneRect =", visibleSceneRect, "\n")
