@@ -351,48 +351,6 @@ class DoImageView(QObject):
         self.cur_nod_num = nod_num
         self.cur_img_num = in_img_num
 
-        print(
-            "imageView.frameRect   ",
-            self.main_obj.window.imageView.frameRect()
-            )
-        print(
-            "imageView.rect        ",
-            self.main_obj.window.imageView.rect()
-            )
-        print(
-            "imageView.contentsRect",
-            self.main_obj.window.imageView.contentsRect()
-            )
-        print(
-            "imageView.childrenRect",
-            self.main_obj.window.imageView.childrenRect()
-            )
-
-
-        print(
-            "imageView.frameGeometry",
-            self.main_obj.window.imageView.frameGeometry()
-            )
-
-        print(
-            "imageView.geometry",
-            self.main_obj.window.imageView.geometry()
-            )
-
-        print(
-            "imageView.normalGeometry",
-            self.main_obj.window.imageView.normalGeometry()
-            )
-
-
-        print(
-            "\n my_scene.itemsBoundingRect =",
-            self.my_scene.itemsBoundingRect()
-        )
-
-        print("\n my_scene.width =", self.my_scene.width())
-        print("my_scene.height =", self.my_scene.height(),"\n")
-
     def show_win_coords(self):
         print("show_win_coords")
 
@@ -403,7 +361,8 @@ class DoImageView(QObject):
 
         visibleSceneRect = self.main_obj.window.imageView.mapToScene(
             viewport_rect
-        ).boundingRect()
+        ).boundingRect().getCoords()
 
         print("\n viewport_rect =", viewport_rect)
         print("visibleSceneRect =", visibleSceneRect, "\n")
+        print(type(visibleSceneRect))
