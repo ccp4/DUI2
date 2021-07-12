@@ -361,8 +361,19 @@ class DoImageView(QObject):
 
         visibleSceneRect = self.main_obj.window.imageView.mapToScene(
             viewport_rect
-        ).boundingRect().getCoords()
+        ).boundingRect()
+
+        visibleSceneCoords = visibleSceneRect.getCoords()
 
         print("\n viewport_rect =", viewport_rect)
         print("visibleSceneRect =", visibleSceneRect, "\n")
-        print(type(visibleSceneRect))
+
+        self.my_scene.addRect(
+            visibleSceneRect,
+            QPen(
+                Qt.green, 1.6, Qt.SolidLine,
+                Qt.RoundCap, Qt.RoundJoin
+                )
+            )
+
+        print("visibleSceneCoords =", visibleSceneCoords)
