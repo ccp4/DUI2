@@ -42,6 +42,7 @@ except ModuleNotFoundError:
 from params_2_json import get_param_list
 from img_uploader import flex_arr_2_json
 
+#("gis", "get_image_slice"                           ),
 def fix_alias(short_in):
     pair_list = [
         ("d", "display"                                     ),
@@ -49,6 +50,7 @@ def fix_alias(short_in):
         ("gr", "get_report"                                 ),
         ("gt", "get_template"                               ),
         ("gi", "get_image"                                  ),
+        ("gis", "get_image"                           ),
         ("grl", "get_reflection_list"                       ),
         ("gb", "get_bravais_sum"                            ),
         ("st", "stop"                                       ),
@@ -435,7 +437,10 @@ class Runner(object):
                         )
                         my_sweep = experiments.imagesets()[0]
                         str_json = my_sweep.get_template()
-                        return_list = [str_json]
+
+                        data_xy_flex = my_sweep.get_raw_data(0)[0].as_double()
+                        img_with, img_height = data_xy_flex.all()[0:2]
+                        return_list = [str_json, img_with, img_height]
 
                     except IndexError:
                         print(

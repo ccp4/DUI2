@@ -157,7 +157,49 @@ class np2bmp_monocrome(object):
         img_array[:, :, 0] = img_all_chanl[:,:] #Red
         return img_array
 
+def load_slice_img_json(
+    nod_num_lst = [1], img_num = 0,
+    x1 = 0, y1 = 0, x2 = 2527, y2 = 2463
+):
+    my_cmd_lst = [
+        "gis " + str(img_num) + " view_rect=" +
+              str(x1) + "," + str(y1) +
+        "," + str(x2) + "," + str(y2)
+    ]
 
+
+    my_cmd = {"nod_lst":nod_num_lst, "cmd_lst":my_cmd_lst}
+    start_tm = time.time()
+    try:
+        req_get = requests.get(uni_url, stream = True, params = my_cmd)
+        compresed = req_get.content
+        dic_str = zlib.decompress(compresed)
+        arr_dic = json.loads(dic_str)
+        end_tm = time.time()
+        print("request took ", end_tm - start_tm, "\n converting to dict ...")
+
+        d1 = arr_dic["d1"]
+        d2 = arr_dic["d2"]
+        str_data = arr_dic["str_data"]
+        print("d1, d2 =", d1, d2)
+        arr_1d = np.fromstring(str_data, dtype = float, sep = ',')
+        np_array_out = arr_1d.reshape(d1, d2)
+
+    except zlib.error:
+        print("zlib.error(load_json_w_str)")
+        return None
+
+    except ConnectionError:
+        print("\n ConnectionError (load_json_w_str) \n")
+        return None
+
+    except requests.exceptions.RequestException:
+        print("\n requests.exceptions.RequestException (load_json_w_str) \n")
+        return None
+
+    return np_array_out
+
+old_stable = '''
 def load_json_w_str(nod_num_lst = [1], img_num = 0):
     my_cmd_lst = ["gi " + str(img_num)]
     my_cmd = {"nod_lst":nod_num_lst, "cmd_lst":my_cmd_lst}
@@ -190,7 +232,7 @@ def load_json_w_str(nod_num_lst = [1], img_num = 0):
         return None
 
     return np_array_out
-
+'''
 
 class ImgGraphicsScene(QGraphicsScene):
     def __init__(self, parent = None):
@@ -243,19 +285,13 @@ class DoImageView(QObject):
         self.main_obj.window.imageView.setDragMode(
             QGraphicsView.ScrollHandDrag
         )
-        '''
-        print(
-            "\n dir(QGraphicsView): \n", dir(self.main_obj.window.imageView)
-        )
-        '''
         self.main_obj.window.TmpButton.clicked.connect(self.show_win_coords)
-
-
         self.bmp_heat = np2bmp_heat()
         self.bmp_m_cro = np2bmp_monocrome()
         self.cur_img_num = None
         self.cur_nod_num = None
         self.cur_templ = None
+        self.img_d1_d2 = (None, None)
 
     def __call__(self, in_img_num, nod_in_lst):
         if nod_in_lst:
@@ -267,20 +303,29 @@ class DoImageView(QObject):
         cmd = {'nod_lst': [nod_num], 'cmd_lst': ["gt"]}
         json_data_lst = json_data_request(uni_url, cmd)
 
-
         print("\n my_scene.width =", self.my_scene.width())
         print("my_scene.height =", self.my_scene.height(),"\n")
 
         try:
             new_templ = json_data_lst[0]
+            self.img_d1_d2 = (
+                json_data_lst[1], json_data_lst[2]
+            )
             new_pixmap = None
             if(
                 self.cur_img_num != in_img_num or
                 self.cur_templ != new_templ
             ):
+
+                np_array_img = np.zeros(
+                    [ self.img_d1_d2[0], self.img_d1_d2[1] ],
+                    dtype=np.uint8
+                )
+                old_stable = '''
                 np_array_img = load_json_w_str(
                     nod_num_lst = [nod_num], img_num = in_img_num
                 )
+                '''
                 try:
                     rgb_np = self.bmp_m_cro.img_2d_rgb(
                         data2d = np_array_img, invert = False,
@@ -377,3 +422,10 @@ class DoImageView(QObject):
             )
 
         print("visibleSceneCoords =", visibleSceneCoords)
+
+        np_array_img = load_slice_img_json(
+            nod_num_lst = [self.cur_nod_num], img_num = self.cur_img_num,
+            x1 = visibleSceneCoords[0], y1 = visibleSceneCoords[1],
+            x2 = visibleSceneCoords[2], y2 = visibleSceneCoords[3],
+        )
+
