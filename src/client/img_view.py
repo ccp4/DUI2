@@ -239,7 +239,7 @@ class ImgGraphicsScene(QGraphicsScene):
         super(ImgGraphicsScene, self).__init__(parent)
         self.main_obj = parent
         self.curr_pixmap = None
-        print("\n dir(QGraphicsScene): \n", dir(self))
+        #print("\n dir(QGraphicsScene): \n", dir(self))
 
     def __call__(self, new_pixmap, refl_list0, refl_list1):
         self.clear()

@@ -42,18 +42,17 @@ except ModuleNotFoundError:
 from params_2_json import get_param_list
 from img_uploader import flex_arr_2_json
 
-#("gis", "get_image_slice"                           ),
 def fix_alias(short_in):
     pair_list = [
-        ("d", "display"                                     ),
-        ("dl", "display_log"                                ),
-        ("gr", "get_report"                                 ),
-        ("gt", "get_template"                               ),
-        ("gi", "get_image"                                  ),
-        ("gis", "get_image"                           ),
+        ("d",   "display"                                   ),
+        ("dl",  "display_log"                               ),
+        ("gr",  "get_report"                                ),
+        ("gt",  "get_template"                              ),
+        ("gi",  "get_image"                                 ),
+        ("gis", "get_image_slice"                           ),
         ("grl", "get_reflection_list"                       ),
-        ("gb", "get_bravais_sum"                            ),
-        ("st", "stop"                                       ),
+        ("gb",  "get_bravais_sum"                           ),
+        ("st",  "stop"                                      ),
         ("fdp", "find_spots_params"                         ),
         ("idp", "index_params"                              ),
         ("rbp", "refine_bravais_settings_params"            ),
@@ -62,23 +61,23 @@ def fix_alias(short_in):
         ("smp", "symmetry_params"                           ),
         ("scp", "scale_params"                              ),
         ("cep", "combine_experiments_params"                ),
-        ("x4", "/scratch/dui_tst/X4_wide/*.cbf"             ),
+        ("x4",  "/scratch/dui_tst/X4_wide/*.cbf"            ),
         ("x41", "/scratch/dui_tst/X4_wide_0_to_9/*.cbf"     ),
         ("x42", "/scratch/dui_tst/X4_wide_10_to_19/*.cbf"   ),
         ("x43", "/scratch/dui_tst/X4_wide_20_to_29/*.cbf"   ),
-        ("ip", "dials.import"                               ),
-        ("mg", "dials.modify_geometry"                      ),
-        ("gm", "dials.generate_mask"                        ),
-        ("am", "dials.apply_mask"                           ),
-        ("fd", "dials.find_spots"                           ),
-        ("id", "dials.index"                                ),
-        ("rb", "dials.refine_bravais_settings"              ),
-        ("ri", "dials.reindex"                              ),
-        ("rf", "dials.refine"                               ),
-        ("it", "dials.integrate"                            ),
-        ("sm", "dials.symmetry"                             ),
-        ("sc", "dials.scale"                                ),
-        ("ce", "dials.combine_experiments"                  ),
+        ("ip",  "dials.import"                              ),
+        ("mg",  "dials.modify_geometry"                     ),
+        ("gm",  "dials.generate_mask"                       ),
+        ("am",  "dials.apply_mask"                          ),
+        ("fd",  "dials.find_spots"                          ),
+        ("id",  "dials.index"                               ),
+        ("rb",  "dials.refine_bravais_settings"             ),
+        ("ri",  "dials.reindex"                             ),
+        ("rf",  "dials.refine"                              ),
+        ("it",  "dials.integrate"                           ),
+        ("sm",  "dials.symmetry"                            ),
+        ("sc",  "dials.scale"                               ),
+        ("ce",  "dials.combine_experiments"                 ),
     ]
     long_out = short_in
     for pair in pair_list:
@@ -384,6 +383,7 @@ class Runner(object):
             ["get_report"] not in full_cmd_lst and
             ["get_template"] not in full_cmd_lst and
             "get_image" not in full_cmd_lst[0] and
+            "get_image_slice" not in full_cmd_lst[0] and
             "get_reflection_list" not in full_cmd_lst[0] and
             ["get_bravais_sum"] not in full_cmd_lst and
             ["stop"] not in full_cmd_lst
@@ -454,6 +454,25 @@ class Runner(object):
                         print(
                             "generating image JSON data for line:", lin2go,
                             " image:", int(uni_cmd[1])
+                        )
+                        #TODO remember to check if the list is empty
+                        str_json = flex_arr_2_json.get_json_w_img_2d(
+                            self.step_list[lin2go]._lst_expt_out,
+                            int(uni_cmd[1])
+                        )
+
+                        byt_data = bytes(str_json.encode('utf-8'))
+                        return_list = byt_data
+
+                    except (IndexError, AttributeError):
+                        print("\n *** ERROR *** \n wrong line \n not sending IMG")
+
+            elif uni_cmd[0] == "get_image_slice":
+                for lin2go in cmd_dict["nod_lst"]:
+                    try:
+                        print(
+                            "generating slice of image for line:", lin2go,
+                            " image:", int(uni_cmd[1]), "\n uni_cmd =", uni_cmd
                         )
                         #TODO remember to check if the list is empty
                         str_json = flex_arr_2_json.get_json_w_img_2d(
