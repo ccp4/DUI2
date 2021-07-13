@@ -472,8 +472,17 @@ class Runner(object):
                     try:
                         print(
                             "generating slice of image for line:", lin2go,
-                            " image:", int(uni_cmd[1]), "\n uni_cmd =", uni_cmd
+                            " image:", int(uni_cmd[1]), "\n uni_cmd =", uni_cmd,
+                            "\n"
                         )
+                        rec_str = uni_cmd[2]
+                        print("rec_str:", rec_str, "\n")
+                        eq_pos = rec_str.find("=")
+                        left_side = rec_str[eq_pos + 1:]
+                        print("left_side =", left_side)
+                        [x1, y1, x2, y2] = left_side.split(",")
+                        print("x1, y1, x2, y2 =", x1, y1, x2, y2)
+
                         #TODO remember to check if the list is empty
                         str_json = flex_arr_2_json.get_json_w_img_2d(
                             self.step_list[lin2go]._lst_expt_out,
