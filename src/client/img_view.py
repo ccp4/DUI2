@@ -317,18 +317,18 @@ class DoImageView(QObject):
                 self.cur_templ != new_templ
             ):
 
-                np_array_img = np.zeros(
+                self.np_full_img = np.zeros(
                     [ self.img_d1_d2[0], self.img_d1_d2[1] ],
                     dtype=np.uint8
                 )
                 old_stable = '''
-                np_array_img = load_json_w_str(
+                self.np_full_img = load_json_w_str(
                     nod_num_lst = [nod_num], img_num = in_img_num
                 )
                 '''
                 try:
                     rgb_np = self.bmp_m_cro.img_2d_rgb(
-                        data2d = np_array_img, invert = False,
+                        data2d = self.np_full_img, invert = False,
                         i_min_max = [-2, 50]
                     )
                     q_img = QImage(
@@ -340,7 +340,7 @@ class DoImageView(QObject):
                     new_pixmap = QPixmap.fromImage(q_img)
 
                 except TypeError:
-                    print("None np_array_img")
+                    print("None self.np_full_img")
 
             self.cur_templ = new_templ
 
@@ -422,10 +422,33 @@ class DoImageView(QObject):
             )
 
         print("visibleSceneCoords =", visibleSceneCoords)
+        x1_slice = int(visibleSceneCoords[0])
+        y1_slice = int(visibleSceneCoords[1])
+        x2_slice = int(visibleSceneCoords[2])
+        y2_slice = int(visibleSceneCoords[3])
 
-        np_array_img = load_slice_img_json(
+        slice_img = load_slice_img_json(
             nod_num_lst = [self.cur_nod_num], img_num = self.cur_img_num,
-            x1 = visibleSceneCoords[0], y1 = visibleSceneCoords[1],
-            x2 = visibleSceneCoords[2], y2 = visibleSceneCoords[3],
+            x1 = x1_slice, y1 = y1_slice,
+            x2 = x2_slice, y2 = y2_slice
         )
+        print(
+            "x1_slice, y1_slice, x2_slice, y2_slice = ",
+             x1_slice, y1_slice, x2_slice, y2_slice
+        )
+        self.np_full_img[x1_slice:x2_slice, y1_slice:y2_slice] = slice_img[:,:]
+        rgb_np = self.bmp_m_cro.img_2d_rgb(
+            data2d = self.np_full_img, invert = False,
+            i_min_max = [-2, 50]
+        )
+        q_img = QImage(
+            rgb_np.data,
+            np.size(rgb_np[0:1, :, 0:1]),
+            np.size(rgb_np[:, 0:1, 0:1]),
+            QImage.Format_ARGB32
+        )
+        new_pixmap = QPixmap.fromImage(q_img)
+
+        self.my_scene(new_pixmap, [], [])
+
 
