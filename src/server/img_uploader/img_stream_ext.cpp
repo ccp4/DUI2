@@ -75,8 +75,63 @@ std::string img_arr_2_str(flex_double& data2d)
     return all_str;
 }
 
+std::string slice_arr_2_str(
+    flex_double& data2d, int x1, int y1, int x2, int y2
+)
+{
+
+    int d1 = data2d.accessor().all()[0];
+    int d2 = data2d.accessor().all()[1];
+    int i, j, pos, pos_size, dx, dy;
+    double d_num;
+    char std_str[15];
+    dx = x2 - x1;
+    dy = y2 - y1;
+    std::cout << "dx, dy  = " << dx << "," << dy << "\n";
+    int buff_size = dx * dy * 15 + 30;
+    std::cout << "buff_size =" << buff_size << "\n";
+    std::cout << "x1, y1, x2, y2 = " << x1 << "," << y1 << "," <<
+                                        x2 << "," << y2 << "," << "\n";
+    char * ch_buff;
+    ch_buff = new char[buff_size];
+    memset(ch_buff,' ',buff_size);
+    pos = 0;
+    strcpy(&ch_buff[pos], "{");
+    pos++;
+    pos_size = sprintf( std_str, "\"d1\":%i,", d1);
+    strcpy(&ch_buff[pos], std_str);
+    pos = pos + pos_size;
+    pos_size = sprintf( std_str, "\"d2\":%i,", d2);
+    strcpy(&ch_buff[pos], std_str);
+    pos = pos + pos_size;
+    pos_size = sprintf( std_str, "\"str_data\":\"");
+    strcpy(&ch_buff[pos], std_str);
+    pos = pos + pos_size;
+    std::cout << "looping thru (" << x2 - x1 << ", " << y2 - y1
+                                  << ") ... nums \n";
+    for (i = x1; i < x2; i++) {
+        for (j = y1; j < y2; j++) {
+            d_num = double(data2d(i, j));
+            pos_size = sprintf( std_str, "%.2f", d_num);
+            strcpy(&ch_buff[pos], std_str);
+            pos = pos + pos_size;
+            strcpy(&ch_buff[pos], ",");
+            pos++;
+        }
+    }
+    std::cout << "... Loop END \n";
+    pos--;
+    pos_size = sprintf( std_str, "\"}");
+    strcpy(&ch_buff[pos], std_str);
+    pos = pos + pos_size;
+    std::string all_str((char *)ch_buff);
+    delete ch_buff;
+    return all_str;
+}
+
 BOOST_PYTHON_MODULE(img_stream_ext)
 {
     using namespace boost::python;
     def("img_arr_2_str", img_arr_2_str);
+    def("slice_arr_2_str", slice_arr_2_str);
 }
