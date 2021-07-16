@@ -146,3 +146,24 @@ def get_json_w_img_2d(experiments_list_path, img_num):
 
     return str_data
 
+def get_json_w_2d_slise(experiments_list_path, img_num, x1, y1, x2, y2):
+    print("experiments_list_path, img_num:", experiments_list_path, img_num)
+    pan_num = 0
+    experiments_path = experiments_list_path[0]
+    print("importing from:", experiments_path)
+    experiments = ExperimentListFactory.from_json_file(experiments_path)
+    my_sweep = experiments.imagesets()[0]
+    print("geting image #", img_num)
+    data_xy_flex = my_sweep.get_raw_data(img_num)[pan_num].as_double()
+    start_tm = time.time()
+    str_data = img_stream_ext.slice_arr_2_str(
+        data_xy_flex, int(float(x1)), int(float(y1)),
+        int(float(x2)), int(float(y2))
+    )
+    end_tm = time.time()
+    print("C++ bit took ", end_tm - start_tm)
+
+    return str_data
+
+
+

@@ -484,9 +484,9 @@ class Runner(object):
                         print("x1, y1, x2, y2 =", x1, y1, x2, y2)
 
                         #TODO remember to check if the list is empty
-                        str_json = flex_arr_2_json.get_json_w_img_2d(
+                        str_json = flex_arr_2_json.get_json_w_2d_slise(
                             self.step_list[lin2go]._lst_expt_out,
-                            int(uni_cmd[1])
+                            int(uni_cmd[1]), x1, y1, x2, y2
                         )
 
                         byt_data = bytes(str_json.encode('utf-8'))

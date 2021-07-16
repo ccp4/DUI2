@@ -98,10 +98,10 @@ std::string slice_arr_2_str(
     pos = 0;
     strcpy(&ch_buff[pos], "{");
     pos++;
-    pos_size = sprintf( std_str, "\"d1\":%i,", d1);
+    pos_size = sprintf( std_str, "\"d1\":%i,", dx);
     strcpy(&ch_buff[pos], std_str);
     pos = pos + pos_size;
-    pos_size = sprintf( std_str, "\"d2\":%i,", d2);
+    pos_size = sprintf( std_str, "\"d2\":%i,", dy);
     strcpy(&ch_buff[pos], std_str);
     pos = pos + pos_size;
     pos_size = sprintf( std_str, "\"str_data\":\"");
