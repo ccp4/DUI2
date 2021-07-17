@@ -82,7 +82,7 @@ std::string slice_arr_2_str(
 
     int d1 = data2d.accessor().all()[0];
     int d2 = data2d.accessor().all()[1];
-    int i, j, pos, pos_size, dx, dy;
+    int x, y, pos, pos_size, dx, dy;
     double d_num;
     char std_str[15];
     dx = x2 - x1;
@@ -109,9 +109,9 @@ std::string slice_arr_2_str(
     pos = pos + pos_size;
     std::cout << "looping thru (" << x2 - x1 << ", " << y2 - y1
                                   << ") ... nums \n";
-    for (i = x1; i < x2; i++) {
-        for (j = y1; j < y2; j++) {
-            d_num = double(data2d(i, j));
+    for (x = x1; x < x2; x++) {
+        for (y = y1; y < y2; y++) {
+            d_num = double(data2d(x, y));
             pos_size = sprintf( std_str, "%.2f", d_num);
             strcpy(&ch_buff[pos], std_str);
             pos = pos + pos_size;

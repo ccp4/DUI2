@@ -422,10 +422,10 @@ class DoImageView(QObject):
             )
 
         print("visibleSceneCoords =", visibleSceneCoords)
-        x1_slice = int(visibleSceneCoords[0])
-        y1_slice = int(visibleSceneCoords[1])
-        x2_slice = int(visibleSceneCoords[2])
-        y2_slice = int(visibleSceneCoords[3])
+        x1_slice = int(visibleSceneCoords[1])
+        y1_slice = int(visibleSceneCoords[0])
+        x2_slice = int(visibleSceneCoords[3])
+        y2_slice = int(visibleSceneCoords[2])
 
         slice_img = load_slice_img_json(
             nod_num_lst = [self.cur_nod_num], img_num = self.cur_img_num,
