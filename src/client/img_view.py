@@ -12,7 +12,7 @@ import requests
 
 from exec_utils import json_data_request, uni_url
 
-def crunch_n_scale(data2d, i_min_max):
+def crunch_min_max(data2d, i_min_max):
     data2d_ini = np.copy(data2d)
     if(i_min_max == [None, None]):
         i_min_max = [data2d_ini.min(), data2d_ini.max()]
@@ -61,7 +61,7 @@ class np2bmp_heat(object):
     def img_2d_rgb(
         self, data2d = None, invert = False, i_min_max = [None, None]
     ):
-        data2d_pos, data2d_pos_max, self.width, self.height = crunch_n_scale(
+        data2d_pos, data2d_pos_max, self.width, self.height = crunch_min_max(
             data2d, i_min_max
         )
 
@@ -118,7 +118,7 @@ class np2bmp_monocrome(object):
     def img_2d_rgb(
         self, data2d = None, invert = False, i_min_max = [None, None]
     ):
-        data2d_pos, data2d_pos_max, self.width, self.height = crunch_n_scale(
+        data2d_pos, data2d_pos_max, self.width, self.height = crunch_min_max(
             data2d, i_min_max
         )
 
@@ -327,7 +327,7 @@ class DoImageView(QObject):
                 )
                 '''
                 try:
-                    rgb_np = self.bmp_m_cro.img_2d_rgb(
+                    rgb_np = self.bmp_heat.img_2d_rgb(
                         data2d = self.np_full_img, invert = False,
                         i_min_max = [-2, 50]
                     )
@@ -437,7 +437,7 @@ class DoImageView(QObject):
              x1_slice, y1_slice, x2_slice, y2_slice
         )
         self.np_full_img[x1_slice:x2_slice, y1_slice:y2_slice] = slice_img[:,:]
-        rgb_np = self.bmp_m_cro.img_2d_rgb(
+        rgb_np = self.bmp_heat.img_2d_rgb(
             data2d = self.np_full_img, invert = False,
             i_min_max = [-2, 50]
         )
