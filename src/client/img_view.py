@@ -199,7 +199,6 @@ def load_slice_img_json(
 
     return np_array_out
 
-old_stable = '''
 def load_json_w_str(nod_num_lst = [1], img_num = 0):
     my_cmd_lst = ["gi " + str(img_num)]
     my_cmd = {"nod_lst":nod_num_lst, "cmd_lst":my_cmd_lst}
@@ -232,7 +231,6 @@ def load_json_w_str(nod_num_lst = [1], img_num = 0):
         return None
 
     return np_array_out
-'''
 
 class ImgGraphicsScene(QGraphicsScene):
     def __init__(self, parent = None):
@@ -321,7 +319,17 @@ class DoImageView(QObject):
                     [ self.img_d1_d2[0], self.img_d1_d2[1] ],
                     dtype=np.uint8
                 )
-                old_stable = '''
+                self.np_full_img[:,:] = 9
+
+                self.np_full_img = np.arange(
+                    self.img_d1_d2[0] * self.img_d1_d2[1]
+                ).reshape(
+                    self.img_d1_d2[0], self.img_d1_d2[1]
+                )
+
+                self.np_full_img = 50 * (self.np_full_img / self.np_full_img.max())
+
+                to_re_use = '''
                 self.np_full_img = load_json_w_str(
                     nod_num_lst = [nod_num], img_num = in_img_num
                 )
