@@ -12,6 +12,30 @@ import requests
 
 from exec_utils import json_data_request, uni_url
 
+def crunch_n_scale(data2d, i_min_max):
+    data2d_ini = np.copy(data2d)
+    if(i_min_max == [None, None]):
+        i_min_max = [data2d_ini.min(), data2d_ini.max()]
+        print("no max and min provided, assuming:", i_min_max)
+
+    elif(i_min_max[0] > data2d_ini.min() or i_min_max[1] < data2d_ini.max()):
+        print("clipping to [max, min]:", i_min_max, "  ...")
+        np.clip(data2d_ini, i_min_max[0], i_min_max[1], out = data2d_ini)
+        print("... done clipping")
+
+    width = np.size( data2d_ini[0:1, :] )
+    height = np.size( data2d_ini[:, 0:1] )
+
+    data2d_pos = data2d_ini[:,:] - i_min_max[0] + 1.0
+    data2d_pos_max = data2d_pos.max()
+
+    calc_pos_max = i_min_max[1] - i_min_max[0] + 1.0
+    if(calc_pos_max > data2d_pos_max):
+        data2d_pos_max = calc_pos_max
+
+    return data2d_pos, data2d_pos_max, width, height
+
+
 class np2bmp_heat(object):
     def __init__(self):
 
@@ -37,25 +61,9 @@ class np2bmp_heat(object):
     def img_2d_rgb(
         self, data2d = None, invert = False, i_min_max = [None, None]
     ):
-        data2d_ini = np.copy(data2d)
-        if(i_min_max == [None, None]):
-            i_min_max = [data2d_ini.min(), data2d_ini.max()]
-            print("no max and min provided, assuming:", i_min_max)
-
-        elif(i_min_max[0] > data2d_ini.min() or i_min_max[1] < data2d_ini.max()):
-            print("clipping to [max, min]:", i_min_max, "  ...")
-            np.clip(data2d_ini, i_min_max[0], i_min_max[1], out = data2d_ini)
-            print("... done clipping")
-
-        self.width = np.size( data2d_ini[0:1, :] )
-        self.height = np.size( data2d_ini[:, 0:1] )
-
-        data2d_pos = data2d_ini[:,:] - i_min_max[0] + 1.0
-        data2d_pos_max = data2d_pos.max()
-
-        calc_pos_max = i_min_max[1] - i_min_max[0] + 1.0
-        if(calc_pos_max > data2d_pos_max):
-            data2d_pos_max = calc_pos_max
+        data2d_pos, data2d_pos_max, self.width, self.height = crunch_n_scale(
+            data2d, i_min_max
+        )
 
         div_scale = 764.0 / data2d_pos_max
         data2d_scale = np.multiply(data2d_pos, div_scale)
@@ -110,25 +118,9 @@ class np2bmp_monocrome(object):
     def img_2d_rgb(
         self, data2d = None, invert = False, i_min_max = [None, None]
     ):
-        data2d_ini = np.copy(data2d)
-        if(i_min_max == [None, None]):
-            i_min_max = [data2d_ini.min(), data2d_ini.max()]
-            print("no max and min provided, assuming:", i_min_max)
-
-        elif(i_min_max[0] > data2d_ini.min() or i_min_max[1] < data2d_ini.max()):
-            print("clipping to [max, min]:", i_min_max, "  ...")
-            np.clip(data2d_ini, i_min_max[0], i_min_max[1], out = data2d_ini)
-            print("... done clipping")
-
-        self.width = np.size( data2d_ini[0:1, :] )
-        self.height = np.size( data2d_ini[:, 0:1] )
-
-        data2d_pos = data2d_ini[:,:] - i_min_max[0] + 1.0
-        data2d_pos_max = data2d_pos.max()
-
-        calc_pos_max = i_min_max[1] - i_min_max[0] + 1.0
-        if(calc_pos_max > data2d_pos_max):
-            data2d_pos_max = calc_pos_max
+        data2d_pos, data2d_pos_max, self.width, self.height = crunch_n_scale(
+            data2d, i_min_max
+        )
 
         div_scale = 254.0 / data2d_pos_max
         data2d_scale = np.multiply(data2d_pos, div_scale)
