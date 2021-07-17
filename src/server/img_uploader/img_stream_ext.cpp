@@ -75,11 +75,10 @@ std::string img_arr_2_str(flex_double& data2d)
     return all_str;
 }
 
-std::string slice_arr_2_str(
-    flex_double& data2d, int x1, int y1, int x2, int y2
-)
+std::string slice_arr_2_str( flex_double& data2d,
+                             int x1, int y1,
+                             int x2, int y2 )
 {
-
     int d1 = data2d.accessor().all()[0];
     int d2 = data2d.accessor().all()[1];
     int x, y, pos, pos_size, dx, dy;
