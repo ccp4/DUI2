@@ -488,9 +488,9 @@ class Runner(object):
                             self.step_list[lin2go]._lst_expt_out,
                             int(uni_cmd[1]), x1, y1, x2, y2
                         )
-
-                        byt_data = bytes(str_json.encode('utf-8'))
-                        return_list = byt_data
+                        if str_json is not None:
+                            byt_data = bytes(str_json.encode('utf-8'))
+                            return_list = byt_data
 
                     except (IndexError, AttributeError):
                         print("\n *** ERROR *** \n wrong line \n not sending IMG")

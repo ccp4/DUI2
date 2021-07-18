@@ -82,6 +82,19 @@ std::string slice_arr_2_str( flex_double& data2d,
     int d1 = data2d.accessor().all()[0];
     int d2 = data2d.accessor().all()[1];
     int x, y, pos, pos_size, dx, dy;
+
+    std::cout << "\n got here \n";
+    if(x1 >= d1 or x2 > d1 or  x1 < 0 or x2 <= 0 or
+       y1 >= d2 or y2 > d2 or  y1 < 0 or y2 <= 0 or
+       x1 > x2 or y1 > y2
+    ){
+        std::cout << "\n ***  array bounding error  *** \n";
+        std::cout << "(x1, y1, x2, y2) = " << x1 << ", " << y1 << ", "
+                                           << x2 << ", " << y2 << "\n";
+        std::cout << "d1[bound], d2[bound] = " << d1 << ", " << d2 << "\n";
+        return "Error";
+    };
+
     double d_num;
     char std_str[15];
     dx = x2 - x1;
@@ -106,6 +119,7 @@ std::string slice_arr_2_str( flex_double& data2d,
     pos_size = sprintf( std_str, "\"str_data\":\"");
     strcpy(&ch_buff[pos], std_str);
     pos = pos + pos_size;
+
     std::cout << "looping thru (" << x2 - x1 << ", " << y2 - y1
                                   << ") ... nums \n";
     for (x = x1; x < x2; x++) {

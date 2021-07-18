@@ -436,18 +436,24 @@ class DoImageView(QObject):
             "x1_slice, y1_slice, x2_slice, y2_slice = ",
              x1_slice, y1_slice, x2_slice, y2_slice
         )
-        self.np_full_img[x1_slice:x2_slice, y1_slice:y2_slice] = slice_img[:,:]
-        rgb_np = self.bmp_heat.img_2d_rgb(
-            data2d = self.np_full_img, invert = False,
-            i_min_max = [-2, 50]
-        )
-        q_img = QImage(
-            rgb_np.data,
-            np.size(rgb_np[0:1, :, 0:1]),
-            np.size(rgb_np[:, 0:1, 0:1]),
-            QImage.Format_ARGB32
-        )
-        new_pixmap = QPixmap.fromImage(q_img)
+        try:
+            self.np_full_img[
+                x1_slice:x2_slice, y1_slice:y2_slice
+            ] = slice_img[:,:]
+            rgb_np = self.bmp_heat.img_2d_rgb(
+                data2d = self.np_full_img, invert = False,
+                i_min_max = [-2, 50]
+            )
+            q_img = QImage(
+                rgb_np.data,
+                np.size(rgb_np[0:1, :, 0:1]),
+                np.size(rgb_np[:, 0:1, 0:1]),
+                QImage.Format_ARGB32
+            )
+            new_pixmap = QPixmap.fromImage(q_img)
+
+        except TypeError:
+            new_pixmap = None
 
         self.my_scene(new_pixmap, [], [])
 

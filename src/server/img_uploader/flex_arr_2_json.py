@@ -163,6 +163,10 @@ def get_json_w_2d_slise(experiments_list_path, img_num, x1, y1, x2, y2):
     end_tm = time.time()
     print("C++ bit took ", end_tm - start_tm)
 
+    if str_data == "Error":
+        print('str_data == "Error"')
+        str_data = None
+
     return str_data
 
 
