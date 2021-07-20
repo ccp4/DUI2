@@ -227,7 +227,7 @@ def load_json_w_str(nod_num_lst = [1], img_num = 0):
 class ImgGraphicsScene(QGraphicsScene):
     def __init__(self, parent = None):
         super(ImgGraphicsScene, self).__init__(parent)
-        self.main_obj = parent
+        self.parent_obj = parent
         self.curr_pixmap = None
         #print("\n dir(QGraphicsScene): \n", dir(self))
 
@@ -261,9 +261,13 @@ class ImgGraphicsScene(QGraphicsScene):
             )
 
     def wheelEvent(self, event):
-        int_delta = int(event.delta())
-        print("wheelEvent(delta) =", int_delta)
+        float_delta = float(event.delta())
+        print("wheelEvent(delta) =", float_delta)
         event.accept()
+        new_scale = 1.0 + float_delta / 1500.0
+        print("new_scale =", new_scale)
+
+        self.parent_obj.main_obj.window.imageView.scale(new_scale, new_scale)
 
 
 class DoImageView(QObject):
