@@ -262,12 +262,21 @@ class ImgGraphicsScene(QGraphicsScene):
 
     def wheelEvent(self, event):
         float_delta = float(event.delta())
-        print("wheelEvent(delta) =", float_delta)
+        #print("wheelEvent(delta) =", float_delta)
         event.accept()
         new_scale = 1.0 + float_delta / 1500.0
-        print("new_scale =", new_scale)
+        #print("new_scale =", new_scale)
+
+        print(
+            "imageView.transform() =",
+            self.parent_obj.main_obj.window.imageView.transform()
+        )
 
         self.parent_obj.main_obj.window.imageView.scale(new_scale, new_scale)
+
+    def OneOneScale(self, event):
+        print("OneOneScale")
+        self.parent_obj.main_obj.window.imageView.resetTransform()
 
 
 class DoImageView(QObject):
@@ -280,6 +289,11 @@ class DoImageView(QObject):
             QGraphicsView.ScrollHandDrag
         )
         self.main_obj.window.TmpButton.clicked.connect(self.show_win_coords)
+
+        self.main_obj.window.ScaleOneOneButton.clicked.connect(
+            self.my_scene.OneOneScale
+        )
+
         self.bmp_heat = np2bmp_heat()
         self.bmp_m_cro = np2bmp_monocrome()
         self.cur_img_num = None
