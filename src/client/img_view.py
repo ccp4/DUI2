@@ -279,7 +279,7 @@ class DoImageView(QObject):
         self.main_obj.window.imageView.setDragMode(
             QGraphicsView.ScrollHandDrag
         )
-        self.main_obj.window.TmpButton.clicked.connect(self.show_win_coords)
+        self.main_obj.window.TmpButton.clicked.connect(self.slice_show_img)
 
         self.main_obj.window.ScaleOneOneButton.clicked.connect(
             self.OneOneScale
@@ -409,8 +409,7 @@ class DoImageView(QObject):
         self.cur_nod_num = nod_num
         self.cur_img_num = in_img_num
 
-    def show_win_coords(self):
-        print("show_win_coords")
+    def slice_show_img(self):
 
         viewport_rect = QRect(
             0, 0, self.main_obj.window.imageView.viewport().width(),
@@ -450,9 +449,27 @@ class DoImageView(QObject):
              x1_slice, y1_slice, x2_slice, y2_slice
         )
         try:
+
             self.np_full_img[
                 x1_slice:x2_slice, y1_slice:y2_slice
             ] = slice_img[:,:]
+
+
+            failed_attemp = '''
+            for i, j in np.nditer(
+                self.np_full_img[x1_slice:x2_slice, y1_slice:y2_slice],
+                slice_img[:,:],
+                op_flags = ['readwrite'],
+                flags = ['external_loop']
+            ):
+                i[...] = j[...]
+            '''
+
+            print("Attempt 1")
+
+
+
+
             rgb_np = self.bmp_heat.img_2d_rgb(
                 data2d = self.np_full_img, invert = False,
                 i_min_max = [-2, 50]
@@ -479,8 +496,21 @@ class DoImageView(QObject):
             "imageView.transform() =",
             self.main_obj.window.imageView.transform()
         )
+
+        print(
+            "type(imageView.transform()) =",
+            type(
+                self.main_obj.window.imageView.transform()
+            )
+        )
+
         self.main_obj.window.imageView.scale(
             relative_new_scale, relative_new_scale
+        )
+        print("\n matrix =", self.main_obj.window.imageView.matrix(), "\n")
+        print(
+            "\n type(matrix) =",
+            type(self.main_obj.window.imageView.matrix()), "\n"
         )
 
 
