@@ -225,6 +225,9 @@ def load_json_w_str(nod_num_lst = [1], img_num = 0):
     return np_array_out
 
 class ImgGraphicsScene(QGraphicsScene):
+    img_scale = Signal(float)
+
+
     def __init__(self, parent = None):
         super(ImgGraphicsScene, self).__init__(parent)
         self.parent_obj = parent
@@ -262,21 +265,9 @@ class ImgGraphicsScene(QGraphicsScene):
 
     def wheelEvent(self, event):
         float_delta = float(event.delta())
-        #print("wheelEvent(delta) =", float_delta)
         event.accept()
         new_scale = 1.0 + float_delta / 1500.0
-        #print("new_scale =", new_scale)
-
-        print(
-            "imageView.transform() =",
-            self.parent_obj.main_obj.window.imageView.transform()
-        )
-
-        self.parent_obj.main_obj.window.imageView.scale(new_scale, new_scale)
-
-    def OneOneScale(self, event):
-        print("OneOneScale")
-        self.parent_obj.main_obj.window.imageView.resetTransform()
+        self.img_scale.emit(new_scale)
 
 
 class DoImageView(QObject):
@@ -291,8 +282,10 @@ class DoImageView(QObject):
         self.main_obj.window.TmpButton.clicked.connect(self.show_win_coords)
 
         self.main_obj.window.ScaleOneOneButton.clicked.connect(
-            self.my_scene.OneOneScale
+            self.OneOneScale
         )
+
+        self.my_scene.img_scale.connect(self.scale_img)
 
         self.bmp_heat = np2bmp_heat()
         self.bmp_m_cro = np2bmp_monocrome()
@@ -337,7 +330,9 @@ class DoImageView(QObject):
                     self.img_d1_d2[0], self.img_d1_d2[1]
                 )
 
-                self.np_full_img = 50 * (self.np_full_img / self.np_full_img.max())
+                self.np_full_img = 50 * (
+                    self.np_full_img / self.np_full_img.max()
+                )
 
                 to_re_use = '''
                 self.np_full_img = load_json_w_str(
@@ -474,5 +469,18 @@ class DoImageView(QObject):
             new_pixmap = None
 
         self.my_scene(new_pixmap, [], [])
+
+    def OneOneScale(self, event):
+        print("OneOneScale")
+        self.main_obj.window.imageView.resetTransform()
+
+    def scale_img(self, relative_new_scale):
+        print(
+            "imageView.transform() =",
+            self.main_obj.window.imageView.transform()
+        )
+        self.main_obj.window.imageView.scale(
+            relative_new_scale, relative_new_scale
+        )
 
 
