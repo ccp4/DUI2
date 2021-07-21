@@ -449,10 +449,22 @@ class DoImageView(QObject):
              x1_slice, y1_slice, x2_slice, y2_slice
         )
         try:
-
+            old_stable = '''
             self.np_full_img[
                 x1_slice:x2_slice, y1_slice:y2_slice
             ] = slice_img[:,:]
+            '''
+
+            inv_scale = 2
+            self.np_full_img[
+                x1_slice:x2_slice +
+                (x2_slice - x1_slice) * (inv_scale - 1),
+                y1_slice:y2_slice +
+                (y2_slice - y1_slice) * (inv_scale - 1)
+            ] = np.repeat(np.repeat(
+                slice_img[:,:],
+                inv_scale, axis=0), inv_scale, axis=1
+            )
 
 
             failed_attemp = '''
