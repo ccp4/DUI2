@@ -466,22 +466,6 @@ class DoImageView(QObject):
                 inv_scale, axis=0), inv_scale, axis=1
             )
 
-
-            failed_attemp = '''
-            for i, j in np.nditer(
-                self.np_full_img[x1_slice:x2_slice, y1_slice:y2_slice],
-                slice_img[:,:],
-                op_flags = ['readwrite'],
-                flags = ['external_loop']
-            ):
-                i[...] = j[...]
-            '''
-
-            print("Attempt 1")
-
-
-
-
             rgb_np = self.bmp_heat.img_2d_rgb(
                 data2d = self.np_full_img, invert = False,
                 i_min_max = [-2, 50]
@@ -504,25 +488,15 @@ class DoImageView(QObject):
         self.main_obj.window.imageView.resetTransform()
 
     def scale_img(self, relative_new_scale):
-        print(
-            "imageView.transform() =",
-            self.main_obj.window.imageView.transform()
-        )
-
-        print(
-            "type(imageView.transform()) =",
-            type(
-                self.main_obj.window.imageView.transform()
-            )
-        )
-
         self.main_obj.window.imageView.scale(
             relative_new_scale, relative_new_scale
         )
-        print("\n matrix =", self.main_obj.window.imageView.matrix(), "\n")
-        print(
-            "\n type(matrix) =",
-            type(self.main_obj.window.imageView.matrix()), "\n"
-        )
-
+        avg_scale =float(
+            self.main_obj.window.imageView.transform().m11() +
+            self.main_obj.window.imageView.transform().m22()
+        ) / 2.0
+        inv_scale = int(1.0 / avg_scale)
+        if inv_scale < 1:
+            inv_scale = 1
+        print("inv_scale = ", inv_scale)
 
