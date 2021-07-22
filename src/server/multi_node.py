@@ -475,13 +475,18 @@ class Runner(object):
                             " image:", int(uni_cmd[1]), "\n uni_cmd =", uni_cmd,
                             "\n"
                         )
-                        rec_str = uni_cmd[2]
-                        print("rec_str:", rec_str, "\n")
-                        eq_pos = rec_str.find("=")
-                        left_side = rec_str[eq_pos + 1:]
-                        print("left_side =", left_side)
-                        [x1, y1, x2, y2] = left_side.split(",")
-                        print("x1, y1, x2, y2 =", x1, y1, x2, y2)
+                        for sub_par in uni_cmd[2:]:
+                            eq_pos = sub_par.find("=")
+                            left_side = sub_par[0:eq_pos]
+                            right_side = sub_par[eq_pos + 1:]
+                            if left_side == "inv_scale":
+                                inv_scale = int(right_side)
+                                print("inv_scale =", inv_scale)
+
+                            elif left_side == "view_rect":
+                                print("view_rect =", right_side)
+                                [x1, y1, x2, y2] = right_side.split(",")
+                                print("x1, y1, x2, y2 =", x1, y1, x2, y2)
 
                         #TODO remember to check if the list is empty
                         str_json = flex_arr_2_json.get_json_w_2d_slise(

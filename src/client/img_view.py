@@ -150,13 +150,14 @@ class np2bmp_monocrome(object):
         return img_array
 
 def load_slice_img_json(
-    nod_num_lst = [1], img_num = 0,
+    nod_num_lst = [1], img_num = 0, inv_scale = 1,
     x1 = 0, y1 = 0, x2 = 2527, y2 = 2463
 ):
     my_cmd_lst = [
-        "gis " + str(img_num) + " view_rect=" +
-              str(x1) + "," + str(y1) +
-        "," + str(x2) + "," + str(y2)
+        "gis " + str(img_num) +
+        " inv_scale=" + str(inv_scale) +
+        " view_rect=" + str(x1) + "," + str(y1) +
+                  "," + str(x2) + "," + str(y2)
     ]
 
 
@@ -293,6 +294,7 @@ class DoImageView(QObject):
         self.cur_nod_num = None
         self.cur_templ = None
         self.img_d1_d2 = (None, None)
+        self.inv_scale = 1
 
     def __call__(self, in_img_num, nod_in_lst):
         if nod_in_lst:
@@ -440,7 +442,8 @@ class DoImageView(QObject):
         y2_slice = int(visibleSceneCoords[2])
 
         slice_img = load_slice_img_json(
-            nod_num_lst = [self.cur_nod_num], img_num = self.cur_img_num,
+            nod_num_lst = [self.cur_nod_num],
+            img_num = self.cur_img_num, inv_scale = self.inv_scale,
             x1 = x1_slice, y1 = y1_slice,
             x2 = x2_slice, y2 = y2_slice
         )
@@ -449,22 +452,21 @@ class DoImageView(QObject):
              x1_slice, y1_slice, x2_slice, y2_slice
         )
         try:
-            old_stable = '''
             self.np_full_img[
                 x1_slice:x2_slice, y1_slice:y2_slice
             ] = slice_img[:,:]
             '''
-
-            inv_scale = 2
+            self.inv_scale = 2
             self.np_full_img[
                 x1_slice:x2_slice +
-                (x2_slice - x1_slice) * (inv_scale - 1),
+                (x2_slice - x1_slice) * (self.inv_scale - 1),
                 y1_slice:y2_slice +
-                (y2_slice - y1_slice) * (inv_scale - 1)
+                (y2_slice - y1_slice) * (self.inv_scale - 1)
             ] = np.repeat(np.repeat(
                 slice_img[:,:],
-                inv_scale, axis=0), inv_scale, axis=1
+                self.inv_scale, axis=0), self.inv_scale, axis=1
             )
+            '''
 
             rgb_np = self.bmp_heat.img_2d_rgb(
                 data2d = self.np_full_img, invert = False,
@@ -495,8 +497,8 @@ class DoImageView(QObject):
             self.main_obj.window.imageView.transform().m11() +
             self.main_obj.window.imageView.transform().m22()
         ) / 2.0
-        inv_scale = int(1.0 / avg_scale)
-        if inv_scale < 1:
-            inv_scale = 1
-        print("inv_scale = ", inv_scale)
+        self.inv_scale = int(1.0 / avg_scale)
+        if self.inv_scale < 1:
+            self.inv_scale = 1
+        print("self.inv_scale = ", self.inv_scale)
 
