@@ -160,7 +160,6 @@ def load_slice_img_json(
                   "," + str(x2) + "," + str(y2)
     ]
 
-
     my_cmd = {"nod_lst":nod_num_lst, "cmd_lst":my_cmd_lst}
     start_tm = time.time()
     try:
@@ -171,9 +170,9 @@ def load_slice_img_json(
         end_tm = time.time()
         print("request took ", end_tm - start_tm, "\n converting to dict ...")
 
+        str_data = arr_dic["str_data"]
         d1 = arr_dic["d1"]
         d2 = arr_dic["d2"]
-        str_data = arr_dic["str_data"]
         print("d1, d2 =", d1, d2)
         arr_1d = np.fromstring(str_data, dtype = float, sep = ',')
         np_array_out = arr_1d.reshape(d1, d2)
@@ -452,21 +451,19 @@ class DoImageView(QObject):
              x1_slice, y1_slice, x2_slice, y2_slice
         )
         try:
+            '''
             self.np_full_img[
                 x1_slice:x2_slice, y1_slice:y2_slice
             ] = slice_img[:,:]
             '''
-            self.inv_scale = 2
-            self.np_full_img[
-                x1_slice:x2_slice +
-                (x2_slice - x1_slice) * (self.inv_scale - 1),
-                y1_slice:y2_slice +
-                (y2_slice - y1_slice) * (self.inv_scale - 1)
-            ] = np.repeat(np.repeat(
+            rep_slice_img = np.repeat(np.repeat(
                 slice_img[:,:],
                 self.inv_scale, axis=0), self.inv_scale, axis=1
             )
-            '''
+            self.np_full_img[
+                x1_slice:x1_slice + np.size(rep_slice_img[:,0:1]),
+                y1_slice:y1_slice + np.size(rep_slice_img[0:1,:])
+            ] = rep_slice_img[:,:]
 
             rgb_np = self.bmp_heat.img_2d_rgb(
                 data2d = self.np_full_img, invert = False,

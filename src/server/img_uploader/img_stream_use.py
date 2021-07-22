@@ -14,7 +14,12 @@ def draw_pyplot(img_arr):
 def save_json_w_str(flex_array_in):
     start_tm = time.time()
     #str_data = img_stream_ext.img_arr_2_str(flex_array_in)
-    str_data = img_stream_ext.slice_arr_2_str(flex_array_in, 2,3,6,9)
+    inv_scale = 2
+    str_data = img_stream_ext.slice_arr_2_str(
+        flex_array_in,
+        inv_scale,
+        2, 3, 6, 9
+    )
     end_tm = time.time()
     '''
     print("str_data[0:80] =", str_data[0:80])
