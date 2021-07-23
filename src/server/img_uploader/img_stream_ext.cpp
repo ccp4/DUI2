@@ -119,11 +119,32 @@ std::string slice_arr_2_str( flex_double& data2d,
 
     std::cout << "looping thru (" << x2 - x1 << ", " << y2 - y1
                                   << ") ... nums \n";
+
+    int mini_x, mini_y;
+    double d_tot, mini_count;
     scaled_dx = 0;
     for (x = x1; x < x2; x = x + inv_scale) {
         scaled_dy = 0;
         for (y = y1; y < y2; y = y + inv_scale) {
-            d_num = double(data2d(x, y));
+            // d_num = double(data2d(x, y));
+            d_tot = 0;
+            mini_count = 0;
+            for (mini_x = x; mini_x < x + inv_scale; mini_x++) {
+                for (mini_y = y; mini_y < y + inv_scale; mini_y++) {
+                    d_tot = d_tot + double(data2d(mini_x, mini_y));
+                    mini_count++;
+                }
+            }
+            d_num = d_tot / mini_count;
+            if(isnan(d_num)){
+                d_num = 0;
+            }
+
+            /* only needed for debugging
+            std::cout << "d_num = " << d_num << ", d_tot = " << d_tot <<
+                         ", mini_count = " << mini_count << "\n";
+            */
+
             pos_size = sprintf( std_str, "%.2f", d_num);
             strcpy(&ch_buff[pos], std_str);
             pos = pos + pos_size;
@@ -156,7 +177,7 @@ std::string slice_arr_2_str( flex_double& data2d,
     delete ch_buff;
     return all_str;
 }
-//{"d1":4,"d2":6,"str_data":"1.00,0.00,0.00,2.00,0.00,0.00"}
+
 BOOST_PYTHON_MODULE(img_stream_ext)
 {
     using namespace boost::python;
