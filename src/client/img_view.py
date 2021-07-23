@@ -439,6 +439,26 @@ class DoImageView(QObject):
         y1_slice = int(visibleSceneCoords[0])
         x2_slice = int(visibleSceneCoords[3])
         y2_slice = int(visibleSceneCoords[2])
+        print (
+            "\n (x1_slice, y1_slice, x2_slice, y2_slice) =\n",
+            x1_slice, y1_slice, x2_slice, y2_slice
+        )
+        if x2_slice > self.img_d1_d2[0] - 1:
+            x2_slice = self.img_d1_d2[0] - 1
+
+        if y2_slice > self.img_d1_d2[1] - 1:
+            y2_slice = self.img_d1_d2[1] - 1
+
+        if x1_slice < 0:
+            x1_slice = 0
+
+        if y1_slice < 0:
+            y1_slice = 0
+        print (
+            "after border control:\n",
+            "(x1_slice, y1_slice, x2_slice, y2_slice) =\n",
+            x1_slice, y1_slice, x2_slice, y2_slice, "\n"
+        )
 
         slice_img = load_slice_img_json(
             nod_num_lst = [self.cur_nod_num],
@@ -451,19 +471,26 @@ class DoImageView(QObject):
              x1_slice, y1_slice, x2_slice, y2_slice
         )
         try:
-            '''
-            self.np_full_img[
-                x1_slice:x2_slice, y1_slice:y2_slice
-            ] = slice_img[:,:]
-            '''
             rep_slice_img = np.repeat(np.repeat(
                 slice_img[:,:],
                 self.inv_scale, axis=0), self.inv_scale, axis=1
             )
+
+            rep_len_x = np.size(rep_slice_img[:,0:1])
+            rep_len_y = np.size(rep_slice_img[0:1,:])
+
+            if x1_slice + rep_len_x > np.size(self.np_full_img[:,0:1]):
+                rep_len_x = np.size(self.np_full_img[:,0:1]) - x1_slice
+                print("limiting dx")
+
+            if y1_slice + rep_len_y > np.size(self.np_full_img[0:1,:]):
+                rep_len_y = np.size(self.np_full_img[0:1,:]) - y1_slice
+                print("limiting dy")
+
             self.np_full_img[
-                x1_slice:x1_slice + np.size(rep_slice_img[:,0:1]),
-                y1_slice:y1_slice + np.size(rep_slice_img[0:1,:])
-            ] = rep_slice_img[:,:]
+                x1_slice:x1_slice + rep_len_x,
+                y1_slice:y1_slice + rep_len_y
+            ] = rep_slice_img[0:rep_len_x, 0:rep_len_y]
 
             rgb_np = self.bmp_heat.img_2d_rgb(
                 data2d = self.np_full_img, invert = False,
