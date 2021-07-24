@@ -131,21 +131,23 @@ std::string slice_arr_2_str( flex_double& data2d,
             } else {
                 d_tot = 0;
                 mini_count = 0;
+
                 for (mini_x = x;
-                     mini_x < x + inv_scale and mini_x < d1;
-                     mini_x++) {
+                      mini_x < x + inv_scale and mini_x < d1;
+                       mini_x++) {
                     for (mini_y = y;
-                         mini_y < y + inv_scale and mini_y < d2;
-                         mini_y++) {
+                          mini_y < y + inv_scale and mini_y < d2;
+                           mini_y++) {
                         d_tot = d_tot + double(data2d(mini_x, mini_y));
                         mini_count++;
                     }
                 }
                 d_num = d_tot / mini_count;
                 if(isnan(d_num)){
-                    d_num = 0;
-                    std::cout << "d_num = " << d_num << ", d_tot = " << d_tot
+                    std::cout << "some NAN in inner loop \n"
+                          << "d_num = " << d_num << ", d_tot = " << d_tot
                           << ", mini_count = " << mini_count << "\n";
+                    d_num = 0;
                 }
             }
 
