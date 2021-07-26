@@ -275,7 +275,9 @@ class DoImageView(QObject):
             QGraphicsView.ScrollHandDrag
         )
         self.main_obj.window.TmpButton.clicked.connect(self.slice_show_img)
-
+        self.main_obj.window.Full_Load_Button.clicked.connect(
+            self.full_img_show
+        )
         self.main_obj.window.ScaleOneOneButton.clicked.connect(
             self.OneOneScale
         )
@@ -327,11 +329,6 @@ class DoImageView(QObject):
                     self.np_full_img / self.np_full_img.max()
                 )
 
-                to_re_use = '''
-                self.np_full_img = load_json_w_str(
-                    nod_num_lst = [nod_num], img_num = in_img_num
-                )
-                '''
                 try:
                     rgb_np = self.bmp_heat.img_2d_rgb(
                         data2d = self.np_full_img, invert = False,
@@ -400,6 +397,29 @@ class DoImageView(QObject):
         self.my_scene(new_pixmap, refl_list0, refl_list1)
         self.cur_nod_num = nod_num
         self.cur_img_num = in_img_num
+
+    def full_img_show(self):
+        print("full_img_show")
+        self.np_full_img = load_json_w_str(
+            nod_num_lst = [self.cur_nod_num], img_num = self.cur_img_num
+        )
+        try:
+            rgb_np = self.bmp_heat.img_2d_rgb(
+                data2d = self.np_full_img, invert = False,
+                i_min_max = [-2, 50]
+            )
+            q_img = QImage(
+                rgb_np.data,
+                np.size(rgb_np[0:1, :, 0:1]),
+                np.size(rgb_np[:, 0:1, 0:1]),
+                QImage.Format_ARGB32
+            )
+            new_pixmap = QPixmap.fromImage(q_img)
+
+        except TypeError:
+            print("None self.np_full_img")
+            new_pixmap =  None
+        self.my_scene(new_pixmap, [], [])
 
     def slice_show_img(self):
 
