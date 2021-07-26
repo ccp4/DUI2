@@ -38,7 +38,6 @@ def crunch_min_max(data2d, i_min_max):
 
 class np2bmp_heat(object):
     def __init__(self):
-
         self.red_byte = np.empty( (255 * 3), 'int')
         self.green_byte = np.empty( (255 * 3), 'int')
         self.blue_byte = np.empty( (255 * 3), 'int')
@@ -57,14 +56,12 @@ class np2bmp_heat(object):
         self.red_byte[764] = 255
         self.green_byte[764] = 255
 
-
     def img_2d_rgb(
         self, data2d = None, invert = False, i_min_max = [None, None]
     ):
         data2d_pos, data2d_pos_max, self.width, self.height = crunch_min_max(
             data2d, i_min_max
         )
-
         div_scale = 764.0 / data2d_pos_max
         data2d_scale = np.multiply(data2d_pos, div_scale)
         if(invert == True):
@@ -231,7 +228,6 @@ class ImgGraphicsScene(QGraphicsScene):
         super(ImgGraphicsScene, self).__init__(parent)
         self.parent_obj = parent
         self.curr_pixmap = None
-        #print("\n dir(QGraphicsScene): \n", dir(self))
 
     def __call__(self, new_pixmap, refl_list0, refl_list1):
         self.clear()
@@ -304,9 +300,6 @@ class DoImageView(QObject):
         cmd = {'nod_lst': [nod_num], 'cmd_lst': ["gt"]}
         json_data_lst = json_data_request(uni_url, cmd)
 
-        print("\n my_scene.width =", self.my_scene.width())
-        print("my_scene.height =", self.my_scene.height(),"\n")
-
         try:
             new_templ = json_data_lst[0]
             self.img_d1_d2 = (
@@ -362,7 +355,6 @@ class DoImageView(QObject):
             #TODO check what happens here if the user navigates
             #     to a different dataset
 
-        ################################ refl_list 0/1 work
         refl_list0 = []
         refl_list1 = []
         if nod_in_lst:
