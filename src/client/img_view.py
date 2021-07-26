@@ -494,5 +494,5 @@ class DoImageView(QObject):
         if self.inv_scale < 1:
             self.inv_scale = 1
 
-        print("self.inv_scale = ", self.inv_scale)
-
+        str_label = "1 / scale = " + str(self.inv_scale)
+        self.main_obj.window.InvScaleLabel.setText(str_label)
