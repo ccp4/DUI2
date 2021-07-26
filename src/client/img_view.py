@@ -227,7 +227,6 @@ def load_json_w_str(nod_num_lst = [1], img_num = 0):
 class ImgGraphicsScene(QGraphicsScene):
     img_scale = Signal(float)
 
-
     def __init__(self, parent = None):
         super(ImgGraphicsScene, self).__init__(parent)
         self.parent_obj = parent
@@ -416,33 +415,16 @@ class DoImageView(QObject):
             0, 0, self.main_obj.window.imageView.viewport().width(),
             self.main_obj.window.imageView.viewport().height()
         )
-
         visibleSceneRect = self.main_obj.window.imageView.mapToScene(
             viewport_rect
         ).boundingRect()
-
         visibleSceneCoords = visibleSceneRect.getCoords()
-
-        print("\n viewport_rect =", viewport_rect)
-        print("visibleSceneRect =", visibleSceneRect, "\n")
-
-        self.my_scene.addRect(
-            visibleSceneRect,
-            QPen(
-                Qt.green, 1.6, Qt.SolidLine,
-                Qt.RoundCap, Qt.RoundJoin
-                )
-            )
-
         print("visibleSceneCoords =", visibleSceneCoords)
         x1_slice = int(visibleSceneCoords[1])
         y1_slice = int(visibleSceneCoords[0])
         x2_slice = int(visibleSceneCoords[3])
         y2_slice = int(visibleSceneCoords[2])
-        print (
-            "\n (x1_slice, y1_slice, x2_slice, y2_slice) =\n",
-            x1_slice, y1_slice, x2_slice, y2_slice
-        )
+
         if x2_slice > self.img_d1_d2[0] - 1:
             x2_slice = self.img_d1_d2[0] - 1
 
@@ -454,11 +436,6 @@ class DoImageView(QObject):
 
         if y1_slice < 0:
             y1_slice = 0
-        print (
-            "after border control:\n",
-            "(x1_slice, y1_slice, x2_slice, y2_slice) =\n",
-            x1_slice, y1_slice, x2_slice, y2_slice, "\n"
-        )
 
         slice_img = load_slice_img_json(
             nod_num_lst = [self.cur_nod_num],
@@ -524,5 +501,6 @@ class DoImageView(QObject):
         self.inv_scale = int(1.0 / avg_scale)
         if self.inv_scale < 1:
             self.inv_scale = 1
+
         print("self.inv_scale = ", self.inv_scale)
 
