@@ -328,22 +328,7 @@ class DoImageView(QObject):
                 self.np_full_img = 50 * (
                     self.np_full_img / self.np_full_img.max()
                 )
-
-                try:
-                    rgb_np = self.bmp_heat.img_2d_rgb(
-                        data2d = self.np_full_img, invert = False,
-                        i_min_max = [-2, 50]
-                    )
-                    q_img = QImage(
-                        rgb_np.data,
-                        np.size(rgb_np[0:1, :, 0:1]),
-                        np.size(rgb_np[:, 0:1, 0:1]),
-                        QImage.Format_ARGB32
-                    )
-                    new_pixmap = QPixmap.fromImage(q_img)
-
-                except TypeError:
-                    print("None self.np_full_img")
+                new_pixmap = self.get_new_pixmap()
 
             self.cur_templ = new_templ
 
@@ -398,11 +383,7 @@ class DoImageView(QObject):
         self.cur_nod_num = nod_num
         self.cur_img_num = in_img_num
 
-    def full_img_show(self):
-        print("full_img_show")
-        self.np_full_img = load_json_w_str(
-            nod_num_lst = [self.cur_nod_num], img_num = self.cur_img_num
-        )
+    def get_new_pixmap(self):
         try:
             rgb_np = self.bmp_heat.img_2d_rgb(
                 data2d = self.np_full_img, invert = False,
@@ -414,11 +395,18 @@ class DoImageView(QObject):
                 np.size(rgb_np[:, 0:1, 0:1]),
                 QImage.Format_ARGB32
             )
-            new_pixmap = QPixmap.fromImage(q_img)
+            return QPixmap.fromImage(q_img)
 
         except TypeError:
             print("None self.np_full_img")
-            new_pixmap =  None
+            return None
+
+    def full_img_show(self):
+        print("full_img_show")
+        self.np_full_img = load_json_w_str(
+            nod_num_lst = [self.cur_nod_num], img_num = self.cur_img_num
+        )
+        new_pixmap = self.get_new_pixmap()
         self.my_scene(new_pixmap, [], [])
 
     def slice_show_img(self):
@@ -459,43 +447,27 @@ class DoImageView(QObject):
             "x1_slice, y1_slice, x2_slice, y2_slice = ",
              x1_slice, y1_slice, x2_slice, y2_slice
         )
-        try:
-            rep_slice_img = np.repeat(np.repeat(
-                slice_img[:,:],
-                self.inv_scale, axis=0), self.inv_scale, axis=1
-            )
+        rep_slice_img = np.repeat(np.repeat(
+            slice_img[:,:],
+            self.inv_scale, axis=0), self.inv_scale, axis=1
+        )
 
-            rep_len_x = np.size(rep_slice_img[:,0:1])
-            rep_len_y = np.size(rep_slice_img[0:1,:])
+        rep_len_x = np.size(rep_slice_img[:,0:1])
+        rep_len_y = np.size(rep_slice_img[0:1,:])
 
-            if x1_slice + rep_len_x > np.size(self.np_full_img[:,0:1]):
-                rep_len_x = np.size(self.np_full_img[:,0:1]) - x1_slice
-                print("limiting dx")
+        if x1_slice + rep_len_x > np.size(self.np_full_img[:,0:1]):
+            rep_len_x = np.size(self.np_full_img[:,0:1]) - x1_slice
+            print("limiting dx")
 
-            if y1_slice + rep_len_y > np.size(self.np_full_img[0:1,:]):
-                rep_len_y = np.size(self.np_full_img[0:1,:]) - y1_slice
-                print("limiting dy")
+        if y1_slice + rep_len_y > np.size(self.np_full_img[0:1,:]):
+            rep_len_y = np.size(self.np_full_img[0:1,:]) - y1_slice
+            print("limiting dy")
 
-            self.np_full_img[
-                x1_slice:x1_slice + rep_len_x,
-                y1_slice:y1_slice + rep_len_y
-            ] = rep_slice_img[0:rep_len_x, 0:rep_len_y]
-
-            rgb_np = self.bmp_heat.img_2d_rgb(
-                data2d = self.np_full_img, invert = False,
-                i_min_max = [-2, 50]
-            )
-            q_img = QImage(
-                rgb_np.data,
-                np.size(rgb_np[0:1, :, 0:1]),
-                np.size(rgb_np[:, 0:1, 0:1]),
-                QImage.Format_ARGB32
-            )
-            new_pixmap = QPixmap.fromImage(q_img)
-
-        except TypeError:
-            new_pixmap = None
-
+        self.np_full_img[
+            x1_slice:x1_slice + rep_len_x,
+            y1_slice:y1_slice + rep_len_y
+        ] = rep_slice_img[0:rep_len_x, 0:rep_len_y]
+        new_pixmap = self.get_new_pixmap()
         self.my_scene(new_pixmap, [], [])
 
     def OneOneScale(self, event):
