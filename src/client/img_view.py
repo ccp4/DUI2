@@ -293,6 +293,9 @@ class DoImageView(QObject):
         self.inv_scale = 1
 
     def __call__(self, in_img_num, nod_in_lst):
+        self.r_list0 = []
+        self.r_list1 = []
+
         if nod_in_lst:
             nod_num = self.main_obj.current_nod_num
 
@@ -328,8 +331,6 @@ class DoImageView(QObject):
                 self.np_full_img = 50 * (
                     self.np_full_img / self.np_full_img.max()
                 )
-                new_pixmap = self.get_new_pixmap()
-
             self.cur_templ = new_templ
 
         except IndexError:
@@ -337,8 +338,6 @@ class DoImageView(QObject):
             #TODO check what happens here if the user navigates
             #     to a different dataset
 
-        refl_list0 = []
-        refl_list1 = []
         if nod_in_lst:
             my_cmd = {
                 'nod_lst': [nod_num], 'cmd_lst': ["grl " + str(in_img_num)]
@@ -346,7 +345,7 @@ class DoImageView(QObject):
             json_lst = json_data_request(uni_url, my_cmd)
             try:
                 for inner_list in json_lst[0]:
-                    refl_list0.append(
+                    self.r_list0.append(
                         {
                             "x"      : float(inner_list[0]),
                             "y"      : float(inner_list[1]),
@@ -362,7 +361,7 @@ class DoImageView(QObject):
                     xrs_size = int(lst_str1[2])
                     size2 = int(lst_str1[3])
                     local_hkl = str(inner_list[1])
-                    refl_list1.append(
+                    self.r_list1.append(
                        {
                          "x_ini"       : x_ini     ,
                          "y_ini"       : y_ini     ,
@@ -379,7 +378,8 @@ class DoImageView(QObject):
         else:
             print("No reflection list to show (known not to be)")
 
-        self.my_scene(new_pixmap, refl_list0, refl_list1)
+        self.get_new_pixmap()
+
         self.cur_nod_num = nod_num
         self.cur_img_num = in_img_num
 
@@ -395,19 +395,18 @@ class DoImageView(QObject):
                 np.size(rgb_np[:, 0:1, 0:1]),
                 QImage.Format_ARGB32
             )
-            return QPixmap.fromImage(q_img)
+            new_pixmap = QPixmap.fromImage(q_img)
+            self.my_scene(new_pixmap, self.r_list0, self.r_list1)
 
         except TypeError:
             print("None self.np_full_img")
-            return None
 
     def full_img_show(self):
         print("full_img_show")
         self.np_full_img = load_json_w_str(
             nod_num_lst = [self.cur_nod_num], img_num = self.cur_img_num
         )
-        new_pixmap = self.get_new_pixmap()
-        self.my_scene(new_pixmap, [], [])
+        self.get_new_pixmap()
 
     def slice_show_img(self):
 
@@ -467,8 +466,7 @@ class DoImageView(QObject):
             x1_slice:x1_slice + rep_len_x,
             y1_slice:y1_slice + rep_len_y
         ] = rep_slice_img[0:rep_len_x, 0:rep_len_y]
-        new_pixmap = self.get_new_pixmap()
-        self.my_scene(new_pixmap, [], [])
+        self.get_new_pixmap()
 
     def OneOneScale(self, event):
         print("OneOneScale")
