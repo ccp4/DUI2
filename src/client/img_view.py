@@ -378,12 +378,12 @@ class DoImageView(QObject):
         else:
             print("No reflection list to show (known not to be)")
 
-        self.get_new_pixmap()
+        self.refresh_pixel_map()
 
         self.cur_nod_num = nod_num
         self.cur_img_num = in_img_num
 
-    def get_new_pixmap(self):
+    def refresh_pixel_map(self):
         try:
             rgb_np = self.bmp_heat.img_2d_rgb(
                 data2d = self.np_full_img, invert = False,
@@ -406,7 +406,7 @@ class DoImageView(QObject):
         self.np_full_img = load_json_w_str(
             nod_num_lst = [self.cur_nod_num], img_num = self.cur_img_num
         )
-        self.get_new_pixmap()
+        self.refresh_pixel_map()
 
     def slice_show_img(self):
 
@@ -466,7 +466,7 @@ class DoImageView(QObject):
             x1_slice:x1_slice + rep_len_x,
             y1_slice:y1_slice + rep_len_y
         ] = rep_slice_img[0:rep_len_x, 0:rep_len_y]
-        self.get_new_pixmap()
+        self.refresh_pixel_map()
 
     def OneOneScale(self, event):
         print("OneOneScale")
