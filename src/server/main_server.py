@@ -30,11 +30,8 @@ import multi_node
 
 class ReqHandler(http.server.BaseHTTPRequestHandler):
     def do_GET(self):
-        self.send_response(200)
-        self.send_header("Content-type", "text/html")
-        self.end_headers()
-        first_str_out = 'Received request:' + str(self) + '\n'
 
+        self.send_response(200)
         url_path = self.path
         url_dict = parse_qs(urlparse(url_path).query)
         print("url_dict =", url_dict)
@@ -44,6 +41,8 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
 
         except KeyError:
             print("no command in request (KeyError)")
+            self.send_header('Content-type', 'text/plain')
+            self.end_headers()
             self.wfile.write(bytes(
                 'no command in request (KeyError) \n', 'utf-8'
             ))
@@ -71,19 +70,29 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
             lst_out = cmd_tree_runner.run_dict(cmd_dict, self)
 
             if type(lst_out) is list:
+                self.send_header('Content-type', 'text/plain')
+                self.end_headers()
                 json_str = json.dumps(lst_out) + '\n'
                 self.wfile.write(bytes(json_str, 'utf-8'))
 
             elif type(lst_out) is bytes:
+                siz_str = str(len(lst_out))
+                print("size =", siz_str)
+
+                self.send_header('Content-type', 'application/zlib')
+                self.send_header('Content-Length', siz_str)
+                self.end_headers()
+
                 byt_data = zlib.compress(lst_out)
                 self.wfile.write(bytes(byt_data))
 
             else:
                 try:
+                    self.send_header('Content-type', 'text/plain')
+                    self.end_headers()
                     f = open(lst_out, "r")
                     str_lst = f.readlines()
                     f.close()
-
                     for lin in str_lst:
                         self.wfile.write(bytes(lin, 'utf-8'))
 
@@ -113,7 +122,7 @@ if __name__ == "__main__":
     except FileNotFoundError:
         print("Starting from hacked multiple import")
         cmd_tree_runner = multi_node.Runner(None)
-        '''
+        #'''
         #temp hack
         lst_dic = [
             {'nod_lst': [0], 'cmd_lst': [['ip', 'x41']]},

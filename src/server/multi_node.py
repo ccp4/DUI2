@@ -233,6 +233,8 @@ class CmdNode(object):
         n_Broken_Pipes = 0
         if self.nod_req is not None:
             try:
+                self.nod_req.send_header('Content-type', 'text/plain')
+                self.nod_req.end_headers()
                 str_nod_num = "node.number=" + str(self.number) + "\n"
                 self.nod_req.wfile.write(bytes(str_nod_num , 'utf-8'))
 
@@ -320,9 +322,6 @@ class CmdNode(object):
         if self.status == "Busy":
             print("attempting to stop the execution of node", self.number)
             try:
-                self.nod_req.wfile.write(
-                    bytes("attempting to stop \n" , 'utf-8')
-                )
                 pid_num = self.my_proc.pid
                 parent_proc = psutil.Process(pid_num)
                 for child in parent_proc.children(recursive=True):
@@ -557,7 +556,7 @@ class Runner(object):
         return return_list
 
     def _create_step(self, prev_step_lst):
-        new_step = CmdNode(parent_lst_in=prev_step_lst)
+        new_step = CmdNode(parent_lst_in = prev_step_lst)
 
         tmp_big = 0
         for node in self.step_list:

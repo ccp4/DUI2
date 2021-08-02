@@ -161,6 +161,9 @@ def load_slice_img_json(
     start_tm = time.time()
     try:
         req_get = requests.get(uni_url, stream = True, params = my_cmd)
+        print("length =",
+            req_get.headers.get('content-length', '0')
+        )
         compresed = req_get.content
         dic_str = zlib.decompress(compresed)
         arr_dic = json.loads(dic_str)
@@ -194,6 +197,10 @@ def load_json_w_str(nod_num_lst = [1], img_num = 0):
     start_tm = time.time()
     try:
         req_get = requests.get(uni_url, stream = True, params = my_cmd)
+        print("length =",
+            req_get.headers.get('content-length', '0')
+        )
+
         compresed = req_get.content
         dic_str = zlib.decompress(compresed)
         arr_dic = json.loads(dic_str)
