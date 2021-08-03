@@ -474,6 +474,7 @@ class Runner(object):
                             " image:", int(uni_cmd[1]), "\n uni_cmd =", uni_cmd,
                             "\n"
                         )
+                        inv_scale = 1
                         for sub_par in uni_cmd[2:]:
                             eq_pos = sub_par.find("=")
                             left_side = sub_par[0:eq_pos]

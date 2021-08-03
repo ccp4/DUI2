@@ -87,9 +87,9 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
                 self.wfile.write(bytes(byt_data))
 
             else:
+                self.send_header('Content-type', 'text/plain')
+                self.end_headers()
                 try:
-                    self.send_header('Content-type', 'text/plain')
-                    self.end_headers()
                     f = open(lst_out, "r")
                     str_lst = f.readlines()
                     f.close()
