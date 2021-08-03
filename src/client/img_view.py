@@ -192,23 +192,24 @@ def load_slice_img_json(
         np_array_out = arr_1d.reshape(d1, d2)
 
     except zlib.error:
-        print("zlib.error(load_json_w_str)")
+        print("zlib.error(load_slice_img_json)")
         return None
 
     except ConnectionError:
-        print("\n ConnectionError (load_json_w_str) \n")
+        print("\n ConnectionError (load_slice_img_json) \n")
         return None
 
     except requests.exceptions.RequestException:
-        print("\n requests.exceptions.RequestException (load_json_w_str) \n")
+        print(
+            "\n requests.exceptions.RequestException (load_slice_img_json) \n"
+        )
         return None
 
     return np_array_out
 
-def load_json_w_str(nod_num_lst = [1], img_num = 0):
+def load_json_w_str(main_obj, nod_num_lst = [1], img_num = 0):
     my_cmd_lst = ["gi " + str(img_num)]
     my_cmd = {"nod_lst":nod_num_lst, "cmd_lst":my_cmd_lst}
-    start_tm = time.time()
 
     print("\n full img here \n")
     try:
@@ -220,6 +221,7 @@ def load_json_w_str(nod_num_lst = [1], img_num = 0):
         compresed = req_get.content
         '''
         #################################################################
+        start_tm = time.time()
         req_get = requests.get(uni_url, stream=True, params = my_cmd)
         total_size = int(req_get.headers.get('content-length', 0))
         print("total_size =", total_size)
@@ -230,7 +232,11 @@ def load_json_w_str(nod_num_lst = [1], img_num = 0):
         for data in req_get.iter_content(block_size):
             compresed += data
             downloaded_size += block_size
-            print("downloaded =", downloaded_size / total_size)
+            progress = int(100.0 * (downloaded_size / total_size))
+            main_obj.window.OutuputStatLabel.setText(
+                '  Loading: ' + str(progress) + " %  "
+            )
+            main_obj.parent_app.processEvents()
         #################################################################
 
         dic_str = zlib.decompress(compresed)
@@ -254,6 +260,10 @@ def load_json_w_str(nod_num_lst = [1], img_num = 0):
 
     except requests.exceptions.RequestException:
         print("\n requests.exceptions.RequestException (load_json_w_str) \n")
+        return None
+
+    except ZeroDivisionError:
+        print("\n ZeroDivisionError (load_json_w_str) \n")
         return None
 
     return np_array_out
@@ -439,11 +449,15 @@ class DoImageView(QObject):
             print("None self.np_full_img")
 
     def full_img_show(self):
+        self.load_started()
         print("full_img_show")
         self.np_full_img = load_json_w_str(
-            nod_num_lst = [self.cur_nod_num], img_num = self.cur_img_num
+            main_obj = self.main_obj,
+            nod_num_lst = [self.cur_nod_num],
+            img_num = self.cur_img_num
         )
         self.refresh_pixel_map()
+        self.load_finished()
 
     def slice_show_img(self):
 
@@ -523,3 +537,20 @@ class DoImageView(QObject):
 
         str_label = "1 / scale = " + str(self.inv_scale)
         self.main_obj.window.InvScaleLabel.setText(str_label)
+
+
+    def load_started(self):
+        self.main_obj.window.OutuputStatLabel.setStyleSheet(
+            "QLabel { background-color : green; color : yellow; }"
+        )
+        self.main_obj.window.OutuputStatLabel.setText('  Loading  ')
+        self.main_obj.parent_app.processEvents()
+        print("RAM load_started")
+
+    def load_finished(self):
+        print("RAM load_finished")
+        self.main_obj.window.OutuputStatLabel.setStyleSheet(
+            "QLabel { background-color : white; color : blue; }"
+        )
+        self.main_obj.window.OutuputStatLabel.setText('  Ready  ')
+
