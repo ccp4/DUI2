@@ -76,14 +76,14 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
                 self.wfile.write(bytes(json_str, 'utf-8'))
 
             elif type(lst_out) is bytes:
-                siz_str = str(len(lst_out))
-                print("size =", siz_str)
+                byt_data = zlib.compress(lst_out)
+                siz_dat = str(len(byt_data))
+                print("size =", siz_dat)
 
                 self.send_header('Content-type', 'application/zlib')
-                self.send_header('Content-Length', siz_str)
+                self.send_header('Content-Length', siz_dat)
                 self.end_headers()
 
-                byt_data = zlib.compress(lst_out)
                 self.wfile.write(bytes(byt_data))
 
             else:
