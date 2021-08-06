@@ -57,6 +57,7 @@ class HandleLoadStatusLabel(QObject):
             "QLabel { background-color : white; color : blue; }"
         )
         self.main_obj.window.OutuputStatLabel.setText('  Ready  ')
+        self.main_obj.parent_app.processEvents()
 
 
 

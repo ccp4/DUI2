@@ -207,7 +207,7 @@ def load_slice_img_json(
 
     return np_array_out
 
-def load_json_w_str(main_obj, nod_num_lst = [1], img_num = 0):
+def load_json_w_str(parent_obj, nod_num_lst = [1], img_num = 0):
     my_cmd_lst = ["gi " + str(img_num)]
     my_cmd = {"nod_lst":nod_num_lst, "cmd_lst":my_cmd_lst}
 
@@ -233,10 +233,7 @@ def load_json_w_str(main_obj, nod_num_lst = [1], img_num = 0):
             compresed += data
             downloaded_size += block_size
             progress = int(100.0 * (downloaded_size / total_size))
-            main_obj.window.OutuputStatLabel.setText(
-                '  Loading: ' + str(progress) + " %  "
-            )
-            main_obj.parent_app.processEvents()
+            parent_obj.load_progress(progress)
         #################################################################
 
         dic_str = zlib.decompress(compresed)
@@ -452,7 +449,7 @@ class DoImageView(QObject):
         self.load_started()
         print("full_img_show")
         self.np_full_img = load_json_w_str(
-            main_obj = self.main_obj,
+            parent_obj = self,
             nod_num_lst = [self.cur_nod_num],
             img_num = self.cur_img_num
         )
@@ -546,6 +543,17 @@ class DoImageView(QObject):
         self.main_obj.window.OutuputStatLabel.setText('  Loading  ')
         self.main_obj.parent_app.processEvents()
         print("RAM load_started")
+
+    def load_progress(self, progress):
+        self.main_obj.window.OutuputStatLabel.setStyleSheet(
+            "QLabel { background-color : green; color : yellow; }"
+        )
+        self.main_obj.window.OutuputStatLabel.setText(
+            '  Loading: ' + str(progress) + " %  "
+        )
+        self.main_obj.parent_app.processEvents()
+
+
 
     def load_finished(self):
         print("RAM load_finished")
