@@ -149,7 +149,7 @@ class np2bmp_monocrome(object):
         return img_array
 
 def load_slice_img_json(
-    nod_num_lst = [1], img_num = 0, inv_scale = 1,
+    parent_obj, nod_num_lst = [1], img_num = 0, inv_scale = 1,
     x1 = 0, y1 = 0, x2 = 2527, y2 = 2463
 ):
     my_cmd_lst = [
@@ -179,7 +179,8 @@ def load_slice_img_json(
         for data in req_get.iter_content(block_size):
             compresed += data
             downloaded_size += block_size
-            print("downloaded =", downloaded_size / total_size)
+            progress = int(100.0 * (downloaded_size / total_size))
+            parent_obj.l_stat.load_progress(progress)
         ####################################################################
         dic_str = zlib.decompress(compresed)
         arr_dic = json.loads(dic_str)
@@ -462,7 +463,7 @@ class DoImageView(QObject):
         self.l_stat.load_finished()
 
     def slice_show_img(self):
-
+        self.l_stat.load_started()
         viewport_rect = QRect(
             0, 0, self.main_obj.window.imageView.viewport().width(),
             self.main_obj.window.imageView.viewport().height()
@@ -490,7 +491,7 @@ class DoImageView(QObject):
             y1_slice = 0
 
         slice_img = load_slice_img_json(
-            nod_num_lst = [self.cur_nod_num],
+            parent_obj = self, nod_num_lst = [self.cur_nod_num],
             img_num = self.cur_img_num, inv_scale = self.inv_scale,
             x1 = x1_slice, y1 = y1_slice,
             x2 = x2_slice, y2 = y2_slice
@@ -520,6 +521,7 @@ class DoImageView(QObject):
             y1_slice:y1_slice + rep_len_y
         ] = rep_slice_img[0:rep_len_x, 0:rep_len_y]
         self.refresh_pixel_map()
+        self.l_stat.load_finished()
 
     def OneOneScale(self, event):
         print("OneOneScale")
@@ -539,33 +541,4 @@ class DoImageView(QObject):
 
         str_label = "1 / scale = " + str(self.inv_scale)
         self.main_obj.window.InvScaleLabel.setText(str_label)
-
-
-    to_remove = '''
-    def load_started(self):
-        self.main_obj.window.OutuputStatLabel.setStyleSheet(
-            "QLabel { background-color : green; color : yellow; }"
-        )
-        self.main_obj.window.OutuputStatLabel.setText('  Loading  ')
-        self.main_obj.parent_app.processEvents()
-        print("RAM load_started")
-
-    def load_progress(self, progress):
-        self.main_obj.window.OutuputStatLabel.setStyleSheet(
-            "QLabel { background-color : green; color : yellow; }"
-        )
-        self.main_obj.window.OutuputStatLabel.setText(
-            '  Loading: ' + str(progress) + " %  "
-        )
-        self.main_obj.parent_app.processEvents()
-
-
-
-    def load_finished(self):
-        print("RAM load_finished")
-        self.main_obj.window.OutuputStatLabel.setStyleSheet(
-            "QLabel { background-color : white; color : blue; }"
-        )
-        self.main_obj.window.OutuputStatLabel.setText('  Ready  ')
-    '''
 
