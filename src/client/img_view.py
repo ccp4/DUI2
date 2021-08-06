@@ -307,10 +307,22 @@ class ImgGraphicsScene(QGraphicsScene):
 
     def wheelEvent(self, event):
         float_delta = float(event.delta())
-        event.accept()
         new_scale = 1.0 + float_delta / 1500.0
         self.img_scale.emit(new_scale)
+        print("wheelEvent")
+        event.accept()
 
+    def mousePressEvent(self, event):
+        print("mousePressEvent")
+        #event.accept()
+
+    def mouseMoveEvent(self, event):
+        print("mouseMoveEvent")
+        event.accept()
+
+    def mouseReleaseEvent(self, event):
+        print("mouseReleaseEvent")
+        #event.accept()
 
 class DoImageView(QObject):
     def __init__(self, parent = None):
