@@ -29,11 +29,51 @@ from PySide2.QtGui import *
 
 from exec_utils import json_data_request, uni_url
 
+class HandleLoadStatusLabel(QObject):
+    def __init__(self, parent = None):
+        super(HandleLoadStatusLabel, self).__init__(parent)
+        self.main_obj = parent
+
+    def load_started(self):
+        self.main_obj.window.OutuputStatLabel.setStyleSheet(
+            "QLabel { background-color : green; color : yellow; }"
+        )
+        self.main_obj.window.OutuputStatLabel.setText('  Loading  ')
+        self.main_obj.parent_app.processEvents()
+        print("RAM load_started")
+
+    def load_progress(self, progress):
+        self.main_obj.window.OutuputStatLabel.setStyleSheet(
+            "QLabel { background-color : green; color : yellow; }"
+        )
+        self.main_obj.window.OutuputStatLabel.setText(
+            '  Loading: ' + str(progress) + " %  "
+        )
+        self.main_obj.parent_app.processEvents()
+
+    def load_finished(self):
+        print("RAM load_finished")
+        self.main_obj.window.OutuputStatLabel.setStyleSheet(
+            "QLabel { background-color : white; color : blue; }"
+        )
+        self.main_obj.window.OutuputStatLabel.setText('  Ready  ')
+
+
+
 class DoLoadHTML(QObject):
     def __init__(self, parent = None):
         super(DoLoadHTML, self).__init__(parent)
         self.main_obj = parent
-        self.connect_loads()
+        self.l_stat = HandleLoadStatusLabel(self.main_obj)
+        self.main_obj.window.HtmlReport.loadStarted.connect(
+            self.l_stat.load_started
+        )
+        self.main_obj.window.HtmlReport.loadProgress.connect(
+            self.l_stat.load_progress
+        )
+        self.main_obj.window.HtmlReport.loadFinished.connect(
+            self.l_stat.load_finished
+        )
         self.lst_html = []
 
         first_half = """<html>
@@ -135,47 +175,6 @@ class DoLoadHTML(QObject):
 
         else:
             self.main_obj.window.HtmlReport.setHtml(self.not_avail_html)
-
-    def connect_loads(self):
-        self.l_stat = HandleLoadStatusLabel(self.main_obj)
-        self.main_obj.window.HtmlReport.loadStarted.connect(
-            self.l_stat.load_started
-        )
-        self.main_obj.window.HtmlReport.loadProgress.connect(
-            self.l_stat.load_progress
-        )
-        self.main_obj.window.HtmlReport.loadFinished.connect(
-            self.l_stat.load_finished
-        )
-
-class HandleLoadStatusLabel(QObject):
-    def __init__(self, parent = None):
-        super(HandleLoadStatusLabel, self).__init__(parent)
-        self.main_obj = parent
-
-    def load_started(self):
-        self.main_obj.window.OutuputStatLabel.setStyleSheet(
-            "QLabel { background-color : green; color : yellow; }"
-        )
-        self.main_obj.window.OutuputStatLabel.setText('  Loading  ')
-        self.main_obj.parent_app.processEvents()
-        print("RAM load_started")
-
-    def load_progress(self, progress):
-        self.main_obj.window.OutuputStatLabel.setStyleSheet(
-            "QLabel { background-color : green; color : yellow; }"
-        )
-        self.main_obj.window.OutuputStatLabel.setText(
-            '  Loading: ' + str(progress) + " %  "
-        )
-        self.main_obj.parent_app.processEvents()
-
-    def load_finished(self):
-        print("RAM load_finished")
-        self.main_obj.window.OutuputStatLabel.setStyleSheet(
-            "QLabel { background-color : white; color : blue; }"
-        )
-        self.main_obj.window.OutuputStatLabel.setText('  Ready  ')
 
 
 class ShowLog(QObject):
