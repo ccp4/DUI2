@@ -451,9 +451,7 @@ class DoImageView(QObject):
             print("None self.np_full_img")
 
     def full_img_show(self):
-        #self.load_started()
         self.l_stat.load_started()
-
         print("full_img_show")
         self.np_full_img = load_json_w_str(
             parent_obj = self,
@@ -461,8 +459,6 @@ class DoImageView(QObject):
             img_num = self.cur_img_num
         )
         self.refresh_pixel_map()
-
-        #self.load_finished()
         self.l_stat.load_finished()
 
     def slice_show_img(self):
