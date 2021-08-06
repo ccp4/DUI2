@@ -12,6 +12,8 @@ import requests
 
 from exec_utils import json_data_request, uni_url
 
+from outputs import HandleLoadStatusLabel
+
 def crunch_min_max(data2d, i_min_max):
     data2d_ini = np.copy(data2d)
     if(i_min_max == [None, None]):
@@ -233,7 +235,7 @@ def load_json_w_str(parent_obj, nod_num_lst = [1], img_num = 0):
             compresed += data
             downloaded_size += block_size
             progress = int(100.0 * (downloaded_size / total_size))
-            parent_obj.load_progress(progress)
+            parent_obj.l_stat.load_progress(progress)
         #################################################################
 
         dic_str = zlib.decompress(compresed)
@@ -313,6 +315,9 @@ class DoImageView(QObject):
     def __init__(self, parent = None):
         super(DoImageView, self).__init__(parent)
         self.main_obj = parent
+
+        self.l_stat = HandleLoadStatusLabel(self.main_obj)
+
         self.my_scene = ImgGraphicsScene(self)
         self.main_obj.window.imageView.setScene(self.my_scene)
         self.main_obj.window.imageView.setDragMode(
@@ -446,7 +451,9 @@ class DoImageView(QObject):
             print("None self.np_full_img")
 
     def full_img_show(self):
-        self.load_started()
+        #self.load_started()
+        self.l_stat.load_started()
+
         print("full_img_show")
         self.np_full_img = load_json_w_str(
             parent_obj = self,
@@ -454,7 +461,9 @@ class DoImageView(QObject):
             img_num = self.cur_img_num
         )
         self.refresh_pixel_map()
-        self.load_finished()
+
+        #self.load_finished()
+        self.l_stat.load_finished()
 
     def slice_show_img(self):
 
@@ -536,6 +545,7 @@ class DoImageView(QObject):
         self.main_obj.window.InvScaleLabel.setText(str_label)
 
 
+    to_remove = '''
     def load_started(self):
         self.main_obj.window.OutuputStatLabel.setStyleSheet(
             "QLabel { background-color : green; color : yellow; }"
@@ -561,4 +571,5 @@ class DoImageView(QObject):
             "QLabel { background-color : white; color : blue; }"
         )
         self.main_obj.window.OutuputStatLabel.setText('  Ready  ')
+    '''
 
