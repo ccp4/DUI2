@@ -309,20 +309,25 @@ class ImgGraphicsScene(QGraphicsScene):
         float_delta = float(event.delta())
         new_scale = 1.0 + float_delta / 1500.0
         self.img_scale.emit(new_scale)
-        print("wheelEvent")
         event.accept()
 
+        to_remove = '''
     def mousePressEvent(self, event):
         print("mousePressEvent")
         #event.accept()
 
     def mouseMoveEvent(self, event):
         print("mouseMoveEvent")
-        event.accept()
+        #event.accept()
 
     def mouseReleaseEvent(self, event):
         print("mouseReleaseEvent")
         #event.accept()
+
+    def dragMoveEvent(self, event):
+        print("dragMoveEvent")
+        '''
+
 
 class DoImageView(QObject):
     def __init__(self, parent = None):
@@ -336,6 +341,7 @@ class DoImageView(QObject):
         self.main_obj.window.imageView.setDragMode(
             QGraphicsView.ScrollHandDrag
         )
+
         self.main_obj.window.TmpButton.clicked.connect(self.slice_show_img)
         self.main_obj.window.Full_Load_Button.clicked.connect(
             self.full_img_show
@@ -353,6 +359,7 @@ class DoImageView(QObject):
         self.cur_templ = None
         self.img_d1_d2 = (None, None)
         self.inv_scale = 1
+
 
     def __call__(self, in_img_num, nod_in_lst):
         self.r_list0 = []
@@ -474,8 +481,7 @@ class DoImageView(QObject):
         self.refresh_pixel_map()
         self.l_stat.load_finished()
 
-    def slice_show_img(self):
-        self.l_stat.load_started()
+    def get_x1_y1_x2_y2(self):
         viewport_rect = QRect(
             0, 0, self.main_obj.window.imageView.viewport().width(),
             self.main_obj.window.imageView.viewport().height()
@@ -485,32 +491,36 @@ class DoImageView(QObject):
         ).boundingRect()
         visibleSceneCoords = visibleSceneRect.getCoords()
         print("visibleSceneCoords =", visibleSceneCoords)
-        x1_slice = int(visibleSceneCoords[1])
-        y1_slice = int(visibleSceneCoords[0])
-        x2_slice = int(visibleSceneCoords[3])
-        y2_slice = int(visibleSceneCoords[2])
+        self.x1 = int(visibleSceneCoords[1])
+        self.y1 = int(visibleSceneCoords[0])
+        self.x2 = int(visibleSceneCoords[3])
+        self.y2 = int(visibleSceneCoords[2])
 
-        if x2_slice > self.img_d1_d2[0] - 1:
-            x2_slice = self.img_d1_d2[0] - 1
+        if self.x2 > self.img_d1_d2[0] - 1:
+            self.x2 = self.img_d1_d2[0] - 1
 
-        if y2_slice > self.img_d1_d2[1] - 1:
-            y2_slice = self.img_d1_d2[1] - 1
+        if self.y2 > self.img_d1_d2[1] - 1:
+            self.y2 = self.img_d1_d2[1] - 1
 
-        if x1_slice < 0:
-            x1_slice = 0
+        if self.x1 < 0:
+            self.x1 = 0
 
-        if y1_slice < 0:
-            y1_slice = 0
+        if self.y1 < 0:
+            self.y1 = 0
+
+    def slice_show_img(self):
+        self.l_stat.load_started()
+        self.get_x1_y1_x2_y2()
 
         slice_img = load_slice_img_json(
             parent_obj = self, nod_num_lst = [self.cur_nod_num],
             img_num = self.cur_img_num, inv_scale = self.inv_scale,
-            x1 = x1_slice, y1 = y1_slice,
-            x2 = x2_slice, y2 = y2_slice
+            x1 = self.x1, y1 = self.y1,
+            x2 = self.x2, y2 = self.y2
         )
         print(
-            "x1_slice, y1_slice, x2_slice, y2_slice = ",
-             x1_slice, y1_slice, x2_slice, y2_slice
+            "self.x1, self.y1, self.x2, self.y2 = ",
+             self.x1, self.y1, self.x2, self.y2
         )
         rep_slice_img = np.repeat(np.repeat(
             slice_img[:,:],
@@ -520,17 +530,17 @@ class DoImageView(QObject):
         rep_len_x = np.size(rep_slice_img[:,0:1])
         rep_len_y = np.size(rep_slice_img[0:1,:])
 
-        if x1_slice + rep_len_x > np.size(self.np_full_img[:,0:1]):
-            rep_len_x = np.size(self.np_full_img[:,0:1]) - x1_slice
+        if self.x1 + rep_len_x > np.size(self.np_full_img[:,0:1]):
+            rep_len_x = np.size(self.np_full_img[:,0:1]) - self.x1
             print("limiting dx")
 
-        if y1_slice + rep_len_y > np.size(self.np_full_img[0:1,:]):
-            rep_len_y = np.size(self.np_full_img[0:1,:]) - y1_slice
+        if self.y1 + rep_len_y > np.size(self.np_full_img[0:1,:]):
+            rep_len_y = np.size(self.np_full_img[0:1,:]) - self.y1
             print("limiting dy")
 
         self.np_full_img[
-            x1_slice:x1_slice + rep_len_x,
-            y1_slice:y1_slice + rep_len_y
+            self.x1:self.x1 + rep_len_x,
+            self.y1:self.y1 + rep_len_y
         ] = rep_slice_img[0:rep_len_x, 0:rep_len_y]
         self.refresh_pixel_map()
         self.l_stat.load_finished()
