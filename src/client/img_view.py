@@ -360,6 +360,26 @@ class DoImageView(QObject):
         self.img_d1_d2 = (None, None)
         self.inv_scale = 1
 
+        (self.old_x1, self.old_y1, self.old_x2, self.old_y2) = (-1, -1, -1, -1)
+
+        timer = QTimer(self)
+        timer.timeout.connect(self.check_move)
+        timer.start(1500)
+
+    def check_move(self):
+        self.get_x1_y1_x2_y2()
+        if(
+            self.old_x1 != self.x1 or self.old_y1 != self.y1 or
+            self.old_x2 != self.x2 or self.old_y2 != self.y2
+        ):
+            print("time to load img")
+            self.slice_show_img()
+
+        self.old_x1 = self.x1
+        self.old_y1 = self.y1
+        self.old_x2 = self.x2
+        self.old_y2 = self.y2
+
 
     def __call__(self, in_img_num, nod_in_lst):
         self.r_list0 = []
@@ -490,23 +510,25 @@ class DoImageView(QObject):
             viewport_rect
         ).boundingRect()
         visibleSceneCoords = visibleSceneRect.getCoords()
-        print("visibleSceneCoords =", visibleSceneCoords)
         self.x1 = int(visibleSceneCoords[1])
         self.y1 = int(visibleSceneCoords[0])
         self.x2 = int(visibleSceneCoords[3])
         self.y2 = int(visibleSceneCoords[2])
+        try:
+            if self.x2 > self.img_d1_d2[0] - 1:
+                self.x2 = self.img_d1_d2[0] - 1
 
-        if self.x2 > self.img_d1_d2[0] - 1:
-            self.x2 = self.img_d1_d2[0] - 1
+            if self.y2 > self.img_d1_d2[1] - 1:
+                self.y2 = self.img_d1_d2[1] - 1
 
-        if self.y2 > self.img_d1_d2[1] - 1:
-            self.y2 = self.img_d1_d2[1] - 1
+            if self.x1 < 0:
+                self.x1 = 0
 
-        if self.x1 < 0:
-            self.x1 = 0
+            if self.y1 < 0:
+                self.y1 = 0
 
-        if self.y1 < 0:
-            self.y1 = 0
+        except TypeError:
+            (self.x1, self.y1, self.x2, self.y2) = (-1, -1, -1, -1)
 
     def slice_show_img(self):
         self.l_stat.load_started()
