@@ -116,11 +116,7 @@ class DoLoadHTML(QObject):
 
             if not found_html:
                 self.main_obj.window.HtmlReport.setHtml(self.loading_html)
-                self.main_obj.window.OutuputStatLabel.setStyleSheet(
-                    "QLabel { background-color : green; color : yellow; }"
-                )
-                self.main_obj.window.OutuputStatLabel.setText('  Loading  ')
-                self.main_obj.parent_app.processEvents()
+                self.l_stat.load_started()
                 try:
                     cmd = {
                         "nod_lst":[nod_p_num],
