@@ -136,6 +136,23 @@ class DoLoadHTML(QObject):
         else:
             self.main_obj.window.HtmlReport.setHtml(self.not_avail_html)
 
+    def connect_loads(self):
+        self.l_stat = HandleLoadStatusLabel(self.main_obj)
+        self.main_obj.window.HtmlReport.loadStarted.connect(
+            self.l_stat.load_started
+        )
+        self.main_obj.window.HtmlReport.loadProgress.connect(
+            self.l_stat.load_progress
+        )
+        self.main_obj.window.HtmlReport.loadFinished.connect(
+            self.l_stat.load_finished
+        )
+
+class HandleLoadStatusLabel(QObject):
+    def __init__(self, parent = None):
+        super(HandleLoadStatusLabel, self).__init__(parent)
+        self.main_obj = parent
+
     def load_started(self):
         self.main_obj.window.OutuputStatLabel.setStyleSheet(
             "QLabel { background-color : green; color : yellow; }"
@@ -159,11 +176,6 @@ class DoLoadHTML(QObject):
             "QLabel { background-color : white; color : blue; }"
         )
         self.main_obj.window.OutuputStatLabel.setText('  Ready  ')
-
-    def connect_loads(self):
-        self.main_obj.window.HtmlReport.loadStarted.connect(self.load_started)
-        self.main_obj.window.HtmlReport.loadProgress.connect(self.load_progress)
-        self.main_obj.window.HtmlReport.loadFinished.connect(self.load_finished)
 
 
 class ShowLog(QObject):
