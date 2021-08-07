@@ -311,23 +311,6 @@ class ImgGraphicsScene(QGraphicsScene):
         self.img_scale.emit(new_scale)
         event.accept()
 
-        to_remove = '''
-    def mousePressEvent(self, event):
-        print("mousePressEvent")
-        #event.accept()
-
-    def mouseMoveEvent(self, event):
-        print("mouseMoveEvent")
-        #event.accept()
-
-    def mouseReleaseEvent(self, event):
-        print("mouseReleaseEvent")
-        #event.accept()
-
-    def dragMoveEvent(self, event):
-        print("dragMoveEvent")
-        '''
-
 
 class DoImageView(QObject):
     def __init__(self, parent = None):
@@ -474,7 +457,7 @@ class DoImageView(QObject):
 
     def refresh_pixel_map(self):
         try:
-            rgb_np = self.bmp_heat.img_2d_rgb(
+            rgb_np = self.bmp_m_cro.img_2d_rgb(
                 data2d = self.np_full_img, invert = False,
                 i_min_max = [-2, 50]
             )
