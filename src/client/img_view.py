@@ -11,7 +11,6 @@ import time
 import requests
 
 from exec_utils import json_data_request, uni_url
-
 from outputs import HandleLoadStatusLabel
 
 def crunch_min_max(data2d, i_min_max):
@@ -389,19 +388,11 @@ class DoImageView(QObject):
                 self.cur_img_num != in_img_num or
                 self.cur_templ != new_templ
             ):
-                '''
-                self.np_full_img = np.zeros(
-                    [ self.img_d1_d2[0], self.img_d1_d2[1] ],
-                    dtype=np.uint8
-                )
-                self.np_full_img[:,:] = 9
-                '''
                 self.np_full_img = np.arange(
                     self.img_d1_d2[0] * self.img_d1_d2[1]
                 ).reshape(
                     self.img_d1_d2[0], self.img_d1_d2[1]
                 )
-                #'''
                 self.np_full_img = 50 * (
                     self.np_full_img / self.np_full_img.max()
                 )
@@ -444,8 +435,6 @@ class DoImageView(QObject):
                          "local_hkl"   : local_hkl ,
                        }
                     )
-
-
             except TypeError:
                 print("No reflection list to show (TypeError except)")
 
@@ -561,19 +550,11 @@ class DoImageView(QObject):
         self.main_obj.window.imageView.scale(
             relative_new_scale, relative_new_scale
         )
-        '''
-        print(
-            "m11, m22 = ",
-            self.main_obj.window.imageView.transform().m11(),
-            self.main_obj.window.imageView.transform().m22(),
-        )
-        '''
         avg_scale = float(
             self.main_obj.window.imageView.transform().m11() +
             self.main_obj.window.imageView.transform().m22()
         ) / 2.0
         avg_scale = abs(avg_scale)
-        #print("avg_scale =", avg_scale)
         self.inv_scale = int(1.0 / avg_scale)
         if self.inv_scale < 1:
             self.inv_scale = 1
