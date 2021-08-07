@@ -387,19 +387,19 @@ class DoImageView(QObject):
                 self.cur_img_num != in_img_num or
                 self.cur_templ != new_templ
             ):
-
+                '''
                 self.np_full_img = np.zeros(
                     [ self.img_d1_d2[0], self.img_d1_d2[1] ],
                     dtype=np.uint8
                 )
                 self.np_full_img[:,:] = 9
-
+                '''
                 self.np_full_img = np.arange(
                     self.img_d1_d2[0] * self.img_d1_d2[1]
                 ).reshape(
                     self.img_d1_d2[0], self.img_d1_d2[1]
                 )
-
+                #'''
                 self.np_full_img = 50 * (
                     self.np_full_img / self.np_full_img.max()
                 )
@@ -525,7 +525,8 @@ class DoImageView(QObject):
         )
         print(
             "self.x1, self.y1, self.x2, self.y2 = ",
-             self.x1, self.y1, self.x2, self.y2
+             self.x1, self.y1, self.x2, self.y2, "\n"
+            "self.inv_scale =", self.inv_scale
         )
         rep_slice_img = np.repeat(np.repeat(
             slice_img[:,:],
@@ -558,14 +559,25 @@ class DoImageView(QObject):
         self.main_obj.window.imageView.scale(
             relative_new_scale, relative_new_scale
         )
-        avg_scale =float(
+        print(
+            "m11, m22 = ",
+            self.main_obj.window.imageView.transform().m11(),
+            self.main_obj.window.imageView.transform().m22(),
+        )
+
+        avg_scale = float(
             self.main_obj.window.imageView.transform().m11() +
             self.main_obj.window.imageView.transform().m22()
         ) / 2.0
+        avg_scale = abs(avg_scale)
+        print("avg_scale =", avg_scale)
         self.inv_scale = int(1.0 / avg_scale)
         if self.inv_scale < 1:
             self.inv_scale = 1
 
-        str_label = "1 / scale = " + str(self.inv_scale)
+        if self.inv_scale > 36:
+            self.inv_scale = 36
+
+        str_label = "scale = 1 / " + str(self.inv_scale)
         self.main_obj.window.InvScaleLabel.setText(str_label)
 
