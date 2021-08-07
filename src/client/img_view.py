@@ -349,22 +349,6 @@ class DoImageView(QObject):
         timer.timeout.connect(self.check_move)
         timer.start(1500)
 
-    def check_move(self):
-        self.get_x1_y1_x2_y2()
-        if(
-            self.old_x1 != self.x1 or self.old_y1 != self.y1 or
-            self.old_x2 != self.x2 or self.old_y2 != self.y2 or
-            self.old_inv_scl != self.inv_scale
-        ):
-            print("time to load img")
-            self.slice_show_img()
-
-        self.old_x1 = self.x1
-        self.old_y1 = self.y1
-        self.old_x2 = self.x2
-        self.old_y2 = self.y2
-        self.old_inv_scl = self.inv_scale
-
     def __call__(self, in_img_num, nod_in_lst):
         self.r_list0 = []
         self.r_list1 = []
@@ -388,11 +372,22 @@ class DoImageView(QObject):
                 self.cur_img_num != in_img_num or
                 self.cur_templ != new_templ
             ):
+                ##############################################
+                x_ax = np.arange(self.img_d1_d2[1])
+                y_ax = np.arange(self.img_d1_d2[0])
+                pi_2 = 3.14159235358 * 2.0
+                sx = 1.0-(np.cos(x_ax * pi_2 / self.img_d1_d2[1]))
+                sy = 1.0-(np.cos(y_ax * pi_2 / self.img_d1_d2[0]))
+                xx, yy = np.meshgrid(sx, sy, sparse = True)
+                self.np_full_img = xx + yy
+                ##############################################
+                '''
                 self.np_full_img = np.arange(
                     self.img_d1_d2[0] * self.img_d1_d2[1]
                 ).reshape(
                     self.img_d1_d2[0], self.img_d1_d2[1]
                 )
+                '''
                 self.np_full_img = 50 * (
                     self.np_full_img / self.np_full_img.max()
                 )
@@ -474,6 +469,22 @@ class DoImageView(QObject):
         )
         self.refresh_pixel_map()
         self.l_stat.load_finished()
+
+    def check_move(self):
+        self.get_x1_y1_x2_y2()
+        if(
+            self.old_x1 != self.x1 or self.old_y1 != self.y1 or
+            self.old_x2 != self.x2 or self.old_y2 != self.y2 or
+            self.old_inv_scl != self.inv_scale
+        ):
+            print("time to load img")
+            self.slice_show_img()
+
+        self.old_x1 = self.x1
+        self.old_y1 = self.y1
+        self.old_x2 = self.x2
+        self.old_y2 = self.y2
+        self.old_inv_scl = self.inv_scale
 
     def get_x1_y1_x2_y2(self):
         viewport_rect = QRect(
