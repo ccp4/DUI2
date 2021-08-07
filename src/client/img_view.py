@@ -344,6 +344,7 @@ class DoImageView(QObject):
         self.inv_scale = 1
 
         (self.old_x1, self.old_y1, self.old_x2, self.old_y2) = (-1, -1, -1, -1)
+        self.old_inv_scl = self.inv_scale
 
         timer = QTimer(self)
         timer.timeout.connect(self.check_move)
@@ -353,7 +354,8 @@ class DoImageView(QObject):
         self.get_x1_y1_x2_y2()
         if(
             self.old_x1 != self.x1 or self.old_y1 != self.y1 or
-            self.old_x2 != self.x2 or self.old_y2 != self.y2
+            self.old_x2 != self.x2 or self.old_y2 != self.y2 or
+            self.old_inv_scl != self.inv_scale
         ):
             print("time to load img")
             self.slice_show_img()
@@ -362,7 +364,7 @@ class DoImageView(QObject):
         self.old_y1 = self.y1
         self.old_x2 = self.x2
         self.old_y2 = self.y2
-
+        self.old_inv_scl = self.inv_scale
 
     def __call__(self, in_img_num, nod_in_lst):
         self.r_list0 = []
@@ -559,18 +561,19 @@ class DoImageView(QObject):
         self.main_obj.window.imageView.scale(
             relative_new_scale, relative_new_scale
         )
+        '''
         print(
             "m11, m22 = ",
             self.main_obj.window.imageView.transform().m11(),
             self.main_obj.window.imageView.transform().m22(),
         )
-
+        '''
         avg_scale = float(
             self.main_obj.window.imageView.transform().m11() +
             self.main_obj.window.imageView.transform().m22()
         ) / 2.0
         avg_scale = abs(avg_scale)
-        print("avg_scale =", avg_scale)
+        #print("avg_scale =", avg_scale)
         self.inv_scale = int(1.0 / avg_scale)
         if self.inv_scale < 1:
             self.inv_scale = 1
