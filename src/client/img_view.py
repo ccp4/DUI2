@@ -347,7 +347,7 @@ class DoImageView(QObject):
 
         timer = QTimer(self)
         timer.timeout.connect(self.check_move)
-        timer.start(1500)
+        timer.start(1600)
 
     def __call__(self, in_img_num, nod_in_lst):
         self.r_list0 = []
@@ -515,9 +515,26 @@ class DoImageView(QObject):
         except TypeError:
             (self.x1, self.y1, self.x2, self.y2) = (-1, -1, -1, -1)
 
+    def get_inv_scale(self):
+        avg_scale = float(
+            self.main_obj.window.imageView.transform().m11() +
+            self.main_obj.window.imageView.transform().m22()
+        ) / 2.0
+        avg_scale = abs(avg_scale)
+        self.inv_scale = int(1.0 / avg_scale)
+        if self.inv_scale < 1:
+            self.inv_scale = 1
+
+        if self.inv_scale > 36:
+            self.inv_scale = 36
+
+        str_label = "scale = 1 / " + str(self.inv_scale)
+        self.main_obj.window.InvScaleLabel.setText(str_label)
+
     def slice_show_img(self):
         self.l_stat.load_started()
         self.get_x1_y1_x2_y2()
+        self.get_inv_scale()
 
         slice_img = load_slice_img_json(
             parent_obj = self, nod_num_lst = [self.cur_nod_num],
@@ -561,18 +578,5 @@ class DoImageView(QObject):
         self.main_obj.window.imageView.scale(
             relative_new_scale, relative_new_scale
         )
-        avg_scale = float(
-            self.main_obj.window.imageView.transform().m11() +
-            self.main_obj.window.imageView.transform().m22()
-        ) / 2.0
-        avg_scale = abs(avg_scale)
-        self.inv_scale = int(1.0 / avg_scale)
-        if self.inv_scale < 1:
-            self.inv_scale = 1
-
-        if self.inv_scale > 36:
-            self.inv_scale = 36
-
-        str_label = "scale = 1 / " + str(self.inv_scale)
-        self.main_obj.window.InvScaleLabel.setText(str_label)
+        self.get_inv_scale()
 
