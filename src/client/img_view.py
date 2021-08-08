@@ -440,6 +440,7 @@ class DoImageView(QObject):
 
         self.cur_nod_num = nod_num
         self.cur_img_num = in_img_num
+        self.slice_show_img()
 
     def refresh_pixel_map(self):
         try:
