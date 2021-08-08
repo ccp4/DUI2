@@ -608,6 +608,8 @@ class ScaleSimplerParamTab(SimpleParamTab):
 
     def build_pars(self):
 
+        #TODO: review the parameters here, the need updating
+
         hbox_lay_mod = QHBoxLayout()
         label_mod = QLabel("Model")
 
