@@ -436,10 +436,10 @@ class DoImageView(QObject):
         else:
             print("No reflection list to show (known not to be)")
 
-        self.refresh_pixel_map()
-
         self.cur_nod_num = nod_num
         self.cur_img_num = in_img_num
+
+        self.refresh_pixel_map()
         self.slice_show_img()
 
     def refresh_pixel_map(self):
