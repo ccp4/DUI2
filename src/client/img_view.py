@@ -209,7 +209,7 @@ def load_slice_img_json(
 
     return np_array_out
 
-def load_json_w_str(parent_obj, nod_num_lst = [1], img_num = 0):
+def load_json_w_str(nod_num_lst = [1], img_num = 0):
     my_cmd_lst = ["gi " + str(img_num)]
     my_cmd = {"nod_lst":nod_num_lst, "cmd_lst":my_cmd_lst}
 
@@ -235,7 +235,6 @@ def load_json_w_str(parent_obj, nod_num_lst = [1], img_num = 0):
             compresed += data
             downloaded_size += block_size
             progress = int(100.0 * (downloaded_size / total_size))
-            parent_obj.l_stat.load_progress(progress)
         #################################################################
 
         dic_str = zlib.decompress(compresed)
@@ -266,6 +265,25 @@ def load_json_w_str(parent_obj, nod_num_lst = [1], img_num = 0):
         return None
 
     return np_array_out
+
+
+class LoadFullImage(QThread):
+    image_loaded = Signal(tuple)
+    def __init__(self, cur_nod_num, cur_img_num):
+        super(LoadFullImage, self).__init__()
+        self.cur_nod_num = cur_nod_num
+        self.cur_img_num = cur_img_num
+
+    def run(self):
+        print("loading image ", self.cur_img_num, " in full resolution")
+        np_full_img = load_json_w_str(
+            nod_num_lst = [self.cur_nod_num],
+            img_num = self.cur_img_num
+        )
+        self.image_loaded.emit(
+            (self.cur_nod_num, self.cur_img_num, np_full_img)
+        )
+
 
 class ImgGraphicsScene(QGraphicsScene):
     img_scale = Signal(float)
@@ -345,9 +363,11 @@ class DoImageView(QObject):
         (self.old_x1, self.old_y1, self.old_x2, self.old_y2) = (-1, -1, -1, -1)
         self.old_inv_scl = self.inv_scale
 
+        '''
         timer = QTimer(self)
         timer.timeout.connect(self.check_move)
         timer.start(1600)
+        '''
 
     def __call__(self, in_img_num, nod_in_lst):
         self.r_list0 = []
@@ -460,16 +480,19 @@ class DoImageView(QObject):
         except TypeError:
             print("None self.np_full_img")
 
-    def full_img_show(self):
-        self.l_stat.load_started()
-        print("full_img_show")
-        self.np_full_img = load_json_w_str(
-            parent_obj = self,
-            nod_num_lst = [self.cur_nod_num],
-            img_num = self.cur_img_num
+    def new_full_img(self, tup_data):
+        print(
+            "new_full_img from: node ", tup_data[0], ", image ", tup_data[1]
         )
+        self.np_full_img = tup_data[2]
         self.refresh_pixel_map()
-        self.l_stat.load_finished()
+
+    def full_img_show(self):
+        self.load_full_image = LoadFullImage(
+            cur_nod_num = self.cur_nod_num, cur_img_num = self.cur_img_num
+        )
+        self.load_full_image.start()
+        self.load_full_image.image_loaded.connect(self.new_full_img)
 
     def check_move(self):
         self.get_x1_y1_x2_y2()
