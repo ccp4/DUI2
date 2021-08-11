@@ -40,7 +40,7 @@ class HandleLoadStatusLabel(QObject):
         )
         self.main_obj.window.OutuputStatLabel.setText('  Loading  ')
         self.main_obj.parent_app.processEvents()
-        print("RAM load_started")
+        print("load_started (HandleLoadStatusLabel)")
 
     def load_progress(self, progress):
         self.main_obj.window.OutuputStatLabel.setStyleSheet(

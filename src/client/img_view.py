@@ -20,9 +20,7 @@ def crunch_min_max(data2d, i_min_max):
         print("no max and min provided, assuming:", i_min_max)
 
     elif(i_min_max[0] > data2d_ini.min() or i_min_max[1] < data2d_ini.max()):
-        print("clipping to [max, min]:", i_min_max, "  ...")
         np.clip(data2d_ini, i_min_max[0], i_min_max[1], out = data2d_ini)
-        print("... done clipping")
 
     width = np.size( data2d_ini[0:1, :] )
     height = np.size( data2d_ini[:, 0:1] )
@@ -359,17 +357,23 @@ class DoImageView(QObject):
         self.cur_templ = None
         self.img_d1_d2 = (None, None)
         self.inv_scale = 1
+        self.full_image_loaded = False
 
         (self.old_x1, self.old_y1, self.old_x2, self.old_y2) = (-1, -1, -1, -1)
         self.old_inv_scl = self.inv_scale
+        self.old_cur_nod_num = self.cur_nod_num
+        self.old_cur_img_num = self.cur_img_num
 
-        '''
+
         timer = QTimer(self)
         timer.timeout.connect(self.check_move)
         timer.start(1600)
-        '''
 
     def __call__(self, in_img_num, nod_in_lst):
+        print(
+            "refreshing Image Viewer\n img:", in_img_num,
+            "\n node in List:", nod_in_lst
+        )
         self.r_list0 = []
         self.r_list1 = []
 
@@ -387,7 +391,6 @@ class DoImageView(QObject):
             self.img_d1_d2 = (
                 json_data_lst[1], json_data_lst[2]
             )
-            new_pixmap = None
             if(
                 self.cur_img_num != in_img_num or
                 self.cur_templ != new_templ
@@ -413,8 +416,8 @@ class DoImageView(QObject):
                 )
             self.cur_templ = new_templ
 
-        except IndexError:
-            new_pixmap = None
+        except (IndexError, TypeError):
+            print("Not loaded new template in full")
             #TODO check what happens here if the user navigates
             #     to a different dataset
 
@@ -460,7 +463,7 @@ class DoImageView(QObject):
         self.cur_img_num = in_img_num
 
         self.refresh_pixel_map()
-        self.slice_show_img()
+        self.full_img_show()
 
     def refresh_pixel_map(self):
         try:
@@ -484,24 +487,36 @@ class DoImageView(QObject):
         print(
             "new_full_img from: node ", tup_data[0], ", image ", tup_data[1]
         )
+        self.full_image_loaded = True
         self.np_full_img = tup_data[2]
         self.refresh_pixel_map()
 
     def full_img_show(self):
+        self.full_image_loaded = False
+        try:
+            #print(dir(self.load_full_image))
+            self.load_full_image.quit()
+            self.load_full_image.wait()
+
+        except AttributeError:
+            print("first full image loading")
+
         self.load_full_image = LoadFullImage(
             cur_nod_num = self.cur_nod_num, cur_img_num = self.cur_img_num
         )
-        self.load_full_image.start()
         self.load_full_image.image_loaded.connect(self.new_full_img)
+        self.load_full_image.start()
 
     def check_move(self):
         self.get_x1_y1_x2_y2()
         if(
             self.old_x1 != self.x1 or self.old_y1 != self.y1 or
             self.old_x2 != self.x2 or self.old_y2 != self.y2 or
-            self.old_inv_scl != self.inv_scale
+            self.old_inv_scl != self.inv_scale or
+            self.old_cur_nod_num != self.cur_nod_num or
+            self.old_cur_img_num != self.cur_img_num
         ):
-            print("time to load img")
+            print("scaled or dragged image")
             self.slice_show_img()
 
         self.old_x1 = self.x1
@@ -509,6 +524,8 @@ class DoImageView(QObject):
         self.old_x2 = self.x2
         self.old_y2 = self.y2
         self.old_inv_scl = self.inv_scale
+        self.old_cur_nod_num = self.cur_nod_num
+        self.old_cur_img_num = self.cur_img_num
 
     def get_x1_y1_x2_y2(self):
         viewport_rect = QRect(
@@ -556,43 +573,48 @@ class DoImageView(QObject):
         self.main_obj.window.InvScaleLabel.setText(str_label)
 
     def slice_show_img(self):
-        self.l_stat.load_started()
         self.get_x1_y1_x2_y2()
         self.get_inv_scale()
+        if self.full_image_loaded == False:
+            try:
+                self.l_stat.load_started()
+                slice_img = load_slice_img_json(
+                    parent_obj = self, nod_num_lst = [self.cur_nod_num],
+                    img_num = self.cur_img_num, inv_scale = self.inv_scale,
+                    x1 = self.x1, y1 = self.y1,
+                    x2 = self.x2, y2 = self.y2
+                )
+                print(
+                    "self.x1, self.y1, self.x2, self.y2 = ",
+                     self.x1, self.y1, self.x2, self.y2, "\n"
+                    "self.inv_scale =", self.inv_scale
+                )
+                rep_slice_img = np.repeat(np.repeat(
+                    slice_img[:,:],
+                    self.inv_scale, axis=0), self.inv_scale, axis=1
+                )
 
-        slice_img = load_slice_img_json(
-            parent_obj = self, nod_num_lst = [self.cur_nod_num],
-            img_num = self.cur_img_num, inv_scale = self.inv_scale,
-            x1 = self.x1, y1 = self.y1,
-            x2 = self.x2, y2 = self.y2
-        )
-        print(
-            "self.x1, self.y1, self.x2, self.y2 = ",
-             self.x1, self.y1, self.x2, self.y2, "\n"
-            "self.inv_scale =", self.inv_scale
-        )
-        rep_slice_img = np.repeat(np.repeat(
-            slice_img[:,:],
-            self.inv_scale, axis=0), self.inv_scale, axis=1
-        )
+                rep_len_x = np.size(rep_slice_img[:,0:1])
+                rep_len_y = np.size(rep_slice_img[0:1,:])
 
-        rep_len_x = np.size(rep_slice_img[:,0:1])
-        rep_len_y = np.size(rep_slice_img[0:1,:])
+                if self.x1 + rep_len_x > np.size(self.np_full_img[:,0:1]):
+                    rep_len_x = np.size(self.np_full_img[:,0:1]) - self.x1
+                    print("limiting dx")
 
-        if self.x1 + rep_len_x > np.size(self.np_full_img[:,0:1]):
-            rep_len_x = np.size(self.np_full_img[:,0:1]) - self.x1
-            print("limiting dx")
+                if self.y1 + rep_len_y > np.size(self.np_full_img[0:1,:]):
+                    rep_len_y = np.size(self.np_full_img[0:1,:]) - self.y1
+                    print("limiting dy")
 
-        if self.y1 + rep_len_y > np.size(self.np_full_img[0:1,:]):
-            rep_len_y = np.size(self.np_full_img[0:1,:]) - self.y1
-            print("limiting dy")
+                self.np_full_img[
+                    self.x1:self.x1 + rep_len_x,
+                    self.y1:self.y1 + rep_len_y
+                ] = rep_slice_img[0:rep_len_x, 0:rep_len_y]
+                self.refresh_pixel_map()
 
-        self.np_full_img[
-            self.x1:self.x1 + rep_len_x,
-            self.y1:self.y1 + rep_len_y
-        ] = rep_slice_img[0:rep_len_x, 0:rep_len_y]
-        self.refresh_pixel_map()
-        self.l_stat.load_finished()
+            except TypeError:
+                print("loading image slice in next loop")
+
+            self.l_stat.load_finished()
 
     def OneOneScale(self, event):
         print("OneOneScale")
