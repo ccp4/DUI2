@@ -174,7 +174,7 @@ def load_slice_img_json(
         dic_str = zlib.decompress(compresed)
         arr_dic = json.loads(dic_str)
         end_tm = time.time()
-        print("request took ", end_tm - start_tm, "\n converting to dict ...")
+        print("request took ", end_tm - start_tm)
 
         str_data = arr_dic["str_data"]
         d1 = arr_dic["d1"]
@@ -225,7 +225,7 @@ def load_json_w_str(nod_num_lst = [1], img_num = 0):
         dic_str = zlib.decompress(compresed)
         arr_dic = json.loads(dic_str)
         end_tm = time.time()
-        print("request took ", end_tm - start_tm, "\n converting to dict ...")
+        print("request took ", end_tm - start_tm)
         d1 = arr_dic["d1"]
         d2 = arr_dic["d2"]
         str_data = arr_dic["str_data"]
@@ -325,11 +325,6 @@ class DoImageView(QObject):
         self.main_obj.window.imageView.setScene(self.my_scene)
         self.main_obj.window.imageView.setDragMode(
             QGraphicsView.ScrollHandDrag
-        )
-
-        self.main_obj.window.TmpButton.clicked.connect(self.slice_show_img)
-        self.main_obj.window.Full_Load_Button.clicked.connect(
-            self.full_img_show
         )
         self.main_obj.window.ScaleOneOneButton.clicked.connect(
             self.OneOneScale
