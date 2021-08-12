@@ -159,16 +159,8 @@ def load_slice_img_json(
     my_cmd = {"nod_lst":nod_num_lst, "cmd_lst":my_cmd_lst}
     start_tm = time.time()
     try:
-        old_stable = '''
-        req_get = requests.get(uni_url, stream = True, params = my_cmd)
-        print("length =",
-            req_get.headers.get('content-length', '0')
-        )
-        compresed = req_get.content
-        '''
-        ####################################################################
         req_get = requests.get(uni_url, stream=True, params = my_cmd)
-        total_size = int(req_get.headers.get('content-length', 0))
+        total_size = int(req_get.headers.get('content-length', 0)) + 1
         print("total_size =", total_size)
         block_size = 65536
         downloaded_size = 0
@@ -178,7 +170,7 @@ def load_slice_img_json(
             downloaded_size += block_size
             progress = int(100.0 * (downloaded_size / total_size))
             parent_obj.l_stat.load_progress(progress)
-        ####################################################################
+
         dic_str = zlib.decompress(compresed)
         arr_dic = json.loads(dic_str)
         end_tm = time.time()
@@ -213,27 +205,22 @@ def load_json_w_str(nod_num_lst = [1], img_num = 0):
 
     print("\n full img here \n")
     try:
-        old_stable = '''
-        req_get = requests.get(uni_url, stream = True, params = my_cmd)
-        print("length =",
-            req_get.headers.get('content-length', '0')
-        )
-        compresed = req_get.content
-        '''
-        #################################################################
         start_tm = time.time()
         req_get = requests.get(uni_url, stream=True, params = my_cmd)
-        total_size = int(req_get.headers.get('content-length', 0))
+        total_size = int(req_get.headers.get('content-length', 0)) + 1
         print("total_size =", total_size)
         #block_size = 1024 #1 Kibibyte
         block_size = 65536
         downloaded_size = 0
         compresed = bytes()
+        print("starting to load full image ...")
         for data in req_get.iter_content(block_size):
             compresed += data
             downloaded_size += block_size
             progress = int(100.0 * (downloaded_size / total_size))
-        #################################################################
+            #print("progress(full image) =", progress )
+
+        print("... finished loading full image")
 
         dic_str = zlib.decompress(compresed)
         arr_dic = json.loads(dic_str)
