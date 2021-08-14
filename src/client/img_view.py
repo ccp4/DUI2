@@ -169,7 +169,8 @@ def load_slice_img_json(
             compresed += data
             downloaded_size += block_size
             progress = int(100.0 * (downloaded_size / total_size))
-            parent_obj.l_stat.load_progress(progress)
+            #next commented line seems to be the culprit of a segmentation fault
+            #parent_obj.l_stat.load_progress(progress)
 
         dic_str = zlib.decompress(compresed)
         arr_dic = json.loads(dic_str)
@@ -267,6 +268,54 @@ class LoadFullImage(QThread):
         )
         self.image_loaded.emit(
             (self.cur_nod_num, self.cur_img_num, np_full_img)
+        )
+
+
+class LoadSliceImage(QThread):
+    slice_loaded = Signal(dict)
+    def __init__(
+        self,
+        parent_obj,
+        nod_num_lst,
+        img_num,
+        inv_scale,
+        x1,
+        y1,
+        x2,
+        y2,
+    ):
+        super(LoadSliceImage, self).__init__()
+        self.parent_obj =   parent_obj
+        self.nod_num_lst =  nod_num_lst
+        self.img_num =      img_num
+        self.inv_scale =    inv_scale
+        self.x1 =           x1
+        self.y1 =           y1
+        self.x2 =           x2
+        self.y2 =           y2
+
+    def run(self):
+        print("loading slice of image ")
+
+        slice_image = load_slice_img_json(
+        self.parent_obj,
+        self.nod_num_lst,
+        self.img_num,
+        self.inv_scale,
+        self.x1,
+        self.y1,
+        self.x2,
+        self.y2,
+        )
+        self.slice_loaded.emit(
+            {
+                "slice_image" :  slice_image,
+                "inv_scale"   :  self.inv_scale,
+                "x1"          :  self.x1,
+                "y1"          :  self.y1,
+                "x2"          :  self.x2,
+                "y2"          :  self.y2
+            }
         )
 
 
@@ -445,7 +494,7 @@ class DoImageView(QObject):
         self.cur_img_num = in_img_num
 
         self.refresh_pixel_map()
-        self.full_img_show()
+        #self.full_img_show()
 
     def refresh_pixel_map(self):
         try:
@@ -554,49 +603,65 @@ class DoImageView(QObject):
         str_label = "scale = 1 / " + str(self.inv_scale)
         self.main_obj.window.InvScaleLabel.setText(str_label)
 
+    def new_slice_img(self, dict_slice):
+        try:
+            slice_image = dict_slice["slice_image"]
+            rep_slice_img = np.repeat(np.repeat(
+                    slice_image[:,:],
+                    dict_slice["inv_scale"], axis=0
+                ),
+                dict_slice["inv_scale"], axis=1
+            )
+
+            rep_len_x = np.size(rep_slice_img[:,0:1])
+            rep_len_y = np.size(rep_slice_img[0:1,:])
+
+            if dict_slice["x1"] + rep_len_x > np.size(self.np_full_img[:,0:1]):
+                rep_len_x = np.size(self.np_full_img[:,0:1]) - dict_slice["x1"]
+                print("limiting dx")
+
+            if dict_slice["y1"] + rep_len_y > np.size(self.np_full_img[0:1,:]):
+                rep_len_y = np.size(self.np_full_img[0:1,:]) - dict_slice["y1"]
+                print("limiting dy")
+
+            self.np_full_img[
+                dict_slice["x1"]:dict_slice["x1"] + rep_len_x,
+                dict_slice["y1"]:dict_slice["y1"] + rep_len_y
+            ] = rep_slice_img[0:rep_len_x, 0:rep_len_y]
+            self.refresh_pixel_map()
+
+        except TypeError:
+            print("loading image slice in next loop")
+
+        self.l_stat.load_finished()
+
     def slice_show_img(self):
         self.get_x1_y1_x2_y2()
         self.get_inv_scale()
-        if self.full_image_loaded == False:
-            try:
-                self.l_stat.load_started()
-                slice_img = load_slice_img_json(
-                    parent_obj = self, nod_num_lst = [self.cur_nod_num],
-                    img_num = self.cur_img_num, inv_scale = self.inv_scale,
-                    x1 = self.x1, y1 = self.y1,
-                    x2 = self.x2, y2 = self.y2
-                )
-                print(
-                    "self.x1, self.y1, self.x2, self.y2 = ",
-                     self.x1, self.y1, self.x2, self.y2, "\n"
-                    "self.inv_scale =", self.inv_scale
-                )
-                rep_slice_img = np.repeat(np.repeat(
-                    slice_img[:,:],
-                    self.inv_scale, axis=0), self.inv_scale, axis=1
-                )
+        #if self.full_image_loaded == False:
+        self.l_stat.load_started()
 
-                rep_len_x = np.size(rep_slice_img[:,0:1])
-                rep_len_y = np.size(rep_slice_img[0:1,:])
+        try:
+            self.load_slice_image.quit()
+            self.load_slice_image.wait()
 
-                if self.x1 + rep_len_x > np.size(self.np_full_img[:,0:1]):
-                    rep_len_x = np.size(self.np_full_img[:,0:1]) - self.x1
-                    print("limiting dx")
+        except AttributeError:
+            print("first slice of image loading")
 
-                if self.y1 + rep_len_y > np.size(self.np_full_img[0:1,:]):
-                    rep_len_y = np.size(self.np_full_img[0:1,:]) - self.y1
-                    print("limiting dy")
-
-                self.np_full_img[
-                    self.x1:self.x1 + rep_len_x,
-                    self.y1:self.y1 + rep_len_y
-                ] = rep_slice_img[0:rep_len_x, 0:rep_len_y]
-                self.refresh_pixel_map()
-
-            except TypeError:
-                print("loading image slice in next loop")
-
-            self.l_stat.load_finished()
+        self.load_slice_image = LoadSliceImage(
+            parent_obj = self,
+            nod_num_lst = [self.cur_nod_num],
+            img_num = self.cur_img_num,
+            inv_scale = self.inv_scale,
+            x1 = self.x1,
+            y1 = self.y1,
+            x2 = self.x2,
+            y2 = self.y2
+        )
+        self.load_slice_image.slice_loaded.connect(
+            self.new_slice_img
+        )
+        self.load_slice_image.start()
 
     def OneOneScale(self, event):
         print("OneOneScale")

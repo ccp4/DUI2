@@ -43,6 +43,7 @@ class HandleLoadStatusLabel(QObject):
         print("load_started (HandleLoadStatusLabel)")
 
     def load_progress(self, progress):
+        print("converting to label:", progress)
         self.main_obj.window.OutuputStatLabel.setStyleSheet(
             "QLabel { background-color : green; color : yellow; }"
         )
