@@ -145,60 +145,6 @@ class np2bmp_monocrome(object):
         img_array[:, :, 0] = img_all_chanl[:,:] #Red
         return img_array
 
-def load_slice_img_json(
-    parent_obj, nod_num_lst = [1], img_num = 0, inv_scale = 1,
-    x1 = 0, y1 = 0, x2 = 2527, y2 = 2463
-):
-    my_cmd_lst = [
-        "gis " + str(img_num) +
-        " inv_scale=" + str(inv_scale) +
-        " view_rect=" + str(x1) + "," + str(y1) +
-                  "," + str(x2) + "," + str(y2)
-    ]
-
-    my_cmd = {"nod_lst":nod_num_lst, "cmd_lst":my_cmd_lst}
-    start_tm = time.time()
-    try:
-        req_get = requests.get(uni_url, stream=True, params = my_cmd)
-        total_size = int(req_get.headers.get('content-length', 0)) + 1
-        print("total_size =", total_size)
-        block_size = 65536
-        downloaded_size = 0
-        compresed = bytes()
-        for data in req_get.iter_content(block_size):
-            compresed += data
-            downloaded_size += block_size
-            progress = int(100.0 * (downloaded_size / total_size))
-            #next commented line seems to be the culprit of a segmentation fault
-            #parent_obj.l_stat.load_progress(progress)
-
-        dic_str = zlib.decompress(compresed)
-        arr_dic = json.loads(dic_str)
-        end_tm = time.time()
-        print("request took ", end_tm - start_tm)
-
-        str_data = arr_dic["str_data"]
-        d1 = arr_dic["d1"]
-        d2 = arr_dic["d2"]
-        print("d1, d2 =", d1, d2)
-        arr_1d = np.fromstring(str_data, dtype = float, sep = ',')
-        np_array_out = arr_1d.reshape(d1, d2)
-
-    except zlib.error:
-        print("zlib.error(load_slice_img_json)")
-        return None
-
-    except ConnectionError:
-        print("\n ConnectionError (load_slice_img_json) \n")
-        return None
-
-    except requests.exceptions.RequestException:
-        print(
-            "\n requests.exceptions.RequestException (load_slice_img_json) \n"
-        )
-        return None
-
-    return np_array_out
 
 def load_json_w_str(nod_num_lst = [1], img_num = 0):
     my_cmd_lst = ["gi " + str(img_num)]
@@ -272,17 +218,10 @@ class LoadFullImage(QThread):
 
 
 class LoadSliceImage(QThread):
+    progressing = Signal(int)
     slice_loaded = Signal(dict)
     def __init__(
-        self,
-        parent_obj,
-        nod_num_lst,
-        img_num,
-        inv_scale,
-        x1,
-        y1,
-        x2,
-        y2,
+        self, parent_obj, nod_num_lst, img_num, inv_scale,x1 ,y1 ,x2 ,y2
     ):
         super(LoadSliceImage, self).__init__()
         self.parent_obj =   parent_obj
@@ -297,19 +236,59 @@ class LoadSliceImage(QThread):
     def run(self):
         print("loading slice of image ")
 
-        slice_image = load_slice_img_json(
-        self.parent_obj,
-        self.nod_num_lst,
-        self.img_num,
-        self.inv_scale,
-        self.x1,
-        self.y1,
-        self.x2,
-        self.y2,
-        )
+        my_cmd_lst = [
+            "gis " + str(self.img_num) +
+            " inv_scale=" + str(self.inv_scale) +
+            " view_rect=" + str(self.x1) + "," + str(self.y1) +
+                      "," + str(self.x2) + "," + str(self.y2)
+        ]
+
+        my_cmd = {"nod_lst":self.nod_num_lst, "cmd_lst":my_cmd_lst}
+        start_tm = time.time()
+        try:
+            req_get = requests.get(uni_url, stream=True, params = my_cmd)
+            total_size = int(req_get.headers.get('content-length', 0)) + 1
+            print("total_size =", total_size)
+            block_size = 65536
+            downloaded_size = 0
+            compresed = bytes()
+            for data in req_get.iter_content(block_size):
+                compresed += data
+                downloaded_size += block_size
+                progress = int(100.0 * (downloaded_size / total_size))
+
+                #next commented line seems to be the culprit of a segmentation fault
+                self.progressing.emit(progress)
+
+            dic_str = zlib.decompress(compresed)
+            arr_dic = json.loads(dic_str)
+            end_tm = time.time()
+            print("request took ", end_tm - start_tm)
+
+            str_data = arr_dic["str_data"]
+            d1 = arr_dic["d1"]
+            d2 = arr_dic["d2"]
+            print("d1, d2 =", d1, d2)
+            arr_1d = np.fromstring(str_data, dtype = float, sep = ',')
+            np_array_out = arr_1d.reshape(d1, d2)
+
+        except zlib.error:
+            print("zlib.error(load_slice_img_json)")
+            np_array_out = None
+
+        except ConnectionError:
+            print("\n ConnectionError (load_slice_img_json) \n")
+            np_array_out = None
+
+        except requests.exceptions.RequestException:
+            print(
+                "\n requests.exceptions.RequestException (load_slice_img_json) \n"
+            )
+            np_array_out = None
+
         self.slice_loaded.emit(
             {
-                "slice_image" :  slice_image,
+                "slice_image" :  np_array_out,
                 "inv_scale"   :  self.inv_scale,
                 "x1"          :  self.x1,
                 "y1"          :  self.y1,
@@ -635,6 +614,10 @@ class DoImageView(QObject):
 
         self.l_stat.load_finished()
 
+    def update_progress(self, progress):
+        print("time to show ", progress, " in progress bar")
+        self.l_stat.load_progress(progress)
+
     def slice_show_img(self):
         self.get_x1_y1_x2_y2()
         self.get_inv_scale()
@@ -660,6 +643,9 @@ class DoImageView(QObject):
         )
         self.load_slice_image.slice_loaded.connect(
             self.new_slice_img
+        )
+        self.load_slice_image.progressing.connect(
+            self.update_progress
         )
         self.load_slice_image.start()
 
