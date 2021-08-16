@@ -615,12 +615,10 @@ class DoImageView(QObject):
         self.l_stat.load_finished()
 
     def update_progress(self, progress):
-        print("time to show ", progress, " in progress bar")
+        #print("time to show ", progress, " in progress bar")
         self.l_stat.load_progress(progress)
 
     def slice_show_img(self):
-        self.get_x1_y1_x2_y2()
-        self.get_inv_scale()
         #if self.full_image_loaded == False:
         self.l_stat.load_started()
 
@@ -630,6 +628,9 @@ class DoImageView(QObject):
 
         except AttributeError:
             print("first slice of image loading")
+
+        self.get_x1_y1_x2_y2()
+        self.get_inv_scale()
 
         self.load_slice_image = LoadSliceImage(
             parent_obj = self,
