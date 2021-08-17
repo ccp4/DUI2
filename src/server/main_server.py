@@ -125,7 +125,11 @@ if __name__ == "__main__":
         lst_dic = [
             {'nod_lst': [0], 'cmd_lst': [['ip', 'x41']]},
             {'nod_lst': [0], 'cmd_lst': [['ip', 'x42']]},
-            {'nod_lst': [0], 'cmd_lst': [['ip', 'x43']]}
+            {'nod_lst': [0], 'cmd_lst': [['ip', 'x43']]},
+            {
+                'nod_lst': [0],
+                'cmd_lst': [['ip', '/scratch/dui_tst/C2sum_1/C2sum_1_0*']]
+            }
         ]
         for cmd_dict in lst_dic:
             cmd_tree_runner.run_dict(cmd_dict)

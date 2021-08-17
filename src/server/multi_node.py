@@ -519,7 +519,7 @@ class Runner(object):
                             "\n *** ERROR *** \n AttributeError" +
                             "\n not sending reflection list"
                         )
-                        return_list = [ [], [] ]
+                        return_list = []
 
 
             elif uni_cmd == ["get_bravais_sum"]:

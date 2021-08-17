@@ -446,7 +446,7 @@ class DoImageView(QObject):
                             "height" : float(inner_list[3]),
                         }
                     )
-
+                to_remove = '''
                 for inner_list in json_lst[1]:
                     lst_str1 = inner_list[0].split(',')
                     x_ini = float(lst_str1[0])
@@ -463,6 +463,7 @@ class DoImageView(QObject):
                          "local_hkl"   : local_hkl ,
                        }
                     )
+                '''
             except TypeError:
                 print("No reflection list to show (TypeError except)")
 
