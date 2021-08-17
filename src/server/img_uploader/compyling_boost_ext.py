@@ -38,10 +38,15 @@ for pos, single_shar in enumerate(cut_lib_path):
     if(single_shar == "/" ):
         cut_cut_lib_path = cut_lib_path[0:pos]
 
-
+python_3_p_8 = '''
 com_lin_02 = "g++ -shared " + obj_name + ".o -L" +   \
     cut_cut_lib_path + " -lboost_python38 -L" +      \
     cut_lib_path + "/config -lpython3.8 -o " + obj_name + ".so"
+'''
+
+com_lin_02 = "g++ -shared " + obj_name + ".o -L" +   \
+    cut_cut_lib_path + " -lboost_python39 -L" +      \
+    cut_lib_path + "/config -lpython3.9 -o " + obj_name + ".so"
 
 print("\n Compiling line 1:")
 print("cmd =", com_lin_01, "\n")
