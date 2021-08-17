@@ -306,7 +306,10 @@ class ImgGraphicsScene(QGraphicsScene):
         self.parent_obj = parent
         self.curr_pixmap = None
 
+    def __call__(self, new_pixmap, refl_list0):
+        to_use_later = '''
     def __call__(self, new_pixmap, refl_list0, refl_list1):
+        '''
         self.clear()
         if new_pixmap is not None:
             self.curr_pixmap = new_pixmap
@@ -323,6 +326,12 @@ class ImgGraphicsScene(QGraphicsScene):
             )
             self.addRect(rectangle, green_pen)
 
+
+            n_text = self.addSimpleText(str(refl["local_hkl"]))
+            n_text.setPos(refl["x"], refl["y"])
+            n_text.setPen(green_pen)
+
+        to_use_later = '''
         for refl in refl_list1:
             self.addLine(
                 refl["x_ini"] + 1 + refl["xrs_size"], refl["y_ini"] + 1,
@@ -334,6 +343,7 @@ class ImgGraphicsScene(QGraphicsScene):
                 refl["x_ini"] + 1, refl["y_ini"] + 1 - refl["xrs_size"],
                 green_pen
             )
+        '''
 
     def wheelEvent(self, event):
         float_delta = float(event.delta())
@@ -385,7 +395,7 @@ class DoImageView(QObject):
             "\n node in List:", nod_in_lst
         )
         self.r_list0 = []
-        self.r_list1 = []
+        #self.r_list1 = []
 
         if nod_in_lst:
             nod_num = self.main_obj.current_nod_num
@@ -440,10 +450,11 @@ class DoImageView(QObject):
                 for inner_list in json_lst[0]:
                     self.r_list0.append(
                         {
-                            "x"      : float(inner_list[0]),
-                            "y"      : float(inner_list[1]),
-                            "width"  : float(inner_list[2]),
-                            "height" : float(inner_list[3]),
+                            "x"         : float(inner_list[0]),
+                            "y"         : float(inner_list[1]),
+                            "width"     : float(inner_list[2]),
+                            "height"    : float(inner_list[3]),
+                            "local_hkl" :   str(inner_list[4]),
                         }
                     )
                 to_remove = '''
@@ -489,7 +500,8 @@ class DoImageView(QObject):
                 QImage.Format_ARGB32
             )
             new_pixmap = QPixmap.fromImage(q_img)
-            self.my_scene(new_pixmap, self.r_list0, self.r_list1)
+            self.my_scene(new_pixmap, self.r_list0)
+            #self.my_scene(new_pixmap, self.r_list0, self.r_list1)
 
         except TypeError:
             print("None self.np_full_img")

@@ -60,7 +60,7 @@ def get_refl_lst(expt_path, refl_path, img_num):
         print(
             "\n sending empty reflection list as no reflection list there \n"
         )
-        return [ [], [] ]
+        return [ [] ]
 
     try:
         pan_col = list(map(int, table["panel"]))
@@ -87,7 +87,7 @@ def get_refl_lst(expt_path, refl_path, img_num):
 
     except KeyError:
         print("NOT found << bbox_col >> col")
-        return [ [], [] ]
+        return [ [] ]
 
 old_incomplete = '''
     try:
