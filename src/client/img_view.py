@@ -317,7 +317,7 @@ class ImgGraphicsScene(QGraphicsScene):
         self.addPixmap(self.curr_pixmap)
 
         green_pen = QPen(
-            Qt.green, 1.6, Qt.SolidLine,
+            Qt.green, 0.8, Qt.SolidLine,
             Qt.RoundCap, Qt.RoundJoin
         )
         for refl in refl_list0:
