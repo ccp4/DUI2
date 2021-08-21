@@ -173,7 +173,8 @@ class SimpleParamTab(QWidget):
         self.do_emit_signal(str_path, str_value)
 
 
-class ImportTmpWidg(SimpleParamTab):
+class ImportTmpWidg(QWidget):
+    item_changed = Signal(str, str)
     def __init__(self, parent = None):
         super(ImportTmpWidg, self).__init__(parent)
         self.do_emit = True
@@ -202,6 +203,10 @@ class ImportTmpWidg(SimpleParamTab):
         str_value = sender.text()
         str_path = " "
         self.item_changed.emit(str_path, str_value)
+
+    def update_all_pars(self, tup_lst_pars):
+        print("update_all_pars(ImportTmpWidg) ... dummy")
+
 
 
 class MaskTmpWidg(SimpleParamTab):

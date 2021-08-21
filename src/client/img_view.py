@@ -503,7 +503,7 @@ class DoImageView(QObject):
             self.my_scene(new_pixmap, self.r_list0)
             #self.my_scene(new_pixmap, self.r_list0, self.r_list1)
 
-        except TypeError:
+        except (TypeError, AttributeError):
             print("None self.np_full_img")
 
     def new_full_img(self, tup_data):

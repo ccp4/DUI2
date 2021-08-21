@@ -45,6 +45,7 @@ from img_uploader import flex_arr_2_json
 def fix_alias(short_in):
     pair_list = [
         ("d",   "display"                                   ),
+        ("h",   "history"                                   ),
         ("dl",  "display_log"                               ),
         ("gr",  "get_report"                                ),
         ("gt",  "get_template"                              ),
@@ -352,6 +353,7 @@ class Runner(object):
             root_node.set_root()
             self.step_list = [root_node]
             self.bigger_lin = 0
+            self.lst_cmd_in = []
 
         else:
             self._recover_state(recovery_data)
@@ -378,6 +380,7 @@ class Runner(object):
         if(
             len(tmp_parent_lst_in) > 0 and
             ["display"] not in full_cmd_lst and
+            ["history"] not in full_cmd_lst and
             ["display_log"] not in full_cmd_lst and
             ["get_report"] not in full_cmd_lst and
             ["get_template"] not in full_cmd_lst and
@@ -388,6 +391,7 @@ class Runner(object):
             ["stop"] not in full_cmd_lst
         ):
             node2run = self._create_step(tmp_parent_lst_in)
+            self.lst_cmd_in.append(cmd_dict)
 
         return_list = []
         for uni_cmd in full_cmd_lst:
@@ -395,6 +399,9 @@ class Runner(object):
                 return_list = format_utils.get_lst2show(self)
                 self.tree_output(return_list)
                 self.tree_output.print_output()
+
+            elif uni_cmd == ["history"]:
+                return_list = self.lst_cmd_in
 
             elif uni_cmd == ["display_log"]:
                 for lin2go in cmd_dict["nod_lst"]:
