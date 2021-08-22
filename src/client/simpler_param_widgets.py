@@ -201,7 +201,8 @@ class ImportTmpWidg(QWidget):
     def line_changed(self):
         sender = self.sender()
         str_value = sender.text()
-        str_path = " "
+        #TODO consider another parameter here
+        str_path = "input.directory"
         self.item_changed.emit(str_path, str_value)
 
     def update_all_pars(self, tup_lst_pars):

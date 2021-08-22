@@ -495,6 +495,11 @@ class MainObject(QObject):
     def item_param_changed(self, str_path, str_value):
         try:
             self.sender().twin_widg.update_param(str_path, str_value)
+
+        except AttributeError:
+            print("no twin widget to update")
+
+        try:
             if(
                 self.current_nod_num == self.new_node.number
                 and
@@ -505,7 +510,7 @@ class MainObject(QObject):
         except AttributeError:
             print(
                 "No need to update parameters for non existent green node \n",
-                "or no twin widget"
+                "or no twin widget \n"
             )
 
     def add_new_node(self):
