@@ -493,8 +493,8 @@ class MainObject(QObject):
         self.reset_param()
 
     def item_param_changed(self, str_path, str_value):
-        self.sender().twin_widg.update_param(str_path, str_value)
         try:
+            self.sender().twin_widg.update_param(str_path, str_value)
             if(
                 self.current_nod_num == self.new_node.number
                 and
@@ -503,7 +503,10 @@ class MainObject(QObject):
                 self.new_node.set_parameter(str_path, str_value)
 
         except AttributeError:
-            print("No need to update parameters for non existent green node")
+            print(
+                "No need to update parameters for non existent green node \n",
+                "or no twin widget"
+            )
 
     def add_new_node(self):
         print("add_new_node")
@@ -528,6 +531,10 @@ class MainObject(QObject):
         except IndexError:
             tmp_cmd_par = self.new_node
 
+        print(
+            "update_all_param(MainObject)...tmp_cmd_par.get_all_params() = ",
+            tmp_cmd_par.get_all_params()
+        )
         self.param_widgets[self.current_widget_key]["simple"].update_all_pars(
             tmp_cmd_par.get_all_params()
         )

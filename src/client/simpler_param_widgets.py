@@ -205,9 +205,16 @@ class ImportTmpWidg(QWidget):
         self.item_changed.emit(str_path, str_value)
 
     def update_all_pars(self, tup_lst_pars):
-        print("update_all_pars(ImportTmpWidg) ... dummy")
+        print(
+            "update_all_pars(ImportTmpWidg)",
+            tup_lst_pars, "... dummy"
+        )
 
-
+    def update_param(self, str_path, str_value):
+        print(
+            "update_param(ImportTmpWidg)",
+            str_path, str_value, "... dummy"
+        )
 
 class MaskTmpWidg(SimpleParamTab):
     def __init__(self, parent = None):
