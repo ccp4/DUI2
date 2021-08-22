@@ -152,6 +152,7 @@ class CmdNode(object):
         self._lst_expt_in = []
         self._lst_refl_in = []
         self.full_cmd_lst = [['Root']]
+        self.lst2run.append(['dials.Root'])
         self.status = "Succeeded"
 
     def set_base_dir(self, dir_in = None):

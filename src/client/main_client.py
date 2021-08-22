@@ -430,6 +430,7 @@ class MainObject(QObject):
                 self.server_nod_lst[self.current_nod_num]["status"]
                 == "Succeeded"
             ):
+                print("\n####### key =", str_key, "\n")
                 for bt_labl in self.param_widgets[str_key]["nxt_widg_lst"]:
                     nxt_butt = QPushButton(bt_labl)
                     nxt_butt.cmd_str = bt_labl
