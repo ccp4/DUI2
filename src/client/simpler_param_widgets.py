@@ -208,8 +208,15 @@ class ImportTmpWidg(QWidget):
     def update_all_pars(self, tup_lst_pars):
         print(
             "update_all_pars(ImportTmpWidg)",
-            tup_lst_pars, "... dummy"
+            tup_lst_pars
         )
+
+        for n, par in enumerate(tup_lst_pars):
+            print("n=", n, "par=", par)
+
+        dir_path = str(tup_lst_pars[0][0]["value"])
+        print("dir_path =", dir_path)
+        self.imp_txt.setText(dir_path)
 
     def update_param(self, str_path, str_value):
         print(
