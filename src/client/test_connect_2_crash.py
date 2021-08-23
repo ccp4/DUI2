@@ -23,6 +23,7 @@ copyright (c) CCP4 - DLS
 
 import sys, json
 import requests
+from exec_utils import uni_url
 
 lst_cmd = [
              {"nod_lst":[1], "cmd_lst":"gis " +
@@ -68,9 +69,7 @@ if __name__ == "__main__":
             else:
                 my_cmd = do_this
 
-            req_get = requests.get(
-                'http://localhost:8765/', stream = True, params = my_cmd
-            )
+            req_get = requests.get(uni_url, stream = True, params = my_cmd)
 
             while True:
                 tmp_dat = req_get.raw.readline()

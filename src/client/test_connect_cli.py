@@ -23,6 +23,8 @@ copyright (c) CCP4 - DLS
 
 import sys, json
 import requests
+from exec_utils import uni_url
+
 opt2 =  '''
             {"nod_lst":[0], "cmd_lst":["ip x41"]},
             {"nod_lst":[0], "cmd_lst":["ip x42"]},
@@ -77,9 +79,7 @@ if __name__ == "__main__":
             else:
                 my_cmd = do_this
 
-            req_get = requests.get(
-                'http://localhost:8765/', stream = True, params = my_cmd
-            )
+            req_get = requests.get(uni_url, stream = True, params = my_cmd)
 
             while True:
                 tmp_dat = req_get.raw.readline()

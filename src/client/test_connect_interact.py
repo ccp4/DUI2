@@ -24,15 +24,16 @@ copyright (c) CCP4 - DLS
 import sys, json
 import requests
 
+from exec_utils import uni_url
+
+
 if __name__ == "__main__":
     lst_cmd = []
     for rep in range(999):
         cmd_in = input("type: \"Node,command\":")
         [parent, cmd] = cmd_in.split(",")
         full_cmd = {"nod_lst":[parent], "cmd_lst":[cmd]}
-        req_get = requests.get(
-            'http://localhost:8765/', stream = True, params = full_cmd
-        )
+        req_get = requests.get(uni_url, stream = True, params = full_cmd)
 
         while True:
             tmp_dat = req_get.raw.readline()

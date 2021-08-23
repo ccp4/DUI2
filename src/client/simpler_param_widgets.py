@@ -213,10 +213,16 @@ class ImportTmpWidg(QWidget):
 
         for n, par in enumerate(tup_lst_pars):
             print("n=", n, "par=", par)
+        try:
+            dir_path = str(tup_lst_pars[0][0]["value"])
+            print("dir_path =", dir_path)
+            self.imp_txt.setText(dir_path)
 
-        dir_path = str(tup_lst_pars[0][0]["value"])
-        print("dir_path =", dir_path)
-        self.imp_txt.setText(dir_path)
+        except IndexError:
+            print(" Not copying parameters from node (IndexError)")
+            dir_path = ""
+            self.imp_txt.setText(dir_path)
+
 
     def update_param(self, str_path, str_value):
         print(

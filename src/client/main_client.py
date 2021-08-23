@@ -171,7 +171,7 @@ class MainObject(QObject):
             comb_simpl_widg.twin_widg = ce_advanced_parameters
 
         except TypeError:
-            print("failed to connect to server")
+            print("failed to connect to server on:", uni_url)
             sys.exit()
 
         self.param_widgets = widgets_defs
