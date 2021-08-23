@@ -139,7 +139,7 @@ if __name__ == "__main__":
     cmd_dict = multi_node.str2dic("display")
     cmd_tree_runner.run_dict(cmd_dict)
 
-    PORT = 8080
+    PORT = 8765
     with socketserver.ThreadingTCPServer(("", PORT), ReqHandler) as http_daemon:
         print("serving at port", PORT)
         try:

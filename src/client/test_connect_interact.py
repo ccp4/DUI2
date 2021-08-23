@@ -31,7 +31,7 @@ if __name__ == "__main__":
         [parent, cmd] = cmd_in.split(",")
         full_cmd = {"nod_lst":[parent], "cmd_lst":[cmd]}
         req_get = requests.get(
-            'http://localhost:8080/', stream = True, params = full_cmd
+            'http://localhost:8765/', stream = True, params = full_cmd
         )
 
         while True:

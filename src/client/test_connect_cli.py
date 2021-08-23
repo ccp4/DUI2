@@ -78,7 +78,7 @@ if __name__ == "__main__":
                 my_cmd = do_this
 
             req_get = requests.get(
-                'http://localhost:8080/', stream = True, params = my_cmd
+                'http://localhost:8765/', stream = True, params = my_cmd
             )
 
             while True:

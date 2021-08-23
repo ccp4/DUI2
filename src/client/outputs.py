@@ -135,9 +135,7 @@ class DoLoadHTML(QObject):
                         "nod_lst":[nod_p_num],
                         "cmd_lst":["get_report"]
                     }
-                    r_g = requests.get(
-                        'http://localhost:8080/', stream = True, params = cmd
-                    )
+                    r_g = requests.get(uni_url, stream = True, params = cmd)
                     full_file = ''
                     while True:
                         tmp_dat = r_g.raw.readline()
