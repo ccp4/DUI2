@@ -23,8 +23,7 @@ copyright (c) CCP4 - DLS
 
 import http.server, socketserver
 from urllib.parse import urlparse, parse_qs
-import json
-import zlib
+import json, os, zlib, sys
 
 import multi_node
 
@@ -69,7 +68,7 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
             #lst_out = []
             lst_out = cmd_tree_runner.run_dict(cmd_dict, self)
 
-            if type(lst_out) is list:
+            if type(lst_out) is list or type(lst_out) is dict:
                 self.send_header('Content-type', 'text/plain')
                 self.end_headers()
                 json_str = json.dumps(lst_out) + '\n'
@@ -87,6 +86,7 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
                 self.wfile.write(bytes(byt_data))
 
             else:
+                #type(lst_out) = <class 'str'> ,# html report
                 self.send_header('Content-type', 'text/plain')
                 self.end_headers()
                 try:
@@ -101,6 +101,7 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
                 except FileNotFoundError:
                     self.wfile.write(bytes("/*EOF*/", 'utf-8'))
 
+
             print("sending /*EOF*/")
             self.wfile.write(bytes('/*EOF*/', 'utf-8'))
 
@@ -109,6 +110,24 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
 
         except ConnectionResetError:
             print("\n *** ConnectionResetError *** while sending EOF or JSON \n")
+
+
+
+def iter_dict(file_path):
+    file_name = file_path.split("/")[-1]
+    local_dict = {
+        "file_name": file_name, "file_path": file_path, "list_child": []
+    }
+    if os.path.isdir(file_path):
+        local_dict["isdir"] = True
+        for new_file_name in sorted(os.listdir(file_path)):
+            new_file_path = os.path.join(file_path, new_file_name)
+            local_dict["list_child"].append(iter_dict(new_file_path))
+
+    else:
+        local_dict["isdir"] = False
+
+    return local_dict
 
 
 if __name__ == "__main__":
@@ -122,19 +141,16 @@ if __name__ == "__main__":
     except FileNotFoundError:
         print("Starting from hacked multiple import")
         cmd_tree_runner = multi_node.Runner(None)
-        tmp_off = '''
-        lst_dic = [
-            {'nod_lst': [0], 'cmd_lst': [['ip', 'x41']]},
-            {'nod_lst': [0], 'cmd_lst': [['ip', 'x42']]},
-            {'nod_lst': [0], 'cmd_lst': [['ip', 'x43']]},
-            {
-                'nod_lst': [0],
-                'cmd_lst': [['ip', '/scratch/dui_tst/C2sum_1/C2sum_1_0*']]
-            }
-        ]
-        for cmd_dict in lst_dic:
-            cmd_tree_runner.run_dict(cmd_dict)
-        '''
+
+        try:
+            tree_ini_path = sys.argv[1]
+
+        except IndexError:
+            tree_ini_path = os.environ['HOME']
+            print("NOT GIVEN init path, assuming:", tree_ini_path)
+
+        tree_dic_lst = iter_dict(tree_ini_path)
+        cmd_tree_runner.set_dir_tree(tree_dic_lst)
 
     cmd_dict = multi_node.str2dic("display")
     cmd_tree_runner.run_dict(cmd_dict)

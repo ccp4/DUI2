@@ -46,6 +46,7 @@ def fix_alias(short_in):
     pair_list = [
         ("d",   "display"                                   ),
         ("h",   "history"                                   ),
+        ("dt",  "dir_tree"                                  ),
         ("dl",  "display_log"                               ),
         ("gr",  "get_report"                                ),
         ("gt",  "get_template"                              ),
@@ -359,6 +360,9 @@ class Runner(object):
         else:
             self._recover_state(recovery_data)
 
+    def set_dir_tree(self, tree_dic_lst):
+        self.dir_tree_dict = tree_dic_lst
+
     def run_dict(self, cmd_dict, req_obj = None):
         tmp_parent_lst_in = []
         for lin2go in cmd_dict["nod_lst"]:
@@ -382,6 +386,7 @@ class Runner(object):
             len(tmp_parent_lst_in) > 0 and
             ["display"] not in full_cmd_lst and
             ["history"] not in full_cmd_lst and
+            ["dir_tree"] not in full_cmd_lst and
             ["display_log"] not in full_cmd_lst and
             ["get_report"] not in full_cmd_lst and
             ["get_template"] not in full_cmd_lst and
@@ -400,6 +405,9 @@ class Runner(object):
                 return_list = format_utils.get_lst2show(self)
                 self.tree_output(return_list)
                 self.tree_output.print_output()
+
+            elif uni_cmd == ["dir_tree"]:
+                return_list = self.dir_tree_dict
 
             elif uni_cmd == ["history"]:
                 #return_list = self.lst_cmd_in

@@ -31,7 +31,12 @@ if __name__ == "__main__":
     lst_cmd = []
     for rep in range(999):
         cmd_in = input("type: \"Node,command\":")
-        [parent, cmd] = cmd_in.split(",")
+        try:
+            [parent, cmd] = cmd_in.split(",")
+
+        except ValueError:
+            [parent, cmd] = ["", cmd_in]
+
         full_cmd = {"nod_lst":[parent], "cmd_lst":[cmd]}
         req_get = requests.get(uni_url, stream = True, params = full_cmd)
 
