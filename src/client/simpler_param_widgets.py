@@ -31,6 +31,8 @@ from PySide2.QtWidgets import *
 from PySide2 import QtUiTools
 from PySide2.QtGui import *
 
+from exec_utils import json_data_request, uni_url
+
 def _get_all_direct_layout_widget_children(parent):
     """Walk a widget tree and get all non-QLayout direct children
 
@@ -207,6 +209,11 @@ class Client(QDialog):
         self.setLayout(mainLayout)
 
     def json_data_request(self):
+
+        cmd = {"nod_lst":[""], "cmd_lst":["dir_tree"]}
+        json_out = json_data_request(uni_url, cmd)
+
+        '''
         req_get = requests.get(
             'http://localhost:8080/', stream = True,
             params = {"path":"/scratch/dui_tst/"}, timeout = 3
@@ -232,8 +239,11 @@ class Client(QDialog):
         if json_out is not None:
             json_out = json.loads(str_lst)
             #print("json_out =", json_out)
+        '''
 
-            self.t_view.fillTree(json_out)
+        self.t_view.fillTree(json_out)
+
+
 
 
 
