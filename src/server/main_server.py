@@ -139,17 +139,19 @@ if __name__ == "__main__":
         cmd_tree_runner = multi_node.Runner(runner_data)
 
     except FileNotFoundError:
-        print("Starting from hacked multiple import")
         cmd_tree_runner = multi_node.Runner(None)
-
         try:
             tree_ini_path = sys.argv[1]
 
         except IndexError:
             tree_ini_path = os.environ['HOME']
-            print("NOT GIVEN init path, assuming:", tree_ini_path)
+            print(
+                "\n\n *** NOT GIVEN init path, assuming:",
+                tree_ini_path, " *** \n"
+            )
 
         tree_dic_lst = iter_dict(tree_ini_path)
+        #TODO make this set_dir_tree persistent with recoveries
         cmd_tree_runner.set_dir_tree(tree_dic_lst)
 
     cmd_dict = multi_node.str2dic("display")
