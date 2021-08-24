@@ -206,6 +206,7 @@ class Client(QDialog):
         open_curr_dir.clicked.connect(self.set_dir)
         mainLayout.addWidget(open_curr_dir)
         self.setLayout(mainLayout)
+
         self.show()
 
         cmd = {"nod_lst":[""], "cmd_lst":["dir_tree"]}
