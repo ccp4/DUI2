@@ -354,7 +354,7 @@ class Runner(object):
             root_node.set_root()
             self.step_list = [root_node]
             self.bigger_lin = 0
-            self.lst_cmd_in = []
+            #self.lst_cmd_in = []
 
         else:
             self._recover_state(recovery_data)
@@ -392,7 +392,7 @@ class Runner(object):
             ["stop"] not in full_cmd_lst
         ):
             node2run = self._create_step(tmp_parent_lst_in)
-            self.lst_cmd_in.append(cmd_dict)
+            #self.lst_cmd_in.append(cmd_dict)
 
         return_list = []
         for uni_cmd in full_cmd_lst:
@@ -402,7 +402,8 @@ class Runner(object):
                 self.tree_output.print_output()
 
             elif uni_cmd == ["history"]:
-                return_list = self.lst_cmd_in
+                #return_list = self.lst_cmd_in
+                print("history command is temporarily off")
 
             elif uni_cmd == ["display_log"]:
                 for lin2go in cmd_dict["nod_lst"]:
