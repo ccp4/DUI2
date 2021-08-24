@@ -157,7 +157,9 @@ if __name__ == "__main__":
     cmd_dict = multi_node.str2dic("display")
     cmd_tree_runner.run_dict(cmd_dict)
 
-    HOST = "localhost"
+    #HOST = "localhost"
+    HOST = "serverip"
+    
     PORT = 45678
     with socketserver.ThreadingTCPServer((HOST, PORT), ReqHandler) as http_daemon:
         print("serving at port", PORT)

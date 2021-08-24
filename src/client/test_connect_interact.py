@@ -24,8 +24,8 @@ copyright (c) CCP4 - DLS
 import sys, json
 import requests
 
-from exec_utils import uni_url
-
+#from exec_utils import uni_url
+uni_url = 'http://localhost:45678/'
 
 if __name__ == "__main__":
     lst_cmd = []
