@@ -173,8 +173,7 @@ class SimpleParamTab(QWidget):
         str_path = str(sender.local_path)
 
         self.do_emit_signal(str_path, str_value)
-############################################################################################
-import requests, json, sys
+
 
 def iter_gui(myself, currentItem):
     for child in myself["list_child"]:
@@ -203,51 +202,20 @@ class Client(QDialog):
         mainLayout = QVBoxLayout()
         self.t_view = MyTree()
         mainLayout.addWidget(self.t_view)
-        send2serverButton = QPushButton("Launch command")
-        send2serverButton.clicked.connect(self.json_data_request)
-        mainLayout.addWidget(send2serverButton)
+        open_curr_dir = QPushButton("Open Dir")
+        open_curr_dir.clicked.connect(self.set_dir)
+        mainLayout.addWidget(open_curr_dir)
         self.setLayout(mainLayout)
-
-    def json_data_request(self):
+        self.show()
 
         cmd = {"nod_lst":[""], "cmd_lst":["dir_tree"]}
         json_out = json_data_request(uni_url, cmd)
-
-        '''
-        req_get = requests.get(
-            'http://localhost:8080/', stream = True,
-            params = {"path":"/scratch/dui_tst/"}, timeout = 3
-        )
-        str_lst = ''
-        line_str = ''
-        times_loop = 10
-        json_out = ""
-        for count_times in range(times_loop):
-            tmp_dat = req_get.raw.readline()
-            line_str = str(tmp_dat.decode('utf-8'))
-            if line_str[-7:] == '/*EOF*/':
-                print('/*EOF*/ received')
-                break
-
-            else:
-                str_lst = line_str
-
-            if count_times == times_loop - 1:
-                print('to many "lines" in http response')
-                json_out = None
-
-        if json_out is not None:
-            json_out = json.loads(str_lst)
-            #print("json_out =", json_out)
-        '''
-
         self.t_view.fillTree(json_out)
 
+    def set_dir(self):
+        print("set_dir ...")
 
 
-
-
-############################################################################################
 class ImportTmpWidg(QWidget):
     item_changed = Signal(str, str)
     def __init__(self, parent = None):
@@ -275,9 +243,8 @@ class ImportTmpWidg(QWidget):
 
     def open_dir_widget(self):
         print("open_dir_widget")
-        self.open_widget = Client()
-        self.open_widget.show()
-        #open_widget.fillTree()
+        self.open_widget = Client(self)
+        #self.open_widget.show()
 
     def reset_pars(self):
         self.imp_txt.setText("")
