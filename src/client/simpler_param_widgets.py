@@ -175,16 +175,18 @@ class SimpleParamTab(QWidget):
         self.do_emit_signal(str_path, str_value)
 
 
-def iter_gui(myself, currentItem):
-    for child in myself["list_child"]:
-        if myself["isdir"]:
-            dirItem = QTreeWidgetItem(currentItem)
-            dirItem.setText(0, child["file_name"])
-            iter_gui(child, dirItem)
 
-        else:
-            fileItem = QTreeWidgetItem(currentItem)
-            fileItem.setText(0, child["file_name"])
+def iter_tree(my_dict, currentItem):
+    for child_dict in my_dict["list_child"]:
+        new_item = QTreeWidgetItem(currentItem)
+        new_item.file_path = child_dict["file_path"]
+        new_item_text = str(child_dict["file_name"])
+        if child_dict["isdir"]:
+            new_item_text = new_item_text + "  ... "
+
+        new_item.setText(0, new_item_text)
+        if my_dict["isdir"]:
+            iter_tree(child_dict, new_item)
 
 
 class MyTree(QTreeWidget):
@@ -193,12 +195,13 @@ class MyTree(QTreeWidget):
 
     def fillTree(self, lst_dic):
         self.clear()
-        iter_gui(lst_dic, self)
+        iter_tree(lst_dic, self)
+        #print("lst_dic =", lst_dic)
 
 
-class Client(QDialog):
+class FileBrowser(QDialog):
     def __init__(self, parent=None):
-        super(Client, self).__init__(parent)
+        super(FileBrowser, self).__init__(parent)
         mainLayout = QVBoxLayout()
         self.t_view = MyTree()
         mainLayout.addWidget(self.t_view)
@@ -207,6 +210,8 @@ class Client(QDialog):
         mainLayout.addWidget(open_curr_dir)
         self.setLayout(mainLayout)
 
+        self.t_view.clicked[QModelIndex].connect(self.node_clicked)
+
         self.show()
 
         cmd = {"nod_lst":[""], "cmd_lst":["dir_tree"]}
@@ -214,7 +219,12 @@ class Client(QDialog):
         self.t_view.fillTree(json_out)
 
     def set_dir(self):
-        print("set_dir ...")
+        print("set_dir ...", self.last_file_clicked)
+
+    def node_clicked(self, it_index):
+        item = self.t_view.itemFromIndex(it_index)
+        self.last_file_clicked = str(item.file_path)
+        print("item.file_path =", self.last_file_clicked)
 
 
 class ImportTmpWidg(QWidget):
@@ -244,7 +254,7 @@ class ImportTmpWidg(QWidget):
 
     def open_dir_widget(self):
         print("open_dir_widget")
-        self.open_widget = Client(self)
+        self.open_widget = FileBrowser(self)
         #self.open_widget.show()
 
     def reset_pars(self):
