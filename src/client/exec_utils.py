@@ -40,8 +40,8 @@ except ModuleNotFoundError:
     sys.path.insert(1, comm_path)
     import format_utils
 
-uni_url = 'http://localhost:45678/'
-#uni_url = 'http://supercomputo.cimav.edu.mx:45678/'
+#uni_url = 'http://localhost:45678/'
+uni_url = 'http://supercomputo.cimav.edu.mx:45678/'
 
 def build_advanced_params_widget(cmd_str):
     cmd = {"nod_lst":"", "cmd_lst":[cmd_str]}

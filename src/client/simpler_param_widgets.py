@@ -200,6 +200,7 @@ class MyTree(QTreeWidget):
 
 
 class FileBrowser(QDialog):
+    file_selected = Signal(str)
     def __init__(self, parent=None):
         super(FileBrowser, self).__init__(parent)
         mainLayout = QVBoxLayout()
@@ -219,7 +220,9 @@ class FileBrowser(QDialog):
         self.t_view.fillTree(json_out)
 
     def set_dir(self):
+        self.file_selected.emit(self.last_file_clicked)
         print("set_dir ...", self.last_file_clicked)
+        self.close()
 
     def node_clicked(self, it_index):
         item = self.t_view.itemFromIndex(it_index)
@@ -252,17 +255,23 @@ class ImportTmpWidg(QWidget):
         self.main_vbox.addWidget(QLabel(" "))
         self.setLayout(self.main_vbox)
 
+    def set_dir(self, str_dir):
+        self.imp_txt.setText(str_dir)
+        self.line_changed()
+
     def open_dir_widget(self):
         print("open_dir_widget")
         self.open_widget = FileBrowser(self)
+        self.open_widget.file_selected.connect(self.set_dir)
         #self.open_widget.show()
 
     def reset_pars(self):
         self.imp_txt.setText("")
 
     def line_changed(self):
-        sender = self.sender()
-        str_value = sender.text()
+        print("line_changed")
+        #sender = self.sender()
+        str_value = self.imp_txt.text()
         #TODO consider another parameter here
         str_path = "input.directory"
         self.item_changed.emit(str_path, str_value)
