@@ -407,7 +407,11 @@ class Runner(object):
                 self.tree_output.print_output()
 
             elif uni_cmd == ["dir_tree"]:
-                return_list = self.dir_tree_dict
+                str_dir_tree = json.dumps(self.dir_tree_dict)
+                byt_data = bytes(str_dir_tree.encode('utf-8'))
+                return_list = byt_data
+
+                #return_list = self.dir_tree_dict
 
             elif uni_cmd == ["history"]:
                 #return_list = self.lst_cmd_in
@@ -670,7 +674,6 @@ def str2dic(cmd_str):
             par_n_cmd_lst.append(inner_lst)
 
     else:
-        print("assuming disconnected command")
         par_n_cmd_lst = [[cmd_str]]
 
     cmd_dict["cmd_lst"] = par_n_cmd_lst

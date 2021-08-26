@@ -21,8 +21,7 @@ copyright (c) CCP4 - DLS
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-import logging
-import sys
+import sys, zlib, json, requests
 
 default_max_nproc = 4
 
@@ -175,6 +174,38 @@ class SimpleParamTab(QWidget):
         self.do_emit_signal(str_path, str_value)
 
 
+class ProgBarBox(QProgressDialog):
+    def __init__(self, max_val=100, min_val=0, text="Working", parent = None):
+        print("ProgBarBox __init__")
+
+        if max_val <= min_val:
+            raise ValueError("max_val must be larger than min_val")
+
+        super(ProgBarBox, self).__init__(
+            labelText=text,
+            cancelButtonText="",
+            minimum=min_val,
+            maximum=max_val,
+            parent=None)
+
+        self.setValue(min_val)
+        self.setWindowTitle("Import DataSet")
+        self.setWindowModality(Qt.WindowModal)
+        self.setMinimumDuration(50)
+        self.setCancelButton(None)
+        self.show()
+
+    def __call__(self, updated_val):
+        self.setValue(updated_val)
+        loop = QEventLoop()
+        QTimer.singleShot(10, loop.quit)
+        loop.exec_()
+
+    def ended(self):
+        self.setValue(100)
+        print("ProgBarBox ended")
+        self.close()
+
 
 def iter_tree(my_dict, currentItem):
     for child_dict in my_dict["list_child"]:
@@ -196,28 +227,42 @@ class MyTree(QTreeWidget):
     def fillTree(self, lst_dic):
         self.clear()
         iter_tree(lst_dic, self)
-        #print("lst_dic =", lst_dic)
 
 
 class FileBrowser(QDialog):
     file_selected = Signal(str)
     def __init__(self, parent=None):
         super(FileBrowser, self).__init__(parent)
+        self.my_bar = ProgBarBox(min_val=0, max_val=10, text="loading dir tree")
+        self.my_bar(1)
         mainLayout = QVBoxLayout()
         self.t_view = MyTree()
+        self.t_view.clicked[QModelIndex].connect(self.node_clicked)
         mainLayout.addWidget(self.t_view)
         open_curr_dir = QPushButton("Open Dir")
         open_curr_dir.clicked.connect(self.set_dir)
         mainLayout.addWidget(open_curr_dir)
         self.setLayout(mainLayout)
-
-        self.t_view.clicked[QModelIndex].connect(self.node_clicked)
-
-        self.show()
-
         cmd = {"nod_lst":[""], "cmd_lst":["dir_tree"]}
-        json_out = json_data_request(uni_url, cmd)
+        self.my_bar(3)
+
+        #TODO consider reuse elsewhere the next bit tat uses requests/zlib
+        ##################################################################
+        req_get = requests.get(
+            uni_url, stream = True, params = cmd
+        )
+
+        compresed = req_get.content
+        dic_str = zlib.decompress(compresed)
+        ##################################################################
+
+        json_out = json.loads(dic_str)
+
+        self.my_bar(7)
         self.t_view.fillTree(json_out)
+        self.my_bar(9)
+        self.my_bar.ended()
+        self.show()
 
     def set_dir(self):
         self.file_selected.emit(self.last_file_clicked)
@@ -260,10 +305,12 @@ class ImportTmpWidg(QWidget):
         self.line_changed()
 
     def open_dir_widget(self):
-        print("open_dir_widget")
+
+
+        print("open_dir_widget ... 1")
         self.open_widget = FileBrowser(self)
         self.open_widget.file_selected.connect(self.set_dir)
-        #self.open_widget.show()
+        print("open_dir_widget ... 2")
 
     def reset_pars(self):
         self.imp_txt.setText("")
