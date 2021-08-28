@@ -145,6 +145,10 @@ if __name__ == "__main__":
         cmd_tree_runner = multi_node.Runner(None)
         try:
             tree_ini_path = sys.argv[1]
+            print(
+                "\n\n *** given init path as: ",
+                tree_ini_path, " *** \n"
+            )
 
         except IndexError:
             tree_ini_path = os.environ['HOME']

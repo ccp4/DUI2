@@ -175,10 +175,25 @@ def get_json_w_img_2d(experiments_list_path, img_num):
     my_sweep = experiments.imagesets()[0]
     print("geting image #", img_num)
     data_xy_flex = my_sweep.get_raw_data(img_num)[pan_num].as_double()
+
+    #start_tm = time.time()
+    #str_data = img_stream_ext.img_arr_2_str(data_xy_flex)
+    ######################################################################
+
     start_tm = time.time()
-    str_data = img_stream_ext.img_arr_2_str(data_xy_flex)
+    np_arr = data_xy_flex.as_numpy_array()
+    d1 = np_arr.shape[0]
+    d2 = np_arr.shape[1]
+    str_tup = str(tuple(np_arr.ravel()))
+    str_data = "{\"d1\":" + str(d1) + ",\"d2\":" + str(d2) \
+             + ",\"str_data\":\"" + str_tup[1:-1] + "\"}"
+
     end_tm = time.time()
-    print("C++ bit took ", end_tm - start_tm)
+    print("str/tuple use and compressing took ", end_tm - start_tm)
+
+    ######################################################################
+    #end_tm = time.time()
+    #print("C++ bit took ", end_tm - start_tm)
 
     return str_data
 

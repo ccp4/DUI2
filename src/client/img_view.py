@@ -415,7 +415,6 @@ class DoImageView(QObject):
                 self.cur_img_num != in_img_num or
                 self.cur_templ != new_templ
             ):
-                ##############################################
                 x_ax = np.arange(self.img_d1_d2[1])
                 y_ax = np.arange(self.img_d1_d2[0])
                 pi_2 = 3.14159235358 * 2.0
@@ -423,14 +422,6 @@ class DoImageView(QObject):
                 sy = 1.0-(np.cos(y_ax * pi_2 / self.img_d1_d2[0]))
                 xx, yy = np.meshgrid(sx, sy, sparse = True)
                 self.np_full_img = xx + yy
-                ##############################################
-                '''
-                self.np_full_img = np.arange(
-                    self.img_d1_d2[0] * self.img_d1_d2[1]
-                ).reshape(
-                    self.img_d1_d2[0], self.img_d1_d2[1]
-                )
-                '''
                 self.np_full_img = 50 * (
                     self.np_full_img / self.np_full_img.max()
                 )
@@ -485,7 +476,7 @@ class DoImageView(QObject):
         self.cur_img_num = in_img_num
 
         self.refresh_pixel_map()
-        #self.full_img_show()
+        self.full_img_show()
 
     def refresh_pixel_map(self):
         try:
@@ -507,10 +498,10 @@ class DoImageView(QObject):
             print("None self.np_full_img")
 
     def new_full_img(self, tup_data):
+        self.full_image_loaded = True
         print(
             "new_full_img from: node ", tup_data[0], ", image ", tup_data[1]
         )
-        self.full_image_loaded = True
         self.np_full_img = tup_data[2]
         self.refresh_pixel_map()
 
@@ -616,11 +607,12 @@ class DoImageView(QObject):
                 rep_len_y = np.size(self.np_full_img[0:1,:]) - dict_slice["y1"]
                 print("limiting dy")
 
-            self.np_full_img[
-                dict_slice["x1"]:dict_slice["x1"] + rep_len_x,
-                dict_slice["y1"]:dict_slice["y1"] + rep_len_y
-            ] = rep_slice_img[0:rep_len_x, 0:rep_len_y]
-            self.refresh_pixel_map()
+            if self.full_image_loaded == False:
+                self.np_full_img[
+                    dict_slice["x1"]:dict_slice["x1"] + rep_len_x,
+                    dict_slice["y1"]:dict_slice["y1"] + rep_len_y
+                ] = rep_slice_img[0:rep_len_x, 0:rep_len_y]
+                self.refresh_pixel_map()
 
         except TypeError:
             print("loading image slice in next loop")
@@ -632,36 +624,36 @@ class DoImageView(QObject):
         self.l_stat.load_progress(progress)
 
     def slice_show_img(self):
-        #if self.full_image_loaded == False:
-        self.l_stat.load_started()
+        if self.full_image_loaded == False:
+            self.l_stat.load_started()
 
-        try:
-            self.load_slice_image.quit()
-            self.load_slice_image.wait()
+            try:
+                self.load_slice_image.quit()
+                self.load_slice_image.wait()
 
-        except AttributeError:
-            print("first slice of image loading")
+            except AttributeError:
+                print("first slice of image loading")
 
-        self.get_x1_y1_x2_y2()
-        self.get_inv_scale()
+            self.get_x1_y1_x2_y2()
+            self.get_inv_scale()
 
-        self.load_slice_image = LoadSliceImage(
-            parent_obj = self,
-            nod_num_lst = [self.cur_nod_num],
-            img_num = self.cur_img_num,
-            inv_scale = self.inv_scale,
-            x1 = self.x1,
-            y1 = self.y1,
-            x2 = self.x2,
-            y2 = self.y2
-        )
-        self.load_slice_image.slice_loaded.connect(
-            self.new_slice_img
-        )
-        self.load_slice_image.progressing.connect(
-            self.update_progress
-        )
-        self.load_slice_image.start()
+            self.load_slice_image = LoadSliceImage(
+                parent_obj = self,
+                nod_num_lst = [self.cur_nod_num],
+                img_num = self.cur_img_num,
+                inv_scale = self.inv_scale,
+                x1 = self.x1,
+                y1 = self.y1,
+                x2 = self.x2,
+                y2 = self.y2
+            )
+            self.load_slice_image.slice_loaded.connect(
+                self.new_slice_img
+            )
+            self.load_slice_image.progressing.connect(
+                self.update_progress
+            )
+            self.load_slice_image.start()
 
     def OneOneScale(self, event):
         print("OneOneScale")
