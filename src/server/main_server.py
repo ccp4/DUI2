@@ -27,6 +27,9 @@ import json, os, zlib, sys
 
 import multi_node
 
+HOST = "localhost"
+#HOST = "serverip"
+
 class ReqHandler(http.server.BaseHTTPRequestHandler):
     def do_GET(self):
 
@@ -156,9 +159,6 @@ if __name__ == "__main__":
 
     cmd_dict = multi_node.str2dic("display")
     cmd_tree_runner.run_dict(cmd_dict)
-
-    HOST = "localhost"
-    #HOST = "serverip"
 
     PORT = 45678
     with socketserver.ThreadingTCPServer((HOST, PORT), ReqHandler) as http_daemon:
