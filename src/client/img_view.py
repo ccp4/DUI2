@@ -476,7 +476,7 @@ class DoImageView(QObject):
         self.cur_img_num = in_img_num
 
         self.refresh_pixel_map()
-        self.full_img_show()
+        #self.full_img_show()
 
     def refresh_pixel_map(self):
         try:
