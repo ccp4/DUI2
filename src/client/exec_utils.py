@@ -27,8 +27,8 @@ import requests, json, os, sys
 
 from gui_utils import AdvancedParameters, widgets_defs
 
-uni_url = 'http://localhost:45678/'
-#uni_url = 'http://supercomputo.cimav.edu.mx:45678/'
+#uni_url = 'http://localhost:45678/'
+uni_url = 'http://supercomputo.cimav.edu.mx:45678/'
 
 try:
     from shared_modules import format_utils
@@ -114,7 +114,6 @@ class Run_n_Output(QThread):
                 not_yet_read = False
 
                 try:
-                    print("line_str <<" + line_str + ">>")
                     nod_p_num = int(line_str.split("=")[1])
                     self.number = nod_p_num
                     print("\n QThread.number =", self.number)
