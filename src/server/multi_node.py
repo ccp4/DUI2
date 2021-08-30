@@ -236,6 +236,7 @@ class CmdNode(object):
         n_Broken_Pipes = 0
         if self.nod_req is not None:
             try:
+                self.nod_req.send_response(201)
                 self.nod_req.send_header('Content-type', 'text/plain')
                 self.nod_req.end_headers()
                 str_nod_num = "node.number=" + str(self.number) + "\n"

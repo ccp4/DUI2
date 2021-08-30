@@ -31,12 +31,68 @@ HOST = "localhost"
 #HOST = "serverip"
 
 class ReqHandler(http.server.BaseHTTPRequestHandler):
+    def do_POST(self):
+        content_len = int(self.headers.get('Content-Length'))
+        post_body = self.rfile.read(content_len)
+        print("\n post_body =", post_body)
+        body_str = str(post_body.decode('utf-8'))
+        print("\n str_tst =", body_str)
+        url_dict = parse_qs(body_str)
+        print("\n url_dict =", url_dict)
+        try:
+            tmp_cmd2lst = url_dict["cmd_lst"]
+            print("tmp_cmd2lst =", tmp_cmd2lst)
+
+        except KeyError:
+            print("no command in request (KeyError)")
+            self.send_header('Content-type', 'text/plain')
+            self.end_headers()
+            self.wfile.write(bytes(
+                'no command in request (KeyError) \n', 'utf-8'
+            ))
+            self.wfile.write(bytes('/*EOF*/', 'utf-8'))
+            return
+
+        cmd_lst = []
+        for inner_str in tmp_cmd2lst:
+            cmd_lst.append(inner_str.split(" "))
+
+        nod_lst = []
+        try:
+            for inner_str in url_dict["nod_lst"]:
+                nod_lst.append(int(inner_str))
+
+        except KeyError:
+            print("no node number provided")
+
+        cmd_dict = {"nod_lst":nod_lst,
+                    "cmd_lst":cmd_lst}
+
+        try:
+            cmd_tree_runner.run_dict(cmd_dict, self)
+
+
+            print("sending /*EOF*/")
+            self.wfile.write(bytes('/*EOF*/', 'utf-8'))
+
+
+        except BrokenPipeError:
+            print("\n *** BrokenPipeError *** while sending EOF or JSON \n")
+
+        except ConnectionResetError:
+            print("\n *** ConnectionResetError *** while sending EOF or JSON \n")
+
+
     def do_GET(self):
 
         self.send_response(200)
         url_path = self.path
+        print("\n url_path =", url_path)
+
+        print("\n urlparse(url_path) =", urlparse(url_path))
+
         url_dict = parse_qs(urlparse(url_path).query)
-        print("url_dict =", url_dict)
+        print("\n url_dict =", url_dict)
         try:
             tmp_cmd2lst = url_dict["cmd_lst"]
             print("tmp_cmd2lst =", tmp_cmd2lst)

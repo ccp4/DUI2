@@ -633,12 +633,9 @@ class MainObject(QObject):
         cmd = {'nod_lst': lst_of_node_str, 'cmd_lst': [cmd_str]}
         print("cmd =", cmd)
         self.window.incoming_text.clear()
-
         try:
-            new_req_get = requests.get(uni_url, stream = True, params = cmd)
-            #TODO make sure when client is relaunched,
-            #TODO somehow it should know about busy nodes
-            new_thrd = Run_n_Output(new_req_get)
+            new_req_post = requests.post(uni_url, stream = True, data = cmd)
+            new_thrd = Run_n_Output(new_req_post)
             new_thrd.new_line_out.connect(self.log_show.add_line)
             new_thrd.first_line.connect(self.line_n1_in)
             new_thrd.finished.connect(self.request_display)
