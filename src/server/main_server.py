@@ -222,7 +222,7 @@ if __name__ == "__main__":
 
     PORT = 45678
     with socketserver.ThreadingTCPServer((HOST, PORT), ReqHandler) as http_daemon:
-        print("serving at port", PORT)
+        print("\n serving at: \n  { host:", HOST, " port:", PORT, "} \n")
         try:
             http_daemon.serve_forever()
 

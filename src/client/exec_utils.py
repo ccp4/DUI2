@@ -27,8 +27,8 @@ import requests, json, os, sys
 
 from gui_utils import AdvancedParameters, widgets_defs
 
-#uni_url = 'http://localhost:45678/'
-uni_url = 'http://supercomputo.cimav.edu.mx:45678/'
+uni_url = 'http://localhost:45678/'
+#uni_url = 'http://supercomputo.cimav.edu.mx:45678/'
 
 try:
     from shared_modules import format_utils
