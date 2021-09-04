@@ -72,9 +72,7 @@ def main():
                         "cmd_lst":cmd_lst}
 
             try:
-                cmd_tree_runner.run_dict(cmd_dict, self)
-
-
+                cmd_tree_runner.run_dials_comand(cmd_dict, self)
                 print("sending /*EOF*/")
                 self.wfile.write(bytes('/*EOF*/', 'utf-8'))
 
@@ -129,7 +127,7 @@ def main():
 
             try:
                 #lst_out = []
-                lst_out = cmd_tree_runner.run_dict(cmd_dict, self)
+                lst_out = cmd_tree_runner.run_get_data(cmd_dict, self)
 
                 if type(lst_out) is list or type(lst_out) is dict:
                     self.send_header('Content-type', 'text/plain')
@@ -221,7 +219,7 @@ def main():
     cmd_tree_runner.set_dir_tree(tree_dic_lst)
 
     cmd_dict = multi_node.str2dic("display")
-    cmd_tree_runner.run_dict(cmd_dict)
+    cmd_tree_runner.run_get_data(cmd_dict)
 
     with socketserver.ThreadingTCPServer(
         (HOST, PORT), ReqHandler

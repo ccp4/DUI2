@@ -361,10 +361,105 @@ class Runner(object):
         else:
             self._recover_state(recovery_data)
 
+    def run_dials_comand(self, cmd_dict, req_obj = None):
+        print("\n cmd_dict: ", cmd_dict, "\n")
+
+        full_cmd_lst = []
+        for inner_lst in cmd_dict["cmd_lst"]:
+            unalias_inner_lst = []
+            for elem in inner_lst:
+                unalias_inner_lst.append(fix_alias(elem))
+
+            full_cmd_lst.append(unalias_inner_lst)
+
+        tmp_parent_lst_in = []
+        for lin2go in cmd_dict["nod_lst"]:
+            for node in self.step_list:
+                if node.number == lin2go:
+                    tmp_parent_lst_in.append(node)
+
+        node2run = self._create_step(tmp_parent_lst_in)
+        for uni_cmd in full_cmd_lst:
+            try:
+                node2run(uni_cmd, req_obj)
+
+            except UnboundLocalError:
+                print("\n *** ERROR *** \n wrong line \n not running")
+                print("uni_cmd =", uni_cmd)
+
+            self._save_state()
+
+    def _create_step(self, prev_step_lst):
+        new_step = CmdNode(parent_lst_in = prev_step_lst)
+        tmp_big = 0
+        for node in self.step_list:
+            if node.number > tmp_big:
+                tmp_big = node.number
+
+        self.bigger_lin = tmp_big + 1
+        new_step.number = self.bigger_lin
+        for prev_step in prev_step_lst:
+            prev_step.child_node_lst.append(new_step.number)
+
+        self.step_list.append(new_step)
+        return new_step
+
+    def _save_state(self):
+        lst_nod = []
+        for uni in self.step_list:
+            node = {
+                        "_base_dir"             :uni._base_dir,
+                        "full_cmd_lst"          :uni.full_cmd_lst,
+                        "lst2run"               :uni.lst2run,
+                        "_lst_expt_in"          :uni._lst_expt_in,
+                        "_lst_refl_in"          :uni._lst_refl_in,
+                        "_lst_expt_out"         :uni._lst_expt_out,
+                        "_lst_refl_out"         :uni._lst_refl_out,
+                        "_run_dir"              :uni._run_dir,
+                        "_html_rep"             :uni._html_rep,
+                        "log_file_path"         :uni.log_file_path,
+                        "number"                :uni.number,
+                        "status"                :uni.status,
+                        "parent_node_lst"       :uni.parent_node_lst,
+                        "child_node_lst"        :uni.child_node_lst
+            }
+            lst_nod.append(node)
+
+        all_dat = {
+                "step_list"             :lst_nod,
+                "bigger_lin"            :self.bigger_lin,
+        }
+
+        with open("run_data", "w") as fp:
+            json.dump(all_dat, fp, indent=4)
+
+    def _recover_state(self, recovery_data):
+        self.step_list =    []
+        self.bigger_lin =   recovery_data["bigger_lin"]
+
+        lst_nod = recovery_data["step_list"]
+        for uni_dic in lst_nod:
+            new_node = CmdNode()
+            new_node._base_dir       = uni_dic["_base_dir"]
+            new_node.full_cmd_lst    = uni_dic["full_cmd_lst"]
+            new_node.lst2run         = uni_dic["lst2run"]
+            new_node._lst_expt_in    = uni_dic["_lst_expt_in"]
+            new_node._lst_refl_in    = uni_dic["_lst_refl_in"]
+            new_node._lst_expt_out   = uni_dic["_lst_expt_out"]
+            new_node._lst_refl_out   = uni_dic["_lst_refl_out"]
+            new_node._run_dir        = uni_dic["_run_dir"]
+            new_node._html_rep       = uni_dic["_html_rep"]
+            new_node.log_file_path   = uni_dic["log_file_path"]
+            new_node.number          = uni_dic["number"]
+            new_node.status          = uni_dic["status"]
+            new_node.child_node_lst  = uni_dic["child_node_lst"]
+            new_node.parent_node_lst = uni_dic["parent_node_lst"]
+            self.step_list.append(new_node)
+
     def set_dir_tree(self, tree_dic_lst):
         self.dir_tree_dict = tree_dic_lst
 
-    def run_dict(self, cmd_dict, req_obj = None):
+    def run_get_data(self, cmd_dict, req_obj = None):
         tmp_parent_lst_in = []
         for lin2go in cmd_dict["nod_lst"]:
             for node in self.step_list:
@@ -382,23 +477,6 @@ class Runner(object):
             full_cmd_lst.append(unalias_inner_lst)
 
         print("full_cmd_lst", full_cmd_lst)
-
-        if(
-            len(tmp_parent_lst_in) > 0 and
-            ["display"] not in full_cmd_lst and
-            ["history"] not in full_cmd_lst and
-            ["dir_tree"] not in full_cmd_lst and
-            ["display_log"] not in full_cmd_lst and
-            ["get_report"] not in full_cmd_lst and
-            ["get_template"] not in full_cmd_lst and
-            "get_image" not in full_cmd_lst[0] and
-            "get_image_slice" not in full_cmd_lst[0] and
-            "get_reflection_list" not in full_cmd_lst[0] and
-            ["get_bravais_sum"] not in full_cmd_lst and
-            ["stop"] not in full_cmd_lst
-        ):
-            node2run = self._create_step(tmp_parent_lst_in)
-            #self.lst_cmd_in.append(cmd_dict)
 
         return_list = []
         for uni_cmd in full_cmd_lst:
@@ -566,85 +644,7 @@ class Runner(object):
             elif uni_cmd[0][-7:] == "_params":
                 return_list = get_param_list(uni_cmd[0])
 
-            else:
-                try:
-                    node2run(uni_cmd, req_obj)
-
-                except UnboundLocalError:
-                    print("\n *** ERROR *** \n wrong line \n not running")
-                    print("uni_cmd =", uni_cmd)
-
-            self._save_state()
-
         return return_list
-
-    def _create_step(self, prev_step_lst):
-        new_step = CmdNode(parent_lst_in = prev_step_lst)
-
-        tmp_big = 0
-        for node in self.step_list:
-            if node.number > tmp_big:
-                tmp_big = node.number
-
-        self.bigger_lin = tmp_big + 1
-        new_step.number = self.bigger_lin
-        for prev_step in prev_step_lst:
-            prev_step.child_node_lst.append(new_step.number)
-
-        self.step_list.append(new_step)
-        return new_step
-
-    def _save_state(self):
-        lst_nod = []
-        for uni in self.step_list:
-            node = {
-                        "_base_dir"             :uni._base_dir,
-                        "full_cmd_lst"          :uni.full_cmd_lst,
-                        "lst2run"               :uni.lst2run,
-                        "_lst_expt_in"          :uni._lst_expt_in,
-                        "_lst_refl_in"          :uni._lst_refl_in,
-                        "_lst_expt_out"         :uni._lst_expt_out,
-                        "_lst_refl_out"         :uni._lst_refl_out,
-                        "_run_dir"              :uni._run_dir,
-                        "_html_rep"             :uni._html_rep,
-                        "log_file_path"         :uni.log_file_path,
-                        "number"                :uni.number,
-                        "status"                :uni.status,
-                        "parent_node_lst"       :uni.parent_node_lst,
-                        "child_node_lst"        :uni.child_node_lst
-            }
-            lst_nod.append(node)
-
-        all_dat = {
-                "step_list"             :lst_nod,
-                "bigger_lin"            :self.bigger_lin,
-        }
-
-        with open("run_data", "w") as fp:
-            json.dump(all_dat, fp, indent=4)
-
-    def _recover_state(self, recovery_data):
-        self.step_list =    []
-        self.bigger_lin =   recovery_data["bigger_lin"]
-
-        lst_nod = recovery_data["step_list"]
-        for uni_dic in lst_nod:
-            new_node = CmdNode()
-            new_node._base_dir       = uni_dic["_base_dir"]
-            new_node.full_cmd_lst    = uni_dic["full_cmd_lst"]
-            new_node.lst2run         = uni_dic["lst2run"]
-            new_node._lst_expt_in    = uni_dic["_lst_expt_in"]
-            new_node._lst_refl_in    = uni_dic["_lst_refl_in"]
-            new_node._lst_expt_out   = uni_dic["_lst_expt_out"]
-            new_node._lst_refl_out   = uni_dic["_lst_refl_out"]
-            new_node._run_dir        = uni_dic["_run_dir"]
-            new_node._html_rep       = uni_dic["_html_rep"]
-            new_node.log_file_path   = uni_dic["log_file_path"]
-            new_node.number          = uni_dic["number"]
-            new_node.status          = uni_dic["status"]
-            new_node.child_node_lst  = uni_dic["child_node_lst"]
-            new_node.parent_node_lst = uni_dic["parent_node_lst"]
-            self.step_list.append(new_node)
 
 
 def str2dic(cmd_str):
@@ -694,7 +694,7 @@ if __name__ == "__main__":
 
     cmd_tree_runner = Runner(runner_data)
     cmd_dict = str2dic("display")
-    cmd_tree_runner.run_dict(cmd_dict)
+    cmd_tree_runner.run_get_data(cmd_dict)
     cmd_str = ""
 
     while cmd_str.strip() != "exit" and cmd_str.strip() != "quit":
@@ -712,8 +712,8 @@ if __name__ == "__main__":
             sys.exit(1)
 
         cmd_dict = str2dic(cmd_str)
-        cmd_tree_runner.run_dict(cmd_dict)
+        cmd_tree_runner.run_dials_comand(cmd_dict)
 
         cmd_dict = str2dic("display")
-        cmd_tree_runner.run_dict(cmd_dict)
+        cmd_tree_runner.run_get_data(cmd_dict)
 

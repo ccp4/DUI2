@@ -24,8 +24,8 @@ copyright (c) CCP4 - DLS
 import sys, json
 import requests
 
-#uni_url = 'http://localhost:45678/'
-uni_url = 'http://supercomputo.cimav.edu.mx:45678/'
+uni_url = 'http://localhost:45678/'
+#uni_url = 'http://supercomputo.cimav.edu.mx:45678/'
 
 if __name__ == "__main__":
     lst_cmd = []
@@ -38,10 +38,12 @@ if __name__ == "__main__":
             [parent, cmd] = ["", cmd_in]
 
         full_cmd = {"nod_lst":[parent], "cmd_lst":[cmd]}
-        req_get = requests.get(uni_url, stream = True, params = full_cmd)
+
+        #req_get = requests.get(uni_url, stream = True, params = full_cmd)
+        req_post = requests.post(uni_url, stream = True, data = full_cmd)
 
         while True:
-            tmp_dat = req_get.raw.readline()
+            tmp_dat = req_post.raw.readline()
             line_str = str(tmp_dat.decode('utf-8'))
 
             if line_str[-7:] == '/*EOF*/':
