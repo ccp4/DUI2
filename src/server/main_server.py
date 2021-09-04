@@ -202,22 +202,23 @@ def main():
 
     except FileNotFoundError:
         cmd_tree_runner = multi_node.Runner(None)
-        try:
-            tree_ini_path = sys.argv[1]
-            print(
-                "\n\n *** given init path as: ",
-                tree_ini_path, " *** \n"
-            )
-        except IndexError:
-            tree_ini_path = os.environ['HOME']
-            print(
-                "\n\n *** NOT GIVEN init path, assuming:",
-                tree_ini_path, " *** \n"
-            )
 
-        tree_dic_lst = iter_dict(tree_ini_path)
-        #TODO make this set_dir_tree persistent with recoveries
-        cmd_tree_runner.set_dir_tree(tree_dic_lst)
+    try:
+        tree_ini_path = sys.argv[1]
+        print(
+            "\n\n *** given init path as: ",
+            tree_ini_path, " *** \n"
+        )
+    except IndexError:
+        tree_ini_path = os.environ['HOME']
+        print(
+            "\n\n *** NOT GIVEN init path, assuming:",
+            tree_ini_path, " *** \n"
+        )
+
+    tree_dic_lst = iter_dict(tree_ini_path)
+    #TODO make this set_dir_tree persistent with recoveries
+    cmd_tree_runner.set_dir_tree(tree_dic_lst)
 
     cmd_dict = multi_node.str2dic("display")
     cmd_tree_runner.run_dict(cmd_dict)
