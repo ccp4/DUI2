@@ -168,10 +168,12 @@ def main():
                 self.wfile.write(bytes('/*EOF*/', 'utf-8'))
 
             except BrokenPipeError:
-                print("\n *** BrokenPipeError *** while sending EOF or JSON \n")
+                print("\n ** BrokenPipeError ** while sending EOF or JSON \n")
 
             except ConnectionResetError:
-                print("\n *** ConnectionResetError *** while sending EOF or JSON \n")
+                print(
+                    "\n ** ConnectionResetError ** while sending EOF or JSON\n"
+                )
 
 
     def iter_dict(file_path):
@@ -189,6 +191,7 @@ def main():
             local_dict["isdir"] = False
 
         return local_dict
+
 
     try:
         with open("run_data") as json_file:
@@ -204,7 +207,6 @@ def main():
                 "\n\n *** given init path as: ",
                 tree_ini_path, " *** \n"
             )
-
         except IndexError:
             tree_ini_path = os.environ['HOME']
             print(
@@ -219,8 +221,6 @@ def main():
     cmd_dict = multi_node.str2dic("display")
     cmd_tree_runner.run_dict(cmd_dict)
 
-
-
     with socketserver.ThreadingTCPServer((HOST, PORT), ReqHandler) as http_daemon:
         print("\n serving at: \n  { host:", HOST, " port:", PORT, "} \n")
         try:
@@ -228,23 +228,6 @@ def main():
 
         except KeyboardInterrupt:
             http_daemon.server_close()
-
-
-    def iter_dict(file_path):
-        file_name = file_path.split("/")[-1]
-        local_dict = {
-            "file_name": file_name, "file_path": file_path, "list_child": []
-        }
-        if os.path.isdir(file_path):
-            local_dict["isdir"] = True
-            for new_file_name in sorted(os.listdir(file_path)):
-                new_file_path = os.path.join(file_path, new_file_name)
-                local_dict["list_child"].append(iter_dict(new_file_path))
-
-        else:
-            local_dict["isdir"] = False
-
-        return local_dict
 
 
 if __name__ == "__main__":
