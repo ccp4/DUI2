@@ -80,11 +80,12 @@ def main():
 
 
             except BrokenPipeError:
-                print("\n *** BrokenPipeError *** while sending EOF or JSON \n")
+                print("\n** BrokenPipeError ** while sending EOF or JSON\n")
 
             except ConnectionResetError:
-                print("\n *** ConnectionResetError *** while sending EOF or JSON \n")
-
+                print(
+                    "\n** ConnectionResetError ** while sending EOF or JSON\n"
+                )
 
         def do_GET(self):
 
@@ -221,7 +222,10 @@ def main():
     cmd_dict = multi_node.str2dic("display")
     cmd_tree_runner.run_dict(cmd_dict)
 
-    with socketserver.ThreadingTCPServer((HOST, PORT), ReqHandler) as http_daemon:
+    with socketserver.ThreadingTCPServer(
+        (HOST, PORT), ReqHandler
+    ) as http_daemon:
+
         print("\n serving at: \n  { host:", HOST, " port:", PORT, "} \n")
         try:
             http_daemon.serve_forever()
