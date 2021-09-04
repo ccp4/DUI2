@@ -670,9 +670,13 @@ class MainObject(QObject):
             )
 
 
-if __name__ == "__main__":
+def main():
     QCoreApplication.setAttribute(Qt.AA_ShareOpenGLContexts)
     app = QApplication(sys.argv)
     m_obj = MainObject(parent = app)
     sys.exit(app.exec_())
+
+
+if __name__ == "__main__":
+    main()
 
