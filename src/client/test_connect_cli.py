@@ -71,18 +71,10 @@ lst_cmd = [
 
 
 if __name__ == "__main__":
-    for cmd in lst_cmd:
-        for do_this in [{"nod_lst":[""], "cmd_lst":["d"]}, None]:
-            if do_this == None:
-                my_cmd = cmd
-
-            else:
-                my_cmd = do_this
-
-            req_get = requests.get(uni_url, stream = True, params = my_cmd)
-
+        for my_cmd in lst_cmd:
+            req_post = requests.post(uni_url, stream = True, data = my_cmd)
             while True:
-                tmp_dat = req_get.raw.readline()
+                tmp_dat = req_post.raw.readline()
                 line_str = str(tmp_dat.decode('utf-8'))
 
                 if line_str[-7:] == '/*EOF*/':
@@ -91,4 +83,5 @@ if __name__ == "__main__":
 
                 else:
                     print(line_str[:-1])
+
 
