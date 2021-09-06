@@ -37,11 +37,9 @@ def main():
         def do_POST(self):
             content_len = int(self.headers.get('Content-Length'))
             post_body = self.rfile.read(content_len)
-            print("\n post_body =", post_body)
             body_str = str(post_body.decode('utf-8'))
-            print("\n str_tst =", body_str)
             url_dict = parse_qs(body_str)
-            print("\n url_dict =", url_dict)
+            print("\n url_dict =", url_dict, "\n")
             try:
                 tmp_cmd2lst = url_dict["cmd_lst"]
                 print("tmp_cmd2lst =", tmp_cmd2lst)
@@ -89,12 +87,8 @@ def main():
 
             self.send_response(200)
             url_path = self.path
-            print("\n url_path =", url_path)
-
-            print("\n urlparse(url_path) =", urlparse(url_path))
-
             url_dict = parse_qs(urlparse(url_path).query)
-            print("\n url_dict =", url_dict)
+            print("\n url_dict =", url_dict, "\n")
             try:
                 tmp_cmd2lst = url_dict["cmd_lst"]
                 print("tmp_cmd2lst =", tmp_cmd2lst)
@@ -123,8 +117,6 @@ def main():
 
             cmd_dict = {"nod_lst":nod_lst,
                         "cmd_lst":cmd_lst}
-            print("parse_qs(urlparse(url_path).query", cmd_dict)
-
             try:
                 #lst_out = []
                 lst_out = cmd_tree_runner.run_get_data(cmd_dict, self)

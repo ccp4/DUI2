@@ -90,6 +90,18 @@ def fix_alias(short_in):
     return long_out
 
 
+def unalias_full_cmd(lst_in):
+    new_full_lst = []
+    for inner_lst in lst_in:
+        unalias_inner_lst = []
+        for elem in inner_lst:
+            unalias_inner_lst.append(fix_alias(elem))
+
+        new_full_lst.append(unalias_inner_lst)
+
+    return new_full_lst
+
+
 class CmdNode(object):
     def __init__(self, parent_lst_in = None):
         self.parent_node_lst = []
@@ -362,15 +374,8 @@ class Runner(object):
             self._recover_state(recovery_data)
 
     def run_dials_comand(self, cmd_dict, req_obj = None):
-        print("\n cmd_dict: ", cmd_dict, "\n")
-
-        full_cmd_lst = []
-        for inner_lst in cmd_dict["cmd_lst"]:
-            unalias_inner_lst = []
-            for elem in inner_lst:
-                unalias_inner_lst.append(fix_alias(elem))
-
-            full_cmd_lst.append(unalias_inner_lst)
+        unalias_cmd_lst = unalias_full_cmd(cmd_dict["cmd_lst"])
+        print("\n cmd_lst: ", unalias_cmd_lst)
 
         tmp_parent_lst_in = []
         for lin2go in cmd_dict["nod_lst"]:
@@ -379,7 +384,7 @@ class Runner(object):
                     tmp_parent_lst_in.append(node)
 
         node2run = self._create_step(tmp_parent_lst_in)
-        for uni_cmd in full_cmd_lst:
+        for uni_cmd in unalias_cmd_lst:
             try:
                 node2run(uni_cmd, req_obj)
 
@@ -466,20 +471,11 @@ class Runner(object):
                 if node.number == lin2go:
                     tmp_parent_lst_in.append(node)
 
-        print("\n cmd_dict: ", cmd_dict, "\n")
-
-        full_cmd_lst = []
-        for inner_lst in cmd_dict["cmd_lst"]:
-            unalias_inner_lst = []
-            for elem in inner_lst:
-                unalias_inner_lst.append(fix_alias(elem))
-
-            full_cmd_lst.append(unalias_inner_lst)
-
-        print("full_cmd_lst", full_cmd_lst)
+        unalias_cmd_lst = unalias_full_cmd(cmd_dict["cmd_lst"])
+        print("\n cmd_lst: ", unalias_cmd_lst)
 
         return_list = []
-        for uni_cmd in full_cmd_lst:
+        for uni_cmd in unalias_cmd_lst:
             if uni_cmd == ["display"]:
                 return_list = format_utils.get_lst2show(self)
                 self.tree_output(return_list)
