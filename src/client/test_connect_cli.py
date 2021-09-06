@@ -31,6 +31,21 @@ opt2 =  '''
             {"nod_lst":[0], "cmd_lst":["ip x43"]},
         '''
 
+to_re_use_as_GET = '''
+            {'nod_lst': [8], 'cmd_lst': ["gt"]},
+            {'nod_lst': [9], 'cmd_lst': ["gt"]},
+            {'nod_lst': [10], 'cmd_lst': ["gt"]},
+
+            {'nod_lst': [12], 'cmd_lst': ["grl 0"]},
+
+            {'nod_lst': [15], 'cmd_lst': ["grl 0"]},
+            {'nod_lst': [16], 'cmd_lst': ["grl 1"]},
+            {'nod_lst': [17], 'cmd_lst': ["grl 2"]},
+            {'nod_lst': [23], 'cmd_lst': ["grl 3"]},
+
+        '''
+
+
 lst_cmd = [
             {'nod_lst': [2], 'cmd_lst':
                  [['gm untrusted.rectangle=0,1421,1258,1312 output.mask=tmp_mask.pickle'],
@@ -45,11 +60,7 @@ lst_cmd = [
             {"nod_lst":[6], "cmd_lst":["fd nproc=9"]},
             {"nod_lst":[7], "cmd_lst":["fd nproc=9"]},
             {'nod_lst': [8, 9, 10], 'cmd_lst': ['ce']},
-            {'nod_lst': [8], 'cmd_lst': ["gt"]},
-            {'nod_lst': [9], 'cmd_lst': ["gt"]},
-            {'nod_lst': [10], 'cmd_lst': ["gt"]},
             {'nod_lst': [11], 'cmd_lst': ["id"]},
-            {'nod_lst': [12], 'cmd_lst': ["grl 0"]},
             {'nod_lst': [12], 'cmd_lst': ['dials.refine_bravais_settings']},
             {'nod_lst': [13], 'cmd_lst': ['dials.reindex 9']},
             {'nod_lst': [8], 'cmd_lst': ["id"]},
@@ -63,10 +74,6 @@ lst_cmd = [
             {'nod_lst': [22], 'cmd_lst': ['rf']},
             {'nod_lst': [18], 'cmd_lst': ['rf']},
             {'nod_lst': [23], 'cmd_lst': ['it nproc=4']},
-            {'nod_lst': [15], 'cmd_lst': ["grl 0"]},
-            {'nod_lst': [16], 'cmd_lst': ["grl 1"]},
-            {'nod_lst': [17], 'cmd_lst': ["grl 2"]},
-            {'nod_lst': [23], 'cmd_lst': ["grl 3"]},
           ]
 
 
