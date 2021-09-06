@@ -465,11 +465,6 @@ class Runner(object):
         self._dir_tree_dict = tree_dic_lst
 
     def run_get_data(self, cmd_dict, req_obj = None):
-        tmp_parent_lst_in = []
-        for lin2go in cmd_dict["nod_lst"]:
-            for node in self.step_list:
-                if node.number == lin2go:
-                    tmp_parent_lst_in.append(node)
 
         unalias_cmd_lst = unalias_full_cmd(cmd_dict["cmd_lst"])
         print("\n cmd_lst: ", unalias_cmd_lst)
@@ -596,6 +591,7 @@ class Runner(object):
 
 
             elif uni_cmd[0] == "get_reflection_list":
+                for lin2go in cmd_dict["nod_lst"]:
                     try:
                         print(
                             "generating reflection list for line:", lin2go,
