@@ -21,7 +21,7 @@ copyright (c) CCP4 - DLS
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-import sys, os, requests
+import sys, os, requests, zlib
 from PySide2.QtCore import *
 from PySide2.QtWidgets import *
 from PySide2 import QtUiTools
@@ -135,18 +135,9 @@ class DoLoadHTML(QObject):
                         "nod_lst":[nod_p_num],
                         "cmd_lst":["get_report"]
                     }
-                    r_g = requests.get(uni_url, stream = True, params = cmd)
-                    full_file = ''
-                    while True:
-                        tmp_dat = r_g.raw.readline()
-                        #line_str = str(tmp_dat.decode('utf-8'))
-                        line_str = tmp_dat.decode('utf-8')
-                        if line_str[-7:] == '/*EOF*/':
-                            print('/*EOF*/ received')
-                            break
-
-                        else:
-                            full_file += line_str
+                    req_gt = requests.get(uni_url, stream = True, params = cmd)
+                    compresed = req_gt.content
+                    full_file = zlib.decompress(compresed).decode('utf-8')
 
                     found_html = False
                     for html_info in self.lst_html:
@@ -171,6 +162,10 @@ class DoLoadHTML(QObject):
                 except requests.exceptions.RequestException:
                     print("\n requests.exceptions.RequestException (DoLoadHTML) \n")
                     full_file = self.failed_html
+
+                except zlib.error:
+                    print("\n zlib.error (DoLoadHTML) \n")
+                    full_file = self.not_avail_html
 
             if len(full_file) < 5:
                 self.main_obj.window.HtmlReport.setHtml(self.not_avail_html)

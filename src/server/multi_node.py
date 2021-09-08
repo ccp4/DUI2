@@ -504,16 +504,24 @@ class Runner(object):
             elif uni_cmd == ["get_report"]:
                 for lin2go in cmd_dict["nod_lst"]:
                     try:
-                        return_list = str(self.step_list[lin2go]._html_rep)
+                        rep_path = str(self.step_list[lin2go]._html_rep)
                         print(
                             "#" * 70 + "\n HTML report in: " +
-                            return_list + "\n" + "#" * 70
+                            rep_path + "\n" + "#" * 70
                         )
-                    except IndexError:
+                        fil = open(rep_path, "r")
+                        str_file = fil.read()
+                        fil.close()
+
+                        byt_data = bytes(str_file.encode('utf-8'))
+                        return_list = byt_data
+
+                    except (IndexError, FileNotFoundError):
                         print(
                             "\n *** ERROR *** \n wrong line" +
                             " \n sending empty html"
                         )
+                        return_list = []
 
             elif uni_cmd == ["get_template"]:
                 for lin2go in cmd_dict["nod_lst"]:

@@ -140,6 +140,7 @@ def main():
 
                 else:
                     #type(lst_out) = <class 'str'> ,# html report
+                    print("\n\n *** type(lst_out) ELSE *** \n\n")
                     self.send_header('Content-type', 'text/plain')
                     self.end_headers()
                     try:
