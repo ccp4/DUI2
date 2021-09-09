@@ -239,6 +239,9 @@ class FileBrowser(QDialog):
     file_selected = Signal(str)
     def __init__(self, parent=None):
         super(FileBrowser, self).__init__(parent)
+
+        self.setWindowTitle("Open IMGs")
+
         self.my_bar = ProgBarBox(
             min_val = 0, max_val = 10, text = "loading dir tree"
         )
@@ -293,6 +296,7 @@ class FileBrowser(QDialog):
     def redraw_dir(self, dummy = None):
         self.last_file_clicked = None
         show_hidden = self.show_hidden_check.isChecked()
+        self.open_dir_file_butt.setText("Open ...")
         self.t_view.fillTree(self.dir_tree_dict, show_hidden)
 
     def set_dir(self):
