@@ -27,10 +27,6 @@ import json, os, zlib, sys
 
 import multi_node
 
-PORT = 45678
-HOST = "localhost"
-#HOST = "serverip"
-
 
 def main():
     class ReqHandler(http.server.BaseHTTPRequestHandler):
@@ -184,6 +180,11 @@ def main():
 
         return local_dict
 
+    ################################################ MAIN
+
+    PORT = 45678
+    HOST = "localhost"
+    #HOST = "serverip"
 
     try:
         with open("run_data") as json_file:
