@@ -215,6 +215,11 @@ def iter_tree(my_dict, currentItem, show_hidden):
             new_item.file_path = child_dict["file_path"]
             if child_dict["isdir"]:
                 new_item_text = new_item_text + "  ...  [ Dir ]"
+                new_item.isdir = True
+
+            else:
+                new_item.isdir = False
+
 
             new_item.setText(0, new_item_text)
             if my_dict["isdir"]:
@@ -240,16 +245,20 @@ class FileBrowser(QDialog):
         self.my_bar(1)
         mainLayout = QVBoxLayout()
         self.t_view = MyTree()
-        self.t_view.clicked[QModelIndex].connect(self.node_clicked)
         mainLayout.addWidget(self.t_view)
-        open_curr_dir = QPushButton("Open Dir")
-        open_curr_dir.clicked.connect(self.set_dir)
-        mainLayout.addWidget(open_curr_dir)
+        self.open_dir_file = QPushButton("Open ...")
+        #print(dir(self.open_dir_file))
+        mainLayout.addWidget(self.open_dir_file)
 
         self.show_hidden_check = QCheckBox("Show Hidden Files")
         self.show_hidden_check.setChecked(False)
-        self.show_hidden_check.stateChanged.connect(self.redraw_dir)
         mainLayout.addWidget(self.show_hidden_check)
+
+
+        self.show_hidden_check.stateChanged.connect(self.redraw_dir)
+        self.t_view.clicked[QModelIndex].connect(self.node_clicked)
+        self.open_dir_file.clicked.connect(self.set_dir)
+
 
         self.setLayout(mainLayout)
         cmd = {"nod_lst":[""], "cmd_lst":["dir_tree"]}
@@ -287,6 +296,16 @@ class FileBrowser(QDialog):
 
     def node_clicked(self, it_index):
         item = self.t_view.itemFromIndex(it_index)
+        if item.isdir:
+            print("\n Clicked on DIR \n ")
+            self.open_dir_file.setText("Open Dir")
+
+        else:
+            print("\n Clicked on FILE \n ")
+            self.open_dir_file.setText("Open File")
+
+        print("item =", item)
+
         str_file_path = str(item.file_path)
         if str_file_path == self.last_file_clicked:
             self.set_dir()
