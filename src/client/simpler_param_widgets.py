@@ -255,7 +255,7 @@ class FileBrowser(QDialog):
         cmd = {"nod_lst":[""], "cmd_lst":["dir_tree"]}
         self.my_bar(3)
 
-        #TODO consider reuse elsewhere the next bit tat uses requests/zlib
+        #TODO consider reuse elsewhere the next bit that uses requests/zlib
         ##################################################################
         req_get = requests.get(
             uni_url, stream = True, params = cmd
@@ -272,21 +272,26 @@ class FileBrowser(QDialog):
         self.show()
 
     def redraw_dir(self, dummy = None):
+        self.last_file_clicked = None
         show_hidden = self.show_hidden_check.isChecked()
         self.t_view.fillTree(self.dir_tree_dict, show_hidden)
 
     def set_dir(self):
-        try:
+        if self.last_file_clicked == None:
+            print("select file first")
+
+        else:
             self.file_selected.emit(self.last_file_clicked)
             print("set_dir ...", self.last_file_clicked)
             self.close()
 
-        except AttributeError:
-            print("select file first")
-
     def node_clicked(self, it_index):
         item = self.t_view.itemFromIndex(it_index)
-        self.last_file_clicked = str(item.file_path)
+        str_file_path = str(item.file_path)
+        if str_file_path == self.last_file_clicked:
+            self.set_dir()
+
+        self.last_file_clicked = str_file_path
         print("item.file_path =", self.last_file_clicked)
 
 
