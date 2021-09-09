@@ -207,33 +207,36 @@ class ProgBarBox(QProgressDialog):
         self.close()
 
 
-def iter_tree(my_dict, currentItem):
+def iter_tree(my_dict, currentItem, show_hidden):
     for child_dict in my_dict["list_child"]:
-        new_item = QTreeWidgetItem(currentItem)
-        new_item.file_path = child_dict["file_path"]
         new_item_text = str(child_dict["file_name"])
-        if child_dict["isdir"]:
-            new_item_text = new_item_text + "  ... "
+        if new_item_text[0] != "." or show_hidden:
+            new_item = QTreeWidgetItem(currentItem)
+            new_item.file_path = child_dict["file_path"]
+            if child_dict["isdir"]:
+                new_item_text = new_item_text + "  ...  [ Dir ]"
 
-        new_item.setText(0, new_item_text)
-        if my_dict["isdir"]:
-            iter_tree(child_dict, new_item)
+            new_item.setText(0, new_item_text)
+            if my_dict["isdir"]:
+                iter_tree(child_dict, new_item, show_hidden)
 
 
 class MyTree(QTreeWidget):
     def __init__(self, parent=None):
         super(MyTree, self).__init__(parent=parent)
 
-    def fillTree(self, lst_dic):
+    def fillTree(self, lst_dic, show_hidden):
         self.clear()
-        iter_tree(lst_dic, self)
+        iter_tree(lst_dic, self, show_hidden)
 
 
 class FileBrowser(QDialog):
     file_selected = Signal(str)
     def __init__(self, parent=None):
         super(FileBrowser, self).__init__(parent)
-        self.my_bar = ProgBarBox(min_val=0, max_val=10, text="loading dir tree")
+        self.my_bar = ProgBarBox(
+            min_val = 0, max_val = 10, text = "loading dir tree"
+        )
         self.my_bar(1)
         mainLayout = QVBoxLayout()
         self.t_view = MyTree()
@@ -242,6 +245,11 @@ class FileBrowser(QDialog):
         open_curr_dir = QPushButton("Open Dir")
         open_curr_dir.clicked.connect(self.set_dir)
         mainLayout.addWidget(open_curr_dir)
+
+        show_hide_hiden = QPushButton("Show/Hide  hidden files")
+        show_hide_hiden.clicked.connect(self.redraw_dir)
+        mainLayout.addWidget(show_hide_hiden)
+
         self.setLayout(mainLayout)
         cmd = {"nod_lst":[""], "cmd_lst":["dir_tree"]}
         self.my_bar(3)
@@ -256,18 +264,28 @@ class FileBrowser(QDialog):
         dic_str = zlib.decompress(compresed)
         ##################################################################
 
-        json_out = json.loads(dic_str)
+        self.dir_tree_dict = json.loads(dic_str)
+        self.show_hidden = False
 
         self.my_bar(7)
-        self.t_view.fillTree(json_out)
+        self.redraw_dir()
         self.my_bar(9)
         self.my_bar.ended()
         self.show()
 
+    def redraw_dir(self):
+        self.show_hidden = not self.show_hidden
+        self.t_view.fillTree(self.dir_tree_dict, self.show_hidden)
+
+
     def set_dir(self):
-        self.file_selected.emit(self.last_file_clicked)
-        print("set_dir ...", self.last_file_clicked)
-        self.close()
+        try:
+            self.file_selected.emit(self.last_file_clicked)
+            print("set_dir ...", self.last_file_clicked)
+            self.close()
+
+        except AttributeError:
+            print("select file first")
 
     def node_clicked(self, it_index):
         item = self.t_view.itemFromIndex(it_index)
