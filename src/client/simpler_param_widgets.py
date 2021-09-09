@@ -243,22 +243,32 @@ class FileBrowser(QDialog):
             min_val = 0, max_val = 10, text = "loading dir tree"
         )
         self.my_bar(1)
-        mainLayout = QVBoxLayout()
-        self.t_view = MyTree()
-        mainLayout.addWidget(self.t_view)
-        self.open_dir_file = QPushButton("Open ...")
-        #print(dir(self.open_dir_file))
-        mainLayout.addWidget(self.open_dir_file)
 
+        self.t_view = MyTree()
+        self.open_dir_file_butt = QPushButton("Open ...")
+        self.cancel_butt = QPushButton("Cancel")
         self.show_hidden_check = QCheckBox("Show Hidden Files")
         self.show_hidden_check.setChecked(False)
-        mainLayout.addWidget(self.show_hidden_check)
 
+        mainLayout = QVBoxLayout()
+
+        top_hbox = QHBoxLayout()
+        top_hbox.addStretch()
+        top_hbox.addWidget(self.show_hidden_check)
+        mainLayout.addLayout(top_hbox)
+
+        mainLayout.addWidget(self.t_view)
+
+        bot_hbox = QHBoxLayout()
+        bot_hbox.addStretch()
+        bot_hbox.addWidget(self.open_dir_file_butt)
+        bot_hbox.addWidget(self.cancel_butt)
+        mainLayout.addLayout(bot_hbox)
 
         self.show_hidden_check.stateChanged.connect(self.redraw_dir)
         self.t_view.clicked[QModelIndex].connect(self.node_clicked)
-        self.open_dir_file.clicked.connect(self.set_dir)
-
+        self.open_dir_file_butt.clicked.connect(self.set_dir)
+        self.cancel_butt.clicked.connect(self.cancel_opn)
 
         self.setLayout(mainLayout)
         cmd = {"nod_lst":[""], "cmd_lst":["dir_tree"]}
@@ -298,11 +308,11 @@ class FileBrowser(QDialog):
         item = self.t_view.itemFromIndex(it_index)
         if item.isdir:
             print("\n Clicked on DIR \n ")
-            self.open_dir_file.setText("Open Dir")
+            self.open_dir_file_butt.setText("Open Dir")
 
         else:
             print("\n Clicked on FILE \n ")
-            self.open_dir_file.setText("Open File")
+            self.open_dir_file_butt.setText("Open File")
 
         print("item =", item)
 
@@ -312,6 +322,9 @@ class FileBrowser(QDialog):
 
         self.last_file_clicked = str_file_path
         print("item.file_path =", self.last_file_clicked)
+
+    def cancel_opn(self):
+        self.close()
 
 
 class ImportTmpWidg(QWidget):
@@ -329,7 +342,7 @@ class ImportTmpWidg(QWidget):
         self.imp_txt = QLineEdit()
         self.imp_txt.editingFinished.connect(self.line_changed)
 
-        self.open_butt = QPushButton("Open IMG dir")
+        self.open_butt = QPushButton(" Open IMGs ")
         self.open_butt.clicked.connect(self.open_dir_widget)
 
         self.main_vbox = QVBoxLayout()
