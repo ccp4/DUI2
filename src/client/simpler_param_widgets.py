@@ -246,9 +246,10 @@ class FileBrowser(QDialog):
         open_curr_dir.clicked.connect(self.set_dir)
         mainLayout.addWidget(open_curr_dir)
 
-        show_hide_hiden = QPushButton("Show/Hide  hidden files")
-        show_hide_hiden.clicked.connect(self.redraw_dir)
-        mainLayout.addWidget(show_hide_hiden)
+        self.show_hidden_check = QCheckBox("Show Hidden Files")
+        self.show_hidden_check.setChecked(False)
+        self.show_hidden_check.stateChanged.connect(self.redraw_dir)
+        mainLayout.addWidget(self.show_hidden_check)
 
         self.setLayout(mainLayout)
         cmd = {"nod_lst":[""], "cmd_lst":["dir_tree"]}
@@ -259,13 +260,10 @@ class FileBrowser(QDialog):
         req_get = requests.get(
             uni_url, stream = True, params = cmd
         )
-
         compresed = req_get.content
         dic_str = zlib.decompress(compresed)
         ##################################################################
-
         self.dir_tree_dict = json.loads(dic_str)
-        self.show_hidden = False
 
         self.my_bar(7)
         self.redraw_dir()
@@ -273,10 +271,9 @@ class FileBrowser(QDialog):
         self.my_bar.ended()
         self.show()
 
-    def redraw_dir(self):
-        self.show_hidden = not self.show_hidden
-        self.t_view.fillTree(self.dir_tree_dict, self.show_hidden)
-
+    def redraw_dir(self, dummy = None):
+        show_hidden = self.show_hidden_check.isChecked()
+        self.t_view.fillTree(self.dir_tree_dict, show_hidden)
 
     def set_dir(self):
         try:
