@@ -256,5 +256,55 @@ class param_tree_2_lineal(object):
             else:
                 self.lst_obj.append(single_obj)
 
+def tup2dict(tup_in):
+    dict_out = {}
+    for par in tup_in:
+        dict_out[par[0]] = par[1]
 
+    return dict_out
+
+def get_par(par_def, lst_in):
+    '''
+    Reused function for handling parameters given via C.L.I.
+    '''
+    if(len(lst_in) == 0):
+        print("\n empty call")
+        print("\n default params:")
+        return tup2dict(par_def)
+
+    par_out = []
+    for par in par_def:
+        par_out.append([par[0], par[1]])
+
+    lst_split_tst = []
+    for par in lst_in:
+        lst_split_tst.append(par.split("="))
+
+    lng_n1 = len(lst_split_tst[0])
+    for lng_tst in lst_split_tst:
+        if(len(lng_tst) != lng_n1):
+            lng_n1 = None
+            break
+
+    if(lng_n1 == None):
+        print("Error 01")
+        return tup2dict(par_def)
+
+    elif(lng_n1 == 1):
+        for pos, par in enumerate(lst_in):
+            par_out[pos][1] = lst_in[pos]
+
+    elif(lng_n1 == 2):
+        for par in lst_in:
+            lf_rg_lst=par.split("=")
+            for pos, iter_par in enumerate(par_def):
+                if(iter_par[0] == lf_rg_lst[0]):
+                    par_out[pos][1] = lf_rg_lst[1]
+
+    else:
+        print("Error 02")
+        return tup2dict(par_def)
+
+    #TODO there is no way to check if the only argument is not the first one
+    return tup2dict(par_out)
 

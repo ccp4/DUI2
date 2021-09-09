@@ -28,6 +28,17 @@ import json, os, zlib, sys
 import multi_node
 
 
+try:
+    from shared_modules import format_utils
+
+except ModuleNotFoundError:
+    may_be_needed = '''
+    comm_path = os.path.abspath(__file__)[0:-21] + "shared_modules"
+    sys.path.insert(1, comm_path)
+    '''
+    import format_utils
+
+
 def main():
     class ReqHandler(http.server.BaseHTTPRequestHandler):
         def do_POST(self):
@@ -182,10 +193,29 @@ def main():
 
     ################################################ MAIN
 
-    PORT = 45678
-    HOST = "localhost"
-    #HOST = "serverip"
+    par_def = (
+        ("port", 45678),
+        ("host", "localhost"),
+        #("host", "serverip"),
+        ("init_path", None),
+    )
 
+    init_param = format_utils.get_par(par_def, sys.argv[1:])
+    print("init_param =", init_param)
+
+    PORT = init_param["port"]
+    HOST = init_param["host"]
+
+    tree_ini_path = init_param["init_path"]
+    if tree_ini_path == None:
+        print("\n NOT GIVEN init path, using << HOME env >>")
+        tree_ini_path = os.environ['HOME']
+
+    print(
+        "\n * using init path as: ",
+        tree_ini_path, " * \n"
+    )
+    tree_dic_lst = iter_dict(tree_ini_path)
     try:
         with open("run_data") as json_file:
             runner_data = json.load(json_file)
@@ -195,21 +225,6 @@ def main():
     except FileNotFoundError:
         cmd_tree_runner = multi_node.Runner(None)
 
-    try:
-        tree_ini_path = sys.argv[1]
-        print(
-            "\n\n *** given init path as: ",
-            tree_ini_path, " *** \n"
-        )
-    except IndexError:
-        tree_ini_path = os.environ['HOME']
-        print(
-            "\n\n *** NOT GIVEN init path, assuming:",
-            tree_ini_path, " *** \n"
-        )
-
-    tree_dic_lst = iter_dict(tree_ini_path)
-    #TODO make this set_dir_tree persistent with recoveries
     cmd_tree_runner.set_dir_tree(tree_dic_lst)
 
     cmd_dict = multi_node.str2dic("display")
