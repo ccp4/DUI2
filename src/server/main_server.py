@@ -203,7 +203,7 @@ def main():
     init_param = format_utils.get_par(par_def, sys.argv[1:])
     print("init_param =", init_param)
 
-    PORT = init_param["port"]
+    PORT = int(init_param["port"])
     HOST = init_param["host"]
 
     tree_ini_path = init_param["init_path"]
