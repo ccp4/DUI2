@@ -236,7 +236,7 @@ class MyTree(QTreeWidget):
 
 
 class FileBrowser(QDialog):
-    file_selected = Signal(str)
+    file_selected = Signal(str, bool)
     def __init__(self, parent=None):
         super(FileBrowser, self).__init__(parent)
 
@@ -248,7 +248,7 @@ class FileBrowser(QDialog):
         self.my_bar(1)
 
         self.t_view = MyTree()
-        self.open_dir_file_butt = QPushButton("Open ...")
+        self.open_select_butt = QPushButton("Open ...")
         self.cancel_butt = QPushButton("Cancel")
         self.show_hidden_check = QCheckBox("Show Hidden Files")
         self.show_hidden_check.setChecked(False)
@@ -264,13 +264,13 @@ class FileBrowser(QDialog):
 
         bot_hbox = QHBoxLayout()
         bot_hbox.addStretch()
-        bot_hbox.addWidget(self.open_dir_file_butt)
+        bot_hbox.addWidget(self.open_select_butt)
         bot_hbox.addWidget(self.cancel_butt)
         mainLayout.addLayout(bot_hbox)
 
         self.show_hidden_check.stateChanged.connect(self.redraw_dir)
         self.t_view.clicked[QModelIndex].connect(self.node_clicked)
-        self.open_dir_file_butt.clicked.connect(self.set_dir)
+        self.open_select_butt.clicked.connect(self.set_selection)
         self.cancel_butt.clicked.connect(self.cancel_opn)
 
         self.setLayout(mainLayout)
@@ -295,47 +295,72 @@ class FileBrowser(QDialog):
 
     def redraw_dir(self, dummy = None):
         self.last_file_clicked = None
+        self.dir_selected = None
         show_hidden = self.show_hidden_check.isChecked()
-        self.open_dir_file_butt.setText("Open ...")
+        self.open_select_butt.setText("Open ...")
         self.t_view.fillTree(self.dir_tree_dict, show_hidden)
 
-    def set_dir(self):
+    def set_selection(self):
         if self.last_file_clicked == None:
             print("select file first")
 
         else:
-            self.file_selected.emit(self.last_file_clicked)
-            print("set_dir ...", self.last_file_clicked)
+            print(
+                "\n set_selection:", self.last_file_clicked,
+                "\n dir_selected:", self.dir_selected
+            )
+            self.file_selected.emit(self.last_file_clicked, self.dir_selected)
             self.close()
 
     def node_clicked(self, it_index):
         item = self.t_view.itemFromIndex(it_index)
         if item.isdir:
             print("\n Clicked on DIR \n ")
-            self.open_dir_file_butt.setText("Open Dir")
+            self.open_select_butt.setText("Open Dir")
 
         else:
             print("\n Clicked on FILE \n ")
-            self.open_dir_file_butt.setText("Open File")
+            self.open_select_butt.setText("Open File")
 
-        print("item =", item)
+        str_select_path = str(item.file_path)
+        if str_select_path == self.last_file_clicked:
+            self.set_selection()
 
-        str_file_path = str(item.file_path)
-        if str_file_path == self.last_file_clicked:
-            self.set_dir()
-
-        self.last_file_clicked = str_file_path
+        self.dir_selected = item.isdir
+        self.last_file_clicked = str_select_path
         print("item.file_path =", self.last_file_clicked)
 
     def cancel_opn(self):
         self.close()
 
 
+def build_template(str_path_in):
+    print("time to build template from:", str_path_in)
+    for pos, single_char in enumerate(str_path_in):
+        if single_char == ".":
+            dot_pos = pos
+
+    for pos, single_char in enumerate(str_path_in[0:dot_pos]):
+        if single_char in "0123456789":
+            last_digit_pos = pos
+
+    for pos in range(last_digit_pos, 0, -1):
+        if str_path_in[pos:pos + 1] not in "0123456789":
+            begin_digit_pos = pos
+            break
+
+    template_str = str_path_in[0:begin_digit_pos + 1] + "#" * (
+        last_digit_pos - begin_digit_pos
+    ) + str_path_in[dot_pos:]
+
+    return template_str
+
 class ImportTmpWidg(QWidget):
     item_changed = Signal(str, str)
     def __init__(self, parent = None):
         super(ImportTmpWidg, self).__init__(parent)
         self.do_emit = True
+        self.dir_selected = None
         sys_font = QFont()
         font_point_size = sys_font.pointSize()
 
@@ -356,17 +381,20 @@ class ImportTmpWidg(QWidget):
         self.main_vbox.addWidget(QLabel(" "))
         self.setLayout(self.main_vbox)
 
-    def set_dir(self, str_dir):
-        self.imp_txt.setText(str_dir)
+    def set_selection(self, str_select, isdir):
+        print("str_select =", str_select, "isdir =", isdir)
+        self.dir_selected = isdir
+        if self.dir_selected:
+            self.imp_txt.setText(str_select)
+
+        else:
+            self.imp_txt.setText(build_template(str_select))
+
         self.line_changed()
 
     def open_dir_widget(self):
-
-
-        print("open_dir_widget ... 1")
         self.open_widget = FileBrowser(self)
-        self.open_widget.file_selected.connect(self.set_dir)
-        print("open_dir_widget ... 2")
+        self.open_widget.file_selected.connect(self.set_selection)
 
     def reset_pars(self):
         self.imp_txt.setText("")
@@ -375,8 +403,12 @@ class ImportTmpWidg(QWidget):
         print("line_changed")
         #sender = self.sender()
         str_value = self.imp_txt.text()
-        #TODO consider another parameter here
-        str_path = "input.directory"
+        if self.dir_selected:
+            str_path = "input.directory"
+
+        else:
+            str_path = "input.template"
+
         self.item_changed.emit(str_path, str_value)
 
     def update_all_pars(self, tup_lst_pars):
