@@ -41,6 +41,7 @@ from exec_utils import (
     CommandParamControl,
     uni_url
 )
+from simpler_param_widgets import RootWidg
 from simpler_param_widgets import ImportTmpWidg as ImportWidget
 from simpler_param_widgets import MaskTmpWidg as MaskWidget
 from simpler_param_widgets import (
@@ -64,6 +65,9 @@ class MainObject(QObject):
 
         self.reseting = False
         try:
+            root_widg = RootWidg()
+            self.window.RootScrollArea.setWidget(root_widg)
+
             imp_widg = ImportWidget()
             imp_widg.item_changed.connect(self.item_param_changed)
             self.window.ImportScrollArea.setWidget(imp_widg)
@@ -175,6 +179,10 @@ class MainObject(QObject):
             sys.exit()
 
         self.param_widgets = widgets_defs
+
+        self.param_widgets["Root"]["simple"] = imp_widg
+        self.param_widgets["Root"]["advanced"] = None
+        self.param_widgets["Root"]["main_page"] = self.window.RootPage
 
         self.param_widgets["import"]["simple"] = imp_widg
         self.param_widgets["import"]["advanced"] = None
@@ -290,7 +298,7 @@ class MainObject(QObject):
         self.window.PrevImgButton.clicked.connect(self.prev_img)
         self.window.NextImgButton.clicked.connect(self.next_img)
 
-        self.current_widget_key = "import"
+        self.current_widget_key = "Root"
         self.new_node = None
         self.current_nod_num = 0
 

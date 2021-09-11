@@ -95,6 +95,27 @@
                 <property name="currentIndex">
                  <number>0</number>
                 </property>
+                <widget class="QWidget" name="RootPage">
+                 <layout class="QGridLayout" name="gridLayout_33">
+                  <item row="0" column="0">
+                   <widget class="QScrollArea" name="RootScrollArea">
+                    <property name="widgetResizable">
+                     <bool>true</bool>
+                    </property>
+                    <widget class="QWidget" name="scrollAreaWidgetContents_20">
+                     <property name="geometry">
+                      <rect>
+                       <x>0</x>
+                       <y>0</y>
+                       <width>467</width>
+                       <height>326</height>
+                      </rect>
+                     </property>
+                    </widget>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
                 <widget class="QWidget" name="ImportPage">
                  <layout class="QGridLayout" name="gridLayout_26">
                   <item row="1" column="0">
@@ -107,7 +128,7 @@
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>314</width>
+                       <width>467</width>
                        <height>326</height>
                       </rect>
                      </property>
@@ -128,8 +149,8 @@
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>98</width>
-                       <height>28</height>
+                       <width>467</width>
+                       <height>326</height>
                       </rect>
                      </property>
                     </widget>
@@ -159,8 +180,8 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>98</width>
-                           <height>28</height>
+                           <width>445</width>
+                           <height>279</height>
                           </rect>
                          </property>
                         </widget>

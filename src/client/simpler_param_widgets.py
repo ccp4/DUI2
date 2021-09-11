@@ -363,6 +363,31 @@ def build_template(str_path_in):
 
     return template_str, star_str
 
+
+class RootWidg(QWidget):
+    def __init__(self, parent = None):
+        super(RootWidg, self).__init__(parent)
+        sys_font = QFont()
+        font_point_size = sys_font.pointSize()
+
+        new_label = QLabel("Root:")
+        new_label.setFont(
+            QFont("Monospace", font_point_size + 3, QFont.Bold)
+        )
+        self.main_vbox = QVBoxLayout()
+        self.main_vbox.addWidget(QLabel("Nothing to do here ..."))
+        self.setLayout(self.main_vbox)
+
+    def reset_pars(self):
+        print("reset_pars(Root) ... dummy")
+
+    def update_all_pars(self, tup_lst_pars):
+        print("update_all_pars(Root)", tup_lst_pars, "... dummy")
+
+    def update_param(self, str_path, str_value):
+        print("update_param(Root)", str_path, str_value, "... dummy")
+
+
 class ImportTmpWidg(QWidget):
     item_changed = Signal(str, str)
     def __init__(self, parent = None):
