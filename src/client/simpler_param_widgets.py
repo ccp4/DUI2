@@ -335,14 +335,18 @@ class FileBrowser(QDialog):
 
 
 def build_template(str_path_in):
-    print("time to build template from:", str_path_in)
-    for pos, single_char in enumerate(str_path_in):
-        if single_char == ".":
-            dot_pos = pos
+    print("\ntime to build template from:\n", str_path_in)
 
-    for pos, single_char in enumerate(str_path_in[0:dot_pos]):
+    found_a_digit = False
+    for pos, single_char in enumerate(str_path_in):
         if single_char in "0123456789":
-            last_digit_pos = pos
+            if found_a_digit:
+                last_digit_pos = pos
+
+            found_a_digit = True
+
+        else:
+            found_a_digit = False
 
     for pos in range(last_digit_pos, 0, -1):
         if str_path_in[pos:pos + 1] not in "0123456789":
@@ -351,9 +355,13 @@ def build_template(str_path_in):
 
     template_str = str_path_in[0:begin_digit_pos + 1] + "#" * (
         last_digit_pos - begin_digit_pos
-    ) + str_path_in[dot_pos:]
+    ) + str_path_in[last_digit_pos + 1:]
 
-    return template_str
+    star_str = str_path_in[
+        0:begin_digit_pos + 1
+    ] + "*" + str_path_in[last_digit_pos + 1:]
+
+    return template_str, star_str
 
 class ImportTmpWidg(QWidget):
     item_changed = Signal(str, str)
@@ -388,7 +396,7 @@ class ImportTmpWidg(QWidget):
             self.imp_txt.setText(str_select)
 
         else:
-            self.imp_txt.setText(build_template(str_select))
+            self.imp_txt.setText(build_template(str_select)[0])
 
         self.line_changed()
 
