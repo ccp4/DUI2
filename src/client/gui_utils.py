@@ -88,13 +88,17 @@ widgets_defs = {
         "tooltip": "dials.reindex ...",
         "icon": "resources/reindex.png",
         "main_cmd"  :"dials.reindex",
-        "nxt_widg_lst"  :["refine", "integrate"]
+        "nxt_widg_lst"  :["refine", "integrate", "combine_experiments"]
     },
     "refine" : {
         "tooltip": "dials.refine ...",
         "icon": "resources/refine.png",
         "main_cmd"  :"dials.refine",
-        "nxt_widg_lst"  :["integrate", "refine_bravais_settings"]
+        "nxt_widg_lst"  :[
+            "integrate",
+            "refine_bravais_settings",
+            "combine_experiments"
+        ]
     },
     "integrate" : {
         "tooltip": "dials.integrate ...",
