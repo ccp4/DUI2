@@ -315,6 +315,23 @@ class MainObject(QObject):
         self.window.LeftVSplitter.setStretchFactor(1, 1)
 
         self.window.show()
+        self.import_init()
+
+    def import_init(self):
+        loop = QEventLoop()
+        QTimer.singleShot(200, loop.quit)
+        loop.exec_()
+        print("self.server_nod_lst =", self.server_nod_lst)
+        if len(self.server_nod_lst) == 1:
+            self.nxt_key_clicked("import")
+
+        else:
+            big_nod_num = 0
+            for node in self.server_nod_lst:
+                if node["number"] > big_nod_num:
+                    big_nod_num = node["number"]
+
+            self.on_node_click(big_nod_num)
 
     def launch_reindex(self, sol_rei):
         print("reindex solution", sol_rei)
@@ -461,7 +478,9 @@ class MainObject(QObject):
             print("no need to add next button")
 
     def nxt_clicked(self):
-        str_key = self.sender().cmd_str
+        self.nxt_key_clicked(self.sender().cmd_str)
+
+    def nxt_key_clicked(self, str_key):
         print("nxt_clicked ... str_key: ", str_key)
 
         if str_key == "reindex":
