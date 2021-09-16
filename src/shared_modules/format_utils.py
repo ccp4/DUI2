@@ -268,8 +268,7 @@ def get_par(par_def, lst_in):
     Reused function for handling parameters given via C.L.I.
     '''
     if(len(lst_in) == 0):
-        print("\n empty call")
-        print("\n default params:")
+        print("default params: \n", par_def)
         return tup2dict(par_def)
 
     par_out = []

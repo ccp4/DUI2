@@ -239,7 +239,7 @@ class LoadFullImage(QThread):
     def run(self):
         print("loading image ", self.cur_img_num, " in full resolution")
         np_full_img = load_json_w_str(
-            self.uni_url
+            self.uni_url,
             nod_num_lst = [self.cur_nod_num],
             img_num = self.cur_img_num
         )
@@ -339,9 +339,6 @@ class ImgGraphicsScene(QGraphicsScene):
         self.curr_pixmap = None
 
     def __call__(self, new_pixmap, refl_list0):
-        to_use_later = '''
-    def __call__(self, new_pixmap, refl_list0, refl_list1):
-        '''
         self.clear()
         if new_pixmap is not None:
             self.curr_pixmap = new_pixmap
