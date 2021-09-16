@@ -26,20 +26,19 @@ from PySide2.QtCore import *
 import requests, json, os, sys
 
 from gui_utils import AdvancedParameters, widgets_defs
+from init_firts import ini_data
+
 
 try:
     from shared_modules import format_utils
 
 except ModuleNotFoundError:
-    '''
-    This trick to import the format_utils module can be
-    removed once the project gets properly packaged
-    '''
     comm_path = os.path.abspath(__file__)[0:-20] + "shared_modules"
     print("comm_path: ", comm_path, "\n")
     sys.path.insert(1, comm_path)
     import format_utils
 
+'''
 par_def = (
     ("url", 'http://localhost:45678/'),
     #("url", 'http://supercomputo.cimav.edu.mx:45678/'),
@@ -48,10 +47,15 @@ par_def = (
 init_param = format_utils.get_par(par_def, sys.argv[1:])
 print("init_param =", init_param)
 uni_url = init_param["url"]
-
+'''
 
 def build_advanced_params_widget(cmd_str):
     cmd = {"nod_lst":"", "cmd_lst":[cmd_str]}
+
+    data_init = ini_data()
+    uni_url = data_init.get_url()
+    print("uni_url(build_advanced_params_widget) =", uni_url)
+
     lst_params = json_data_request(uni_url, cmd)
     lin_lst = format_utils.param_tree_2_lineal(lst_params)
     par_def = lin_lst()

@@ -34,7 +34,11 @@ import zlib
 import time
 import requests
 
-from exec_utils import json_data_request, uni_url
+#from exec_utils import uni_url
+from init_firts import ini_data
+
+
+from exec_utils import json_data_request
 from outputs import HandleLoadStatusLabel
 
 def crunch_min_max(data2d, i_min_max):
@@ -177,6 +181,10 @@ def load_json_w_str(nod_num_lst = [1], img_num = 0):
     print("\n full img here \n")
     try:
         start_tm = time.time()
+
+        data_init = ini_data()
+        uni_url = data_init.get_url()
+
         req_get = requests.get(uni_url, stream=True, params = my_cmd)
         total_size = int(req_get.headers.get('content-length', 0)) + 1
         print("total_size =", total_size)
@@ -269,6 +277,10 @@ class LoadSliceImage(QThread):
 
         my_cmd = {"nod_lst":self.nod_num_lst, "cmd_lst":my_cmd_lst}
         start_tm = time.time()
+
+        data_init = ini_data()
+        uni_url = data_init.get_url()
+
         try:
             req_get = requests.get(uni_url, stream=True, params = my_cmd)
             total_size = int(req_get.headers.get('content-length', 0)) + 1
@@ -426,6 +438,9 @@ class DoImageView(QObject):
 
         else:
             nod_num = self.main_obj.new_node.parent_node_lst[0]
+
+        data_init = ini_data()
+        uni_url = data_init.get_url()
 
         cmd = {'nod_lst': [nod_num], 'cmd_lst': ["gt"]}
         json_data_lst = json_data_request(uni_url, cmd)

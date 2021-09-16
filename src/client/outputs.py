@@ -27,7 +27,10 @@ from PySide2.QtWidgets import *
 from PySide2 import QtUiTools
 from PySide2.QtGui import *
 
-from exec_utils import json_data_request, uni_url
+from exec_utils import json_data_request
+
+#from exec_utils import uni_url
+from init_firts import ini_data
 
 class HandleLoadStatusLabel(QObject):
     def __init__(self, parent = None):
@@ -130,6 +133,10 @@ class DoLoadHTML(QObject):
             if not found_html:
                 self.main_obj.window.HtmlReport.setHtml(self.loading_html)
                 self.l_stat.load_started()
+
+                data_init = ini_data()
+                uni_url = data_init.get_url()
+
                 try:
                     cmd = {
                         "nod_lst":[nod_p_num],
@@ -193,6 +200,9 @@ class ShowLog(QObject):
                 if log_node["number"] == nod_p_num:
                     found_nod_num = True
                     lst_log_lines = log_node["log_line_lst"]
+
+            data_init = ini_data()
+            uni_url = data_init.get_url()
 
             try:
                 if not found_nod_num:

@@ -27,8 +27,12 @@ from PySide2.QtCore import *
 from PySide2.QtWidgets import *
 
 from q_object import MainObject
+from init_firts import ini_data
 
 def main():
+    test_url = ini_data()
+    print("test_url =", test_url)
+    print("uni_url(main) =", test_url.get_url())
     QCoreApplication.setAttribute(Qt.AA_ShareOpenGLContexts)
     app = QApplication(sys.argv)
     m_obj = MainObject(parent = app)

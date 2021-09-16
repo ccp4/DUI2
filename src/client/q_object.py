@@ -37,8 +37,12 @@ from img_view import DoImageView
 from reindex_table import ReindexTable
 from exec_utils import (
     build_advanced_params_widget, json_data_request, Run_n_Output,
-    CommandParamControl, uni_url
+    CommandParamControl
 )
+
+#from exec_utils import uni_url
+from init_firts import ini_data
+
 from simpler_param_widgets import RootWidg
 from simpler_param_widgets import ImportTmpWidg as ImportWidget
 from simpler_param_widgets import MaskTmpWidg as MaskWidget
@@ -60,6 +64,10 @@ class MainObject(QObject):
 
         self.window = QtUiTools.QUiLoader().load(ui_path)
         self.window.setWindowTitle("CCP4 DUI Cloud")
+
+        data_init = ini_data()
+        self.uni_url = data_init.get_url()
+
 
         self.reseting = False
         try:
@@ -173,7 +181,7 @@ class MainObject(QObject):
             comb_simpl_widg.twin_widg = ce_advanced_parameters
 
         except TypeError:
-            print("failed to connect to server on:", uni_url)
+            print("failed to connect to server on:", self.uni_url)
             sys.exit()
 
         self.param_widgets = widgets_defs
@@ -399,7 +407,7 @@ class MainObject(QObject):
                     "nod_lst":cur_nod["parent_node_lst"],
                     "cmd_lst":["get_bravais_sum"]
                 }
-                json_data_lst = json_data_request(uni_url, cmd)
+                json_data_lst = json_data_request(self.uni_url, cmd)
                 self.r_index_widg.add_opts_lst(
                     json_data=json_data_lst[0]
                 )
@@ -486,7 +494,7 @@ class MainObject(QObject):
                 "nod_lst":[self.current_nod_num],
                 "cmd_lst":["get_bravais_sum"]
             }
-            json_data_lst = json_data_request(uni_url, cmd)
+            json_data_lst = json_data_request(self.uni_url, cmd)
             self.r_index_widg.add_opts_lst(
                 json_data = json_data_lst[0]
             )
@@ -630,7 +638,7 @@ class MainObject(QObject):
 
     def request_display(self):
         cmd = {"nod_lst":"", "cmd_lst":["display"]}
-        self.server_nod_lst = json_data_request(uni_url, cmd)
+        self.server_nod_lst = json_data_request(self.uni_url, cmd)
         self.display()
 
     def on_clone(self):
@@ -659,7 +667,7 @@ class MainObject(QObject):
         print("cmd =", cmd)
         self.window.incoming_text.clear()
         try:
-            new_req_post = requests.post(uni_url, stream = True, data = cmd)
+            new_req_post = requests.post(self.uni_url, stream = True, data = cmd)
             new_thrd = Run_n_Output(new_req_post)
             new_thrd.new_line_out.connect(self.log_show.add_line)
             new_thrd.first_line.connect(self.line_n1_in)
@@ -687,7 +695,7 @@ class MainObject(QObject):
         cmd = {"nod_lst":nod_lst, "cmd_lst":["stop"]}
         print("cmd =", cmd)
         try:
-            lst_params = json_data_request(uni_url, cmd)
+            lst_params = json_data_request(self.uni_url, cmd)
 
         except requests.exceptions.RequestException:
             print(
