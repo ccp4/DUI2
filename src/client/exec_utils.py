@@ -38,17 +38,6 @@ except ModuleNotFoundError:
     sys.path.insert(1, comm_path)
     import format_utils
 
-'''
-par_def = (
-    ("url", 'http://localhost:45678/'),
-    #("url", 'http://supercomputo.cimav.edu.mx:45678/'),
-)
-
-init_param = format_utils.get_par(par_def, sys.argv[1:])
-print("init_param =", init_param)
-uni_url = init_param["url"]
-'''
-
 def build_advanced_params_widget(cmd_str):
     cmd = {"nod_lst":"", "cmd_lst":[cmd_str]}
 

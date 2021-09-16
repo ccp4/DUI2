@@ -80,6 +80,10 @@ class DoLoadHTML(QObject):
     def __init__(self, parent = None):
         super(DoLoadHTML, self).__init__(parent)
         self.main_obj = parent
+
+        data_init = ini_data()
+        self.uni_url = data_init.get_url()
+
         self.l_stat = HandleLoadStatusLabel(self.main_obj)
         self.main_obj.window.HtmlReport.loadStarted.connect(
             self.l_stat.load_started
@@ -133,16 +137,12 @@ class DoLoadHTML(QObject):
             if not found_html:
                 self.main_obj.window.HtmlReport.setHtml(self.loading_html)
                 self.l_stat.load_started()
-
-                data_init = ini_data()
-                uni_url = data_init.get_url()
-
                 try:
                     cmd = {
                         "nod_lst":[nod_p_num],
                         "cmd_lst":["get_report"]
                     }
-                    req_gt = requests.get(uni_url, stream = True, params = cmd)
+                    req_gt = requests.get(self.uni_url, stream = True, params = cmd)
                     compresed = req_gt.content
                     full_file = zlib.decompress(compresed).decode('utf-8')
 
@@ -192,6 +192,9 @@ class ShowLog(QObject):
         self.main_obj = parent
         self.lst_node_log_out = []
 
+        data_init = ini_data()
+        self.uni_url = data_init.get_url()
+
     def __call__(self, nod_p_num = 0, do_request = False):
         print("Do Request =", do_request)
         if do_request:
@@ -201,13 +204,10 @@ class ShowLog(QObject):
                     found_nod_num = True
                     lst_log_lines = log_node["log_line_lst"]
 
-            data_init = ini_data()
-            uni_url = data_init.get_url()
-
             try:
                 if not found_nod_num:
                     cmd = {"nod_lst":[nod_p_num], "cmd_lst":["display_log"]}
-                    json_log = json_data_request(uni_url, cmd)
+                    json_log = json_data_request(self.uni_url, cmd)
                     try:
                         lst_log_lines = json_log[0]
                         self.lst_node_log_out.append(

@@ -174,7 +174,7 @@ class np2bmp_monocrome(object):
         return img_array
 
 
-def load_json_w_str(nod_num_lst = [1], img_num = 0):
+def load_json_w_str(uni_url = None, nod_num_lst = [1], img_num = 0):
     my_cmd_lst = ["gi " + str(img_num)]
     my_cmd = {"nod_lst":nod_num_lst, "cmd_lst":my_cmd_lst}
 
@@ -182,13 +182,10 @@ def load_json_w_str(nod_num_lst = [1], img_num = 0):
     try:
         start_tm = time.time()
 
-        data_init = ini_data()
-        uni_url = data_init.get_url()
-
         req_get = requests.get(uni_url, stream=True, params = my_cmd)
         total_size = int(req_get.headers.get('content-length', 0)) + 1
         print("total_size =", total_size)
-        #block_size = 1024 #1 Kibibyte
+        #block_size = 1024 #1 Kilobyte
         block_size = 65536
         downloaded_size = 0
         compresed = bytes()
@@ -233,14 +230,16 @@ def load_json_w_str(nod_num_lst = [1], img_num = 0):
 
 class LoadFullImage(QThread):
     image_loaded = Signal(tuple)
-    def __init__(self, cur_nod_num, cur_img_num):
+    def __init__(self, unit_URL, cur_nod_num, cur_img_num):
         super(LoadFullImage, self).__init__()
+        self.uni_url = unit_URL
         self.cur_nod_num = cur_nod_num
         self.cur_img_num = cur_img_num
 
     def run(self):
         print("loading image ", self.cur_img_num, " in full resolution")
         np_full_img = load_json_w_str(
+            self.uni_url
             nod_num_lst = [self.cur_nod_num],
             img_num = self.cur_img_num
         )
@@ -253,10 +252,10 @@ class LoadSliceImage(QThread):
     progressing = Signal(int)
     slice_loaded = Signal(dict)
     def __init__(
-        self, parent_obj, nod_num_lst, img_num, inv_scale,x1 ,y1 ,x2 ,y2
+        self, unit_URL, nod_num_lst, img_num, inv_scale,x1 ,y1 ,x2 ,y2
     ):
         super(LoadSliceImage, self).__init__()
-        self.parent_obj =   parent_obj
+        self.uni_url =      unit_URL
         self.nod_num_lst =  nod_num_lst
         self.img_num =      img_num
         self.inv_scale =    inv_scale
@@ -278,11 +277,8 @@ class LoadSliceImage(QThread):
         my_cmd = {"nod_lst":self.nod_num_lst, "cmd_lst":my_cmd_lst}
         start_tm = time.time()
 
-        data_init = ini_data()
-        uni_url = data_init.get_url()
-
         try:
-            req_get = requests.get(uni_url, stream=True, params = my_cmd)
+            req_get = requests.get(self.uni_url, stream=True, params = my_cmd)
             total_size = int(req_get.headers.get('content-length', 0)) + 1
             print("total_size =", total_size)
             block_size = 65536
@@ -393,6 +389,9 @@ class DoImageView(QObject):
         super(DoImageView, self).__init__(parent)
         self.main_obj = parent
 
+        data_init = ini_data()
+        self.uni_url = data_init.get_url()
+
         self.l_stat = HandleLoadStatusLabel(self.main_obj)
 
         self.my_scene = ImgGraphicsScene(self)
@@ -439,11 +438,8 @@ class DoImageView(QObject):
         else:
             nod_num = self.main_obj.new_node.parent_node_lst[0]
 
-        data_init = ini_data()
-        uni_url = data_init.get_url()
-
         cmd = {'nod_lst': [nod_num], 'cmd_lst': ["gt"]}
-        json_data_lst = json_data_request(uni_url, cmd)
+        json_data_lst = json_data_request(self.uni_url, cmd)
 
         try:
             new_templ = json_data_lst[0]
@@ -475,7 +471,7 @@ class DoImageView(QObject):
             my_cmd = {
                 'nod_lst': [nod_num], 'cmd_lst': ["grl " + str(in_img_num)]
             }
-            json_lst = json_data_request(uni_url, my_cmd)
+            json_lst = json_data_request(self.uni_url, my_cmd)
             try:
                 for inner_list in json_lst[0]:
                     self.r_list0.append(
@@ -515,7 +511,9 @@ class DoImageView(QObject):
         self.cur_img_num = in_img_num
 
         self.refresh_pixel_map()
-        #self.full_img_show()
+
+        # if you wanna only load the current slice of image, comment next line
+        self.full_img_show()
 
     def refresh_pixel_map(self):
         try:
@@ -555,7 +553,9 @@ class DoImageView(QObject):
             print("first full image loading")
 
         self.load_full_image = LoadFullImage(
-            cur_nod_num = self.cur_nod_num, cur_img_num = self.cur_img_num
+            unit_URL = self.uni_url,
+            cur_nod_num = self.cur_nod_num,
+            cur_img_num = self.cur_img_num
         )
         self.load_full_image.image_loaded.connect(self.new_full_img)
         self.load_full_image.start()
@@ -677,7 +677,7 @@ class DoImageView(QObject):
             self.get_inv_scale()
 
             self.load_slice_image = LoadSliceImage(
-                parent_obj = self,
+                unit_URL = self.uni_url,
                 nod_num_lst = [self.cur_nod_num],
                 img_num = self.cur_img_num,
                 inv_scale = self.inv_scale,
