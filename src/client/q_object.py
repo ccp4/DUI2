@@ -679,7 +679,9 @@ class MainObject(QObject):
         print("cmd =", cmd)
         self.window.incoming_text.clear()
         try:
-            new_req_post = requests.post(self.uni_url, stream = True, data = cmd)
+            new_req_post = requests.post(
+                self.uni_url, stream = True, data = cmd
+            )
             new_thrd = Run_n_Output(new_req_post)
             new_thrd.new_line_out.connect(self.log_show.add_line)
             new_thrd.first_line.connect(self.line_n1_in)

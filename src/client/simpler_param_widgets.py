@@ -378,8 +378,8 @@ class RootWidg(QWidget):
         sys_font = QFont()
         font_point_size = sys_font.pointSize()
 
-        new_label = QLabel("Root:")
-        new_label.setFont(
+        big_label = QLabel("Root:")
+        big_label.setFont(
             QFont("Monospace", font_point_size + 3, QFont.Bold)
         )
         self.main_vbox = QVBoxLayout()
@@ -397,7 +397,6 @@ class RootWidg(QWidget):
 
 
 class ImportWidget(QWidget):
-    #item_changed = Signal(str, str)
     all_items_changed = Signal(str, str)
     def __init__(self, parent = None):
         super(ImportWidget, self).__init__(parent)
@@ -406,21 +405,25 @@ class ImportWidget(QWidget):
         sys_font = QFont()
         font_point_size = sys_font.pointSize()
 
-        new_label = QLabel("Import:")
-        new_label.setFont(QFont(
-            "Monospace", font_point_size + 3, QFont.Bold
-        ))
+        self.state_label = QLabel("   ...")
+        self.state_label.setFont(
+            QFont("Monospace", font_point_size + 1, QFont.Bold)
+        )
+
+
         self.imp_txt = QLineEdit()
         self.imp_txt.editingFinished.connect(self.line_changed)
 
-        self.open_butt = QPushButton(" Open IMGs ")
+        self.open_butt = QPushButton("\n Open Images \n")
         self.open_butt.clicked.connect(self.open_dir_widget)
 
         self.main_vbox = QVBoxLayout()
-        self.main_vbox.addWidget(new_label)
+        self.main_vbox.addStretch()
         self.main_vbox.addWidget(self.open_butt)
+        self.main_vbox.addStretch()
+        self.main_vbox.addWidget(self.state_label)
         self.main_vbox.addWidget(self.imp_txt)
-        self.main_vbox.addWidget(QLabel(" "))
+        self.main_vbox.addStretch()
         self.setLayout(self.main_vbox)
 
     def set_selection(self, str_select, isdir):
@@ -451,7 +454,7 @@ class ImportWidget(QWidget):
         else:
             str_path = "input.template"
 
-        #self.item_changed.emit(str_path, str_value)
+        self.state_label.setText(str_path)
         self.all_items_changed.emit(str_path, str_value)
 
     def update_all_pars(self, tup_lst_pars):
@@ -462,15 +465,23 @@ class ImportWidget(QWidget):
 
         for n, par in enumerate(tup_lst_pars):
             print("n=", n, "par=", par)
+
+        #TODO in the future there will be more than one parameter to update,
+        #TODO the next try: will go inside a loop and consequently will be
+        #TODO different
         try:
-            dir_path = str(tup_lst_pars[0][0]["value"])
-            print("dir_path =", dir_path)
-            self.imp_txt.setText(dir_path)
+            inp_val = str(tup_lst_pars[0][0]["value"])
+            print("inp_val =", inp_val)
+            self.imp_txt.setText(inp_val)
+
+            input_parmeter = str(tup_lst_pars[0][0]["name"])
+            print("input_parmeter =", input_parmeter)
+            self.state_label.setText(input_parmeter)
 
         except IndexError:
             print(" Not copying parameters from node (IndexError)")
-            dir_path = ""
-            self.imp_txt.setText(dir_path)
+            self.imp_txt.setText("")
+            self.state_label.setText("...")
 
 
     def update_param(self, str_path, str_value):
@@ -486,14 +497,14 @@ class MaskTmpWidg(SimpleParamTab):
         sys_font = QFont()
         font_point_size = sys_font.pointSize()
 
-        new_label = QLabel(" ...  (TMP)   Apply Mask:    ")
-        new_label.setFont(QFont(
+        big_label = QLabel(" ...  (TMP)   Apply Mask:    ")
+        big_label.setFont(QFont(
             "Monospace", font_point_size + 3, QFont.Bold
         ))
 
         self.main_vbox = QVBoxLayout()
         self.main_vbox.addWidget(QLabel(" "))
-        self.main_vbox.addWidget(new_label)
+        self.main_vbox.addWidget(big_label)
         self.main_vbox.addWidget(QLabel(" "))
         self.setLayout(self.main_vbox)
 
