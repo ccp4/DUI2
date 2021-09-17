@@ -38,6 +38,7 @@ except ModuleNotFoundError:
     sys.path.insert(1, comm_path)
     import format_utils
 
+
 def build_advanced_params_widget(cmd_str):
     cmd = {"nod_lst":"", "cmd_lst":[cmd_str]}
 
@@ -88,6 +89,7 @@ def json_data_request(url, cmd):
         json_out = None
 
     return json_out
+
 
 class Run_n_Output(QThread):
     new_line_out = Signal(str, int)

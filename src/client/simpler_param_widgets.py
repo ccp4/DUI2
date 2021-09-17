@@ -397,6 +397,11 @@ class RootWidg(QWidget):
 
 
 class ImportWidget(QWidget):
+    '''
+        This widget behaves differently from mos of the other  << simple >>
+        parameter widgets, every time the user changes a parameter DUI should
+        refresh all parameter since there are some parameter that exclude others
+    '''
     all_items_changed = Signal(str, str)
     def __init__(self, parent = None):
         super(ImportWidget, self).__init__(parent)
@@ -409,7 +414,6 @@ class ImportWidget(QWidget):
         self.state_label.setFont(
             QFont("Monospace", font_point_size + 1, QFont.Bold)
         )
-
 
         self.imp_txt = QLineEdit()
         self.imp_txt.editingFinished.connect(self.line_changed)
@@ -483,7 +487,6 @@ class ImportWidget(QWidget):
             self.imp_txt.setText("")
             self.state_label.setText("...")
 
-
     def update_param(self, str_path, str_value):
         print(
             "update_param(ImportWidget)",
@@ -516,7 +519,7 @@ class FindspotsSimplerParameterTab(SimpleParamTab):
     """
     This widget is the tool for tunning the simpler and most common parameters
     in the spot-finder, this widget is the first to appear once the button
-    "Find Sots" at the left side of the GUI is clicked
+    "Find Sots" is clicked
     """
 
     def __init__(self, parent=None):
@@ -592,8 +595,6 @@ class FindspotsSimplerParameterTab(SimpleParamTab):
         self.main_v_layout.addLayout(hbox_lay_nproc)
 
         self.main_v_layout.addStretch()
-
-
         self.lst_var_widg = _get_all_direct_layout_widget_children(self.main_v_layout)
 
     def reset_pars(self):
@@ -610,7 +611,7 @@ class IndexSimplerParamTab(SimpleParamTab):
     """
     This widget is the tool for tunning the simpler and most common parameters
     in the indexer, this widget is the first to appear once the button
-    "Index" at the left side of the GUI is clicked
+    "Index" is clicked
     """
 
     def __init__(self, phl_obj=None, parent=None):
@@ -655,7 +656,6 @@ class IndexSimplerParamTab(SimpleParamTab):
         unit_cell_line.local_path = "indexing.known_symmetry.unit_cell"
         unit_cell_line.editingFinished.connect(self.line_changed)
 
-
         self.main_v_layout.addLayout(hbox_method)
 
         qf = QFormLayout()
@@ -695,7 +695,6 @@ class RefineBravaiSimplerParamTab(SimpleParamTab):
 
         self.main_v_layout.addStretch()
 
-
         self.lst_var_widg = []
         self.lst_var_widg.append(box_outlier_algorithm)
         self.lst_var_widg.append(label_outlier_algorithm)
@@ -709,7 +708,7 @@ class RefineSimplerParamTab(SimpleParamTab):
     """
     This widget is the tool for tunning the simpler and most common parameters
     in the refiner, this widget is the first to appear once the button
-    "Refine" at the left side of the GUI is clicked
+    "Refine" is clicked
     """
 
     def __init__(self, parent=None):
@@ -749,7 +748,6 @@ class RefineSimplerParamTab(SimpleParamTab):
 
         self.main_v_layout.addStretch()
 
-
         self.lst_var_widg = []
         self.lst_var_widg.append(box_scan_varying)
         self.lst_var_widg.append(label_scan_varying)
@@ -765,8 +763,8 @@ class RefineSimplerParamTab(SimpleParamTab):
 class IntegrateSimplerParamTab(SimpleParamTab):
     """
     This widget is the tool for tunning the simpler and most common parameters
-    in the integrate algorithm, this widget is the first to appear once the button
-    "Integrate" at the left side of the GUI is clicked
+    in the integrate algorithm, this widget is the first to appear once the
+    button "Integrate" is clicked
     """
 
     def __init__(self, parent=None):
@@ -825,7 +823,9 @@ class IntegrateSimplerParamTab(SimpleParamTab):
 
         self.main_v_layout.addStretch()
         #self.box_nproc.item_list = None
-        self.lst_var_widg = _get_all_direct_layout_widget_children(self.main_v_layout)
+        self.lst_var_widg = _get_all_direct_layout_widget_children(
+            self.main_v_layout
+        )
 
     def reset_pars(self):
         self.clearLayout(self.main_v_layout)
@@ -841,7 +841,7 @@ class SymmetrySimplerParamTab(SimpleParamTab):
     """
     This widget is the tool for tunning the simpler and most common parameters
     in the symmetry command, this widget is the first to appear once the button
-    "Symmetry" at the left side of the GUI is clicked
+    "Symmetry" is clicked
     """
 
     def __init__(self, parent=None):
@@ -882,7 +882,7 @@ class ScaleSimplerParamTab(SimpleParamTab):
     """
     This widget is the tool for tunning the simpler and most common parameters
     in the scale command, this widget is the first to appear once the button
-    "Scale" at the left side of the GUI is clicked
+    "Scale" is clicked
     """
 
     def __init__(self, parent=None):
@@ -894,7 +894,7 @@ class ScaleSimplerParamTab(SimpleParamTab):
 
     def build_pars(self):
 
-        #TODO: review the parameters here, the need updating
+        #TODO: review the parameters here, they need updating
 
         hbox_lay_mod = QHBoxLayout()
         label_mod = QLabel("Model")

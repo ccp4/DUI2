@@ -160,7 +160,9 @@ class AdvancedParameters(QWidget):
             label_str += data_info["name"]
             new_label = QLabel(label_str)
             new_label.setAutoFillBackground(True)
-            new_label.setFont(QFont("Monospace", self.font_point_size, QFont.Bold))
+            new_label.setFont(
+                QFont("Monospace", self.font_point_size, QFont.Bold)
+            )
             data_info["Label"] = new_label
             new_hbox = QHBoxLayout()
 
@@ -257,7 +259,10 @@ class AdvancedParameters(QWidget):
                     self.do_emit = True
 
     def update_all_pars(self, tup_lst_pars):
-        print("\n (Advanced Widget) \n time to update par to:", tup_lst_pars, "\n")
+        print(
+            "\n (Advanced Widget) \n time to update par to:",
+            tup_lst_pars, "\n"
+        )
         for par_dic in tup_lst_pars[0]:
             self.update_param(par_dic["name"], par_dic["value"])
 
@@ -473,43 +478,34 @@ class TreeDirScene(QGraphicsScene):
         self.blue_gradient_brush = QBrush(Qt.blue, Qt.SolidPattern)
 
         self.black_pen = QPen(
-            Qt.black, 1.6, Qt.SolidLine,
-            Qt.RoundCap, Qt.RoundJoin
+            Qt.black, 1.6, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
         )
 
         self.green_pen = QPen(
-            Qt.green, 1.6, Qt.SolidLine,
-            Qt.RoundCap, Qt.RoundJoin
+            Qt.green, 1.6, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
         )
         self.dark_green_pen = QPen(
-            Qt.darkGreen, 1.6, Qt.SolidLine,
-            Qt.RoundCap, Qt.RoundJoin
+            Qt.darkGreen, 1.6, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
         )
 
         self.red_pen = QPen(
-            Qt.red, 1.6, Qt.SolidLine,
-            Qt.RoundCap, Qt.RoundJoin
+            Qt.red, 1.6, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
         )
 
         self.blue_pen = QPen(
-            Qt.blue, 1.6, Qt.SolidLine,
-            Qt.RoundCap, Qt.RoundJoin
+            Qt.blue, 1.6, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
         )
         self.dark_blue_pen = QPen(
-            Qt.darkBlue, 1.9, Qt.SolidLine,
-            Qt.RoundCap, Qt.RoundJoin
+            Qt.darkBlue, 1.9, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
         )
         self.cyan_pen = QPen(
-            Qt.cyan, 2, Qt.SolidLine,
-            Qt.RoundCap, Qt.RoundJoin
+            Qt.cyan, 2, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
         )
         self.gray_pen = QPen(
-            Qt.gray, 2, Qt.SolidLine,
-            Qt.RoundCap, Qt.RoundJoin
+            Qt.gray, 2, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
         )
         self.white_pen = QPen(
-            Qt.white, 2, Qt.SolidLine,
-            Qt.RoundCap, Qt.RoundJoin
+            Qt.white, 2, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
         )
         self.lst_nod_pos = []
         self.nod_lst = None
@@ -729,7 +725,9 @@ class TreeDirScene(QGraphicsScene):
                 )
                 stat_text.setBrush(self.dark_blue_brush)
                 if str(node["stp_stat"]) == "B":
-                    right_x1, down_y1 = self.get_coords(pos + 0.3, max_indent + 1)
+                    right_x1, down_y1 = self.get_coords(
+                        pos + 0.3, max_indent + 1
+                    )
                     left_x1, up_y1 = self.get_coords(pos - 0.3, max_indent + 4)
                     dx1 = right_x1 - left_x1
                     dy1 = down_y1 - up_y1

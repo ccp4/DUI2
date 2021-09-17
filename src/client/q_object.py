@@ -499,6 +499,7 @@ class MainObject(QObject):
             self.r_index_widg.add_opts_lst(
                 json_data = json_data_lst[0]
             )
+
         self.change_widget(str_key)
         self.reset_param()
         self.add_new_node()
