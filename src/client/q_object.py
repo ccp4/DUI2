@@ -44,7 +44,7 @@ from exec_utils import (
 from init_firts import ini_data
 
 from simpler_param_widgets import RootWidg
-from simpler_param_widgets import ImportTmpWidg as ImportWidget
+from simpler_param_widgets import ImportWidget
 from simpler_param_widgets import MaskTmpWidg as MaskWidget
 from simpler_param_widgets import (
     FindspotsSimplerParameterTab, IndexSimplerParamTab,
@@ -75,7 +75,8 @@ class MainObject(QObject):
             self.window.RootScrollArea.setWidget(root_widg)
 
             imp_widg = ImportWidget()
-            imp_widg.item_changed.connect(self.item_param_changed)
+            imp_widg.all_items_changed.connect(self.all_items_param_changed)
+            #imp_widg.item_changed.connect(self.item_param_changed)
             self.window.ImportScrollArea.setWidget(imp_widg)
 
             mask_widg = MaskWidget()
@@ -525,6 +526,17 @@ class MainObject(QObject):
     def reset_new_node(self):
         self.new_node.reset_all_params()
         self.reset_param()
+
+    def all_items_param_changed(self, str_path, str_value):
+        self.new_node.reset_all_params()
+        try:
+            self.new_node.set_parameter(str_path, str_value)
+
+        except AttributeError:
+            print(
+                "No need to update parameters for non existent green node \n",
+                "or no twin widget \n"
+            )
 
     def item_param_changed(self, str_path, str_value):
         try:

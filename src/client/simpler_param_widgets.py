@@ -76,7 +76,7 @@ class SimpleParamTab(QWidget):
     """Base class shared by all simple parameter tabs"""
 
     item_changed = Signal(str, str)
-    item_to_remove = Signal(str)
+    #item_to_remove = Signal(str)
 
     def clearLayout(self, layout):
         if layout is not None:
@@ -240,7 +240,7 @@ class MyTree(QTreeWidget):
 
 
 class FileBrowser(QDialog):
-    file_selected = Signal(str, bool)
+    file_or_dur_selected = Signal(str, bool)
     def __init__(self, parent=None):
         super(FileBrowser, self).__init__(parent)
 
@@ -317,7 +317,7 @@ class FileBrowser(QDialog):
                 "\n set_selection:", self.last_file_clicked,
                 "\n dir_selected:", self.dir_selected
             )
-            self.file_selected.emit(self.last_file_clicked, self.dir_selected)
+            self.file_or_dur_selected.emit(self.last_file_clicked, self.dir_selected)
             self.close()
 
     def node_clicked(self, it_index):
@@ -396,10 +396,11 @@ class RootWidg(QWidget):
         print("update_param(Root)", str_path, str_value, "... dummy")
 
 
-class ImportTmpWidg(QWidget):
-    item_changed = Signal(str, str)
+class ImportWidget(QWidget):
+    #item_changed = Signal(str, str)
+    all_items_changed = Signal(str, str)
     def __init__(self, parent = None):
-        super(ImportTmpWidg, self).__init__(parent)
+        super(ImportWidget, self).__init__(parent)
         self.do_emit = True
         self.dir_selected = None
         sys_font = QFont()
@@ -435,7 +436,7 @@ class ImportTmpWidg(QWidget):
 
     def open_dir_widget(self):
         self.open_widget = FileBrowser(self)
-        self.open_widget.file_selected.connect(self.set_selection)
+        self.open_widget.file_or_dur_selected.connect(self.set_selection)
 
     def reset_pars(self):
         self.imp_txt.setText("")
@@ -450,11 +451,12 @@ class ImportTmpWidg(QWidget):
         else:
             str_path = "input.template"
 
-        self.item_changed.emit(str_path, str_value)
+        #self.item_changed.emit(str_path, str_value)
+        self.all_items_changed.emit(str_path, str_value)
 
     def update_all_pars(self, tup_lst_pars):
         print(
-            "update_all_pars(ImportTmpWidg)",
+            "update_all_pars(ImportWidget)",
             tup_lst_pars
         )
 
@@ -473,7 +475,7 @@ class ImportTmpWidg(QWidget):
 
     def update_param(self, str_path, str_value):
         print(
-            "update_param(ImportTmpWidg)",
+            "update_param(ImportWidget)",
             str_path, str_value, "... dummy"
         )
 
@@ -974,7 +976,7 @@ class TmpTstWidget(QWidget):
         self.do_emit = True
 
         #my_widget = MaskTmpWidg(self)
-        my_widget = ImportTmpWidg(self)
+        my_widget = ImportWidget(self)
         #my_widget = FindspotsSimplerParameterTab(self)
         #my_widget = IndexSimplerParamTab(self)
         #my_widget = RefineBravaiSimplerParamTab(self)
