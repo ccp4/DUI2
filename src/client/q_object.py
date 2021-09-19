@@ -66,8 +66,8 @@ class MainObject(QObject):
         self.window.setWindowTitle("CCP4 DUI Cloud")
 
         data_init = ini_data()
+        data_init.set_data()
         self.uni_url = data_init.get_url()
-
 
         self.reseting = False
         try:

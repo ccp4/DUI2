@@ -18,6 +18,9 @@ except ModuleNotFoundError:
 
 class ini_data(object):
     def __init__(self):
+        print("ini_data.__init__()")
+
+    def set_data(self):
         par_def = (
             ("url", 'http://localhost:45678/'),
             #("url", 'http://supercomputo.cimav.edu.mx:45678/'),
