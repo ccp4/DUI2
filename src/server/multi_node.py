@@ -612,10 +612,9 @@ class Runner(object):
                         )
                         return_list = refl_lst
 
-                    except AttributeError:
+                    except (IndexError, AttributeError):
                         print(
-                            "\n *** ERROR *** \n AttributeError" +
-                            "\n not sending reflection list"
+                            "\n *** ERROR *** \n not sending reflection list \n"
                         )
                         return_list = []
 
