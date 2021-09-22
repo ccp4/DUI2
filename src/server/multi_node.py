@@ -25,8 +25,7 @@ import subprocess, psutil
 import os, sys
 import glob, json
 
-from dxtbx.model.experiment_list import ExperimentListFactory
-
+from data_n_json import get_data_from_steps
 try:
     from shared_modules import format_utils
 
@@ -38,9 +37,6 @@ except ModuleNotFoundError:
     comm_path = os.path.abspath(__file__)[0:-20] + "shared_modules"
     sys.path.insert(1, comm_path)
     import format_utils
-
-from data_n_json import get_param_list
-from img_uploader import flex_arr_2_json
 
 def fix_alias(short_in):
     pair_list = [
@@ -101,155 +97,6 @@ def unalias_full_cmd(lst_in):
 
     return new_full_lst
 
-
-def get_data_from_steps(uni_cmd, cmd_dict, step_list):
-    return_list = []
-    if uni_cmd == ["display_log"]:
-        for lin2go in cmd_dict["nod_lst"]:
-            try:
-                lof_file = open(
-                    step_list[lin2go].log_file_path, "r"
-                )
-                lst2add = lof_file.readlines()
-                lof_file.close()
-                return_list.append(lst2add)
-
-            except (IndexError, TypeError, FileNotFoundError) as my_er:
-                print(
-                    "\n *** ERROR *** \n", my_er, "\n *** \n" +
-                    "wrong line \n not logging"
-                )
-
-    elif uni_cmd == ["get_report"]:
-        for lin2go in cmd_dict["nod_lst"]:
-            try:
-                rep_path = str(step_list[lin2go]._html_rep)
-                print(
-                    "#" * 70 + "\n HTML report in: " +
-                    rep_path + "\n" + "#" * 70
-                )
-                fil = open(rep_path, "r")
-                str_file = fil.read()
-                fil.close()
-
-                byt_data = bytes(str_file.encode('utf-8'))
-                return_list = byt_data
-
-            except (IndexError, FileNotFoundError):
-                print(
-                    "\n *** ERROR *** \n wrong line" +
-                    " \n sending empty html"
-                )
-                return_list = []
-
-    elif uni_cmd == ["get_template"]:
-        for lin2go in cmd_dict["nod_lst"]:
-            try:
-                #TODO check if the first element is enough
-                exp_path = step_list[lin2go]._lst_expt_out[0]
-                experiments = ExperimentListFactory.from_json_file(
-                    exp_path
-                )
-                my_sweep = experiments.imagesets()[0]
-                str_json = my_sweep.get_template()
-
-                data_xy_flex = my_sweep.get_raw_data(0)[0].as_double()
-                img_with, img_height = data_xy_flex.all()[0:2]
-                return_list = [str_json, img_with, img_height]
-
-            except IndexError:
-                print(
-                    "\n *** ERROR *** \n wrong line" +
-                    " \n not sending template string"
-                )
-
-    elif uni_cmd[0] == "get_image":
-        for lin2go in cmd_dict["nod_lst"]:
-            try:
-                print(
-                    "generating image JSON data for line:", lin2go,
-                    " image:", int(uni_cmd[1])
-                )
-                #TODO remember to check if the list is empty
-                str_json = flex_arr_2_json.get_json_w_img_2d(
-                    step_list[lin2go]._lst_expt_out,
-                    int(uni_cmd[1])
-                )
-
-                byt_data = bytes(str_json.encode('utf-8'))
-                return_list = byt_data
-
-            except (IndexError, AttributeError):
-                print("\n *** ERROR *** \n wrong line \n not sending IMG")
-
-    elif uni_cmd[0] == "get_image_slice":
-        for lin2go in cmd_dict["nod_lst"]:
-            try:
-                print(
-                    "generating slice of image for line:", lin2go,
-                    " image:", int(uni_cmd[1]), "\n uni_cmd =", uni_cmd,
-                    "\n"
-                )
-                inv_scale = 1
-                for sub_par in uni_cmd[2:]:
-                    eq_pos = sub_par.find("=")
-                    left_side = sub_par[0:eq_pos]
-                    right_side = sub_par[eq_pos + 1:]
-                    if left_side == "inv_scale":
-                        inv_scale = int(right_side)
-                        print("inv_scale =", inv_scale)
-
-                    elif left_side == "view_rect":
-                        print("view_rect =", right_side)
-                        [x1, y1, x2, y2] = right_side.split(",")
-                        print("x1, y1, x2, y2 =", x1, y1, x2, y2)
-
-                #TODO remember to check if the list is empty
-                str_json = flex_arr_2_json.get_json_w_2d_slise(
-                    step_list[lin2go]._lst_expt_out,
-                    int(uni_cmd[1]), inv_scale, x1, y1, x2, y2
-                )
-                if str_json is not None:
-                    byt_data = bytes(str_json.encode('utf-8'))
-                    return_list = byt_data
-
-            except (IndexError, AttributeError):
-                print("\n *** ERROR *** \n wrong line \n not sending IMG")
-
-    elif uni_cmd[0] == "get_reflection_list":
-        for lin2go in cmd_dict["nod_lst"]:
-            try:
-                print(
-                    "generating reflection list for line:", lin2go,
-                    " image:", int(uni_cmd[1])
-                )
-                refl_lst = flex_arr_2_json.get_refl_lst(
-                    step_list[lin2go]._lst_expt_out,
-                    step_list[lin2go]._lst_refl_out,
-                    int(uni_cmd[1])
-                )
-                return_list = refl_lst
-
-            except (IndexError, AttributeError):
-                print(
-                    "\n *** ERROR *** \n not sending reflection list \n"
-                )
-                return_list = []
-
-    elif uni_cmd == ["get_bravais_sum"]:
-        for lin2go in cmd_dict["nod_lst"]:
-            try:
-                lst2add = step_list[lin2go].get_bravais_summ()
-                return_list.append(lst2add)
-
-            except IndexError:
-                print("\n *** ERROR *** \n wrong line \n not logging")
-
-
-    elif uni_cmd[0][-7:] == "_params":
-        return_list = get_param_list(uni_cmd[0])
-
-    return return_list
 
 
 class CmdNode(object):
