@@ -464,7 +464,7 @@ class Runner(object):
     def set_dir_tree(self, tree_dic_lst):
         self._dir_tree_dict = tree_dic_lst
 
-    def run_get_data(self, cmd_dict, req_obj = None):
+    def run_get_data(self, cmd_dict):
 
         unalias_cmd_lst = unalias_full_cmd(cmd_dict["cmd_lst"])
         print("\n cmd_lst: ", unalias_cmd_lst)
@@ -472,7 +472,7 @@ class Runner(object):
         return_list = []
         for uni_cmd in unalias_cmd_lst:
             if uni_cmd == ["display"]:
-                return_list = format_utils.get_lst2show(self)
+                return_list = format_utils.get_lst2show(self.step_list)
                 self.tree_output(return_list)
                 self.tree_output.print_output()
 

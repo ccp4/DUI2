@@ -23,9 +23,9 @@ copyright (c) CCP4 - DLS
 
 import json
 
-def get_lst2show(main_obj):
+def get_lst2show(step_list):
     lst_nod = []
-    for uni in main_obj.step_list:
+    for uni in step_list:
         tst_off = '''
         if uni.lst2run == []:
             cmd2show = ["None"]

@@ -126,7 +126,7 @@ def main():
                         "cmd_lst":cmd_lst}
             try:
                 #lst_out = []
-                lst_out = cmd_tree_runner.run_get_data(cmd_dict, self)
+                lst_out = cmd_tree_runner.run_get_data(cmd_dict)
 
                 if type(lst_out) is list or type(lst_out) is dict:
                     self.send_header('Content-type', 'text/plain')
