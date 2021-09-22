@@ -145,23 +145,6 @@ def main():
 
                     self.wfile.write(bytes(byt_data))
 
-                else:
-                    #type(lst_out) = <class 'str'> ,# html report
-                    print("\n\n *** type(lst_out) ELSE *** \n\n")
-                    self.send_header('Content-type', 'text/plain')
-                    self.end_headers()
-                    try:
-                        f = open(lst_out, "r")
-                        str_lst = f.readlines()
-                        f.close()
-                        for lin in str_lst:
-                            self.wfile.write(bytes(lin, 'utf-8'))
-
-                        self.wfile.write(bytes("/*EOF*/", 'utf-8'))
-
-                    except FileNotFoundError:
-                        self.wfile.write(bytes("/*EOF*/", 'utf-8'))
-
 
                 print("sending /*EOF*/")
                 self.wfile.write(bytes('/*EOF*/', 'utf-8'))
