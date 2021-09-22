@@ -39,7 +39,7 @@ except ModuleNotFoundError:
     sys.path.insert(1, comm_path)
     import format_utils
 
-from params_2_json import get_param_list
+from data_n_json import get_param_list
 from img_uploader import flex_arr_2_json
 
 def fix_alias(short_in):
