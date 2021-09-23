@@ -30,11 +30,7 @@ from PySide2.QtWidgets import *
 from PySide2 import QtUiTools
 from PySide2.QtGui import *
 
-from exec_utils import json_data_request
-
-#from exec_utils import uni_url
 from init_firts import ini_data
-
 
 def _get_all_direct_layout_widget_children(parent):
     """Walk a widget tree and get all non-QLayout direct children
@@ -281,9 +277,6 @@ class FileBrowser(QDialog):
         cmd = {"nod_lst":[""], "cmd_lst":["dir_tree"]}
         self.my_bar(3)
 
-        #TODO consider reuse elsewhere the next bit that uses requests/zlib
-        ##################################################################
-
         data_init = ini_data()
         uni_url = data_init.get_url()
 
@@ -292,7 +285,6 @@ class FileBrowser(QDialog):
         )
         compresed = req_get.content
         dic_str = zlib.decompress(compresed)
-        ##################################################################
         self.dir_tree_dict = json.loads(dic_str)
 
         self.my_bar(7)
