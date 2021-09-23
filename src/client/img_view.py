@@ -178,30 +178,14 @@ def load_json_w_str(uni_url = None, nod_num_lst = [1], img_num = 0):
     my_cmd_lst = ["gi " + str(img_num)]
     my_cmd = {"nod_lst":nod_num_lst, "cmd_lst":my_cmd_lst}
 
-    print("\n full img here \n")
     try:
         start_tm = time.time()
-
-        req_get = requests.get(uni_url, stream=True, params = my_cmd)
-        total_size = int(req_get.headers.get('content-length', 0)) + 1
-        print("total_size =", total_size)
-        #block_size = 1024 #1 Kilobyte
-        block_size = 65536
-        downloaded_size = 0
-        compresed = bytes()
-        print("starting to load full image ...")
-        for data in req_get.iter_content(block_size):
-            compresed += data
-            downloaded_size += block_size
-            progress = int(100.0 * (downloaded_size / total_size))
-            #print("progress(full image) =", progress )
-
-        print("... finished loading full image")
-
+        req_get = requests.get(uni_url, stream = True, params = my_cmd)
+        compresed = req_get.content
         dic_str = zlib.decompress(compresed)
         arr_dic = json.loads(dic_str)
         end_tm = time.time()
-        print("request took ", end_tm - start_tm)
+        print("full IMG request took ", end_tm - start_tm, "sec")
         d1 = arr_dic["d1"]
         d2 = arr_dic["d2"]
         str_data = arr_dic["str_data"]
@@ -295,7 +279,7 @@ class LoadSliceImage(QThread):
             dic_str = zlib.decompress(compresed)
             arr_dic = json.loads(dic_str)
             end_tm = time.time()
-            print("request took ", end_tm - start_tm)
+            print("slice IMG request took ", end_tm - start_tm, "sec")
 
             str_data = arr_dic["str_data"]
             d1 = arr_dic["d1"]
