@@ -27,7 +27,6 @@ from PySide2.QtCore import *
 from PySide2.QtWidgets import *
 
 from q_object import MainObject
-from init_firts import ini_data
 
 def main():
     #QCoreApplication.setAttribute(Qt.AA_ShareOpenGLContexts)

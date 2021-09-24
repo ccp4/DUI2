@@ -22,7 +22,7 @@ copyright (c) CCP4 - DLS
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 
-import sys
+import sys, os
 from PySide2.QtCore import *
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
@@ -34,7 +34,6 @@ import zlib
 import time
 import requests
 
-#from exec_utils import uni_url
 from init_firts import ini_data
 
 
@@ -684,4 +683,39 @@ class DoImageView(QObject):
             relative_new_scale, relative_new_scale
         )
         self.get_inv_scale()
+
+
+
+
+class MainImgViewObject(QObject):
+    def __init__(self, parent = None):
+        super(MainImgViewObject, self).__init__(parent)
+        self.parent_app = parent
+        self.ui_dir_path = os.path.dirname(os.path.abspath(__file__))
+        ui_path = self.ui_dir_path + os.sep + "img_view.ui"
+        print("ui_path =", ui_path)
+
+        self.window = QtUiTools.QUiLoader().load(ui_path)
+        self.window.setWindowTitle("CCP4 DUI Cloud")
+
+        data_init = ini_data()
+        data_init.set_data()
+        self.uni_url = data_init.get_url()
+
+        self.window.show()
+
+
+
+def main():
+    QCoreApplication.setAttribute(Qt.AA_ShareOpenGLContexts)
+    app = QApplication(sys.argv)
+    m_obj = MainImgViewObject(parent = app)
+    sys.exit(app.exec_())
+
+
+if __name__ == "__main__":
+    main()
+
+
+
 
