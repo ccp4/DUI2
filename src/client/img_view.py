@@ -702,8 +702,23 @@ class MainImgViewObject(QObject):
         data_init.set_data()
         self.uni_url = data_init.get_url()
 
-        self.window.show()
+        self.current_nod_num = 1
+        self.do_image_view = DoImageView(self)
 
+        self.window.show()
+        self.window.IntroNodeEdit.editingFinished.connect(
+            self.node_num_entered
+        )
+
+    def node_num_entered(self):
+        try:
+            nod_num = int(self.window.IntroNodeEdit.text())
+            print("nod_num =", nod_num)
+            img_num = int(self.window.ImgNumEdit.text())
+            self.do_image_view(in_img_num = img_num, nod_in_lst = nod_num)
+
+        except ValueError:
+            print("NAN entered")
 
 
 def main():
