@@ -713,9 +713,9 @@ class MainImgViewObject(QObject):
     def node_num_entered(self):
         try:
             nod_num = int(self.window.IntroNodeEdit.text())
-            print("nod_num =", nod_num)
+            self.current_nod_num = nod_num
             img_num = int(self.window.ImgNumEdit.text())
-            self.do_image_view(in_img_num = img_num, nod_in_lst = nod_num)
+            self.do_image_view(in_img_num = img_num, nod_in_lst = True)
 
         except ValueError:
             print("NAN entered")
