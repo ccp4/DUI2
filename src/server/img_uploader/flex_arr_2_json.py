@@ -11,7 +11,8 @@ import time
 from dxtbx.model.experiment_list import ExperimentListFactory
 
 def list_p_arrange_exp(
-    bbox_col = None, pan_col = None, hkl_col = None, n_imgs = None
+    bbox_col = None, pan_col = None, hkl_col = None,
+    n_imgs = None, id_col = None
 ):
 
     img_lst = []
@@ -19,40 +20,39 @@ def list_p_arrange_exp(
         img_lst.append([])
 
     for i, ref_box in enumerate(bbox_col):
-        x_ini = ref_box[0]
-        y_ini = ref_box[2] + pan_col[i] * 213
-        width = ref_box[1] - ref_box[0]
-        height = ref_box[3] - ref_box[2]
+        if id_col[i] == 0:
+            x_ini = ref_box[0]
+            y_ini = ref_box[2] + pan_col[i] * 213
+            width = ref_box[1] - ref_box[0]
+            height = ref_box[3] - ref_box[2]
 
-        if hkl_col is None or len(hkl_col) <= 1:
-            local_hkl = ""
+            if hkl_col is None or len(hkl_col) <= 1:
+                local_hkl = ""
 
-        else:
-            local_hkl = hkl_col[i]
-            if local_hkl == "(0, 0, 0)":
-                local_hkl = "NOT indexed"
+            else:
+                local_hkl = hkl_col[i]
+                if local_hkl == "(0, 0, 0)":
+                    local_hkl = "NOT indexed"
 
-        box_dat = []
-        box_dat.append(x_ini)
-        box_dat.append(y_ini)
-        box_dat.append(width)
-        box_dat.append(height)
-        box_dat.append(local_hkl)
+            box_dat = []
+            box_dat.append(x_ini)
+            box_dat.append(y_ini)
+            box_dat.append(width)
+            box_dat.append(height)
+            box_dat.append(local_hkl)
 
-        for idx in range(ref_box[4], ref_box[5]):
-            if idx >= 0 and idx < n_imgs:
-                img_lst[idx].append(box_dat)
+            for idx in range(ref_box[4], ref_box[5]):
+                if idx >= 0 and idx < n_imgs:
+                    img_lst[idx].append(box_dat)
 
     return img_lst
-
-
 
 
 def get_refl_lst(expt_path, refl_path, img_num):
     try:
         experiments = ExperimentListFactory.from_json_file(expt_path[0])
         my_sweep = experiments.imagesets()[0]
-        #data_xy_flex = my_sweep.get_raw_data(0)[0].as_double()
+        print("len(experiments.imagesets()) =", len(experiments.imagesets()))
         print("refl_path =", refl_path)
         table = flex.reflection_table.from_file(refl_path[0])
 
@@ -65,13 +65,12 @@ def get_refl_lst(expt_path, refl_path, img_num):
     try:
         pan_col = list(map(int, table["panel"]))
         bbox_col = list(map(list, table["bbox"]))
+        id_col = list(map(int, table["id"]))
 
         n_imgs = len(my_sweep.indices())
         print("n_imgs =", n_imgs)
         box_flat_data_lst = []
         if n_imgs > 0:
-
-            ############################################ xyzcal
             try:
                 hkl_col = list(map(str, table["miller_index"]))
 
@@ -80,7 +79,7 @@ def get_refl_lst(expt_path, refl_path, img_num):
                 hkl_col = None
 
             box_flat_data_lst = list_p_arrange_exp(
-                bbox_col, pan_col, hkl_col, n_imgs
+                bbox_col, pan_col, hkl_col, n_imgs, id_col
             )
 
         return [box_flat_data_lst[img_num]]
