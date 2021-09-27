@@ -105,7 +105,7 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
 
     elif uni_cmd[0] == "get_image":
         for lin2go in cmd_dict["nod_lst"]:
-            try:
+                #try:
                 print(
                     "generating image JSON data for line:", lin2go,
                     " image:", int(uni_cmd[1])
@@ -118,13 +118,14 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
 
                 byt_data = bytes(str_json.encode('utf-8'))
                 return_list = byt_data
-
+                '''
             except (IndexError, AttributeError):
                 print("\n *** ERROR *** \n wrong line \n not sending IMG")
+                '''
 
     elif uni_cmd[0] == "get_image_slice":
         for lin2go in cmd_dict["nod_lst"]:
-            try:
+                #try:
                 print(
                     "generating slice of image for line:", lin2go,
                     " image:", int(uni_cmd[1]), "\n uni_cmd =", uni_cmd,
@@ -153,8 +154,10 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
                     byt_data = bytes(str_json.encode('utf-8'))
                     return_list = byt_data
 
+                '''
             except (IndexError, AttributeError):
                 print("\n *** ERROR *** \n wrong line \n not sending IMG")
+                '''
 
     elif uni_cmd[0] == "get_reflection_list":
         for lin2go in cmd_dict["nod_lst"]:

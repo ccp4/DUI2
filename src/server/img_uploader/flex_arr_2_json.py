@@ -183,13 +183,30 @@ def get_json_w_img_2d(experiments_list_path, img_num):
     experiments_path = experiments_list_path[0]
     print("importing from:", experiments_path)
     experiments = ExperimentListFactory.from_json_file(experiments_path)
+    '''
     my_sweep = experiments.imagesets()[0]
     print("geting image #", img_num)
     data_xy_flex = my_sweep.get_raw_data(img_num)[pan_num].as_double()
+    '''
+    lst_num_of_imgs = []
+    for single_sweep in experiments.imagesets():
+        lst_num_of_imgs.append(len(single_sweep.indices()))
 
-    #start_tm = time.time()
-    #str_data = img_stream_ext.img_arr_2_str(data_xy_flex)
-    ######################################################################
+    print("lst_num_of_imgs =", lst_num_of_imgs)
+
+    on_sweep_img_num = img_num
+    n_sweep = 0
+    for num_of_imgs in lst_num_of_imgs:
+        if on_sweep_img_num >= num_of_imgs:
+            on_sweep_img_num -= num_of_imgs
+            n_sweep += 1
+
+        else:
+            break
+
+    print("geting image #", on_sweep_img_num, "from sweep #", n_sweep)
+    my_sweep = experiments.imagesets()[n_sweep]
+    data_xy_flex = my_sweep.get_raw_data(on_sweep_img_num)[pan_num].as_double()
 
     start_tm = time.time()
     np_arr = data_xy_flex.as_numpy_array()
@@ -202,10 +219,6 @@ def get_json_w_img_2d(experiments_list_path, img_num):
     end_tm = time.time()
     print("str/tuple use and compressing took ", end_tm - start_tm)
 
-    ######################################################################
-    #end_tm = time.time()
-    #print("C++ bit took ", end_tm - start_tm)
-
     return str_data
 
 def get_json_w_2d_slise(experiments_list_path, img_num, inv_scale, x1, y1, x2, y2):
@@ -214,9 +227,33 @@ def get_json_w_2d_slise(experiments_list_path, img_num, inv_scale, x1, y1, x2, y
     experiments_path = experiments_list_path[0]
     print("importing from:", experiments_path)
     experiments = ExperimentListFactory.from_json_file(experiments_path)
+    '''
     my_sweep = experiments.imagesets()[0]
     print("geting image #", img_num)
     data_xy_flex = my_sweep.get_raw_data(img_num)[pan_num].as_double()
+    '''
+
+    lst_num_of_imgs = []
+    for single_sweep in experiments.imagesets():
+        lst_num_of_imgs.append(len(single_sweep.indices()))
+
+    print("lst_num_of_imgs =", lst_num_of_imgs)
+
+    on_sweep_img_num = img_num
+    n_sweep = 0
+    for num_of_imgs in lst_num_of_imgs:
+        if on_sweep_img_num >= num_of_imgs:
+            on_sweep_img_num -= num_of_imgs
+            n_sweep += 1
+
+        else:
+            break
+
+    print("geting image #", on_sweep_img_num, "from sweep #", n_sweep)
+    my_sweep = experiments.imagesets()[n_sweep]
+    data_xy_flex = my_sweep.get_raw_data(on_sweep_img_num)[pan_num].as_double()
+
+
     start_tm = time.time()
     str_data = img_stream_ext.slice_arr_2_str(
         data_xy_flex, inv_scale,
