@@ -12,7 +12,7 @@ from dxtbx.model.experiment_list import ExperimentListFactory
 
 def list_p_arrange_exp(
     bbox_col = None, pan_col = None, hkl_col = None,
-    n_imgs = None, id_col = None
+    n_imgs = None, n_imgs_lst = None, id_col = None
 ):
 
     img_lst = []
@@ -20,30 +20,34 @@ def list_p_arrange_exp(
         img_lst.append([])
 
     for i, ref_box in enumerate(bbox_col):
-        if id_col[i] == 0:
-            x_ini = ref_box[0]
-            y_ini = ref_box[2] + pan_col[i] * 213
-            width = ref_box[1] - ref_box[0]
-            height = ref_box[3] - ref_box[2]
+        x_ini = ref_box[0]
+        y_ini = ref_box[2] + pan_col[i] * 213
+        width = ref_box[1] - ref_box[0]
+        height = ref_box[3] - ref_box[2]
 
-            if hkl_col is None or len(hkl_col) <= 1:
-                local_hkl = ""
+        if hkl_col is None or len(hkl_col) <= 1:
+            local_hkl = ""
 
-            else:
-                local_hkl = hkl_col[i]
-                if local_hkl == "(0, 0, 0)":
-                    local_hkl = "NOT indexed"
+        else:
+            local_hkl = hkl_col[i]
+            if local_hkl == "(0, 0, 0)":
+                local_hkl = "NOT indexed"
 
-            box_dat = []
-            box_dat.append(x_ini)
-            box_dat.append(y_ini)
-            box_dat.append(width)
-            box_dat.append(height)
-            box_dat.append(local_hkl)
+        box_dat = []
+        box_dat.append(x_ini)
+        box_dat.append(y_ini)
+        box_dat.append(width)
+        box_dat.append(height)
+        box_dat.append(local_hkl)
 
-            for idx in range(ref_box[4], ref_box[5]):
-                if idx >= 0 and idx < n_imgs:
-                    img_lst[idx].append(box_dat)
+        for ind_z in range(ref_box[4], ref_box[5]):
+            '''
+            FIXME the next formula assumes that all experiments have the same
+            amount of images
+            '''
+            img_id_ind_z = ind_z + id_col[i] * n_imgs_lst[id_col[i]]
+            if img_id_ind_z >= 0 and img_id_ind_z < n_imgs:
+                img_lst[img_id_ind_z].append(box_dat)
 
     return img_lst
 
@@ -51,7 +55,8 @@ def list_p_arrange_exp(
 def get_refl_lst(expt_path, refl_path, img_num):
     try:
         experiments = ExperimentListFactory.from_json_file(expt_path[0])
-        my_sweep = experiments.imagesets()[0]
+        #my_sweep = experiments.imagesets()[0]
+        all_sweeps = experiments.imagesets()
         print("len(experiments.imagesets()) =", len(experiments.imagesets()))
         print("refl_path =", refl_path)
         table = flex.reflection_table.from_file(refl_path[0])
@@ -67,7 +72,14 @@ def get_refl_lst(expt_path, refl_path, img_num):
         bbox_col = list(map(list, table["bbox"]))
         id_col = list(map(int, table["id"]))
 
-        n_imgs = len(my_sweep.indices())
+        #n_imgs = len(my_sweep.indices())
+        n_imgs_lst = []
+        n_imgs = 0
+        for single_sweep in all_sweeps:
+            len_sweep = len(single_sweep.indices())
+            n_imgs += len_sweep
+            n_imgs_lst.append(len_sweep)
+
         print("n_imgs =", n_imgs)
         box_flat_data_lst = []
         if n_imgs > 0:
@@ -79,7 +91,7 @@ def get_refl_lst(expt_path, refl_path, img_num):
                 hkl_col = None
 
             box_flat_data_lst = list_p_arrange_exp(
-                bbox_col, pan_col, hkl_col, n_imgs, id_col
+                bbox_col, pan_col, hkl_col, n_imgs, n_imgs_lst, id_col
             )
 
         return [box_flat_data_lst[img_num]]
@@ -144,9 +156,9 @@ def list_p_arrange_pre(pos_col, hkl_col, pan_col, n_imgs):
         xrs_size = 1
         int_z_centr = int(pos_tri[2])
         max_xrs_siz = 3
-        for idx in range(int_z_centr - max_xrs_siz, int_z_centr + max_xrs_siz):
-            xrs_size = max_xrs_siz - abs(int_z_centr - idx)
-            if idx == int_z_centr:
+        for ind_z in range(int_z_centr - max_xrs_siz, int_z_centr + max_xrs_siz):
+            xrs_size = max_xrs_siz - abs(int_z_centr - ind_z)
+            if ind_z == int_z_centr:
                 size2 = 2
 
             else:
@@ -158,8 +170,8 @@ def list_p_arrange_pre(pos_col, hkl_col, pan_col, n_imgs):
                 local_hkl
              ]
 
-            if idx >= 0 and idx < n_imgs:
-                img_lst[idx].append(dat_to_append)
+            if ind_z >= 0 and ind_z < n_imgs:
+                img_lst[ind_z].append(dat_to_append)
 
     return img_lst
     '''

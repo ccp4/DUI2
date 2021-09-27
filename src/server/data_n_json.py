@@ -158,7 +158,7 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
 
     elif uni_cmd[0] == "get_reflection_list":
         for lin2go in cmd_dict["nod_lst"]:
-            try:
+                #try:
                 print(
                     "generating reflection list for line:", lin2go,
                     " image:", int(uni_cmd[1])
@@ -169,12 +169,13 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
                     int(uni_cmd[1])
                 )
                 return_list = refl_lst
-
+                '''
             except (IndexError, AttributeError):
                 print(
                     "\n *** ERROR *** \n not sending reflection list \n"
                 )
                 return_list = []
+                '''
 
     elif uni_cmd == ["get_bravais_sum"]:
         for lin2go in cmd_dict["nod_lst"]:
