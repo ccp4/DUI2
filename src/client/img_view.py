@@ -271,8 +271,6 @@ class LoadSliceImage(QThread):
                 compresed += data
                 downloaded_size += block_size
                 progress = int(100.0 * (downloaded_size / total_size))
-
-                #next commented line seems to be the culprit of a segmentation fault
                 self.progressing.emit(progress)
 
             dic_str = zlib.decompress(compresed)

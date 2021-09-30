@@ -42,7 +42,8 @@ def list_p_arrange_exp(
 
         for ind_z in range(ref_box[4], ref_box[5]):
             '''
-            FIXME the next formula assumes that all experiments have the same
+            FIXME
+            the next formula assumes that all experiments have the same
             amount of images
             '''
             img_id_ind_z = ind_z + id_col[i] * n_imgs_lst[id_col[i]]
@@ -99,82 +100,6 @@ def get_refl_lst(expt_path, refl_path, img_num):
     except KeyError:
         print("NOT found << bbox_col >> col")
         return [ [] ]
-
-old_incomplete = '''
-    try:
-        pan_col = list(map(int, table["panel"]))
-        bbox_col = list(map(list, table["bbox"]))
-
-        n_imgs = len(my_sweep.indices())
-        print("n_imgs =", n_imgs)
-        box_flat_data_lst = []
-        plus_flat_data_lst = []
-        if n_imgs > 0:
-            box_flat_data_lst = list_p_arrange_exp(
-                bbox_col, pan_col, n_imgs
-            )
-
-            ############################################ xyzcal
-            try:
-                pos_col = list(map(list, table["xyzcal.px"]))
-                hkl_col = list(map(str, table["miller_index"]))
-                plus_flat_data_lst = list_p_arrange_pre(
-                    pos_col, hkl_col, pan_col, n_imgs
-                )
-
-            except KeyError:
-                print("NOT found << xyzcal >> col")
-                return [box_flat_data_lst[img_num], []]
-
-
-        return [box_flat_data_lst[img_num], plus_flat_data_lst[img_num]]
-
-    except KeyError:
-        print("NOT found << bbox_col >> col")
-        return [ [], [] ]
-
-def list_p_arrange_pre(pos_col, hkl_col, pan_col, n_imgs):
-    img_lst = []
-    for times in range(n_imgs):
-        img_lst.append([])
-
-    print(" len(pos_col) = ", len(pos_col))
-
-    for i, pos_tri in enumerate(pos_col):
-
-        x_ini = '{:.2f}'.format(pos_tri[0] - 1)
-        y_ini = '{:.2f}'.format((pos_tri[1] - 1) + pan_col[i] * 213)
-
-        if len(hkl_col) <= 1:
-            local_hkl = ""
-
-        else:
-            local_hkl = hkl_col[i]
-            if local_hkl == "(0, 0, 0)":
-                local_hkl = "NOT indexed"
-
-        xrs_size = 1
-        int_z_centr = int(pos_tri[2])
-        max_xrs_siz = 3
-        for ind_z in range(int_z_centr - max_xrs_siz, int_z_centr + max_xrs_siz):
-            xrs_size = max_xrs_siz - abs(int_z_centr - ind_z)
-            if ind_z == int_z_centr:
-                size2 = 2
-
-            else:
-                size2 = 0
-
-            dat_to_append = [
-                x_ini + "," + y_ini + "," +
-                str(xrs_size) + "," + str(size2),
-                local_hkl
-             ]
-
-            if ind_z >= 0 and ind_z < n_imgs:
-                img_lst[ind_z].append(dat_to_append)
-
-    return img_lst
-    '''
 
 
 def get_json_w_img_2d(experiments_list_path, img_num):
