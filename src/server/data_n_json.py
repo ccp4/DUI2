@@ -84,7 +84,7 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
 
     elif uni_cmd == ["get_template"]:
         for lin2go in cmd_dict["nod_lst"]:
-                #try:
+            try:
                 #TODO check if the first element is enough
                 exp_path = step_list[lin2go]._lst_expt_out[0]
                 experiments = ExperimentListFactory.from_json_file(
@@ -96,16 +96,14 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
                 data_xy_flex = my_sweep.get_raw_data(0)[0].as_double()
                 img_with, img_height = data_xy_flex.all()[0:2]
                 return_list = [str_json, img_with, img_height]
-                '''
             except IndexError:
                 print(
                     "\n *** ERROR *** \n wrong line" +
                     " \n not sending template string"
                 )
-                '''
     elif uni_cmd[0] == "get_image":
         for lin2go in cmd_dict["nod_lst"]:
-                #try:
+            try:
                 print(
                     "generating image JSON data for line:", lin2go,
                     " image:", int(uni_cmd[1])
@@ -118,14 +116,13 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
 
                 byt_data = bytes(str_json.encode('utf-8'))
                 return_list = byt_data
-                '''
+
             except (IndexError, AttributeError):
                 print("\n *** ERROR *** \n wrong line \n not sending IMG")
-                '''
 
     elif uni_cmd[0] == "get_image_slice":
         for lin2go in cmd_dict["nod_lst"]:
-                #try:
+            try:
                 print(
                     "generating slice of image for line:", lin2go,
                     " image:", int(uni_cmd[1]), "\n uni_cmd =", uni_cmd,
@@ -154,14 +151,12 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
                     byt_data = bytes(str_json.encode('utf-8'))
                     return_list = byt_data
 
-                '''
             except (IndexError, AttributeError):
                 print("\n *** ERROR *** \n wrong line \n not sending IMG")
-                '''
 
     elif uni_cmd[0] == "get_reflection_list":
         for lin2go in cmd_dict["nod_lst"]:
-                #try:
+            try:
                 print(
                     "generating reflection list for line:", lin2go,
                     " image:", int(uni_cmd[1])
@@ -172,13 +167,12 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
                     int(uni_cmd[1])
                 )
                 return_list = refl_lst
-                '''
+
             except (IndexError, AttributeError):
                 print(
                     "\n *** ERROR *** \n not sending reflection list \n"
                 )
                 return_list = []
-                '''
 
     elif uni_cmd == ["get_bravais_sum"]:
         for lin2go in cmd_dict["nod_lst"]:

@@ -45,8 +45,14 @@ def list_p_arrange_exp(
             FIXME
             the next formula assumes that all experiments have the same
             amount of images
-            '''
             img_id_ind_z = ind_z + id_col[i] * n_imgs_lst[id_col[i]]
+            '''
+            img_id_ind_z = 0
+            for id_num in range(id_col[i]):
+                img_id_ind_z += n_imgs_lst[id_num]
+
+            img_id_ind_z += ind_z
+
             if img_id_ind_z >= 0 and img_id_ind_z < n_imgs:
                 img_lst[img_id_ind_z].append(box_dat)
 
@@ -82,6 +88,8 @@ def get_refl_lst(expt_path, refl_path, img_num):
             n_imgs_lst.append(len_sweep)
 
         print("n_imgs =", n_imgs)
+        print("n_imgs_lst =", n_imgs_lst)
+
         box_flat_data_lst = []
         if n_imgs > 0:
             try:
