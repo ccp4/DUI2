@@ -41,12 +41,6 @@ def list_p_arrange_exp(
         box_dat.append(local_hkl)
 
         for ind_z in range(ref_box[4], ref_box[5]):
-            '''
-            FIXME
-            the next formula assumes that all experiments have the same
-            amount of images
-            img_id_ind_z = ind_z + id_col[i] * n_imgs_lst[id_col[i]]
-            '''
             img_id_ind_z = 0
             for id_num in range(id_col[i]):
                 img_id_ind_z += n_imgs_lst[id_num]
