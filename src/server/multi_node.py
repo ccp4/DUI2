@@ -267,6 +267,12 @@ class CmdNode(object):
 
             log_line_lst.append(new_line[:-1])
 
+        for inv_pos in range(1, len(log_line_lst)):
+            if log_line_lst[-inv_pos] != '':
+                log_line_lst = log_line_lst[0:-inv_pos]
+                print("inv_pos =", inv_pos)
+                break
+
         if n_Broken_Pipes > 0:
             print("\n *** BrokenPipeError *** while sending output \n")
 
