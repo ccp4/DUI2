@@ -15,31 +15,20 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_3">
-    <item row="1" column="0" colspan="4">
-     <widget class="QGraphicsView" name="imageView"/>
-    </item>
-    <item row="2" column="2">
-     <widget class="QLabel" name="InvScaleLabel">
-      <property name="text">
-       <string>scale = 1 / 1</string>
-      </property>
-     </widget>
-    </item>
     <item row="2" column="1">
-     <widget class="QPushButton" name="ScaleOneOneButton">
-      <property name="text">
-       <string>Scale 1 : 1  </string>
-      </property>
-     </widget>
+     <widget class="QLineEdit" name="IntroPathEdit"/>
     </item>
-    <item row="2" column="3">
+    <item row="2" column="6">
      <widget class="QLabel" name="OutuputStatLabel">
       <property name="text">
        <string>Ready</string>
       </property>
      </widget>
     </item>
-    <item row="2" column="0">
+    <item row="1" column="0" colspan="7">
+     <widget class="QGraphicsView" name="imageView"/>
+    </item>
+    <item row="2" column="3">
      <spacer name="horizontalSpacer_2">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
@@ -52,7 +41,7 @@
       </property>
      </spacer>
     </item>
-    <item row="0" column="0" colspan="4">
+    <item row="0" column="0" colspan="7">
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
        <widget class="QLineEdit" name="IntroNodeEdit"/>
@@ -104,6 +93,27 @@
        </widget>
       </item>
      </layout>
+    </item>
+    <item row="2" column="4">
+     <widget class="QPushButton" name="ScaleOneOneButton">
+      <property name="text">
+       <string>Scale 1 : 1  </string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="5">
+     <widget class="QLabel" name="InvScaleLabel">
+      <property name="text">
+       <string>scale = 1 / 1</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="2">
+     <widget class="QPushButton" name="OpenFileButton">
+      <property name="text">
+       <string>Open File / Dir</string>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>

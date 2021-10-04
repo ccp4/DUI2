@@ -36,9 +36,12 @@ import requests
 
 from init_firts import ini_data
 
-
 from exec_utils import json_data_request
 from outputs import HandleLoadStatusLabel
+
+#FIXME change the name of FileBrowser to camel_case
+from simpler_param_widgets import FileBrowser, build_template
+
 
 def crunch_min_max(data2d, i_min_max):
     data2d_ini = np.copy(data2d)
@@ -709,6 +712,7 @@ class MainImgViewObject(QObject):
         self.window.ImgNumEdit.textChanged.connect(self.img_num_changed)
         self.window.PrevImgButton.clicked.connect(self.prev_img)
         self.window.NextImgButton.clicked.connect(self.next_img)
+        self.window.OpenFileButton.clicked.connect(self.open_dir_widget)
 
     def node_num_entered(self):
         try:
@@ -740,6 +744,20 @@ class MainImgViewObject(QObject):
     def next_img(self):
         print("next_img")
         self.shift_img_num(1)
+
+    def set_selection(self, str_select, isdir):
+        print("str_select =", str_select, "isdir =", isdir)
+        self.dir_selected = isdir
+        if self.dir_selected:
+            self.window.IntroPathEdit.setText(str_select)
+
+        else:
+            self.window.IntroPathEdit.setText(build_template(str_select)[0])
+
+    def open_dir_widget(self):
+        #TODO make sure self.window is that goes as argument
+        self.open_widget = FileBrowser(self.window)
+        self.open_widget.file_or_dur_selected.connect(self.set_selection)
 
 
 def main():
