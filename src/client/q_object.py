@@ -248,7 +248,6 @@ class MainObject(QObject):
             "combine_experiments"
         ]["main_page"] = self.window.CombinePage
 
-        self.window.incoming_text.setFont(QFont("Monospace"))
         self.tree_scene = TreeDirScene(self)
         self.window.treeView.setScene(self.tree_scene)
 

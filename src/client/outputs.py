@@ -195,6 +195,13 @@ class ShowLog(QObject):
         data_init = ini_data()
         self.uni_url = data_init.get_url()
 
+        my_font = QFont("TypeWriter")
+        my_font.setFixedPitch(True)
+
+        self.main_obj.window.incoming_text.setFont(my_font)
+        self.main_obj.window.incoming_text.setCurrentFont(my_font)
+
+
     def __call__(self, nod_p_num = 0, do_request = False):
         print("Do Request =", do_request)
         if do_request:
