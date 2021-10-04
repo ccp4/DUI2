@@ -683,8 +683,6 @@ class DoImageView(QObject):
         self.get_inv_scale()
 
 
-
-
 class MainImgViewObject(QObject):
     def __init__(self, parent = None):
         super(MainImgViewObject, self).__init__(parent)
@@ -708,6 +706,10 @@ class MainImgViewObject(QObject):
             self.node_num_entered
         )
 
+        self.window.ImgNumEdit.textChanged.connect(self.img_num_changed)
+        self.window.PrevImgButton.clicked.connect(self.prev_img)
+        self.window.NextImgButton.clicked.connect(self.next_img)
+
     def node_num_entered(self):
         try:
             nod_num = int(self.window.IntroNodeEdit.text())
@@ -717,6 +719,27 @@ class MainImgViewObject(QObject):
 
         except ValueError:
             print("NAN entered")
+
+    def refresh_output(self, tab_index = None):
+        img_num = int(self.window.ImgNumEdit.text())
+        self.do_image_view(in_img_num = img_num, nod_in_lst = True)
+
+    def img_num_changed(self, new_img_num):
+        print("should load IMG num:", new_img_num)
+        self.refresh_output()
+
+    def shift_img_num(self, sh_num):
+        img_num = int(self.window.ImgNumEdit.text())
+        img_num += sh_num
+        self.window.ImgNumEdit.setText(str(img_num))
+
+    def prev_img(self):
+        print("prev_img")
+        self.shift_img_num(-1)
+
+    def next_img(self):
+        print("next_img")
+        self.shift_img_num(1)
 
 
 def main():
