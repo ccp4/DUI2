@@ -25,65 +25,33 @@ import http.server, socketserver
 from urllib.parse import urlparse, parse_qs
 import json, os, zlib, sys
 
-import multi_node
 from data_n_json import iter_dict
 
 try:
     from shared_modules import format_utils
 
 except ModuleNotFoundError:
-    may_be_needed = '''
-    comm_path = os.path.abspath(__file__)[0:-21] + "shared_modules"
+    comm_path = os.path.abspath(__file__)[0:-30] + "shared_modules"
+    print("comm_path =", comm_path)
     sys.path.insert(1, comm_path)
-    '''
     import format_utils
 
-
-class Runner(object):
-    def __init__(self, recovery_data):
-        self._recover_state(recovery_data)
-
-    def set_dir_tree(self, tree_dic_lst):
+class Browser(object):
+    def __init__(self, tree_dic_lst):
         self._dir_tree_dict = tree_dic_lst
 
     def run_get_data(self, cmd_dict):
-
-        unalias_cmd_lst = unalias_full_cmd(cmd_dict["cmd_lst"])
-        print("\n cmd_lst: ", unalias_cmd_lst)
+        cmd_lst = cmd_dict["cmd_lst"]
+        print("\n cmd_lst: ", cmd_lst)
 
         return_list = []
-        for uni_cmd in unalias_cmd_lst:
-            if uni_cmd == ["display"]:
-                return_list = format_utils.get_lst2show(self.step_list)
-                self.tree_output(return_list)
-                self.tree_output.print_output()
-
-            elif uni_cmd == ["dir_tree"]:
+        for uni_cmd in cmd_lst:
+            if uni_cmd == ["dir_tree"]:
                 str_dir_tree = json.dumps(self._dir_tree_dict)
                 byt_data = bytes(str_dir_tree.encode('utf-8'))
                 return_list = byt_data
 
-            elif uni_cmd == ["history"]:
-                #return_list = self.lst_cmd_in
-                print("history command is temporarily off")
-
-            elif uni_cmd == ["stop"]:
-                #TODO: consider moving this to << run_dials_comand >> (do_POST)
-                for lin2go in cmd_dict["nod_lst"]:
-                    try:
-                        stat2add = self.step_list[lin2go].status
-                        return_list.append([stat2add])
-                        self.step_list[lin2go].stop_me()
-
-                    except IndexError:
-                        print("\n *** ERROR *** \n wrong line \n not logging")
-
-            else:
-                return_list = get_data_from_steps(uni_cmd, cmd_dict, self.step_list)
-
         return return_list
-
-
 
 
 def main():
@@ -181,8 +149,7 @@ def main():
 
     #####################################################
 
-    cmd_tree_runner = multi_node.Runner(None)
-    cmd_tree_runner.set_dir_tree(tree_dic_lst)
+    cmd_tree_runner = Browser(tree_dic_lst)
 
     with socketserver.ThreadingTCPServer(
         (HOST, PORT), ReqHandler
