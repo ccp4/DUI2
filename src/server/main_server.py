@@ -26,7 +26,7 @@ from urllib.parse import urlparse, parse_qs
 import json, os, zlib, sys
 
 import multi_node
-
+from data_n_json import iter_dict
 
 try:
     from shared_modules import format_utils
@@ -157,24 +157,7 @@ def main():
                     "\n ** ConnectionResetError ** while sending EOF or JSON\n"
                 )
 
-
-    def iter_dict(file_path):
-        file_name = file_path.split("/")[-1]
-        local_dict = {
-            "file_name": file_name, "file_path": file_path, "list_child": []
-        }
-        if os.path.isdir(file_path):
-            local_dict["isdir"] = True
-            for new_file_name in sorted(os.listdir(file_path)):
-                new_file_path = os.path.join(file_path, new_file_name)
-                local_dict["list_child"].append(iter_dict(new_file_path))
-
-        else:
-            local_dict["isdir"] = False
-
-        return local_dict
-
-    ################################################ MAIN
+    ################################################ PROPER MAIN
 
     par_def = (
         ("port", 45678),
