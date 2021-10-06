@@ -59,7 +59,7 @@ class MainObject(QObject):
         super(MainObject, self).__init__(parent)
         self.parent_app = parent
         self.ui_dir_path = os.path.dirname(os.path.abspath(__file__))
-        ui_path = self.ui_dir_path + os.sep + "client.ui"
+        ui_path = self.ui_dir_path + os.sep + "dui_client.ui"
         print("ui_path =", ui_path)
 
         self.window = QtUiTools.QUiLoader().load(ui_path)

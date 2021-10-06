@@ -691,7 +691,7 @@ class MainImgViewObject(QObject):
         super(MainImgViewObject, self).__init__(parent)
         self.parent_app = parent
         self.ui_dir_path = os.path.dirname(os.path.abspath(__file__))
-        ui_path = self.ui_dir_path + os.sep + "img_view.ui"
+        ui_path = self.ui_dir_path + os.sep + "view_client.ui"
         print("ui_path =", ui_path)
 
         self.window = QtUiTools.QUiLoader().load(ui_path)
