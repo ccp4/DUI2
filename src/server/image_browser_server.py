@@ -127,7 +127,7 @@ def main():
         ("port", 45678),
         ("host", "localhost"),
         #("host", "serverip"),
-        ("init_path", None),
+        ("init_path", "."),
     )
 
     init_param = format_utils.get_par(par_def, sys.argv[1:])
