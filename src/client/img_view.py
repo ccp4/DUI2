@@ -413,10 +413,10 @@ class DoImageView(QObject):
         self.r_list0 = []
         #self.r_list1 = []
 
-        if nod_in_lst:
+        if nod_in_lst is True:
             nod_num = self.main_obj.current_nod_num
 
-        else:
+        elif nod_in_lst is False:
             nod_num = self.main_obj.new_node.parent_node_lst[0]
 
         cmd = {'nod_lst': [nod_num], 'cmd_lst': ["gt"]}
@@ -448,7 +448,7 @@ class DoImageView(QObject):
             #TODO check what happens here if the user navigates
             #     to a different dataset
 
-        if nod_in_lst:
+        if nod_in_lst is True:
             my_cmd = {
                 'nod_lst': [nod_num], 'cmd_lst': ["grl " + str(in_img_num)]
             }
@@ -485,7 +485,7 @@ class DoImageView(QObject):
             except TypeError:
                 print("No reflection list to show (TypeError except)")
 
-        else:
+        elif nod_in_lst is False:
             print("No reflection list to show (known not to be)")
 
         self.cur_nod_num = nod_num
@@ -494,7 +494,7 @@ class DoImageView(QObject):
         self.refresh_pixel_map()
 
         # if you wanna only load the current slice of image, comment next line
-        self.full_img_show()
+        #self.full_img_show()
 
     def refresh_pixel_map(self):
         try:
@@ -748,11 +748,24 @@ class MainImgViewObject(QObject):
     def set_selection(self, str_select, isdir):
         print("str_select =", str_select, "isdir =", isdir)
         self.dir_selected = isdir
+
+        #self.refresh_output()
+        self.window.IntroPathEdit.setText(str_select)
+
+        cmd = {"path": str_select, 'cmd_lst': "get_template"}
+
+        print("cmd =", cmd)
+        json_data_lst = json_data_request(self.uni_url, cmd)
+        new_templ = json_data_lst[0]
+        self.img_d1_d2 = (json_data_lst[1], json_data_lst[2])
+        print("self.img_d1_d2 =", self.img_d1_d2)
+        old_one = '''
         if self.dir_selected:
             self.window.IntroPathEdit.setText(str_select)
 
         else:
             self.window.IntroPathEdit.setText(build_template(str_select)[0])
+        '''
 
     def open_dir_widget(self):
         #TODO make sure self.window is that goes as argument
