@@ -375,7 +375,7 @@ class MainObject(QObject):
 
         if tab_index == 0:
             img_num = int(self.window.ImgNumEdit.text())
-            self.do_image_view(in_img_num = img_num, nod_in_lst = fnd_cur_nod)
+            self.do_image_view(in_img_num = img_num, nod_or_path = fnd_cur_nod)
 
         elif tab_index == 1:
             self.log_show(self.current_nod_num, do_request = fnd_cur_nod)

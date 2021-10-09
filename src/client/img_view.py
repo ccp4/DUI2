@@ -178,7 +178,9 @@ class np2bmp_monocrome(object):
 
 def load_json_w_str(uni_url = None, nod_num_lst = [1], img_num = 0):
     my_cmd_lst = ["gi " + str(img_num)]
-    my_cmd = {"nod_lst":nod_num_lst, "cmd_lst":my_cmd_lst}
+    my_cmd = {"nod_lst" : nod_num_lst,
+              "path"    : self.exp_path,
+              "cmd_lst" : my_cmd_lst}
 
     try:
         start_tm = time.time()
@@ -216,18 +218,23 @@ def load_json_w_str(uni_url = None, nod_num_lst = [1], img_num = 0):
 
 class LoadFullImage(QThread):
     image_loaded = Signal(tuple)
-    def __init__(self, unit_URL, cur_nod_num, cur_img_num):
+    def __init__(
+        self, unit_URL = None, cur_nod_num = None,
+        cur_img_num = None, path_in = None
+    ):
         super(LoadFullImage, self).__init__()
         self.uni_url = unit_URL
         self.cur_nod_num = cur_nod_num
         self.cur_img_num = cur_img_num
+        self.exp_path = path_in
 
     def run(self):
         print("loading image ", self.cur_img_num, " in full resolution")
         np_full_img = load_json_w_str(
             self.uni_url,
             nod_num_lst = [self.cur_nod_num],
-            img_num = self.cur_img_num
+            img_num = self.cur_img_num,
+            exp_path = self.exp_path
         )
         self.image_loaded.emit(
             (self.cur_nod_num, self.cur_img_num, np_full_img)
@@ -238,7 +245,10 @@ class LoadSliceImage(QThread):
     progressing = Signal(int)
     slice_loaded = Signal(dict)
     def __init__(
-        self, unit_URL, nod_num_lst, img_num, inv_scale,x1 ,y1 ,x2 ,y2
+        self, unit_URL = None, nod_num_lst = None,
+        img_num = None, inv_scale = None,
+        x1 = None, y1 = None, x2 = None, y2 = None,
+        path_in = None
     ):
         super(LoadSliceImage, self).__init__()
         self.uni_url =      unit_URL
@@ -249,6 +259,7 @@ class LoadSliceImage(QThread):
         self.y1 =           y1
         self.x2 =           x2
         self.y2 =           y2
+        self.exp_path =     path_in
 
     def run(self):
         print("loading slice of image ")
@@ -260,7 +271,9 @@ class LoadSliceImage(QThread):
                       "," + str(self.x2) + "," + str(self.y2)
         ]
 
-        my_cmd = {"nod_lst":self.nod_num_lst, "cmd_lst":my_cmd_lst}
+        my_cmd = {"nod_lst" : self.nod_num_lst,
+                  "path"    : self.exp_path,
+                  "cmd_lst" : my_cmd_lst}
         start_tm = time.time()
 
         try:
@@ -405,21 +418,27 @@ class DoImageView(QObject):
         timer.timeout.connect(self.check_move)
         timer.start(1600)
 
-    def __call__(self, in_img_num, nod_in_lst):
+    def __call__(self, in_img_num, nod_or_path):
         print(
             "refreshing Image Viewer\n img:", in_img_num,
-            "\n node in List:", nod_in_lst
+            "\n node in List:", nod_or_path
         )
         self.r_list0 = []
+        self.exp_path = None
         #self.r_list1 = []
-
-        if nod_in_lst is True:
+        if nod_or_path is True:
             nod_num = self.main_obj.current_nod_num
+            cmd = {'nod_lst': [nod_num], 'cmd_lst': ["gt"]}
 
-        elif nod_in_lst is False:
+        elif nod_or_path is False:
             nod_num = self.main_obj.new_node.parent_node_lst[0]
+            cmd = {'nod_lst': [nod_num], 'cmd_lst': ["gt"]}
 
-        cmd = {'nod_lst': [nod_num], 'cmd_lst': ["gt"]}
+        elif type(nod_or_path) is str:
+            nod_num = nod_or_path
+            cmd = {"path": nod_or_path, 'cmd_lst': "get_template"}
+            self.exp_path = nod_or_path
+
         json_data_lst = json_data_request(self.uni_url, cmd)
 
         try:
@@ -448,10 +467,21 @@ class DoImageView(QObject):
             #TODO check what happens here if the user navigates
             #     to a different dataset
 
-        if nod_in_lst is True:
+        if nod_or_path is True:
             my_cmd = {
                 'nod_lst': [nod_num], 'cmd_lst': ["grl " + str(in_img_num)]
             }
+
+        elif type(nod_or_path) is str:
+            my_cmd = {
+                'path': nod_or_path,
+                'cmd_lst': "get_reflection_list " + str(in_img_num)
+            }
+
+        elif nod_or_path is False:
+            print("No reflection list to show (known not to be)")
+
+        if nod_or_path is not False:
             json_lst = json_data_request(self.uni_url, my_cmd)
             try:
                 for inner_list in json_lst[0]:
@@ -482,11 +512,8 @@ class DoImageView(QObject):
                        }
                     )
                 '''
-            except TypeError:
+            except (TypeError, IndexError):
                 print("No reflection list to show (TypeError except)")
-
-        elif nod_in_lst is False:
-            print("No reflection list to show (known not to be)")
 
         self.cur_nod_num = nod_num
         self.cur_img_num = in_img_num
@@ -536,7 +563,8 @@ class DoImageView(QObject):
         self.load_full_image = LoadFullImage(
             unit_URL = self.uni_url,
             cur_nod_num = self.cur_nod_num,
-            cur_img_num = self.cur_img_num
+            cur_img_num = self.cur_img_num,
+            path_in = self.exp_path
         )
         self.load_full_image.image_loaded.connect(self.new_full_img)
         self.load_full_image.start()
@@ -665,7 +693,8 @@ class DoImageView(QObject):
                 x1 = self.x1,
                 y1 = self.y1,
                 x2 = self.x2,
-                y2 = self.y2
+                y2 = self.y2,
+                path_in = self.exp_path
             )
             self.load_slice_image.slice_loaded.connect(
                 self.new_slice_img
@@ -719,14 +748,14 @@ class MainImgViewObject(QObject):
             nod_num = int(self.window.IntroNodeEdit.text())
             self.current_nod_num = nod_num
             img_num = int(self.window.ImgNumEdit.text())
-            self.do_image_view(in_img_num = img_num, nod_in_lst = True)
+            self.do_image_view(in_img_num = img_num, nod_or_path = True)
 
         except ValueError:
             print("NAN entered")
 
-    def refresh_output(self, tab_index = None):
+    def refresh_output(self, nod_or_path = True):
         img_num = int(self.window.ImgNumEdit.text())
-        self.do_image_view(in_img_num = img_num, nod_in_lst = True)
+        self.do_image_view(in_img_num = img_num, nod_or_path = nod_or_path)
 
     def img_num_changed(self, new_img_num):
         print("should load IMG num:", new_img_num)
@@ -748,24 +777,16 @@ class MainImgViewObject(QObject):
     def set_selection(self, str_select, isdir):
         print("str_select =", str_select, "isdir =", isdir)
         self.dir_selected = isdir
-
-        #self.refresh_output()
         self.window.IntroPathEdit.setText(str_select)
 
         cmd = {"path": str_select, 'cmd_lst': "get_template"}
-
-        print("cmd =", cmd)
         json_data_lst = json_data_request(self.uni_url, cmd)
         new_templ = json_data_lst[0]
         self.img_d1_d2 = (json_data_lst[1], json_data_lst[2])
         print("self.img_d1_d2 =", self.img_d1_d2)
-        old_one = '''
-        if self.dir_selected:
-            self.window.IntroPathEdit.setText(str_select)
 
-        else:
-            self.window.IntroPathEdit.setText(build_template(str_select)[0])
-        '''
+        self.refresh_output(nod_or_path = str_select)
+
 
     def open_dir_widget(self):
         #TODO make sure self.window is that goes as argument

@@ -26,6 +26,7 @@ from urllib.parse import urlparse, parse_qs
 import json, os, zlib, sys
 
 from data_n_json import iter_dict
+from img_uploader import flex_arr_2_json
 
 from dxtbx.model.experiment_list import ExperimentListFactory
 
@@ -43,68 +44,83 @@ class Browser(object):
         self._dir_tree_dict = tree_dic_lst
 
     def run_get_data(self, cmd_dict):
-        cmd_lst = cmd_dict["cmd_lst"]
+        cmd_lst = cmd_dict["cmd_lst"][0].split(" ")
         print("\n cmd_lst: ", cmd_lst)
 
         return_list = []
-        for uni_cmd in cmd_lst:
-            print("uni_cmd =", uni_cmd)
-            if uni_cmd == "dir_tree":
-                print("\n *** dir_tree *** \n")
-                str_dir_tree = json.dumps(self._dir_tree_dict)
-                byt_data = bytes(str_dir_tree.encode('utf-8'))
+        uni_cmd = cmd_lst[0]
+        print("uni_cmd = <<", uni_cmd, ">>")
+        if uni_cmd == "dir_tree":
+            print("\n *** dir_tree *** \n")
+            str_dir_tree = json.dumps(self._dir_tree_dict)
+            byt_data = bytes(str_dir_tree.encode('utf-8'))
+            return_list = byt_data
+
+        #elif uni_cmd == "get_image_slice":
+        elif uni_cmd == "gis":
+            img_num = int(cmd_lst[1])
+            print("generating slice of image", img_num)
+            '''
+            cmd_lst = ['gis', '0', 'inv_scale=1', 'view_rect=319,463,693,1089']
+
+            '''
+            inv_scale = 1
+            for sub_par in cmd_lst[2:]:
+                eq_pos = sub_par.find("=")
+                left_side = sub_par[0:eq_pos]
+                right_side = sub_par[eq_pos + 1:]
+                if left_side == "inv_scale":
+                    inv_scale = int(right_side)
+                    print("inv_scale =", inv_scale)
+
+                elif left_side == "view_rect":
+                    print("view_rect =", right_side)
+                    [x1, y1, x2, y2] = right_side.split(",")
+                    print("x1, y1, x2, y2 =", x1, y1, x2, y2)
+
+            exp_path = cmd_dict["path"][0]
+            str_json = flex_arr_2_json.get_json_w_2d_slise(
+                [exp_path], img_num, inv_scale, x1, y1, x2, y2
+            )
+            if str_json is not None:
+                byt_data = bytes(str_json.encode('utf-8'))
                 return_list = byt_data
 
-            elif uni_cmd == "get_image_slice":
-                print(
-                    "generating slice of image \n uni_cmd =", uni_cmd,
-                    "\n"
-                )
-                inv_scale = 1
-                for sub_par in uni_cmd[2:]:
-                    eq_pos = sub_par.find("=")
-                    left_side = sub_par[0:eq_pos]
-                    right_side = sub_par[eq_pos + 1:]
-                    if left_side == "inv_scale":
-                        inv_scale = int(right_side)
-                        print("inv_scale =", inv_scale)
+        elif uni_cmd == "get_template":
 
-                    elif left_side == "view_rect":
-                        print("view_rect =", right_side)
-                        [x1, y1, x2, y2] = right_side.split(",")
-                        print("x1, y1, x2, y2 =", x1, y1, x2, y2)
+            print("cmd_dict =", cmd_dict)
 
-                #TODO fix hard coded value of << path_expt_out >>
-                path_expt_out = "/tmp/dui_serv_run/run1/imported.expt"
-                str_json = flex_arr_2_json.get_json_w_2d_slise(
-                    path_expt_out, int(uni_cmd[1]),
-                    inv_scale, x1, y1, x2, y2
-                )
-                if str_json is not None:
-                    byt_data = bytes(str_json.encode('utf-8'))
-                    return_list = byt_data
+            exp_path = cmd_dict["path"][0]
+            print("\n exp_path =", exp_path, "\n")
 
-            elif uni_cmd == "get_template":
+            experiments = ExperimentListFactory.from_json_file(
+                exp_path
+            )
+            my_sweep = experiments.imagesets()[0]
+            str_json = my_sweep.get_template()
 
-                print("cmd_dict =", cmd_dict)
+            data_xy_flex = my_sweep.get_raw_data(0)[0].as_double()
+            img_with, img_height = data_xy_flex.all()[0:2]
+            return_list = [str_json, img_with, img_height]
 
-                exp_path = cmd_dict["path"][0]
-                print("\n exp_path =", exp_path, "\n")
+
+        elif uni_cmd == "get_reflection_list":
+
+            print("cmd_dict =", cmd_dict)
+            exp_path = cmd_dict["path"][0]
+            print("\n exp_path =", exp_path, "\n")
+            ref_path = exp_path[:-4] + "refl"
+            print("\n ref_path =", ref_path, "\n")
 
 
 
-                experiments = ExperimentListFactory.from_json_file(
-                    exp_path
-                )
-                my_sweep = experiments.imagesets()[0]
-                str_json = my_sweep.get_template()
+            refl_lst = flex_arr_2_json.get_refl_lst(
+                [exp_path], [ref_path],
+                int(cmd_lst[1])
+            )
+            return_list = refl_lst
 
-                data_xy_flex = my_sweep.get_raw_data(0)[0].as_double()
-                img_with, img_height = data_xy_flex.all()[0:2]
-                return_list = [str_json, img_with, img_height]
-
-
-            return return_list
+        return return_list
 
 
 def main():
