@@ -731,6 +731,7 @@ class MainImgViewObject(QObject):
         self.uni_url = data_init.get_url()
 
         self.current_nod_num = 1
+        self.nod_or_path = True
         self.do_image_view = DoImageView(self)
 
         self.window.show()
@@ -759,7 +760,7 @@ class MainImgViewObject(QObject):
 
     def img_num_changed(self, new_img_num):
         print("should load IMG num:", new_img_num)
-        self.refresh_output()
+        self.refresh_output(nod_or_path = self.nod_or_path)
 
     def shift_img_num(self, sh_num):
         img_num = int(self.window.ImgNumEdit.text())
@@ -776,16 +777,17 @@ class MainImgViewObject(QObject):
 
     def set_selection(self, str_select, isdir):
         print("str_select =", str_select, "isdir =", isdir)
+        self.nod_or_path = str_select
         self.dir_selected = isdir
-        self.window.IntroPathEdit.setText(str_select)
+        self.window.IntroPathEdit.setText(self.nod_or_path)
 
-        cmd = {"path": str_select, 'cmd_lst': "get_template"}
+        cmd = {"path": self.nod_or_path, 'cmd_lst': "get_template"}
         json_data_lst = json_data_request(self.uni_url, cmd)
         new_templ = json_data_lst[0]
         self.img_d1_d2 = (json_data_lst[1], json_data_lst[2])
         print("self.img_d1_d2 =", self.img_d1_d2)
 
-        self.refresh_output(nod_or_path = str_select)
+        self.refresh_output(nod_or_path = self.nod_or_path)
 
 
     def open_dir_widget(self):
