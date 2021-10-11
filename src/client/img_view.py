@@ -176,10 +176,12 @@ class np2bmp_monocrome(object):
         return img_array
 
 
-def load_json_w_str(uni_url = None, nod_num_lst = [1], img_num = 0):
+def load_json_w_str(
+    uni_url = None, nod_num_lst = [1], img_num = 0, exp_path = None
+):
     my_cmd_lst = ["gi " + str(img_num)]
     my_cmd = {"nod_lst" : nod_num_lst,
-              "path"    : self.exp_path,
+              "path"    : exp_path,
               "cmd_lst" : my_cmd_lst}
 
     try:
@@ -196,10 +198,11 @@ def load_json_w_str(uni_url = None, nod_num_lst = [1], img_num = 0):
         print("d1, d2 =", d1, d2)
         arr_1d = np.fromstring(str_data, dtype = float, sep = ',')
         np_array_out = arr_1d.reshape(d1, d2)
-
+        '''
     except zlib.error:
         print("zlib.error(load_json_w_str)")
         return None
+        '''
 
     except ConnectionError:
         print("\n ConnectionError (load_json_w_str) \n")
@@ -521,7 +524,7 @@ class DoImageView(QObject):
         self.refresh_pixel_map()
 
         # if you wanna only load the current slice of image, comment next line
-        #self.full_img_show()
+        self.full_img_show()
 
     def refresh_pixel_map(self):
         try:
