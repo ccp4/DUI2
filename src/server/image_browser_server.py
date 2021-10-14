@@ -206,7 +206,7 @@ def main():
 
     browser_runner = Browser(tree_dic_lst)
     launch_success = False
-    n_secs = 3
+    n_secs = 5
     while launch_success == False:
         try:
             with socketserver.ThreadingTCPServer(
