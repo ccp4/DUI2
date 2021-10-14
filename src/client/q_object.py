@@ -40,7 +40,6 @@ from exec_utils import (
     CommandParamControl
 )
 
-#from exec_utils import uni_url
 from init_firts import ini_data
 
 from simpler_param_widgets import RootWidg
@@ -66,7 +65,6 @@ class MainObject(QObject):
         self.window.setWindowTitle("CCP4 DUI Cloud")
 
         data_init = ini_data()
-        data_init.set_data()
         self.uni_url = data_init.get_url()
 
         self.reseting = False

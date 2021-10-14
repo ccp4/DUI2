@@ -198,11 +198,9 @@ def load_json_w_str(
         print("d1, d2 =", d1, d2)
         arr_1d = np.fromstring(str_data, dtype = float, sep = ',')
         np_array_out = arr_1d.reshape(d1, d2)
-        '''
     except zlib.error:
         print("zlib.error(load_json_w_str)")
         return None
-        '''
 
     except ConnectionError:
         print("\n ConnectionError (load_json_w_str) \n")
