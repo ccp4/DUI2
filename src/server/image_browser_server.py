@@ -23,7 +23,7 @@ copyright (c) CCP4 - DLS
 
 import http.server, socketserver
 from urllib.parse import urlparse, parse_qs
-import json, os, zlib, sys
+import json, os, zlib, sys, time
 
 from data_n_json import iter_dict
 from img_uploader import flex_arr_2_json
@@ -205,17 +205,26 @@ def main():
     #####################################################
 
     browser_runner = Browser(tree_dic_lst)
-
-    with socketserver.ThreadingTCPServer(
-        (HOST, PORT), ReqHandler
-    ) as http_daemon:
-
-        print("\n serving at: \n  { host:", HOST, " port:", PORT, "} \n")
+    launch_success = False
+    n_secs = 3
+    while launch_success == False:
         try:
-            http_daemon.serve_forever()
+            with socketserver.ThreadingTCPServer(
+                (HOST, PORT), ReqHandler
+            ) as http_daemon:
+                print("\n serving at: \n  { host:", HOST, " port:", PORT, "} \n")
+                launch_success = True
+                try:
+                    http_daemon.serve_forever()
 
-        except KeyboardInterrupt:
-            http_daemon.server_close()
+                except KeyboardInterrupt:
+                    http_daemon.server_close()
+
+        except OSError:
+            launch_success = False
+
+            print("OSError, trying again in",  n_secs, "secs")
+            time.sleep(n_secs)
 
 
 if __name__ == "__main__":
