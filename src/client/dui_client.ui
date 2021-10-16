@@ -107,7 +107,7 @@
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>467</width>
+                       <width>435</width>
                        <height>326</height>
                       </rect>
                      </property>
@@ -752,26 +752,6 @@
               </property>
              </widget>
             </item>
-            <item row="2" column="3">
-             <widget class="QLabel" name="InvScaleLabel">
-              <property name="text">
-               <string>scale = 1.00</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="0">
-             <spacer name="horizontalSpacer_3">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
             <item row="0" column="3">
              <widget class="QPushButton" name="NextImgButton">
               <property name="text">
@@ -783,6 +763,13 @@
              <widget class="QPushButton" name="ScaleOneOneButton">
               <property name="text">
                <string>Scale 1 : 1  </string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QLabel" name="InvScaleLabel">
+              <property name="text">
+               <string>scale = 1.00</string>
               </property>
              </widget>
             </item>
