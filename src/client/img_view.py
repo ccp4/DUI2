@@ -522,7 +522,7 @@ class DoImageView(QObject):
         self.refresh_pixel_map()
 
         # if you wanna only load the current slice of image, comment next line
-        self.full_img_show()
+        #self.full_img_show()
 
     def refresh_pixel_map(self):
         try:
@@ -619,20 +619,19 @@ class DoImageView(QObject):
         except TypeError:
             (self.x1, self.y1, self.x2, self.y2) = (-1, -1, -1, -1)
 
-    def get_inv_scale(self):
+
+    def get_scale_label(self):
         avg_scale = float(
             self.main_obj.window.imageView.transform().m11() +
             self.main_obj.window.imageView.transform().m22()
         ) / 2.0
         avg_scale = abs(avg_scale)
-        #str_label = "scale = " + str(avg_scale)
-
         str_label = "scale = {:3.3}".format(avg_scale)
-
-
         self.main_obj.window.InvScaleLabel.setText(str_label)
+        return avg_scale
 
-
+    def get_inv_scale(self):
+        avg_scale = self.get_scale_label()
         self.inv_scale = int(1.0 / avg_scale)
 
         if self.inv_scale < 1:
@@ -715,6 +714,7 @@ class DoImageView(QObject):
     def OneOneScale(self, event):
         print("OneOneScale")
         self.main_obj.window.imageView.resetTransform()
+        avg_scale = self.get_scale_label()
 
     def scale_img(self, relative_new_scale):
         self.main_obj.window.imageView.scale(
