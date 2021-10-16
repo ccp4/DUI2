@@ -625,15 +625,22 @@ class DoImageView(QObject):
             self.main_obj.window.imageView.transform().m22()
         ) / 2.0
         avg_scale = abs(avg_scale)
+        #str_label = "scale = " + str(avg_scale)
+
+        str_label = "scale = {:3.3}".format(avg_scale)
+
+
+        self.main_obj.window.InvScaleLabel.setText(str_label)
+
+
         self.inv_scale = int(1.0 / avg_scale)
+
         if self.inv_scale < 1:
             self.inv_scale = 1
 
         if self.inv_scale > 36:
             self.inv_scale = 36
 
-        str_label = "scale = 1 / " + str(self.inv_scale)
-        self.main_obj.window.InvScaleLabel.setText(str_label)
 
     def new_slice_img(self, dict_slice):
         try:
