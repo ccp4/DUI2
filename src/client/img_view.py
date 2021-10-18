@@ -630,7 +630,7 @@ class DoImageView(QObject):
         self.main_obj.window.InvScaleLabel.setText(str_label)
         return avg_scale
 
-    def get_inv_scale(self):
+    def set_inv_scale(self):
         avg_scale = self.get_scale_label()
         self.inv_scale = int(1.0 / avg_scale)
 
@@ -639,7 +639,6 @@ class DoImageView(QObject):
 
         if self.inv_scale > 36:
             self.inv_scale = 36
-
 
     def new_slice_img(self, dict_slice):
         try:
@@ -690,7 +689,7 @@ class DoImageView(QObject):
                 print("first slice of image loading")
 
             self.get_x1_y1_x2_y2()
-            self.get_inv_scale()
+            self.set_inv_scale()
 
             self.load_slice_image = LoadSliceImage(
                 unit_URL = self.uni_url,
@@ -720,7 +719,7 @@ class DoImageView(QObject):
         self.main_obj.window.imageView.scale(
             relative_new_scale, relative_new_scale
         )
-        self.get_inv_scale()
+        self.set_inv_scale()
 
 
 class MainImgViewObject(QObject):
