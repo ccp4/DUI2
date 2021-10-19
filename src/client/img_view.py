@@ -729,12 +729,16 @@ class DoImageView(QObject):
 
     def scale_img(self, relative_new_scale):
         tmp_x1, tmp_y1, tmp_x2, tmp_y2 = self.det_tmp_x1_y1_x2_y2()
-        print("tmp_x1, tmp_y1, tmp_x2, tmp_y2 =", tmp_x1, tmp_y1, tmp_x2, tmp_y2)
+        dx = tmp_x2 - tmp_x1
+        dy = tmp_y2 - tmp_y1
         if(
-            tmp_x1 >= 0 or tmp_y1 >= 0 or
-            tmp_x2 <= self.img_d1_d2[0] or
-            tmp_y2 <= self.img_d1_d2[1] or
-            relative_new_scale > 1.0
+            (
+                relative_new_scale > 1.0 and  dx > 10 and dy > 10
+            ) or (
+                relative_new_scale < 1.0 and (
+                    dx <= self.img_d1_d2[0] or dy <= self.img_d1_d2[1]
+                )
+            )
         ):
             self.main_obj.window.imageView.scale(
                 relative_new_scale, relative_new_scale
