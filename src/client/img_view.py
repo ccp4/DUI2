@@ -373,6 +373,8 @@ class ImgGraphicsScene(QGraphicsScene):
         '''
 
     def wheelEvent(self, event):
+        #print("width         =", self.width()         )
+        #print("height        =", self.height()        )
         float_delta = float(event.delta())
         new_scale = 1.0 + float_delta / 1500.0
         self.img_scale.emit(new_scale)
@@ -590,7 +592,7 @@ class DoImageView(QObject):
         self.old_cur_nod_num = self.cur_nod_num
         self.old_cur_img_num = self.cur_img_num
 
-    def get_x1_y1_x2_y2(self):
+    def det_tmp_x1_y1_x2_y2(self):
         viewport_rect = QRect(
             0, 0, self.main_obj.window.imageView.viewport().width(),
             self.main_obj.window.imageView.viewport().height()
@@ -599,10 +601,14 @@ class DoImageView(QObject):
             viewport_rect
         ).boundingRect()
         visibleSceneCoords = visibleSceneRect.getCoords()
-        self.x1 = int(visibleSceneCoords[1])
-        self.y1 = int(visibleSceneCoords[0])
-        self.x2 = int(visibleSceneCoords[3])
-        self.y2 = int(visibleSceneCoords[2])
+        tmp_x1 = int(visibleSceneCoords[1])
+        tmp_y1 = int(visibleSceneCoords[0])
+        tmp_x2 = int(visibleSceneCoords[3])
+        tmp_y2 = int(visibleSceneCoords[2])
+        return tmp_x1, tmp_y1, tmp_x2, tmp_y2
+
+    def get_x1_y1_x2_y2(self):
+        self.x1, self.y1, self.x2, self.y2 = self.det_tmp_x1_y1_x2_y2()
         try:
             if self.x2 > self.img_d1_d2[0] - 1:
                 self.x2 = self.img_d1_d2[0] - 1
@@ -716,10 +722,17 @@ class DoImageView(QObject):
         avg_scale = self.get_scale_label()
 
     def scale_img(self, relative_new_scale):
-        self.main_obj.window.imageView.scale(
-            relative_new_scale, relative_new_scale
-        )
-        self.set_inv_scale()
+        tmp_x1, tmp_y1, tmp_x2, tmp_y2 = self.det_tmp_x1_y1_x2_y2()
+        if(
+            tmp_x1 >= 0 or tmp_y1 >= 0 or
+            tmp_x2 <= self.img_d1_d2[0] or
+            tmp_y2 <= self.img_d1_d2[1] or
+            relative_new_scale > 1.0
+        ):
+            self.main_obj.window.imageView.scale(
+                relative_new_scale, relative_new_scale
+            )
+            self.set_inv_scale()
 
 
 class MainImgViewObject(QObject):
