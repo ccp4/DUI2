@@ -316,6 +316,12 @@ class LoadSliceImage(QThread):
             )
             np_array_out = None
 
+        except json.decoder.JSONDecodeError:
+            print(
+                "\n json.decoder.JSONDecodeError (load_slice_img_json) \n"
+            )
+            np_array_out = None
+
         self.slice_loaded.emit(
             {
                 "slice_image" :  np_array_out,
@@ -723,6 +729,7 @@ class DoImageView(QObject):
 
     def scale_img(self, relative_new_scale):
         tmp_x1, tmp_y1, tmp_x2, tmp_y2 = self.det_tmp_x1_y1_x2_y2()
+        print("tmp_x1, tmp_y1, tmp_x2, tmp_y2 =", tmp_x1, tmp_y1, tmp_x2, tmp_y2)
         if(
             tmp_x1 >= 0 or tmp_y1 >= 0 or
             tmp_x2 <= self.img_d1_d2[0] or
@@ -806,9 +813,7 @@ class MainImgViewObject(QObject):
         new_templ = json_data_lst[0]
         self.img_d1_d2 = (json_data_lst[1], json_data_lst[2])
         print("self.img_d1_d2 =", self.img_d1_d2)
-
         self.refresh_output(nod_or_path = self.nod_or_path)
-
 
     def open_dir_widget(self):
         #TODO make sure self.window is that goes as argument
