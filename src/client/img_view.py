@@ -349,6 +349,12 @@ class ImgGraphicsScene(QGraphicsScene):
 
         self.addPixmap(self.curr_pixmap)
 
+        '''
+        self.curr_pixmap.setEnabled(True)
+        self.curr_pixmap.setAcceptHoverEvents(True)
+        self.curr_pixmap.setMouseTracking(True)
+        '''
+
         green_pen = QPen(
             Qt.green, 0.8, Qt.SolidLine,
             Qt.RoundCap, Qt.RoundJoin
@@ -386,6 +392,10 @@ class ImgGraphicsScene(QGraphicsScene):
         self.img_scale.emit(new_scale)
         event.accept()
 
+    def mouseMoveEvent(self, event):
+        ev_pos = event.scenePos()
+        print("mov X, mov Y =", ev_pos.x(), ev_pos.y())
+
 
 class DoImageView(QObject):
     def __init__(self, parent = None):
@@ -399,9 +409,14 @@ class DoImageView(QObject):
 
         self.my_scene = ImgGraphicsScene(self)
         self.main_obj.window.imageView.setScene(self.my_scene)
+        self.main_obj.window.imageView.setMouseTracking(True)
+
         self.main_obj.window.imageView.setDragMode(
             QGraphicsView.ScrollHandDrag
         )
+        #self.main_obj.window.imageView.setDragMode(QGraphicsView.NoDrag)
+
+
         self.main_obj.window.ScaleOneOneButton.clicked.connect(
             self.OneOneScale
         )
