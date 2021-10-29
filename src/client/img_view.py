@@ -770,7 +770,7 @@ class DoImageView(QObject):
         except AttributeError:
             str_out = "I =?"
 
-        print(str_out)
+        self.main_obj.window.IntensLabel.setText(str_out)
 
 
 class MainImgViewObject(QObject):

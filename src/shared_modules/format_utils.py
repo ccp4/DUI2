@@ -52,6 +52,8 @@ class TreeShow(object):
     def __call__(self, lst_nod = None):
         self.lst_nod = lst_nod
 
+        print("self.lst_nod =\n", self.lst_nod)
+
         self.lst_out = []
         self.lst_out.append("")
         self.lst_out.append("status: (R)eady  (B)usy  (F)ailed  (S)ucceeded")

@@ -723,15 +723,22 @@
             <string>Image</string>
            </attribute>
            <layout class="QGridLayout" name="gridLayout_32">
-            <item row="0" column="1">
-             <widget class="QPushButton" name="PrevImgButton">
+            <item row="2" column="0">
+             <widget class="QPushButton" name="ScaleOneOneButton">
               <property name="text">
-               <string> &lt; </string>
+               <string>Scale 1 : 1  </string>
               </property>
              </widget>
             </item>
             <item row="1" column="0" colspan="4">
              <widget class="QGraphicsView" name="imageView"/>
+            </item>
+            <item row="0" column="3">
+             <widget class="QPushButton" name="NextImgButton">
+              <property name="text">
+               <string> &gt; </string>
+              </property>
+             </widget>
             </item>
             <item row="0" column="2">
              <widget class="QLineEdit" name="ImgNumEdit">
@@ -752,24 +759,24 @@
               </property>
              </widget>
             </item>
-            <item row="0" column="3">
-             <widget class="QPushButton" name="NextImgButton">
-              <property name="text">
-               <string> &gt; </string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="0">
-             <widget class="QPushButton" name="ScaleOneOneButton">
-              <property name="text">
-               <string>Scale 1 : 1  </string>
-              </property>
-             </widget>
-            </item>
             <item row="2" column="1">
              <widget class="QLabel" name="InvScaleLabel">
               <property name="text">
                <string>scale = 1.00</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QPushButton" name="PrevImgButton">
+              <property name="text">
+               <string> &lt; </string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="3">
+             <widget class="QLabel" name="IntensLabel">
+              <property name="text">
+               <string>I = ?</string>
               </property>
              </widget>
             </item>
