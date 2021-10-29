@@ -336,6 +336,7 @@ class LoadSliceImage(QThread):
 
 class ImgGraphicsScene(QGraphicsScene):
     img_scale = Signal(float)
+    new_mouse_pos = Signal(int, int)
 
     def __init__(self, parent = None):
         super(ImgGraphicsScene, self).__init__(parent)
@@ -394,7 +395,7 @@ class ImgGraphicsScene(QGraphicsScene):
 
     def mouseMoveEvent(self, event):
         ev_pos = event.scenePos()
-        print("mov X, mov Y =", ev_pos.x(), ev_pos.y())
+        self.new_mouse_pos.emit(int(ev_pos.x()), int(ev_pos.y()))
 
 
 class DoImageView(QObject):
@@ -422,6 +423,7 @@ class DoImageView(QObject):
         )
 
         self.my_scene.img_scale.connect(self.scale_img)
+        self.my_scene.new_mouse_pos.connect(self.on_mouse_move)
 
         self.bmp_heat = np2bmp_heat()
         self.bmp_m_cro = np2bmp_monocrome()
@@ -759,6 +761,16 @@ class DoImageView(QObject):
                 relative_new_scale, relative_new_scale
             )
             self.set_inv_scale()
+
+    def on_mouse_move(self, x_pos, y_pos):
+        try:
+            str_out = "I(" + str(x_pos) + ", " + str(y_pos) + ") = " +\
+                      str(self.np_full_img[y_pos, x_pos])
+
+        except AttributeError:
+            str_out = "I =?"
+
+        print(str_out)
 
 
 class MainImgViewObject(QObject):
