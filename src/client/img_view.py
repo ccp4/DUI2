@@ -343,51 +343,49 @@ class ImgGraphicsScene(QGraphicsScene):
         self.parent_obj = parent
         self.curr_pixmap = None
 
-    def __call__(self, new_pixmap, refl_list0):
-        self.clear()
-        if new_pixmap is not None:
-            self.curr_pixmap = new_pixmap
-
-        self.addPixmap(self.curr_pixmap)
-
-        '''
-        self.curr_pixmap.setEnabled(True)
-        self.curr_pixmap.setAcceptHoverEvents(True)
-        self.curr_pixmap.setMouseTracking(True)
-        '''
-
-        green_pen = QPen(
+        self.green_pen = QPen(
             Qt.green, 0.8, Qt.SolidLine,
             Qt.RoundCap, Qt.RoundJoin
         )
-        for refl in refl_list0:
+        self.draw_all_hkl = False
+
+    def draw_ref_rect(self):
+        self.clear()
+        if self.my_pix_map is not None:
+            self.curr_pixmap = self.my_pix_map
+
+        self.addPixmap(self.curr_pixmap)
+        for refl in self.refl_list:
             rectangle = QRectF(
                 refl["x"], refl["y"], refl["width"], refl["height"]
             )
-            self.addRect(rectangle, green_pen)
-
-
-            n_text = self.addSimpleText(str(refl["local_hkl"]))
-            n_text.setPos(refl["x"], refl["y"])
-            n_text.setPen(green_pen)
+            self.addRect(rectangle, self.green_pen)
 
         to_use_later = '''
         for refl in refl_list1:
             self.addLine(
                 refl["x_ini"] + 1 + refl["xrs_size"], refl["y_ini"] + 1,
                 refl["x_ini"] + 1 - refl["xrs_size"], refl["y_ini"] + 1,
-                green_pen
+                self.green_pen
             )
             self.addLine(
                 refl["x_ini"] + 1, refl["y_ini"] + 1 + refl["xrs_size"],
                 refl["x_ini"] + 1, refl["y_ini"] + 1 - refl["xrs_size"],
-                green_pen
+                self.green_pen
             )
         '''
 
+    def __call__(self, new_pixmap, refl_list0):
+        self.refl_list = refl_list0
+        self.my_pix_map = new_pixmap
+        self.draw_ref_rect()
+        if self.draw_all_hkl:
+            for refl in self.refl_list:
+                n_text = self.addSimpleText(str(refl["local_hkl"]))
+                n_text.setPos(refl["x"], refl["y"])
+                n_text.setPen(self.green_pen)
+
     def wheelEvent(self, event):
-        #print("width         =", self.width()         )
-        #print("height        =", self.height()        )
         float_delta = float(event.delta())
         new_scale = 1.0 + float_delta / 1500.0
         self.img_scale.emit(new_scale)
@@ -395,7 +393,28 @@ class ImgGraphicsScene(QGraphicsScene):
 
     def mouseMoveEvent(self, event):
         ev_pos = event.scenePos()
-        self.new_mouse_pos.emit(int(ev_pos.x()), int(ev_pos.y()))
+        x_pos, y_pos = int(ev_pos.x()), int(ev_pos.y())
+        if self.draw_all_hkl == False:
+            d_cuad_min = 10000000
+            for num, refl in enumerate(self.refl_list):
+                x_ref = refl["x"] + refl["width"] / 2
+                y_ref = refl["y"] + refl["height"] / 2
+
+                dx = x_ref - x_pos
+                dy = y_ref - y_pos
+                d_cuad = dx * dx + dy * dy
+                if d_cuad < d_cuad_min:
+                    d_cuad_min = d_cuad
+                    pos_min = num
+
+            self.draw_ref_rect()
+            refl = self.refl_list[pos_min]
+            n_text = self.addSimpleText(str(refl["local_hkl"]))
+            n_text.setPos(refl["x"], refl["y"])
+            n_text.setPen(self.green_pen)
+
+        self.new_mouse_pos.emit(x_pos, y_pos)
+
 
 
 class DoImageView(QObject):
