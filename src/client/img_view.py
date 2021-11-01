@@ -777,19 +777,23 @@ class DoImageView(QObject):
         tmp_x1, tmp_y1, tmp_x2, tmp_y2 = self.det_tmp_x1_y1_x2_y2()
         dx = tmp_x2 - tmp_x1
         dy = tmp_y2 - tmp_y1
-        if(
-            (
-                relative_new_scale > 1.0 and  dx > 10 and dy > 10
-            ) or (
-                relative_new_scale < 1.0 and (
-                    dx <= self.img_d1_d2[0] or dy <= self.img_d1_d2[1]
+        try:
+            if(
+                (
+                    relative_new_scale > 1.0 and  dx > 10 and dy > 10
+                ) or (
+                    relative_new_scale < 1.0 and (
+                        dx <= self.img_d1_d2[0] or dy <= self.img_d1_d2[1]
+                    )
                 )
-            )
-        ):
-            self.main_obj.window.imageView.scale(
-                relative_new_scale, relative_new_scale
-            )
-            self.set_inv_scale()
+            ):
+                self.main_obj.window.imageView.scale(
+                    relative_new_scale, relative_new_scale
+                )
+                self.set_inv_scale()
+
+        except TypeError:
+            print("not zooming/unzooming before loading image")
 
     def on_mouse_move(self, x_pos, y_pos):
         try:
