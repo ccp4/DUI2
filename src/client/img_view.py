@@ -395,23 +395,33 @@ class ImgGraphicsScene(QGraphicsScene):
         ev_pos = event.scenePos()
         x_pos, y_pos = int(ev_pos.x()), int(ev_pos.y())
         if self.draw_all_hkl == False:
-            d_cuad_min = 10000000
-            for num, refl in enumerate(self.refl_list):
-                x_ref = refl["x"] + refl["width"] / 2
-                y_ref = refl["y"] + refl["height"] / 2
+            try:
+                pos_min = None
+                d_cuad_min = 10000000
+                for num, refl in enumerate(self.refl_list):
+                    x_ref = refl["x"] + refl["width"] / 2
+                    y_ref = refl["y"] + refl["height"] / 2
 
-                dx = x_ref - x_pos
-                dy = y_ref - y_pos
-                d_cuad = dx * dx + dy * dy
-                if d_cuad < d_cuad_min:
-                    d_cuad_min = d_cuad
-                    pos_min = num
+                    dx = x_ref - x_pos
+                    dy = y_ref - y_pos
+                    d_cuad = dx * dx + dy * dy
+                    if d_cuad < d_cuad_min:
+                        d_cuad_min = d_cuad
+                        pos_min = num
 
-            self.draw_ref_rect()
-            refl = self.refl_list[pos_min]
-            n_text = self.addSimpleText(str(refl["local_hkl"]))
-            n_text.setPos(refl["x"], refl["y"])
-            n_text.setPen(self.green_pen)
+                self.draw_ref_rect()
+                refl = self.refl_list[pos_min]
+                n_text = self.addSimpleText(str(refl["local_hkl"]))
+                n_text.setPos(refl["x"], refl["y"])
+                n_text.setPen(self.green_pen)
+
+            except (UnboundLocalError, TypeError, AttributeError):
+                prints_to_console_for_debugging = '''
+                print(
+                    "not found the nearer reflection " +
+                    "or not existent reflection list yet"
+                )'''
+                pass
 
         self.new_mouse_pos.emit(x_pos, y_pos)
 
