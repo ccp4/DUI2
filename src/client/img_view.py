@@ -796,7 +796,7 @@ class DoImageView(QObject):
             str_out = "I(" + str(x_pos) + ", " + str(y_pos) + ") = " +\
                       str(self.np_full_img[y_pos, x_pos])
 
-        except AttributeError:
+        except (AttributeError, IndexError):
             str_out = "I =?"
 
         self.main_obj.window.IntensLabel.setText(str_out)
