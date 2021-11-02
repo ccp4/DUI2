@@ -760,40 +760,6 @@
             <item row="0" column="0" colspan="5">
              <layout class="QHBoxLayout" name="horizontalLayout">
               <item>
-               <widget class="QPushButton" name="ZoomInButton">
-                <property name="text">
-                 <string>Zoom In</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="ScaleOneOneButton">
-                <property name="text">
-                 <string>Scale 1 : 1  </string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="ZoomOutButton">
-                <property name="text">
-                 <string>Zoom Out</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <spacer name="horizontalSpacer_4">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-              <item>
                <widget class="QPushButton" name="PrevImgButton">
                 <property name="text">
                  <string> &lt; </string>
@@ -823,6 +789,40 @@
                <widget class="QPushButton" name="NextImgButton">
                 <property name="text">
                  <string> &gt; </string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_4">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QPushButton" name="ZoomInButton">
+                <property name="text">
+                 <string>Zoom In</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="ScaleOneOneButton">
+                <property name="text">
+                 <string>Scale 1 : 1  </string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="ZoomOutButton">
+                <property name="text">
+                 <string>Zoom Out</string>
                 </property>
                </widget>
               </item>
