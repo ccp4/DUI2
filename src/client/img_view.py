@@ -281,6 +281,14 @@ class DoImageView(QObject):
             self.OneOneScale
         )
 
+        self.main_obj.window.ZoomInButton.clicked.connect(
+            self.ZoomInScale
+        )
+
+        self.main_obj.window.ZoomOutButton.clicked.connect(
+            self.ZoomOutScale
+        )
+
         self.my_scene.img_scale.connect(self.scale_img)
         self.my_scene.new_mouse_pos.connect(self.on_mouse_move)
 
@@ -601,6 +609,16 @@ class DoImageView(QObject):
     def OneOneScale(self, event):
         print("OneOneScale")
         self.main_obj.window.imageView.resetTransform()
+        avg_scale = self.get_scale_label()
+
+    def ZoomInScale(self, event):
+        print("ZoomInScale")
+        self.scale_img(1.05)
+        avg_scale = self.get_scale_label()
+
+    def ZoomOutScale(self, event):
+        print("ZoomOutScale")
+        self.scale_img(0.95)
         avg_scale = self.get_scale_label()
 
     def scale_img(self, relative_new_scale):
