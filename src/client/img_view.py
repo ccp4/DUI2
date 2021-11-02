@@ -274,19 +274,22 @@ class DoImageView(QObject):
         self.main_obj.window.imageView.setDragMode(
             QGraphicsView.ScrollHandDrag
         )
-        #self.main_obj.window.imageView.setDragMode(QGraphicsView.NoDrag)
-
-
         self.main_obj.window.ScaleOneOneButton.clicked.connect(
             self.OneOneScale
         )
-
         self.main_obj.window.ZoomInButton.clicked.connect(
             self.ZoomInScale
         )
-
         self.main_obj.window.ZoomOutButton.clicked.connect(
             self.ZoomOutScale
+        )
+
+        self.main_obj.window.DisplayButton.clicked.connect(
+            self.menu_display
+        )
+
+        self.main_obj.window.ActionsButton.clicked.connect(
+            self.menu_actions
         )
 
         self.my_scene.img_scale.connect(self.scale_img)
@@ -434,6 +437,12 @@ class DoImageView(QObject):
 
         except (TypeError, AttributeError):
             print("None self.np_full_img")
+
+    def menu_display(self, event):
+        print("menu_display")
+
+    def menu_actions(self, event):
+        print("menu_actions")
 
     def new_full_img(self, tup_data):
         self.full_image_loaded = True
