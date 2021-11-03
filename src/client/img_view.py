@@ -261,16 +261,22 @@ class PopActionsMenu(QMenu):
         super().__init__()
         self.my_parent = parent
 
-        info_grp = QGroupBox("Mask tool")
-        ref_bond_group_box_layout = QVBoxLayout()
-        ref_bond_group_box_layout.addWidget(QLabel("Dummy_01"))
-        ref_bond_group_box_layout.addWidget(QLabel("Dummy_02"))
-        ref_bond_group_box_layout.addWidget(QLabel("Dummy_03"))
+        mask_group = QGroupBox("Mask tool")
+        mask_box_layout = QVBoxLayout()
+        mask_box_layout.addWidget(QLabel("Dummy_01"))
+        mask_box_layout.addWidget(QLabel("Dummy_02"))
+        mask_group.setLayout(mask_box_layout)
 
-        info_grp.setLayout(ref_bond_group_box_layout)
+        sp_find_group = QGroupBox("Spot finding steps")
+        sp_find_box_layout = QVBoxLayout()
+        sp_find_box_layout.addWidget(QLabel("Dummy ... one"))
+        sp_find_box_layout.addWidget(QLabel("Dummy ... two"))
+        sp_find_box_layout.addWidget(QLabel("Dummy ... three"))
+        sp_find_group.setLayout(sp_find_box_layout)
 
         my_main_box = QHBoxLayout()
-        my_main_box.addWidget(info_grp)
+        my_main_box.addWidget(mask_group)
+        my_main_box.addWidget(sp_find_group)
 
         self.setLayout(my_main_box)
 
@@ -280,21 +286,26 @@ class PopDisplayMenu(QMenu):
         super().__init__()
         self.my_parent = parent
 
-        info_grp = QGroupBox("IMG view")
-        ref_bond_group_box_layout = QVBoxLayout()
-        ref_bond_group_box_layout.addWidget(QLabel("Palette tuning"))
-        ref_bond_group_box_layout.addWidget(QLabel("  ...  "))
-        ref_bond_group_box_layout.addWidget(QLabel("Reflection info"))
+        palette_group = QGroupBox("Palette tuning")
+        palette_box_layout = QVBoxLayout()
+        palette_box_layout.addWidget(QLabel("Dummy ... 01"))
+        palette_box_layout.addWidget(QLabel("  ...  "))
+        palette_box_layout.addWidget(QLabel("Done"))
+        palette_group.setLayout(palette_box_layout)
 
-        info_grp.setLayout(ref_bond_group_box_layout)
 
-        my_main_box = QHBoxLayout()
-        my_main_box.addWidget(info_grp)
+        info_group = QGroupBox("Reflection info")
+        ref_box_layout = QVBoxLayout()
+        ref_box_layout.addWidget(QLabel("Dummy ... one"))
+        ref_box_layout.addWidget(QLabel("  ...  "))
+        ref_box_layout.addWidget(QLabel("Done"))
+        info_group.setLayout(ref_box_layout)
 
+
+        my_main_box = QVBoxLayout()
+        my_main_box.addWidget(palette_group)
+        my_main_box.addWidget(info_group)
         self.setLayout(my_main_box)
-
-
-
 
 
 class DoImageView(QObject):
