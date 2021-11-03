@@ -277,7 +277,6 @@ class PopActionsMenu(QMenu):
         my_main_box = QHBoxLayout()
         my_main_box.addWidget(mask_group)
         my_main_box.addWidget(sp_find_group)
-
         self.setLayout(my_main_box)
 
 
@@ -288,11 +287,22 @@ class PopDisplayMenu(QMenu):
 
         palette_group = QGroupBox("Palette tuning")
         palette_box_layout = QVBoxLayout()
-        palette_box_layout.addWidget(QLabel("Dummy ... 01"))
-        palette_box_layout.addWidget(QLabel("  ...  "))
-        palette_box_layout.addWidget(QLabel("Done"))
-        palette_group.setLayout(palette_box_layout)
 
+
+        self.i_min_line = QLineEdit()
+        self.i_min_line.textChanged.connect(self.i_min_changed)
+        self.i_max_line = QLineEdit()
+        self.i_max_line.textChanged.connect(self.i_max_changed)
+
+        i_min_max_layout = QHBoxLayout()
+        i_min_max_layout.addWidget(self.i_min_line)
+        i_min_max_layout.addWidget(self.i_max_line)
+
+        palette_box_layout.addLayout(i_min_max_layout)
+        palette_box_layout.addWidget(QLabel(" ...   "))
+        palette_box_layout.addWidget(QLabel("   ... "))
+
+        palette_group.setLayout(palette_box_layout)
 
         info_group = QGroupBox("Reflection info")
         ref_box_layout = QVBoxLayout()
@@ -301,11 +311,16 @@ class PopDisplayMenu(QMenu):
         ref_box_layout.addWidget(QLabel("Done"))
         info_group.setLayout(ref_box_layout)
 
-
         my_main_box = QVBoxLayout()
         my_main_box.addWidget(palette_group)
         my_main_box.addWidget(info_group)
         self.setLayout(my_main_box)
+
+    def i_min_changed(self, value):
+        print("i_min_changed; value=", value)
+
+    def i_max_changed(self, value):
+        print("i_max_changed; value=", value)
 
 
 class DoImageView(QObject):
