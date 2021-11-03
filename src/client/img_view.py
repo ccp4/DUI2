@@ -281,17 +281,21 @@ class PopActionsMenu(QMenu):
 
 
 class PopDisplayMenu(QMenu):
+    new_i_min_max = Signal(int, int)
     def __init__(self, parent=None):
         super().__init__()
         self.my_parent = parent
+
+        self.i_min = int(self.my_parent.i_min_max[0])
+        self.i_max = int(self.my_parent.i_min_max[1])
 
         palette_group = QGroupBox("Palette tuning")
         palette_box_layout = QVBoxLayout()
 
 
-        self.i_min_line = QLineEdit()
+        self.i_min_line = QLineEdit(str(self.i_min))
         self.i_min_line.textChanged.connect(self.i_min_changed)
-        self.i_max_line = QLineEdit()
+        self.i_max_line = QLineEdit(str(self.i_max))
         self.i_max_line.textChanged.connect(self.i_max_changed)
 
         i_min_max_layout = QHBoxLayout()
@@ -316,11 +320,18 @@ class PopDisplayMenu(QMenu):
         my_main_box.addWidget(info_group)
         self.setLayout(my_main_box)
 
+    def i_min_max_changed(self):
+        self.new_i_min_max.emit(self.i_min, self.i_max)
+
     def i_min_changed(self, value):
         print("i_min_changed; value=", value)
+        self.i_min = int(value)
+        self.i_min_max_changed()
 
     def i_max_changed(self, value):
         print("i_max_changed; value=", value)
+        self.i_max = int(value)
+        self.i_min_max_changed()
 
 
 class DoImageView(QObject):
@@ -350,8 +361,11 @@ class DoImageView(QObject):
             self.ZoomOutScale
         )
 
+        self.i_min_max = [-2, 50]
+
         self.pop_display_menu = PopDisplayMenu(self)
         self.main_obj.window.DisplayButton.setMenu(self.pop_display_menu)
+        self.pop_display_menu.new_i_min_max.connect(self.change_i_min_max)
 
         self.pop_mask_menu = PopActionsMenu(self)
         self.main_obj.window.ActionsButton.setMenu(self.pop_mask_menu)
@@ -488,7 +502,7 @@ class DoImageView(QObject):
         try:
             rgb_np = self.bmp_m_cro.img_2d_rgb(
                 data2d = self.np_full_img, invert = False,
-                i_min_max = [-2, 50]
+                i_min_max = self.i_min_max
             )
             q_img = QImage(
                 rgb_np.data,
@@ -502,6 +516,11 @@ class DoImageView(QObject):
 
         except (TypeError, AttributeError):
             print("None self.np_full_img")
+
+    def change_i_min_max(self, new_i_min, new_i_max):
+        self.i_min_max = [new_i_min, new_i_max]
+        self.refresh_pixel_map()
+
 
     def menu_display(self, event):
         print("menu_display")
