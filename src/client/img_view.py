@@ -256,6 +256,46 @@ class ImgGraphicsScene(QGraphicsScene):
         self.new_mouse_pos.emit(x_pos, y_pos)
 
 
+class PopActionsMenu(QMenu):
+    def __init__(self, parent=None):
+        super().__init__()
+        self.my_parent = parent
+
+        info_grp = QGroupBox("Mask tool")
+        ref_bond_group_box_layout = QVBoxLayout()
+        ref_bond_group_box_layout.addWidget(QLabel("Dummy_01"))
+        ref_bond_group_box_layout.addWidget(QLabel("Dummy_02"))
+        ref_bond_group_box_layout.addWidget(QLabel("Dummy_03"))
+
+        info_grp.setLayout(ref_bond_group_box_layout)
+
+        my_main_box = QHBoxLayout()
+        my_main_box.addWidget(info_grp)
+
+        self.setLayout(my_main_box)
+
+
+class PopDisplayMenu(QMenu):
+    def __init__(self, parent=None):
+        super().__init__()
+        self.my_parent = parent
+
+        info_grp = QGroupBox("IMG view")
+        ref_bond_group_box_layout = QVBoxLayout()
+        ref_bond_group_box_layout.addWidget(QLabel("Palette tuning"))
+        ref_bond_group_box_layout.addWidget(QLabel("  ...  "))
+        ref_bond_group_box_layout.addWidget(QLabel("Reflection info"))
+
+        info_grp.setLayout(ref_bond_group_box_layout)
+
+        my_main_box = QHBoxLayout()
+        my_main_box.addWidget(info_grp)
+
+        self.setLayout(my_main_box)
+
+
+
+
 
 class DoImageView(QObject):
     def __init__(self, parent = None):
@@ -284,13 +324,11 @@ class DoImageView(QObject):
             self.ZoomOutScale
         )
 
-        self.main_obj.window.DisplayButton.clicked.connect(
-            self.menu_display
-        )
+        self.pop_display_menu = PopDisplayMenu(self)
+        self.main_obj.window.DisplayButton.setMenu(self.pop_display_menu)
 
-        self.main_obj.window.ActionsButton.clicked.connect(
-            self.menu_actions
-        )
+        self.pop_mask_menu = PopActionsMenu(self)
+        self.main_obj.window.ActionsButton.setMenu(self.pop_mask_menu)
 
         self.my_scene.img_scale.connect(self.scale_img)
         self.my_scene.new_mouse_pos.connect(self.on_mouse_move)
@@ -308,6 +346,7 @@ class DoImageView(QObject):
         self.old_inv_scl = self.inv_scale
         self.old_cur_nod_num = self.cur_nod_num
         self.old_cur_img_num = self.cur_img_num
+
 
 
         timer = QTimer(self)
