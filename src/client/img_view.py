@@ -417,7 +417,7 @@ class DoImageView(QObject):
         self.refresh_pixel_map()
 
         # if you wanna only load the current slice of image, comment next line
-        self.full_img_show()
+        #self.full_img_show()
 
     def refresh_pixel_map(self):
         try:
