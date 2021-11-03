@@ -44,9 +44,6 @@ from img_view_utils import (
 from simpler_param_widgets import FileBrowser, build_template
 
 
-
-
-
 class LoadFullImage(QThread):
     image_loaded = Signal(tuple)
     def __init__(
@@ -282,12 +279,14 @@ class PopActionsMenu(QMenu):
 
 class PopDisplayMenu(QMenu):
     new_i_min_max = Signal(int, int)
+    new_palette = Signal(str)
     def __init__(self, parent=None):
         super().__init__()
         self.my_parent = parent
 
         self.i_min = int(self.my_parent.i_min_max[0])
         self.i_max = int(self.my_parent.i_min_max[1])
+        self.palette = self.my_parent.palette
 
         palette_group = QGroupBox("Palette tuning")
         palette_box_layout = QVBoxLayout()
@@ -303,8 +302,20 @@ class PopDisplayMenu(QMenu):
         i_min_max_layout.addWidget(self.i_max_line)
 
         palette_box_layout.addLayout(i_min_max_layout)
-        palette_box_layout.addWidget(QLabel(" ...   "))
-        palette_box_layout.addWidget(QLabel("   ... "))
+
+        self.palette_select = QComboBox()
+        self.palette_lst = ["grayscale", "invert", "heat", "heat invert"]
+        for n, plt in enumerate(self.palette_lst):
+            self.palette_select.addItem(plt)
+            if plt == self.palette:
+                self.palette_select.setCurrentIndex(n)
+
+        self.palette_select.currentIndexChanged.connect(
+            self.palette_changed_by_user
+        )
+
+        palette_box_layout.addWidget(QLabel("  ... "))
+        palette_box_layout.addWidget(self.palette_select)
 
         palette_group.setLayout(palette_box_layout)
 
@@ -319,6 +330,11 @@ class PopDisplayMenu(QMenu):
         my_main_box.addWidget(palette_group)
         my_main_box.addWidget(info_group)
         self.setLayout(my_main_box)
+
+    def palette_changed_by_user(self, new_palette_num):
+        self.palette = self.palette_lst[new_palette_num]
+        print("self.palette =", self.palette)
+        self.new_palette.emit(str(self.palette))
 
     def i_min_max_changed(self):
         self.new_i_min_max.emit(self.i_min, self.i_max)
@@ -362,10 +378,12 @@ class DoImageView(QObject):
         )
 
         self.i_min_max = [-2, 50]
+        self.palette = "grayscale"
 
         self.pop_display_menu = PopDisplayMenu(self)
         self.main_obj.window.DisplayButton.setMenu(self.pop_display_menu)
         self.pop_display_menu.new_i_min_max.connect(self.change_i_min_max)
+        self.pop_display_menu.new_palette.connect(self.change_palette)
 
         self.pop_mask_menu = PopActionsMenu(self)
         self.main_obj.window.ActionsButton.setMenu(self.pop_mask_menu)
@@ -500,10 +518,18 @@ class DoImageView(QObject):
 
     def refresh_pixel_map(self):
         try:
-            rgb_np = self.bmp_m_cro.img_2d_rgb(
-                data2d = self.np_full_img, invert = False,
-                i_min_max = self.i_min_max
-            )
+            if self.palette == "heat":
+                rgb_np = self.bmp_heat.img_2d_rgb(
+                    data2d = self.np_full_img, invert = False,
+                    i_min_max = self.i_min_max
+                )
+
+            elif self.palette == "grayscale":
+                rgb_np = self.bmp_m_cro.img_2d_rgb(
+                    data2d = self.np_full_img, invert = False,
+                    i_min_max = self.i_min_max
+                )
+
             q_img = QImage(
                 rgb_np.data,
                 np.size(rgb_np[0:1, :, 0:1]),
@@ -521,6 +547,9 @@ class DoImageView(QObject):
         self.i_min_max = [new_i_min, new_i_max]
         self.refresh_pixel_map()
 
+    def change_palette(self, new_palette):
+        self.palette = new_palette
+        self.refresh_pixel_map()
 
     def menu_display(self, event):
         print("menu_display")
