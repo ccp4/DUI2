@@ -530,6 +530,18 @@ class DoImageView(QObject):
                     i_min_max = self.i_min_max
                 )
 
+            elif self.palette == "heat invert":
+                rgb_np = self.bmp_heat.img_2d_rgb(
+                    data2d = self.np_full_img, invert = True,
+                    i_min_max = self.i_min_max
+                )
+
+            elif self.palette == "invert":
+                rgb_np = self.bmp_m_cro.img_2d_rgb(
+                    data2d = self.np_full_img, invert = True,
+                    i_min_max = self.i_min_max
+                )
+
             q_img = QImage(
                 rgb_np.data,
                 np.size(rgb_np[0:1, :, 0:1]),
