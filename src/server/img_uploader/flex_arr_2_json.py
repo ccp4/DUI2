@@ -11,8 +11,8 @@ import time
 from dxtbx.model.experiment_list import ExperimentListFactory
 
 def list_p_arrange_exp(
-    bbox_col = None, pan_col = None, hkl_col = None,
-    n_imgs = None, n_imgs_lst = None, id_col = None
+    bbox_col = None, pan_col = None, hkl_col = None, n_imgs = None,
+    n_imgs_lst = None, id_col = None, num_of_imagesets = 1
 ):
 
     img_lst = []
@@ -40,15 +40,23 @@ def list_p_arrange_exp(
         box_dat.append(height)
         box_dat.append(local_hkl)
 
-        for ind_z in range(ref_box[4], ref_box[5]):
-            img_id_ind_z = 0
-            for id_num in range(id_col[i]):
-                img_id_ind_z += n_imgs_lst[id_num]
+        if num_of_imagesets > 1:
+            for ind_z in range(ref_box[4], ref_box[5]):
+                img_id_ind_z = 0
+                for id_num in range(id_col[i]):
+                    print("id_num =", id_num)
+                    img_id_ind_z += n_imgs_lst[id_num]
 
-            img_id_ind_z += ind_z
+                img_id_ind_z += ind_z
 
-            if img_id_ind_z >= 0 and img_id_ind_z < n_imgs:
-                img_lst[img_id_ind_z].append(box_dat)
+                if img_id_ind_z >= 0 and img_id_ind_z < n_imgs:
+                    img_lst[img_id_ind_z].append(box_dat)
+
+        else:
+            for ind_z in range(ref_box[4], ref_box[5]):
+                if ind_z >= 0 and ind_z < n_imgs:
+                    img_lst[ind_z].append(box_dat)
+
 
     return img_lst
 
@@ -58,7 +66,8 @@ def get_refl_lst(expt_path, refl_path, img_num):
         experiments = ExperimentListFactory.from_json_file(expt_path[0])
         #my_sweep = experiments.imagesets()[0]
         all_sweeps = experiments.imagesets()
-        print("len(experiments.imagesets()) =", len(experiments.imagesets()))
+        num_of_imagesets = len(experiments.imagesets())
+        print("len(experiments.imagesets()) =", num_of_imagesets)
         print("refl_path =", refl_path)
         table = flex.reflection_table.from_file(refl_path[0])
 
@@ -94,7 +103,7 @@ def get_refl_lst(expt_path, refl_path, img_num):
                 hkl_col = None
 
             box_flat_data_lst = list_p_arrange_exp(
-                bbox_col, pan_col, hkl_col, n_imgs, n_imgs_lst, id_col
+                bbox_col, pan_col, hkl_col, n_imgs, n_imgs_lst, id_col, num_of_imagesets
             )
 
         return [box_flat_data_lst[img_num]]

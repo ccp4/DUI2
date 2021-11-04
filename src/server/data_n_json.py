@@ -156,23 +156,23 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
 
     elif uni_cmd[0] == "get_reflection_list":
         for lin2go in cmd_dict["nod_lst"]:
-            try:
-                print(
-                    "generating reflection list for line:", lin2go,
-                    " image:", int(uni_cmd[1])
-                )
-                refl_lst = flex_arr_2_json.get_refl_lst(
-                    step_list[lin2go]._lst_expt_out,
-                    step_list[lin2go]._lst_refl_out,
-                    int(uni_cmd[1])
-                )
-                return_list = refl_lst
+            #try:
+            print(
+                "generating reflection list for line:", lin2go,
+                " image:", int(uni_cmd[1])
+            )
+            refl_lst = flex_arr_2_json.get_refl_lst(
+                step_list[lin2go]._lst_expt_out,
+                step_list[lin2go]._lst_refl_out,
+                int(uni_cmd[1])
+            )
+            return_list = refl_lst
 
-            except (IndexError, AttributeError):
+            '''except (IndexError, AttributeError):
                 print(
                     "\n *** ERROR *** \n not sending reflection list \n"
                 )
-                return_list = []
+                return_list = []'''
 
     elif uni_cmd == ["get_bravais_sum"]:
         for lin2go in cmd_dict["nod_lst"]:

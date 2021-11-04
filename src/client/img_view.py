@@ -449,26 +449,12 @@ class DoImageView(QObject):
                             "local_hkl" :   str(inner_list[4]),
                         }
                     )
-                to_remove = '''
-                for inner_list in json_lst[1]:
-                    lst_str1 = inner_list[0].split(',')
-                    x_ini = float(lst_str1[0])
-                    y_ini = float(lst_str1[1])
-                    xrs_size = int(lst_str1[2])
-                    size2 = int(lst_str1[3])
-                    local_hkl = str(inner_list[1])
-                    self.r_list1.append(
-                       {
-                         "x_ini"       : x_ini     ,
-                         "y_ini"       : y_ini     ,
-                         "xrs_size"    : xrs_size  ,
-                         "size2"       : size2     ,
-                         "local_hkl"   : local_hkl ,
-                       }
-                    )
-                '''
-            except (TypeError, IndexError):
+
+            except TypeError:
                 print("No reflection list to show (TypeError except)")
+
+            except IndexError:
+                print("No reflection list to show (IndexError except)")
 
         self.cur_nod_num = nod_num
         self.cur_img_num = in_img_num
