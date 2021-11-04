@@ -419,46 +419,8 @@ class DoImageView(QObject):
         self.r_list0 = []
         self.exp_path = None
         #self.r_list1 = []
-        if nod_or_path is True:
-            nod_num = self.main_obj.current_nod_num
-            cmd = {'nod_lst': [nod_num], 'cmd_lst': ["gt"]}
 
-        elif nod_or_path is False:
-            nod_num = self.main_obj.new_node.parent_node_lst[0]
-            cmd = {'nod_lst': [nod_num], 'cmd_lst': ["gt"]}
-
-        elif type(nod_or_path) is str:
-            nod_num = nod_or_path
-            cmd = {"path": nod_or_path, 'cmd_lst': "get_template"}
-            self.exp_path = nod_or_path
-
-        json_data_lst = json_data_request(self.uni_url, cmd)
-
-        try:
-            new_templ = json_data_lst[0]
-            self.img_d1_d2 = (
-                json_data_lst[1], json_data_lst[2]
-            )
-            if(
-                self.cur_img_num != in_img_num or
-                self.cur_templ != new_templ
-            ):
-                x_ax = np.arange(self.img_d1_d2[1])
-                y_ax = np.arange(self.img_d1_d2[0])
-                pi_2 = 3.14159235358 * 2.0
-                sx = 1.0-(np.cos(x_ax * pi_2 / self.img_d1_d2[1]))
-                sy = 1.0-(np.cos(y_ax * pi_2 / self.img_d1_d2[0]))
-                xx, yy = np.meshgrid(sx, sy, sparse = True)
-                self.np_full_img = xx + yy
-                self.np_full_img = 50 * (
-                    self.np_full_img / self.np_full_img.max()
-                )
-            self.cur_templ = new_templ
-
-        except (IndexError, TypeError):
-            print("Not loaded new template in full")
-            #TODO check what happens here if the user navigates
-            #     to a different dataset
+        nod_num = self.build_background_n_get_nod_num(nod_or_path, in_img_num)
 
         if nod_or_path is True:
             my_cmd = {
@@ -515,6 +477,50 @@ class DoImageView(QObject):
 
         # if you wanna only load the current slice of image, comment next line
         #self.full_img_show()
+
+    def build_background_n_get_nod_num(self, nod_or_path, in_img_num):
+        if nod_or_path is True:
+            nod_num = self.main_obj.current_nod_num
+            cmd = {'nod_lst': [nod_num], 'cmd_lst': ["gt"]}
+
+        elif nod_or_path is False:
+            nod_num = self.main_obj.new_node.parent_node_lst[0]
+            cmd = {'nod_lst': [nod_num], 'cmd_lst': ["gt"]}
+
+        elif type(nod_or_path) is str:
+            nod_num = nod_or_path
+            cmd = {"path": nod_or_path, 'cmd_lst': "get_template"}
+            self.exp_path = nod_or_path
+
+        json_data_lst = json_data_request(self.uni_url, cmd)
+
+        try:
+            new_templ = json_data_lst[0]
+            self.img_d1_d2 = (
+                json_data_lst[1], json_data_lst[2]
+            )
+            if(
+                self.cur_img_num != in_img_num or
+                self.cur_templ != new_templ
+            ):
+                x_ax = np.arange(self.img_d1_d2[1])
+                y_ax = np.arange(self.img_d1_d2[0])
+                pi_2 = 3.14159235358 * 2.0
+                sx = 1.0-(np.cos(x_ax * pi_2 / self.img_d1_d2[1]))
+                sy = 1.0-(np.cos(y_ax * pi_2 / self.img_d1_d2[0]))
+                xx, yy = np.meshgrid(sx, sy, sparse = True)
+                self.np_full_img = xx + yy
+                self.np_full_img = self.i_min_max[1] * (
+                    self.np_full_img / self.np_full_img.max()
+                )
+            self.cur_templ = new_templ
+
+        except (IndexError, TypeError):
+            print("Not loaded new template in full")
+            #TODO check what happens here if the user navigates
+            #     to a different dataset
+
+        return nod_num
 
     def refresh_pixel_map(self):
         try:
