@@ -44,7 +44,6 @@ def list_p_arrange_exp(
             for ind_z in range(ref_box[4], ref_box[5]):
                 img_id_ind_z = 0
                 for id_num in range(id_col[i]):
-                    print("id_num =", id_num)
                     img_id_ind_z += n_imgs_lst[id_num]
 
                 img_id_ind_z += ind_z
@@ -56,7 +55,6 @@ def list_p_arrange_exp(
             for ind_z in range(ref_box[4], ref_box[5]):
                 if ind_z >= 0 and ind_z < n_imgs:
                     img_lst[ind_z].append(box_dat)
-
 
     return img_lst
 
