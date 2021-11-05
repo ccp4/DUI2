@@ -367,6 +367,7 @@ class DoImageView(QObject):
         self.main_obj.window.imageView.setDragMode(
             QGraphicsView.ScrollHandDrag
         )
+        #try:
         self.main_obj.window.ScaleOneOneButton.clicked.connect(
             self.OneOneScale
         )
@@ -377,9 +378,13 @@ class DoImageView(QObject):
             self.ZoomOutScale
         )
 
+        #except AttributeError:
+        #    print("temporarly disable some functions")
+
         self.i_min_max = [-2, 50]
         self.palette = "grayscale"
 
+        #try:
         self.pop_display_menu = PopDisplayMenu(self)
         self.main_obj.window.DisplayButton.setMenu(self.pop_display_menu)
         self.pop_display_menu.new_i_min_max.connect(self.change_i_min_max)
@@ -387,6 +392,9 @@ class DoImageView(QObject):
 
         self.pop_mask_menu = PopActionsMenu(self)
         self.main_obj.window.ActionsButton.setMenu(self.pop_mask_menu)
+
+        #except AttributeError:
+        #    print("temporarly disable some functions")
 
         self.my_scene.img_scale.connect(self.scale_img)
         self.my_scene.new_mouse_pos.connect(self.on_mouse_move)
@@ -800,15 +808,17 @@ class MainImgViewObject(QObject):
         self.do_image_view = DoImageView(self)
 
         self.window.show()
-        self.window.IntroNodeEdit.editingFinished.connect(
+
+        '''self.window.IntroNodeEdit.editingFinished.connect(
             self.node_num_entered
-        )
+        )'''
 
         self.window.ImgNumEdit.textChanged.connect(self.img_num_changed)
         self.window.PrevImgButton.clicked.connect(self.prev_img)
         self.window.NextImgButton.clicked.connect(self.next_img)
         self.window.OpenFileButton.clicked.connect(self.open_dir_widget)
 
+        '''
     def node_num_entered(self):
         try:
             nod_num = int(self.window.IntroNodeEdit.text())
@@ -817,7 +827,7 @@ class MainImgViewObject(QObject):
             self.do_image_view(in_img_num = img_num, nod_or_path = True)
 
         except ValueError:
-            print("NAN entered")
+            print("NAN entered")'''
 
     def refresh_output(self, nod_or_path = True):
         img_num = int(self.window.ImgNumEdit.text())

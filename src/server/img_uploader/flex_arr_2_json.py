@@ -69,7 +69,7 @@ def get_refl_lst(expt_path, refl_path, img_num):
         print("refl_path =", refl_path)
         table = flex.reflection_table.from_file(refl_path[0])
 
-    except IndexError:
+    except (IndexError, OSError):
         print(
             "\n sending empty reflection list as no reflection list there \n"
         )
@@ -104,7 +104,13 @@ def get_refl_lst(expt_path, refl_path, img_num):
                 bbox_col, pan_col, hkl_col, n_imgs, n_imgs_lst, id_col, num_of_imagesets
             )
 
-        return [box_flat_data_lst[img_num]]
+        try:
+            refl_lst = [box_flat_data_lst[img_num]]
+
+        except IndexError:
+            refl_lst = []
+
+        return refl_lst
 
     except KeyError:
         print("NOT found << bbox_col >> col")
