@@ -378,6 +378,7 @@ class DoImageView(QObject):
         )
 
         self.main_obj.window.EasterEggButton.clicked.connect(self.easter_egg)
+        self.easter_egg_active = False
 
         self.i_min_max = [-2, 50]
         self.palette = "grayscale"
@@ -464,8 +465,8 @@ class DoImageView(QObject):
 
         self.refresh_pixel_map()
 
-        # if you wanna only load the current slice of image, comment next line
-        #self.full_img_show()
+        if not self.easter_egg_active:
+            self.full_img_show()
 
     def build_background_n_get_nod_num(self, nod_or_path, in_img_num):
         if nod_or_path is True:
@@ -783,7 +784,8 @@ class DoImageView(QObject):
         self.main_obj.window.EasterEggButton.setText(str_out)
 
     def easter_egg(self, event):
-        print("YES")
+        self.easter_egg_active = not self.easter_egg_active
+        print("activating / deactivating easter egg")
 
 
 class MainImgViewObject(QObject):
