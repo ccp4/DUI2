@@ -377,6 +377,8 @@ class DoImageView(QObject):
             self.ZoomOutScale
         )
 
+        self.main_obj.window.EasterEggButton.clicked.connect(self.easter_egg)
+
         self.i_min_max = [-2, 50]
         self.palette = "grayscale"
 
@@ -390,6 +392,7 @@ class DoImageView(QObject):
 
         self.my_scene.img_scale.connect(self.scale_img)
         self.my_scene.new_mouse_pos.connect(self.on_mouse_move)
+
 
         self.bmp_heat = np2bmp_heat()
         self.bmp_m_cro = np2bmp_monocrome()
@@ -771,13 +774,16 @@ class DoImageView(QObject):
 
     def on_mouse_move(self, x_pos, y_pos):
         try:
-            str_out = "I(" + str(x_pos) + ", " + str(y_pos) + ") = " +\
-                      str(self.np_full_img[y_pos, x_pos])
+            str_out = "  I(" + str(x_pos) + ", " + str(y_pos) + ") = " +\
+                      str(self.np_full_img[y_pos, x_pos]) + "  "
 
         except (AttributeError, IndexError):
-            str_out = "I =?"
+            str_out = " I = ?"
 
-        self.main_obj.window.IntensLabel.setText(str_out)
+        self.main_obj.window.EasterEggButton.setText(str_out)
+
+    def easter_egg(self, event):
+        print("YES")
 
 
 class MainImgViewObject(QObject):
