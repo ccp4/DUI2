@@ -786,6 +786,7 @@ class DoImageView(QObject):
     def easter_egg(self, event):
         self.easter_egg_active = not self.easter_egg_active
         print("self.easter_egg_active =", self.easter_egg_active)
+        self.full_image_loaded = False
 
 
 class MainImgViewObject(QObject):
