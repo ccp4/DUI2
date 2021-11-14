@@ -785,7 +785,7 @@ class DoImageView(QObject):
 
     def easter_egg(self, event):
         self.easter_egg_active = not self.easter_egg_active
-        print("activating / deactivating easter egg")
+        print("self.easter_egg_active =", self.easter_egg_active)
 
 
 class MainImgViewObject(QObject):
