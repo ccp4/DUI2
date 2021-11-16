@@ -280,6 +280,7 @@ class PopActionsMenu(QMenu):
 class PopDisplayMenu(QMenu):
     new_i_min_max = Signal(int, int)
     new_palette = Signal(str)
+    new_redraw = Signal()
     def __init__(self, parent=None):
         super().__init__()
         self.my_parent = parent
@@ -321,15 +322,25 @@ class PopDisplayMenu(QMenu):
 
         info_group = QGroupBox("Reflection info")
         ref_box_layout = QVBoxLayout()
-        ref_box_layout.addWidget(QLabel("Dummy ... one"))
+
+
+        # Viewing Tool
+        self.chk_box_show = QCheckBox("Show reflection info")
+        self.chk_box_show.setChecked(True)
+        self.chk_box_show.stateChanged.connect(self.sig_new_redraw)
+        ref_box_layout.addWidget(self.chk_box_show)
+
         ref_box_layout.addWidget(QLabel("  ...  "))
-        ref_box_layout.addWidget(QLabel("Done"))
+
         info_group.setLayout(ref_box_layout)
 
         my_main_box = QVBoxLayout()
         my_main_box.addWidget(palette_group)
         my_main_box.addWidget(info_group)
         self.setLayout(my_main_box)
+    def sig_new_redraw(self):
+        print("new_redraw")
+        self.new_redraw.emit()
 
     def palette_changed_by_user(self, new_palette_num):
         self.palette = self.palette_lst[new_palette_num]
@@ -387,6 +398,7 @@ class DoImageView(QObject):
         self.main_obj.window.DisplayButton.setMenu(self.pop_display_menu)
         self.pop_display_menu.new_i_min_max.connect(self.change_i_min_max)
         self.pop_display_menu.new_palette.connect(self.change_palette)
+        self.pop_display_menu.new_redraw.connect(self.refresh_pixel_map)
 
         self.pop_mask_menu = PopActionsMenu(self)
         self.main_obj.window.ActionsButton.setMenu(self.pop_mask_menu)
@@ -513,6 +525,8 @@ class DoImageView(QObject):
         return nod_num
 
     def refresh_pixel_map(self):
+        show_refl = self.pop_display_menu.chk_box_show.isChecked()
+        print("show_refl =", show_refl)
         try:
             if self.palette == "heat":
                 rgb_np = self.bmp_heat.img_2d_rgb(
@@ -545,8 +559,11 @@ class DoImageView(QObject):
                 QImage.Format_ARGB32
             )
             new_pixmap = QPixmap.fromImage(q_img)
-            self.my_scene(new_pixmap, self.r_list0)
-            #self.my_scene(new_pixmap, self.r_list0, self.r_list1)
+            if show_refl:
+                self.my_scene(new_pixmap, self.r_list0)
+
+            else:
+                self.my_scene(new_pixmap, [])
 
         except (TypeError, AttributeError):
             print("None self.np_full_img")
@@ -778,7 +795,7 @@ class DoImageView(QObject):
             str_out = "  I(" + str(x_pos) + ", " + str(y_pos) + ") = " +\
                       str(self.np_full_img[y_pos, x_pos]) + "  "
 
-        except (AttributeError, IndexError):
+        except (AttributeError, IndexError, TypeError):
             str_out = " I = ?"
 
         self.main_obj.window.EasterEggButton.setText(str_out)
