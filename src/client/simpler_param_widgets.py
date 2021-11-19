@@ -183,7 +183,6 @@ class ProgBarBox(QProgressDialog):
 
         super(ProgBarBox, self).__init__(
             labelText=text,
-            cancelButtonText="",
             minimum=min_val,
             maximum=max_val,
             parent=None)

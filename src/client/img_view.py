@@ -174,7 +174,7 @@ class ImgGraphicsScene(QGraphicsScene):
             Qt.green, 0.8, Qt.SolidLine,
             Qt.RoundCap, Qt.RoundJoin
         )
-        self.draw_all_hkl = False
+        self.draw_all_hkl = True
 
     def draw_ref_rect(self):
         self.clear()
@@ -330,7 +330,22 @@ class PopDisplayMenu(QMenu):
         self.chk_box_show.stateChanged.connect(self.sig_new_redraw)
         ref_box_layout.addWidget(self.chk_box_show)
 
-        ref_box_layout.addWidget(QLabel("  ...  "))
+        ###########################################################################
+
+        self.rad_but_near_hkl = QRadioButton("Nearest HKL")
+        self.rad_but_near_hkl.clicked.connect(self.sig_new_redraw)
+        self.rad_but_near_hkl.setChecked(True)
+        ref_box_layout.addWidget(self.rad_but_near_hkl)
+
+        self.rad_but_all_hkl = QRadioButton("All HKLs")
+        self.rad_but_all_hkl.clicked.connect(self.sig_new_redraw)
+        ref_box_layout.addWidget(self.rad_but_all_hkl)
+
+        self.rad_but_none_hkl = QRadioButton("No HKL")
+        self.rad_but_none_hkl.clicked.connect(self.sig_new_redraw)
+        ref_box_layout.addWidget(self.rad_but_none_hkl)
+        ###########################################################################
+
 
         info_group.setLayout(ref_box_layout)
 
@@ -527,6 +542,8 @@ class DoImageView(QObject):
     def refresh_pixel_map(self):
         show_refl = self.pop_display_menu.chk_box_show.isChecked()
         print("show_refl =", show_refl)
+        self.my_scene.draw_all_hkl = self.pop_display_menu.rad_but_all_hkl.isChecked()
+
         try:
             if self.palette == "heat":
                 rgb_np = self.bmp_heat.img_2d_rgb(
