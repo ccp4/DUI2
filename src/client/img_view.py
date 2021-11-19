@@ -174,7 +174,7 @@ class ImgGraphicsScene(QGraphicsScene):
             Qt.green, 0.8, Qt.SolidLine,
             Qt.RoundCap, Qt.RoundJoin
         )
-        self.draw_all_hkl = True
+        #self.draw_all_hkl = True
 
     def draw_ref_rect(self):
         self.clear()
@@ -221,7 +221,7 @@ class ImgGraphicsScene(QGraphicsScene):
     def mouseMoveEvent(self, event):
         ev_pos = event.scenePos()
         x_pos, y_pos = int(ev_pos.x()), int(ev_pos.y())
-        if self.draw_all_hkl == False:
+        if self.draw_near_hkl == True:
             try:
                 pos_min = None
                 d_cuad_min = 10000000
@@ -543,6 +543,7 @@ class DoImageView(QObject):
         show_refl = self.pop_display_menu.chk_box_show.isChecked()
         print("show_refl =", show_refl)
         self.my_scene.draw_all_hkl = self.pop_display_menu.rad_but_all_hkl.isChecked()
+        self.my_scene.draw_near_hkl = self.pop_display_menu.rad_but_near_hkl.isChecked()
 
         try:
             if self.palette == "heat":
