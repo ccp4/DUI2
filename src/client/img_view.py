@@ -174,7 +174,8 @@ class ImgGraphicsScene(QGraphicsScene):
             Qt.green, 0.8, Qt.SolidLine,
             Qt.RoundCap, Qt.RoundJoin
         )
-        #self.draw_all_hkl = True
+        self.draw_all_hkl = False
+        self.draw_near_hkl = True
 
     def draw_ref_rect(self):
         self.clear()
