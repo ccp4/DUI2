@@ -23,7 +23,11 @@ copyright (c) CCP4 - DLS
 
 import sys, json
 import requests
-from exec_utils import uni_url
+#from exec_utils import uni_url
+
+from init_firts import ini_data
+
+
 
 opt2 =  '''
             {"nod_lst":[0], "cmd_lst":["ip x41"]},
@@ -47,26 +51,34 @@ to_re_use_as_GET = '''
 
 
 lst_cmd = [
+            {"nod_lst":[0], "cmd_lst":["ip x41"]},
+            {"nod_lst":[0], "cmd_lst":["ip x42"]},
+            {"nod_lst":[0], "cmd_lst":["ip x43"]},
+
+
+            {'nod_lst': [1], 'cmd_lst':
+                 [['gm untrusted.rectangle=0,1421,1258,1312 output.mask=tmp_mask.pickle'],
+                  ['am input.mask=tmp_mask.pickle']]},
             {'nod_lst': [2], 'cmd_lst':
                  [['gm untrusted.rectangle=0,1421,1258,1312 output.mask=tmp_mask.pickle'],
                   ['am input.mask=tmp_mask.pickle']]},
             {'nod_lst': [3], 'cmd_lst':
                  [['gm untrusted.rectangle=0,1421,1258,1312 output.mask=tmp_mask.pickle'],
                   ['am input.mask=tmp_mask.pickle']]},
-            {'nod_lst': [4], 'cmd_lst':
-                 [['gm untrusted.rectangle=0,1421,1258,1312 output.mask=tmp_mask.pickle'],
-                  ['am input.mask=tmp_mask.pickle']]},
+
+            {"nod_lst":[4], "cmd_lst":["fd nproc=9"]},
             {"nod_lst":[5], "cmd_lst":["fd nproc=9"]},
             {"nod_lst":[6], "cmd_lst":["fd nproc=9"]},
-            {"nod_lst":[7], "cmd_lst":["fd nproc=9"]},
-            {'nod_lst': [8, 9, 10], 'cmd_lst': ['ce']},
-            {'nod_lst': [11], 'cmd_lst': ["id"]},
-            {'nod_lst': [12], 'cmd_lst': ['dials.refine_bravais_settings']},
-            {'nod_lst': [13], 'cmd_lst': ['dials.reindex 9']},
+            {'nod_lst': [7, 8, 9], 'cmd_lst': ['ce']},
+            {'nod_lst': [10], 'cmd_lst': ["id"]},
+            {'nod_lst': [11], 'cmd_lst': ['dials.refine_bravais_settings']},
+            {'nod_lst': [12], 'cmd_lst': ['dials.reindex 9']},
+            {'nod_lst': [7], 'cmd_lst': ["id"]},
             {'nod_lst': [8], 'cmd_lst': ["id"]},
             {'nod_lst': [9], 'cmd_lst': ["id"]},
-            {'nod_lst': [10], 'cmd_lst': ["id"]},
-            {'nod_lst': [15, 16, 17], 'cmd_lst': ['ce']},
+            {'nod_lst': [14, 15, 16], 'cmd_lst': ['ce']},
+          ]
+tmp_off = '''
             {"nod_lst":[1], "cmd_lst":["fd nproc=9"]},
             {'nod_lst': [19], 'cmd_lst': ["id"]},
             {'nod_lst': [20], 'cmd_lst': ['dials.refine_bravais_settings']},
@@ -74,21 +86,26 @@ lst_cmd = [
             {'nod_lst': [22], 'cmd_lst': ['rf']},
             {'nod_lst': [18], 'cmd_lst': ['rf']},
             {'nod_lst': [23], 'cmd_lst': ['it nproc=4']},
-          ]
+'''
 
 
 if __name__ == "__main__":
-        for my_cmd in lst_cmd:
-            req_post = requests.post(uni_url, stream = True, data = my_cmd)
-            while True:
-                tmp_dat = req_post.raw.readline()
-                line_str = str(tmp_dat.decode('utf-8'))
 
-                if line_str[-7:] == '/*EOF*/':
-                    print('/*EOF*/ received')
-                    break
+    data_init = ini_data()
+    data_init.set_data()
+    uni_url = data_init.get_url()
 
-                else:
-                    print(line_str[:-1])
+    for my_cmd in lst_cmd:
+        req_post = requests.post(uni_url, stream = True, data = my_cmd)
+        while True:
+            tmp_dat = req_post.raw.readline()
+            line_str = str(tmp_dat.decode('utf-8'))
+
+            if line_str[-7:] == '/*EOF*/':
+                print('/*EOF*/ received')
+                break
+
+            else:
+                print(line_str[:-1])
 
 
