@@ -229,15 +229,22 @@ class CmdNode(object):
         self.nod_req = req_obj
         self.status = "Busy"
         inner_lst = self.full_cmd_lst[-1]
-        print("\n Running:", inner_lst, "\n")
-        self.my_proc = subprocess.Popen(
-            inner_lst,
-            shell = False,
-            cwd = self._run_dir,
-            stdout = subprocess.PIPE,
-            stderr = subprocess.STDOUT,
-            universal_newlines = True
-        )
+        try:
+            print("\n Running:", inner_lst, "\n")
+            self.my_proc = subprocess.Popen(
+                inner_lst,
+                shell = False,
+                cwd = self._run_dir,
+                stdout = subprocess.PIPE,
+                stderr = subprocess.STDOUT,
+                universal_newlines = True
+            )
+
+        except FileNotFoundError:
+            print("unable to run:", inner_lst[0], " <<FileNotFoundError>> ")
+            self.my_proc = None
+            return
+            
         new_line = None
         log_line_lst = []
         self.log_file_path = self._run_dir + "/out.log"
