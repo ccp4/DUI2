@@ -55,10 +55,14 @@ lst_cmd = [
             {"nod_lst":[0], "cmd_lst":["ip x42"]},
             {"nod_lst":[0], "cmd_lst":["ip x43"]},
 
-
+            #
             {'nod_lst': [1], 'cmd_lst':
-                 [['gm untrusted.rectangle=0,1421,1258,1312 output.mask=tmp_mask.pickle'],
-                  ['am input.mask=tmp_mask.pickle']]},
+                [
+                    [
+                        'gm untrusted.rectangle=0,1421,1258,1312 untrusted.circle=1421,1270,150 output.mask=tmp_mask.pickle'
+                    ],
+                  ['am input.mask=tmp_mask.pickle']
+                ]},
             {'nod_lst': [2], 'cmd_lst':
                  [['gm untrusted.rectangle=0,1421,1258,1312 output.mask=tmp_mask.pickle'],
                   ['am input.mask=tmp_mask.pickle']]},
@@ -66,7 +70,9 @@ lst_cmd = [
                  [['gm untrusted.rectangle=0,1421,1258,1312 output.mask=tmp_mask.pickle'],
                   ['am input.mask=tmp_mask.pickle']]},
 
-            {"nod_lst":[4], "cmd_lst":["fd nproc=9"]},
+            {"nod_lst":[4], "cmd_lst":[
+                "fd nproc=9 spotfinder.threshold.dispersion.gain=1.01 spotfinder.threshold.dispersion.sigma_background=6.02 spotfinder.threshold.dispersion.sigma_strong=3.03"
+                ]},
             {"nod_lst":[5], "cmd_lst":["fd nproc=9"]},
             {"nod_lst":[6], "cmd_lst":["fd nproc=9"]},
             {'nod_lst': [7, 8, 9], 'cmd_lst': ['ce']},
