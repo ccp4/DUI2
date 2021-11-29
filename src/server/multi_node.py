@@ -244,7 +244,7 @@ class CmdNode(object):
             print("unable to run:", inner_lst[0], " <<FileNotFoundError>> ")
             self.my_proc = None
             return
-            
+
         new_line = None
         log_line_lst = []
         self.log_file_path = self._run_dir + "/out.log"
@@ -356,6 +356,9 @@ class CmdNode(object):
 
             except BrokenPipeError:
                 print("Broken Pipe Error")
+
+            except AttributeError:
+                print("No PID for << None >> process")
 
         else:
             print("node", self.number, "not running, so not stopping it")

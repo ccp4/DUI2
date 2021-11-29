@@ -484,26 +484,26 @@ class ImportWidget(QWidget):
             str_path, str_value, "... dummy"
         )
 
-class MaskTmpWidg(SimpleParamTab):
+class MaskLablWidg(SimpleParamTab):
     def __init__(self, parent = None):
-        super(MaskTmpWidg, self).__init__(parent)
+        super(MaskLablWidg, self).__init__(parent)
         self.do_emit = True
         sys_font = QFont()
         font_point_size = sys_font.pointSize()
 
-        big_label = QLabel(" ...  (TMP)   Apply Mask:    ")
-        big_label.setFont(QFont(
+        self.cmd_label = QLabel("  Apply Mask:    ")
+        self.cmd_label.setFont(QFont(
             "Monospace", font_point_size + 3, QFont.Bold
         ))
 
         self.main_vbox = QVBoxLayout()
         self.main_vbox.addWidget(QLabel(" "))
-        self.main_vbox.addWidget(big_label)
+        self.main_vbox.addWidget(self.cmd_label)
         self.main_vbox.addWidget(QLabel(" "))
         self.setLayout(self.main_vbox)
 
     def reset_pars(self):
-        print("\n reset_pars(MaskTmpWidg) \n")
+        print("\n reset_pars(MaskLablWidg) \n")
 
 
 class FindspotsSimplerParameterTab(SimpleParamTab):
@@ -977,7 +977,7 @@ class TmpTstWidget(QWidget):
         super(TmpTstWidget, self).__init__()
         self.do_emit = True
 
-        #my_widget = MaskTmpWidg(self)
+        #my_widget = MaskLablWidg(self)
         my_widget = ImportWidget(self)
         #my_widget = FindspotsSimplerParameterTab(self)
         #my_widget = IndexSimplerParamTab(self)
