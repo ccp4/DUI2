@@ -247,6 +247,27 @@ class CommandParamControl:
 
         return str_out
 
+    def get_full_command_list(self):
+        print("\n *** get_full_command_list")
+        str_out = str(self.m_cmd_lst[0])
+        print("self.par_lst =", self.par_lst)
+        for par in self.par_lst:
+            par_str = " " + par["name"] + "=" + par["value"]
+            str_out += par_str
+
+        if self.custm_param is not None:
+            str_out += " " + str(self.custm_param)
+
+        lst_out = [str_out]
+        lst_tail = list(self.m_cmd_lst[1:])
+        print("lst_tail =", lst_tail)
+        for cmd_elem in lst_tail:
+            lst_out.append(cmd_elem)
+
+        print("\n lst_out =", lst_out, "\n")
+
+        return lst_out
+
 
 if __name__ == "__main__":
     tst_cmd = CommandParamControl("my_cmd")

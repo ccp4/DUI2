@@ -673,10 +673,13 @@ class MainObject(QObject):
         self.refresh_output()
 
     def request_launch(self):
-        cmd_str = self.new_node.get_full_command_string()
+        #cmd_str = self.new_node.get_full_command_string()
+        cmd_lst = self.new_node.get_full_command_list()
         lst_of_node_str = self.new_node.parent_node_lst
 
-        cmd = {'nod_lst': lst_of_node_str, 'cmd_lst': [cmd_str]}
+        #cmd = {'nod_lst': lst_of_node_str, 'cmd_lst': [cmd_str]}
+        cmd = {'nod_lst': lst_of_node_str, 'cmd_lst': cmd_lst}
+
         print("cmd =", cmd)
         self.window.incoming_text.clear()
         try:
