@@ -302,14 +302,14 @@ class MainObject(QObject):
         self.window.PrevImgButton.clicked.connect(self.prev_img)
         self.window.NextImgButton.clicked.connect(self.next_img)
 
-        self.current_widget_key = "Root"
+        self.curr_widg_key = "Root"
         self.new_node = None
         self.current_nod_num = 0
 
         self.server_nod_lst = []
         self.request_display()
 
-        self.change_widget(self.current_widget_key)
+        self.change_widget(self.curr_widg_key)
         self.thrd_lst = []
 
         self.window.MainHSplitter.setStretchFactor(0, 1)
@@ -421,7 +421,7 @@ class MainObject(QObject):
             self.new_node is not None and
             node_numb != self.current_nod_num and
             self.window.NodeSelecCheck.checkState() and
-            self.current_widget_key == "combine_experiments"
+            self.curr_widg_key == "combine_experiments"
         ):
                 self.new_node.add_or_remove_parent(node_numb)
                 self.display()
@@ -508,13 +508,13 @@ class MainObject(QObject):
             self.param_widgets[str_key]["main_page"]
         )
         self.check_nxt_btn()
-        self.current_widget_key = str_key
+        self.curr_widg_key = str_key
 
     def reset_param(self):
         self.reseting = True
-        self.param_widgets[self.current_widget_key]["simple"].reset_pars()
+        self.param_widgets[self.curr_widg_key]["simple"].reset_pars()
         try:
-            self.param_widgets[self.current_widget_key]["advanced"].reset_pars()
+            self.param_widgets[self.curr_widg_key]["advanced"].reset_pars()
 
         except AttributeError:
             print("No advanced pars")
@@ -560,7 +560,7 @@ class MainObject(QObject):
     def add_new_node(self):
         print("add_new_node")
         self.new_node = CommandParamControl(
-            main_command = self.param_widgets[self.current_widget_key]["main_cmd"]
+            main_command = self.param_widgets[self.curr_widg_key]["main_cmd"]
         )
         self.new_node.set_connections(
             self.server_nod_lst, [self.current_nod_num]
@@ -584,11 +584,11 @@ class MainObject(QObject):
             "update_all_param(MainObject)...tmp_cmd_par.get_all_params() = ",
             tmp_cmd_par.get_all_params()
         )
-        self.param_widgets[self.current_widget_key]["simple"].update_all_pars(
+        self.param_widgets[self.curr_widg_key]["simple"].update_all_pars(
             tmp_cmd_par.get_all_params()
         )
         try:
-            self.param_widgets[self.current_widget_key]["advanced"].update_all_pars(
+            self.param_widgets[self.curr_widg_key]["advanced"].update_all_pars(
                 tmp_cmd_par.get_all_params()
             )
         except AttributeError:
@@ -601,7 +601,7 @@ class MainObject(QObject):
         except IndexError:
             tmp_state = "Ready"
 
-        str_key = self.current_widget_key
+        str_key = self.curr_widg_key
         self.param_widgets[str_key]["simple"].setEnabled(False)
         try:
             self.param_widgets[str_key]["advanced"].setEnabled(False)
@@ -655,7 +655,7 @@ class MainObject(QObject):
         print("on_clone")
 
         self.new_node = CommandParamControl(
-            main_command = self.param_widgets[self.current_widget_key]["main_cmd"]
+            main_command = self.param_widgets[self.curr_widg_key]["main_cmd"]
         )
         self.new_node.set_connections(
             self.server_nod_lst,
