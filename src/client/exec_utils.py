@@ -134,8 +134,8 @@ class CommandParamControl:
     '''
     keeps track of command to run with parameters included
     '''
-    def __init__(self, main_command = None, param_list = []):
-        self.m_cmd_lst = main_command
+    def __init__(self, main_list = None, param_list = []):
+        self.m_cmd_lst = main_list
         self.par_lst = list(param_list)
         self.custm_param = None
         print("\n New 'CommandParamControl':")
