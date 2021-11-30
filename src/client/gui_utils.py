@@ -45,33 +45,33 @@ except ModuleNotFoundError:
 
 widgets_defs = {
     "Root" : {
-        "tooltip": "Root node ... Not supposed to run any code",
-        "icon": "resources/root.png",
-        "main_cmd"  :["# root node"],
+        "tooltip"       : "Root node ... Not supposed to run any code",
+        "icon"          : "resources/root.png",
+        "main_cmd"      :["# root node"],
         "nxt_widg_lst"  :["import"]
     },
     "import" : {
-        "tooltip": "dials.import ...",
-        "icon": "resources/import.png",
-        "main_cmd"  :["dials.import"],
+        "tooltip"       : "dials.import ...",
+        "icon"          : "resources/import.png",
+        "main_cmd"      :["dials.import"],
         "nxt_widg_lst"  :["find_spots", "apply_mask"]
     },
     "apply_mask" : {
-        "tooltip": "dials.apply_mask ...",
-        "icon": "resources/mask.png",
-        "main_cmd"  :["dials.apply_mask"],
+        "tooltip"       : "dials.apply_mask ...",
+        "icon"          : "resources/mask.png",
+        "main_cmd"      :["dials.apply_mask"],
         "nxt_widg_lst"  :["find_spots"]
     },
     "find_spots" : {
-        "tooltip": "dials.find_spots ...",
-        "icon": "resources/find_spots.png",
-        "main_cmd"  :["dials.find_spots"],
+        "tooltip"       : "dials.find_spots ...",
+        "icon"          : "resources/find_spots.png",
+        "main_cmd"      :["dials.find_spots"],
         "nxt_widg_lst"  :["index", "combine_experiments"]
     },
     "index" : {
-        "tooltip": "dials.index ...",
-        "icon": "resources/index.png",
-        "main_cmd"  :["dials.index"],
+        "tooltip"       : "dials.index ...",
+        "icon"          : "resources/index.png",
+        "main_cmd"      :["dials.index"],
         "nxt_widg_lst"  :[
             "refine_bravais_settings",
             "refine",
@@ -79,21 +79,21 @@ widgets_defs = {
         ]
     },
     "refine_bravais_settings" : {
-        "tooltip": "dials.refine_bravais_settings ...",
-        "icon": "resources/refine_bv_set.png",
-        "main_cmd"  :["dials.refine_bravais_settings"],
+        "tooltip"       : "dials.refine_bravais_settings ...",
+        "icon"          : "resources/refine_bv_set.png",
+        "main_cmd"      :["dials.refine_bravais_settings"],
         "nxt_widg_lst"  :["reindex"]
     },
     "reindex" : {
-        "tooltip": "dials.reindex ...",
-        "icon": "resources/reindex.png",
-        "main_cmd"  :["dials.reindex"],
+        "tooltip"       : "dials.reindex ...",
+        "icon"          : "resources/reindex.png",
+        "main_cmd"      :["dials.reindex"],
         "nxt_widg_lst"  :["refine", "integrate", "combine_experiments"]
     },
     "refine" : {
-        "tooltip": "dials.refine ...",
-        "icon": "resources/refine.png",
-        "main_cmd"  :["dials.refine"],
+        "tooltip"       : "dials.refine ...",
+        "icon"          : "resources/refine.png",
+        "main_cmd"      :["dials.refine"],
         "nxt_widg_lst"  :[
             "integrate",
             "refine_bravais_settings",
@@ -101,27 +101,27 @@ widgets_defs = {
         ]
     },
     "integrate" : {
-        "tooltip": "dials.integrate ...",
-        "icon": "resources/integrate.png",
-        "main_cmd"  :["dials.integrate"],
+        "tooltip"       : "dials.integrate ...",
+        "icon"          : "resources/integrate.png",
+        "main_cmd"      :["dials.integrate"],
         "nxt_widg_lst"  :["scale", "symmetry"]
     },
     "symmetry" : {
-        "tooltip": "dials.symmetry ...",
-        "icon": "resources/symmetry.png",
-        "main_cmd"  :["dials.symmetry"],
+        "tooltip"       : "dials.symmetry ...",
+        "icon"          : "resources/symmetry.png",
+        "main_cmd"      :["dials.symmetry"],
         "nxt_widg_lst"  :["scale", "combine_experiments"]
     },
     "scale" : {
-        "tooltip": "dials.scale ...",
-        "icon": "resources/scale.png",
-        "main_cmd"  :["dials.scale"],
+        "tooltip"       : "dials.scale ...",
+        "icon"          : "resources/scale.png",
+        "main_cmd"      :["dials.scale"],
         "nxt_widg_lst"  :["symmetry", "combine_experiments"]
     },
     "combine_experiments" : {
-        "tooltip": "dials.combine_experiments ...",
-        "icon": "resources/combine.png",
-        "main_cmd"  :["dials.combine_experiments"],
+        "tooltip"       : "dials.combine_experiments ...",
+        "icon"          : "resources/combine.png",
+        "main_cmd"      :["dials.combine_experiments"],
         "nxt_widg_lst"  :["index", "refine", "integrate"]
     }
 }
