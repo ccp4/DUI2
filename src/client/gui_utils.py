@@ -425,7 +425,7 @@ def add_ready_node(old_lst_nodes, com_par):
         cp_new_node = {
             "number": int(com_par.number),
             "status": str(com_par.status),
-            "cmd2show": [str(com_par.cmd)],
+            "cmd2show": [str(com_par.m_cmd_lst[-1])],
         }
         new_parent_node_lst = []
         for parent_node in com_par.parent_node_lst:

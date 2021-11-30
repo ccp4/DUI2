@@ -560,7 +560,7 @@ class MainObject(QObject):
     def add_new_node(self):
         print("add_new_node")
         self.new_node = CommandParamControl(
-            self.param_widgets[self.current_widget_key]["main_cmd"][-1]
+            main_command = self.param_widgets[self.current_widget_key]["main_cmd"]
         )
         self.new_node.set_connections(
             self.server_nod_lst, [self.current_nod_num]
@@ -655,7 +655,7 @@ class MainObject(QObject):
         print("on_clone")
 
         self.new_node = CommandParamControl(
-            self.param_widgets[self.current_widget_key]["main_cmd"][-1]
+            main_command = self.param_widgets[self.current_widget_key]["main_cmd"]
         )
         self.new_node.set_connections(
             self.server_nod_lst,
