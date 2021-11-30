@@ -289,9 +289,10 @@ class MainObject(QObject):
         self.window.CmdSend2server.setEnabled(True)
         self.window.ReqStopButton.setEnabled(True)
 
-
+        tmp_off_to_run_on_old_version_of_PySide2 = '''
         self.do_load_html = DoLoadHTML(self)
         self.window.HtmlReport.setHtml(self.do_load_html.not_avail_html)
+        '''
 
         self.log_show = ShowLog(self)
 
@@ -378,8 +379,10 @@ class MainObject(QObject):
         elif tab_index == 1:
             self.log_show(self.current_nod_num, do_request = fnd_cur_nod)
 
+        tmp_off_to_run_on_old_version_of_PySide2 = '''
         elif tab_index == 2:
             self.do_load_html(do_request = fnd_cur_nod)
+        '''
 
     def clear_parent_list(self):
         self.new_node.clear_parents()
