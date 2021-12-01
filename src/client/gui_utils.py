@@ -57,13 +57,12 @@ widgets_defs = {
         "nxt_widg_lst"  :["find_spots", "apply_mask"]
     },
     "apply_mask" : {
-        "tooltip"       : "dials.apply_mask ...",
+        "tooltip"       : "dials.generate_mask && dials.apply_mask ...",
         "icon"          : "resources/mask.png",
-        "main_cmd"      :
-                    [
-                        'dials.generate_mask untrusted.rectangle=0,1421,1258,1312 untrusted.circle=1421,1270,150 output.mask=tmp_mask.pickle'
-                    ,'dials.apply_mask input.mask=tmp_mask.pickle'
-                    ],
+        "main_cmd"      :[
+                            'dials.generate_mask',
+                            'dials.apply_mask input.mask=tmp_mask.pickle'
+                        ],
         "nxt_widg_lst"  :["find_spots"]
     },
     "find_spots" : {

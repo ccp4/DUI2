@@ -565,6 +565,14 @@ class MainObject(QObject):
         self.new_node = CommandParamControl(
             main_list = self.param_widgets[self.curr_widg_key]["main_cmd"]
         )
+        #############################################################################
+        if self.new_node.m_cmd_lst[0] == 'dials.generate_mask':
+            self.new_node.set_parameter("untrusted.rectangle","0,1421,1258,1312")
+            self.new_node.set_parameter("untrusted.circle","1421,1270,150")
+            self.new_node.set_parameter("output.mask","tmp_mask.pickle")
+        ##############################################################################
+
+
         self.new_node.set_connections(
             self.server_nod_lst, [self.current_nod_num]
         )
