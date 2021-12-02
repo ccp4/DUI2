@@ -232,21 +232,6 @@ class CommandParamControl:
     def get_all_params(self):
         return self.par_lst, self.custm_param
 
-    def get_full_command_string(self):
-        print("\n *** get_full_command_string")
-        str_out = str(self.m_cmd_lst[-1])
-        print("self.par_lst =", self.par_lst)
-        for par in self.par_lst:
-            par_str = " " + par["name"] + "=" + par["value"]
-            str_out += par_str
-
-        if self.custm_param is not None:
-            str_out += " " + str(self.custm_param)
-
-        print("\n str_out =", str_out, "\n")
-
-        return str_out
-
     def get_full_command_list(self):
         print("\n *** get_full_command_list")
         str_out = str(self.m_cmd_lst[0])
@@ -270,21 +255,21 @@ class CommandParamControl:
 
 
 if __name__ == "__main__":
-    tst_cmd = CommandParamControl("my_cmd")
+    tst_cmd = CommandParamControl(["my_cmd"])
 
     tst_cmd.set_parameter("new_param", "new_value")
-    print("cmd_lst =", tst_cmd.get_full_command_string())
+    print("cmd_lst =", tst_cmd.get_full_command_list())
     tst_cmd.set_parameter("new_param_2", "new_value_2")
-    print("cmd_lst =", tst_cmd.get_full_command_string())
+    print("cmd_lst =", tst_cmd.get_full_command_list())
     tst_cmd.set_parameter("random_param_n", "random_value_n")
-    print("cmd_lst =", tst_cmd.get_full_command_string())
+    print("cmd_lst =", tst_cmd.get_full_command_list())
 
     tst_cmd.set_parameter("new_param", "value_2")
-    print("cmd_lst =", tst_cmd.get_full_command_string())
+    print("cmd_lst =", tst_cmd.get_full_command_list())
     tst_cmd.set_parameter("new_param_2", "value_3")
-    print("cmd_lst =", tst_cmd.get_full_command_string())
+    print("cmd_lst =", tst_cmd.get_full_command_list())
     tst_cmd.set_parameter("random_param_n", "value_4")
-    print("cmd_lst =", tst_cmd.get_full_command_string())
+    print("cmd_lst =", tst_cmd.get_full_command_list())
     same = tst_cmd.set_custom_parameter("random_custom command _5")
-    print("cmd_lst =", tst_cmd.get_full_command_string())
+    print("cmd_lst =", tst_cmd.get_full_command_list())
     print("same =", same)
