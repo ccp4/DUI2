@@ -59,10 +59,7 @@ widgets_defs = {
     "apply_mask" : {
         "tooltip"       : "dials.generate_mask && dials.apply_mask ...",
         "icon"          : "resources/mask.png",
-        "main_cmd"      :[
-                            'dials.generate_mask',
-                            'dials.apply_mask input.mask=tmp_mask.pickle'
-                        ],
+        "main_cmd"      :['dials.generate_mask','dials.apply_mask'],
         "nxt_widg_lst"  :["find_spots"]
     },
     "find_spots" : {

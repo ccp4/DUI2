@@ -567,9 +567,11 @@ class MainObject(QObject):
         )
         #############################################################################
         if self.new_node.m_cmd_lst[0] == 'dials.generate_mask':
-            self.new_node.set_parameter("untrusted.rectangle","0,1421,1258,1312")
-            self.new_node.set_parameter("untrusted.circle","1421,1270,150")
-            self.new_node.set_parameter("output.mask","tmp_mask.pickle")
+            self.new_node.set_parameter("untrusted.rectangle", "0,1421,1258,1312")
+            self.new_node.set_parameter("untrusted.circle", "1421,1270,150")
+            self.new_node.set_parameter("output.mask", "tmp_mask.pickle")
+            self.new_node.set_parameter("input.mask", "tmp_mask.pickle", lst_num = 1)
+
         ##############################################################################
 
 

@@ -162,6 +162,7 @@ class CommandParamControl:
 
         if not already_here:
             self.par_lst[lst_num].append({"name":new_name, "value":new_value})
+
         print(" par_lst(set_parameter) end =", self.par_lst)
 
     def set_custom_parameter(self, new_custom_parameter):
@@ -225,23 +226,20 @@ class CommandParamControl:
 
     def get_full_command_list(self):
         print("\n *** get_full_command_list")
-        str_out = str(self.m_cmd_lst[0])
         print("self.par_lst =", self.par_lst)
-        for par in self.par_lst[0]:
-            par_str = " " + par["name"] + "=" + par["value"]
-            str_out += par_str
+        lst_out = []
+        for lst_num in range(len(self.m_cmd_lst)):
+            str_out = str(self.m_cmd_lst[lst_num])
+            for par in self.par_lst[lst_num]:
+                par_str = " " + par["name"] + "=" + par["value"]
+                str_out += par_str
 
-        if self.custm_param is not None:
-            str_out += " " + str(self.custm_param)
+            if self.custm_param is not None:
+                str_out += " " + str(self.custm_param)
 
-        lst_out = [str_out]
-        lst_tail = list(self.m_cmd_lst[1:])
-        print("lst_tail =", lst_tail)
-        for cmd_elem in lst_tail:
-            lst_out.append(cmd_elem)
+            lst_out.append(str_out)
 
         print("\n lst_out =", lst_out, "\n")
-
         return lst_out
 
 
