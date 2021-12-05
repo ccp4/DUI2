@@ -408,11 +408,21 @@ def copy_lst_nodes(old_lst_nodes):
 
         cp_new_node["parent_node_lst"] = new_parent_node_lst
 
-        new_cmd_lst = []
+        new_cmd2show = []
         for cmd in old_node["cmd2show"]:
-            new_cmd_lst.append(str(cmd))
+            new_cmd2show.append(str(cmd))
 
-        cp_new_node["cmd2show"] = new_cmd_lst
+        cp_new_node["cmd2show"] = new_cmd2show
+
+        new_lst2run = []
+        for cmd_lst in old_node["lst2run"]:
+            inner_lst = []
+            for inner_cmd in cmd_lst:
+                inner_lst.append(str(inner_cmd))
+
+            new_lst2run.append(inner_lst)
+
+        cp_new_node["lst2run"] = new_lst2run
 
         new_lst.append(cp_new_node)
 

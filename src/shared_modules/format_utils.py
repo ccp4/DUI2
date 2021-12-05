@@ -39,6 +39,7 @@ def get_lst2show(step_list):
         node = {"number"           :uni.number,
                 "status"            :uni.status,
                 "cmd2show"          :cmd2show,
+                "lst2run"           :uni.lst2run,
                 "child_node_lst"    :uni.child_node_lst,
                 "parent_node_lst"   :uni.parent_node_lst}
         lst_nod.append(node)
