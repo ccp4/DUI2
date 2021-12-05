@@ -395,7 +395,6 @@ def copy_lst_nodes(old_lst_nodes):
         cp_new_node = {
             "number": int(old_node["number"]),
             "status": str(old_node["status"]),
-            "cmd2show": list(old_node["cmd2show"]),
         }
         new_child_node_lst = []
         for child_node in old_node["child_node_lst"]:
