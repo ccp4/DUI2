@@ -150,6 +150,7 @@ class CommandParamControl:
 
     def reset_all_params(self):
         self.par_lst = [[]]
+        #self.m_cmd_lst = []
         self.custm_param = None
 
     def set_parameter(self, new_name, new_value, lst_num = 0):
@@ -203,19 +204,28 @@ class CommandParamControl:
     def clone_from_list(self, lst_par_in):
         print(" clone_from_list ------------")
         print("lst_par_in =", lst_par_in)
-        lst_par = []
-        for str_elem in lst_par_in:
-            if "=" in str_elem:
-                lst_par.append(str_elem)
 
-        inner_lst = []
-        for str_elem in lst_par:
-            tmp_lst = str_elem.split("=")
-            inner_lst.append(
-                {"name":str(tmp_lst[0]), "value":str(tmp_lst[1])}
-            )
+        self.m_cmd_lst = []
+        for inner_lst in lst_par_in:
+            self.m_cmd_lst.append(str(inner_lst[0]))
 
-        self.par_lst = [inner_lst]
+        self.par_lst = []
+
+        for inner_lst in lst_par_in:
+            lst_par = []
+            for str_elem in inner_lst:
+                if "=" in str_elem:
+                    lst_par.append(str_elem)
+
+            inner_2_lst = []
+            for str_elem in lst_par:
+                tmp_lst = str_elem.split("=")
+                inner_2_lst.append(
+                    {"name":str(tmp_lst[0]), "value":str(tmp_lst[1])}
+                )
+
+            self.par_lst.append(inner_2_lst)
+
 
         print("lst_par =", lst_par)
         print("self.par_lst =", self.par_lst)
@@ -227,6 +237,8 @@ class CommandParamControl:
     def get_full_command_list(self):
         print("\n *** get_full_command_list")
         print("self.par_lst =", self.par_lst)
+        print("self.m_cmd_lst =", self.m_cmd_lst)
+
         lst_out = []
         for lst_num in range(len(self.m_cmd_lst)):
             str_out = str(self.m_cmd_lst[lst_num])

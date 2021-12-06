@@ -586,8 +586,12 @@ class MainObject(QObject):
         tmp_cmd_par = CommandParamControl()
         self.reset_param()
         try:
+            to_remove = '''
             tmp_cmd_par.clone_from_list(
                 self.server_nod_lst[self.current_nod_num]["cmd2show"]
+            )'''
+            tmp_cmd_par.clone_from_list(
+                self.server_nod_lst[self.current_nod_num]["lst2run"]
             )
 
         except IndexError:
@@ -674,8 +678,12 @@ class MainObject(QObject):
             self.server_nod_lst,
             self.server_nod_lst[self.current_nod_num]["parent_node_lst"]
         )
+        to_remove = '''
         self.new_node.clone_from_list(
             self.server_nod_lst[self.current_nod_num]["cmd2show"]
+        )'''
+        self.new_node.clone_from_list(
+            self.server_nod_lst[self.current_nod_num]["lst2run"]
         )
         self.current_nod_num = self.new_node.number
         self.display()

@@ -26,16 +26,7 @@ import json
 def get_lst2show(step_list):
     lst_nod = []
     for uni in step_list:
-        tst_off = '''
-        if uni.lst2run == []:
-            cmd2show = ["None"]
-
-        else:
-            cmd2show = uni.lst2run[-1]
-        '''
         cmd2show = uni.lst2run[-1]
-
-
         node = {"number"           :uni.number,
                 "status"            :uni.status,
                 "cmd2show"          :cmd2show,
