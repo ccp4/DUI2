@@ -186,7 +186,6 @@ class CommandParamControl:
 
     def add_or_remove_parent(self, nod_num):
         print("New node to add or remove:", nod_num)
-
         if nod_num not in self.parent_node_lst:
             self.parent_node_lst.append(nod_num)
 
@@ -210,24 +209,21 @@ class CommandParamControl:
             self.m_cmd_lst.append(str(inner_lst[0]))
 
         self.par_lst = []
-
         for inner_lst in lst_par_in:
             lst_par = []
             for str_elem in inner_lst:
                 if "=" in str_elem:
                     lst_par.append(str_elem)
 
-            inner_2_lst = []
+            inner_par_lst = []
             for str_elem in lst_par:
                 tmp_lst = str_elem.split("=")
-                inner_2_lst.append(
+                inner_par_lst.append(
                     {"name":str(tmp_lst[0]), "value":str(tmp_lst[1])}
                 )
 
-            self.par_lst.append(inner_2_lst)
+            self.par_lst.append(inner_par_lst)
 
-
-        print("lst_par =", lst_par)
         print("self.par_lst =", self.par_lst)
         #TODO remember to handle "self.custm_param"
 
