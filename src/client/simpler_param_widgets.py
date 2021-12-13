@@ -501,12 +501,46 @@ class MaskLablWidg(QWidget):
         self.main_vbox.addWidget(QLabel(" "))
         self.main_vbox.addWidget(self.cmd_label)
         self.main_vbox.addWidget(QLabel(" "))
-
+        ########################################################
+        self.rad_but_rect_mask = QRadioButton("Rectangle")
+        self.main_vbox.addWidget(self.rad_but_rect_mask)
+        self.rad_but_circ_mask = QRadioButton("Circle")
+        self.main_vbox.addWidget(self.rad_but_circ_mask)
+        self.rad_but_poly_mask = QRadioButton("Polygon")
+        self.main_vbox.addWidget(self.rad_but_poly_mask)
+        self.rad_but_rect_mask.setChecked(True)
+        ########################################################
         tmp_butt = QPushButton("test hard coded")
         tmp_butt.clicked.connect(self.test_hardcoded)
         self.main_vbox.addWidget(tmp_butt)
 
+        self.rad_but_rect_mask.toggled.connect(self.toggle_funtion)
+        self.rad_but_circ_mask.toggled.connect(self.toggle_funtion)
+        self.rad_but_poly_mask.toggled.connect(self.toggle_funtion)
+
+
         self.setLayout(self.main_vbox)
+        self.toggle_funtion()
+
+    def toggle_funtion(self):
+        print("toggle_funtion")
+        if self.rad_but_rect_mask.isChecked():
+            self.stat = "rect"
+
+        elif self.rad_but_circ_mask.isChecked():
+            self.stat = "circ"
+
+        elif self.rad_but_poly_mask.isChecked():
+            self.stat = "poly"
+
+        else:
+            print("something is wrong here")
+            self.stat = None
+
+        print("self.stat =", self.stat)
+
+    def update_all_pars(self, par_lst_0):
+        print("update_all_pars:", par_lst_0)
 
     def reset_pars(self):
         print("\n reset_pars(MaskLablWidg) \n")

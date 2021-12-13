@@ -387,10 +387,8 @@ class DoImageView(QObject):
         self.my_scene = ImgGraphicsScene(self)
         self.main_obj.window.imageView.setScene(self.my_scene)
         self.main_obj.window.imageView.setMouseTracking(True)
+        self.set_drag_mode()
 
-        self.main_obj.window.imageView.setDragMode(
-            QGraphicsView.ScrollHandDrag
-        )
         self.main_obj.window.ScaleOneOneButton.clicked.connect(
             self.OneOneScale
         )
@@ -413,12 +411,11 @@ class DoImageView(QObject):
         self.pop_display_menu.new_palette.connect(self.change_palette)
         self.pop_display_menu.new_redraw.connect(self.refresh_pixel_map)
 
-        self.pop_mask_menu = PopActionsMenu(self)
-        self.main_obj.window.ActionsButton.setMenu(self.pop_mask_menu)
+        self.pop_act_menu = PopActionsMenu(self)
+        self.main_obj.window.ActionsButton.setMenu(self.pop_act_menu)
 
         self.my_scene.img_scale.connect(self.scale_img)
         self.my_scene.new_mouse_pos.connect(self.on_mouse_move)
-
 
         self.bmp_heat = np2bmp_heat()
         self.bmp_m_cro = np2bmp_monocrome()
@@ -439,6 +436,19 @@ class DoImageView(QObject):
         timer = QTimer(self)
         timer.timeout.connect(self.check_move)
         timer.start(1600)
+
+    def set_drag_mode(self, mask_mode = False):
+        if mask_mode:
+            self.main_obj.window.imageView.setDragMode(
+                QGraphicsView.NoDrag
+            )
+
+        else:
+            self.main_obj.window.imageView.setDragMode(
+                QGraphicsView.ScrollHandDrag
+            )
+
+        print("set_drag_mode, mask_mode =", mask_mode)
 
     def __call__(self, in_img_num, nod_or_path):
         print(
