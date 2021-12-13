@@ -71,7 +71,7 @@ class DefaultComboBox(QComboBox):
 class SimpleParamTab(QWidget):
     """Base class shared by all simple parameter tabs"""
 
-    item_changed = Signal(str, str)
+    item_changed = Signal(str, str, int)
     #item_to_remove = Signal(str)
 
     def clearLayout(self, layout):
@@ -137,7 +137,7 @@ class SimpleParamTab(QWidget):
 
     def do_emit_signal(self, str_path, str_value):
         if self.do_emit:
-            self.item_changed.emit(str_path, str_value)
+            self.item_changed.emit(str_path, str_value, 0)
 
         self.do_emit = True #TODO: find out if this line is needed
 
@@ -484,7 +484,8 @@ class ImportWidget(QWidget):
             str_path, str_value, "... dummy"
         )
 
-class MaskLablWidg(SimpleParamTab):
+class MaskLablWidg(QWidget):
+    item_changed = Signal(str, str, int)
     def __init__(self, parent = None):
         super(MaskLablWidg, self).__init__(parent)
         self.do_emit = True
@@ -500,11 +501,22 @@ class MaskLablWidg(SimpleParamTab):
         self.main_vbox.addWidget(QLabel(" "))
         self.main_vbox.addWidget(self.cmd_label)
         self.main_vbox.addWidget(QLabel(" "))
+
+        tmp_butt = QPushButton("test hard coded")
+        tmp_butt.clicked.connect(self.test_hardcoded)
+        self.main_vbox.addWidget(tmp_butt)
+
         self.setLayout(self.main_vbox)
 
     def reset_pars(self):
         print("\n reset_pars(MaskLablWidg) \n")
 
+    def test_hardcoded(self):
+        print("test_hardcoded")
+        self.item_changed.emit("untrusted.rectangle", "0,1421,1258,1312", 0)
+        self.item_changed.emit("untrusted.circle", "1421,1270,150", 0)
+        self.item_changed.emit("output.mask", "tmp_mask.pickle", 0)
+        self.item_changed.emit("input.mask", "tmp_mask.pickle", 1)
 
 class FindspotsSimplerParameterTab(SimpleParamTab):
     """

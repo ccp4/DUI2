@@ -78,7 +78,7 @@ class MainObject(QObject):
             self.window.ImportScrollArea.setWidget(imp_widg)
 
             mask_widg = MaskWidget()
-            #mask_widg.item_changed.connect(self.item_param_changed)
+            mask_widg.item_changed.connect(self.item_param_changed)
             self.window.MaskScrollArea.setWidget(mask_widg)
 
             find_simpl_widg = FindspotsSimplerParameterTab()
@@ -539,7 +539,7 @@ class MainObject(QObject):
                 "or no twin widget \n"
             )
 
-    def item_param_changed(self, str_path, str_value):
+    def item_param_changed(self, str_path = None, str_value = None, lst_num = 0):
         try:
             self.sender().twin_widg.update_param(str_path, str_value)
 
@@ -552,7 +552,7 @@ class MainObject(QObject):
                 and
                 not self.reseting
             ):
-                self.new_node.set_parameter(str_path, str_value)
+                self.new_node.set_parameter(str_path, str_value, lst_num)
 
         except AttributeError:
             print(
@@ -565,16 +565,6 @@ class MainObject(QObject):
         self.new_node = CommandParamControl(
             main_list = self.param_widgets[self.curr_widg_key]["main_cmd"]
         )
-        #############################################################################
-        if self.new_node.m_cmd_lst[0] == 'dials.generate_mask':
-            self.new_node.set_parameter("untrusted.rectangle", "0,1421,1258,1312")
-            self.new_node.set_parameter("untrusted.circle", "1421,1270,150")
-            self.new_node.set_parameter("output.mask", "tmp_mask.pickle")
-            self.new_node.set_parameter("input.mask", "tmp_mask.pickle", lst_num = 1)
-
-        ##############################################################################
-
-
         self.new_node.set_connections(
             self.server_nod_lst, [self.current_nod_num]
         )
