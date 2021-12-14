@@ -486,6 +486,7 @@ class ImportWidget(QWidget):
 
 class MaskLablWidg(QWidget):
     item_changed = Signal(str, str, int)
+    component_changed = Signal(str)
     def __init__(self, parent = None):
         super(MaskLablWidg, self).__init__(parent)
         self.do_emit = True
@@ -508,7 +509,7 @@ class MaskLablWidg(QWidget):
         self.main_vbox.addWidget(self.rad_but_circ_mask)
         self.rad_but_poly_mask = QRadioButton("Polygon")
         self.main_vbox.addWidget(self.rad_but_poly_mask)
-        self.rad_but_rect_mask.setChecked(True)
+        #self.rad_but_rect_mask.setChecked(True)
         ########################################################
         tmp_butt = QPushButton("test hard coded")
         tmp_butt.clicked.connect(self.test_hardcoded)
@@ -538,6 +539,7 @@ class MaskLablWidg(QWidget):
             self.stat = None
 
         print("self.stat =", self.stat)
+        self.component_changed.emit(str(self.stat))
 
     def update_all_pars(self, par_lst_0):
         print("update_all_pars:", par_lst_0)

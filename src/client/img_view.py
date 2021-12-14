@@ -388,6 +388,7 @@ class DoImageView(QObject):
         self.main_obj.window.imageView.setScene(self.my_scene)
         self.main_obj.window.imageView.setMouseTracking(True)
         self.set_drag_mode()
+        self.set_mask_comp()
 
         self.main_obj.window.ScaleOneOneButton.clicked.connect(
             self.OneOneScale
@@ -438,7 +439,8 @@ class DoImageView(QObject):
         timer.start(1600)
 
     def set_drag_mode(self, mask_mode = False):
-        if mask_mode:
+        self.mask_mode = mask_mode
+        if self.mask_mode:
             self.main_obj.window.imageView.setDragMode(
                 QGraphicsView.NoDrag
             )
@@ -448,7 +450,12 @@ class DoImageView(QObject):
                 QGraphicsView.ScrollHandDrag
             )
 
-        print("set_drag_mode, mask_mode =", mask_mode)
+        print("\n set_drag_mode \n mask_mode =", self.mask_mode)
+
+    def set_mask_comp(self, mask_comp = None):
+        self.mask_comp = mask_comp
+        print("mask_comp =", self.mask_comp)
+
 
     def __call__(self, in_img_num, nod_or_path):
         print(

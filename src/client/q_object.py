@@ -79,6 +79,7 @@ class MainObject(QObject):
 
             mask_widg = MaskWidget()
             mask_widg.item_changed.connect(self.item_param_changed)
+            mask_widg.component_changed.connect(self.mask_comp_changed)
             self.window.MaskScrollArea.setWidget(mask_widg)
 
             find_simpl_widg = FindspotsSimplerParameterTab()
@@ -375,16 +376,6 @@ class MainObject(QObject):
         if tab_index == 0:
             img_num = int(self.window.ImgNumEdit.text())
             self.do_image_view(in_img_num = img_num, nod_or_path = fnd_cur_nod)
-            if(
-                self.new_node is not None and
-                self.new_node.m_cmd_lst[0] == "dials.generate_mask" and
-                self.new_node.number == self.current_nod_num
-            ):
-                self.do_image_view.set_drag_mode(mask_mode = True)
-
-            else:
-                self.do_image_view.set_drag_mode(mask_mode = False)
-
 
         elif tab_index == 1:
             self.log_show(self.current_nod_num, do_request = fnd_cur_nod)
@@ -393,6 +384,19 @@ class MainObject(QObject):
         elif tab_index == 2:
             self.do_load_html(do_request = fnd_cur_nod)
         '''
+
+        if(
+            self.new_node is not None and
+            self.new_node.m_cmd_lst[0] == "dials.generate_mask" and
+            self.new_node.number == self.current_nod_num
+        ):
+            self.do_image_view.set_drag_mode(mask_mode = True)
+
+        else:
+            self.do_image_view.set_drag_mode(mask_mode = False)
+
+    def mask_comp_changed(self, mask_comp):
+        self.do_image_view.set_mask_comp(mask_comp)
 
     def clear_parent_list(self):
         self.new_node.clear_parents()
