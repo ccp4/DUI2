@@ -77,10 +77,10 @@ class MainObject(QObject):
             #imp_widg.item_changed.connect(self.item_param_changed)
             self.window.ImportScrollArea.setWidget(imp_widg)
 
-            mask_widg = MaskWidget()
-            mask_widg.item_changed.connect(self.item_param_changed)
-            mask_widg.component_changed.connect(self.mask_comp_changed)
-            self.window.MaskScrollArea.setWidget(mask_widg)
+            self.mask_widg = MaskWidget()
+            self.mask_widg.item_changed.connect(self.item_param_changed)
+            self.mask_widg.component_changed.connect(self.mask_comp_changed)
+            self.window.MaskScrollArea.setWidget(self.mask_widg)
 
             find_simpl_widg = FindspotsSimplerParameterTab()
             find_simpl_widg.item_changed.connect(self.item_param_changed)
@@ -198,7 +198,7 @@ class MainObject(QObject):
         self.param_widgets["find_spots"]["advanced"] = fd_advanced_parameters
         self.param_widgets["find_spots"]["main_page"] = self.window.FindspotsPage
 
-        self.param_widgets["apply_mask"]["simple"] = mask_widg
+        self.param_widgets["apply_mask"]["simple"] = self.mask_widg
         self.param_widgets["apply_mask"]["advanced"] = None
         self.param_widgets["apply_mask"]["main_page"] = self.window.MaskPage
 
@@ -299,6 +299,8 @@ class MainObject(QObject):
 
         self.do_image_view = DoImageView(self)
 
+        self.do_image_view.new_mask_comp.connect(self.get_new_mask_comp)
+
         self.window.OutputTabWidget.currentChanged.connect(self.refresh_output)
         self.window.ImgNumEdit.textChanged.connect(self.img_num_changed)
         self.window.PrevImgButton.clicked.connect(self.prev_img)
@@ -397,6 +399,9 @@ class MainObject(QObject):
 
     def mask_comp_changed(self, mask_comp):
         self.do_image_view.set_mask_comp(mask_comp)
+
+    def get_new_mask_comp(self, comp_dict):
+        self.mask_widg.get_new_comp(comp_dict)
 
     def clear_parent_list(self):
         self.new_node.clear_parents()

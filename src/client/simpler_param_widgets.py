@@ -546,10 +546,22 @@ class MaskLablWidg(QWidget):
     def reset_pars(self):
         print("\n reset_pars(MaskLablWidg) \n")
 
+    def get_new_comp(self, comp_dict):
+        print("mask new comp_dict =", comp_dict)
+        if comp_dict["type"] == "rect":
+
+            self.item_changed.emit(
+                "untrusted.rectangle",
+                str(comp_dict["x_ini"]) + "," + str(comp_dict["x_end"]) + "," +
+                str(comp_dict["y_ini"]) + "," + str(comp_dict["y_end"]) + "," ,
+                0
+            )
+
+
     def test_hardcoded(self):
         print("test_hardcoded")
-        self.item_changed.emit("untrusted.rectangle", "0,1421,1258,1312", 0)
-        self.item_changed.emit("untrusted.circle", "1421,1270,150", 0)
+        #self.item_changed.emit("untrusted.rectangle", "0,1421,1258,1312", 0)
+        #self.item_changed.emit("untrusted.circle", "1421,1270,150", 0)
         self.item_changed.emit("output.mask", "tmp_mask.pickle", 0)
         self.item_changed.emit("input.mask", "tmp_mask.pickle", 1)
 

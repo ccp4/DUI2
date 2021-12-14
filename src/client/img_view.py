@@ -386,6 +386,7 @@ class PopDisplayMenu(QMenu):
 
 
 class DoImageView(QObject):
+    new_mask_comp = Signal(dict)
     def __init__(self, parent = None):
         super(DoImageView, self).__init__(parent)
         self.main_obj = parent
@@ -879,7 +880,32 @@ class DoImageView(QObject):
     def on_mouse_release(self, x_pos, y_pos):
         print("on_mouse_release \n x_pos, y_pos =", x_pos, y_pos)
         if self.mask_mode:
-            print("mask_comp =", self.mask_comp)
+            if(
+                self.mask_comp is not None and
+                self.mask_x_ini is not None and
+                self.mask_y_ini is not None
+            ):
+                x_ini = int(self.mask_x_ini)
+                x_end = int(x_pos)
+                y_ini = int(self.mask_y_ini)
+                y_end = int(y_pos)
+                if x_ini > x_end:
+                    x_ini, x_end = x_end, x_ini
+
+                if y_ini > y_end:
+                    y_ini, y_end = y_end, y_ini
+
+                self.new_mask_comp.emit(
+                    {
+                        "type"  : str(self.mask_comp) ,
+                        "x_ini" : x_ini ,
+                        "x_end" : x_end ,
+                        "y_ini" : y_ini ,
+                        "y_end" : y_end ,
+                    }
+                )
+                self.mask_x_ini = None
+                self.mask_y_ini = None
 
 
 class MainImgViewObject(QObject):
