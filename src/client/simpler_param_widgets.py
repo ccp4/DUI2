@@ -509,7 +509,6 @@ class MaskLablWidg(QWidget):
         self.main_vbox.addWidget(self.rad_but_circ_mask)
         self.rad_but_poly_mask = QRadioButton("Polygon")
         self.main_vbox.addWidget(self.rad_but_poly_mask)
-        #self.rad_but_rect_mask.setChecked(True)
         ########################################################
         tmp_butt = QPushButton("test hard coded")
         tmp_butt.clicked.connect(self.test_hardcoded)

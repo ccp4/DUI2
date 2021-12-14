@@ -164,6 +164,8 @@ class LoadSliceImage(QThread):
 class ImgGraphicsScene(QGraphicsScene):
     img_scale = Signal(float)
     new_mouse_pos = Signal(int, int)
+    mouse_pressed = Signal(int, int)
+    mouse_released = Signal(int, int)
 
     def __init__(self, parent = None):
         super(ImgGraphicsScene, self).__init__(parent)
@@ -253,6 +255,15 @@ class ImgGraphicsScene(QGraphicsScene):
 
         self.new_mouse_pos.emit(x_pos, y_pos)
 
+    def mousePressEvent(self, event):
+        ev_pos = event.scenePos()
+        x_pos, y_pos = int(ev_pos.x()), int(ev_pos.y())
+        self.mouse_pressed.emit(x_pos, y_pos)
+
+    def mouseReleaseEvent(self, event):
+        ev_pos = event.scenePos()
+        x_pos, y_pos = int(ev_pos.x()), int(ev_pos.y())
+        self.mouse_released.emit(x_pos, y_pos)
 
 class PopActionsMenu(QMenu):
     def __init__(self, parent=None):
@@ -417,6 +428,8 @@ class DoImageView(QObject):
 
         self.my_scene.img_scale.connect(self.scale_img)
         self.my_scene.new_mouse_pos.connect(self.on_mouse_move)
+        self.my_scene.mouse_pressed.connect(self.on_mouse_press)
+        self.my_scene.mouse_released.connect(self.on_mouse_release)
 
         self.bmp_heat = np2bmp_heat()
         self.bmp_m_cro = np2bmp_monocrome()
@@ -437,25 +450,6 @@ class DoImageView(QObject):
         timer = QTimer(self)
         timer.timeout.connect(self.check_move)
         timer.start(1600)
-
-    def set_drag_mode(self, mask_mode = False):
-        self.mask_mode = mask_mode
-        if self.mask_mode:
-            self.main_obj.window.imageView.setDragMode(
-                QGraphicsView.NoDrag
-            )
-
-        else:
-            self.main_obj.window.imageView.setDragMode(
-                QGraphicsView.ScrollHandDrag
-            )
-
-        print("\n set_drag_mode \n mask_mode =", self.mask_mode)
-
-    def set_mask_comp(self, mask_comp = None):
-        self.mask_comp = mask_comp
-        print("mask_comp =", self.mask_comp)
-
 
     def __call__(self, in_img_num, nod_or_path):
         print(
@@ -825,6 +819,32 @@ class DoImageView(QObject):
         except TypeError:
             print("not zooming/unzooming before loading image")
 
+    def easter_egg(self, event):
+        self.easter_egg_active = not self.easter_egg_active
+        print("self.easter_egg_active =", self.easter_egg_active)
+        self.full_image_loaded = False
+
+    def set_drag_mode(self, mask_mode = False):
+        self.mask_mode = mask_mode
+        if self.mask_mode:
+            self.main_obj.window.imageView.setDragMode(
+                QGraphicsView.NoDrag
+            )
+
+        else:
+            self.main_obj.window.imageView.setDragMode(
+                QGraphicsView.ScrollHandDrag
+            )
+
+        print("\n set_drag_mode \n mask_mode =", self.mask_mode)
+
+    def set_mask_comp(self, mask_comp = None):
+        self.mask_comp = mask_comp
+        print("mask_comp =", self.mask_comp)
+        if self.mask_comp is None:
+            self.mask_x_ini = None
+            self.mask_y_ini = None
+
     def on_mouse_move(self, x_pos, y_pos):
         try:
             str_out = "  I(" + str(x_pos) + ", " + str(y_pos) + ") = " +\
@@ -834,11 +854,32 @@ class DoImageView(QObject):
             str_out = " I = ?"
 
         self.main_obj.window.EasterEggButton.setText(str_out)
+        if self.mask_mode:
+            if(
+                self.mask_comp is not None and
+                self.mask_x_ini is not None and
+                self.mask_y_ini is not None
+            ):
+                tmp_width = x_pos - self.mask_x_ini
+                tmp_height = y_pos - self.mask_y_ini
+                rectangle = QRectF(
+                    self.mask_x_ini, self.mask_y_ini, tmp_width, tmp_height
+                )
+                self.my_scene.addRect(rectangle, self.my_scene.green_pen)
 
-    def easter_egg(self, event):
-        self.easter_egg_active = not self.easter_egg_active
-        print("self.easter_egg_active =", self.easter_egg_active)
-        self.full_image_loaded = False
+
+    def on_mouse_press(self, x_pos, y_pos):
+        print("on_mouse_press \n x_pos, y_pos =", x_pos, y_pos)
+        if self.mask_mode:
+            print("mask_comp =", self.mask_comp)
+            if self.mask_comp is not None:
+                self.mask_x_ini = x_pos
+                self.mask_y_ini = y_pos
+
+    def on_mouse_release(self, x_pos, y_pos):
+        print("on_mouse_release \n x_pos, y_pos =", x_pos, y_pos)
+        if self.mask_mode:
+            print("mask_comp =", self.mask_comp)
 
 
 class MainImgViewObject(QObject):
