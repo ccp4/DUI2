@@ -549,7 +549,6 @@ class MaskLablWidg(QWidget):
     def get_new_comp(self, comp_dict):
         print("mask new comp_dict =", comp_dict)
         if comp_dict["type"] == "rect":
-
             self.item_changed.emit(
                 "untrusted.rectangle",
                 str(comp_dict["x_ini"]) + "," + str(comp_dict["x_end"]) + "," +
@@ -557,6 +556,13 @@ class MaskLablWidg(QWidget):
                 0
             )
 
+        elif comp_dict["type"] == "circ":
+            self.item_changed.emit(
+                "untrusted.circle",
+                str(comp_dict["x_c"]) + "," + str(comp_dict["y_c"]) + "," +
+                str(comp_dict["r"]) + "," ,
+                0
+            )
 
     def test_hardcoded(self):
         print("test_hardcoded")

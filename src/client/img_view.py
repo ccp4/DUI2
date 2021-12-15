@@ -861,13 +861,26 @@ class DoImageView(QObject):
                 self.mask_x_ini is not None and
                 self.mask_y_ini is not None
             ):
-                tmp_width = x_pos - self.mask_x_ini
-                tmp_height = y_pos - self.mask_y_ini
-                rectangle = QRectF(
-                    self.mask_x_ini, self.mask_y_ini, tmp_width, tmp_height
-                )
-                self.my_scene.addRect(rectangle, self.my_scene.green_pen)
+                if self.mask_comp == "rect":
+                    tmp_width = x_pos - self.mask_x_ini
+                    tmp_height = y_pos - self.mask_y_ini
+                    rectangle = QRectF(
+                        self.mask_x_ini, self.mask_y_ini, tmp_width, tmp_height
+                    )
+                    self.my_scene.addRect(rectangle, self.my_scene.green_pen)
 
+                elif self.mask_comp == "circ":
+                    dx = float(x_pos - self.mask_x_ini)
+                    dy = float(y_pos - self.mask_y_ini)
+                    r = int(np.sqrt(dx * dx + dy * dy))
+                    rectangle = QRectF(
+                        self.mask_x_ini - r, self.mask_y_ini - r,  2 * r, 2 * r
+                    )
+                    self.my_scene.addEllipse(rectangle, self.my_scene.green_pen)
+                    self.my_scene.addLine(
+                        self.mask_x_ini, self.mask_y_ini, x_pos, y_pos,
+                        self.my_scene.green_pen
+                    )
 
     def on_mouse_press(self, x_pos, y_pos):
         print("on_mouse_press \n x_pos, y_pos =", x_pos, y_pos)
@@ -885,25 +898,40 @@ class DoImageView(QObject):
                 self.mask_x_ini is not None and
                 self.mask_y_ini is not None
             ):
-                x_ini = int(self.mask_x_ini)
-                x_end = int(x_pos)
-                y_ini = int(self.mask_y_ini)
-                y_end = int(y_pos)
-                if x_ini > x_end:
-                    x_ini, x_end = x_end, x_ini
+                if self.mask_comp == "rect":
+                    x_ini = int(self.mask_x_ini)
+                    x_end = int(x_pos)
+                    y_ini = int(self.mask_y_ini)
+                    y_end = int(y_pos)
+                    if x_ini > x_end:
+                        x_ini, x_end = x_end, x_ini
 
-                if y_ini > y_end:
-                    y_ini, y_end = y_end, y_ini
+                    if y_ini > y_end:
+                        y_ini, y_end = y_end, y_ini
 
-                self.new_mask_comp.emit(
-                    {
-                        "type"  : str(self.mask_comp) ,
-                        "x_ini" : x_ini ,
-                        "x_end" : x_end ,
-                        "y_ini" : y_ini ,
-                        "y_end" : y_end ,
-                    }
-                )
+                    self.new_mask_comp.emit(
+                        {
+                            "type"  : "rect" ,
+                            "x_ini" : x_ini ,
+                            "x_end" : x_end ,
+                            "y_ini" : y_ini ,
+                            "y_end" : y_end ,
+                        }
+                    )
+
+                elif self.mask_comp == "circ":
+                    dx = float(self.mask_x_ini - x_pos)
+                    dy = float(self.mask_y_ini - y_pos)
+                    r = int(np.sqrt(dx * dx + dy * dy))
+                    self.new_mask_comp.emit(
+                        {
+                            "type"  : "circ" ,
+                            "x_c"   : int(self.mask_x_ini) ,
+                            "y_c"   : int(self.mask_y_ini) ,
+                            "r"     : r ,
+                        }
+                    )
+
                 self.mask_x_ini = None
                 self.mask_y_ini = None
 
