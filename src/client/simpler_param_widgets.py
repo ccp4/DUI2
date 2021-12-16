@@ -393,7 +393,7 @@ class ImportWidget(QWidget):
         parameter widgets, every time the user changes a parameter DUI should
         refresh all parameter since there are some parameter that exclude others
     '''
-    all_items_changed = Signal(str, str)
+    all_items_changed = Signal(list)
     def __init__(self, parent = None):
         super(ImportWidget, self).__init__(parent)
         self.do_emit = True
@@ -450,7 +450,7 @@ class ImportWidget(QWidget):
             str_path = "input.template"
 
         self.state_label.setText(str_path)
-        self.all_items_changed.emit(str_path, str_value)
+        self.all_items_changed.emit([[[str_path, str_value]]])
 
     def update_all_pars(self, tup_lst_pars):
         print(
@@ -485,8 +485,9 @@ class ImportWidget(QWidget):
         )
 
 class MaskLablWidg(QWidget):
-    item_changed = Signal(str, str, int)
+    all_items_changed = Signal(list)
     component_changed = Signal(str)
+    #item_changed = Signal(str, str, int)
     def __init__(self, parent = None):
         super(MaskLablWidg, self).__init__(parent)
         self.do_emit = True
@@ -549,20 +550,68 @@ class MaskLablWidg(QWidget):
     def get_new_comp(self, comp_dict):
         print("mask new comp_dict =", comp_dict)
         if comp_dict["type"] == "rect":
+            self.all_items_changed.emit(
+                [
+                    [
+                        [
+                            "untrusted.rectangle",
+                            str(comp_dict["x_ini"]) + "," +
+                            str(comp_dict["x_end"]) + "," +
+                            str(comp_dict["y_ini"]) + "," +
+                            str(comp_dict["y_end"]) + ","
+                        ],
+                        [
+                            "output.mask",
+                            "tmp_mask.pickle"
+                        ]
+                    ],
+                    [
+                        [
+                            "input.mask",
+                            "tmp_mask.pickle",
+                        ]
+                    ]
+                ]
+            )
+
+        elif comp_dict["type"] == "circ":
+            self.all_items_changed.emit(
+                [
+                    [
+                        [
+                            "untrusted.circle",
+                            str(comp_dict["x_c"]) + "," +
+                            str(comp_dict["y_c"]) + "," +
+                            str(comp_dict["r"]) + "," ,
+                        ],
+                        [
+                            "output.mask",
+                            "tmp_mask.pickle"
+                        ]
+                    ],
+                    [
+                        [
+                            "input.mask",
+                            "tmp_mask.pickle",
+                        ]
+                    ]
+                ]
+            )
+
+
+
+        to_remove = '''
             self.item_changed.emit(
                 "untrusted.rectangle",
                 str(comp_dict["x_ini"]) + "," + str(comp_dict["x_end"]) + "," +
                 str(comp_dict["y_ini"]) + "," + str(comp_dict["y_end"]) + "," ,
                 0
-            )
-
-        elif comp_dict["type"] == "circ":
             self.item_changed.emit(
                 "untrusted.circle",
                 str(comp_dict["x_c"]) + "," + str(comp_dict["y_c"]) + "," +
                 str(comp_dict["r"]) + "," ,
                 0
-            )
+            )'''
 
     def test_hardcoded(self):
         print("test_hardcoded")

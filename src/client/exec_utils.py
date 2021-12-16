@@ -166,6 +166,27 @@ class CommandParamControl:
 
         print(" par_lst(set_parameter) end =", self.par_lst)
 
+    def set_all_parameters(self, lst_of_lst):
+        print("set_all_parameters")
+        print("lst_of_lst =", lst_of_lst)
+        self.par_lst = []
+        self.custm_param = None
+
+        for inner_lst in lst_of_lst:
+            print("inner_lst =", inner_lst)
+            build_lst = []
+            for inner_par_val in inner_lst:
+                print("inner_par_val =", inner_par_val)
+                build_lst.append(
+                    {
+                        "name":str(inner_par_val[0]),
+                        "value":str(inner_par_val[1])
+                    }
+                )
+
+            self.par_lst.append(build_lst)
+
+
     def set_custom_parameter(self, new_custom_parameter):
         is_same = False
         if new_custom_parameter == self.custm_param:
@@ -270,3 +291,8 @@ if __name__ == "__main__":
     same = tst_cmd.set_custom_parameter("random_custom command _5")
     print("cmd_lst =", tst_cmd.get_full_command_list())
     print("same =", same)
+
+    print("\n" * 3)
+
+    tst_cmd.set_all_parameters([[["random_param_#", "value_#"]]])
+    print("cmd_lst =", tst_cmd.get_full_command_list())
