@@ -541,6 +541,7 @@ class MaskLablWidg(QWidget):
 
     def reset_pars(self):
         print("\n reset_pars(MaskLablWidg) \n")
+        self.comp_list = []
 
     def get_new_comp(self, comp_dict):
         print("mask new comp_dict =", comp_dict)
@@ -558,15 +559,15 @@ class MaskLablWidg(QWidget):
                 str(comp_dict["r"]) + "," ,
             ]
 
+        self.comp_list.append(inner_lst_pair)
+        print("\n self.comp_list =", self.comp_list)
+        first_list = list(self.comp_list)
+        first_list.append(["output.mask", "tmp_mask.pickle"])
+        print("first_list =", first_list, "\n")
+
         self.all_items_changed.emit(
             [
-                [
-                    inner_lst_pair,
-                    [
-                        "output.mask",
-                        "tmp_mask.pickle"
-                    ]
-                ],
+                first_list,
                 [
                     [
                         "input.mask",
