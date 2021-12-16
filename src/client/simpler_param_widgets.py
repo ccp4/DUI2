@@ -487,7 +487,6 @@ class ImportWidget(QWidget):
 class MaskLablWidg(QWidget):
     all_items_changed = Signal(list)
     component_changed = Signal(str)
-    #item_changed = Signal(str, str, int)
     def __init__(self, parent = None):
         super(MaskLablWidg, self).__init__(parent)
         self.do_emit = True
@@ -503,17 +502,13 @@ class MaskLablWidg(QWidget):
         self.main_vbox.addWidget(QLabel(" "))
         self.main_vbox.addWidget(self.cmd_label)
         self.main_vbox.addWidget(QLabel(" "))
-        ########################################################
+
         self.rad_but_rect_mask = QRadioButton("Rectangle")
         self.main_vbox.addWidget(self.rad_but_rect_mask)
         self.rad_but_circ_mask = QRadioButton("Circle")
         self.main_vbox.addWidget(self.rad_but_circ_mask)
         self.rad_but_poly_mask = QRadioButton("Polygon")
         self.main_vbox.addWidget(self.rad_but_poly_mask)
-        ########################################################
-        tmp_butt = QPushButton("test hard coded")
-        tmp_butt.clicked.connect(self.test_hardcoded)
-        self.main_vbox.addWidget(tmp_butt)
 
         self.rad_but_rect_mask.toggled.connect(self.toggle_funtion)
         self.rad_but_circ_mask.toggled.connect(self.toggle_funtion)
@@ -550,75 +545,37 @@ class MaskLablWidg(QWidget):
     def get_new_comp(self, comp_dict):
         print("mask new comp_dict =", comp_dict)
         if comp_dict["type"] == "rect":
-            self.all_items_changed.emit(
-                [
-                    [
-                        [
-                            "untrusted.rectangle",
-                            str(comp_dict["x_ini"]) + "," +
-                            str(comp_dict["x_end"]) + "," +
-                            str(comp_dict["y_ini"]) + "," +
-                            str(comp_dict["y_end"]) + ","
-                        ],
-                        [
-                            "output.mask",
-                            "tmp_mask.pickle"
-                        ]
-                    ],
-                    [
-                        [
-                            "input.mask",
-                            "tmp_mask.pickle",
-                        ]
-                    ]
-                ]
-            )
-
-        elif comp_dict["type"] == "circ":
-            self.all_items_changed.emit(
-                [
-                    [
-                        [
-                            "untrusted.circle",
-                            str(comp_dict["x_c"]) + "," +
-                            str(comp_dict["y_c"]) + "," +
-                            str(comp_dict["r"]) + "," ,
-                        ],
-                        [
-                            "output.mask",
-                            "tmp_mask.pickle"
-                        ]
-                    ],
-                    [
-                        [
-                            "input.mask",
-                            "tmp_mask.pickle",
-                        ]
-                    ]
-                ]
-            )
-
-
-
-        to_remove = '''
-            self.item_changed.emit(
+            inner_lst_pair = [
                 "untrusted.rectangle",
                 str(comp_dict["x_ini"]) + "," + str(comp_dict["x_end"]) + "," +
-                str(comp_dict["y_ini"]) + "," + str(comp_dict["y_end"]) + "," ,
-                0
-            self.item_changed.emit(
+                str(comp_dict["y_ini"]) + "," + str(comp_dict["y_end"]) + ","
+            ]
+
+        elif comp_dict["type"] == "circ":
+            inner_lst_pair = [
                 "untrusted.circle",
                 str(comp_dict["x_c"]) + "," + str(comp_dict["y_c"]) + "," +
                 str(comp_dict["r"]) + "," ,
-                0
-            )'''
+            ]
 
-    def test_hardcoded(self):
-        print("test_hardcoded")
-        #self.item_changed.emit("untrusted.rectangle", "0,1421,1258,1312", 0)
-        #self.item_changed.emit("untrusted.circle", "1421,1270,150", 0)
-        self.item_changed.emit("output.mask", "tmp_mask.pickle", 0)
-        self.item_changed.emit("input.mask", "tmp_mask.pickle", 1)
+        self.all_items_changed.emit(
+            [
+                [
+                    inner_lst_pair,
+                    [
+                        "output.mask",
+                        "tmp_mask.pickle"
+                    ]
+                ],
+                [
+                    [
+                        "input.mask",
+                        "tmp_mask.pickle",
+                    ]
+                ]
+            ]
+        )
+
 
 class FindspotsSimplerParameterTab(SimpleParamTab):
     """

@@ -74,11 +74,9 @@ class MainObject(QObject):
 
             imp_widg = ImportWidget()
             imp_widg.all_items_changed.connect(self.all_items_param_changed)
-            #imp_widg.item_changed.connect(self.item_param_changed)
             self.window.ImportScrollArea.setWidget(imp_widg)
 
             self.mask_widg = MaskWidget()
-            #self.mask_widg.item_changed.connect(self.item_param_changed)
             self.mask_widg.all_items_changed.connect(self.all_items_param_changed)
             self.mask_widg.component_changed.connect(self.mask_comp_changed)
             self.window.MaskScrollArea.setWidget(self.mask_widg)
