@@ -535,32 +535,6 @@ class MaskLablWidg(QWidget):
         self.component_changed.emit(str(self.stat))
 
     def update_all_pars(self, par_lst_0):
-        example = '''
-        (
-            [
-                {
-                    'name': 'untrusted.rectangle', 'value': '864,1111,1449,1605,'
-                },
-                {
-                    'name': 'untrusted.rectangle', 'value': '837,1141,897,1229,'
-                },
-                {
-                    'name': 'untrusted.rectangle', 'value': '1331,1556,1136,1281,'
-                },
-                {
-                    'name': 'untrusted.circle', 'value': '1957,1184,328,'
-                },
-                {
-                    'name': 'untrusted.circle', 'value': '1485,720,373,'
-                },
-                {
-                    'name': 'untrusted.circle', 'value': '1678,1754,503,'
-                },
-                {
-                    'name': 'output.mask', 'value': 'tmp_mask.pickle'
-                }
-            ], None
-        )        '''
         print("update_all_pars:", par_lst_0)
         self.comp_list = []
         for par_dic in par_lst_0[0][0:-1]:

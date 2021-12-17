@@ -546,11 +546,9 @@ class MainObject(QObject):
         self.new_node.reset_all_params()
         self.reset_param()
 
-    #def all_items_param_changed(self, str_path, str_value):
     def all_items_param_changed(self, lst_of_lst):
         self.new_node.reset_all_params()
         try:
-            #self.new_node.set_parameter(str_path, str_value)
             self.new_node.set_all_parameters(lst_of_lst)
 
         except AttributeError:
