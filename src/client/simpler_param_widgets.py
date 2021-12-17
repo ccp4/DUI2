@@ -493,15 +493,12 @@ class MaskLablWidg(QWidget):
         sys_font = QFont()
         font_point_size = sys_font.pointSize()
 
-        self.cmd_label = QLabel("  Apply Mask:    ")
+        self.cmd_label = QLabel("")
         self.cmd_label.setFont(QFont(
-            "Monospace", font_point_size + 3, QFont.Bold
+            "Monospace", font_point_size -1, QFont.Bold
         ))
 
         self.main_vbox = QVBoxLayout()
-        self.main_vbox.addWidget(QLabel(" "))
-        self.main_vbox.addWidget(self.cmd_label)
-        self.main_vbox.addWidget(QLabel(" "))
 
         self.rad_but_rect_mask = QRadioButton("Rectangle")
         self.main_vbox.addWidget(self.rad_but_rect_mask)
@@ -509,14 +506,15 @@ class MaskLablWidg(QWidget):
         self.main_vbox.addWidget(self.rad_but_circ_mask)
         self.rad_but_poly_mask = QRadioButton("Polygon")
         self.main_vbox.addWidget(self.rad_but_poly_mask)
+        self.main_vbox.addWidget(self.cmd_label)
 
         self.rad_but_rect_mask.toggled.connect(self.toggle_funtion)
         self.rad_but_circ_mask.toggled.connect(self.toggle_funtion)
         self.rad_but_poly_mask.toggled.connect(self.toggle_funtion)
 
-
         self.setLayout(self.main_vbox)
         self.toggle_funtion()
+        self.reset_pars()
 
     def toggle_funtion(self):
         print("toggle_funtion")
@@ -537,11 +535,52 @@ class MaskLablWidg(QWidget):
         self.component_changed.emit(str(self.stat))
 
     def update_all_pars(self, par_lst_0):
+        example = '''
+        (
+            [
+                {
+                    'name': 'untrusted.rectangle', 'value': '864,1111,1449,1605,'
+                },
+                {
+                    'name': 'untrusted.rectangle', 'value': '837,1141,897,1229,'
+                },
+                {
+                    'name': 'untrusted.rectangle', 'value': '1331,1556,1136,1281,'
+                },
+                {
+                    'name': 'untrusted.circle', 'value': '1957,1184,328,'
+                },
+                {
+                    'name': 'untrusted.circle', 'value': '1485,720,373,'
+                },
+                {
+                    'name': 'untrusted.circle', 'value': '1678,1754,503,'
+                },
+                {
+                    'name': 'output.mask', 'value': 'tmp_mask.pickle'
+                }
+            ], None
+        )        '''
         print("update_all_pars:", par_lst_0)
+        self.comp_list = []
+        for par_dic in par_lst_0[0][0:-1]:
+            single_comp_lst = [str(par_dic["name"]), str(par_dic["value"])]
+            self.comp_list.append(single_comp_lst)
+
+        self.update_comp_label()
 
     def reset_pars(self):
         print("\n reset_pars(MaskLablWidg) \n")
         self.comp_list = []
+        self.update_comp_label()
+
+    def update_comp_label(self):
+        label_str = ""
+        for comp in self.comp_list:
+            single_comp_str = str(comp[0]) + " >> " + str(comp[1])
+            label_str += "\n" + single_comp_str
+
+        self.cmd_label.setText(label_str)
 
     def get_new_comp(self, comp_dict):
         print("mask new comp_dict =", comp_dict)
@@ -576,6 +615,8 @@ class MaskLablWidg(QWidget):
                 ]
             ]
         )
+
+        self.update_comp_label()
 
 
 class FindspotsSimplerParameterTab(SimpleParamTab):
