@@ -289,10 +289,13 @@ class MainObject(QObject):
         self.window.CmdSend2server.setEnabled(True)
         self.window.ReqStopButton.setEnabled(True)
 
-        tmp_off_to_run_on_old_version_of_PySide2 = '''
-        self.do_load_html = DoLoadHTML(self)
-        self.window.HtmlReport.setHtml(self.do_load_html.not_avail_html)
-        '''
+        try:
+            self.do_load_html = DoLoadHTML(self)
+            self.window.HtmlReport.setHtml(self.do_load_html.not_avail_html)
+
+        except AttributeError:
+            print("removing HtmlReport for old vesion of PySide2 ")
+
 
         self.log_show = ShowLog(self)
 
@@ -381,10 +384,12 @@ class MainObject(QObject):
         elif tab_index == 1:
             self.log_show(self.current_nod_num, do_request = fnd_cur_nod)
 
-        tmp_off_to_run_on_old_version_of_PySide2 = '''
         elif tab_index == 2:
-            self.do_load_html(do_request = fnd_cur_nod)
-        '''
+            try:
+                self.do_load_html(do_request = fnd_cur_nod)
+
+            except AttributeError:
+                print("removing HtmlReport for old vesion of PySide2 ")
 
         if(
             self.new_node is not None and

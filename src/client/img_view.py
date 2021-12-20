@@ -909,6 +909,18 @@ class DoImageView(QObject):
                     if y_ini > y_end:
                         y_ini, y_end = y_end, y_ini
 
+                    if x_ini < 0:
+                        x_ini = 0
+
+                    if y_ini < 0:
+                        y_ini = 0
+
+                    if x_end > self.img_d1_d2[0] - 2:
+                        x_end = self.img_d1_d2[0] - 2
+
+                    if y_end > self.img_d1_d2[1] - 2:
+                        y_end = self.img_d1_d2[1] - 2
+
                     self.new_mask_comp.emit(
                         {
                             "type"  : "rect" ,
