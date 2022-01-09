@@ -78,6 +78,7 @@ class MainObject(QObject):
 
             self.mask_widg = MaskWidget()
             self.mask_widg.all_items_changed.connect(self.all_items_param_changed)
+            self.mask_widg.all_items_changed.connect(self.tmp_mask_changed)
             self.mask_widg.component_changed.connect(self.mask_comp_changed)
             self.window.MaskScrollArea.setWidget(self.mask_widg)
 
@@ -406,6 +407,9 @@ class MainObject(QObject):
 
     def get_new_mask_comp(self, comp_dict):
         self.mask_widg.get_new_comp(comp_dict)
+
+    def tmp_mask_changed(self, lst_of_lst):
+        self.do_image_view.update_tmp_mask(lst_of_lst[0][0:-1])
 
     def clear_parent_list(self):
         self.new_node.clear_parents()

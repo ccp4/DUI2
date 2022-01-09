@@ -846,6 +846,9 @@ class DoImageView(QObject):
             self.mask_x_ini = None
             self.mask_y_ini = None
 
+    def update_tmp_mask(self, lst_of_lst_0):
+        print("updating tmp_mask to: \n", lst_of_lst_0, "\n")
+
     def on_mouse_move(self, x_pos, y_pos):
         try:
             str_out = "  I(" + str(x_pos) + ", " + str(y_pos) + ") = " +\
