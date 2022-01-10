@@ -205,7 +205,41 @@ class ImgGraphicsScene(QGraphicsScene):
             )
         '''
 
-    def __call__(self, new_pixmap, refl_list0):
+    def draw_temp_mask(self):
+        print("self.temp_mask =", self.temp_mask)
+        print("len(self.temp_mask) =", len(self.temp_mask))
+
+        for pict in self.temp_mask:
+            lst_str = pict[1].split(",")
+            lst_num = []
+            for in_str in lst_str:
+                try:
+                    lst_num.append(int(in_str))
+
+                except ValueError:
+                    pass
+
+            print("lst_num =", lst_num)
+
+            if pict[0] == 'untrusted.rectangle':
+                print("Drawing Rectangle:")
+                tmp_width = lst_num[1] - lst_num[0]
+                tmp_height = lst_num[3] - lst_num[2]
+                rectangle = QRectF(
+                    lst_num[0], lst_num[2], tmp_width, tmp_height
+                )
+                self.addRect(rectangle, self.green_pen)
+
+            elif pict[0] == 'untrusted.circle':
+                print("Drawing Circle:")
+                rectangle = QRectF(
+                    lst_num[0] - lst_num[2], lst_num[1] - lst_num[2],
+                    2 * lst_num[2], 2 * lst_num[2]
+                )
+                self.addEllipse(rectangle, self.green_pen)
+
+    def __call__(self, new_pixmap, refl_list0, new_temp_mask):
+        self.temp_mask = new_temp_mask
         self.refl_list = refl_list0
         self.my_pix_map = new_pixmap
         self.draw_ref_rect()
@@ -214,6 +248,8 @@ class ImgGraphicsScene(QGraphicsScene):
                 n_text = self.addSimpleText(str(refl["local_hkl"]))
                 n_text.setPos(refl["x"], refl["y"])
                 n_text.setPen(self.green_pen)
+
+        self.draw_temp_mask()
 
     def wheelEvent(self, event):
         float_delta = float(event.delta())
@@ -446,7 +482,7 @@ class DoImageView(QObject):
         self.old_cur_nod_num = self.cur_nod_num
         self.old_cur_img_num = self.cur_img_num
 
-
+        self.list_temp_mask = None
 
         timer = QTimer(self)
         timer.timeout.connect(self.check_move)
@@ -590,10 +626,10 @@ class DoImageView(QObject):
             )
             new_pixmap = QPixmap.fromImage(q_img)
             if show_refl:
-                self.my_scene(new_pixmap, self.r_list0)
+                self.my_scene(new_pixmap, self.r_list0, self.list_temp_mask)
 
             else:
-                self.my_scene(new_pixmap, [])
+                self.my_scene(new_pixmap, [], self.list_temp_mask)
 
         except (TypeError, AttributeError):
             print("None self.np_full_img")
@@ -847,7 +883,8 @@ class DoImageView(QObject):
             self.mask_y_ini = None
 
     def update_tmp_mask(self, lst_of_lst_0):
-        print("updating tmp_mask to: \n", lst_of_lst_0, "\n")
+        self.list_temp_mask = lst_of_lst_0
+        self.refresh_pixel_map()
 
     def on_mouse_move(self, x_pos, y_pos):
         try:
