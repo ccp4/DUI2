@@ -191,20 +191,6 @@ class ImgGraphicsScene(QGraphicsScene):
             )
             self.addRect(rectangle, self.green_pen)
 
-        to_use_later = '''
-        for refl in refl_list1:
-            self.addLine(
-                refl["x_ini"] + 1 + refl["xrs_size"], refl["y_ini"] + 1,
-                refl["x_ini"] + 1 - refl["xrs_size"], refl["y_ini"] + 1,
-                self.green_pen
-            )
-            self.addLine(
-                refl["x_ini"] + 1, refl["y_ini"] + 1 + refl["xrs_size"],
-                refl["x_ini"] + 1, refl["y_ini"] + 1 - refl["xrs_size"],
-                self.green_pen
-            )
-        '''
-
     def draw_temp_mask(self):
         print("self.temp_mask =", self.temp_mask)
         print("len(self.temp_mask) =", len(self.temp_mask))
@@ -286,7 +272,8 @@ class ImgGraphicsScene(QGraphicsScene):
                 print(
                     "not found the nearer reflection " +
                     "or not existent reflection list yet"
-                )'''
+                )
+                '''
                 pass
 
         self.new_mouse_pos.emit(x_pos, y_pos)
@@ -902,10 +889,25 @@ class DoImageView(QObject):
                 self.mask_y_ini is not None
             ):
                 if self.mask_comp == "rect":
-                    tmp_width = x_pos - self.mask_x_ini
-                    tmp_height = y_pos - self.mask_y_ini
+                    x1 = int(x_pos)
+                    y1 = int(y_pos)
+                    x2 = int(self.mask_x_ini)
+                    y2 = int(self.mask_y_ini)
+
+                    if x1 < x2:
+                        x1, x2 = x2, x1
+
+                    if y1 < y2:
+                        y1, y2 = y2, y1
+
+                    tmp_width = x1 - x2
+                    tmp_height = y1 - y2
+                    print(
+                        "QRect =",
+                        x2, y2, tmp_width, tmp_height
+                    )
                     rectangle = QRectF(
-                        self.mask_x_ini, self.mask_y_ini, tmp_width, tmp_height
+                        x2, y2, tmp_width, tmp_height
                     )
                     self.my_scene.addRect(rectangle, self.my_scene.green_pen)
 
