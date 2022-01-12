@@ -902,13 +902,8 @@ class DoImageView(QObject):
 
                     tmp_width = x1 - x2
                     tmp_height = y1 - y2
-                    print(
-                        "QRect =",
-                        x2, y2, tmp_width, tmp_height
-                    )
-                    rectangle = QRectF(
-                        x2, y2, tmp_width, tmp_height
-                    )
+                    print("QRect =", x2, y2, tmp_width, tmp_height)
+                    rectangle = QRectF(x2, y2, tmp_width, tmp_height)
                     self.my_scene.addRect(rectangle, self.my_scene.green_pen)
 
                 elif self.mask_comp == "circ":
@@ -916,12 +911,14 @@ class DoImageView(QObject):
                     dy = float(y_pos - self.mask_y_ini)
                     r = int(np.sqrt(dx * dx + dy * dy))
                     rectangle = QRectF(
-                        self.mask_x_ini - r, self.mask_y_ini - r,  2 * r, 2 * r
+                        self.mask_x_ini - r, self.mask_y_ini - r, 2 * r, 2 * r
                     )
-                    self.my_scene.addEllipse(rectangle, self.my_scene.green_pen)
+                    self.my_scene.addEllipse(
+                        rectangle, self.my_scene.green_pen
+                    )
                     self.my_scene.addLine(
-                        self.mask_x_ini, self.mask_y_ini, x_pos, y_pos,
-                        self.my_scene.green_pen
+                        self.mask_x_ini, self.mask_y_ini, x_pos,
+                        y_pos, self.my_scene.green_pen
                     )
 
     def on_mouse_press(self, x_pos, y_pos):
