@@ -192,37 +192,34 @@ class ImgGraphicsScene(QGraphicsScene):
             self.addRect(rectangle, self.green_pen)
 
     def draw_temp_mask(self):
-        print("self.temp_mask =", self.temp_mask)
-        print("len(self.temp_mask) =", len(self.temp_mask))
+        try:
+            for pict in self.temp_mask:
+                lst_str = pict[1].split(",")
+                lst_num = []
+                for in_str in lst_str:
+                    try:
+                        lst_num.append(int(in_str))
 
-        for pict in self.temp_mask:
-            lst_str = pict[1].split(",")
-            lst_num = []
-            for in_str in lst_str:
-                try:
-                    lst_num.append(int(in_str))
+                    except ValueError:
+                        pass
 
-                except ValueError:
-                    pass
+                if pict[0] == 'untrusted.rectangle':
+                    tmp_width = lst_num[1] - lst_num[0]
+                    tmp_height = lst_num[3] - lst_num[2]
+                    rectangle = QRectF(
+                        lst_num[0], lst_num[2], tmp_width, tmp_height
+                    )
+                    self.addRect(rectangle, self.green_pen)
 
-            print("lst_num =", lst_num)
+                elif pict[0] == 'untrusted.circle':
+                    rectangle = QRectF(
+                        lst_num[0] - lst_num[2], lst_num[1] - lst_num[2],
+                        2 * lst_num[2], 2 * lst_num[2]
+                    )
+                    self.addEllipse(rectangle, self.green_pen)
 
-            if pict[0] == 'untrusted.rectangle':
-                print("Drawing Rectangle:")
-                tmp_width = lst_num[1] - lst_num[0]
-                tmp_height = lst_num[3] - lst_num[2]
-                rectangle = QRectF(
-                    lst_num[0], lst_num[2], tmp_width, tmp_height
-                )
-                self.addRect(rectangle, self.green_pen)
-
-            elif pict[0] == 'untrusted.circle':
-                print("Drawing Circle:")
-                rectangle = QRectF(
-                    lst_num[0] - lst_num[2], lst_num[1] - lst_num[2],
-                    2 * lst_num[2], 2 * lst_num[2]
-                )
-                self.addEllipse(rectangle, self.green_pen)
+        except TypeError:
+            pass
 
     def __call__(self, new_pixmap, refl_list0, new_temp_mask):
         self.temp_mask = new_temp_mask
@@ -883,6 +880,7 @@ class DoImageView(QObject):
 
         self.main_obj.window.EasterEggButton.setText(str_out)
         if self.mask_mode:
+            self.my_scene.draw_temp_mask()
             if(
                 self.mask_comp is not None and
                 self.mask_x_ini is not None and
@@ -902,7 +900,6 @@ class DoImageView(QObject):
 
                     tmp_width = x1 - x2
                     tmp_height = y1 - y2
-                    print("QRect =", x2, y2, tmp_width, tmp_height)
                     rectangle = QRectF(x2, y2, tmp_width, tmp_height)
                     self.my_scene.addRect(rectangle, self.my_scene.green_pen)
 
