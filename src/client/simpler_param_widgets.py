@@ -573,6 +573,9 @@ class MaskLablWidg(QWidget):
             ]
 
         self.comp_list.append(inner_lst_pair)
+        self.comp_list_update()
+
+    def comp_list_update(self):
         print("\n self.comp_list =", self.comp_list)
         first_list = list(self.comp_list)
         first_list.append(["output.mask", "tmp_mask.pickle"])
@@ -582,10 +585,7 @@ class MaskLablWidg(QWidget):
             [
                 first_list,
                 [
-                    [
-                        "input.mask",
-                        "tmp_mask.pickle",
-                    ]
+                    ["input.mask", "tmp_mask.pickle"]
                 ]
             ]
         )
