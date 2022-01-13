@@ -380,6 +380,22 @@ class MainObject(QObject):
 
         if tab_index == 0:
             img_num = int(self.window.ImgNumEdit.text())
+            if(
+                self.new_node is not None and
+                self.new_node.m_cmd_lst[0] == "dials.generate_mask" and
+                self.new_node.number == self.current_nod_num
+            ):
+                self.do_image_view.set_drag_mode(mask_mode = True)
+
+            else:
+                self.do_image_view.set_drag_mode(mask_mode = False)
+
+            try:
+                self.param_widgets[self.curr_widg_key]["simple"].comp_list_update()
+
+            except AttributeError:
+                self.do_image_view.update_tmp_mask([])
+
             self.do_image_view(in_img_num = img_num, nod_or_path = fnd_cur_nod)
 
         elif tab_index == 1:
@@ -392,15 +408,6 @@ class MainObject(QObject):
             except AttributeError:
                 print("removing HtmlReport for old vesion of PySide2 ")
 
-        if(
-            self.new_node is not None and
-            self.new_node.m_cmd_lst[0] == "dials.generate_mask" and
-            self.new_node.number == self.current_nod_num
-        ):
-            self.do_image_view.set_drag_mode(mask_mode = True)
-
-        else:
-            self.do_image_view.set_drag_mode(mask_mode = False)
 
     def mask_comp_changed(self, mask_comp):
         self.do_image_view.set_mask_comp(mask_comp)
