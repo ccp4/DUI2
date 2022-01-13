@@ -379,7 +379,13 @@ class MainObject(QObject):
                 fnd_cur_nod = True
 
         if tab_index == 0:
-            img_num = int(self.window.ImgNumEdit.text())
+            try:
+                new_lst = self.param_widgets[self.curr_widg_key]["simple"].comp_list_update()
+                self.do_image_view.update_tmp_mask(new_lst[0][0:-1])
+
+            except AttributeError:
+                self.do_image_view.update_tmp_mask([])
+
             if(
                 self.new_node is not None and
                 self.new_node.m_cmd_lst[0] == "dials.generate_mask" and
@@ -390,12 +396,7 @@ class MainObject(QObject):
             else:
                 self.do_image_view.set_drag_mode(mask_mode = False)
 
-            try:
-                self.param_widgets[self.curr_widg_key]["simple"].comp_list_update()
-
-            except AttributeError:
-                self.do_image_view.update_tmp_mask([])
-
+            img_num = int(self.window.ImgNumEdit.text())
             self.do_image_view(in_img_num = img_num, nod_or_path = fnd_cur_nod)
 
         elif tab_index == 1:

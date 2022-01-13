@@ -581,16 +581,15 @@ class MaskLablWidg(QWidget):
         first_list.append(["output.mask", "tmp_mask.pickle"])
         print("first_list =", first_list, "\n")
 
-        self.all_items_changed.emit(
+        new_full_list = [
+            first_list,
             [
-                first_list,
-                [
-                    ["input.mask", "tmp_mask.pickle"]
-                ]
+                ["input.mask", "tmp_mask.pickle"]
             ]
-        )
-
+        ]
+        self.all_items_changed.emit(new_full_list)
         self.update_comp_label()
+        return new_full_list
 
 
 class FindspotsSimplerParameterTab(SimpleParamTab):
