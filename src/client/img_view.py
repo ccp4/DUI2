@@ -191,6 +191,9 @@ class ImgGraphicsScene(QGraphicsScene):
             )
             self.addRect(rectangle, self.green_pen)
 
+    def update_tmp_mask(self, new_temp_mask):
+        self.temp_mask = new_temp_mask
+
     def draw_temp_mask(self):
         try:
             for pict in self.temp_mask:
@@ -217,7 +220,7 @@ class ImgGraphicsScene(QGraphicsScene):
                         2 * lst_num[2], 2 * lst_num[2]
                     )
                     self.addEllipse(rectangle, self.green_pen)
-
+            print("\n Drawn (self.temp_mask): ", self.temp_mask)
         except TypeError:
             pass
 
@@ -867,6 +870,7 @@ class DoImageView(QObject):
             self.mask_y_ini = None
 
     def update_tmp_mask(self, lst_of_lst_0):
+        print("update_tmp_mask(DoImageView)")
         self.list_temp_mask = lst_of_lst_0
         self.refresh_pixel_map()
 
@@ -879,6 +883,8 @@ class DoImageView(QObject):
             str_out = " I = ?"
 
         self.main_obj.window.EasterEggButton.setText(str_out)
+
+        self.my_scene.update_tmp_mask(self.list_temp_mask)
         if self.mask_mode:
             self.my_scene.draw_temp_mask()
             if(

@@ -432,7 +432,6 @@ class MainObject(QObject):
         except IndexError:
             cur_nod = self.tree_scene.paint_nod_lst[node_numb]
 
-        self.refresh_output()
         cmd_ini = cur_nod["cmd2show"][0]
         key2find = cmd_ini[6:]
         try:
@@ -451,6 +450,7 @@ class MainObject(QObject):
         except KeyError:
             print("command widget not there yet")
             return
+        self.refresh_output()
 
         self.display()
 
@@ -564,15 +564,16 @@ class MainObject(QObject):
         self.reset_param()
 
     def all_items_param_changed(self, lst_of_lst):
-        self.new_node.reset_all_params()
-        try:
-            self.new_node.set_all_parameters(lst_of_lst)
+        if self.new_node.number == self.current_nod_num:
+            self.new_node.reset_all_params()
+            try:
+                self.new_node.set_all_parameters(lst_of_lst)
 
-        except AttributeError:
-            print(
-                "No need to update parameters for non existent green node \n",
-                "or no twin widget \n"
-            )
+            except AttributeError:
+                print(
+                    "No need to update parameters for non existent green node \n",
+                    "or no twin widget \n"
+                )
 
     def item_param_changed(self, str_path = None, str_value = None, lst_num = 0):
         try:
@@ -614,9 +615,11 @@ class MainObject(QObject):
             tmp_cmd_par.clone_from_list(
                 self.server_nod_lst[self.current_nod_num]["lst2run"]
             )
+            print("\n Updating parameters from server_nod_lst")
 
         except IndexError:
             tmp_cmd_par = self.new_node
+            print("\n Updating parameters from ...new_node")
 
         print(
             "update_all_param(MainObject)...tmp_cmd_par.get_all_params() = ",
