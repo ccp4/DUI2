@@ -220,7 +220,7 @@ class ImgGraphicsScene(QGraphicsScene):
                         2 * lst_num[2], 2 * lst_num[2]
                     )
                     self.addEllipse(rectangle, self.green_pen)
-            print("\n Drawn (self.temp_mask): ", self.temp_mask)
+
         except TypeError:
             pass
 
@@ -870,7 +870,6 @@ class DoImageView(QObject):
             self.mask_y_ini = None
 
     def update_tmp_mask(self, lst_of_lst_0):
-        print("update_tmp_mask(DoImageView)")
         self.list_temp_mask = lst_of_lst_0
         self.refresh_pixel_map()
 
