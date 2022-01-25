@@ -146,25 +146,28 @@ class SimpleParamTab(QWidget):
         sender = self.sender()
         value = sender.value()
         str_path = str(sender.local_path)
+        '''
         #TODO find out why there is a "item_to_remove" signal
         if sender.specialValueText() and value == sender.minimum():
             self.item_to_remove.emit(str_path)
 
         else:
-            str_value = str(value)
-            self.do_emit_signal(str_path, str_value)
+        '''
+        str_value = str(value)
+        self.do_emit_signal(str_path, str_value)
 
     def combobox_changed(self, value):
         print("combobox_changed")
         sender = self.sender()
         str_value = str(sender.item_list[value])
         str_path = str(sender.local_path)
-
+        '''
         #TODO find out why there is a "item_to_remove" signal
         if sender.currentIndex() == sender.default_index:
             self.item_to_remove.emit(str_path)
         else:
-            self.do_emit_signal(str_path, str_value)
+        '''
+        self.do_emit_signal(str_path, str_value)
 
     def line_changed(self):
         sender = self.sender()
