@@ -484,11 +484,11 @@ class ImportWidget(QWidget):
             str_path, str_value, "... dummy"
         )
 
-class MaskLablWidg(QWidget):
+class MaskWidget(QWidget):
     all_items_changed = Signal(list)
     component_changed = Signal(str)
     def __init__(self, parent = None):
-        super(MaskLablWidg, self).__init__(parent)
+        super(MaskWidget, self).__init__(parent)
         self.do_emit = True
         sys_font = QFont()
         font_point_size = sys_font.pointSize()
@@ -544,7 +544,7 @@ class MaskLablWidg(QWidget):
         self.update_comp_label()
 
     def reset_pars(self):
-        print("\n reset_pars(MaskLablWidg) \n")
+        print("\n reset_pars(MaskWidget) \n")
         self.comp_list = []
         self.update_comp_label()
 
@@ -1063,7 +1063,7 @@ class TmpTstWidget(QWidget):
         super(TmpTstWidget, self).__init__()
         self.do_emit = True
 
-        #my_widget = MaskLablWidg(self)
+        #my_widget = MaskWidget(self)
         my_widget = ImportWidget(self)
         #my_widget = FindspotsSimplerParameterTab(self)
         #my_widget = IndexSimplerParamTab(self)

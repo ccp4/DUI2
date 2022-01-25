@@ -44,7 +44,7 @@ from init_firts import ini_data
 
 from simpler_param_widgets import RootWidg
 from simpler_param_widgets import ImportWidget
-from simpler_param_widgets import MaskLablWidg as MaskWidget
+from simpler_param_widgets import MaskWidget
 from simpler_param_widgets import (
     FindspotsSimplerParameterTab, IndexSimplerParamTab,
     RefineBravaiSimplerParamTab, RefineSimplerParamTab,
