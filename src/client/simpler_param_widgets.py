@@ -575,18 +575,23 @@ class MaskWidget(QWidget):
         self.comp_list.append(inner_lst_pair)
         self.comp_list_update()
 
-    def comp_list_update(self):
-        print("\n self.comp_list =", self.comp_list)
+
+    def build_full_list(self):
         first_list = list(self.comp_list)
         first_list.append(["output.mask", "tmp_mask.pickle"])
         print("first_list =", first_list, "\n")
 
-        new_full_list = [
+        full_list = [
             first_list,
             [
                 ["input.mask", "tmp_mask.pickle"]
             ]
         ]
+        return full_list
+
+    def comp_list_update(self):
+        print("\n self.comp_list =", self.comp_list)
+        new_full_list = self.build_full_list()
         self.all_items_changed.emit(new_full_list)
         self.update_comp_label()
         return new_full_list

@@ -380,7 +380,8 @@ class MainObject(QObject):
 
         if tab_index == 0:
             try:
-                new_lst = self.param_widgets[self.curr_widg_key]["simple"].comp_list_update()
+                simpl_widg = self.param_widgets[self.curr_widg_key]["simple"]
+                new_lst = simpl_widg.comp_list_update()
                 self.do_image_view.update_tmp_mask(new_lst[0][0:-1])
 
             except AttributeError:
@@ -562,18 +563,26 @@ class MainObject(QObject):
     def reset_new_node(self):
         self.new_node.reset_all_params()
         self.reset_param()
+        try:
+            simpl_widg = self.param_widgets[self.curr_widg_key]["simple"]
+            new_full_list = simpl_widg.build_full_list()
+            self.tmp_mask_changed(new_full_list)
+
+        except AttributeError:
+            print("this node does not need build_full_list")
 
     def all_items_param_changed(self, lst_of_lst):
-        if self.new_node.number == self.current_nod_num:
-            self.new_node.reset_all_params()
-            try:
+        try:
+            if self.new_node.number == self.current_nod_num:
+                print("\n\n Updating Params with", lst_of_lst, "\n\n")
+                self.new_node.reset_all_params()
                 self.new_node.set_all_parameters(lst_of_lst)
 
-            except AttributeError:
-                print(
-                    "No need to update parameters for non existent green node \n",
-                    "or no twin widget \n"
-                )
+        except AttributeError:
+            print(
+                "No need to update parameters for non existent green node \n",
+                "or no twin widget \n"
+            )
 
     def item_param_changed(self, str_path = None, str_value = None, lst_num = 0):
         try:
