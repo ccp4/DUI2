@@ -221,6 +221,15 @@ class ImgGraphicsScene(QGraphicsScene):
                     )
                     self.addEllipse(rectangle, self.green_pen)
 
+                elif pict[0] == 'untrusted.polygon':
+                    print("drawing Polygon")
+                    self.addLine(
+                        lst_num[0], lst_num[2],
+                        lst_num[1], lst_num[3],
+                        self.green_pen
+                    )
+
+
         except TypeError:
             pass
 
@@ -923,6 +932,16 @@ class DoImageView(QObject):
                         y_pos, self.my_scene.green_pen
                     )
 
+                elif self.mask_comp == "poly":
+                    dx = float(x_pos - self.mask_x_ini)
+                    dy = float(y_pos - self.mask_y_ini)
+                    r = int(np.sqrt(dx * dx + dy * dy))
+
+                    self.my_scene.addLine(
+                        self.mask_x_ini, self.mask_y_ini, x_pos,
+                        y_pos, self.my_scene.green_pen
+                    )
+
     def on_mouse_press(self, x_pos, y_pos):
         print("on_mouse_press \n x_pos, y_pos =", x_pos, y_pos)
         if self.mask_mode:
@@ -982,6 +1001,46 @@ class DoImageView(QObject):
                             "x_c"   : int(self.mask_x_ini) ,
                             "y_c"   : int(self.mask_y_ini) ,
                             "r"     : r ,
+                        }
+                    )
+
+                elif self.mask_comp == "poly":
+                    x_ini = int(self.mask_x_ini)
+                    x_end = int(x_pos)
+                    y_ini = int(self.mask_y_ini)
+                    y_end = int(y_pos)
+
+                    if x_ini < 0:
+                        x_ini = 0
+
+                    if y_ini < 0:
+                        y_ini = 0
+
+                    if x_end < 0:
+                        x_end = 0
+
+                    if y_end < 0:
+                        y_end = 0
+
+                    if x_ini > self.img_d1_d2[0] - 2:
+                        x_ini = self.img_d1_d2[0] - 2
+
+                    if y_ini > self.img_d1_d2[1] - 2:
+                        y_ini = self.img_d1_d2[1] - 2
+
+                    if x_end > self.img_d1_d2[0] - 2:
+                        x_end = self.img_d1_d2[0] - 2
+
+                    if y_end > self.img_d1_d2[1] - 2:
+                        y_end = self.img_d1_d2[1] - 2
+
+                    self.new_mask_comp.emit(
+                        {
+                            "type"  : "poly" ,
+                            "x_ini" : x_ini ,
+                            "x_end" : x_end ,
+                            "y_ini" : y_ini ,
+                            "y_end" : y_end ,
                         }
                     )
 
