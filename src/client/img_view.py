@@ -222,13 +222,14 @@ class ImgGraphicsScene(QGraphicsScene):
                     self.addEllipse(rectangle, self.green_pen)
 
                 elif pict[0] == 'untrusted.polygon':
-                    print("drawing Polygon")
-                    self.addLine(
-                        lst_num[0], lst_num[2],
-                        lst_num[1], lst_num[3],
-                        self.green_pen
-                    )
-
+                    siz_n_blk = (len(lst_num) - 2) / 2
+                    if siz_n_blk >= 1:
+                        for i in range(int(siz_n_blk)):
+                            self.addLine(
+                                lst_num[i * 2], lst_num[i * 2 + 1],
+                                lst_num[i * 2 + 2], lst_num[i * 2 + 3],
+                                self.green_pen
+                            )
 
         except TypeError:
             pass
