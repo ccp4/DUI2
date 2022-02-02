@@ -579,7 +579,7 @@ class MaskWidget(QWidget):
 
         elif comp_dict["type"] == "poly":
             #try:
-            if self.comp_list == []:
+            if self.comp_list == [] or self.comp_list[-1][0] != "untrusted.polygon":
                 inner_lst_pair = [
                     "untrusted.polygon",
                     str(comp_dict["x_end"]) + "," + str(comp_dict["y_end"]) + ","
@@ -587,7 +587,6 @@ class MaskWidget(QWidget):
                 self.comp_list.append(inner_lst_pair)
 
             elif self.comp_list[-1][0] == "untrusted.polygon":
-                print("\n\n adding to already started poligon \n\n")
                 str_tail = str(comp_dict["x_end"]) + "," + str(comp_dict["y_end"]) + ","
                 self.comp_list[-1][1] += str_tail
 
