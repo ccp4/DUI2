@@ -56,7 +56,6 @@ class Browser(object):
             byt_data = bytes(str_dir_tree.encode('utf-8'))
             return_list = byt_data
 
-        #elif uni_cmd == "get_image_slice":
         elif uni_cmd == "gis":
             img_num = int(cmd_lst[1])
             print("generating slice of image", img_num)
@@ -86,6 +85,32 @@ class Browser(object):
                 byt_data = bytes(str_json.encode('utf-8'))
                 return_list = byt_data
 
+        elif uni_cmd == "gmis":
+            img_num = int(cmd_lst[1])
+            print("generating slice of mask image", img_num)
+
+            inv_scale = 1
+            for sub_par in cmd_lst[2:]:
+                eq_pos = sub_par.find("=")
+                left_side = sub_par[0:eq_pos]
+                right_side = sub_par[eq_pos + 1:]
+                if left_side == "inv_scale":
+                    inv_scale = int(right_side)
+                    print("inv_scale =", inv_scale)
+
+                elif left_side == "view_rect":
+                    print("view_rect =", right_side)
+                    [x1, y1, x2, y2] = right_side.split(",")
+                    print("x1, y1, x2, y2 =", x1, y1, x2, y2)
+
+            exp_path = cmd_dict["path"][0]
+            str_json = flex_arr_2_json.get_json_w_2d_mask_slise(
+                [exp_path], img_num, inv_scale, x1, y1, x2, y2
+            )
+            if str_json is not None:
+                byt_data = bytes(str_json.encode('utf-8'))
+                return_list = byt_data
+
         elif uni_cmd == "gi":
             img_num = int(cmd_lst[1])
             print("generating image", img_num)
@@ -98,8 +123,6 @@ class Browser(object):
                 byt_data = bytes(str_json.encode('utf-8'))
                 return_list = byt_data
 
-        ############################## START copy
-
         elif uni_cmd == "gmi":
             img_num = int(cmd_lst[1])
             print("generating slice of mask image", img_num)
@@ -111,9 +134,6 @@ class Browser(object):
             if str_json is not None:
                 byt_data = bytes(str_json.encode('utf-8'))
                 return_list = byt_data
-
-
-        ############################## FINISH copy
 
         elif uni_cmd == "get_template":
 

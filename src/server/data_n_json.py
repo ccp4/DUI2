@@ -154,8 +154,6 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
             except (IndexError, AttributeError):
                 print("\n *** ERROR *** \n wrong line \n not sending IMG")
 
-    ##############################  INI copy ##############################################
-
     elif uni_cmd[0] == "get_mask_image":
         print("\n\n *****************  get_mask_image  ******************\n\n")
 
@@ -179,11 +177,10 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
 
     elif uni_cmd[0] == "get_mask_image_slice":
         print("\n\n *****************  get_mask_image_slice  ******************\n\n")
-        tmp_off = '''
         for lin2go in cmd_dict["nod_lst"]:
             try:
                 print(
-                    "generating slice of image for line:", lin2go,
+                    "generating slice of mask image for line:", lin2go,
                     " image:", int(uni_cmd[1]), "\n uni_cmd =", uni_cmd,
                     "\n"
                 )
@@ -202,7 +199,7 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
                         print("x1, y1, x2, y2 =", x1, y1, x2, y2)
 
                 #TODO remember to check if the list is empty
-                str_json = flex_arr_2_json.get_json_w_2d_slise(
+                str_json = flex_arr_2_json.get_json_w_2d_mask_slise(
                     step_list[lin2go]._lst_expt_out,
                     int(uni_cmd[1]), inv_scale, x1, y1, x2, y2
                 )
@@ -212,9 +209,6 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
 
             except (IndexError, AttributeError):
                 print("\n *** ERROR *** \n wrong line \n not sending IMG")
-        '''
-
-    ################################### END copy #########################################
 
     elif uni_cmd[0] == "get_reflection_list":
         for lin2go in cmd_dict["nod_lst"]:

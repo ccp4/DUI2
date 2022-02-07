@@ -41,7 +41,6 @@ def load_img_json_w_str(
 
     return np_array_out
 
-################################################### START copy
 
 def load_mask_img_json_w_str(
     uni_url = None, nod_num_lst = [1], img_num = 0, exp_path = None
@@ -58,7 +57,7 @@ def load_mask_img_json_w_str(
         dic_str = zlib.decompress(compresed)
         arr_dic = json.loads(dic_str)
         end_tm = time.time()
-        print("full IMG request took ", end_tm - start_tm, "sec")
+        print("full Mask IMG request took ", end_tm - start_tm, "sec")
         d1 = arr_dic["d1"]
         d2 = arr_dic["d2"]
         str_data = arr_dic["str_data"]
@@ -86,9 +85,6 @@ def load_mask_img_json_w_str(
 
     return np_array_out
 
-
-
-################################################### FINISH copy
 
 def crunch_min_max(data2d, i_min_max):
     data2d_ini = np.copy(data2d)

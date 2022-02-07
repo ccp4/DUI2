@@ -70,6 +70,99 @@ class LoadFullMaskImage(QThread):
         )
 
 
+class LoadSliceMaskImage(QThread):
+    progressing = Signal(int)
+    slice_loaded = Signal(dict)
+    def __init__(
+        self, unit_URL = None, nod_num_lst = None,
+        img_num = None, inv_scale = None,
+        x1 = None, y1 = None, x2 = None, y2 = None,
+        path_in = None
+    ):
+        super(LoadSliceMaskImage, self).__init__()
+        self.uni_url =      unit_URL
+        self.nod_num_lst =  nod_num_lst
+        self.img_num =      img_num
+        self.inv_scale =    inv_scale
+        self.x1 =           x1
+        self.y1 =           y1
+        self.x2 =           x2
+        self.y2 =           y2
+        self.exp_path =     path_in
+
+    def run(self):
+        print("loading mask slice of image ")
+
+        my_cmd_lst = [
+            "gmis " + str(self.img_num) +
+            " inv_scale=" + str(self.inv_scale) +
+            " view_rect=" + str(self.x1) + "," + str(self.y1) +
+                      "," + str(self.x2) + "," + str(self.y2)
+        ]
+
+        my_cmd = {"nod_lst" : self.nod_num_lst,
+                  "path"    : self.exp_path,
+                  "cmd_lst" : my_cmd_lst}
+        start_tm = time.time()
+
+        try:
+            req_get = requests.get(self.uni_url, stream=True, params = my_cmd)
+            total_size = int(req_get.headers.get('content-length', 0)) + 1
+            print("total_size =", total_size)
+            block_size = 65536
+            downloaded_size = 0
+            compresed = bytes()
+            for data in req_get.iter_content(block_size):
+                compresed += data
+                downloaded_size += block_size
+                progress = int(100.0 * (downloaded_size / total_size))
+                self.progressing.emit(progress)
+
+            dic_str = zlib.decompress(compresed)
+            arr_dic = json.loads(dic_str)
+            end_tm = time.time()
+            print("slice IMG request took ", end_tm - start_tm, "sec")
+
+            str_data = arr_dic["str_data"]
+            d1 = arr_dic["d1"]
+            d2 = arr_dic["d2"]
+            print("d1, d2 =", d1, d2)
+
+            n_tup = tuple(str_data)
+            arr_1d = np.asarray(n_tup, dtype = 'float')
+
+            np_array_out = arr_1d.reshape(d1, d2)
+
+        except zlib.error:
+            print("zlib.error(load_slice_mask_img_json)")
+            np_array_out = None
+
+        except ConnectionError:
+            print("\n ConnectionError (load_slice_mask_img_json) \n")
+            np_array_out = None
+
+        except requests.exceptions.RequestException:
+            print(
+                "\n requests.exceptions.RequestException (load_slice_mask_img_json) \n"
+            )
+            np_array_out = None
+
+        except json.decoder.JSONDecodeError:
+            print(
+                "\n json.decoder.JSONDecodeError (load_slice_mask_img_json) \n"
+            )
+            np_array_out = None
+
+        self.slice_loaded.emit(
+            {
+                "slice_image" :  np_array_out,
+                "inv_scale"   :  self.inv_scale,
+                "x1"          :  self.x1,
+                "y1"          :  self.y1,
+                "x2"          :  self.x2,
+                "y2"          :  self.y2
+            }
+        )
 
 
 class LoadFullImage(QThread):
@@ -608,6 +701,15 @@ class DoImageView(QObject):
             #TODO check what happens here if the user navigates
             #     to a different dataset
 
+        try:
+            self.np_full_mask_img = np.ones((
+                self.img_d1_d2[0], self.img_d1_d2[1]
+                ), dtype = 'float')
+            self.np_full_mask_img[:,:] = 1.0
+
+        except TypeError:
+            self.np_full_mask_img = None
+
         return nod_num
 
     def refresh_pixel_map(self):
@@ -675,14 +777,10 @@ class DoImageView(QObject):
 
     def new_full_img(self, tup_data):
         self.full_image_loaded = True
-        print(
-            "new_full_img from: node ", tup_data[0], ", image ", tup_data[1]
-        )
         self.np_full_img = tup_data[2]
         self.refresh_pixel_map()
 
     def new_full_mask_img(self, tup_data):
-        print("\n\n new_full_mask_img(DoImageView)")
         self.np_full_mask_img = tup_data[2]
         self.refresh_pixel_map()
 
@@ -695,14 +793,12 @@ class DoImageView(QObject):
         except AttributeError:
             print("first full image loading")
 
-
         try:
             self.load_full_mask_image.quit()
             self.load_full_mask_image.wait()
 
         except AttributeError:
             print("first full image loading")
-
 
         self.load_full_image = LoadFullImage(
             unit_URL = self.uni_url,
@@ -723,7 +819,6 @@ class DoImageView(QObject):
 
         self.load_full_mask_image.image_loaded.connect(self.new_full_mask_img)
         self.load_full_mask_image.start()
-
 
     def check_move(self):
         self.get_x1_y1_x2_y2()
@@ -832,6 +927,39 @@ class DoImageView(QObject):
 
         self.l_stat.load_finished()
 
+    def new_slice_mask_img(self, dict_slice):
+        try:
+            slice_image = dict_slice["slice_image"]
+            rep_slice_img = np.repeat(np.repeat(
+                    slice_image[:,:],
+                    dict_slice["inv_scale"], axis=0
+                ),
+                dict_slice["inv_scale"], axis=1
+            )
+
+            rep_len_x = np.size(rep_slice_img[:,0:1])
+            rep_len_y = np.size(rep_slice_img[0:1,:])
+
+            if dict_slice["x1"] + rep_len_x > np.size(self.np_full_mask_img[:,0:1]):
+                rep_len_x = np.size(self.np_full_mask_img[:,0:1]) - dict_slice["x1"]
+                print("limiting dx")
+
+            if dict_slice["y1"] + rep_len_y > np.size(self.np_full_mask_img[0:1,:]):
+                rep_len_y = np.size(self.np_full_mask_img[0:1,:]) - dict_slice["y1"]
+                print("limiting dy")
+
+            if self.full_image_loaded == False:
+                self.np_full_mask_img[
+                    dict_slice["x1"]:dict_slice["x1"] + rep_len_x,
+                    dict_slice["y1"]:dict_slice["y1"] + rep_len_y
+                ] = rep_slice_img[0:rep_len_x, 0:rep_len_y]
+                self.refresh_pixel_map()
+
+        except TypeError:
+            print("loading image slice in next loop")
+
+        self.l_stat.load_finished()
+
     def update_progress(self, progress):
         #print("time to show ", progress, " in progress bar")
         self.l_stat.load_progress(progress)
@@ -846,6 +974,13 @@ class DoImageView(QObject):
 
             except AttributeError:
                 print("first slice of image loading")
+
+            try:
+                self.load_slice_mask_image.quit()
+                self.load_slice_mask_image.wait()
+
+            except AttributeError:
+                print("first slice of mask image loading")
 
             self.get_x1_y1_x2_y2()
             self.set_inv_scale()
@@ -868,6 +1003,27 @@ class DoImageView(QObject):
                 self.update_progress
             )
             self.load_slice_image.start()
+
+            # Now Same for mask
+            self.load_slice_mask_image = LoadSliceMaskImage(
+                unit_URL = self.uni_url,
+                nod_num_lst = [self.cur_nod_num],
+                img_num = self.cur_img_num,
+                inv_scale = self.inv_scale,
+                x1 = self.x1,
+                y1 = self.y1,
+                x2 = self.x2,
+                y2 = self.y2,
+                path_in = self.exp_path
+            )
+            self.load_slice_mask_image.slice_loaded.connect(
+                self.new_slice_mask_img
+            )
+            self.load_slice_mask_image.progressing.connect(
+                self.update_progress
+            )
+            self.load_slice_mask_image.start()
+
 
     def OneOneScale(self, event):
         print("OneOneScale")

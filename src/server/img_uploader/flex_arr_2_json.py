@@ -259,5 +259,60 @@ def get_json_w_2d_slise(experiments_list_path, img_num, inv_scale, x1, y1, x2, y
 
     return str_data
 
+####################################################################################
+
+def get_json_w_2d_mask_slise(experiments_list_path, img_num, inv_scale, x1, y1, x2, y2):
+    print("experiments_list_path, img_num:", experiments_list_path, img_num)
+    pan_num = 0
+    experiments_path = experiments_list_path[0]
+    print("importing from:", experiments_path)
+    experiments = ExperimentListFactory.from_json_file(experiments_path)
+
+    lst_num_of_imgs = []
+    for single_sweep in experiments.imagesets():
+        lst_num_of_imgs.append(len(single_sweep.indices()))
+
+    print("lst_num_of_imgs =", lst_num_of_imgs)
+
+    on_sweep_img_num = img_num
+    n_sweep = 0
+    for num_of_imgs in lst_num_of_imgs:
+        if on_sweep_img_num >= num_of_imgs:
+            on_sweep_img_num -= num_of_imgs
+            n_sweep += 1
+
+        else:
+            break
+
+    print("geting image #", on_sweep_img_num, "from sweep #", n_sweep)
+
+    imageset_tmp = experiments.imagesets()[n_sweep]
+    mask_file = imageset_tmp.external_lookup.mask.filename
+    try:
+        pick_file = open(mask_file, "rb")
+        mask_tup_obj = pickle.load(pick_file)
+        pick_file.close()
+
+        mask_flex = mask_tup_obj[0]
+
+        start_tm = time.time()
+        str_data = img_stream_ext.slice_mask_2_str(
+            mask_flex, inv_scale,
+            int(float(x1)), int(float(y1)),
+            int(float(x2)), int(float(y2))
+        )
+        end_tm = time.time()
+        print("C++ bit took ", end_tm - start_tm)
+
+        if str_data == "Error":
+            print('str_data == "Error"')
+            str_data = None
+
+    except FileNotFoundError:
+        str_data = None
+
+    return str_data
+
+
 
 
