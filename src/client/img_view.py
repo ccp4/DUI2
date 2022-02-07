@@ -37,11 +37,39 @@ from exec_utils import json_data_request
 from outputs import HandleLoadStatusLabel
 
 from img_view_utils import (
-    crunch_min_max, np2bmp_monocrome, np2bmp_heat, load_json_w_str
+    crunch_min_max, np2bmp_monocrome, np2bmp_heat,
+    load_img_json_w_str, load_mask_img_json_w_str
 )
 
 #FIXME change the name of FileBrowser to camel_case
 from simpler_param_widgets import FileBrowser, build_template
+
+
+class LoadFullMaskImage(QThread):
+    image_loaded = Signal(tuple)
+    def __init__(
+        self, unit_URL = None, cur_nod_num = None,
+        cur_img_num = None, path_in = None
+    ):
+        super(LoadFullMaskImage, self).__init__()
+        self.uni_url = unit_URL
+        self.cur_nod_num = cur_nod_num
+        self.cur_img_num = cur_img_num
+        self.exp_path = path_in
+
+    def run(self):
+        print("loading image ", self.cur_img_num, " in full resolution")
+        np_full_img = load_mask_img_json_w_str(
+            self.uni_url,
+            nod_num_lst = [self.cur_nod_num],
+            img_num = self.cur_img_num,
+            exp_path = self.exp_path
+        )
+        self.image_loaded.emit(
+            (self.cur_nod_num, self.cur_img_num, np_full_img)
+        )
+
+
 
 
 class LoadFullImage(QThread):
@@ -58,7 +86,7 @@ class LoadFullImage(QThread):
 
     def run(self):
         print("loading image ", self.cur_img_num, " in full resolution")
-        np_full_img = load_json_w_str(
+        np_full_img = load_img_json_w_str(
             self.uni_url,
             nod_num_lst = [self.cur_nod_num],
             img_num = self.cur_img_num,
@@ -653,15 +681,28 @@ class DoImageView(QObject):
         self.np_full_img = tup_data[2]
         self.refresh_pixel_map()
 
+    def new_full_mask_img(self, tup_data):
+        print("\n\n new_full_mask_img(DoImageView)")
+        self.np_full_mask_img = tup_data[2]
+        self.refresh_pixel_map()
+
     def full_img_show(self):
         self.full_image_loaded = False
         try:
-            #print(dir(self.load_full_image))
             self.load_full_image.quit()
             self.load_full_image.wait()
 
         except AttributeError:
             print("first full image loading")
+
+
+        try:
+            self.load_full_mask_image.quit()
+            self.load_full_mask_image.wait()
+
+        except AttributeError:
+            print("first full image loading")
+
 
         self.load_full_image = LoadFullImage(
             unit_URL = self.uni_url,
@@ -669,8 +710,20 @@ class DoImageView(QObject):
             cur_img_num = self.cur_img_num,
             path_in = self.exp_path
         )
+
+        self.load_full_mask_image = LoadFullMaskImage(
+            unit_URL = self.uni_url,
+            cur_nod_num = self.cur_nod_num,
+            cur_img_num = self.cur_img_num,
+            path_in = self.exp_path
+        )
+
         self.load_full_image.image_loaded.connect(self.new_full_img)
         self.load_full_image.start()
+
+        self.load_full_mask_image.image_loaded.connect(self.new_full_mask_img)
+        self.load_full_mask_image.start()
+
 
     def check_move(self):
         self.get_x1_y1_x2_y2()
@@ -886,10 +939,17 @@ class DoImageView(QObject):
     def on_mouse_move(self, x_pos, y_pos):
         try:
             str_out = "  I(" + str(x_pos) + ", " + str(y_pos) + ") = " +\
-                      str(self.np_full_img[y_pos, x_pos]) + "  "
+                  str(self.np_full_img[y_pos, x_pos])
+
 
         except (AttributeError, IndexError, TypeError):
             str_out = " I = ?"
+
+        try:
+            str_out += "  mask=" + str(self.np_full_mask_img[y_pos, x_pos])
+
+        except (AttributeError, IndexError, TypeError):
+            str_out += "  mask = ?"
 
         self.main_obj.window.EasterEggButton.setText(str_out)
 

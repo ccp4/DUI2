@@ -35,7 +35,7 @@ def save_json_w_str(flex_array_in, inv_scale, x1, y1, x2, y2):
         file_out.write(byt_data)
 
 
-def load_json_w_str():
+def load_img_json_w_str():
     with open("arr_img.json.zip", 'rb') as json_file:
         compresed = json_file.read()
 
@@ -70,7 +70,7 @@ if __name__ == "__main__":
     mask_flex = mask_tup_obj[0]
     save_json_w_str(mask_flex, 5, 850, 1000, 950, 1200)
 
-    loaded_array = load_json_w_str()
+    loaded_array = load_img_json_w_str()
     print("drawing")
     draw_pyplot(loaded_array)
 

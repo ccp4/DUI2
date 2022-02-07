@@ -1,7 +1,7 @@
 import numpy as np
 import json, zlib, time, requests
 
-def load_json_w_str(
+def load_img_json_w_str(
     uni_url = None, nod_num_lst = [1], img_num = 0, exp_path = None
 ):
     my_cmd_lst = ["gi " + str(img_num)]
@@ -24,24 +24,71 @@ def load_json_w_str(
         arr_1d = np.fromstring(str_data, dtype = float, sep = ',')
         np_array_out = arr_1d.reshape(d1, d2)
     except zlib.error:
-        print("zlib.error(load_json_w_str)")
+        print("zlib.error(load_img_json_w_str)")
         return None
 
     except ConnectionError:
-        print("\n ConnectionError (load_json_w_str) \n")
+        print("\n ConnectionError (load_img_json_w_str) \n")
         return None
 
     except requests.exceptions.RequestException:
-        print("\n requests.exceptions.RequestException (load_json_w_str) \n")
+        print("\n requests.exceptions.RequestException (load_img_json_w_str) \n")
         return None
 
     except ZeroDivisionError:
-        print("\n ZeroDivisionError (load_json_w_str) \n")
+        print("\n ZeroDivisionError (load_img_json_w_str) \n")
+        return None
+
+    return np_array_out
+
+################################################### START copy
+
+def load_mask_img_json_w_str(
+    uni_url = None, nod_num_lst = [1], img_num = 0, exp_path = None
+):
+    my_cmd_lst = ["gmi " + str(img_num)]
+    my_cmd = {"nod_lst" : nod_num_lst,
+              "path"    : exp_path,
+              "cmd_lst" : my_cmd_lst}
+
+    try:
+        start_tm = time.time()
+        req_get = requests.get(uni_url, stream = True, params = my_cmd)
+        compresed = req_get.content
+        dic_str = zlib.decompress(compresed)
+        arr_dic = json.loads(dic_str)
+        end_tm = time.time()
+        print("full IMG request took ", end_tm - start_tm, "sec")
+        d1 = arr_dic["d1"]
+        d2 = arr_dic["d2"]
+        str_data = arr_dic["str_data"]
+
+        print("d1, d2 =", d1, d2)
+        n_tup = tuple(str_data)
+        arr_1d = np.asarray(n_tup, dtype = 'float')
+
+        np_array_out = arr_1d.reshape(d1, d2)
+    except zlib.error:
+        print("zlib.error(load_img_json_w_str)")
+        return None
+
+    except ConnectionError:
+        print("\n ConnectionError (load_img_json_w_str) \n")
+        return None
+
+    except requests.exceptions.RequestException:
+        print("\n requests.exceptions.RequestException (load_img_json_w_str) \n")
+        return None
+
+    except ZeroDivisionError:
+        print("\n ZeroDivisionError (load_img_json_w_str) \n")
         return None
 
     return np_array_out
 
 
+
+################################################### FINISH copy
 
 def crunch_min_max(data2d, i_min_max):
     data2d_ini = np.copy(data2d)

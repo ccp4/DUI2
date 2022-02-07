@@ -88,7 +88,7 @@ class Browser(object):
 
         elif uni_cmd == "gi":
             img_num = int(cmd_lst[1])
-            print("generating slice of image", img_num)
+            print("generating image", img_num)
             exp_path = cmd_dict["path"][0]
             str_json = flex_arr_2_json.get_json_w_img_2d(
                 [exp_path], img_num,
@@ -97,6 +97,23 @@ class Browser(object):
             if str_json is not None:
                 byt_data = bytes(str_json.encode('utf-8'))
                 return_list = byt_data
+
+        ############################## START copy
+
+        elif uni_cmd == "gmi":
+            img_num = int(cmd_lst[1])
+            print("generating slice of mask image", img_num)
+            exp_path = cmd_dict["path"][0]
+            str_json = flex_arr_2_json.get_json_w_mask_img_2d(
+                [exp_path], img_num,
+            )
+
+            if str_json is not None:
+                byt_data = bytes(str_json.encode('utf-8'))
+                return_list = byt_data
+
+
+        ############################## FINISH copy
 
         elif uni_cmd == "get_template":
 

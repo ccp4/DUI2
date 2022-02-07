@@ -154,6 +154,68 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
             except (IndexError, AttributeError):
                 print("\n *** ERROR *** \n wrong line \n not sending IMG")
 
+    ##############################  INI copy ##############################################
+
+    elif uni_cmd[0] == "get_mask_image":
+        print("\n\n *****************  get_mask_image  ******************\n\n")
+
+        for lin2go in cmd_dict["nod_lst"]:
+            try:
+                print(
+                    "generating mask image JSON data for line:", lin2go,
+                    " image:", int(uni_cmd[1])
+                )
+                #TODO remember to check if the list is empty
+                str_json = flex_arr_2_json.get_json_w_mask_img_2d(
+                    step_list[lin2go]._lst_expt_out,
+                    int(uni_cmd[1])
+                )
+
+                byt_data = bytes(str_json.encode('utf-8'))
+                return_list = byt_data
+
+            except (IndexError, AttributeError):
+                print("\n *** ERROR *** \n wrong line \n not sending IMG")
+
+    elif uni_cmd[0] == "get_mask_image_slice":
+        print("\n\n *****************  get_mask_image_slice  ******************\n\n")
+        tmp_off = '''
+        for lin2go in cmd_dict["nod_lst"]:
+            try:
+                print(
+                    "generating slice of image for line:", lin2go,
+                    " image:", int(uni_cmd[1]), "\n uni_cmd =", uni_cmd,
+                    "\n"
+                )
+                inv_scale = 1
+                for sub_par in uni_cmd[2:]:
+                    eq_pos = sub_par.find("=")
+                    left_side = sub_par[0:eq_pos]
+                    right_side = sub_par[eq_pos + 1:]
+                    if left_side == "inv_scale":
+                        inv_scale = int(right_side)
+                        print("inv_scale =", inv_scale)
+
+                    elif left_side == "view_rect":
+                        print("view_rect =", right_side)
+                        [x1, y1, x2, y2] = right_side.split(",")
+                        print("x1, y1, x2, y2 =", x1, y1, x2, y2)
+
+                #TODO remember to check if the list is empty
+                str_json = flex_arr_2_json.get_json_w_2d_slise(
+                    step_list[lin2go]._lst_expt_out,
+                    int(uni_cmd[1]), inv_scale, x1, y1, x2, y2
+                )
+                if str_json is not None:
+                    byt_data = bytes(str_json.encode('utf-8'))
+                    return_list = byt_data
+
+            except (IndexError, AttributeError):
+                print("\n *** ERROR *** \n wrong line \n not sending IMG")
+        '''
+
+    ################################### END copy #########################################
+
     elif uni_cmd[0] == "get_reflection_list":
         for lin2go in cmd_dict["nod_lst"]:
             #try:

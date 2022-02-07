@@ -7,8 +7,17 @@ except ImportError:
 from dials.array_family import flex
 import json
 import time
+import pickle
 
-from dxtbx.model.experiment_list import ExperimentListFactory
+#from dxtbx.model.experiment_list import ExperimentListFactory
+
+from dxtbx.datablock import DataBlockFactory
+from dxtbx.model import Experiment, ExperimentList
+from dxtbx.model.experiment_list import (
+    ExperimentListFactory,
+    InvalidExperimentListError,
+)
+
 
 def list_p_arrange_exp(
     bbox_col = None, pan_col = None, hkl_col = None, n_imgs = None,
@@ -158,6 +167,47 @@ def get_json_w_img_2d(experiments_list_path, img_num):
 
     end_tm = time.time()
     print("str/tuple use and compressing took ", end_tm - start_tm)
+
+    return str_data
+
+
+    ######################################################### START copy
+
+def get_json_w_mask_img_2d(experiments_list_path, img_num):
+    print("experiments_list_path, img_num:", experiments_list_path, img_num)
+    pan_num = 0
+    experiments_path = experiments_list_path[0]
+    print("importing from:", experiments_path)
+    experiments = ExperimentListFactory.from_json_file(experiments_path)
+
+    lst_num_of_imgs = []
+    for single_sweep in experiments.imagesets():
+        lst_num_of_imgs.append(len(single_sweep.indices()))
+
+    print("lst_num_of_imgs =", lst_num_of_imgs)
+
+    on_sweep_img_num = img_num
+    n_sweep = 0
+    for num_of_imgs in lst_num_of_imgs:
+        if on_sweep_img_num >= num_of_imgs:
+            on_sweep_img_num -= num_of_imgs
+            n_sweep += 1
+
+        else:
+            break
+
+    print("geting image #", on_sweep_img_num, "from sweep #", n_sweep)
+    try:
+        imageset_tmp = experiments.imagesets()[n_sweep]
+        mask_file = imageset_tmp.external_lookup.mask.filename
+        pick_file = open(mask_file, "rb")
+        mask_tup_obj = pickle.load(pick_file)
+        pick_file.close()
+        mask_flex = mask_tup_obj[0]
+        str_data = img_stream_ext.mask_arr_2_str(mask_flex)
+
+    except FileNotFoundError:
+        str_data = None
 
     return str_data
 
