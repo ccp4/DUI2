@@ -123,7 +123,7 @@ class DoLoadHTML(QObject):
         print("Do Request =", do_request)
         if do_request:
             print("network load_html ... Start")
-            nod_p_num = self.main_obj.current_nod_num
+            nod_p_num = self.main_obj.curr_nod_num
             found_html = False
             for html_info in self.lst_html:
                 if(
@@ -257,7 +257,7 @@ class ShowLog(QObject):
                 }
             )
 
-        if self.main_obj.current_nod_num == nod_p_num:
+        if self.main_obj.curr_nod_num == nod_p_num:
             self.main_obj.window.incoming_text.moveCursor(QTextCursor.End)
             self.main_obj.window.incoming_text.insertPlainText(new_line)
 

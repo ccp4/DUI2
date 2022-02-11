@@ -616,7 +616,7 @@ class TreeDirScene(QGraphicsScene):
                 )
 
             for pos, node in enumerate(self.nod_lst):
-                if node["number"] == self.current_nod_num:
+                if node["number"] == self.curr_nod_num:
                     current_nod_pos = pos
                     right_x1, down_y1 = self.get_coords(
                         current_nod_pos + 0.43,
@@ -774,7 +774,7 @@ class TreeDirScene(QGraphicsScene):
             self.update()
 
     def draw_tree_graph(
-            self, nod_lst_in = [], current_nod_num = 0, new_node = None
+            self, nod_lst_in = [], curr_nod_num = 0, new_node = None
     ):
         tmp_local_lst = copy_lst_nodes(nod_lst_in)
         self.paint_nod_lst = add_ready_node(tmp_local_lst, new_node)
@@ -782,10 +782,10 @@ class TreeDirScene(QGraphicsScene):
         lst_2d_dat = self.tree_obj.get_tree_data()
 
         self.nod_lst = lst_2d_dat
-        self.current_nod_num = current_nod_num
+        self.curr_nod_num = curr_nod_num
         self.draw_all()
 
     def new_nod_num(self, nod_num_in):
-        self.current_nod_num = nod_num_in
+        self.curr_nod_num = nod_num_in
         self.draw_all()
 

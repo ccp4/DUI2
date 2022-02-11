@@ -311,7 +311,7 @@ class MainObject(QObject):
 
         self.curr_widg_key = "Root"
         self.new_node = None
-        self.current_nod_num = 0
+        self.curr_nod_num = 0
 
         self.server_nod_lst = []
         self.request_display()
@@ -375,7 +375,7 @@ class MainObject(QObject):
         print("tab_index =", tab_index)
         fnd_cur_nod = False
         for node in self.server_nod_lst:
-            if node["number"] == self.current_nod_num:
+            if node["number"] == self.curr_nod_num:
                 fnd_cur_nod = True
 
         if tab_index == 0:
@@ -390,7 +390,7 @@ class MainObject(QObject):
             if(
                 self.new_node is not None and
                 self.new_node.m_cmd_lst[0] == "dials.generate_mask" and
-                self.new_node.number == self.current_nod_num
+                self.new_node.number == self.curr_nod_num
             ):
                 self.do_image_view.set_drag_mode(mask_mode = True)
 
@@ -401,7 +401,7 @@ class MainObject(QObject):
             self.do_image_view(in_img_num = img_num, nod_or_path = fnd_cur_nod)
 
         elif tab_index == 1:
-            self.log_show(self.current_nod_num, do_request = fnd_cur_nod)
+            self.log_show(self.curr_nod_num, do_request = fnd_cur_nod)
 
         elif tab_index == 2:
             try:
@@ -426,7 +426,7 @@ class MainObject(QObject):
 
     def clicked_4_navigation(self, node_numb):
         print("\n clicked_4_navigation\n  node_numb =", node_numb)
-        self.current_nod_num = node_numb
+        self.curr_nod_num = node_numb
         try:
             cur_nod = self.server_nod_lst[node_numb]
 
@@ -458,7 +458,7 @@ class MainObject(QObject):
     def on_node_click(self, node_numb):
         if (
             self.new_node is not None and
-            node_numb != self.current_nod_num and
+            node_numb != self.curr_nod_num and
             self.window.NodeSelecCheck.checkState() and
             self.curr_widg_key == "combine_experiments"
         ):
@@ -483,7 +483,7 @@ class MainObject(QObject):
         self.clearLayout(self.window.Next2RunLayout)
         self.window.Next2RunLayout.addStretch()
         try:
-            str_key = self.server_nod_lst[self.current_nod_num]["cmd2show"][0][6:]
+            str_key = self.server_nod_lst[self.curr_nod_num]["cmd2show"][0][6:]
             print("update_nxt_butt(", str_key, ")")
             self.update_nxt_butt(str_key)
 
@@ -495,7 +495,7 @@ class MainObject(QObject):
         small_font = QFont("OldEnglish", pointSize = small_f_size, italic=True)
         try:
             if(
-                self.server_nod_lst[self.current_nod_num]["status"]
+                self.server_nod_lst[self.curr_nod_num]["status"]
                 == "Succeeded"
             ):
                 print("\n####### key =", str_key, "\n")
@@ -528,7 +528,7 @@ class MainObject(QObject):
 
         if str_key == "reindex":
             cmd = {
-                "nod_lst":[self.current_nod_num],
+                "nod_lst":[self.curr_nod_num],
                 "cmd_lst":["get_bravais_sum"]
             }
             json_data_lst = json_data_request(self.uni_url, cmd)
@@ -573,7 +573,7 @@ class MainObject(QObject):
 
     def all_items_param_changed(self, lst_of_lst):
         try:
-            if self.new_node.number == self.current_nod_num:
+            if self.new_node.number == self.curr_nod_num:
                 print("\n\n Updating Params with", lst_of_lst, "\n\n")
                 self.new_node.reset_all_params()
                 self.new_node.set_all_parameters(lst_of_lst)
@@ -593,7 +593,7 @@ class MainObject(QObject):
 
         try:
             if(
-                self.current_nod_num == self.new_node.number
+                self.curr_nod_num == self.new_node.number
                 and
                 not self.reseting
             ):
@@ -611,9 +611,9 @@ class MainObject(QObject):
             main_list = self.param_widgets[self.curr_widg_key]["main_cmd"]
         )
         self.new_node.set_connections(
-            self.server_nod_lst, [self.current_nod_num]
+            self.server_nod_lst, [self.curr_nod_num]
         )
-        self.current_nod_num = self.new_node.number
+        self.curr_nod_num = self.new_node.number
         self.display()
         self.refresh_output()
 
@@ -622,7 +622,7 @@ class MainObject(QObject):
         self.reset_param()
         try:
             tmp_cmd_par.clone_from_list(
-                self.server_nod_lst[self.current_nod_num]["lst2run"]
+                self.server_nod_lst[self.curr_nod_num]["lst2run"]
             )
             print("\n Updating parameters from server_nod_lst")
 
@@ -646,7 +646,7 @@ class MainObject(QObject):
 
     def gray_n_ungray(self):
         try:
-            tmp_state = self.server_nod_lst[self.current_nod_num]["status"]
+            tmp_state = self.server_nod_lst[self.curr_nod_num]["status"]
 
         except IndexError:
             tmp_state = "Ready"
@@ -691,7 +691,7 @@ class MainObject(QObject):
     def display(self):
         self.tree_scene.draw_tree_graph(
             nod_lst_in = self.server_nod_lst,
-            current_nod_num = self.current_nod_num,
+            curr_nod_num = self.curr_nod_num,
             new_node = self.new_node
         )
         self.gray_n_ungray()
@@ -709,12 +709,12 @@ class MainObject(QObject):
         )
         self.new_node.set_connections(
             self.server_nod_lst,
-            self.server_nod_lst[self.current_nod_num]["parent_node_lst"]
+            self.server_nod_lst[self.curr_nod_num]["parent_node_lst"]
         )
         self.new_node.clone_from_list(
-            self.server_nod_lst[self.current_nod_num]["lst2run"]
+            self.server_nod_lst[self.curr_nod_num]["lst2run"]
         )
-        self.current_nod_num = self.new_node.number
+        self.curr_nod_num = self.new_node.number
         self.display()
         self.check_nxt_btn()
         self.refresh_output()
@@ -754,7 +754,7 @@ class MainObject(QObject):
     def req_stop(self):
         print("req_stop")
         #self.window.incoming_text.clear()
-        nod_lst = [str(self.current_nod_num)]
+        nod_lst = [str(self.curr_nod_num)]
         print("\n nod_lst", nod_lst)
         cmd = {"nod_lst":nod_lst, "cmd_lst":["stop"]}
         print("cmd =", cmd)

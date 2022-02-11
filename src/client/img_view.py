@@ -661,7 +661,7 @@ class DoImageView(QObject):
 
     def build_background_n_get_nod_num(self, nod_or_path, in_img_num):
         if nod_or_path is True:
-            nod_num = self.main_obj.current_nod_num
+            nod_num = self.main_obj.curr_nod_num
             cmd = {'nod_lst': [nod_num], 'cmd_lst': ["gt"]}
 
         elif nod_or_path is False:
@@ -1280,7 +1280,7 @@ class MainImgViewObject(QObject):
         data_init.set_data()
         self.uni_url = data_init.get_url()
 
-        self.current_nod_num = 1
+        self.curr_nod_num = 1
         self.nod_or_path = True
         self.do_image_view = DoImageView(self)
 

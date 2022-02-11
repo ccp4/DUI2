@@ -155,8 +155,6 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
                 print("\n *** ERROR *** \n wrong line \n not sending IMG")
 
     elif uni_cmd[0] == "get_mask_image":
-        print("\n\n *****************  get_mask_image  ******************\n\n")
-
         for lin2go in cmd_dict["nod_lst"]:
             try:
                 print(
@@ -176,7 +174,6 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
                 print("\n *** ERROR *** \n wrong line \n not sending IMG")
 
     elif uni_cmd[0] == "get_mask_image_slice":
-        print("\n\n *****************  get_mask_image_slice  ******************\n\n")
         for lin2go in cmd_dict["nod_lst"]:
             try:
                 print(
