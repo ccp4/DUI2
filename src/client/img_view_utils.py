@@ -217,3 +217,40 @@ class np2bmp_monocrome(object):
         img_array[:, :, 0] = img_all_chanl[:,:] #Red
         return img_array
 
+
+class np2bmp_mask(object):
+    def __init__(self):
+        self.all_chan_byte = np.empty( (255), 'int')
+        for i in range(255):
+            self.all_chan_byte[i] = i
+
+    def img_2d_rgb(self, data2d = None):
+        self.width = np.size( data2d[0:1, :] )
+        self.height = np.size( data2d[:, 0:1] )
+
+        data2d_scale = np.multiply(data2d, 254.0)
+        if(invert == True):
+            for x in np.nditer(
+                data2d_scale[:,:], op_flags=['readwrite'],
+                flags=['external_loop']
+            ):
+                x[...] = 254.0 - x[...]
+
+        img_array = np.zeros([self.height, self.width, 4], dtype=np.uint8)
+        img_all_chanl = np.empty( (self.height, self.width), 'int')
+        scaled_i = np.empty( (self.height, self.width), 'int')
+        scaled_i[:,:] = data2d_scale[:,:]
+
+        img_all_chanl[:,:] = scaled_i[:,:]
+        for x in np.nditer(
+            img_all_chanl[:,:], op_flags=['readwrite'],
+            flags=['external_loop']
+        ):
+            x[...] = self.all_chan_byte[x]
+
+        img_array[:, :, 3] = 175
+        img_array[:, :, 2] = img_all_chanl[:,:] #Blue
+        img_array[:, :, 1] = img_all_chanl[:,:] #Green
+        img_array[:, :, 0] = img_all_chanl[:,:] #Red
+        return img_array
+
