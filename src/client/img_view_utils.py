@@ -232,24 +232,15 @@ class np2bmp_mask(object):
         except TypeError:
             return None
 
-        data2d_scale = np.multiply(data2d, 254.0)
-        for x in np.nditer(
-            data2d_scale[:,:], op_flags=['readwrite'],
-            flags=['external_loop']
-        ):
-            x[...] = 254.0 - x[...]
-
         img_array = np.zeros([self.height, self.width, 4], dtype=np.uint8)
         img_all_chanl = np.empty( (self.height, self.width), 'int')
-        scaled_i = np.empty( (self.height, self.width), 'int')
-        scaled_i[:,:] = data2d_scale[:,:]
 
-        img_all_chanl[:,:] = scaled_i[:,:]
+        img_all_chanl[:,:] = data2d[:,:] * 254.0
         for x in np.nditer(
             img_all_chanl[:,:], op_flags=['readwrite'],
             flags=['external_loop']
         ):
-            x[...] = self.all_chan_byte[x]
+            x[...] = 254.0 - self.all_chan_byte[x]
 
         img_array[:, :, 3] = img_all_chanl[:,:] / 2.0                #Transp
         img_array[:, :, 2] = img_all_chanl[:,:] #Blue
