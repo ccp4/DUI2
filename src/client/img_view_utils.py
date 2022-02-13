@@ -251,9 +251,9 @@ class np2bmp_mask(object):
         ):
             x[...] = self.all_chan_byte[x]
 
-        img_array[:, :, 3] = 175
+        img_array[:, :, 3] = img_all_chanl[:,:] / 2.0                #Transp
         img_array[:, :, 2] = img_all_chanl[:,:] #Blue
-        img_array[:, :, 1] = img_all_chanl[:,:] #Green
-        img_array[:, :, 0] = img_all_chanl[:,:] #Red
+        #img_array[:, :, 1] = img_all_chanl[:,:] #Green
+        #img_array[:, :, 0] = img_all_chanl[:,:] #Red
         return img_array
 

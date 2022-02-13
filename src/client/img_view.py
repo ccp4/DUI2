@@ -375,7 +375,6 @@ class ImgGraphicsScene(QGraphicsScene):
 
     def add_mask_pixmap(self, mask_pixmap):
         self.my_mask_pix_map = mask_pixmap
-        self.addPixmap(self.my_mask_pix_map)
 
     def wheelEvent(self, event):
         float_delta = float(event.delta())
