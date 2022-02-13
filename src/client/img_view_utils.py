@@ -229,12 +229,11 @@ class np2bmp_mask(object):
         self.height = np.size( data2d[:, 0:1] )
 
         data2d_scale = np.multiply(data2d, 254.0)
-        if(invert == True):
-            for x in np.nditer(
-                data2d_scale[:,:], op_flags=['readwrite'],
-                flags=['external_loop']
-            ):
-                x[...] = 254.0 - x[...]
+        for x in np.nditer(
+            data2d_scale[:,:], op_flags=['readwrite'],
+            flags=['external_loop']
+        ):
+            x[...] = 254.0 - x[...]
 
         img_array = np.zeros([self.height, self.width, 4], dtype=np.uint8)
         img_all_chanl = np.empty( (self.height, self.width), 'int')

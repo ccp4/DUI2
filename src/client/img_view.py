@@ -37,7 +37,7 @@ from exec_utils import json_data_request
 from outputs import HandleLoadStatusLabel
 
 from img_view_utils import (
-    crunch_min_max, np2bmp_monocrome, np2bmp_heat,
+    crunch_min_max, np2bmp_monocrome, np2bmp_heat, np2bmp_mask,
     load_img_json_w_str, load_mask_img_json_w_str
 )
 
@@ -368,6 +368,10 @@ class ImgGraphicsScene(QGraphicsScene):
 
         self.draw_temp_mask()
 
+    def add_mask_pixmap(self, mask_pixmap):
+        self.my_mask_pix_map = mask_pixmap
+        self.addPixmap(self.my_mask_pix_map)
+
     def wheelEvent(self, event):
         float_delta = float(event.delta())
         new_scale = 1.0 + float_delta / 1500.0
@@ -588,6 +592,8 @@ class DoImageView(QObject):
 
         self.bmp_heat = np2bmp_heat()
         self.bmp_m_cro = np2bmp_monocrome()
+        self.bmp_mask = np2bmp_mask()
+
         self.cur_img_num = None
         self.cur_nod_num = None
         self.cur_templ = None
@@ -760,6 +766,20 @@ class DoImageView(QObject):
 
         except (TypeError, AttributeError):
             print("None self.np_full_img")
+
+        try:
+            m_rgb_np = self.bmp_mask.img_2d_rgb(data2d = self.np_full_mask_img)
+            q_img = QImage(
+                m_rgb_np.data,
+                np.size(m_rgb_np[0:1, :, 0:1]),
+                np.size(m_rgb_np[:, 0:1, 0:1]),
+                QImage.Format_ARGB32
+            )
+            new_m_pixmap = QPixmap.fromImage(q_img)
+            self.my_scene.add_mask_pixmap(new_m_pixmap)
+
+        except AttributeError:
+            print("no mask to draw here")
 
     def change_i_min_max(self, new_i_min, new_i_max):
         self.i_min_max = [new_i_min, new_i_max]
