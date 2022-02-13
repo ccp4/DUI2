@@ -292,6 +292,7 @@ class ImgGraphicsScene(QGraphicsScene):
         super(ImgGraphicsScene, self).__init__(parent)
         self.parent_obj = parent
         self.curr_pixmap = None
+        self.my_mask_pix_map = None
 
         self.green_pen = QPen(
             Qt.green, 0.8, Qt.SolidLine,
@@ -311,6 +312,10 @@ class ImgGraphicsScene(QGraphicsScene):
                 refl["x"], refl["y"], refl["width"], refl["height"]
             )
             self.addRect(rectangle, self.green_pen)
+
+        if self.my_mask_pix_map is not None:
+            self.addPixmap(self.my_mask_pix_map)
+
 
     def update_tmp_mask(self, new_temp_mask):
         self.temp_mask = new_temp_mask

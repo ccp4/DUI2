@@ -225,8 +225,12 @@ class np2bmp_mask(object):
             self.all_chan_byte[i] = i
 
     def img_2d_rgb(self, data2d = None):
-        self.width = np.size( data2d[0:1, :] )
-        self.height = np.size( data2d[:, 0:1] )
+        try:
+            self.width = np.size( data2d[0:1, :] )
+            self.height = np.size( data2d[:, 0:1] )
+
+        except TypeError:
+            return None
 
         data2d_scale = np.multiply(data2d, 254.0)
         for x in np.nditer(
