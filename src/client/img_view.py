@@ -58,7 +58,7 @@ class LoadFullMaskImage(QThread):
         self.exp_path = path_in
 
     def run(self):
-        print("loading image ", self.cur_img_num, " in full resolution")
+        print("loading full image ", self.cur_img_num, " in full resolution")
         np_full_img = load_mask_img_json_w_str(
             self.uni_url,
             nod_num_lst = [self.cur_nod_num],
@@ -952,37 +952,37 @@ class DoImageView(QObject):
         self.l_stat.load_finished()
 
     def new_slice_mask_img(self, dict_slice):
-        try:
-            slice_image = dict_slice["slice_image"]
-            rep_slice_img = np.repeat(np.repeat(
-                    slice_image[:,:],
-                    dict_slice["inv_scale"], axis=0
-                ),
-                dict_slice["inv_scale"], axis=1
-            )
+        if self.easter_egg_active:
+            try:
+                slice_image = dict_slice["slice_image"]
+                rep_slice_img = np.repeat(np.repeat(
+                        slice_image[:,:],
+                        dict_slice["inv_scale"], axis=0
+                    ),
+                    dict_slice["inv_scale"], axis=1
+                )
+                rep_len_x = np.size(rep_slice_img[:,0:1])
+                rep_len_y = np.size(rep_slice_img[0:1,:])
 
-            rep_len_x = np.size(rep_slice_img[:,0:1])
-            rep_len_y = np.size(rep_slice_img[0:1,:])
+                if dict_slice["x1"] + rep_len_x > np.size(self.np_full_mask_img[:,0:1]):
+                    rep_len_x = np.size(self.np_full_mask_img[:,0:1]) - dict_slice["x1"]
+                    print("limiting dx")
 
-            if dict_slice["x1"] + rep_len_x > np.size(self.np_full_mask_img[:,0:1]):
-                rep_len_x = np.size(self.np_full_mask_img[:,0:1]) - dict_slice["x1"]
-                print("limiting dx")
+                if dict_slice["y1"] + rep_len_y > np.size(self.np_full_mask_img[0:1,:]):
+                    rep_len_y = np.size(self.np_full_mask_img[0:1,:]) - dict_slice["y1"]
+                    print("limiting dy")
 
-            if dict_slice["y1"] + rep_len_y > np.size(self.np_full_mask_img[0:1,:]):
-                rep_len_y = np.size(self.np_full_mask_img[0:1,:]) - dict_slice["y1"]
-                print("limiting dy")
+                if self.full_image_loaded == False:
+                    self.np_full_mask_img[
+                        dict_slice["x1"]:dict_slice["x1"] + rep_len_x,
+                        dict_slice["y1"]:dict_slice["y1"] + rep_len_y
+                    ] = rep_slice_img[0:rep_len_x, 0:rep_len_y]
+                    self.refresh_pixel_map()
 
-            if self.full_image_loaded == False:
-                self.np_full_mask_img[
-                    dict_slice["x1"]:dict_slice["x1"] + rep_len_x,
-                    dict_slice["y1"]:dict_slice["y1"] + rep_len_y
-                ] = rep_slice_img[0:rep_len_x, 0:rep_len_y]
-                self.refresh_pixel_map()
+            except TypeError:
+                print("loading image slice in next loop")
 
-        except TypeError:
-            print("loading image slice in next loop")
-
-        self.l_stat.load_finished()
+            self.l_stat.load_finished()
 
     def update_progress(self, progress):
         #print("time to show ", progress, " in progress bar")
