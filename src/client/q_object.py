@@ -379,13 +379,21 @@ class MainObject(QObject):
                 fnd_cur_nod = True
 
         if tab_index == 0:
+            lst_tmp_par = []
             try:
                 simpl_widg = self.param_widgets[self.curr_widg_key]["simple"]
                 new_lst = simpl_widg.comp_list_update()
-                self.do_image_view.update_tmp_mask(new_lst[0][0:-1])
+                if(
+                    self.new_node is not None and
+                    self.new_node.m_cmd_lst[0] == "dials.generate_mask" and
+                    self.new_node.number == self.curr_nod_num
+                ):
+                    lst_tmp_par = new_lst[0][0:-1]
 
             except AttributeError:
-                self.do_image_view.update_tmp_mask([])
+                print("(empty) update_tmp_mask()")
+
+            self.do_image_view.update_tmp_mask(lst_tmp_par)
 
             if(
                 self.new_node is not None and
@@ -445,14 +453,14 @@ class MainObject(QObject):
                 }
                 json_data_lst = json_data_request(self.uni_url, cmd)
                 self.r_index_widg.add_opts_lst(
-                    json_data=json_data_lst[0]
+                    json_data = json_data_lst[0]
                 )
 
         except KeyError:
             print("command widget not there yet")
             return
-        self.refresh_output()
 
+        self.refresh_output()
         self.display()
 
     def on_node_click(self, node_numb):
