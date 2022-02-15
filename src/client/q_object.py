@@ -297,11 +297,9 @@ class MainObject(QObject):
         except AttributeError:
             print("removing HtmlReport for old vesion of PySide2 ")
 
-
         self.log_show = ShowLog(self)
 
         self.do_image_view = DoImageView(self)
-
         self.do_image_view.new_mask_comp.connect(self.get_new_mask_comp)
 
         self.window.OutputTabWidget.currentChanged.connect(self.refresh_output)
@@ -321,7 +319,6 @@ class MainObject(QObject):
 
         self.window.MainHSplitter.setStretchFactor(0, 1)
         self.window.MainHSplitter.setStretchFactor(1, 2)
-
         self.window.LeftVSplitter.setStretchFactor(0, 3)
         self.window.LeftVSplitter.setStretchFactor(1, 1)
 
@@ -503,15 +500,15 @@ class MainObject(QObject):
         small_font = QFont("OldEnglish", pointSize = small_f_size, italic=True)
         try:
             if(
-                self.server_nod_lst[self.curr_nod_num]["status"]
-                == "Succeeded"
+                self.server_nod_lst[self.curr_nod_num]["status"] == "Succeeded"
             ):
-                print("\n####### key =", str_key, "\n")
+                print("\nupdate_nxt_butt: key =", str_key, "\n")
                 for bt_labl in self.param_widgets[str_key]["nxt_widg_lst"]:
                     nxt_butt = QPushButton(bt_labl)
                     nxt_butt.cmd_str = bt_labl
                     nxt_butt.setFont(small_font)
                     nxt_butt.clicked.connect(self.nxt_clicked)
+                    #TODO consider loading all icons at the beginning
                     nxt_ico = QIcon()
                     icon_path = self.ui_dir_path + os.sep + \
                         self.param_widgets[bt_labl]["icon"]
@@ -587,10 +584,7 @@ class MainObject(QObject):
                 self.new_node.set_all_parameters(lst_of_lst)
 
         except AttributeError:
-            print(
-                "No need to update parameters for non existent green node \n",
-                "or no twin widget \n"
-            )
+            print("Not updating parameters, no (green node or twin widget)\n")
 
     def item_param_changed(self, str_path = None, str_value = None, lst_num = 0):
         try:
@@ -602,16 +596,12 @@ class MainObject(QObject):
         try:
             if(
                 self.curr_nod_num == self.new_node.number
-                and
-                not self.reseting
+                and not self.reseting
             ):
                 self.new_node.set_parameter(str_path, str_value, lst_num)
 
         except AttributeError:
-            print(
-                "No need to update parameters for non existent green node \n",
-                "or no twin widget \n"
-            )
+            print("Not updating parameters, no (green node or twin widget)\n")
 
     def add_new_node(self):
         print("add_new_node")
@@ -668,7 +658,6 @@ class MainObject(QObject):
             print("no need to gray 'None' widget")
 
         self.window.ClearParentButton.setEnabled(False)
-
         self.window.RetryButton.setEnabled(False)
         self.window.CmdSend2server.setEnabled(False)
         self.window.ReqStopButton.setEnabled(False)
@@ -711,7 +700,6 @@ class MainObject(QObject):
 
     def on_clone(self):
         print("on_clone")
-
         self.new_node = CommandParamControl(
             main_list = self.param_widgets[self.curr_widg_key]["main_cmd"]
         )
@@ -730,10 +718,7 @@ class MainObject(QObject):
     def request_launch(self):
         cmd_lst = self.new_node.get_full_command_list()
         lst_of_node_str = self.new_node.parent_node_lst
-
-        #cmd = {'nod_lst': lst_of_node_str, 'cmd_lst': [cmd_str]}
         cmd = {'nod_lst': lst_of_node_str, 'cmd_lst': cmd_lst}
-
         print("cmd =", cmd)
         self.window.incoming_text.clear()
         try:
@@ -761,7 +746,6 @@ class MainObject(QObject):
 
     def req_stop(self):
         print("req_stop")
-        #self.window.incoming_text.clear()
         nod_lst = [str(self.curr_nod_num)]
         print("\n nod_lst", nod_lst)
         cmd = {"nod_lst":nod_lst, "cmd_lst":["stop"]}
