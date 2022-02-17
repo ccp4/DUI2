@@ -390,6 +390,49 @@ class RootWidg(QWidget):
         print("update_param(Root)", str_path, str_value, "... dummy")
 
 
+
+
+class ExportWidget(QWidget):
+    '''
+        ...TODO write here
+    '''
+    all_items_changed = Signal(list)
+    def __init__(self, parent = None):
+        super(ExportWidget, self).__init__(parent)
+        sys_font = QFont()
+        font_point_size = sys_font.pointSize()
+
+        self.state_label = QLabel("   ...")
+        self.state_label.setFont(
+            QFont("Monospace", font_point_size + 1, QFont.Bold)
+        )
+
+        self.imp_txt = QLineEdit()
+        self.imp_txt.editingFinished.connect(self.line_changed)
+
+        self.main_vbox = QVBoxLayout()
+        self.main_vbox.addStretch()
+        #self.main_vbox.addWidget(self.open_butt)
+        self.main_vbox.addStretch()
+        self.main_vbox.addWidget(self.state_label)
+        self.main_vbox.addWidget(self.imp_txt)
+        self.main_vbox.addStretch()
+        self.setLayout(self.main_vbox)
+
+    def line_changed(self):
+        print("line_changed", str(self.imp_txt.text()))
+        str_value = self.imp_txt.text()
+
+    def reset_pars(self):
+        self.imp_txt.setText("")
+
+    def update_all_pars(self, tup_lst_pars):
+        print(
+            "update_all_pars(ImportWidget)",
+            tup_lst_pars
+        )
+
+
 class ImportWidget(QWidget):
     '''
         This widget behaves differently from mos of the other  << simple >>

@@ -31,7 +31,7 @@ from PySide2.QtGui import *
 from PySide2.QtWebEngineWidgets import QWebEngineView
 
 
-from gui_utils import TreeDirScene, widgets_defs
+from gui_utils import TreeDirScene, widgets_defs, get_icons
 from outputs import DoLoadHTML, ShowLog
 from img_view import DoImageView
 from reindex_table import ReindexTable
@@ -45,6 +45,7 @@ from init_firts import ini_data
 from simpler_param_widgets import RootWidg
 from simpler_param_widgets import ImportWidget
 from simpler_param_widgets import MaskWidget
+from simpler_param_widgets import ExportWidget
 from simpler_param_widgets import (
     FindspotsSimplerParameterTab, IndexSimplerParamTab,
     RefineBravaiSimplerParamTab, RefineSimplerParamTab,
@@ -75,6 +76,10 @@ class MainObject(QObject):
             imp_widg = ImportWidget()
             imp_widg.all_items_changed.connect(self.all_items_param_changed)
             self.window.ImportScrollArea.setWidget(imp_widg)
+
+            exp_widg = ExportWidget()
+            #exp_widg.all_items_changed.connect(self.all_items_param_changed)
+            self.window.ExportScrollArea.setWidget(exp_widg)
 
             self.mask_widg = MaskWidget()
             self.mask_widg.all_items_changed.connect(self.all_items_param_changed)
@@ -184,7 +189,8 @@ class MainObject(QObject):
             print("failed to connect to server on:", self.uni_url)
             sys.exit()
 
-        self.param_widgets = widgets_defs
+        tmp_widget_defs = widgets_defs
+        self.param_widgets = get_icons(widgets_defs, self.ui_dir_path)
 
         self.param_widgets["Root"]["simple"] = imp_widg
         self.param_widgets["Root"]["advanced"] = None
@@ -246,6 +252,10 @@ class MainObject(QObject):
         self.param_widgets[
             "combine_experiments"
         ]["main_page"] = self.window.CombinePage
+
+        self.param_widgets["export"]["simple"] = exp_widg
+        self.param_widgets["export"]["advanced"] = None
+        self.param_widgets["export"]["main_page"] = self.window.ExportPage
 
         self.tree_scene = TreeDirScene(self)
         self.window.treeView.setScene(self.tree_scene)
@@ -508,18 +518,8 @@ class MainObject(QObject):
                     nxt_butt.cmd_str = bt_labl
                     nxt_butt.setFont(small_font)
                     nxt_butt.clicked.connect(self.nxt_clicked)
-                    #TODO consider loading all icons at the beginning
-                    nxt_ico = QIcon()
-                    icon_path = self.ui_dir_path + os.sep + \
-                        self.param_widgets[bt_labl]["icon"]
-
-                    nxt_ico.addFile(
-                        icon_path,
-                        mode=QIcon.Normal
-                    )
-                    nxt_butt.setIcon(nxt_ico)
+                    nxt_butt.setIcon(self.param_widgets[bt_labl]["icon"])
                     nxt_butt.setIconSize(QSize(38, 42))
-
                     self.window.Next2RunLayout.addWidget(nxt_butt)
 
         except (IndexError, KeyError):

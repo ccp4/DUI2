@@ -104,19 +104,25 @@ widgets_defs = {
         "tooltip"       : "dials.integrate ...",
         "icon"          : "resources/integrate.png",
         "main_cmd"      :["dials.integrate"],
-        "nxt_widg_lst"  :["scale", "symmetry"]
+        "nxt_widg_lst"  :["scale", "symmetry", "export"]
     },
     "symmetry" : {
         "tooltip"       : "dials.symmetry ...",
         "icon"          : "resources/symmetry.png",
         "main_cmd"      :["dials.symmetry"],
-        "nxt_widg_lst"  :["scale", "combine_experiments"]
+        "nxt_widg_lst"  :["scale", "combine_experiments", "export"]
     },
     "scale" : {
         "tooltip"       : "dials.scale ...",
         "icon"          : "resources/scale.png",
         "main_cmd"      :["dials.scale"],
-        "nxt_widg_lst"  :["symmetry", "combine_experiments"]
+        "nxt_widg_lst"  :["symmetry", "combine_experiments", "export"]
+    },
+    "export" : {
+        "tooltip"       : "dials.export ...",
+        "icon"          : "resources/export.png",
+        "main_cmd"      :["dials.export"],
+        "nxt_widg_lst"  :[]
     },
     "combine_experiments" : {
         "tooltip"       : "dials.combine_experiments ...",
@@ -125,6 +131,21 @@ widgets_defs = {
         "nxt_widg_lst"  :["index", "refine", "integrate"]
     }
 }
+
+
+def get_icons(in_dic, ui_path):
+    out_dic = {}
+    print("Loading Icons")
+    for key, value in in_dic.items():
+        new_inner_dict = dict(value)
+        nxt_ico = QIcon()
+        icon_path = ui_path + os.sep + new_inner_dict["icon"]
+        print("(", key, ") icon_path =", icon_path)
+        nxt_ico.addFile(icon_path, mode = QIcon.Normal)
+        new_inner_dict["icon"] = nxt_ico
+        out_dic[str(key)] = dict(new_inner_dict)
+
+    return out_dic
 
 
 class MyQComboBox(QComboBox):

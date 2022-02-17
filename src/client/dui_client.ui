@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout_4">
+   <layout class="QHBoxLayout" name="horizontalLayout_6">
     <item>
      <widget class="QSplitter" name="MainHSplitter">
       <property name="orientation">
@@ -93,7 +93,7 @@
                  </font>
                 </property>
                 <property name="currentIndex">
-                 <number>8</number>
+                 <number>12</number>
                 </property>
                 <widget class="QWidget" name="RootPage">
                  <layout class="QGridLayout" name="gridLayout_33">
@@ -128,8 +128,8 @@
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>98</width>
-                       <height>28</height>
+                       <width>279</width>
+                       <height>326</height>
                       </rect>
                      </property>
                     </widget>
@@ -461,8 +461,8 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>98</width>
-                           <height>28</height>
+                           <width>257</width>
+                           <height>279</height>
                           </rect>
                          </property>
                         </widget>
@@ -614,8 +614,8 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>98</width>
-                           <height>28</height>
+                           <width>257</width>
+                           <height>250</height>
                           </rect>
                          </property>
                         </widget>
@@ -664,6 +664,27 @@
                     <property name="text">
                      <string>Clear Parent List</string>
                     </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+                <widget class="QWidget" name="ExportPage">
+                 <layout class="QGridLayout" name="gridLayout_27">
+                  <item row="0" column="0">
+                   <widget class="QScrollArea" name="ExportScrollArea">
+                    <property name="widgetResizable">
+                     <bool>true</bool>
+                    </property>
+                    <widget class="QWidget" name="scrollAreaWidgetContents_21">
+                     <property name="geometry">
+                      <rect>
+                       <x>0</x>
+                       <y>0</y>
+                       <width>279</width>
+                       <height>326</height>
+                      </rect>
+                     </property>
+                    </widget>
                    </widget>
                   </item>
                  </layout>
