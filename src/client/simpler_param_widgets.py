@@ -394,7 +394,8 @@ class RootWidg(QWidget):
 
 class ExportWidget(QWidget):
     '''
-        ...TODO write here
+        This widget is a simplified version of ImportWidget since
+        there is no need interact with a remote << FileBrowser >>
     '''
     all_items_changed = Signal(list)
     def __init__(self, parent = None):
@@ -402,35 +403,43 @@ class ExportWidget(QWidget):
         sys_font = QFont()
         font_point_size = sys_font.pointSize()
 
-        self.state_label = QLabel("   ...")
-        self.state_label.setFont(
+        state_label = QLabel("mtz output name:")
+        state_label.setFont(
             QFont("Monospace", font_point_size + 1, QFont.Bold)
         )
 
-        self.imp_txt = QLineEdit()
-        self.imp_txt.editingFinished.connect(self.line_changed)
+        self.exp_txt = QLineEdit()
+        self.exp_txt.editingFinished.connect(self.line_changed)
 
         self.main_vbox = QVBoxLayout()
         self.main_vbox.addStretch()
-        #self.main_vbox.addWidget(self.open_butt)
-        self.main_vbox.addStretch()
-        self.main_vbox.addWidget(self.state_label)
-        self.main_vbox.addWidget(self.imp_txt)
+        self.main_vbox.addWidget(state_label)
+        self.main_vbox.addWidget(self.exp_txt)
         self.main_vbox.addStretch()
         self.setLayout(self.main_vbox)
+        self.reset_pars()
 
     def line_changed(self):
-        print("line_changed", str(self.imp_txt.text()))
-        str_value = self.imp_txt.text()
+        print("line_changed")
+        str_value = self.exp_txt.text()
+        self.all_items_changed.emit([[["mtz.hklout", str_value]]])
 
     def reset_pars(self):
-        self.imp_txt.setText("")
+        self.exp_txt.setText("integrated.mtz")
 
     def update_all_pars(self, tup_lst_pars):
         print(
             "update_all_pars(ImportWidget)",
             tup_lst_pars
         )
+        try:
+            inp_val = str(tup_lst_pars[0][0]["value"])
+            print("inp_val =", inp_val)
+            self.exp_txt.setText(inp_val)
+
+        except IndexError:
+            print(" Not copying parameters from node (IndexError)")
+            self.exp_txt.setText("")
 
 
 class ImportWidget(QWidget):

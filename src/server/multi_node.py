@@ -78,6 +78,7 @@ def fix_alias(short_in):
         ("sm",    "dials.symmetry"                        ),
         ("sc",    "dials.scale"                           ),
         ("ce",    "dials.combine_experiments"             ),
+        ("ex",    "dials.export"                          ),
     ]
     long_out = short_in
     for pair in pair_list:

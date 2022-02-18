@@ -78,7 +78,7 @@ class MainObject(QObject):
             self.window.ImportScrollArea.setWidget(imp_widg)
 
             exp_widg = ExportWidget()
-            #exp_widg.all_items_changed.connect(self.all_items_param_changed)
+            exp_widg.all_items_changed.connect(self.all_items_param_changed)
             self.window.ExportScrollArea.setWidget(exp_widg)
 
             self.mask_widg = MaskWidget()
