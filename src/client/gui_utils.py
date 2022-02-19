@@ -128,7 +128,7 @@ widgets_defs = {
         "tooltip"       : "dials.combine_experiments ...",
         "icon"          : "resources/combine.png",
         "main_cmd"      :["dials.combine_experiments"],
-        "nxt_widg_lst"  :["index", "refine", "integrate"]
+        "nxt_widg_lst"  :["index", "refine", "integrate", "export"]
     }
 }
 

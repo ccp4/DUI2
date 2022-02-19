@@ -54,6 +54,35 @@ from simpler_param_widgets import (
 )
 
 
+class find_scale_cmd(object):
+    '''
+    This class works as a function that internally navigates with
+    recursive calls to find out if there is a << dials.scale >> command
+    '''
+    def __init__(self, nod_lst, nod_num):
+        print(
+            "searching for Scale Command in history \n single node =",
+             nod_lst[nod_num]
+        )
+        self.nod_lst = nod_lst
+        self.found_scale = False
+        self.get_parent_num(nod_num)
+
+    def get_parent_num(self, nod_num):
+        print(
+            "(number, cmd2show[0]) =", nod_num, ":",
+            self.nod_lst[nod_num]["cmd2show"][0]
+        )
+        if self.nod_lst[nod_num]["cmd2show"][0] == "dials.scale":
+            self.found_scale = True
+
+        for new_nod_num in self.nod_lst[nod_num]["parent_node_lst"]:
+            self.get_parent_num(new_nod_num)
+
+    def foung_scale(self):
+        return self.found_scale
+
+
 class MainObject(QObject):
     def __init__(self, parent = None):
         super(MainObject, self).__init__(parent)
@@ -77,9 +106,10 @@ class MainObject(QObject):
             imp_widg.all_items_changed.connect(self.all_items_param_changed)
             self.window.ImportScrollArea.setWidget(imp_widg)
 
-            exp_widg = ExportWidget()
-            exp_widg.all_items_changed.connect(self.all_items_param_changed)
-            self.window.ExportScrollArea.setWidget(exp_widg)
+            self.expr_widg = ExportWidget()
+            self.expr_widg.all_items_changed.connect(self.all_items_param_changed)
+            self.expr_widg.find_scaled_before.connect(self.search_in_parent_nodes)
+            self.window.ExportScrollArea.setWidget(self.expr_widg)
 
             self.mask_widg = MaskWidget()
             self.mask_widg.all_items_changed.connect(self.all_items_param_changed)
@@ -253,7 +283,7 @@ class MainObject(QObject):
             "combine_experiments"
         ]["main_page"] = self.window.CombinePage
 
-        self.param_widgets["export"]["simple"] = exp_widg
+        self.param_widgets["export"]["simple"] = self.expr_widg
         self.param_widgets["export"]["advanced"] = None
         self.param_widgets["export"]["main_page"] = self.window.ExportPage
 
@@ -477,8 +507,8 @@ class MainObject(QObject):
             self.window.NodeSelecCheck.checkState() and
             self.curr_widg_key == "combine_experiments"
         ):
-                self.new_node.add_or_remove_parent(node_numb)
-                self.display()
+            self.new_node.add_or_remove_parent(node_numb)
+            self.display()
 
         else:
             self.clicked_4_navigation(node_numb)
@@ -579,12 +609,14 @@ class MainObject(QObject):
     def all_items_param_changed(self, lst_of_lst):
         try:
             if self.new_node.number == self.curr_nod_num:
-                print("\n\n Updating Params with", lst_of_lst, "\n\n")
+                print("\n Updating Params with", lst_of_lst, "\n")
                 self.new_node.reset_all_params()
                 self.new_node.set_all_parameters(lst_of_lst)
 
         except AttributeError:
             print("Not updating parameters, no (green node or twin widget)\n")
+            print("self.new_node.number =", self.new_node.number)
+            print("self.curr_nod_num =", self.curr_nod_num)
 
     def item_param_changed(self, str_path = None, str_value = None, lst_num = 0):
         try:
@@ -605,8 +637,9 @@ class MainObject(QObject):
 
     def add_new_node(self):
         print("add_new_node")
+        local_main_cmd = self.param_widgets[self.curr_widg_key]["main_cmd"]
         self.new_node = CommandParamControl(
-            main_list = self.param_widgets[self.curr_widg_key]["main_cmd"]
+            main_list = local_main_cmd
         )
         self.new_node.set_connections(
             self.server_nod_lst, [self.curr_nod_num]
@@ -614,6 +647,16 @@ class MainObject(QObject):
         self.curr_nod_num = self.new_node.number
         self.display()
         self.refresh_output()
+        if local_main_cmd == ['dials.export']:
+            self.param_widgets[self.curr_widg_key]["simple"].reset_pars()
+
+    def search_in_parent_nodes(self):
+        fnd_scl_cmd = find_scale_cmd(
+            self.server_nod_lst, self.new_node.parent_node_lst[0]
+        )
+        fnd_scl = fnd_scl_cmd.foung_scale()
+        print("found_scale =", fnd_scl)
+        self.expr_widg.is_scale_parent(fnd_scl)
 
     def update_all_param(self):
         tmp_cmd_par = CommandParamControl()
