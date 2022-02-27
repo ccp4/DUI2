@@ -344,16 +344,29 @@ def get_param_list(cmd_str):
     return lst_phil_obj
 
 
-def iter_dict(file_path):
+def iter_dict(file_path, depth_ini):
     file_name = file_path.split("/")[-1]
     local_dict = {
         "file_name": file_name, "file_path": file_path, "list_child": []
     }
-    if os.path.isdir(file_path):
+    if depth_ini >= 20:
+        print("reached to deep with: ", file_path)
+        local_dict["isdir"] = False
+
+    elif os.path.isdir(file_path):
         local_dict["isdir"] = True
+        depth_next = depth_ini + 1
+        #print("depth_next =", depth_next)
         for new_file_name in sorted(os.listdir(file_path)):
-            new_file_path = os.path.join(file_path, new_file_name)
-            local_dict["list_child"].append(iter_dict(new_file_path))
+            try:
+                new_file_path = os.path.join(file_path, new_file_name)
+                local_dict["list_child"].append(iter_dict(new_file_path, depth_next))
+
+            except PermissionError:
+                local_dict["list_child"] = []
+                local_dict["isdir"] = False
+                break
+                return local_dict
 
     else:
         local_dict["isdir"] = False

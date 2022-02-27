@@ -181,7 +181,7 @@ def main():
         "\n * using init path as: ",
         tree_ini_path, " * \n"
     )
-    tree_dic_lst = iter_dict(tree_ini_path)
+    tree_dic_lst = iter_dict(tree_ini_path, 0)
     try:
         with open("run_data") as json_file:
             runner_data = json.load(json_file)
