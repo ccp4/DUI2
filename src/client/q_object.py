@@ -732,6 +732,26 @@ class MainObject(QObject):
             print("only clone (F or S)")
             self.window.RetryButton.setEnabled(True)
 
+        self.check_if_exported()
+
+    def check_if_exported(self):
+        try:
+            if(
+                self.server_nod_lst[self.curr_nod_num]["status"]  == "Succeeded"
+                and
+                self.server_nod_lst[self.curr_nod_num]["cmd2show"][0] == "dials.export"
+            ):
+                enabl = True
+
+            else:
+                enabl = False
+
+        except IndexError:
+            enabl = False
+
+        self.expr_widg.set_download_stat(do_enable = enabl)
+
+
     def display(self):
         self.tree_scene.draw_tree_graph(
             nod_lst_in = self.server_nod_lst,

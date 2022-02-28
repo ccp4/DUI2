@@ -1102,11 +1102,15 @@ class ExportWidget(QWidget):
 
         self.exp_txt = QLineEdit()
         self.exp_txt.editingFinished.connect(self.line_changed)
+        self.downl_but = QPushButton("Download MTZ")
+        self.downl_but.clicked.connect(self.download_mtz)
 
         self.main_vbox = QVBoxLayout()
         self.main_vbox.addStretch()
         self.main_vbox.addWidget(state_label)
         self.main_vbox.addWidget(self.exp_txt)
+        self.main_vbox.addStretch()
+        self.main_vbox.addWidget(self.downl_but)
         self.main_vbox.addStretch()
         self.setLayout(self.main_vbox)
 
@@ -1141,6 +1145,14 @@ class ExportWidget(QWidget):
         except IndexError:
             print(" Not copying parameters from node (IndexError)")
             self.exp_txt.setText("")
+
+    def set_download_stat(self, do_enable):
+        self.setEnabled(True)
+        self.exp_txt.setEnabled(not do_enable)
+        self.downl_but.setEnabled(do_enable)
+
+    def download_mtz(self):
+        print("time to Download MTZ")
 
 
 class TmpTstWidget(QWidget):
