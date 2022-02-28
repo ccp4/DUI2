@@ -651,12 +651,16 @@ class MainObject(QObject):
             self.param_widgets[self.curr_widg_key]["simple"].reset_pars()
 
     def search_in_parent_nodes(self):
-        fnd_scl_cmd = find_scale_cmd(
-            self.server_nod_lst, self.new_node.parent_node_lst[0]
-        )
-        fnd_scl = fnd_scl_cmd.foung_scale()
-        print("found_scale =", fnd_scl)
-        self.expr_widg.is_scale_parent(fnd_scl)
+        try:
+            fnd_scl_cmd = find_scale_cmd(
+                self.server_nod_lst, self.new_node.parent_node_lst[0]
+            )
+            fnd_scl = fnd_scl_cmd.foung_scale()
+            print("found_scale =", fnd_scl)
+            self.expr_widg.is_scale_parent(fnd_scl)
+
+        except AttributeError:
+            print("no need to find scale step as parent")
 
     def update_all_param(self):
         tmp_cmd_par = CommandParamControl()
