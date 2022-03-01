@@ -21,7 +21,7 @@ copyright (c) CCP4 - DLS
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-import sys, zlib, json, requests
+import os, sys, zlib, json, requests
 
 default_max_nproc = 4
 
@@ -1152,7 +1152,14 @@ class ExportWidget(QWidget):
         self.downl_but.setEnabled(do_enable)
 
     def download_mtz(self):
-        print("time to Download MTZ")
+        ini_file = os.getcwd() + os.sep + self.exp_txt.text()
+        print("ini_file =", ini_file)
+        fileResul = QFileDialog.getSaveFileName(
+            self, "Download MTZ File", ini_file, "Intensity  (*.mtz)"
+        )
+
+        fileName = fileResul[0]
+        print("fileName =", fileName)
 
 
 class TmpTstWidget(QWidget):
