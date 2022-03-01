@@ -23,7 +23,7 @@ copyright (c) CCP4 - DLS
 
 
 from PySide2.QtCore import *
-import requests, json, os, sys
+import requests, json, os, sys, zlib
 
 from gui_utils import AdvancedParameters, widgets_defs
 from init_firts import ini_data
@@ -89,6 +89,40 @@ def json_data_request(url, cmd):
         json_out = None
 
     return json_out
+
+def mtz_data_request(url, cmd):
+    try:
+        req_get = requests.get(url, stream = True, params = cmd, timeout = 3)
+        total_size = int(req_get.headers.get('content-length', 0)) + 1
+        print("total_size =", total_size)
+
+        block_size = 65536
+        downloaded_size = 0
+        compresed = bytes()
+        for data in req_get.iter_content(block_size):
+            compresed += data
+            downloaded_size += block_size
+            progress = int(100.0 * (downloaded_size / total_size))
+            print("progress =", progress)
+
+        mtz_data = zlib.decompress(compresed)
+        print("mtz downloaded")
+
+    except zlib.error:
+        print("zlib.error(mtz_data_request)")
+        mtz_data = None
+
+    except ConnectionError:
+        print("\n ConnectionError (mtz_data_request) \n")
+        mtz_data = None
+
+    except requests.exceptions.RequestException:
+        print(
+            "\n requests.exceptions.RequestException (mtz_data_request) \n"
+        )
+        mtz_data = None
+
+    return mtz_data
 
 
 class Run_n_Output(QThread):

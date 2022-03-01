@@ -31,6 +31,7 @@ from PySide2 import QtUiTools
 from PySide2.QtGui import *
 
 from init_firts import ini_data
+from exec_utils import mtz_data_request
 
 def _get_all_direct_layout_widget_children(parent):
     """Walk a widget tree and get all non-QLayout direct children
@@ -1146,10 +1147,11 @@ class ExportWidget(QWidget):
             print(" Not copying parameters from node (IndexError)")
             self.exp_txt.setText("")
 
-    def set_download_stat(self, do_enable):
+    def set_download_stat(self, do_enable = False, nod_num = None):
         self.setEnabled(True)
         self.exp_txt.setEnabled(not do_enable)
         self.downl_but.setEnabled(do_enable)
+        self.cur_nod_num = nod_num
 
     def download_mtz(self):
         ini_file = os.getcwd() + os.sep + self.exp_txt.text()
@@ -1160,6 +1162,17 @@ class ExportWidget(QWidget):
 
         fileName = fileResul[0]
         print("fileName =", fileName)
+
+        data_init = ini_data()
+        uni_url = data_init.get_url()
+
+        cmd = {"nod_lst":[self.cur_nod_num], "cmd_lst":["get_mtz"]}
+        mtz_info = mtz_data_request(uni_url, cmd)
+
+        file_out = open(fileName, "wb")
+        file_out.write(mtz_info)
+        file_out.close()
+        print(fileName, " writen to disk")
 
 
 class TmpTstWidget(QWidget):

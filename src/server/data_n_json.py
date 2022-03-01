@@ -60,6 +60,35 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
                     "wrong line \n not logging"
                 )
 
+    elif uni_cmd == ["get_mtz"]:
+        for lin2go in cmd_dict["nod_lst"]:
+            try:
+                print("compresing mtz generated from node #:", lin2go)
+                mtz_dir_path = step_list[lin2go]._run_dir
+                mtz_name = step_list[lin2go].lst2run[0][-1][11:]
+                mtz_path = mtz_dir_path + os.sep + mtz_name
+                print("mtz_path =", mtz_path)
+                '''
+                fil = open(mtz_path, "r")
+                byt_data = fil.read()
+                '''
+                with open(mtz_path, 'rb') as fil_h:
+                    byt_data = fil_h.read()
+
+                '''
+                str_file = fil.read()
+                fil.close()
+
+                byt_data = bytes(str_file.encode('utf-8'))
+                '''
+                return_list = byt_data
+
+            except (IndexError, FileNotFoundError):
+                print(
+                    "\n *** ERROR *** \n wrong line" +
+                    " \n sending empty mtz"
+                )
+
     elif uni_cmd == ["get_report"]:
         for lin2go in cmd_dict["nod_lst"]:
             try:

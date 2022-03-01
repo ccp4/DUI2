@@ -45,6 +45,7 @@ def fix_alias(short_in):
         ("dt",    "dir_tree"                              ),
         ("dl",    "display_log"                           ),
         ("gr",    "get_report"                            ),
+        ("gmt",   "get_mtz"                               ),
         ("gt",    "get_template"                          ),
         ("gi",    "get_image"                             ),
         ("gis",   "get_image_slice"                       ),

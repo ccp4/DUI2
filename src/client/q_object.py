@@ -749,7 +749,7 @@ class MainObject(QObject):
         except IndexError:
             enabl = False
 
-        self.expr_widg.set_download_stat(do_enable = enabl)
+        self.expr_widg.set_download_stat(do_enable = enabl, nod_num = self.curr_nod_num)
 
 
     def display(self):
