@@ -1159,20 +1159,23 @@ class ExportWidget(QWidget):
         fileResul = QFileDialog.getSaveFileName(
             self, "Download MTZ File", ini_file, "Intensity  (*.mtz)"
         )
-
         fileName = fileResul[0]
         print("fileName =", fileName)
 
-        data_init = ini_data()
-        uni_url = data_init.get_url()
+        if fileName != '':
+            data_init = ini_data()
+            uni_url = data_init.get_url()
 
-        cmd = {"nod_lst":[self.cur_nod_num], "cmd_lst":["get_mtz"]}
-        mtz_info = mtz_data_request(uni_url, cmd)
+            cmd = {"nod_lst":[self.cur_nod_num], "cmd_lst":["get_mtz"]}
+            mtz_info = mtz_data_request(uni_url, cmd)
 
-        file_out = open(fileName, "wb")
-        file_out.write(mtz_info)
-        file_out.close()
-        print(fileName, " writen to disk")
+            file_out = open(fileName, "wb")
+            file_out.write(mtz_info)
+            file_out.close()
+            print(fileName, " writen to disk")
+
+        else:
+            print("Canceled Operation")
 
 
 class TmpTstWidget(QWidget):
