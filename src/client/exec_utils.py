@@ -90,39 +90,51 @@ def json_data_request(url, cmd):
 
     return json_out
 
-def mtz_data_request(url, cmd):
-    try:
-        req_get = requests.get(url, stream = True, params = cmd, timeout = 3)
-        total_size = int(req_get.headers.get('content-length', 0)) + 1
-        print("total_size =", total_size)
 
-        block_size = 65536
-        downloaded_size = 0
-        compresed = bytes()
-        for data in req_get.iter_content(block_size):
-            compresed += data
-            downloaded_size += block_size
-            progress = int(100.0 * (downloaded_size / total_size))
-            print("progress =", progress)
+class Mtz_Data_Request(QThread):
+    update_progress = Signal(int)
+    done_download = Signal(bytes)
+    def __init__(self, url, cmd):
+        super(Mtz_Data_Request, self).__init__()
+        self.url = url
+        self.cmd = cmd
 
-        mtz_data = zlib.decompress(compresed)
-        print("mtz downloaded")
+    def run(self):
+        try:
+            req_get = requests.get(
+                self.url, stream = True, params = self.cmd, timeout = 3
+            )
+            total_size = int(req_get.headers.get('content-length', 0)) + 1
+            print("total_size =", total_size)
 
-    except zlib.error:
-        print("zlib.error(mtz_data_request)")
-        mtz_data = None
+            block_size = 65536
+            downloaded_size = 0
+            compresed = bytes()
+            for data in req_get.iter_content(block_size):
+                compresed += data
+                downloaded_size += block_size
+                progress = int(100.0 * (downloaded_size / total_size))
+                self.update_progress.emit(progress)
 
-    except ConnectionError:
-        print("\n ConnectionError (mtz_data_request) \n")
-        mtz_data = None
+            mtz_data = zlib.decompress(compresed)
+            print("mtz downloaded")
+            print("type(mtz_data) =", type(mtz_data))
 
-    except requests.exceptions.RequestException:
-        print(
-            "\n requests.exceptions.RequestException (mtz_data_request) \n"
-        )
-        mtz_data = None
+        except zlib.error:
+            print("zlib.error(Mtz_Data_Request)")
+            mtz_data = None
 
-    return mtz_data
+        except ConnectionError:
+            print("\n ConnectionError (Mtz_Data_Request) \n")
+            mtz_data = None
+
+        except requests.exceptions.RequestException:
+            print(
+                "\n requests.exceptions.RequestException (Mtz_Data_Request) \n"
+            )
+            mtz_data = None
+
+        self.done_download.emit(mtz_data)
 
 
 class Run_n_Output(QThread):

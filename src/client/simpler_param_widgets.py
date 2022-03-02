@@ -31,7 +31,7 @@ from PySide2 import QtUiTools
 from PySide2.QtGui import *
 
 from init_firts import ini_data
-from exec_utils import mtz_data_request
+from exec_utils import Mtz_Data_Request
 
 def _get_all_direct_layout_widget_children(parent):
     """Walk a widget tree and get all non-QLayout direct children
@@ -1105,6 +1105,7 @@ class ExportWidget(QWidget):
         self.exp_txt.editingFinished.connect(self.line_changed)
         self.downl_but = QPushButton("Download MTZ")
         self.downl_but.clicked.connect(self.download_mtz)
+        self.progress_label = QLabel("...")
 
         self.main_vbox = QVBoxLayout()
         self.main_vbox.addStretch()
@@ -1112,6 +1113,7 @@ class ExportWidget(QWidget):
         self.main_vbox.addWidget(self.exp_txt)
         self.main_vbox.addStretch()
         self.main_vbox.addWidget(self.downl_but)
+        self.main_vbox.addWidget(self.progress_label)
         self.main_vbox.addStretch()
         self.setLayout(self.main_vbox)
 
@@ -1159,23 +1161,38 @@ class ExportWidget(QWidget):
         fileResul = QFileDialog.getSaveFileName(
             self, "Download MTZ File", ini_file, "Intensity  (*.mtz)"
         )
-        fileName = fileResul[0]
-        print("fileName =", fileName)
+        self.file_name = fileResul[0]
+        print("self.file_name =", self.file_name)
 
-        if fileName != '':
+        if self.file_name != '':
             data_init = ini_data()
             uni_url = data_init.get_url()
 
             cmd = {"nod_lst":[self.cur_nod_num], "cmd_lst":["get_mtz"]}
-            mtz_info = mtz_data_request(uni_url, cmd)
 
-            file_out = open(fileName, "wb")
-            file_out.write(mtz_info)
-            file_out.close()
-            print(fileName, " writen to disk")
+            print("uni_url, cmd =", uni_url, cmd)
+
+            self.dowl_thrd = Mtz_Data_Request(uni_url, cmd)
+            self.dowl_thrd.update_progress.connect(self.show_new_progress)
+            self.dowl_thrd.done_download.connect(self.save_mtz_on_disc)
+            self.dowl_thrd.start()
 
         else:
             print("Canceled Operation")
+
+    def show_new_progress(self, new_prog):
+        print("new_prog =", new_prog)
+        self.progress_label.setText(
+            str("Downloading: " + str(new_prog) + " %")
+        )
+
+    def save_mtz_on_disc(self, mtz_info):
+        self.progress_label.setText("...")
+        file_out = open(self.file_name, "wb")
+        file_out.write(mtz_info)
+        file_out.close()
+        print(self.file_name, " writen to disk")
+        print("Done Download")
 
 
 class TmpTstWidget(QWidget):
