@@ -140,7 +140,6 @@ def get_icons(in_dic, ui_path):
         new_inner_dict = dict(value)
         nxt_ico = QIcon()
         icon_path = ui_path + os.sep + new_inner_dict["icon"]
-        print("(", key, ") icon_path =", icon_path)
         nxt_ico.addFile(icon_path, mode = QIcon.Normal)
         new_inner_dict["icon"] = nxt_ico
         out_dic[str(key)] = dict(new_inner_dict)
