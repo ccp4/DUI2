@@ -1157,24 +1157,20 @@ class ExportWidget(QWidget):
 
     def download_mtz(self):
         ini_file = os.getcwd() + os.sep + self.exp_txt.text()
-        print("ini_file =", ini_file)
         fileResul = QFileDialog.getSaveFileName(
             self, "Download MTZ File", ini_file, "Intensity  (*.mtz)"
         )
         self.file_name = fileResul[0]
-        print("self.file_name =", self.file_name)
-
         if self.file_name != '':
+            self.progress_label.setText("Requesting mtz file ...")
+
             data_init = ini_data()
             uni_url = data_init.get_url()
-
             cmd = {"nod_lst":[self.cur_nod_num], "cmd_lst":["get_mtz"]}
-
-            print("uni_url, cmd =", uni_url, cmd)
-
             self.dowl_thrd = Mtz_Data_Request(uni_url, cmd)
             self.dowl_thrd.update_progress.connect(self.show_new_progress)
             self.dowl_thrd.done_download.connect(self.save_mtz_on_disc)
+            self.dowl_thrd.finished.connect(self.restore_p_label)
             self.dowl_thrd.start()
 
         else:
@@ -1191,7 +1187,11 @@ class ExportWidget(QWidget):
         file_out.write(mtz_info)
         file_out.close()
         print(self.file_name, " writen to disk")
+
+    def restore_p_label(self):
+        self.progress_label.setText("...")
         print("Done Download")
+
 
 
 class TmpTstWidget(QWidget):
