@@ -1181,7 +1181,6 @@ class ExportWidget(QWidget):
             print("Canceled Operation")
 
     def show_new_progress(self, new_prog):
-        print("new_prog =", new_prog)
         self.progress_label.setText(
             str("Downloading: " + str(new_prog) + " %")
         )
