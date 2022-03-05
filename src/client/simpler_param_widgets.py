@@ -684,18 +684,6 @@ class FindspotsSimplerParameterTab(SimpleParamTab):
         xds_global_threshold_hb.addWidget(xds_global_threshold_spn_bx)
         self.main_v_layout.addLayout(xds_global_threshold_hb)
 
-        hbox_lay_nproc = QHBoxLayout()
-        label_nproc = QLabel("Number of Processes")
-        # label_nproc.setPalette(palette_object)
-        # label_nproc.setFont( QFont("Monospace", 10))
-        hbox_lay_nproc.addWidget(label_nproc)
-
-        self.box_nproc = QSpinBox()
-        self.box_nproc.local_path = "spotfinder.mp.nproc"
-
-        self.box_nproc.editingFinished.connect(self.spnbox_finished)
-        hbox_lay_nproc.addWidget(self.box_nproc)
-        self.main_v_layout.addLayout(hbox_lay_nproc)
 
         self.main_v_layout.addStretch()
         self.lst_var_widg = _get_all_direct_layout_widget_children(self.main_v_layout)
@@ -703,11 +691,6 @@ class FindspotsSimplerParameterTab(SimpleParamTab):
     def reset_pars(self):
         self.clearLayout(self.main_v_layout)
         self.build_pars()
-
-    def set_max_nproc(self):
-        cpu_max_proc = default_max_nproc
-        self.box_nproc.setValue(cpu_max_proc)
-        return cpu_max_proc
 
 
 class IndexSimplerParamTab(SimpleParamTab):
@@ -912,18 +895,6 @@ class IntegrateSimplerParamTab(SimpleParamTab):
         d_min_spn_bx.editingFinished.connect(self.spnbox_finished)
         self.main_v_layout.addLayout(hbox_d_min)
 
-        hbox_lay_nproc = QHBoxLayout()
-        label_nproc = QLabel("Number of Processes")
-        # label_nproc.setFont( QFont("Monospace", 10))
-        hbox_lay_nproc.addWidget(label_nproc)
-
-        self.box_nproc = QSpinBox()
-
-        self.box_nproc.local_path = "integration.mp.nproc"
-        self.box_nproc.editingFinished.connect(self.spnbox_finished)
-        hbox_lay_nproc.addWidget(self.box_nproc)
-        self.main_v_layout.addLayout(hbox_lay_nproc)
-
         self.main_v_layout.addStretch()
         #self.box_nproc.item_list = None
         self.lst_var_widg = _get_all_direct_layout_widget_children(
@@ -933,12 +904,6 @@ class IntegrateSimplerParamTab(SimpleParamTab):
     def reset_pars(self):
         self.clearLayout(self.main_v_layout)
         self.build_pars()
-
-    def set_max_nproc(self):
-        cpu_max_proc = default_max_nproc
-        self.box_nproc.setValue(cpu_max_proc)
-        return cpu_max_proc
-
 
 class SymmetrySimplerParamTab(SimpleParamTab):
     """
