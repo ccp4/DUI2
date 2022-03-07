@@ -615,8 +615,6 @@ class MainObject(QObject):
 
         except AttributeError:
             print("Not updating parameters, no (green node or twin widget)\n")
-            print("self.new_node.number =", self.new_node.number)
-            print("self.curr_nod_num =", self.curr_nod_num)
 
     def item_param_changed(self, str_path = None, str_value = None, lst_num = 0):
         try:
