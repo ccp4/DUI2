@@ -749,7 +749,6 @@ class MainObject(QObject):
 
         self.expr_widg.set_download_stat(do_enable = enabl, nod_num = self.curr_nod_num)
 
-
     def display(self):
         self.tree_scene.draw_tree_graph(
             nod_lst_in = self.server_nod_lst,
