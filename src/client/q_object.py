@@ -455,7 +455,6 @@ class MainObject(QObject):
             except AttributeError:
                 print("removing HtmlReport for old vesion of PySide2 ")
 
-
     def mask_comp_changed(self, mask_comp):
         self.do_image_view.set_mask_comp(mask_comp)
 
