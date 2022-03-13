@@ -1,4 +1,7 @@
-from subprocess import call as shell_call
+#from subprocess import call as shell_call
+
+from subprocess import PIPE, run
+
 from distutils import sysconfig
 import scitbx
 
@@ -48,13 +51,43 @@ com_lin_02 = "g++ -shared " + obj_name + ".o -L" +   \
     cut_cut_lib_path + " -lboost_python39 -L" +      \
     cut_lib_path + "/config -lpython3.9 -o " + obj_name + ".so"
 
-print("\n Compiling line 1:")
-print("cmd =", com_lin_01, "\n")
-err_msg_01 = shell_call(com_lin_01, shell=True)
-print("\n Compiling line 2:")
-print("cmd =", com_lin_02, "\n")
-err_msg_02 = shell_call(com_lin_02, shell=True)
-print("\n Done compiling")
+print("\n Compiling Line 1:")
+print("cmd =", com_lin_01)
 
-if(err_msg_01 != 0 or err_msg_02 !=0 ):
-    print("Failed to compile some C++ extensions ")
+result1 = run(
+    com_lin_01, shell=True,
+    stdout=PIPE, stderr=PIPE,
+    universal_newlines=True
+)
+print("\n Line 1 (returncode) =", result1.returncode)
+
+#################################################################
+
+print("\n Compiling Line 2:")
+print("cmd =", com_lin_02)
+
+result2 = run(
+    com_lin_02, shell=True,
+    stdout=PIPE, stderr=PIPE,
+    universal_newlines=True
+)
+print("\n Line 2 (returncode) =", result2.returncode)
+
+if(result1.returncode != 0 or result2.returncode !=0 ):
+
+    print("\n result1.stdout =", result1.stdout)
+    print("\n result1.stderr =", result1.stderr)
+
+    print("\n result2.stdout =", result2.stdout)
+    print("\n result2.stderr =", result2.stderr)
+    print("\n")
+    print("*********************************************")
+    print("*                                           *")
+    print("*                  ERROR                    *")
+    print("*   Failed to compile some C++ extensions   *")
+    print("*                                           *")
+    print("*********************************************")
+    print("\n")
+
+else:
+    print("\n Done compiling")
