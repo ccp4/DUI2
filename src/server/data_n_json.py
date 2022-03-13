@@ -378,8 +378,8 @@ def iter_dict(file_path, depth_ini):
     local_dict = {
         "file_name": file_name, "file_path": file_path, "list_child": []
     }
-    if depth_ini >= 20:
-        print("reached to deep with: ", file_path)
+    if depth_ini >= 30:
+        #print("reached to deep with: ", file_path)
         local_dict["isdir"] = False
 
     elif os.path.isdir(file_path):

@@ -32,11 +32,11 @@ mkdir dui_cmd_tools
 cd dui_cmd_tools
 CMD_TOOLS_PATH=$(pwd)
 SET_DIALS_ENV="source $INI_DIR_PATH/dials-v3-8-3/dials_env.sh"
-CLIENT_EXE_CMD="dials.python $INI_DIR_PATH/DUI2/src/client/main_client.py"
+CLIENT_EXE_CMD="dials.python $INI_DIR_PATH/DUI2/src/client/main_client.py \$\@"
 echo $SET_DIALS_ENV > dui_client
 echo $CLIENT_EXE_CMD >> dui_client
 chmod +x dui_client
-SERVER_EXE_CMD="dials.python $INI_DIR_PATH/DUI2/src/server/main_server.py"
+SERVER_EXE_CMD="dials.python $INI_DIR_PATH/DUI2/src/server/main_server.py \$\@"
 echo $SET_DIALS_ENV > dui_server
 echo $SERVER_EXE_CMD >> dui_server
 chmod +x dui_server
