@@ -1,3 +1,5 @@
+mkdir dials_n_dui_installs
+cd dials_n_dui_installs
 printf "========================================\n"
 printf "#        INSTALLING DIALS v3.8.3       #\n"
 printf "========================================\n\n"
@@ -51,3 +53,4 @@ printf "To set enviromet to run DUI2 (including Dials) type:\n\n"
 printf "  export PATH=$CMD_TOOLS_PATH:\$PATH  \n\n"
 printf "or add it to your init bash shell\n\n"
 cd $INI_DIR_PATH
+cd ..
