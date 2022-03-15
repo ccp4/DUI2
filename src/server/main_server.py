@@ -174,14 +174,15 @@ def main():
 
     tree_ini_path = init_param["init_path"]
     if tree_ini_path == None:
-        print("\n NOT GIVEN init path, using << HOME env >>")
-        tree_ini_path = os.environ['HOME']
+        print("\n NOT GIVEN init_path")
+        print(" using the dir from where the commad 'dui_server' was invoqued")
+        tree_ini_path = os.getcwd()
 
     print(
-        "\n * using init path as: ",
-        tree_ini_path, " * \n"
+        "\n using init path as: <<", tree_ini_path, ">> \n"
     )
     tree_dic_lst = iter_dict(tree_ini_path, 0)
+
     try:
         with open("run_data") as json_file:
             runner_data = json.load(json_file)
