@@ -44,6 +44,7 @@ def fix_alias(short_in):
         ("h",     "history"                               ),
         ("dt",    "dir_tree"                              ),
         ("dl",    "display_log"                           ),
+        ("cl",    "closed"                                ),
         ("gr",    "get_report"                            ),
         ("gmt",   "get_mtz"                               ),
         ("gt",    "get_template"                          ),
@@ -507,6 +508,10 @@ class Runner(object):
             elif uni_cmd == ["history"]:
                 #return_list = self.lst_cmd_in
                 print("history command is temporarily off")
+
+            elif uni_cmd == ["closed"]:
+                return_list = ["closed received"]
+                print("received closed command")
 
             elif uni_cmd == ["stop"]:
                 #TODO: consider moving this to << run_dials_comand >> (do_POST)

@@ -362,8 +362,20 @@ class MainObject(QObject):
         self.window.LeftVSplitter.setStretchFactor(0, 3)
         self.window.LeftVSplitter.setStretchFactor(1, 1)
 
+        self.window.destroyed.connect(self.close_event)
+
         self.window.show()
         self.import_init()
+
+
+    def close_event(self, event):
+        print("\n destroyed event ... 1\n")
+
+        cmd = {"nod_lst":"", "cmd_lst":["closed"]}
+        resp = json_data_request(self.uni_url, cmd)
+        print("resp =", resp)
+
+        print("\n destroyed event ... 2\n")
 
     def import_init(self):
         loop = QEventLoop()

@@ -134,6 +134,9 @@ def main():
                     json_str = json.dumps(lst_out) + '\n'
                     self.wfile.write(bytes(json_str, 'utf-8'))
 
+                    if lst_out == ['closed received']:
+                        print("\n maybe is time to stop the server app \n")
+
                 elif type(lst_out) is bytes:
                     byt_data = zlib.compress(lst_out)
                     siz_dat = str(len(byt_data))
