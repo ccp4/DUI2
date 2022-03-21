@@ -169,10 +169,11 @@ class DoLoadHTML(QObject):
                 except requests.exceptions.RequestException:
                     print("\n requests.exceptions.RequestException (DoLoadHTML) \n")
                     full_file = self.failed_html
-
+                    tmp_off = '''
                 except zlib.error:
                     print("\n zlib.error (DoLoadHTML) \n")
                     full_file = self.not_avail_html
+                    '''
 
             if len(full_file) < 5:
                 self.main_obj.window.HtmlReport.setHtml(self.not_avail_html)

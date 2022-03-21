@@ -23,12 +23,25 @@ class ini_data(object):
     def set_data(self):
         par_def = (
             ("url", 'http://localhost:45678/'),
+            ("all_local", "False"),
         )
         print("sys.argv =", sys.argv)
         init_param = format_utils.get_par(par_def, sys.argv[1:])
         print("init_param =", init_param)
         global uni_url
         uni_url = init_param["url"]
+        print(
+            "\n init_param['all_local'] =",
+            init_param["all_local"], "\n"
+        )
+        global run_local
+        if init_param["all_local"].lower() == "true":
+            run_local = True
+
+        else:
+            run_local = False
+
+        print("\n run_local =", run_local, "\n")
 
     def get_url(self):
         return uni_url

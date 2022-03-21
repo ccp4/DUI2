@@ -220,6 +220,7 @@ def main():
         ("host", "localhost"),
         #("host", "serverip"),
         ("init_path", "."),
+        ("all_local", "False"),
     )
 
     init_param = format_utils.get_par(par_def, sys.argv[1:])
@@ -227,6 +228,15 @@ def main():
 
     PORT = int(init_param["port"])
     HOST = init_param["host"]
+
+    #global run_local
+    if init_param["all_local"].lower() == "true":
+        run_local = True
+
+    else:
+        run_local = False
+
+    print("\n run_local =", run_local, "\n")
 
     tree_ini_path = init_param["init_path"]
     if tree_ini_path == None:
