@@ -370,23 +370,32 @@ class LocalFileBrowser(QDialog):
         bot_hbox.addWidget(self.cancel_butt)
         mainLayout.addLayout(bot_hbox)
 
-        self.t_view.clicked.connect(self.something_clicked)
+        self.t_view.clicked.connect(self.node_clicked)
         self.open_select_butt.clicked.connect(self.set_selection)
         self.cancel_butt.clicked.connect(self.cancel_opn)
 
         self.setLayout(mainLayout)
         self.show()
 
-    def something_clicked(self, event):
+    def node_clicked(self, it_index):
         index = self.t_view.currentIndex()
-        print("\n index =", index)
         new_path = self.fil_sys_mod.filePath(index)
         new_info = self.fil_sys_mod.fileInfo(index)
-        print("new_path =", new_path)
-        print("new_info.isDir =", new_info.isDir())
+        is_dir = new_info.isDir()
+        if is_dir:
+            print("\n Clicked on DIR \n ")
+            self.open_select_butt.setText("Open Dir")
 
-        self.last_file_clicked = new_path
-        self.dir_selected = new_info.isDir()
+        else:
+            print("\n Clicked on FILE \n ")
+            self.open_select_butt.setText("Open File")
+
+        str_select_path = str(new_path)
+        if str_select_path == self.last_file_clicked:
+            self.set_selection()
+
+        self.dir_selected = is_dir
+        self.last_file_clicked = str_select_path
 
     def set_selection(self):
         if self.last_file_clicked == None:
