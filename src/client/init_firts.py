@@ -43,6 +43,9 @@ class ini_data(object):
 
         print("\n run_local =", run_local, "\n")
 
+    def get_if_local(self):
+        return run_local
+
     def get_url(self):
         return uni_url
 

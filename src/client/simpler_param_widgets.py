@@ -312,7 +312,9 @@ class FileBrowser(QDialog):
                 "\n set_selection:", self.last_file_clicked,
                 "\n dir_selected:", self.dir_selected
             )
-            self.file_or_dir_selected.emit(self.last_file_clicked, self.dir_selected)
+            self.file_or_dir_selected.emit(
+                self.last_file_clicked, self.dir_selected
+            )
             self.close()
 
     def node_clicked(self, it_index):
@@ -334,6 +336,64 @@ class FileBrowser(QDialog):
         print("item.file_path =", self.last_file_clicked)
 
     def cancel_opn(self):
+        self.close()
+
+
+class LocalFileBrowser(QDialog):
+    file_or_dir_selected = Signal(str, bool)
+    def __init__(self, parent=None):
+        super(LocalFileBrowser, self).__init__(parent)
+
+        self.setWindowTitle("Open IMGs")
+
+        self.fil_sys_mod = QFileSystemModel()
+        self.fil_sys_mod.setRootPath(QDir.homePath())
+
+        self.t_view =  QTreeView()
+        self.t_view.setModel(self.fil_sys_mod)
+
+        self.open_select_butt = QPushButton("Open ...")
+        self.cancel_butt = QPushButton("Cancel")
+        self.show_hidden_check = QCheckBox("Show Hidden Files")
+        self.show_hidden_check.setChecked(False)
+
+        mainLayout = QVBoxLayout()
+
+        top_hbox = QHBoxLayout()
+        top_hbox.addStretch()
+        top_hbox.addWidget(self.show_hidden_check)
+        mainLayout.addLayout(top_hbox)
+
+        mainLayout.addWidget(self.t_view)
+
+        bot_hbox = QHBoxLayout()
+        bot_hbox.addStretch()
+        bot_hbox.addWidget(self.open_select_butt)
+        bot_hbox.addWidget(self.cancel_butt)
+        mainLayout.addLayout(bot_hbox)
+
+        self.t_view.clicked.connect(self.someting_click)
+        self.open_select_butt.clicked.connect(self.set_selection)
+        #self.cancel_butt.clicked.connect(self.cancel_opn)
+
+        self.setLayout(mainLayout)
+        self.show()
+
+    def someting_click(self, event):
+        index = self.t_view.currentIndex()
+        print("\n index =", index)
+        new_path = self.fil_sys_mod.filePath(index)
+        new_info = self.fil_sys_mod.fileInfo(index)
+        print("new_path =", new_path)
+        print("new_info.isDir =", new_info.isDir())
+
+        self.last_file_clicked = new_path
+        self.dir_selected = new_info.isDir()
+
+    def set_selection(self):
+        self.file_or_dir_selected.emit(
+            self.last_file_clicked, self.dir_selected
+        )
         self.close()
 
 
@@ -391,6 +451,8 @@ class RootWidg(QWidget):
         print("update_param(Root)", str_path, str_value, "... dummy")
 
 
+
+
 class ImportWidget(QWidget):
     '''
         This widget behaves differently from mos of the other  << simple >>
@@ -437,7 +499,15 @@ class ImportWidget(QWidget):
         self.line_changed()
 
     def open_dir_widget(self):
-        self.open_widget = FileBrowser(self)
+
+        data_init = ini_data()
+        run_local = data_init.get_if_local()
+        if run_local:
+            self.open_widget = LocalFileBrowser(self)
+
+        else:
+            self.open_widget = FileBrowser(self)
+
         self.open_widget.file_or_dir_selected.connect(self.set_selection)
 
     def reset_pars(self):
