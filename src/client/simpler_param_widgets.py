@@ -239,7 +239,7 @@ class MyTree(QTreeWidget):
 
 
 class FileBrowser(QDialog):
-    file_or_dur_selected = Signal(str, bool)
+    file_or_dir_selected = Signal(str, bool)
     def __init__(self, parent=None):
         super(FileBrowser, self).__init__(parent)
 
@@ -312,7 +312,7 @@ class FileBrowser(QDialog):
                 "\n set_selection:", self.last_file_clicked,
                 "\n dir_selected:", self.dir_selected
             )
-            self.file_or_dur_selected.emit(self.last_file_clicked, self.dir_selected)
+            self.file_or_dir_selected.emit(self.last_file_clicked, self.dir_selected)
             self.close()
 
     def node_clicked(self, it_index):
@@ -438,7 +438,7 @@ class ImportWidget(QWidget):
 
     def open_dir_widget(self):
         self.open_widget = FileBrowser(self)
-        self.open_widget.file_or_dur_selected.connect(self.set_selection)
+        self.open_widget.file_or_dir_selected.connect(self.set_selection)
 
     def reset_pars(self):
         self.imp_txt.setText("")

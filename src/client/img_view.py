@@ -1352,7 +1352,7 @@ class MainImgViewObject(QObject):
     def open_dir_widget(self):
         #TODO make sure self.window is that goes as argument
         self.open_widget = FileBrowser(self.window)
-        self.open_widget.file_or_dur_selected.connect(self.set_selection)
+        self.open_widget.file_or_dir_selected.connect(self.set_selection)
 
 
 def main():
