@@ -346,22 +346,20 @@ class LocalFileBrowser(QDialog):
 
         self.setWindowTitle("Open IMGs")
 
+        self.last_file_clicked = None
+
         self.fil_sys_mod = QFileSystemModel()
         self.fil_sys_mod.setRootPath(QDir.homePath())
-
         self.t_view =  QTreeView()
         self.t_view.setModel(self.fil_sys_mod)
 
         self.open_select_butt = QPushButton("Open ...")
         self.cancel_butt = QPushButton("Cancel")
-        self.show_hidden_check = QCheckBox("Show Hidden Files")
-        self.show_hidden_check.setChecked(False)
 
         mainLayout = QVBoxLayout()
 
         top_hbox = QHBoxLayout()
         top_hbox.addStretch()
-        top_hbox.addWidget(self.show_hidden_check)
         mainLayout.addLayout(top_hbox)
 
         mainLayout.addWidget(self.t_view)
@@ -372,14 +370,14 @@ class LocalFileBrowser(QDialog):
         bot_hbox.addWidget(self.cancel_butt)
         mainLayout.addLayout(bot_hbox)
 
-        self.t_view.clicked.connect(self.someting_click)
+        self.t_view.clicked.connect(self.something_clicked)
         self.open_select_butt.clicked.connect(self.set_selection)
-        #self.cancel_butt.clicked.connect(self.cancel_opn)
+        self.cancel_butt.clicked.connect(self.cancel_opn)
 
         self.setLayout(mainLayout)
         self.show()
 
-    def someting_click(self, event):
+    def something_clicked(self, event):
         index = self.t_view.currentIndex()
         print("\n index =", index)
         new_path = self.fil_sys_mod.filePath(index)
@@ -391,11 +389,17 @@ class LocalFileBrowser(QDialog):
         self.dir_selected = new_info.isDir()
 
     def set_selection(self):
-        self.file_or_dir_selected.emit(
-            self.last_file_clicked, self.dir_selected
-        )
-        self.close()
+        if self.last_file_clicked == None:
+            print("select file first")
 
+        else:
+            self.file_or_dir_selected.emit(
+                self.last_file_clicked, self.dir_selected
+            )
+            self.close()
+
+    def cancel_opn(self):
+        self.close()
 
 def build_template(str_path_in):
     print("\ntime to build template from:\n", str_path_in)
