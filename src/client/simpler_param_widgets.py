@@ -354,6 +354,9 @@ class LocalFileBrowser(QDialog):
         self.t_view.setModel(self.fil_sys_mod)
         self.t_view.setSortingEnabled(True)
 
+        tmp_width = self.t_view.columnWidth(0)
+        self.t_view.setColumnWidth(0, tmp_width * 3)
+
         self.open_select_butt = QPushButton("Open ...")
         self.cancel_butt = QPushButton("Cancel")
 
