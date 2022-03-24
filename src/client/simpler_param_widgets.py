@@ -352,6 +352,7 @@ class LocalFileBrowser(QDialog):
         self.fil_sys_mod.setRootPath(QDir.homePath())
         self.t_view =  QTreeView()
         self.t_view.setModel(self.fil_sys_mod)
+        self.t_view.setSortingEnabled(True)
 
         self.open_select_butt = QPushButton("Open ...")
         self.cancel_butt = QPushButton("Cancel")
