@@ -15,14 +15,13 @@ source dials-v3-9-0/dials_env.sh
 printf "========================================\n"
 printf "#           INSTALLING MAMBA           #\n"
 printf "========================================\n\n"
-libtbx.conda install -c conda-forge mamba
+libtbx.conda install -c conda-forge mamba -y
 libtbx.refresh
 printf "========================================\n"
 printf "#         INSTALLING DUI2 DEPS         #\n"
 printf "========================================\n\n"
 libtbx.mamba install pyside2 -y
 libtbx.mamba install git -y
-###################### libtbx.conda install -c conda-forge gxx # does not seems to work
 printf "========================================\n"
 printf "#           INSTALLING DUI2            #\n"
 printf "========================================\n\n"
