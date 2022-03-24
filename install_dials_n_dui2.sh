@@ -1,22 +1,27 @@
 mkdir dials_n_dui_installs
 cd dials_n_dui_installs
 printf "========================================\n"
-printf "#        INSTALLING DIALS v3.8.3       #\n"
+printf "#        INSTALLING DIALS v3.9.0       #\n"
 printf "========================================\n\n"
 INI_DIR_PATH=$(pwd)
 mkdir dials_installer_tmp
 cd dials_installer_tmp
-wget https://github.com/dials/dials/releases/download/v3.8.3/dials-v3-8-3-linux-x86_64.tar.xz
-tar -xvf dials-v3-8-3-linux-x86_64.tar.xz
+wget https://github.com/dials/dials/releases/download/v3.9.0/dials-v3-9-0-linux-x86_64.tar.xz
+tar -xf dials-v3-9-0-linux-x86_64.tar.xz
 cd dials-installer
 ./install --prefix=$INI_DIR_PATH
+cd $INI_DIR_PATH
+source dials-v3-9-0/dials_env.sh
+printf "========================================\n"
+printf "#           INSTALLING MAMBA           #\n"
+printf "========================================\n\n"
+libtbx.conda install -c conda-forge mamba
+libtbx.refresh
 printf "========================================\n"
 printf "#         INSTALLING DUI2 DEPS         #\n"
 printf "========================================\n\n"
-cd $INI_DIR_PATH
-source dials-v3-8-3/dials_env.sh
-libtbx.conda install pyside2 -y
-libtbx.conda install git -y
+libtbx.mamba install pyside2 -y
+libtbx.mamba install git -y
 ###################### libtbx.conda install -c conda-forge gxx # does not seems to work
 printf "========================================\n"
 printf "#           INSTALLING DUI2            #\n"
@@ -37,7 +42,7 @@ mkdir dui_cmd_tools
 cd dui_cmd_tools
 
 CMD_TOOLS_PATH=$(pwd)
-SET_DIALS_ENV="source $INI_DIR_PATH/dials-v3-8-3/dials_env.sh"
+SET_DIALS_ENV="source $INI_DIR_PATH/dials-v3-9-0/dials_env.sh"
 
 CLIENT_EXE_CMD="dials.python $INI_DIR_PATH/DUI2/src/client/main_client.py \$@"
 echo $SET_DIALS_ENV > dui_client
