@@ -330,12 +330,12 @@ class MainObject(QObject):
         self.window.CmdSend2server.setEnabled(True)
         self.window.ReqStopButton.setEnabled(True)
 
-        #try:
-        self.do_load_html = DoLoadHTML(self)
-        self.window.HtmlReport.setHtml(self.do_load_html.not_avail_html)
+        try:
+            self.do_load_html = DoLoadHTML(self)
+            self.window.HtmlReport.setHtml(self.do_load_html.not_avail_html)
 
-        #except AttributeError:
-        #    print("removing HtmlReport for old vesion of PySide2 ")
+        except AttributeError:
+            print("removing HtmlReport for old vesion of PySide2 ")
 
         self.log_show = ShowLog(self)
 
@@ -461,11 +461,11 @@ class MainObject(QObject):
             self.log_show(self.curr_nod_num, do_request = fnd_cur_nod)
 
         elif tab_index == 2:
-            #try:
-            self.do_load_html(do_request = fnd_cur_nod)
+            try:
+                self.do_load_html(do_request = fnd_cur_nod)
 
-            #except AttributeError:
-            #    print("removing HtmlReport for old vesion of PySide2 ")
+            except AttributeError:
+                print("removing HtmlReport for old vesion of PySide2 ")
 
     def mask_comp_changed(self, mask_comp):
         self.do_image_view.set_mask_comp(mask_comp)
