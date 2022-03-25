@@ -17,6 +17,7 @@ printf "========================================\n"
 printf "#           INSTALLING MAMBA           #\n"
 printf "========================================\n\n"
 libtbx.conda install -c conda-forge mamba -y
+printf "Setting up mamba ...\n"
 libtbx.refresh
 printf "========================================\n"
 printf "#         INSTALLING DUI2 DEPS         #\n"
