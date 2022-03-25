@@ -7,6 +7,7 @@ INI_DIR_PATH=$(pwd)
 mkdir dials_installer_tmp
 cd dials_installer_tmp
 wget https://github.com/dials/dials/releases/download/v3.9.0/dials-v3-9-0-linux-x86_64.tar.xz
+printf "decompressing the dials installer, this might take a few minutes ... \n\n"
 tar -xf dials-v3-9-0-linux-x86_64.tar.xz
 cd dials-installer
 ./install --prefix=$INI_DIR_PATH
