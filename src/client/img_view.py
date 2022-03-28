@@ -427,29 +427,6 @@ class ImgGraphicsScene(QGraphicsScene):
         x_pos, y_pos = int(ev_pos.x()), int(ev_pos.y())
         self.mouse_released.emit(x_pos, y_pos)
 
-class PopActionsMenu(QMenu):
-    def __init__(self, parent=None):
-        super().__init__()
-        self.my_parent = parent
-
-        mask_group = QGroupBox("Mask tool")
-        mask_box_layout = QVBoxLayout()
-        mask_box_layout.addWidget(QLabel("Dummy_01"))
-        mask_box_layout.addWidget(QLabel("Dummy_02"))
-        mask_group.setLayout(mask_box_layout)
-
-        sp_find_group = QGroupBox("Spot finding steps")
-        sp_find_box_layout = QVBoxLayout()
-        sp_find_box_layout.addWidget(QLabel("Dummy ... one"))
-        sp_find_box_layout.addWidget(QLabel("Dummy ... two"))
-        sp_find_box_layout.addWidget(QLabel("Dummy ... three"))
-        sp_find_group.setLayout(sp_find_box_layout)
-
-        my_main_box = QHBoxLayout()
-        my_main_box.addWidget(mask_group)
-        my_main_box.addWidget(sp_find_group)
-        self.setLayout(my_main_box)
-
 
 class PopDisplayMenu(QMenu):
     new_i_min_max = Signal(int, int)
@@ -586,9 +563,6 @@ class DoImageView(QObject):
         self.pop_display_menu.new_palette.connect(self.change_palette)
         self.pop_display_menu.new_redraw.connect(self.refresh_pixel_map)
 
-        self.pop_act_menu = PopActionsMenu(self)
-        self.main_obj.window.ActionsButton.setMenu(self.pop_act_menu)
-
         self.my_scene.img_scale.connect(self.scale_img)
         self.my_scene.new_mouse_pos.connect(self.on_mouse_move)
         self.my_scene.mouse_pressed.connect(self.on_mouse_press)
@@ -668,6 +642,10 @@ class DoImageView(QObject):
 
         if not self.easter_egg_active:
             self.full_img_show()
+
+        self.main_obj.window.ImagePathLabel.setText(
+            str("??? " + str(in_img_num) + str(nod_or_path) + " ???")
+        )
 
     def build_background_n_get_nod_num(self, nod_or_path, in_img_num):
         if nod_or_path is True:
