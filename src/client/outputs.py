@@ -46,7 +46,6 @@ class HandleLoadStatusLabel(QObject):
         print("load_started (HandleLoadStatusLabel)")
 
     def load_progress(self, progress):
-        #print("converting to label:", progress)
         if progress > 100:
             str_progress = "100 +"
             print("progress =", progress)
@@ -65,15 +64,15 @@ class HandleLoadStatusLabel(QObject):
             '  Loading: ' + str_progress + " %  "
         )
         self.main_obj.parent_app.processEvents()
+        #print("load_progress (HandleLoadStatusLabel):", progress)
 
     def load_finished(self):
-        print("RAM load_finished")
         self.main_obj.window.OutuputStatLabel.setStyleSheet(
             "QLabel { background-color : white; color : blue; }"
         )
         self.main_obj.window.OutuputStatLabel.setText('  Ready  ')
         self.main_obj.parent_app.processEvents()
-
+        print("load_finished (HandleLoadStatusLabel)")
 
 
 class DoLoadHTML(QObject):
