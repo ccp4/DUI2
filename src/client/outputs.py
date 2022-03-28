@@ -122,7 +122,7 @@ class DoLoadHTML(QObject):
     def __call__(self, do_request = False):
         print("Do Request =", do_request)
         if do_request:
-            print("network load_html ... Start")
+            print("Show HTML ... Start")
             nod_p_num = self.main_obj.curr_nod_num
             found_html = False
             for html_info in self.lst_html:
@@ -135,6 +135,7 @@ class DoLoadHTML(QObject):
                     full_file = html_info["html_report"]
 
             if not found_html:
+                print("not found_html #1, Local Mem")
                 self.main_obj.window.HtmlReport.setHtml(self.loading_html)
                 self.l_stat.load_started()
                 try:
@@ -142,9 +143,15 @@ class DoLoadHTML(QObject):
                         "nod_lst":[nod_p_num],
                         "cmd_lst":["get_report"]
                     }
-                    req_gt = requests.get(self.uni_url, stream = True, params = cmd)
+                    print("staring html request ...")
+                    req_gt = requests.get(
+                        self.uni_url, stream = True, params = cmd
+                    )
                     compresed = req_gt.content
+                    print("... html request ended")
+
                     full_file = zlib.decompress(compresed).decode('utf-8')
+                    #print("full_file =", full_file)
 
                     found_html = False
                     for html_info in self.lst_html:
@@ -155,6 +162,7 @@ class DoLoadHTML(QObject):
                             html_info["html_report"] = full_file
 
                     if not found_html:
+                        print("not found_html #2, After http request")
                         self.lst_html.append(
                             {
                                 "number"       :nod_p_num,
@@ -180,7 +188,7 @@ class DoLoadHTML(QObject):
             else:
                 self.main_obj.window.HtmlReport.setHtml(full_file)
 
-            print("network load_html ... End")
+            print("Show HTML ... End")
 
         else:
             self.main_obj.window.HtmlReport.setHtml(self.not_avail_html)
