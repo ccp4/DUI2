@@ -643,25 +643,31 @@ class DoImageView(QObject):
         if not self.easter_egg_active:
             self.full_img_show()
 
-        self.main_obj.window.ImagePathLabel.setText(
-            str("??? " + str(in_img_num) + str(nod_or_path) + " ???")
-        )
-
     def build_background_n_get_nod_num(self, nod_or_path, in_img_num):
         if nod_or_path is True:
             nod_num = self.main_obj.curr_nod_num
-            cmd = {'nod_lst': [nod_num], 'cmd_lst': ["gt"]}
 
         elif nod_or_path is False:
             nod_num = self.main_obj.new_node.parent_node_lst[0]
-            cmd = {'nod_lst': [nod_num], 'cmd_lst': ["gt"]}
 
+        to_fix_later = '''
         elif type(nod_or_path) is str:
             nod_num = nod_or_path
             cmd = {"path": nod_or_path, 'cmd_lst': "get_template"}
             self.exp_path = nod_or_path
+        '''
 
+        my_cmd_lst = ["get_template " + str(in_img_num)]
+        my_cmd = {"nod_lst" : [nod_num],
+                  "path"    : nod_or_path,
+                  "cmd_lst" : my_cmd_lst}
+
+        json_data_lst = json_data_request(self.uni_url, my_cmd)
+
+        old_one = '''
+        cmd = {'nod_lst': [nod_num], 'cmd_lst': ["get_template"]}
         json_data_lst = json_data_request(self.uni_url, cmd)
+        '''
 
         try:
             new_templ = json_data_lst[0]
@@ -686,6 +692,12 @@ class DoImageView(QObject):
                     self.np_full_img / self.np_full_img.max()
                 )
             self.cur_templ = new_templ
+            self.main_obj.window.ImagePathLabel.setText(
+                str(
+                    "path img # " + str(in_img_num) + " = "
+                    + str(json_data_lst[3])
+                )
+            )
 
         except (IndexError, TypeError):
             print("Not loaded new template in full")
