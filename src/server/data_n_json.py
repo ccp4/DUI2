@@ -68,19 +68,10 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
                 mtz_name = step_list[lin2go].lst2run[0][-1][11:]
                 mtz_path = mtz_dir_path + os.sep + mtz_name
                 print("mtz_path =", mtz_path)
-                '''
-                fil = open(mtz_path, "r")
-                byt_data = fil.read()
-                '''
+
                 with open(mtz_path, 'rb') as fil_h:
                     byt_data = fil_h.read()
 
-                '''
-                str_file = fil.read()
-                fil.close()
-
-                byt_data = bytes(str_file.encode('utf-8'))
-                '''
                 return_list = byt_data
 
             except (IndexError, FileNotFoundError):
@@ -121,6 +112,8 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
                 )
                 my_sweep = experiments.imagesets()[0]
                 str_json = my_sweep.get_template()
+                #print("dir(my_sweep) =", dir(my_sweep))
+                print("\n get_path =", my_sweep.get_path(3), "\n")
 
                 data_xy_flex = my_sweep.get_raw_data(0)[0].as_double()
                 img_with, img_height = data_xy_flex.all()[0:2]

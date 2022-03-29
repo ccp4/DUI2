@@ -23,10 +23,12 @@ def list_p_arrange_exp(
     bbox_col = None, pan_col = None, hkl_col = None, n_imgs = None,
     n_imgs_lst = None, id_col = None, num_of_imagesets = 1
 ):
-
+    print("n_imgs(list_p_arrange_exp) =", n_imgs)
     img_lst = []
     for time in range(n_imgs):
         img_lst.append([])
+
+    print("img_lst =", img_lst)
 
     for i, ref_box in enumerate(bbox_col):
         x_ini = ref_box[0]
@@ -65,6 +67,8 @@ def list_p_arrange_exp(
                 if ind_z >= 0 and ind_z < n_imgs:
                     img_lst[ind_z].append(box_dat)
 
+                #print("box_dat =", box_dat)
+
     return img_lst
 
 
@@ -78,10 +82,12 @@ def get_refl_lst(expt_path, refl_path, img_num):
         print("refl_path =", refl_path)
         table = flex.reflection_table.from_file(refl_path[0])
 
-    except (IndexError, OSError):
-        print(
-            "\n sending empty reflection list as no reflection list there \n"
-        )
+    except IndexError:
+        print("\n sending empty reflection (IndexError) \n")
+        return [ [] ]
+
+    except OSError:
+        print("\n sending empty reflection (OSError) \n")
         return [ [] ]
 
     try:
@@ -89,7 +95,6 @@ def get_refl_lst(expt_path, refl_path, img_num):
         bbox_col = list(map(list, table["bbox"]))
         id_col = list(map(int, table["id"]))
 
-        #n_imgs = len(my_sweep.indices())
         n_imgs_lst = []
         n_imgs = 0
         for single_sweep in all_sweeps:
@@ -110,14 +115,17 @@ def get_refl_lst(expt_path, refl_path, img_num):
                 hkl_col = None
 
             box_flat_data_lst = list_p_arrange_exp(
-                bbox_col, pan_col, hkl_col, n_imgs, n_imgs_lst, id_col, num_of_imagesets
+                bbox_col, pan_col, hkl_col, n_imgs,
+                n_imgs_lst, id_col, num_of_imagesets
             )
 
         try:
             refl_lst = [box_flat_data_lst[img_num]]
+            print("len(refl_lst) =", len(refl_lst))
 
         except IndexError:
             refl_lst = []
+            print("refl_lst = []")
 
         return refl_lst
 

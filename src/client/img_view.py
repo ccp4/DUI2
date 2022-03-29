@@ -597,7 +597,6 @@ class DoImageView(QObject):
         )
         self.r_list0 = []
         self.exp_path = None
-        #self.r_list1 = []
 
         nod_num = self.build_background_n_get_nod_num(nod_or_path, in_img_num)
 
@@ -616,6 +615,7 @@ class DoImageView(QObject):
             print("No reflection list to show (known not to be)")
 
         if nod_or_path is not False:
+            print("requesting reflection list (cmd=", my_cmd, ")")
             json_lst = json_data_request(self.uni_url, my_cmd)
             try:
                 for inner_list in json_lst[0]:
@@ -665,6 +665,9 @@ class DoImageView(QObject):
 
         try:
             new_templ = json_data_lst[0]
+
+            print("new_templ = ", new_templ)
+
             self.img_d1_d2 = (
                 json_data_lst[1], json_data_lst[2]
             )
