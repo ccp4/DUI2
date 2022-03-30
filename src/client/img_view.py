@@ -651,11 +651,8 @@ class DoImageView(QObject):
             nod_num = self.main_obj.new_node.parent_node_lst[0]
 
         elif type(nod_or_path) is str:
-            print("\n\n ****** HERE ****** \n\n")
-
             nod_num = nod_or_path
-            cmd = {"path": nod_or_path, 'cmd_lst': "get_template"}
-            self.exp_path = nod_or_path
+            self.exp_path = str(nod_num)
 
         my_cmd_lst = ["get_template " + str(in_img_num)]
         my_cmd = {"nod_lst" : [nod_num],
@@ -663,11 +660,6 @@ class DoImageView(QObject):
                   "cmd_lst" : my_cmd_lst}
 
         json_data_lst = json_data_request(self.uni_url, my_cmd)
-
-        old_one = '''
-        cmd = {'nod_lst': [nod_num], 'cmd_lst': ["get_template"]}
-        json_data_lst = json_data_request(self.uni_url, cmd)
-        '''
 
         try:
             new_templ = json_data_lst[0]
@@ -1335,8 +1327,14 @@ class MainImgViewObject(QObject):
         self.dir_selected = isdir
         self.window.IntroPathEdit.setText(self.nod_or_path)
 
-        cmd = {"path": self.nod_or_path, 'cmd_lst': "get_template"}
-        json_data_lst = json_data_request(self.uni_url, cmd)
+
+        my_cmd_lst = ["get_template 0"]
+        my_cmd = {"path"    : self.nod_or_path,
+                  "cmd_lst" : my_cmd_lst}
+
+        json_data_lst = json_data_request(self.uni_url, my_cmd)
+
+
         new_templ = json_data_lst[0]
         self.img_d1_d2 = (json_data_lst[1], json_data_lst[2])
         print("self.img_d1_d2 =", self.img_d1_d2)

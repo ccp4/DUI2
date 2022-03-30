@@ -107,13 +107,6 @@
          </spacer>
         </item>
         <item>
-         <widget class="QLabel" name="InvScaleLabel">
-          <property name="text">
-           <string>scale = 1 / 1</string>
-          </property>
-         </widget>
-        </item>
-        <item>
          <widget class="QPushButton" name="ZoomInButton">
           <property name="text">
            <string>Zoom In</string>
@@ -131,6 +124,13 @@
          <widget class="QPushButton" name="ZoomOutButton">
           <property name="text">
            <string>Zoom Out</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="InvScaleLabel">
+          <property name="text">
+           <string>scale = 1 / 1</string>
           </property>
          </widget>
         </item>
