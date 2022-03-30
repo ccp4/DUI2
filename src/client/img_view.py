@@ -650,12 +650,12 @@ class DoImageView(QObject):
         elif nod_or_path is False:
             nod_num = self.main_obj.new_node.parent_node_lst[0]
 
-        to_fix_later = '''
         elif type(nod_or_path) is str:
+            print("\n\n ****** HERE ****** \n\n")
+
             nod_num = nod_or_path
             cmd = {"path": nod_or_path, 'cmd_lst': "get_template"}
             self.exp_path = nod_or_path
-        '''
 
         my_cmd_lst = ["get_template " + str(in_img_num)]
         my_cmd = {"nod_lst" : [nod_num],
