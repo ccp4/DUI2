@@ -21,7 +21,7 @@ from dxtbx.model.experiment_list import (
 
 def list_p_arrange_exp(
     bbox_col = None, pan_col = None, hkl_col = None, n_imgs = None,
-    n_imgs_lst = None, id_col = None, num_of_imagesets = 1
+    num_of_imgs_n_shift_lst = None, id_col = None, num_of_imagesets = 1
 ):
     print("n_imgs(list_p_arrange_exp) =", n_imgs)
     img_lst = []
@@ -55,17 +55,20 @@ def list_p_arrange_exp(
             for ind_z in range(ref_box[4], ref_box[5]):
                 img_id_ind_z = 0
                 for id_num in range(id_col[i]):
-                    img_id_ind_z += n_imgs_lst[id_num]
+                    img_id_ind_z += num_of_imgs_n_shift_lst[id_num][0]
 
-                img_id_ind_z += ind_z
+                ind_z_shift = ind_z - num_of_imgs_n_shift_lst[id_num][1]
+                img_id_ind_z += ind_z_shift
 
                 if img_id_ind_z >= 0 and img_id_ind_z < n_imgs:
                     img_lst[img_id_ind_z].append(box_dat)
 
         else:
+            id_num = 0
             for ind_z in range(ref_box[4], ref_box[5]):
-                if ind_z >= 0 and ind_z < n_imgs:
-                    img_lst[ind_z].append(box_dat)
+                ind_z_shift = ind_z - num_of_imgs_n_shift_lst[id_num][1]
+                if ind_z_shift >= 0 and ind_z_shift < n_imgs:
+                    img_lst[ind_z_shift].append(box_dat)
 
                 #print("box_dat =", box_dat)
 
@@ -75,7 +78,6 @@ def list_p_arrange_exp(
 def get_refl_lst(expt_path, refl_path, img_num):
     try:
         experiments = ExperimentListFactory.from_json_file(expt_path[0])
-        #my_sweep = experiments.imagesets()[0]
         all_sweeps = experiments.imagesets()
         num_of_imagesets = len(experiments.imagesets())
         print("len(experiments.imagesets()) =", num_of_imagesets)
@@ -95,15 +97,17 @@ def get_refl_lst(expt_path, refl_path, img_num):
         bbox_col = list(map(list, table["bbox"]))
         id_col = list(map(int, table["id"]))
 
-        n_imgs_lst = []
+        num_of_imgs_n_shift_lst = []
         n_imgs = 0
         for single_sweep in all_sweeps:
-            len_sweep = len(single_sweep.indices())
-            n_imgs += len_sweep
-            n_imgs_lst.append(len_sweep)
+            num_of_imgs = len(single_sweep.indices())
+            n_imgs += num_of_imgs
+
+            shift = single_sweep.get_scan().get_image_range()[0] - 1
+            num_of_imgs_n_shift_lst.append((num_of_imgs, shift))
 
         print("n_imgs =", n_imgs)
-        print("n_imgs_lst =", n_imgs_lst)
+        print("num_of_imgs_n_shift_lst =", num_of_imgs_n_shift_lst)
 
         box_flat_data_lst = []
         if n_imgs > 0:
@@ -116,7 +120,7 @@ def get_refl_lst(expt_path, refl_path, img_num):
 
             box_flat_data_lst = list_p_arrange_exp(
                 bbox_col, pan_col, hkl_col, n_imgs,
-                n_imgs_lst, id_col, num_of_imagesets
+                num_of_imgs_n_shift_lst, id_col, num_of_imagesets
             )
 
         try:
