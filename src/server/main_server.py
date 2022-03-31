@@ -137,12 +137,12 @@ def main():
                     if lst_out == ['closed received']:
                         print("Client app closed")
                         print("run_local =", run_local)
-                        sep_lin = "#" * 42 + "\n"
+                        sep_lin = "#" * 44 + "\n"
                         if run_local == True:
                             print(
                                 "\n " + sep_lin,
-                                "closing server as it is seems to be ",
-                                "\n running in the same computer as the client \n",
+                                " closing the server as it is running in ",
+                                "\n  the same computer as the client \n",
                                 sep_lin,
                             )
                             self.server.shutdown()
@@ -150,9 +150,9 @@ def main():
                         else:
                             print(
                                 "\n " + sep_lin,
-                                "keeping server running as the client might",
-                                "\n need to continue processing the same \n",
-                                "images latter \n",
+                                " keeping server running as the client might",
+                                "\n  need to continue processing the same \n",
+                                " images latter \n",
                                 sep_lin,
                             )
 
