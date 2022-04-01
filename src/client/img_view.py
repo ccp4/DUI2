@@ -1033,7 +1033,6 @@ class DoImageView(QObject):
             )
             self.load_slice_mask_image.start()
 
-
     def OneOneScale(self, event):
         print("OneOneScale")
         self.main_obj.window.imageView.resetTransform()
@@ -1053,6 +1052,7 @@ class DoImageView(QObject):
         tmp_x1, tmp_y1, tmp_x2, tmp_y2 = self.det_tmp_x1_y1_x2_y2()
         dx = tmp_x2 - tmp_x1
         dy = tmp_y2 - tmp_y1
+
         try:
             if(
                 (
@@ -1067,9 +1067,29 @@ class DoImageView(QObject):
                     relative_new_scale, relative_new_scale
                 )
                 self.set_inv_scale()
+                self.sheck_inversion()
 
         except TypeError:
             print("not zooming/unzooming before loading image")
+
+    def sheck_inversion(self):
+        m11 = self.main_obj.window.imageView.transform().m11()
+        m22 = self.main_obj.window.imageView.transform().m22()
+        if m11 < 0 or m22 < 0:
+            print(
+                "\n re-inverting image from m11, m22 =", m11, m22, "\n",
+            )
+            self.main_obj.window.imageView.setMatrix(
+                QMatrix(
+                    float(abs(m11)), float(0.0), float(0.0),
+                    float(abs(m22)), float(0.0), float(0.0)
+                )
+            )
+            m11 = self.main_obj.window.imageView.transform().m11()
+            m22 = self.main_obj.window.imageView.transform().m22()
+            print(
+                "\n ... To m11, m22 =", m11, m22, "\n",
+            )
 
     def easter_egg(self, event):
         self.easter_egg_active = not self.easter_egg_active
@@ -1105,7 +1125,6 @@ class DoImageView(QObject):
         try:
             str_out = "  I(" + str(x_pos) + ", " + str(y_pos) + ") = " +\
                   str(self.np_full_img[y_pos, x_pos])
-
 
         except (AttributeError, IndexError, TypeError):
             str_out = " I = ?"
