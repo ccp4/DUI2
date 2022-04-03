@@ -136,19 +136,12 @@ def get_refl_lst(expt_path, refl_path, img_num):
         return [ [] ]
 
 
-def get_json_w_img_2d(experiments_list_path, img_num):
-    print("experiments_list_path, img_num:", experiments_list_path, img_num)
-    pan_num = 0
-    experiments_path = experiments_list_path[0]
-    print("importing from:", experiments_path)
-    experiments = ExperimentListFactory.from_json_file(experiments_path)
-
+def get_correct_img_num_n_sweep_num(experiments, img_num):
     lst_num_of_imgs = []
     for single_sweep in experiments.imagesets():
         lst_num_of_imgs.append(len(single_sweep.indices()))
 
     print("lst_num_of_imgs =", lst_num_of_imgs)
-
     on_sweep_img_num = img_num
     n_sweep = 0
     for num_of_imgs in lst_num_of_imgs:
@@ -160,6 +153,19 @@ def get_json_w_img_2d(experiments_list_path, img_num):
             break
 
     print("geting image #", on_sweep_img_num, "from sweep #", n_sweep)
+    return on_sweep_img_num, n_sweep
+
+def get_json_w_img_2d(experiments_list_path, img_num):
+    pan_num = 0
+    print("experiments_list_path, img_num:", experiments_list_path, img_num)
+    experiments_path = experiments_list_path[0]
+    print("importing from:", experiments_path)
+    experiments = ExperimentListFactory.from_json_file(experiments_path)
+
+    on_sweep_img_num, n_sweep = get_correct_img_num_n_sweep_num(
+        experiments, img_num
+    )
+
     my_sweep = experiments.imagesets()[n_sweep]
     data_xy_flex = my_sweep.get_raw_data(on_sweep_img_num)[pan_num].as_double()
 
@@ -176,9 +182,6 @@ def get_json_w_img_2d(experiments_list_path, img_num):
 
     return str_data
 
-
-    ######################################################### START copy
-
 def get_json_w_mask_img_2d(experiments_list_path, img_num):
     print("experiments_list_path, img_num:", experiments_list_path, img_num)
     pan_num = 0
@@ -186,23 +189,10 @@ def get_json_w_mask_img_2d(experiments_list_path, img_num):
     print("importing from:", experiments_path)
     experiments = ExperimentListFactory.from_json_file(experiments_path)
 
-    lst_num_of_imgs = []
-    for single_sweep in experiments.imagesets():
-        lst_num_of_imgs.append(len(single_sweep.indices()))
+    on_sweep_img_num, n_sweep = get_correct_img_num_n_sweep_num(
+        experiments, img_num
+    )
 
-    print("lst_num_of_imgs =", lst_num_of_imgs)
-
-    on_sweep_img_num = img_num
-    n_sweep = 0
-    for num_of_imgs in lst_num_of_imgs:
-        if on_sweep_img_num >= num_of_imgs:
-            on_sweep_img_num -= num_of_imgs
-            n_sweep += 1
-
-        else:
-            break
-
-    print("geting image #", on_sweep_img_num, "from sweep #", n_sweep)
     try:
         imageset_tmp = experiments.imagesets()[n_sweep]
         mask_file = imageset_tmp.external_lookup.mask.filename
@@ -224,23 +214,10 @@ def get_json_w_2d_slise(experiments_list_path, img_num, inv_scale, x1, y1, x2, y
     print("importing from:", experiments_path)
     experiments = ExperimentListFactory.from_json_file(experiments_path)
 
-    lst_num_of_imgs = []
-    for single_sweep in experiments.imagesets():
-        lst_num_of_imgs.append(len(single_sweep.indices()))
+    on_sweep_img_num, n_sweep = get_correct_img_num_n_sweep_num(
+        experiments, img_num
+    )
 
-    print("lst_num_of_imgs =", lst_num_of_imgs)
-
-    on_sweep_img_num = img_num
-    n_sweep = 0
-    for num_of_imgs in lst_num_of_imgs:
-        if on_sweep_img_num >= num_of_imgs:
-            on_sweep_img_num -= num_of_imgs
-            n_sweep += 1
-
-        else:
-            break
-
-    print("geting image #", on_sweep_img_num, "from sweep #", n_sweep)
     my_sweep = experiments.imagesets()[n_sweep]
     data_xy_flex = my_sweep.get_raw_data(on_sweep_img_num)[pan_num].as_double()
 
@@ -268,23 +245,9 @@ def get_json_w_2d_mask_slise(experiments_list_path, img_num, inv_scale, x1, y1, 
     print("importing from:", experiments_path)
     experiments = ExperimentListFactory.from_json_file(experiments_path)
 
-    lst_num_of_imgs = []
-    for single_sweep in experiments.imagesets():
-        lst_num_of_imgs.append(len(single_sweep.indices()))
-
-    print("lst_num_of_imgs =", lst_num_of_imgs)
-
-    on_sweep_img_num = img_num
-    n_sweep = 0
-    for num_of_imgs in lst_num_of_imgs:
-        if on_sweep_img_num >= num_of_imgs:
-            on_sweep_img_num -= num_of_imgs
-            n_sweep += 1
-
-        else:
-            break
-
-    print("geting image #", on_sweep_img_num, "from sweep #", n_sweep)
+    on_sweep_img_num, n_sweep = get_correct_img_num_n_sweep_num(
+        experiments, img_num
+    )
 
     imageset_tmp = experiments.imagesets()[n_sweep]
     mask_file = imageset_tmp.external_lookup.mask.filename
