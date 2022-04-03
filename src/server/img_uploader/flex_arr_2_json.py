@@ -22,10 +22,15 @@ def get_template_info(exp_path, img_num):
     experiments = ExperimentListFactory.from_json_file(
         exp_path
     )
-    my_sweep = experiments.imagesets()[0]
+
+    on_sweep_img_num, n_sweep = get_correct_img_num_n_sweep_num(
+        experiments, img_num
+    )
+    my_sweep = experiments.imagesets()[n_sweep]
+
     str_json = my_sweep.get_template()
     print("getting template for image num:", img_num)
-    img_path = my_sweep.get_path(img_num)
+    img_path = my_sweep.get_path(on_sweep_img_num)
     print("\n get_path =", img_path, "\n")
 
     data_xy_flex = my_sweep.get_raw_data(0)[0].as_double()
