@@ -106,20 +106,13 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
         for lin2go in cmd_dict["nod_lst"]:
             try:
                 #TODO check if the first element is enough
-                exp_path = step_list[lin2go]._lst_expt_out[0]
-                experiments = ExperimentListFactory.from_json_file(
-                    exp_path
-                )
-                my_sweep = experiments.imagesets()[0]
-                str_json = my_sweep.get_template()
+                exp_path = str(step_list[lin2go]._lst_expt_out[0])
                 img_num = int(uni_cmd[1])
-                print("getting template for image num:", img_num)
-                img_path = my_sweep.get_path(img_num)
-                print("\n get_path =", img_path, "\n")
 
-                data_xy_flex = my_sweep.get_raw_data(0)[0].as_double()
-                img_with, img_height = data_xy_flex.all()[0:2]
-                return_list = [str_json, img_with, img_height, img_path]
+                return_list = flex_arr_2_json.get_template_info(
+                    exp_path, img_num
+                )
+
             except IndexError:
                 print(
                     "\n *** ERROR *** \n wrong line" +

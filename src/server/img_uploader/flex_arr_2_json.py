@@ -18,6 +18,19 @@ from dxtbx.model.experiment_list import (
     InvalidExperimentListError,
 )
 
+def get_template_info(exp_path, img_num):
+    experiments = ExperimentListFactory.from_json_file(
+        exp_path
+    )
+    my_sweep = experiments.imagesets()[0]
+    str_json = my_sweep.get_template()
+    print("getting template for image num:", img_num)
+    img_path = my_sweep.get_path(img_num)
+    print("\n get_path =", img_path, "\n")
+
+    data_xy_flex = my_sweep.get_raw_data(0)[0].as_double()
+    img_with, img_height = data_xy_flex.all()[0:2]
+    return [str_json, img_with, img_height, img_path]
 
 def list_p_arrange_exp(
     bbox_col = None, pan_col = None, hkl_col = None, n_imgs = None,
