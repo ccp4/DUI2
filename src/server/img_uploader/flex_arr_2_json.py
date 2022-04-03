@@ -28,8 +28,6 @@ def list_p_arrange_exp(
     for time in range(n_imgs):
         img_lst.append([])
 
-    print("img_lst =", img_lst)
-
     for i, ref_box in enumerate(bbox_col):
         x_ini = ref_box[0]
         y_ini = ref_box[2] + pan_col[i] * 213
@@ -51,6 +49,7 @@ def list_p_arrange_exp(
         box_dat.append(height)
         box_dat.append(local_hkl)
 
+        id_num = 0
         if num_of_imagesets > 1:
             for ind_z in range(ref_box[4], ref_box[5]):
                 img_id_ind_z = 0
@@ -64,7 +63,6 @@ def list_p_arrange_exp(
                     img_lst[img_id_ind_z].append(box_dat)
 
         else:
-            id_num = 0
             for ind_z in range(ref_box[4], ref_box[5]):
                 ind_z_shift = ind_z - num_of_imgs_n_shift_lst[id_num][1]
                 if ind_z_shift >= 0 and ind_z_shift < n_imgs:
@@ -79,7 +77,7 @@ def get_refl_lst(expt_path, refl_path, img_num):
     try:
         experiments = ExperimentListFactory.from_json_file(expt_path[0])
         all_sweeps = experiments.imagesets()
-        num_of_imagesets = len(experiments.imagesets())
+        num_of_imagesets = len(all_sweeps)
         print("len(experiments.imagesets()) =", num_of_imagesets)
         print("refl_path =", refl_path)
         table = flex.reflection_table.from_file(refl_path[0])
@@ -144,11 +142,7 @@ def get_json_w_img_2d(experiments_list_path, img_num):
     experiments_path = experiments_list_path[0]
     print("importing from:", experiments_path)
     experiments = ExperimentListFactory.from_json_file(experiments_path)
-    '''
-    my_sweep = experiments.imagesets()[0]
-    print("geting image #", img_num)
-    data_xy_flex = my_sweep.get_raw_data(img_num)[pan_num].as_double()
-    '''
+
     lst_num_of_imgs = []
     for single_sweep in experiments.imagesets():
         lst_num_of_imgs.append(len(single_sweep.indices()))
@@ -229,11 +223,6 @@ def get_json_w_2d_slise(experiments_list_path, img_num, inv_scale, x1, y1, x2, y
     experiments_path = experiments_list_path[0]
     print("importing from:", experiments_path)
     experiments = ExperimentListFactory.from_json_file(experiments_path)
-    '''
-    my_sweep = experiments.imagesets()[0]
-    print("geting image #", img_num)
-    data_xy_flex = my_sweep.get_raw_data(img_num)[pan_num].as_double()
-    '''
 
     lst_num_of_imgs = []
     for single_sweep in experiments.imagesets():
@@ -254,7 +243,6 @@ def get_json_w_2d_slise(experiments_list_path, img_num, inv_scale, x1, y1, x2, y
     print("geting image #", on_sweep_img_num, "from sweep #", n_sweep)
     my_sweep = experiments.imagesets()[n_sweep]
     data_xy_flex = my_sweep.get_raw_data(on_sweep_img_num)[pan_num].as_double()
-
 
     start_tm = time.time()
     str_data = img_stream_ext.slice_arr_2_str(
