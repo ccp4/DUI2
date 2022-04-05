@@ -524,6 +524,27 @@ class PopDisplayMenu(QMenu):
         self.i_min_max_changed()
 
 
+class LoadInThread(QThread):
+    request_loaded = Signal(tuple)
+    def __init__(
+        self, unit_URL = None, cmd_in = None
+    ):
+        super(LoadInThread, self).__init__()
+        self.uni_url = unit_URL
+        self.cmd = cmd_in
+
+    def run(self):
+        print("\n Loading with QThread ... Start", self.cmd, " \n")
+        response = json_data_request(
+            self.uni_url, self.cmd
+        )
+        self.request_loaded.emit(
+            (response)
+        )
+        print("\n Loading with QThread ... End ", self.cmd, " \n")
+
+
+
 class DoImageView(QObject):
     new_mask_comp = Signal(dict)
     def __init__(self, parent = None):
@@ -595,11 +616,8 @@ class DoImageView(QObject):
             "refreshing Image Viewer\n img:", in_img_num,
             "\n node in List:", nod_or_path
         )
-        self.r_list0 = []
         self.exp_path = None
-
         nod_num = self.build_background_n_get_nod_num(nod_or_path, in_img_num)
-
         if nod_or_path is True:
             my_cmd = {
                 'nod_lst': [nod_num], 'cmd_lst': ["grl " + str(in_img_num)]
@@ -614,32 +632,45 @@ class DoImageView(QObject):
         elif nod_or_path is False:
             print("No reflection list to show (known not to be)")
 
-        if nod_or_path is not False:
-            print("requesting reflection list (cmd=", my_cmd, ")")
-            json_lst = json_data_request(self.uni_url, my_cmd)
-            try:
-                for inner_list in json_lst[0]:
-                    self.r_list0.append(
-                        {
-                            "x"         : float(inner_list[0]),
-                            "y"         : float(inner_list[1]),
-                            "width"     : float(inner_list[2]),
-                            "height"    : float(inner_list[3]),
-                            "local_hkl" :   str(inner_list[4]),
-                        }
-                    )
-
-            except TypeError:
-                print("No reflection list to show (TypeError except)")
-
-            except IndexError:
-                print("No reflection list to show (IndexError except)")
-
         self.cur_nod_num = nod_num
         self.cur_img_num = in_img_num
 
-        self.refresh_pixel_map()
+        if nod_or_path is not False:
+            print("requesting reflection list (cmd=", my_cmd, ")")
 
+            try:
+                self.ld_ref_thread.quit()
+                self.ld_ref_thread.wait()
+
+            except AttributeError:
+                print("first reflection list loading")
+
+            self.ld_ref_thread = LoadInThread(self.uni_url, my_cmd)
+            self.ld_ref_thread.request_loaded.connect(self.after_requesting_ref_lst)
+            self.ld_ref_thread.start()
+
+    def after_requesting_ref_lst(self, req_tup):
+        json_lst = req_tup
+        self.r_list0 = []
+        try:
+            for inner_list in json_lst[0]:
+                self.r_list0.append(
+                    {
+                        "x"         : float(inner_list[0]),
+                        "y"         : float(inner_list[1]),
+                        "width"     : float(inner_list[2]),
+                        "height"    : float(inner_list[3]),
+                        "local_hkl" :   str(inner_list[4]),
+                    }
+                )
+
+        except TypeError:
+            print("No reflection list to show (TypeError except)")
+
+        except IndexError:
+            print("No reflection list to show (IndexError except)")
+
+        self.refresh_pixel_map()
         if not self.easter_egg_active:
             self.full_img_show()
 
@@ -659,8 +690,20 @@ class DoImageView(QObject):
                   "path"    : nod_or_path,
                   "cmd_lst" : my_cmd_lst}
 
-        json_data_lst = json_data_request(self.uni_url, my_cmd)
+        try:
+            self.ld_tpl_thread.quit()
+            self.ld_tpl_thread.wait()
 
+        except AttributeError:
+            print("first reflection list loading")
+
+        self.ld_tpl_thread = LoadInThread(self.uni_url, my_cmd)
+        self.ld_tpl_thread.request_loaded.connect(self.after_requesting_template)
+        self.ld_tpl_thread.start()
+        return nod_num
+
+    def after_requesting_template(self, tup_data):
+        json_data_lst = tup_data
         try:
             new_templ = json_data_lst[0]
 
@@ -670,7 +713,7 @@ class DoImageView(QObject):
                 json_data_lst[1], json_data_lst[2]
             )
             if(
-                self.cur_img_num != in_img_num or
+                #self.cur_img_num != in_img_num or
                 self.cur_templ != new_templ
             ):
                 x_ax = np.arange(self.img_d1_d2[1])
@@ -686,7 +729,7 @@ class DoImageView(QObject):
             self.cur_templ = new_templ
             self.main_obj.window.ImagePathLabel.setText(
                 str(
-                    "path img # " + str(in_img_num) + " = "
+                    "path img # " + str(self.cur_img_num) + " = "
                     + str(json_data_lst[3])
                 )
             )
@@ -705,7 +748,6 @@ class DoImageView(QObject):
         except TypeError:
             self.np_full_mask_img = None
 
-        return nod_num
 
     def refresh_pixel_map(self):
         show_refl = self.pop_display_menu.chk_box_show.isChecked()
