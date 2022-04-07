@@ -56,8 +56,7 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
 
             except (IndexError, TypeError, FileNotFoundError) as my_er:
                 print(
-                    "\n *** ERROR *** \n", my_er, "\n *** \n" +
-                    "wrong line \n not logging"
+                    "\n error ", my_er, " wrong line not logging \n"
                 )
 
     elif uni_cmd == ["get_mtz"]:
@@ -76,8 +75,7 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
 
             except (IndexError, FileNotFoundError):
                 print(
-                    "\n *** ERROR *** \n wrong line" +
-                    " \n sending empty mtz"
+                    "\n error, wrong line, sending empty mtz \n"
                 )
 
     elif uni_cmd == ["get_report"]:
@@ -97,8 +95,7 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
 
             except (IndexError, FileNotFoundError):
                 print(
-                    "\n *** ERROR *** \n wrong line" +
-                    " \n sending empty html"
+                    "\n error, wrong line, sending empty html \n"
                 )
                 return_list = []
 
@@ -115,8 +112,7 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
 
             except IndexError:
                 print(
-                    "\n *** ERROR *** \n wrong line" +
-                    " \n not sending template string"
+                    "\n error, wrong line, not sending template string \n"
                 )
     elif uni_cmd[0] == "get_image":
         for lin2go in cmd_dict["nod_lst"]:
@@ -135,7 +131,7 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
                 return_list = byt_data
 
             except (IndexError, AttributeError):
-                print("\n *** ERROR *** \n wrong line \n not sending IMG")
+                print("\n error, wrong line, not sending IMG \n")
 
     elif uni_cmd[0] == "get_image_slice":
         for lin2go in cmd_dict["nod_lst"]:
@@ -169,7 +165,7 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
                     return_list = byt_data
 
             except (IndexError, AttributeError):
-                print("\n *** ERROR *** \n wrong line \n not sending IMG")
+                print("\n error, wrong line, not sending IMG \n")
 
     elif uni_cmd[0] == "get_mask_image":
         for lin2go in cmd_dict["nod_lst"]:
@@ -188,7 +184,7 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
                 return_list = byt_data
 
             except (IndexError, AttributeError):
-                print("\n *** ERROR *** \n wrong line \n not sending IMG")
+                print("\n error, wrong line, not sending IMG \n")
 
     elif uni_cmd[0] == "get_mask_image_slice":
         for lin2go in cmd_dict["nod_lst"]:
@@ -222,27 +218,27 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
                     return_list = byt_data
 
             except (IndexError, AttributeError):
-                print("\n *** ERROR *** \n wrong line \n not sending IMG")
+                print("\n error, wrong line, not sending IMG \n")
 
     elif uni_cmd[0] == "get_reflection_list":
         for lin2go in cmd_dict["nod_lst"]:
-            #try:
-            print(
-                "generating reflection list for line:", lin2go,
-                " image:", int(uni_cmd[1])
-            )
-            refl_lst = flex_arr_2_json.get_refl_lst(
-                step_list[lin2go]._lst_expt_out,
-                step_list[lin2go]._lst_refl_out,
-                int(uni_cmd[1])
-            )
-            return_list = refl_lst
-
-            '''except (IndexError, AttributeError):
+            try:
                 print(
-                    "\n *** ERROR *** \n not sending reflection list \n"
+                    "generating reflection list for line:", lin2go,
+                    " image:", int(uni_cmd[1])
                 )
-                return_list = []'''
+                refl_lst = flex_arr_2_json.get_refl_lst(
+                    step_list[lin2go]._lst_expt_out,
+                    step_list[lin2go]._lst_refl_out,
+                    int(uni_cmd[1])
+                )
+                return_list = refl_lst
+
+            except (IndexError, AttributeError):
+                print(
+                    "\n error, wrong line, not sending reflection list \n"
+                )
+                return_list = []
 
     elif uni_cmd == ["get_bravais_sum"]:
         for lin2go in cmd_dict["nod_lst"]:
@@ -251,8 +247,7 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
                 return_list.append(lst2add)
 
             except IndexError:
-                print("\n *** ERROR *** \n wrong line \n not logging")
-
+                print("\n error, wrong line, not sending bravais_sum \n")
 
     elif uni_cmd[0][-7:] == "_params":
         return_list = get_param_list(uni_cmd[0])

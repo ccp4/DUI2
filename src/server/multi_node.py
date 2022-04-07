@@ -522,7 +522,7 @@ class Runner(object):
                         self.step_list[lin2go].stop_me()
 
                     except IndexError:
-                        print("\n *** ERROR *** \n wrong line \n not logging")
+                        print("\n error, wrong line not logging \n")
 
             else:
                 return_list = get_data_from_steps(uni_cmd, cmd_dict, self.step_list)
