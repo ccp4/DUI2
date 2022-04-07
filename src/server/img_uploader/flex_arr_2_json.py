@@ -86,8 +86,6 @@ def list_p_arrange_exp(
                 if ind_z_shift >= 0 and ind_z_shift < n_imgs:
                     img_lst[ind_z_shift].append(box_dat)
 
-                #print("box_dat =", box_dat)
-
     return img_lst
 
 
@@ -118,7 +116,6 @@ def get_refl_lst(expt_path, refl_path, img_num):
         for single_sweep in all_sweeps:
             num_of_imgs = len(single_sweep.indices())
             n_imgs += num_of_imgs
-
             shift = single_sweep.get_scan().get_image_range()[0] - 1
             num_of_imgs_n_shift_lst.append((num_of_imgs, shift))
 
