@@ -155,15 +155,11 @@ class Browser(object):
             return_list = [str_json, img_with, img_height, img_path]
 
         elif uni_cmd == "get_reflection_list":
-
             print("cmd_dict =", cmd_dict)
             exp_path = cmd_dict["path"][0]
             print("\n exp_path =", exp_path, "\n")
             ref_path = exp_path[:-4] + "refl"
             print("\n ref_path =", ref_path, "\n")
-
-
-
             refl_lst = flex_arr_2_json.get_refl_lst(
                 [exp_path], [ref_path],
                 int(cmd_lst[1])
