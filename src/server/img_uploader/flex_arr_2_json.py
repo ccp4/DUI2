@@ -67,16 +67,16 @@ def list_p_arrange_exp(
 
         id_num = 0
         if num_of_imagesets > 1:
+            add_shift = 0
+            for id_num in range(id_col[i]):
+                add_shift += num_of_imgs_n_shift_lst[id_num][0]
+                add_shift += num_of_imgs_n_shift_lst[id_num][1]
+
             for ind_z in range(ref_box[4], ref_box[5]):
-                img_id_ind_z = 0
-                for id_num in range(id_col[i]):
-                    img_id_ind_z += num_of_imgs_n_shift_lst[id_num][0]
-
-                ind_z_shift = ind_z - num_of_imgs_n_shift_lst[id_num][1]
-                img_id_ind_z += ind_z_shift
-
-                if img_id_ind_z >= 0 and img_id_ind_z < n_imgs:
-                    img_lst[img_id_ind_z].append(box_dat)
+                ind_z_shift = ind_z - num_of_imgs_n_shift_lst[id_col[i]][1]
+                ind_z_shift += add_shift
+                if ind_z_shift >= 0 and ind_z_shift < n_imgs:
+                    img_lst[ind_z_shift].append(box_dat)
 
         else:
             for ind_z in range(ref_box[4], ref_box[5]):
