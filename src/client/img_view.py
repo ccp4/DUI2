@@ -612,30 +612,104 @@ class DoImageView(QObject):
         timer.start(1600)
 
     def __call__(self, in_img_num, nod_or_path):
-        print(
-            "refreshing Image Viewer\n img:", in_img_num,
-            "\n node in List:", nod_or_path
-        )
         self.exp_path = None
-        nod_num = self.build_background_n_get_nod_num(nod_or_path, in_img_num)
-        if nod_or_path is True:
+        self.nod_or_path = nod_or_path
+        self.build_background_n_get_nod_num(in_img_num)
+
+    def build_background_n_get_nod_num(self, in_img_num):
+        if self.nod_or_path is True:
+            self.cur_nod_num = self.main_obj.curr_nod_num
+
+        elif self.nod_or_path is False:
+            self.cur_nod_num = self.main_obj.new_node.parent_node_lst[0]
+
+        elif type(self.nod_or_path) is str:
+            self.cur_nod_num = self.nod_or_path
+            self.exp_path = str(self.cur_nod_num)
+
+        my_cmd_lst = ["get_template " + str(in_img_num)]
+        my_cmd = {"nod_lst" : [self.cur_nod_num],
+                  "path"    : self.nod_or_path,
+                  "cmd_lst" : my_cmd_lst}
+
+        try:
+            self.ld_tpl_thread.quit()
+            self.ld_tpl_thread.wait()
+
+        except AttributeError:
+            print("first reflection list loading")
+
+        self.ld_tpl_thread = LoadInThread(self.uni_url, my_cmd)
+        self.ld_tpl_thread.request_loaded.connect(
+            self.after_requesting_template
+        )
+        self.ld_tpl_thread.start()
+
+    def after_requesting_template(self, tup_data):
+        json_data_lst = tup_data
+        try:
+            new_templ = json_data_lst[0]
+            self.cur_img_num = int(json_data_lst[4])
+            self.main_obj.window.ImgNumEdit.setText(str(self.cur_img_num))
+            print("new_templ = ", new_templ)
+            self.img_d1_d2 = (
+                json_data_lst[1], json_data_lst[2]
+            )
+            if(
+                self.cur_templ != new_templ
+            ):
+                x_ax = np.arange(self.img_d1_d2[1])
+                y_ax = np.arange(self.img_d1_d2[0])
+                pi_2 = 3.14159235358 * 2.0
+                sx = 1.0-(np.cos(x_ax * pi_2 / self.img_d1_d2[1]))
+                sy = 1.0-(np.cos(y_ax * pi_2 / self.img_d1_d2[0]))
+                xx, yy = np.meshgrid(sx, sy, sparse = True)
+                self.np_full_img = xx + yy
+                self.np_full_img = self.i_min_max[1] * (
+                    self.np_full_img / self.np_full_img.max()
+                )
+            self.cur_templ = new_templ
+            self.main_obj.window.ImagePathLabel.setText(
+                str(
+                    "path img # " + str(self.cur_img_num) + " = "
+                    + str(json_data_lst[3])
+                )
+            )
+            print("New Img Num = ", json_data_lst[4])
+
+        except (IndexError, TypeError):
+            print("Not loaded new template in full")
+            #TODO check what happens here if the user navigates
+            #     to a different dataset
+
+        try:
+            self.np_full_mask_img = np.ones((
+                self.img_d1_d2[0], self.img_d1_d2[1]
+                ), dtype = 'float')
+            self.np_full_mask_img[:,:] = 1.0
+
+        except TypeError:
+            self.np_full_mask_img = None
+
+        print(
+            "refreshing Image Viewer\n img:", self.cur_img_num,
+            "\n node in List:", self.nod_or_path
+        )
+        if self.nod_or_path is True:
             my_cmd = {
-                'nod_lst': [nod_num], 'cmd_lst': ["grl " + str(in_img_num)]
+                'nod_lst': [self.cur_nod_num], 'cmd_lst': ["grl " + str(self.cur_img_num)]
             }
 
-        elif type(nod_or_path) is str:
+        elif type(self.nod_or_path) is str:
             my_cmd = {
-                'path': nod_or_path,
-                'cmd_lst': "get_reflection_list " + str(in_img_num)
+                'path': self.nod_or_path,
+                'cmd_lst': "get_reflection_list " + str(self.cur_img_num)
             }
 
-        elif nod_or_path is False:
+        elif self.nod_or_path is False:
             print("No reflection list to show (known not to be)")
 
-        self.cur_nod_num = nod_num
-        self.cur_img_num = in_img_num
-
-        if nod_or_path is not False:
+        if self.nod_or_path is not False:
             print("requesting reflection list (cmd=", my_cmd, ")")
 
             try:
@@ -673,81 +747,6 @@ class DoImageView(QObject):
         self.refresh_pixel_map()
         if not self.easter_egg_active:
             self.full_img_show()
-
-    def build_background_n_get_nod_num(self, nod_or_path, in_img_num):
-        if nod_or_path is True:
-            nod_num = self.main_obj.curr_nod_num
-
-        elif nod_or_path is False:
-            nod_num = self.main_obj.new_node.parent_node_lst[0]
-
-        elif type(nod_or_path) is str:
-            nod_num = nod_or_path
-            self.exp_path = str(nod_num)
-
-        my_cmd_lst = ["get_template " + str(in_img_num)]
-        my_cmd = {"nod_lst" : [nod_num],
-                  "path"    : nod_or_path,
-                  "cmd_lst" : my_cmd_lst}
-
-        try:
-            self.ld_tpl_thread.quit()
-            self.ld_tpl_thread.wait()
-
-        except AttributeError:
-            print("first reflection list loading")
-
-        self.ld_tpl_thread = LoadInThread(self.uni_url, my_cmd)
-        self.ld_tpl_thread.request_loaded.connect(self.after_requesting_template)
-        self.ld_tpl_thread.start()
-        return nod_num
-
-    def after_requesting_template(self, tup_data):
-        json_data_lst = tup_data
-        try:
-            new_templ = json_data_lst[0]
-
-            print("new_templ = ", new_templ)
-
-            self.img_d1_d2 = (
-                json_data_lst[1], json_data_lst[2]
-            )
-            if(
-                #self.cur_img_num != in_img_num or
-                self.cur_templ != new_templ
-            ):
-                x_ax = np.arange(self.img_d1_d2[1])
-                y_ax = np.arange(self.img_d1_d2[0])
-                pi_2 = 3.14159235358 * 2.0
-                sx = 1.0-(np.cos(x_ax * pi_2 / self.img_d1_d2[1]))
-                sy = 1.0-(np.cos(y_ax * pi_2 / self.img_d1_d2[0]))
-                xx, yy = np.meshgrid(sx, sy, sparse = True)
-                self.np_full_img = xx + yy
-                self.np_full_img = self.i_min_max[1] * (
-                    self.np_full_img / self.np_full_img.max()
-                )
-            self.cur_templ = new_templ
-            self.main_obj.window.ImagePathLabel.setText(
-                str(
-                    "path img # " + str(self.cur_img_num) + " = "
-                    + str(json_data_lst[3])
-                )
-            )
-
-        except (IndexError, TypeError):
-            print("Not loaded new template in full")
-            #TODO check what happens here if the user navigates
-            #     to a different dataset
-
-        try:
-            self.np_full_mask_img = np.ones((
-                self.img_d1_d2[0], self.img_d1_d2[1]
-                ), dtype = 'float')
-            self.np_full_mask_img[:,:] = 1.0
-
-        except TypeError:
-            self.np_full_mask_img = None
-
 
     def refresh_pixel_map(self):
         show_refl = self.pop_display_menu.chk_box_show.isChecked()

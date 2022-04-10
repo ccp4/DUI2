@@ -167,6 +167,10 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
             except (IndexError, AttributeError):
                 print("\n error, wrong line, not sending IMG \n")
 
+            except ValueError:
+                print("\n error, wrong command, not sending IMG \n")
+
+
     elif uni_cmd[0] == "get_mask_image":
         for lin2go in cmd_dict["nod_lst"]:
             try:
@@ -218,7 +222,10 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
                     return_list = byt_data
 
             except (IndexError, AttributeError):
-                print("\n error, wrong line, not sending IMG \n")
+                print("\n error, wrong line, not sending mask IMG \n")
+
+            except ValueError:
+                print("\n error, wrong command, not sending mask IMG \n")
 
     elif uni_cmd[0] == "get_reflection_list":
         for lin2go in cmd_dict["nod_lst"]:

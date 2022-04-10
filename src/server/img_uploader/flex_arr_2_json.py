@@ -17,23 +17,42 @@ from dxtbx.model.experiment_list import (
 )
 
 def get_template_info(exp_path, img_num):
-    experiments = ExperimentListFactory.from_json_file(
-        exp_path
-    )
+    try:
+        experiments = ExperimentListFactory.from_json_file(
+            exp_path
+        )
 
-    on_sweep_img_num, n_sweep = get_correct_img_num_n_sweep_num(
-        experiments, img_num
-    )
-    my_sweep = experiments.imagesets()[n_sweep]
+        max_img_num = 0
+        for single_sweep in experiments.imagesets():
+            max_img_num += len(single_sweep.indices())
 
-    str_json = my_sweep.get_template()
-    print("getting template for image num:", img_num)
-    img_path = my_sweep.get_path(on_sweep_img_num)
-    print("\n get_path =", img_path, "\n")
+        max_img_num -= 1
+        print("max_img_num =", max_img_num)
+        if img_num > max_img_num:
+            new_img_num = max_img_num
+            print("time to reduce image number to ", new_img_num)
 
-    data_xy_flex = my_sweep.get_raw_data(0)[0].as_double()
-    img_with, img_height = data_xy_flex.all()[0:2]
-    return [str_json, img_with, img_height, img_path]
+        else:
+            new_img_num = img_num
+
+        on_sweep_img_num, n_sweep = get_correct_img_num_n_sweep_num(
+            experiments, new_img_num
+        )
+        my_sweep = experiments.imagesets()[n_sweep]
+
+        str_json = my_sweep.get_template()
+        print("getting template for image num:", new_img_num)
+        img_path = my_sweep.get_path(on_sweep_img_num)
+        print("\n get_path =", img_path, "\n")
+
+        data_xy_flex = my_sweep.get_raw_data(0)[0].as_double()
+        img_with, img_height = data_xy_flex.all()[0:2]
+        return [str_json, img_with, img_height, img_path, new_img_num]
+
+    except IndexError:
+        print(" *** IndexError in template ***")
+        return
+
 
 def list_p_arrange_exp(
     bbox_col = None, pan_col = None, hkl_col = None, n_imgs = None,
