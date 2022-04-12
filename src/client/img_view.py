@@ -602,8 +602,8 @@ class DoImageView(QObject):
 
         (self.old_x1, self.old_y1, self.old_x2, self.old_y2) = (-1, -1, -1, -1)
         self.old_inv_scl = self.inv_scale
-        self.old_cur_nod_num = self.cur_nod_num
-        self.old_cur_img_num = self.cur_img_num
+        self.old_nod_num = self.cur_nod_num
+        self.old_img_num = self.cur_img_num
 
         self.list_temp_mask = None
 
@@ -876,8 +876,8 @@ class DoImageView(QObject):
             self.old_x1 != self.x1 or self.old_y1 != self.y1 or
             self.old_x2 != self.x2 or self.old_y2 != self.y2 or
             self.old_inv_scl != self.inv_scale or
-            self.old_cur_nod_num != self.cur_nod_num or
-            self.old_cur_img_num != self.cur_img_num
+            self.old_nod_num != self.cur_nod_num or
+            self.old_img_num != self.cur_img_num
         ):
             print("scaled or dragged image")
             self.slice_show_img()
@@ -887,8 +887,8 @@ class DoImageView(QObject):
         self.old_x2 = self.x2
         self.old_y2 = self.y2
         self.old_inv_scl = self.inv_scale
-        self.old_cur_nod_num = self.cur_nod_num
-        self.old_cur_img_num = self.cur_img_num
+        self.old_nod_num = self.cur_nod_num
+        self.old_img_num = self.cur_img_num
 
     def det_tmp_x1_y1_x2_y2(self):
         viewport_rect = QRect(
