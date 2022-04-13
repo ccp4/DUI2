@@ -84,12 +84,10 @@ def list_p_arrange_exp(
         box_dat.append(height)
         box_dat.append(local_hkl)
 
-        id_num = 0
         if num_of_imagesets > 1:
             add_shift = 0
             for id_num in range(id_col[i]):
                 add_shift += num_of_imgs_n_shift_lst[id_num][0]
-                add_shift += num_of_imgs_n_shift_lst[id_num][1]
 
             for ind_z in range(ref_box[4], ref_box[5]):
                 ind_z_shift = ind_z - num_of_imgs_n_shift_lst[id_col[i]][1]
@@ -99,7 +97,7 @@ def list_p_arrange_exp(
 
         else:
             for ind_z in range(ref_box[4], ref_box[5]):
-                ind_z_shift = ind_z - num_of_imgs_n_shift_lst[id_num][1]
+                ind_z_shift = ind_z - num_of_imgs_n_shift_lst[0][1]
                 if ind_z_shift >= 0 and ind_z_shift < n_imgs:
                     img_lst[ind_z_shift].append(box_dat)
 
