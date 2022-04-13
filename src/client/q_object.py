@@ -454,7 +454,12 @@ class MainObject(QObject):
             else:
                 self.do_image_view.set_drag_mode(mask_mode = False)
 
-            img_num = int(self.window.ImgNumEdit.text())
+            try:
+                img_num = int(self.window.ImgNumEdit.text())
+
+            except ValueError:
+                img_num = 0
+
             self.do_image_view(in_img_num = img_num, nod_or_path = fnd_cur_nod)
 
         elif tab_index == 1:
