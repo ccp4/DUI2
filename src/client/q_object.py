@@ -343,7 +343,8 @@ class MainObject(QObject):
         self.do_image_view.new_mask_comp.connect(self.get_new_mask_comp)
 
         self.window.OutputTabWidget.currentChanged.connect(self.refresh_output)
-        self.window.ImgNumEdit.textChanged.connect(self.img_num_changed)
+        #self.window.ImgNumEdit.textChanged.connect(self.img_num_changed)
+        self.window.ImgNumEdit.editingFinished.connect(self.img_num_changed)
         self.window.PrevImgButton.clicked.connect(self.prev_img)
         self.window.NextImgButton.clicked.connect(self.next_img)
 
@@ -400,7 +401,8 @@ class MainObject(QObject):
             print("clicked twice same row, launching reindex")
             self.request_launch()
 
-    def img_num_changed(self, new_img_num):
+    def img_num_changed(self):
+        new_img_num = self.window.ImgNumEdit.text()
         print("should load IMG num:", new_img_num)
         self.refresh_output()
 
@@ -408,6 +410,7 @@ class MainObject(QObject):
         img_num = int(self.window.ImgNumEdit.text())
         img_num += sh_num
         self.window.ImgNumEdit.setText(str(img_num))
+        self.img_num_changed()
 
     def prev_img(self):
         print("prev_img")
