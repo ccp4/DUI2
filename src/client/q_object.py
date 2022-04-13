@@ -343,7 +343,6 @@ class MainObject(QObject):
         self.do_image_view.new_mask_comp.connect(self.get_new_mask_comp)
 
         self.window.OutputTabWidget.currentChanged.connect(self.refresh_output)
-        #self.window.ImgNumEdit.textChanged.connect(self.img_num_changed)
         self.window.ImgNumEdit.editingFinished.connect(self.img_num_changed)
         self.window.PrevImgButton.clicked.connect(self.prev_img)
         self.window.NextImgButton.clicked.connect(self.next_img)

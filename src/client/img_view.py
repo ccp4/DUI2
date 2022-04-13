@@ -679,8 +679,6 @@ class DoImageView(QObject):
 
         except (IndexError, TypeError):
             print("Not loaded new template in full")
-            #TODO check what happens here if the user navigates
-            #     to a different dataset
 
         try:
             self.np_full_mask_img = np.ones((
