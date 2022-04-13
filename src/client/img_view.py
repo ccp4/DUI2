@@ -650,7 +650,7 @@ class DoImageView(QObject):
         try:
             new_templ = json_data_lst[0]
             self.cur_img_num = int(json_data_lst[4])
-            #self.main_obj.window.ImgNumEdit.setText(str(self.cur_img_num))
+            self.main_obj.window.ImgNumEdit.setText(str(self.cur_img_num))
             print("new_templ = ", new_templ)
             self.img_d1_d2 = (
                 json_data_lst[1], json_data_lst[2]
