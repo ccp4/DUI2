@@ -130,7 +130,7 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
                 byt_data = bytes(str_json.encode('utf-8'))
                 return_list = byt_data
 
-            except (IndexError, AttributeError):
+            except (IndexError, AttributeError, ValueError):
                 print("\n error, wrong line, not sending IMG \n")
 
     elif uni_cmd[0] == "get_image_slice":
@@ -187,7 +187,7 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
                 byt_data = bytes(str_json.encode('utf-8'))
                 return_list = byt_data
 
-            except (IndexError, AttributeError):
+            except (IndexError, AttributeError, ValueError):
                 print("\n error, wrong line, not sending IMG \n")
 
     elif uni_cmd[0] == "get_mask_image_slice":
@@ -241,7 +241,7 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
                 )
                 return_list = refl_lst
 
-            except (IndexError, AttributeError):
+            except (IndexError, AttributeError, ValueError):
                 print(
                     "\n error, wrong line, not sending reflection list \n"
                 )
