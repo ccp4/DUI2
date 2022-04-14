@@ -42,6 +42,7 @@ from exec_utils import (
 
 from init_firts import ini_data
 
+from simpler_param_widgets import RootWidg
 from simpler_param_widgets import ImportWidget
 from simpler_param_widgets import MaskWidget
 from simpler_param_widgets import ExportWidget
@@ -98,6 +99,9 @@ class MainObject(QObject):
 
         self.reseting = False
         try:
+            root_widg = RootWidg()
+            self.window.RootScrollArea.setWidget(root_widg)
+
             imp_widg = ImportWidget()
             imp_widg.all_items_changed.connect(self.all_items_param_changed)
             self.window.ImportScrollArea.setWidget(imp_widg)
