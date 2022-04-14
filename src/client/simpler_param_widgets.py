@@ -196,7 +196,6 @@ class ProgBarBox(QProgressDialog):
         self.close()
 
 
-
 def iter_tree(my_dict, currentItem, show_hidden, icon_dict):
     for child_dict in my_dict["list_child"]:
         new_item_text = str(child_dict["file_name"])
@@ -529,7 +528,6 @@ class ImportWidget(QWidget):
 
     def line_changed(self):
         print("line_changed")
-        #sender = self.sender()
         str_value = self.imp_txt.text()
         if self.dir_selected:
             str_path = "input.directory"
@@ -663,7 +661,6 @@ class MaskWidget(QWidget):
             self.comp_list.append(inner_lst_pair)
 
         elif comp_dict["type"] == "poly":
-            #try:
             if self.comp_list == [] or self.comp_list[-1][0] != "untrusted.polygon":
                 inner_lst_pair = [
                     "untrusted.polygon",
@@ -675,11 +672,7 @@ class MaskWidget(QWidget):
                 str_tail = str(comp_dict["x_end"]) + "," + str(comp_dict["y_end"]) + ","
                 self.comp_list[-1][1] += str_tail
 
-            #except IndexError:
-            #    print("TMP IndexError")
-
         self.comp_list_update()
-
 
     def build_full_list(self):
         first_list = list(self.comp_list)
@@ -708,7 +701,6 @@ class FindspotsSimplerParameterTab(SimpleParamTab):
     in the spot-finder, this widget is the first to appear once the button
     "Find Sots" is clicked
     """
-
     def __init__(self, parent=None):
         super(FindspotsSimplerParameterTab, self).__init__()
         self.do_emit = True
@@ -747,7 +739,6 @@ class FindspotsSimplerParameterTab(SimpleParamTab):
         )
         xds_global_threshold_spn_bx.editingFinished.connect(self.spnbox_finished)
 
-
         xds_gain_hb = QHBoxLayout()
         xds_gain_hb.addWidget(xds_gain_label)
         xds_gain_hb.addWidget(xds_gain_spn_bx)
@@ -783,7 +774,6 @@ class IndexSimplerParamTab(SimpleParamTab):
     in the indexer, this widget is the first to appear once the button
     "Index" is clicked
     """
-
     def __init__(self, phl_obj=None, parent=None):
         super(IndexSimplerParamTab, self).__init__()
         self.do_emit = True
@@ -880,7 +870,6 @@ class RefineSimplerParamTab(SimpleParamTab):
     in the refiner, this widget is the first to appear once the button
     "Refine" is clicked
     """
-
     def __init__(self, parent=None):
         super(RefineSimplerParamTab, self).__init__()
         self.do_emit = True
@@ -891,9 +880,7 @@ class RefineSimplerParamTab(SimpleParamTab):
     def build_pars(self):
 
         hbox_lay_scan_varying = QHBoxLayout()
-
         label_scan_varying = QLabel("Scan varying refinement")
-
         hbox_lay_scan_varying.addWidget(label_scan_varying)
 
         box_scan_varying = DefaultComboBox("refinement.parameterisation.scan_varying",
@@ -936,7 +923,6 @@ class IntegrateSimplerParamTab(SimpleParamTab):
     in the integrate algorithm, this widget is the first to appear once the
     button "Integrate" is clicked
     """
-
     def __init__(self, parent=None):
         super(IntegrateSimplerParamTab, self).__init__()
         self.do_emit = True
@@ -995,7 +981,6 @@ class SymmetrySimplerParamTab(SimpleParamTab):
     in the symmetry command, this widget is the first to appear once the button
     "Symmetry" is clicked
     """
-
     def __init__(self, parent=None):
         super(SymmetrySimplerParamTab, self).__init__()
         self.do_emit = True
@@ -1017,7 +1002,6 @@ class SymmetrySimplerParamTab(SimpleParamTab):
         d_min_spn_bx.editingFinished.connect(self.spnbox_finished)
 
         self.main_v_layout.addLayout(hbox_d_min)
-
         self.main_v_layout.addStretch()
 
         self.lst_var_widg = []
@@ -1030,13 +1014,11 @@ class SymmetrySimplerParamTab(SimpleParamTab):
 
 
 class ScaleSimplerParamTab(SimpleParamTab):
-
     """
     This widget is the tool for tunning the simpler and most common parameters
     in the scale command, this widget is the first to appear once the button
     "Scale" is clicked
     """
-
     def __init__(self, parent=None):
         super(ScaleSimplerParamTab, self).__init__()
         self.do_emit = True
@@ -1064,11 +1046,6 @@ class ScaleSimplerParamTab(SimpleParamTab):
             ["basic", "None"])
         box_wgh_opt_err.currentIndexChanged.connect(self.combobox_changed)
         hbox_lay_wgh_opt_err.addWidget(box_wgh_opt_err)
-        """
-        weighting {
-          error_model {
-            error_model = *basic None
-        """
 
         hbox_d_min = QHBoxLayout()
         d_min_label = QLabel("High resolution limit")
@@ -1084,8 +1061,6 @@ class ScaleSimplerParamTab(SimpleParamTab):
         self.main_v_layout.addLayout(hbox_lay_mod)
         self.main_v_layout.addLayout(hbox_lay_wgh_opt_err)
         self.main_v_layout.addLayout(hbox_d_min)
-
-
         self.main_v_layout.addStretch()
 
         self.lst_var_widg = []
@@ -1240,7 +1215,6 @@ class ExportWidget(QWidget):
     def restore_p_label(self):
         self.progress_label.setText("...")
         print("Done Download")
-
 
 
 class TmpTstWidget(QWidget):
