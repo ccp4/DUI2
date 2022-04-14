@@ -105,7 +105,6 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
                 #TODO check if the first element is enough
                 exp_path = str(step_list[lin2go]._lst_expt_out[0])
                 img_num = int(uni_cmd[1])
-
                 return_list = flex_arr_2_json.get_template_info(
                     exp_path, img_num
                 )

@@ -668,7 +668,6 @@ class DoImageView(QObject):
                 )
             )
             print("New Img Num = ", json_data_lst[4])
-
         except (IndexError, TypeError):
             print("Not loaded new template in full")
 

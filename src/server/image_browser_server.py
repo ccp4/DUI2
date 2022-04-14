@@ -130,29 +130,16 @@ class Browser(object):
             str_json = flex_arr_2_json.get_json_w_mask_img_2d(
                 [exp_path], img_num,
             )
-
             if str_json is not None:
                 byt_data = bytes(str_json.encode('utf-8'))
                 return_list = byt_data
 
         elif uni_cmd == "get_template":
-
-            print("cmd_dict =", cmd_dict)
             exp_path = cmd_dict["path"][0]
-            print("\n exp_path =", exp_path, "\n")
-            experiments = ExperimentListFactory.from_json_file(
-                exp_path
-            )
-            my_sweep = experiments.imagesets()[0]
-            str_json = my_sweep.get_template()
-
             img_num = int(cmd_lst[1])
-            print("getting template for image num:", img_num)
-            img_path = my_sweep.get_path(img_num)
-            print("\n get_path =", img_path, "\n")
-            data_xy_flex = my_sweep.get_raw_data(0)[0].as_double()
-            img_with, img_height = data_xy_flex.all()[0:2]
-            return_list = [str_json, img_with, img_height, img_path]
+            return_list = flex_arr_2_json.get_template_info(
+                exp_path, img_num
+            )
 
         elif uni_cmd == "get_reflection_list":
             print("cmd_dict =", cmd_dict)
