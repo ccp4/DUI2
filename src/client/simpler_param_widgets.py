@@ -58,7 +58,7 @@ class DefaultComboBox(QComboBox):
     """A ComboBox initialised with a list of items and keeps track of which one
     is default"""
 
-    def __init__(self, local_path, items, default_index=0):
+    def __init__(self, local_path, items, default_index = 0):
         super(DefaultComboBox, self).__init__()
         self.local_path = local_path
         self.item_list = items
@@ -73,7 +73,6 @@ class SimpleParamTab(QWidget):
     """Base class shared by all simple parameter tabs"""
 
     item_changed = Signal(str, str, int)
-    #item_to_remove = Signal(str)
 
     def clearLayout(self, layout):
         if layout is not None:
@@ -147,13 +146,6 @@ class SimpleParamTab(QWidget):
         sender = self.sender()
         value = sender.value()
         str_path = str(sender.local_path)
-        '''
-        #TODO find out why there is a "item_to_remove" signal
-        if sender.specialValueText() and value == sender.minimum():
-            self.item_to_remove.emit(str_path)
-
-        else:
-        '''
         str_value = str(value)
         self.do_emit_signal(str_path, str_value)
 
@@ -162,12 +154,6 @@ class SimpleParamTab(QWidget):
         sender = self.sender()
         str_value = str(sender.item_list[value])
         str_path = str(sender.local_path)
-        '''
-        #TODO find out why there is a "item_to_remove" signal
-        if sender.currentIndex() == sender.default_index:
-            self.item_to_remove.emit(str_path)
-        else:
-        '''
         self.do_emit_signal(str_path, str_value)
 
     def line_changed(self):
@@ -453,32 +439,6 @@ def build_template(str_path_in):
     ] + "*" + str_path_in[last_digit_pos + 1:]
 
     return template_str, star_str
-
-
-class RootWidg(QWidget):
-    def __init__(self, parent = None):
-        super(RootWidg, self).__init__(parent)
-        sys_font = QFont()
-        font_point_size = sys_font.pointSize()
-
-        big_label = QLabel("Root:")
-        big_label.setFont(
-            QFont("Monospace", font_point_size + 3, QFont.Bold)
-        )
-        self.main_vbox = QVBoxLayout()
-        self.main_vbox.addWidget(QLabel("Nothing to do here ..."))
-        self.setLayout(self.main_vbox)
-
-    def reset_pars(self):
-        print("reset_pars(Root) ... dummy")
-
-    def update_all_pars(self, tup_lst_pars):
-        print("update_all_pars(Root)", tup_lst_pars, "... dummy")
-
-    def update_param(self, str_path, str_value):
-        print("update_param(Root)", str_path, str_value, "... dummy")
-
-
 
 
 class ImportWidget(QWidget):
