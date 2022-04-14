@@ -32,7 +32,6 @@ import numpy as np
 import json, zlib, time, requests
 
 from init_firts import ini_data
-
 from exec_utils import json_data_request
 from outputs import HandleLoadStatusLabel
 
@@ -40,10 +39,7 @@ from img_view_utils import (
     crunch_min_max, np2bmp_monocrome, np2bmp_heat, np2bmp_mask,
     load_img_json_w_str, load_mask_img_json_w_str
 )
-
-#FIXME change the name of FileBrowser to camel_case
 from simpler_param_widgets import FileBrowser, build_template
-
 
 class LoadFullMaskImage(QThread):
     image_loaded = Signal(tuple)
@@ -316,7 +312,6 @@ class ImgGraphicsScene(QGraphicsScene):
         if self.my_mask_pix_map is not None:
             self.addPixmap(self.my_mask_pix_map)
 
-
     def update_tmp_mask(self, new_temp_mask):
         self.temp_mask = new_temp_mask
 
@@ -474,7 +469,6 @@ class PopDisplayMenu(QMenu):
         info_group = QGroupBox("Reflection info")
         ref_box_layout = QVBoxLayout()
 
-
         # Viewing Tool
         self.chk_box_show = QCheckBox("Show reflection info")
         self.chk_box_show.setChecked(True)
@@ -493,7 +487,6 @@ class PopDisplayMenu(QMenu):
         self.rad_but_none_hkl = QRadioButton("No HKL")
         self.rad_but_none_hkl.clicked.connect(self.sig_new_redraw)
         ref_box_layout.addWidget(self.rad_but_none_hkl)
-
 
         info_group.setLayout(ref_box_layout)
 
@@ -542,7 +535,6 @@ class LoadInThread(QThread):
             (response)
         )
         print("\n Loading with QThread ... End ", self.cmd, " \n")
-
 
 
 class DoImageView(QObject):
@@ -1009,7 +1001,6 @@ class DoImageView(QObject):
             self.l_stat.load_finished()
 
     def update_progress(self, progress):
-        #print("time to show ", progress, " in progress bar")
         self.l_stat.load_progress(progress)
 
     def slice_show_img(self):

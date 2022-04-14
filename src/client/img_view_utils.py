@@ -107,6 +107,7 @@ def crunch_min_max(data2d, i_min_max):
 
     return data2d_pos, data2d_pos_max, width, height
 
+
 class np2bmp_heat(object):
     def __init__(self):
         self.red_byte = np.empty( (255 * 3), 'int')
@@ -238,5 +239,6 @@ class np2bmp_mask(object):
         img_array[:, :, 2] = img_all_chanl[:,:]          #Blue
         #img_array[:, :, 1] = img_all_chanl[:,:]         #Green
         #img_array[:, :, 0] = img_all_chanl[:,:]         #Red
+        #TODO: find why the last chanel(Blue) is used for a Red colour
         return img_array
 

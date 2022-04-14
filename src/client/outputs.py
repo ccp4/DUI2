@@ -28,8 +28,6 @@ from PySide2 import QtUiTools
 from PySide2.QtGui import *
 
 from exec_utils import json_data_request
-
-#from exec_utils import uni_url
 from init_firts import ini_data
 
 class HandleLoadStatusLabel(QObject):
@@ -211,7 +209,6 @@ class ShowLog(QObject):
 
         self.main_obj.window.incoming_text.setFont(my_font)
         self.main_obj.window.incoming_text.setCurrentFont(my_font)
-
 
     def __call__(self, nod_p_num = 0, do_request = False):
         print("Do Request =", do_request)

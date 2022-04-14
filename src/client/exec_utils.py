@@ -59,10 +59,8 @@ def json_data_request(url, cmd):
         req_get = requests.get(url, stream = True, params = cmd, timeout = 3)
         str_lst = ''
         line_str = ''
-
-        #while True:
-        times_loop = 10
         json_out = ""
+        times_loop = 10
         for count_times in range(times_loop):
             tmp_dat = req_get.raw.readline()
             line_str = str(tmp_dat.decode('utf-8'))
@@ -146,7 +144,6 @@ class Run_n_Output(QThread):
         self.number = None
 
     def run(self):
-
         line_str = ''
         not_yet_read = True
         while True:

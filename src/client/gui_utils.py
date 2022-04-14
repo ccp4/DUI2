@@ -288,18 +288,15 @@ class AdvancedParameters(QWidget):
 
     def text_changed(self):
         sender = self.sender()
-
         str_path = str(sender.local_path)
         str_value = str(sender.text())
         self.do_emit_signal(str_path, str_value)
 
     def spnbox_changed(self):
         sender = self.sender()
-
         str_path = str(sender.local_path)
         str_value = str(sender.currentText())
         self.do_emit_signal(str_path, str_value)
-
 
     def reset_pars(self):
         print("Hi from reset_pars")
