@@ -34,7 +34,7 @@ from PySide2.QtWebEngineWidgets import QWebEngineView
 from gui_utils import TreeDirScene, widgets_defs, get_icons
 from outputs import DoLoadHTML, ShowLog
 from img_view import DoImageView
-from reindex_table import ReindexTable
+from reindex_table import ReindexTable, get_label_from_str_list
 from exec_utils import (
     build_advanced_params_widget, json_data_request, Run_n_Output,
     CommandParamControl
@@ -511,8 +511,7 @@ class MainObject(QObject):
                 self.r_index_widg.add_opts_lst(
                     json_data = json_data_lst[0]
                 )
-                self.update_reindex_table_header()
-
+                self.update_reindex_table_header(cur_nod["parent_node_lst"])
 
         except KeyError:
             print("command widget not there yet")
@@ -579,10 +578,17 @@ class MainObject(QObject):
     def nxt_clicked(self):
         self.nxt_key_clicked(self.sender().cmd_str)
 
-    def update_reindex_table_header(self):
-        self.window.ReindexHeaderLabel.setText(
-            " TODO: Symmetry header info here "
-        )
+    def update_reindex_table_header(self, nod_lst):
+        cmd = {"nod_lst":nod_lst, "cmd_lst":["display_log"]}
+        json_log = json_data_request(self.uni_url, cmd)
+        try:
+            lst_log_lines = json_log[0]
+            label2update = get_label_from_str_list(lst_log_lines)
+
+        except TypeError:
+            label2update = "Error Loading Log"
+
+        self.window.ReindexHeaderLabel.setText(label2update)
 
     def nxt_key_clicked(self, str_key):
         print("nxt_clicked ... str_key: ", str_key)
@@ -596,7 +602,7 @@ class MainObject(QObject):
             self.r_index_widg.add_opts_lst(
                 json_data = json_data_lst[0]
             )
-            self.update_reindex_table_header()
+            self.update_reindex_table_header([self.curr_nod_num])
 
         self.change_widget(str_key)
         self.reset_param()
