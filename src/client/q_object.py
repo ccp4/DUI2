@@ -149,6 +149,7 @@ class MainObject(QObject):
             )
 
             self.r_index_widg = ReindexTable()
+            self.window.ReindexHeaderLabel.setText("...")
             self.window.ReindexTableScrollArea.setWidget(self.r_index_widg)
 
             ref_simpl_widg = RefineSimplerParamTab()
@@ -510,6 +511,8 @@ class MainObject(QObject):
                 self.r_index_widg.add_opts_lst(
                     json_data = json_data_lst[0]
                 )
+                self.update_reindex_table_header()
+
 
         except KeyError:
             print("command widget not there yet")
@@ -576,6 +579,11 @@ class MainObject(QObject):
     def nxt_clicked(self):
         self.nxt_key_clicked(self.sender().cmd_str)
 
+    def update_reindex_table_header(self):
+        self.window.ReindexHeaderLabel.setText(
+            " TODO: Symmetry header info here "
+        )
+
     def nxt_key_clicked(self, str_key):
         print("nxt_clicked ... str_key: ", str_key)
 
@@ -588,6 +596,7 @@ class MainObject(QObject):
             self.r_index_widg.add_opts_lst(
                 json_data = json_data_lst[0]
             )
+            self.update_reindex_table_header()
 
         self.change_widget(str_key)
         self.reset_param()

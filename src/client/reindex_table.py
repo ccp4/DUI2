@@ -145,7 +145,7 @@ def ops_list_from_json(json_data = None):
 class ReindexTable(QTableWidget):
     opt_signal = Signal(int)
 
-    def __init__(self, parent=None):
+    def __init__(self, parent = None):
         super(ReindexTable, self).__init__(parent)
 
         self.cellClicked.connect(self.opt_clicked)
@@ -195,7 +195,9 @@ class ReindexTable(QTableWidget):
 
         return bst_sol
 
-    def add_opts_lst(self, lst_labels=None, json_data=None, selected_pos=None):
+    def add_opts_lst(
+        self, lst_labels = None, json_data = None, selected_pos = None
+    ):
 
         if lst_labels is None:
             self.list_labl = ops_list_from_json(json_data)
@@ -282,21 +284,49 @@ class ReindexTable(QTableWidget):
         self.setRowCount(1)
         self.setColumnCount(1)
 
+def get_label_from_str_list(log_data):
+
+        for num, single_line in enumerate(log_data):
+            if single_line[:6] == "Chiral":
+                ini_num = num - 1
+
+            if single_line[:6] == "+-----":
+                end_num = num - 1
+                break
+
+        print("ini_num =", ini_num)
+        print("end_num =", end_num)
+
+        lst_str = log_data[ini_num:end_num]
+        full_label_str = ""
+        for label_line in lst_str:
+            full_label_str += label_line
+
+        return full_label_str
+
 
 class MainWindow(QMainWindow):
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent)
 
-        full_json_path = "/scratch/dui_tst/X4_wide/dui_files/bravais_summary.json"
+        #full_json_path = "/scratch/dui_tst/X4_wide/dui_files/bravais_summary.json"
+        full_json_path = "/home/lui-temp/xrd_data/tst_area/run4/bravais_summary.json"
+        full_log_path = "/home/lui-temp/xrd_data/tst_area/run4/out.log"
+
         with open(full_json_path) as json_file:
             json_data = json.load(json_file)
 
+        lof_file = open(full_log_path, "r")
+        log_data = lof_file.readlines()
+        lof_file.close()
+
+        full_label_str = get_label_from_str_list(log_data)
 
         my_inner_table = ReindexTable()
         my_inner_table.add_opts_lst(json_data = json_data)
 
         vbox = QVBoxLayout()
-        vbox.addWidget(QLabel("\n some header info \n here \n"))
+        vbox.addWidget(QLabel(full_label_str))
         vbox.addWidget(my_inner_table)
         vbox.addWidget(QLabel("\n some clicking suggestion here \n"))
 

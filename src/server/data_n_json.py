@@ -21,8 +21,7 @@ copyright (c) CCP4 - DLS
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-import json
-import os, sys
+import json, os
 import libtbx.phil
 from dials.command_line.find_spots import phil_scope as phil_scope_find_spots
 from dials.command_line.index import working_phil as phil_scope_index
