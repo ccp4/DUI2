@@ -43,15 +43,19 @@ mkdir dui_cmd_tools
 cd dui_cmd_tools
 
 CMD_TOOLS_PATH=$(pwd)
+
 SET_DIALS_ENV="source $INI_DIR_PATH/dials-v3-9-0/dials_env.sh"
+SET_W_ENG_FLAG="export QTWEBENGINE_CHROMIUM_FLAGS=\"--no-sandbox\""
 
 CLIENT_EXE_CMD="dials.python $INI_DIR_PATH/DUI2/src/client/main_client.py \$@"
-echo $SET_DIALS_ENV > dui_client
+echo $SET_W_ENG_FLAG > dui_client
+echo $SET_DIALS_ENV >> dui_client
 echo $CLIENT_EXE_CMD >> dui_client
 chmod +x dui_client
 
 SERVER_EXE_CMD="dials.python $INI_DIR_PATH/DUI2/src/server/main_server.py \$@"
-echo $SET_DIALS_ENV > dui_server
+echo $SET_W_ENG_FLAG > dui_server
+echo $SET_DIALS_ENV >> dui_server
 echo $SERVER_EXE_CMD >> dui_server
 chmod +x dui_server
 
