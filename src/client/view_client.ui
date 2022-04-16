@@ -87,7 +87,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="ImagePathLabel">
+         <widget class="QLabel" name="ImagePathText">
           <property name="text">
            <string>TextLabel</string>
           </property>

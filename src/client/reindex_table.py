@@ -288,7 +288,7 @@ def get_label_from_str_list(log_data):
 
         for num, single_line in enumerate(log_data):
             if single_line[:6] == "Chiral":
-                ini_num = num - 1
+                ini_num = num
 
             if single_line[:6] == "+-----":
                 end_num = num - 1

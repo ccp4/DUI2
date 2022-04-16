@@ -661,7 +661,7 @@ class DoImageView(QObject):
                     self.np_full_img / self.np_full_img.max()
                 )
             self.cur_templ = new_templ
-            self.main_obj.window.ImagePathLabel.setText(
+            self.main_obj.window.ImagePathText.setText(
                 str(
                     "path img # " + str(self.cur_img_num) + " = "
                     + str(json_data_lst[3])
