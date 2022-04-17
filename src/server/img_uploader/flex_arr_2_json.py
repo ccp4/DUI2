@@ -28,7 +28,11 @@ def get_template_info(exp_path, img_num):
 
         max_img_num -= 1
         print("max_img_num =", max_img_num)
-        if img_num > max_img_num:
+        if img_num < 0:
+            new_img_num = 0
+            print("time to correct image number to ", new_img_num)
+
+        elif img_num > max_img_num:
             new_img_num = max_img_num
             print("time to reduce image number to ", new_img_num)
 
@@ -51,6 +55,10 @@ def get_template_info(exp_path, img_num):
 
     except IndexError:
         print(" *** IndexError in template ***")
+        return
+
+    except OverflowError:
+        print(" *** OverflowError in template ***")
         return
 
 
