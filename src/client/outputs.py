@@ -200,7 +200,10 @@ class ShowLog(QObject):
         data_init = ini_data()
         self.uni_url = data_init.get_url()
 
-        my_font = QFont("Monospace")
+        sys_font = QFont()
+        font_point_size = sys_font.pointSize()
+        #my_font = QFont("Monospace", font_point_size + 1)
+        my_font = QFont("Monospace", font_point_size, QFont.Bold)
         my_font.setFixedPitch(True)
 
         old_dui_font = '''
