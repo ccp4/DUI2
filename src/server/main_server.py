@@ -236,12 +236,15 @@ def main():
                 (HOST, PORT), ReqHandler
             ) as http_daemon:
 
-                print("\n serving at: \n  { host:", HOST, " port:", PORT, "} \n")
+                print(
+                    "\n serving at:\n  { host:", HOST, " port:", PORT, "}\n"
+                )
                 launch_success = True
                 try:
                     http_daemon.serve_forever()
 
                 except KeyboardInterrupt:
+                    print("caling server_close()")
                     http_daemon.server_close()
 
         except OSError:
