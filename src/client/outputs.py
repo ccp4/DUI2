@@ -207,13 +207,17 @@ class ShowLog(QObject):
         my_font.setFixedPitch(True)
 
         old_dui_font = '''
-        QFont("Monospace", 10, QFont.Bold))
+        QFont("Monospace", 10, QFont.Bold)
         '''
 
         self.main_obj.window.incoming_text.setFont(my_font)
         self.main_obj.window.incoming_text.setCurrentFont(my_font)
 
-    def __call__(self, nod_p_num = 0, do_request = False):
+        self.red_color = QColor(255, 0, 0)
+        self.green_color = QColor(0, 155, 0)
+        self.blue_color = QColor(0, 0, 255)
+
+    def __call__(self, nod_p_num = 0, do_request = False, stat = "Busy"):
         print("Do Request =", do_request)
         if do_request:
             found_nod_num = False
@@ -239,6 +243,15 @@ class ShowLog(QObject):
                         lst_log_lines = ["Nothing here"]
 
                 self.main_obj.window.incoming_text.clear()
+                if stat == "Busy":
+                    self.main_obj.window.incoming_text.setTextColor(self.green_color)
+
+                elif stat == "Succeeded":
+                    self.main_obj.window.incoming_text.setTextColor(self.blue_color)
+
+                else:
+                    self.main_obj.window.incoming_text.setTextColor(self.red_color)
+
                 for single_log_line in lst_log_lines:
                     self.main_obj.window.incoming_text.insertPlainText(single_log_line)
                     self.main_obj.window.incoming_text.moveCursor(QTextCursor.End)
@@ -266,10 +279,12 @@ class ShowLog(QObject):
 
         if self.main_obj.curr_nod_num == nod_p_num:
             self.main_obj.window.incoming_text.moveCursor(QTextCursor.End)
+            self.main_obj.window.incoming_text.setTextColor(self.green_color)
             self.main_obj.window.incoming_text.insertPlainText(new_line)
 
     def show_ready_log(self):
         print('\n no need to reload "ready" log')
         self.main_obj.window.incoming_text.clear()
+        self.main_obj.window.incoming_text.setTextColor(self.green_color)
         self.main_obj.window.incoming_text.insertPlainText("Ready to run: ")
 

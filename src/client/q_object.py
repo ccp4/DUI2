@@ -466,7 +466,15 @@ class MainObject(QObject):
             self.do_image_view(in_img_num = img_num, nod_or_path = fnd_cur_nod)
 
         elif tab_index == 1:
-            self.log_show(self.curr_nod_num, do_request = fnd_cur_nod)
+            try:
+                nod_stat = self.server_nod_lst[self.curr_nod_num]["status"]
+
+            except IndexError:
+                nod_stat = "Busy"
+
+            self.log_show(
+                self.curr_nod_num, do_request = fnd_cur_nod, stat = nod_stat
+            )
 
         elif tab_index == 2:
             try:
@@ -818,6 +826,7 @@ class MainObject(QObject):
         cmd = {'nod_lst': lst_of_node_str, 'cmd_lst': cmd_lst}
         print("cmd =", cmd)
         self.window.incoming_text.clear()
+        self.window.incoming_text.setTextColor(self.log_show.green_color)
         try:
             new_req_post = requests.post(
                 self.uni_url, stream = True, data = cmd

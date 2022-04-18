@@ -136,7 +136,7 @@ class Mtz_Data_Request(QThread):
 
 
 class Run_n_Output(QThread):
-    new_line_out = Signal(str, int)
+    new_line_out = Signal(str, int, str)
     first_line = Signal(int)
     def __init__(self, request):
         super(Run_n_Output, self).__init__()
@@ -168,7 +168,7 @@ class Run_n_Output(QThread):
                     not_yet_read = True
 
             else:
-                self.new_line_out.emit(line_str, self.number)
+                self.new_line_out.emit(line_str, self.number, "Busy")
 
             self.usleep(1)
 
