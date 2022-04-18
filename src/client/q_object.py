@@ -96,6 +96,7 @@ class MainObject(QObject):
 
         data_init = ini_data()
         self.uni_url = data_init.get_url()
+        run_local = data_init.get_if_local()
 
         self.reseting = False
         try:
@@ -371,7 +372,6 @@ class MainObject(QObject):
 
     def close_event(self, event):
         print("\n destroyed event ... 1\n")
-
         cmd = {"nod_lst":"", "cmd_lst":["closed"]}
         resp = json_data_request(self.uni_url, cmd)
         print("resp =", resp)
