@@ -647,19 +647,17 @@ class DoImageView(QObject):
             self.img_d1_d2 = (
                 json_data_lst[1], json_data_lst[2]
             )
-            if(
-                self.cur_templ != new_templ
-            ):
-                x_ax = np.arange(self.img_d1_d2[1])
-                y_ax = np.arange(self.img_d1_d2[0])
-                pi_2 = 3.14159235358 * 2.0
-                sx = 1.0-(np.cos(x_ax * pi_2 / self.img_d1_d2[1]))
-                sy = 1.0-(np.cos(y_ax * pi_2 / self.img_d1_d2[0]))
-                xx, yy = np.meshgrid(sx, sy, sparse = True)
-                self.np_full_img = xx + yy
-                self.np_full_img = self.i_min_max[1] * (
-                    self.np_full_img / self.np_full_img.max()
-                )
+            # drawing new temporal background
+            x_ax = np.arange(self.img_d1_d2[1])
+            y_ax = np.arange(self.img_d1_d2[0])
+            pi_2 = 3.14159235358 * 2.0
+            sx = 1.0-(np.cos(x_ax * pi_2 / self.img_d1_d2[1]))
+            sy = 1.0-(np.cos(y_ax * pi_2 / self.img_d1_d2[0]))
+            xx, yy = np.meshgrid(sx, sy, sparse = True)
+            self.np_full_img = xx + yy
+            self.np_full_img = self.i_min_max[1] * (
+                self.np_full_img / self.np_full_img.max()
+            )
             self.cur_templ = new_templ
             self.main_obj.window.ImagePathText.setText(
                 str(
