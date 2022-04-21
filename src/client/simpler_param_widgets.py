@@ -521,6 +521,7 @@ class ImportWidget(QWidget):
         else:
             self.open_widget = FileBrowser(self)
 
+        self.open_widget.resize(self.open_widget.size() * 2)
         self.open_widget.file_or_dir_selected.connect(self.set_selection)
 
     def reset_pars(self):
