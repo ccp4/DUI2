@@ -1330,7 +1330,7 @@ class MainImgViewObject(QObject):
         print("ui_path =", ui_path)
 
         self.window = QtUiTools.QUiLoader().load(ui_path)
-        self.window.setWindowTitle("CCP4 DUI Cloud")
+        self.window.setWindowTitle("CCP4 DUIs embedded image viewer")
 
         data_init = ini_data()
         data_init.set_data()
