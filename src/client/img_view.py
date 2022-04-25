@@ -649,11 +649,18 @@ class DoImageView(QObject):
             )
             new_img_path = str(json_data_lst[3])
             if self.img_path != new_img_path:
-                x_ax = np.arange(self.img_d1_d2[1])
-                y_ax = np.arange(self.img_d1_d2[0])
-                pi_2 = 3.14159235358 * 2.0
-                sx = 1.0-(np.cos(x_ax * pi_2 / self.img_d1_d2[1]))
-                sy = 1.0-(np.cos(y_ax * pi_2 / self.img_d1_d2[0]))
+                x_ax = np.arange(
+                    start = -self.img_d1_d2[1] / 2,
+                    stop = self.img_d1_d2[1] / 2 + 1,
+                    step = 1
+                )
+                y_ax = np.arange(
+                    start = -self.img_d1_d2[0] / 2,
+                    stop = self.img_d1_d2[0] / 2 + 1,
+                    step = 1
+                )
+                sx = x_ax * x_ax
+                sy = y_ax * y_ax
                 xx, yy = np.meshgrid(sx, sy, sparse = True)
                 self.np_full_img = xx + yy
                 self.np_full_img = self.i_min_max[1] * (
@@ -1390,6 +1397,7 @@ class MainImgViewObject(QObject):
     def open_dir_widget(self):
         #TODO make sure self.window is that goes as argument
         self.open_widget = FileBrowser(self.window)
+        self.open_widget.resize(self.open_widget.size() * 2)
         self.open_widget.file_or_dir_selected.connect(self.set_selection)
 
 
