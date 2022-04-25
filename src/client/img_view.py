@@ -1158,11 +1158,11 @@ class DoImageView(QObject):
 
     def on_mouse_move(self, x_pos, y_pos):
         try:
-            str_out = "  I(" + str(x_pos) + ", " + str(y_pos) + ") = " +\
-                  str(self.np_full_img[y_pos, x_pos])
+            str_out = "  I(" + str(x_pos) + ", " + str(y_pos) + ")  =  " +\
+                  "{:8.1f}".format(self.np_full_img[y_pos, x_pos])
 
         except (AttributeError, IndexError, TypeError):
-            str_out = " I = ?"
+            str_out = " I  =  ?"
 
         try:
             str_out += "  mask=" + str(self.np_full_mask_img[y_pos, x_pos])
