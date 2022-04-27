@@ -662,9 +662,11 @@ class DoImageView(QObject):
                 sx = x_ax * x_ax
                 sy = y_ax * y_ax
                 xx, yy = np.meshgrid(sx, sy, sparse = True)
-                self.np_full_img = xx + yy
+                tmp_2d_arr = xx + yy
+                tmp_2d_arr = tmp_2d_arr.max() - tmp_2d_arr
+                tmp_2d_arr = tmp_2d_arr ** 6
                 self.np_full_img = self.i_min_max[1] * (
-                    self.np_full_img / self.np_full_img.max()
+                    tmp_2d_arr / tmp_2d_arr.max()
                 )
             self.img_path = new_img_path
             self.main_obj.window.ImagePathText.setText(
