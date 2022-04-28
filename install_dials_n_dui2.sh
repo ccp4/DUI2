@@ -23,11 +23,12 @@ printf "========================================\n"
 printf "#         INSTALLING DUI2 DEPS         #\n"
 printf "========================================\n\n"
 libtbx.mamba install pyside2 -y
-libtbx.mamba install git -y
 printf "========================================\n"
 printf "#           INSTALLING DUI2            #\n"
 printf "========================================\n\n"
-git clone https://github.com/ccp4/DUI2.git
+wget https://github.com/ccp4/DUI2/archive/refs/heads/master.zip
+unzip master.zip
+mv DUI2-master DUI2
 cd DUI2/src/server/img_uploader/
 printf "========================================\n"
 printf "#     COMPYLING DUI2 C++ EXTENSION     #\n"
