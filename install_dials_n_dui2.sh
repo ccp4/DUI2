@@ -31,6 +31,7 @@ printf "========================================\n\n"
 wget https://github.com/ccp4/DUI2/archive/refs/heads/master.zip
 unzip master.zip
 mv DUI2-master DUI2
+rm master.zip
 cd DUI2/src/server/img_uploader/
 printf "========================================\n"
 printf "#     COMPYLING DUI2 C++ EXTENSION     #\n"
