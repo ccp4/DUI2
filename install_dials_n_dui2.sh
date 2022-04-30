@@ -28,10 +28,18 @@ libtbx.mamba install pyside2 -y
 printf "========================================\n"
 printf "#           INSTALLING DUI2            #\n"
 printf "========================================\n\n"
-wget https://github.com/ccp4/DUI2/archive/refs/heads/master.zip
-unzip master.zip
-mv DUI2-master DUI2
-rm master.zip
+
+{ # try
+    git clone https://github.com/ccp4/DUI2.git &&
+    printf "  GIT use  \n\n "
+} || { # catch
+    wget https://github.com/ccp4/DUI2/archive/refs/heads/master.zip
+    unzip master.zip
+    mv DUI2-master DUI2
+    rm master.zip
+    printf "  using WGET intead of GIT  \n\n "
+}
+
 cd DUI2/src/server/img_uploader/
 printf "========================================\n"
 printf "#     COMPYLING DUI2 C++ EXTENSION     #\n"
