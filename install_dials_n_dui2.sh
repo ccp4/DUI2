@@ -13,6 +13,8 @@ cd dials-installer
 ./install --prefix=$INI_DIR_PATH
 cd $INI_DIR_PATH
 source dials-v3-9-0/dials_env.sh
+printf "\n\n If the HTML report crashes, try running the following command:\n\n  "
+printf "cp /usr/lib/x86_64-linux-gnu/libstdc++.so.6 $INI_DIR_PATH/dials-v3-9-0/conda_base/lib/\n\n"
 printf "========================================\n"
 printf "#           INSTALLING MAMBA           #\n"
 printf "========================================\n\n"
