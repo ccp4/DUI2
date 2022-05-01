@@ -13,7 +13,6 @@ cd dials-installer
 ./install --prefix=$INI_DIR_PATH
 cd $INI_DIR_PATH
 source dials-v3-9-0/dials_env.sh
-
 libtbx.conda update -n base conda -y
 
 printf "\n\n If the HTML report crashes, try running the following command:\n\n  "
@@ -23,7 +22,6 @@ printf "========================================\n"
 printf "#           INSTALLING MAMBA           #\n"
 printf "========================================\n\n"
 libtbx.conda install -c conda-forge mamba -y
-
 printf "Setting up mamba ...\n"
 libtbx.refresh
 printf "========================================\n"
@@ -37,7 +35,7 @@ printf "========================================\n\n"
 { # try
     git clone https://github.com/ccp4/DUI2.git &&
     printf "  GIT use  \n\n "
-} || { # catch
+} || { # except
     wget https://github.com/ccp4/DUI2/archive/refs/heads/master.zip
     unzip master.zip
     mv DUI2-master DUI2
