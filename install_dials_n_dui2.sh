@@ -16,8 +16,8 @@ source dials-v3-9-0/dials_env.sh
 
 libtbx.conda update -n base conda -y
 
-#printf "\n\n If the HTML report crashes, try running the following command:\n\n  "
-#printf "cp /usr/lib/x86_64-linux-gnu/libstdc++.so.6 $INI_DIR_PATH/dials-v3-9-0/conda_base/lib/\n\n"
+printf "\n\n If the HTML report crashes, try running the following command:\n\n  "
+printf "cp /usr/lib/x86_64-linux-gnu/libstdc++.so.6 $INI_DIR_PATH/dials-v3-9-0/conda_base/lib/\n\n"
 
 printf "========================================\n"
 printf "#           INSTALLING MAMBA           #\n"
