@@ -132,12 +132,11 @@ class CmdNode(object):
         try:
             for single_parent in parent_lst_in:
                 self.set_base_dir(single_parent._base_dir)
-                for expt_2_add in glob.glob(single_parent._run_dir + "/*.expt"):
+                for expt_2_add in single_parent._lst_expt_out:
                     self._lst_expt_in.append(expt_2_add)
 
-                for refl_2_add in glob.glob(single_parent._run_dir + "/*.refl"):
+                for refl_2_add in single_parent._lst_refl_out:
                     self._lst_refl_in.append(refl_2_add)
-
 
                 if(
                     single_parent.lst2run[0][0] ==
@@ -355,7 +354,6 @@ class CmdNode(object):
         if os.path.exists(tmp_html_path):
             self._html_rep = tmp_html_path
 
-        tmp_off = '''
         # running prediction generation
         pred_lst_dat_in = ['dials.predict']
         for expt_2_add in self._lst_expt_out:
@@ -383,7 +381,6 @@ class CmdNode(object):
         tmp_predic_path = self._run_dir + "/dials.report.html"
         if os.path.exists(tmp_predic_path):
             self._predic_refl = tmp_predic_path
-        '''
 
     def stop_me(self):
         print("node", self.number, "status:", self.status)
