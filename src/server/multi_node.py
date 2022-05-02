@@ -117,6 +117,7 @@ class CmdNode(object):
         self._lst_expt_in = []
         self._lst_refl_in = []
         self._html_rep = None
+        self._predic_refl = None
         self._lst_expt_out = []
         self._lst_refl_out = []
         self.lst2run = []
@@ -324,18 +325,18 @@ class CmdNode(object):
             self._lst_refl_out = list(self._lst_refl_in)
 
         # running HTML report generation
-        lst_dat_in = ['dials.report']
+        rep_lst_dat_in = ['dials.report']
         for expt_2_add in self._lst_expt_out:
-            lst_dat_in.append(expt_2_add)
+            rep_lst_dat_in.append(expt_2_add)
 
         for refl_2_add in self._lst_refl_out:
-            lst_dat_in.append(refl_2_add)
+            rep_lst_dat_in.append(refl_2_add)
 
-        print("\n running:", lst_dat_in, "\n")
+        print("\n running:", rep_lst_dat_in, "\n")
         lst_rep_out = []
 
         rep_proc = subprocess.Popen(
-            lst_dat_in,
+            rep_lst_dat_in,
             shell = False,
             cwd = self._run_dir,
             stdout = subprocess.PIPE,
@@ -353,6 +354,36 @@ class CmdNode(object):
         tmp_html_path = self._run_dir + "/dials.report.html"
         if os.path.exists(tmp_html_path):
             self._html_rep = tmp_html_path
+
+        tmp_off = '''
+        # running prediction generation
+        pred_lst_dat_in = ['dials.predict']
+        for expt_2_add in self._lst_expt_out:
+            pred_lst_dat_in.append(expt_2_add)
+
+        print("\n running:", pred_lst_dat_in, "\n")
+        lst_pred_out = []
+
+        pred_proc = subprocess.Popen(
+            pred_lst_dat_in,
+            shell = False,
+            cwd = self._run_dir,
+            stdout = subprocess.PIPE,
+            stderr = subprocess.STDOUT,
+            universal_newlines = True
+        )
+        while pred_proc.poll() is None or new_line != '':
+            new_line = pred_proc.stdout.readline()
+            lst_pred_out.append(new_line)
+
+        pred_proc.stdout.close()
+        # in case needed there is the output of the prediction here:
+        #print("predict stdout <<< \n", lst_pred_out, "\n >>>")
+
+        tmp_predic_path = self._run_dir + "/dials.report.html"
+        if os.path.exists(tmp_predic_path):
+            self._predic_refl = tmp_predic_path
+        '''
 
     def stop_me(self):
         print("node", self.number, "status:", self.status)
@@ -446,6 +477,7 @@ class Runner(object):
                         "_lst_refl_out"         :uni._lst_refl_out,
                         "_run_dir"              :uni._run_dir,
                         "_html_rep"             :uni._html_rep,
+                        "_predic_refl"          :uni._predic_refl,
                         "log_file_path"         :uni.log_file_path,
                         "number"                :uni.number,
                         "status"                :uni.status,
@@ -478,6 +510,7 @@ class Runner(object):
             new_node._lst_refl_out   = uni_dic["_lst_refl_out"]
             new_node._run_dir        = uni_dic["_run_dir"]
             new_node._html_rep       = uni_dic["_html_rep"]
+            new_node._predic_refl    = uni_dic["_predic_refl"]
             new_node.log_file_path   = uni_dic["log_file_path"]
             new_node.number          = uni_dic["number"]
             new_node.status          = uni_dic["status"]
