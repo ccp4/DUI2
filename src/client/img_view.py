@@ -304,10 +304,23 @@ class ImgGraphicsScene(QGraphicsScene):
 
         self.addPixmap(self.curr_pixmap)
         for refl in self.refl_list:
+            '''
             rectangle = QRectF(
                 refl["x"], refl["y"], refl["width"], refl["height"]
             )
             self.addRect(rectangle, self.green_pen)
+            '''
+            self.addLine(
+                refl["x"], refl["y"] - 5.0,
+                refl["x"], refl["y"] + 5.0,
+                self.green_pen
+            )
+
+            self.addLine(
+                refl["x"] + 5.0, refl["y"],
+                refl["x"] - 5.0, refl["y"],
+                self.green_pen
+            )
 
         if self.my_mask_pix_map is not None:
             self.addPixmap(self.my_mask_pix_map)
@@ -355,9 +368,11 @@ class ImgGraphicsScene(QGraphicsScene):
         except TypeError:
             pass
 
-    def __call__(self, new_pixmap, refl_list0, new_temp_mask):
+    def __call__(self, new_pixmap, refl_list1, new_temp_mask):
+        #def __call__(self, new_pixmap, refl_list0, new_temp_mask):
         self.temp_mask = new_temp_mask
-        self.refl_list = refl_list0
+        #self.refl_list = refl_list0
+        self.refl_list = refl_list1
         self.my_pix_map = new_pixmap
         self.draw_ref_rect()
         if self.draw_all_hkl:
@@ -385,8 +400,12 @@ class ImgGraphicsScene(QGraphicsScene):
                 pos_min = None
                 d_cuad_min = 10000000
                 for num, refl in enumerate(self.refl_list):
+                    '''
                     x_ref = refl["x"] + refl["width"] / 2
                     y_ref = refl["y"] + refl["height"] / 2
+                    '''
+                    x_ref = refl["x"]
+                    y_ref = refl["y"]
 
                     dx = x_ref - x_pos
                     dy = y_ref - y_pos
@@ -693,8 +712,14 @@ class DoImageView(QObject):
             "\n node in List:", self.nod_or_path
         )
         if self.nod_or_path is True:
+            '''
             my_cmd = {
                 'nod_lst': [self.cur_nod_num], 'cmd_lst': ["grl " + str(self.cur_img_num)]
+            }
+            '''
+
+            my_cmd = {
+                'nod_lst': [self.cur_nod_num], 'cmd_lst': ["grp " + str(self.cur_img_num)]
             }
 
         elif type(self.nod_or_path) is str:
@@ -717,7 +742,8 @@ class DoImageView(QObject):
                 print("first reflection list loading")
 
             self.ld_ref_thread = LoadInThread(self.uni_url, my_cmd)
-            self.ld_ref_thread.request_loaded.connect(self.after_requesting_ref_lst)
+            #self.ld_ref_thread.request_loaded.connect(self.after_requesting_ref_lst)
+            self.ld_ref_thread.request_loaded.connect(self.after_requesting_predict_lst)
             self.ld_ref_thread.start()
 
     def after_requesting_ref_lst(self, req_tup):
@@ -740,6 +766,29 @@ class DoImageView(QObject):
 
         except IndexError:
             print("No reflection list to show (IndexError except)")
+
+        self.refresh_pixel_map()
+        if not self.easter_egg_active:
+            self.full_img_show()
+
+    def after_requesting_predict_lst(self, req_tup):
+        json_lst = req_tup
+        self.r_list1 = []
+        try:
+            for inner_list in json_lst[0]:
+                self.r_list1.append(
+                    {
+                        "x"         : float(inner_list[0]),
+                        "y"         : float(inner_list[1]),
+                        "local_hkl" :   str(inner_list[2]),
+                    }
+                )
+
+        except TypeError:
+            print("No reflection << predict >> to show (TypeError except)")
+
+        except IndexError:
+            print("No reflection << predict >> to show (IndexError except)")
 
         self.refresh_pixel_map()
         if not self.easter_egg_active:
@@ -786,7 +835,8 @@ class DoImageView(QObject):
             )
             new_pixmap = QPixmap.fromImage(q_img)
             if show_refl:
-                self.my_scene(new_pixmap, self.r_list0, self.list_temp_mask)
+                #self.my_scene(new_pixmap, self.r_list0, self.list_temp_mask)
+                self.my_scene(new_pixmap, self.r_list1, self.list_temp_mask)
 
             else:
                 self.my_scene(new_pixmap, [], self.list_temp_mask)

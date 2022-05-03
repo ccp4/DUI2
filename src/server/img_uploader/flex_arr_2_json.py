@@ -112,6 +112,52 @@ def list_p_arrange_exp(
     return img_lst
 
 
+def list_p_arrange_predic(
+    xyzcal_col = None, pan_col = None, hkl_col = None, n_imgs = None,
+    num_of_imgs_n_shift_lst = None, id_col = None, num_of_imagesets = 1
+):
+    print("n_imgs(list_p_arrange_predic) =", n_imgs)
+    img_lst = []
+    for time in range(n_imgs):
+        img_lst.append([])
+
+    for i, ref_xyx in enumerate(xyzcal_col):
+        x_cord = ref_xyx[0]
+        y_cord = ref_xyx[1] + pan_col[i] * 213
+        z_cord = ref_xyx[2]
+
+        if hkl_col is None or len(hkl_col) <= 1:
+            local_hkl = ""
+
+        else:
+            local_hkl = hkl_col[i]
+            if local_hkl == "(0, 0, 0)":
+                local_hkl = "NOT indexed"
+
+        ref_dat = []
+        ref_dat.append(x_cord)
+        ref_dat.append(y_cord)
+        ref_dat.append(local_hkl)
+
+        if num_of_imagesets > 1:
+            add_shift = 0
+            for id_num in range(id_col[i]):
+                add_shift += num_of_imgs_n_shift_lst[id_num][0]
+
+            for ind_z in range(int(z_cord) - 2, int(z_cord) + 2):
+                ind_z_shift = ind_z - num_of_imgs_n_shift_lst[id_col[i]][1]
+                ind_z_shift += add_shift
+                if ind_z_shift >= 0 and ind_z_shift < n_imgs:
+                    img_lst[ind_z_shift].append(ref_dat)
+
+        else:
+            for ind_z in range(int(z_cord) - 2, int(z_cord) + 2):
+                ind_z_shift = ind_z - num_of_imgs_n_shift_lst[0][1]
+                if ind_z_shift >= 0 and ind_z_shift < n_imgs:
+                    img_lst[ind_z_shift].append(ref_dat)
+
+    return img_lst
+
 def get_refl_lst(expt_path, refl_path, img_num):
     try:
         experiments = ExperimentListFactory.from_json_file(expt_path[0])
@@ -172,6 +218,73 @@ def get_refl_lst(expt_path, refl_path, img_num):
     except KeyError:
         print("NOT found << bbox_col >> col")
         return [ [] ]
+
+
+def get_refl_pred_lst(expt_path, refl_path, img_num):
+    try:
+        experiments = ExperimentListFactory.from_json_file(expt_path[0])
+        all_sweeps = experiments.imagesets()
+        num_of_imagesets = len(all_sweeps)
+        print("len(experiments.imagesets()) =", num_of_imagesets)
+        print("refl_path =", refl_path)
+        table = flex.reflection_table.from_file(refl_path)
+
+    except IndexError:
+        print("\n sending empty reflection (IndexError) \n")
+        return [ [] ]
+
+    except OSError:
+        print("\n sending empty reflection (OSError) \n")
+        return [ [] ]
+
+    except TypeError:
+        print("\n sending empty reflection (TypeError) \n")
+        return [ [] ]
+
+    try:
+        pan_col = list(map(int, table["panel"]))
+        xyzcal_col = list(map(list, table["xyzcal.px"]))
+        id_col = list(map(int, table["id"]))
+
+        num_of_imgs_n_shift_lst = []
+        n_imgs = 0
+        for single_sweep in all_sweeps:
+            num_of_imgs = len(single_sweep.indices())
+            n_imgs += num_of_imgs
+            shift = single_sweep.get_scan().get_image_range()[0] - 1
+            num_of_imgs_n_shift_lst.append((num_of_imgs, shift))
+
+        print("n_imgs =", n_imgs)
+        print("num_of_imgs_n_shift_lst =", num_of_imgs_n_shift_lst)
+
+        box_flat_data_lst = []
+        if n_imgs > 0:
+            try:
+                hkl_col = list(map(str, table["miller_index"]))
+
+            except KeyError:
+                print("NOT found << miller_index >> col")
+                hkl_col = None
+
+            box_flat_data_lst = list_p_arrange_predic(
+                xyzcal_col, pan_col, hkl_col, n_imgs,
+                num_of_imgs_n_shift_lst, id_col, num_of_imagesets
+            )
+
+        try:
+            refl_lst = [box_flat_data_lst[img_num]]
+            print("len(refl_lst) =", len(refl_lst))
+
+        except IndexError:
+            refl_lst = []
+            print("refl_lst = []")
+
+        return refl_lst
+
+    except KeyError:
+        print("NOT found << xyzcal_col >> col")
+        return [ [] ]
+
 
 
 def get_correct_img_num_n_sweep_num(experiments, img_num):

@@ -53,6 +53,7 @@ def fix_alias(short_in):
         ("gmi",   "get_mask_image"                        ),
         ("gmis",  "get_mask_image_slice"                  ),
         ("grl",   "get_reflection_list"                   ),
+        ("grp",   "get_predictions"                       ),
         ("gb",    "get_bravais_sum"                       ),
         ("st",    "stop"                                  ),
         ("fdp",   "find_spots_params"                     ),
@@ -378,7 +379,7 @@ class CmdNode(object):
         # in case needed there is the output of the prediction here:
         #print("predict stdout <<< \n", lst_pred_out, "\n >>>")
 
-        tmp_predic_path = self._run_dir + "/dials.report.html"
+        tmp_predic_path = self._run_dir + "/predicted.refl"
         if os.path.exists(tmp_predic_path):
             self._predic_refl = tmp_predic_path
 
@@ -555,6 +556,10 @@ class Runner(object):
                         print("\n error, wrong line not logging \n")
 
             else:
+                print(
+                    "running run_get_data(", uni_cmd, ", "
+                    ,cmd_dict, ", ", self.step_list, ")"
+                )
                 return_list = get_data_from_steps(uni_cmd, cmd_dict, self.step_list)
 
         return return_list
