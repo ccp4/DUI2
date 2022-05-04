@@ -249,20 +249,28 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
         print("running << get_predictions >> ")
         for lin2go in cmd_dict["nod_lst"]:
             try:
+                img_num = int(uni_cmd[1])
                 print(
                     "generating predictions for line:", lin2go,
-                    " image:", int(uni_cmd[1])
+                    " image:", img_num
                 )
+                sub_par = uni_cmd[2]
+                if sub_par[0:7] == "z_dept=":
+                    z_dept = int(sub_par[7:])
+
+                else:
+                    z_dept = 1
+
                 refl_pre_lst = flex_arr_2_json.get_refl_pred_lst(
                     step_list[lin2go]._lst_expt_out,
                     step_list[lin2go]._predic_refl,
-                    int(uni_cmd[1])
+                    img_num, z_dept
                 )
                 return_list = refl_pre_lst
 
             except (IndexError, AttributeError, ValueError):
                 print(
-                    "\n error, wrong line, not sending predictions \n"
+                    "\n error, not sending predictions \n"
                 )
                 return_list = []
 

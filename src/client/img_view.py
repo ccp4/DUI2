@@ -719,7 +719,8 @@ class DoImageView(QObject):
             '''
 
             my_cmd = {
-                'nod_lst': [self.cur_nod_num], 'cmd_lst': ["grp " + str(self.cur_img_num)]
+                'nod_lst': [self.cur_nod_num],
+                'cmd_lst': ["grp " + str(self.cur_img_num) + " z_dept=1"]
             }
 
         elif type(self.nod_or_path) is str:

@@ -117,7 +117,8 @@ def list_p_arrange_predic(
     num_of_imgs_n_shift_lst = None, id_col = None, num_of_imagesets = 1,
     z_dept = 1
 ):
-    print("n_imgs(list_p_arrange_predic) =", n_imgs)
+    print("z_dept(list_p_arrange_predic) =", z_dept)
+
     img_lst = []
     for time in range(n_imgs):
         img_lst.append([])
@@ -221,7 +222,7 @@ def get_refl_lst(expt_path, refl_path, img_num):
         return [ [] ]
 
 
-def get_refl_pred_lst(expt_path, refl_path, img_num):
+def get_refl_pred_lst(expt_path, refl_path, img_num, z_dept):
     try:
         experiments = ExperimentListFactory.from_json_file(expt_path[0])
         all_sweeps = experiments.imagesets()
@@ -272,7 +273,7 @@ def get_refl_pred_lst(expt_path, refl_path, img_num):
                 hkl_col = hkl_col, n_imgs = n_imgs,
                 num_of_imgs_n_shift_lst = num_of_imgs_n_shift_lst,
                 id_col = id_col, num_of_imagesets = num_of_imagesets,
-                z_dept = 5
+                z_dept = z_dept
             )
 
         try:

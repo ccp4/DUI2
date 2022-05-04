@@ -556,10 +556,12 @@ class Runner(object):
                         print("\n error, wrong line not logging \n")
 
             else:
+                not_needed_for_now = '''
                 print(
                     "running run_get_data(", uni_cmd, ", "
                     ,cmd_dict, ", ", self.step_list, ")"
                 )
+                '''
                 return_list = get_data_from_steps(uni_cmd, cmd_dict, self.step_list)
 
         return return_list
