@@ -484,11 +484,11 @@ class PopDisplayMenu(QMenu):
         palette_box_layout.addWidget(self.palette_select)
 
         palette_group.setLayout(palette_box_layout)
+        # hkl Viewing Tool
 
         info_group = QGroupBox("Reflection info")
         ref_box_layout = QVBoxLayout()
 
-        # Viewing Tool
         self.chk_box_show = QCheckBox("Show reflection info")
         self.chk_box_show.setChecked(True)
         self.chk_box_show.stateChanged.connect(self.sig_new_redraw)
@@ -509,10 +509,34 @@ class PopDisplayMenu(QMenu):
 
         info_group.setLayout(ref_box_layout)
 
+        # Find vs Predictions
+        find_vs_predict_group = QGroupBox("Reflection Type")
+        fnd_vs_prd_layout = QVBoxLayout()
+
+        self.rad_but_obs = QRadioButton("Observation")
+        self.rad_but_obs.clicked.connect(self.sig_new_redraw)
+        self.rad_but_obs.setChecked(True)
+        fnd_vs_prd_layout.addWidget(self.rad_but_obs)
+
+        self.rad_but_pred = QRadioButton("Prediction      View Depth")
+        self.rad_but_pred.clicked.connect(self.sig_new_redraw)
+
+        self.z_dept_combo = QSpinBox(self)
+        self.z_dept_combo.setMinimum(1)
+        self.z_dept_combo.valueChanged.connect(self.sig_new_redraw)
+        predict_h_layout = QHBoxLayout()
+        predict_h_layout.addWidget(self.rad_but_pred)
+        predict_h_layout.addWidget(self.z_dept_combo)
+        fnd_vs_prd_layout.addLayout(predict_h_layout)
+
+        find_vs_predict_group.setLayout(fnd_vs_prd_layout)
+
         my_main_box = QVBoxLayout()
         my_main_box.addWidget(palette_group)
         my_main_box.addWidget(info_group)
+        my_main_box.addWidget(find_vs_predict_group)
         self.setLayout(my_main_box)
+
     def sig_new_redraw(self):
         print("new_redraw")
         self.new_redraw.emit()
@@ -717,10 +741,12 @@ class DoImageView(QObject):
                 'nod_lst': [self.cur_nod_num], 'cmd_lst': ["grl " + str(self.cur_img_num)]
             }
             '''
-
+            z_dept_str = str(self.pop_display_menu.z_dept_combo.value())
             my_cmd = {
                 'nod_lst': [self.cur_nod_num],
-                'cmd_lst': ["grp " + str(self.cur_img_num) + " z_dept=1"]
+                'cmd_lst': [
+                    "grp " + str(self.cur_img_num) + " z_dept=" + z_dept_str
+                ]
             }
 
         elif type(self.nod_or_path) is str:
