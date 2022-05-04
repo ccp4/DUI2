@@ -114,7 +114,8 @@ def list_p_arrange_exp(
 
 def list_p_arrange_predic(
     xyzcal_col = None, pan_col = None, hkl_col = None, n_imgs = None,
-    num_of_imgs_n_shift_lst = None, id_col = None, num_of_imagesets = 1
+    num_of_imgs_n_shift_lst = None, id_col = None, num_of_imagesets = 1,
+    z_dept = 1
 ):
     print("n_imgs(list_p_arrange_predic) =", n_imgs)
     img_lst = []
@@ -144,14 +145,14 @@ def list_p_arrange_predic(
             for id_num in range(id_col[i]):
                 add_shift += num_of_imgs_n_shift_lst[id_num][0]
 
-            for ind_z in range(int(z_cord) - 2, int(z_cord) + 2):
+            for ind_z in range(int(z_cord) - z_dept, int(z_cord) + z_dept):
                 ind_z_shift = ind_z - num_of_imgs_n_shift_lst[id_col[i]][1]
                 ind_z_shift += add_shift
                 if ind_z_shift >= 0 and ind_z_shift < n_imgs:
                     img_lst[ind_z_shift].append(ref_dat)
 
         else:
-            for ind_z in range(int(z_cord) - 2, int(z_cord) + 2):
+            for ind_z in range(int(z_cord) - z_dept, int(z_cord) + z_dept):
                 ind_z_shift = ind_z - num_of_imgs_n_shift_lst[0][1]
                 if ind_z_shift >= 0 and ind_z_shift < n_imgs:
                     img_lst[ind_z_shift].append(ref_dat)
@@ -267,8 +268,11 @@ def get_refl_pred_lst(expt_path, refl_path, img_num):
                 hkl_col = None
 
             box_flat_data_lst = list_p_arrange_predic(
-                xyzcal_col, pan_col, hkl_col, n_imgs,
-                num_of_imgs_n_shift_lst, id_col, num_of_imagesets
+                xyzcal_col = xyzcal_col, pan_col = pan_col,
+                hkl_col = hkl_col, n_imgs = n_imgs,
+                num_of_imgs_n_shift_lst = num_of_imgs_n_shift_lst,
+                id_col = id_col, num_of_imagesets = num_of_imagesets,
+                z_dept = 5
             )
 
         try:
