@@ -624,8 +624,9 @@ class DoImageView(QObject):
         self.pop_display_menu.new_i_min_max.connect(self.change_i_min_max)
         self.pop_display_menu.new_palette.connect(self.change_palette)
         self.pop_display_menu.new_redraw.connect(self.refresh_pixel_map)
+
         self.pop_display_menu.new_ref_list.connect(
-            self.refresh_reflection_list
+            self.request_reflection_list
         )
 
         self.my_scene.img_scale.connect(self.scale_img)
@@ -896,10 +897,6 @@ class DoImageView(QObject):
 
         except AttributeError:
             print("no mask to draw here")
-
-    def refresh_reflection_list(self):
-        print("#" * 50 + "refresh_reflection_list")
-        self.request_reflection_list()
 
     def change_i_min_max(self, new_i_min, new_i_max):
         self.i_min_max = [new_i_min, new_i_max]
