@@ -304,23 +304,23 @@ class ImgGraphicsScene(QGraphicsScene):
 
         self.addPixmap(self.curr_pixmap)
         for refl in self.refl_list:
-            '''
-            rectangle = QRectF(
-                refl["x"], refl["y"], refl["width"], refl["height"]
-            )
-            self.addRect(rectangle, self.green_pen)
-            '''
-            self.addLine(
-                refl["x"], refl["y"] - 5.0,
-                refl["x"], refl["y"] + 5.0,
-                self.green_pen
-            )
+            if self.parent_obj.pop_display_menu.rad_but_obs.isChecked():
+                rectangle = QRectF(
+                    refl["x"], refl["y"], refl["width"], refl["height"]
+                )
+                self.addRect(rectangle, self.green_pen)
 
-            self.addLine(
-                refl["x"] + 5.0, refl["y"],
-                refl["x"] - 5.0, refl["y"],
-                self.green_pen
-            )
+            else:
+                self.addLine(
+                    refl["x"], refl["y"] - 5.0,
+                    refl["x"], refl["y"] + 5.0,
+                    self.green_pen
+                )
+                self.addLine(
+                    refl["x"] + 5.0, refl["y"],
+                    refl["x"] - 5.0, refl["y"],
+                    self.green_pen
+                )
 
         if self.my_mask_pix_map is not None:
             self.addPixmap(self.my_mask_pix_map)
@@ -749,18 +749,22 @@ class DoImageView(QObject):
             "\n node in List:", self.nod_or_path
         )
         if self.nod_or_path is True:
-            '''
-            my_cmd = {
-                'nod_lst': [self.cur_nod_num], 'cmd_lst': ["grl " + str(self.cur_img_num)]
-            }
-            '''
-            z_dept_str = str(self.pop_display_menu.z_dept_combo.value())
-            my_cmd = {
-                'nod_lst': [self.cur_nod_num],
-                'cmd_lst': [
-                    "grp " + str(self.cur_img_num) + " z_dept=" + z_dept_str
-                ]
-            }
+            if self.pop_display_menu.rad_but_obs.isChecked():
+                my_cmd = {
+                    'nod_lst': [self.cur_nod_num], 'cmd_lst': [
+                        "grl " + str(self.cur_img_num)
+                    ]
+                }
+
+            else:
+                z_dept_str = str(self.pop_display_menu.z_dept_combo.value())
+                my_cmd = {
+                    'nod_lst': [self.cur_nod_num],
+                    'cmd_lst': [
+                        "grp " + str(self.cur_img_num) +
+                        " z_dept=" + z_dept_str
+                    ]
+                }
 
         elif type(self.nod_or_path) is str:
             my_cmd = {
@@ -782,8 +786,16 @@ class DoImageView(QObject):
                 print("first reflection list loading")
 
             self.ld_ref_thread = LoadInThread(self.uni_url, my_cmd)
-            #self.ld_ref_thread.request_loaded.connect(self.after_requesting_ref_lst)
-            self.ld_ref_thread.request_loaded.connect(self.after_requesting_predict_lst)
+            if self.pop_display_menu.rad_but_obs.isChecked():
+                self.ld_ref_thread.request_loaded.connect(
+                    self.after_requesting_ref_lst
+                )
+
+            else:
+                self.ld_ref_thread.request_loaded.connect(
+                    self.after_requesting_predict_lst
+                )
+
             self.ld_ref_thread.start()
 
     def after_requesting_ref_lst(self, req_tup):
@@ -875,8 +887,11 @@ class DoImageView(QObject):
             )
             new_pixmap = QPixmap.fromImage(q_img)
             if show_refl:
-                #self.my_scene(new_pixmap, self.r_list0, self.list_temp_mask)
-                self.my_scene(new_pixmap, self.r_list1, self.list_temp_mask)
+                if self.pop_display_menu.rad_but_obs.isChecked():
+                    self.my_scene(new_pixmap, self.r_list0, self.list_temp_mask)
+
+                else:
+                    self.my_scene(new_pixmap, self.r_list1, self.list_temp_mask)
 
             else:
                 self.my_scene(new_pixmap, [], self.list_temp_mask)
