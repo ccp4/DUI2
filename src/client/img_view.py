@@ -446,6 +446,7 @@ class PopDisplayMenu(QMenu):
     new_i_min_max = Signal(int, int)
     new_palette = Signal(str)
     new_redraw = Signal()
+    new_ref_list = Signal()
     def __init__(self, parent=None):
         super().__init__()
         self.my_parent = parent
@@ -514,16 +515,16 @@ class PopDisplayMenu(QMenu):
         fnd_vs_prd_layout = QVBoxLayout()
 
         self.rad_but_obs = QRadioButton("Observation")
-        self.rad_but_obs.clicked.connect(self.sig_new_redraw)
+        self.rad_but_obs.clicked.connect(self.sig_new_refl)
         self.rad_but_obs.setChecked(True)
         fnd_vs_prd_layout.addWidget(self.rad_but_obs)
 
         self.rad_but_pred = QRadioButton("Prediction      View Depth")
-        self.rad_but_pred.clicked.connect(self.sig_new_redraw)
+        self.rad_but_pred.clicked.connect(self.sig_new_refl)
 
         self.z_dept_combo = QSpinBox(self)
         self.z_dept_combo.setMinimum(1)
-        self.z_dept_combo.valueChanged.connect(self.sig_new_redraw)
+        self.z_dept_combo.valueChanged.connect(self.sig_new_refl)
         predict_h_layout = QHBoxLayout()
         predict_h_layout.addWidget(self.rad_but_pred)
         predict_h_layout.addWidget(self.z_dept_combo)
@@ -540,6 +541,11 @@ class PopDisplayMenu(QMenu):
     def sig_new_redraw(self):
         print("new_redraw")
         self.new_redraw.emit()
+
+    def sig_new_refl(self):
+        print("new_ref_list")
+        self.new_ref_list.emit()
+
 
     def palette_changed_by_user(self, new_palette_num):
         self.palette = self.palette_lst[new_palette_num]
@@ -618,6 +624,9 @@ class DoImageView(QObject):
         self.pop_display_menu.new_i_min_max.connect(self.change_i_min_max)
         self.pop_display_menu.new_palette.connect(self.change_palette)
         self.pop_display_menu.new_redraw.connect(self.refresh_pixel_map)
+        self.pop_display_menu.new_ref_list.connect(
+            self.refresh_reflection_list
+        )
 
         self.my_scene.img_scale.connect(self.scale_img)
         self.my_scene.new_mouse_pos.connect(self.on_mouse_move)
@@ -884,6 +893,9 @@ class DoImageView(QObject):
 
         except AttributeError:
             print("no mask to draw here")
+
+    def refresh_reflection_list(self):
+        print("#" * 50 + "refresh_reflection_list")
 
     def change_i_min_max(self, new_i_min, new_i_max):
         self.i_min_max = [new_i_min, new_i_max]
