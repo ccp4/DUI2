@@ -740,6 +740,9 @@ class DoImageView(QObject):
         except TypeError:
             self.np_full_mask_img = None
 
+        self.request_reflection_list()
+
+    def request_reflection_list(self):
         print(
             "refreshing Image Viewer\n img:", self.cur_img_num,
             "\n node in List:", self.nod_or_path
@@ -896,6 +899,7 @@ class DoImageView(QObject):
 
     def refresh_reflection_list(self):
         print("#" * 50 + "refresh_reflection_list")
+        self.request_reflection_list()
 
     def change_i_min_max(self, new_i_min, new_i_max):
         self.i_min_max = [new_i_min, new_i_max]
