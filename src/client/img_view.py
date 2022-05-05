@@ -290,8 +290,8 @@ class ImgGraphicsScene(QGraphicsScene):
         self.curr_pixmap = None
         self.my_mask_pix_map = None
 
-        self.green_pen = QPen(
-            Qt.green, 0.8, Qt.SolidLine,
+        self.ovelay_pen = QPen(
+            Qt.white, 0.8, Qt.SolidLine,
             Qt.RoundCap, Qt.RoundJoin
         )
         self.draw_all_hkl = False
@@ -308,18 +308,18 @@ class ImgGraphicsScene(QGraphicsScene):
                 rectangle = QRectF(
                     refl["x"], refl["y"], refl["width"], refl["height"]
                 )
-                self.addRect(rectangle, self.green_pen)
+                self.addRect(rectangle, self.ovelay_pen)
 
             else:
                 self.addLine(
                     refl["x"], refl["y"] - 5.0,
                     refl["x"], refl["y"] + 5.0,
-                    self.green_pen
+                    self.ovelay_pen
                 )
                 self.addLine(
                     refl["x"] + 5.0, refl["y"],
                     refl["x"] - 5.0, refl["y"],
-                    self.green_pen
+                    self.ovelay_pen
                 )
 
         if self.my_mask_pix_map is not None:
@@ -346,14 +346,14 @@ class ImgGraphicsScene(QGraphicsScene):
                     rectangle = QRectF(
                         lst_num[0], lst_num[2], tmp_width, tmp_height
                     )
-                    self.addRect(rectangle, self.green_pen)
+                    self.addRect(rectangle, self.ovelay_pen)
 
                 elif pict[0] == 'untrusted.circle':
                     rectangle = QRectF(
                         lst_num[0] - lst_num[2], lst_num[1] - lst_num[2],
                         2 * lst_num[2], 2 * lst_num[2]
                     )
-                    self.addEllipse(rectangle, self.green_pen)
+                    self.addEllipse(rectangle, self.ovelay_pen)
 
                 elif pict[0] == 'untrusted.polygon':
                     siz_n_blk = (len(lst_num) - 2) / 2
@@ -362,24 +362,42 @@ class ImgGraphicsScene(QGraphicsScene):
                             self.addLine(
                                 lst_num[i * 2], lst_num[i * 2 + 1],
                                 lst_num[i * 2 + 2], lst_num[i * 2 + 3],
-                                self.green_pen
+                                self.ovelay_pen
                             )
 
         except TypeError:
             pass
 
     def __call__(self, new_pixmap, refl_list1, new_temp_mask):
-        #def __call__(self, new_pixmap, refl_list0, new_temp_mask):
-        self.temp_mask = new_temp_mask
-        #self.refl_list = refl_list0
+        bkp_in_case = '''
+    def __call__(self, new_pixmap, refl_list0, new_temp_mask):
+        self.refl_list = refl_list0
+        '''
         self.refl_list = refl_list1
+        if self.parent_obj.palette == "heat":
+            overlay_colour = Qt.green
+
+        elif self.parent_obj.palette == "grayscale":
+            overlay_colour = Qt.cyan
+
+        elif self.parent_obj.palette == "heat invert":
+            overlay_colour = Qt.darkGreen
+
+        elif self.parent_obj.palette == "invert":
+            overlay_colour = Qt.blue
+
+        self.ovelay_pen = QPen(
+            overlay_colour, 0.8, Qt.SolidLine,
+            Qt.RoundCap, Qt.RoundJoin
+        )
+        self.temp_mask = new_temp_mask
         self.my_pix_map = new_pixmap
         self.draw_ref_rect()
         if self.draw_all_hkl:
             for refl in self.refl_list:
                 n_text = self.addSimpleText(str(refl["local_hkl"]))
                 n_text.setPos(refl["x"], refl["y"])
-                n_text.setPen(self.green_pen)
+                n_text.setPen(self.ovelay_pen)
 
         self.draw_temp_mask()
 
@@ -418,7 +436,7 @@ class ImgGraphicsScene(QGraphicsScene):
                 refl = self.refl_list[pos_min]
                 n_text = self.addSimpleText(str(refl["local_hkl"]))
                 n_text.setPos(refl["x"], refl["y"])
-                n_text.setPen(self.green_pen)
+                n_text.setPen(self.ovelay_pen)
 
             except (UnboundLocalError, TypeError, AttributeError):
                 prints_to_console_for_debugging = '''
@@ -888,13 +906,19 @@ class DoImageView(QObject):
             new_pixmap = QPixmap.fromImage(q_img)
             if show_refl:
                 if self.pop_display_menu.rad_but_obs.isChecked():
-                    self.my_scene(new_pixmap, self.r_list0, self.list_temp_mask)
+                    self.my_scene(
+                        new_pixmap, self.r_list0, self.list_temp_mask
+                    )
 
                 else:
-                    self.my_scene(new_pixmap, self.r_list1, self.list_temp_mask)
+                    self.my_scene(
+                        new_pixmap, self.r_list1, self.list_temp_mask
+                    )
 
             else:
-                self.my_scene(new_pixmap, [], self.list_temp_mask)
+                self.my_scene(
+                    new_pixmap, [], self.list_temp_mask
+                )
 
         except (TypeError, AttributeError):
             print("None self.np_full_img")
