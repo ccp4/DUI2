@@ -183,7 +183,7 @@ def single_image_arrange_predic(
     print("z_dept(single_image_arrange_predic) =", z_dept)
 
     img_lst = []
-
+    half_z_dept = float(z_dept) / 2.0
     for i, ref_xyx in enumerate(xyzcal_col):
         x_cord = ref_xyx[0]
         y_cord = ref_xyx[1] + pan_col[i] * 213
@@ -194,8 +194,8 @@ def single_image_arrange_predic(
             for id_num in range(id_col[i]):
                 add_shift += num_of_imgs_n_shift_lst[id_num][0]
 
-            ind_z_ini = int(z_cord + 0.5) - z_dept
-            ind_z_end = int(z_cord + 0.5) + z_dept
+            ind_z_ini = round(z_cord - half_z_dept)
+            ind_z_end = round(z_cord + half_z_dept)
 
             ind_z_ini_shift = ind_z_ini - num_of_imgs_n_shift_lst[id_col[i]][1]
             ind_z_end_shift = ind_z_end - num_of_imgs_n_shift_lst[id_col[i]][1]
@@ -213,8 +213,8 @@ def single_image_arrange_predic(
                 img_lst.append([x_cord, y_cord, local_hkl])
 
         else:
-            ind_z_ini = int(z_cord + 0.5) - z_dept
-            ind_z_end = int(z_cord + 0.5) + z_dept
+            ind_z_ini = round(z_cord - half_z_dept)
+            ind_z_end = round(z_cord + half_z_dept)
             ind_z_ini_shift = ind_z_ini - num_of_imgs_n_shift_lst[0][1]
             ind_z_end_shift = ind_z_end - num_of_imgs_n_shift_lst[0][1]
             if(
