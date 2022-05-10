@@ -303,22 +303,26 @@ class ImgGraphicsScene(QGraphicsScene):
             self.curr_pixmap = self.my_pix_map
 
         self.addPixmap(self.curr_pixmap)
-        for refl in self.refl_list:
-            if self.parent_obj.pop_display_menu.rad_but_obs.isChecked():
+        if self.parent_obj.pop_display_menu.rad_but_obs.isChecked():
+            for refl in self.refl_list:
                 rectangle = QRectF(
                     refl["x"], refl["y"], refl["width"], refl["height"]
                 )
                 self.addRect(rectangle, self.ovelay_pen)
 
-            else:
+        else:
+            z_dept_fl = float(self.parent_obj.pop_display_menu.z_dept_combo.value())
+            max_size = z_dept_fl / 4.0 + 5.0
+            for refl in self.refl_list:
+                paint_size = max_size - refl["z_dist"] * 2.0
                 self.addLine(
-                    refl["x"], refl["y"] - 5.0,
-                    refl["x"], refl["y"] + 5.0,
+                    refl["x"], refl["y"] - paint_size,
+                    refl["x"], refl["y"] + paint_size,
                     self.ovelay_pen
                 )
                 self.addLine(
-                    refl["x"] + 5.0, refl["y"],
-                    refl["x"] - 5.0, refl["y"],
+                    refl["x"] + paint_size, refl["y"],
+                    refl["x"] - paint_size, refl["y"],
                     self.ovelay_pen
                 )
 
@@ -542,6 +546,8 @@ class PopDisplayMenu(QMenu):
 
         self.z_dept_combo = QSpinBox(self)
         self.z_dept_combo.setMinimum(0)
+        self.z_dept_combo.setMaximum(10)
+        self.z_dept_combo.setValue(1)
         self.z_dept_combo.valueChanged.connect(self.sig_new_refl)
         predict_h_layout = QHBoxLayout()
         predict_h_layout.addWidget(self.rad_but_pred)
@@ -851,8 +857,8 @@ class DoImageView(QObject):
                         "x"         : float(inner_dict["x"]),
                         "y"         : float(inner_dict["y"]),
                         "local_hkl" :   str(inner_dict["local_hkl"]),
+                        "z_dist"    : float(inner_dict["z_dist"]),
                     }
-
                 )
 
         except TypeError:

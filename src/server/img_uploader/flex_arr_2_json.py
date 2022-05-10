@@ -210,8 +210,12 @@ def single_image_arrange_predic(
                 if hkl_col[i] == "(0, 0, 0)":
                     hkl_col[i] = "NOT indexed"
 
+                z_dist = abs(z_cord - img_num)
                 img_lst.append(
-                    {"x":x_cord, "y":y_cord, "local_hkl":local_hkl}
+                    {
+                        "x":x_cord, "y":y_cord,
+                        "local_hkl":local_hkl, "z_dist": z_dist
+                    }
                 )
 
         else:
@@ -227,9 +231,15 @@ def single_image_arrange_predic(
                 if hkl_col[i] == "(0, 0, 0)":
                     hkl_col[i] = "NOT indexed"
 
+                z_dist = abs(z_cord - img_num)
                 img_lst.append(
-                    {"x":x_cord, "y":y_cord, "local_hkl":local_hkl}
+                    {
+                        "x":x_cord, "y":y_cord,
+                        "local_hkl":local_hkl, "z_dist": z_dist
+                    }
                 )
+
+
 
     refl_lst = img_lst
     print("len(refl_lst) =", len(refl_lst))
