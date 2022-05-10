@@ -820,14 +820,14 @@ class DoImageView(QObject):
         json_lst = req_tup
         self.r_list0 = []
         try:
-            for inner_list in json_lst:
+            for inner_dict in json_lst:
                 self.r_list0.append(
                     {
-                        "x"         : float(inner_list[0]),
-                        "y"         : float(inner_list[1]),
-                        "width"     : float(inner_list[2]),
-                        "height"    : float(inner_list[3]),
-                        "local_hkl" :   str(inner_list[4]),
+                        "x"         : float(inner_dict["x"]),
+                        "y"         : float(inner_dict["y"]),
+                        "width"     : float(inner_dict["width"]),
+                        "height"    : float(inner_dict["height"]),
+                        "local_hkl" :   str(inner_dict["local_hkl"]),
                     }
                 )
 
@@ -845,13 +845,14 @@ class DoImageView(QObject):
         json_lst = req_tup
         self.r_list1 = []
         try:
-            for inner_list in json_lst:
+            for inner_dict in json_lst:
                 self.r_list1.append(
                     {
-                        "x"         : float(inner_list[0]),
-                        "y"         : float(inner_list[1]),
-                        "local_hkl" :   str(inner_list[2]),
+                        "x"         : float(inner_dict["x"]),
+                        "y"         : float(inner_dict["y"]),
+                        "local_hkl" :   str(inner_dict["local_hkl"]),
                     }
+
                 )
 
         except TypeError:

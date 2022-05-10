@@ -85,13 +85,13 @@ def list_p_arrange_exp(
             if local_hkl == "(0, 0, 0)":
                 local_hkl = "NOT indexed"
 
-        box_dat = []
-        box_dat.append(x_ini)
-        box_dat.append(y_ini)
-        box_dat.append(width)
-        box_dat.append(height)
-        box_dat.append(local_hkl)
-
+        box_dat = {
+            "x"         :x_ini,
+            "y"         :y_ini,
+            "width"     :width,
+            "height"    :height,
+            "local_hkl" :local_hkl,
+        }
         if num_of_imagesets > 1:
             add_shift = 0
             for id_num in range(id_col[i]):
@@ -124,11 +124,11 @@ def get_refl_lst(expt_path, refl_path, img_num):
 
     except IndexError:
         print("\n sending empty reflection (IndexError) \n")
-        return [ [] ]
+        return []
 
     except OSError:
         print("\n sending empty reflection (OSError) \n")
-        return [ [] ]
+        return []
 
     try:
         pan_col = list(map(int, table["panel"]))
@@ -210,7 +210,9 @@ def single_image_arrange_predic(
                 if hkl_col[i] == "(0, 0, 0)":
                     hkl_col[i] = "NOT indexed"
 
-                img_lst.append([x_cord, y_cord, local_hkl])
+                img_lst.append(
+                    {"x":x_cord, "y":y_cord, "local_hkl":local_hkl}
+                )
 
         else:
             ind_z_ini = round(z_cord - half_z_dept)
@@ -225,7 +227,9 @@ def single_image_arrange_predic(
                 if hkl_col[i] == "(0, 0, 0)":
                     hkl_col[i] = "NOT indexed"
 
-                img_lst.append([x_cord, y_cord, local_hkl])
+                img_lst.append(
+                    {"x":x_cord, "y":y_cord, "local_hkl":local_hkl}
+                )
 
     refl_lst = img_lst
     print("len(refl_lst) =", len(refl_lst))
@@ -243,15 +247,15 @@ def get_refl_pred_lst(expt_path, refl_path, img_num, z_dept):
 
     except IndexError:
         print("\n sending empty reflection (IndexError) \n")
-        return [ [] ]
+        return []
 
     except OSError:
         print("\n sending empty reflection (OSError) \n")
-        return [ [] ]
+        return []
 
     except TypeError:
         print("\n sending empty reflection (TypeError) \n")
-        return [ [] ]
+        return []
 
     try:
         pan_col = list(map(int, table["panel"]))
