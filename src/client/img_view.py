@@ -820,7 +820,7 @@ class DoImageView(QObject):
         json_lst = req_tup
         self.r_list0 = []
         try:
-            for inner_list in json_lst[0]:
+            for inner_list in json_lst:
                 self.r_list0.append(
                     {
                         "x"         : float(inner_list[0]),
@@ -845,7 +845,7 @@ class DoImageView(QObject):
         json_lst = req_tup
         self.r_list1 = []
         try:
-            for inner_list in json_lst[0]:
+            for inner_list in json_lst:
                 self.r_list1.append(
                     {
                         "x"         : float(inner_list[0]),

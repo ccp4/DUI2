@@ -161,7 +161,7 @@ def get_refl_lst(expt_path, refl_path, img_num):
             )
 
         try:
-            refl_lst = [box_flat_data_lst[img_num]]
+            refl_lst = box_flat_data_lst[img_num]
             print("len(refl_lst) =", len(refl_lst))
 
         except IndexError:
@@ -172,7 +172,7 @@ def get_refl_lst(expt_path, refl_path, img_num):
 
     except KeyError:
         print("NOT found << bbox_col >> col")
-        return [ [] ]
+        return []
 
 
 def single_image_arrange_predic(
@@ -227,7 +227,7 @@ def single_image_arrange_predic(
 
                 img_lst.append([x_cord, y_cord, local_hkl])
 
-    refl_lst = [img_lst]
+    refl_lst = img_lst
     print("len(refl_lst) =", len(refl_lst))
     return refl_lst
 
