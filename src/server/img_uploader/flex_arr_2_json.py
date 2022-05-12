@@ -186,7 +186,6 @@ def single_image_arrange_predic(
 ):
     print("z_dept(single_image_arrange_predic) =", z_dept)
     img_lst = []
-    half_z_dept = float(z_dept) / 2.0
     for i, ref_xyx in enumerate(xyzcal_col):
         x_cord = ref_xyx[0]
         y_cord = ref_xyx[1] + pan_col[i] * 213
@@ -197,23 +196,14 @@ def single_image_arrange_predic(
             for id_num in range(id_col[i]):
                 add_shift += num_of_imgs_lst[id_num]
 
+            ind_z_shift = round(z_cord) - imgs_shift_lst[id_col[i]] + add_shift
+            z_dist = abs(ind_z_shift - img_num)
 
-            ind_z_ini = round(z_cord - half_z_dept)
-            ind_z_end = round(z_cord + half_z_dept)
-            ind_z_ini_shift = ind_z_ini - imgs_shift_lst[id_col[i]]
-            ind_z_end_shift = ind_z_end - imgs_shift_lst[id_col[i]]
-            ind_z_ini_shift += add_shift
-            ind_z_end_shift += add_shift
-
-            if(
-                ind_z_ini_shift >= 0 and ind_z_end_shift < n_imgs and
-                ind_z_ini_shift <= img_num and ind_z_end_shift >= img_num
-            ):
+            if z_dist < z_dept:
                 local_hkl = hkl_col[i]
                 if hkl_col[i] == "(0, 0, 0)":
                     hkl_col[i] = "NOT indexed"
 
-                z_dist = abs(z_cord - img_num)
                 img_lst.append(
                     {
                         "x":x_cord, "y":y_cord,
@@ -222,19 +212,13 @@ def single_image_arrange_predic(
                 )
 
         else:
-            ind_z_ini = round(z_cord - half_z_dept)
-            ind_z_end = round(z_cord + half_z_dept)
-            ind_z_ini_shift = ind_z_ini - imgs_shift_lst[0]
-            ind_z_end_shift = ind_z_end - imgs_shift_lst[0]
-            if(
-                ind_z_ini_shift >= 0 and ind_z_end_shift < n_imgs and
-                ind_z_ini_shift <= img_num and ind_z_end_shift >= img_num
-            ):
+            ind_z_shift = round(z_cord) - imgs_shift_lst[0]
+            z_dist = abs(ind_z_shift - img_num)
+            if z_dist < z_dept:
                 local_hkl = hkl_col[i]
                 if hkl_col[i] == "(0, 0, 0)":
                     hkl_col[i] = "NOT indexed"
 
-                z_dist = abs(z_cord - img_num)
                 img_lst.append(
                     {
                         "x":x_cord, "y":y_cord,
