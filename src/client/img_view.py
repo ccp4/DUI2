@@ -312,9 +312,10 @@ class ImgGraphicsScene(QGraphicsScene):
 
         else:
             z_dept_fl = float(self.parent_obj.pop_display_menu.z_dept_combo.value())
-            max_size = z_dept_fl / 4.0 + 5.0
+            #max_size = z_dept_fl * 2.0
+            max_size = 5.0
             for refl in self.refl_list:
-                paint_size = max_size - refl["z_dist"] * 2.0
+                paint_size = max_size - refl["z_dist"] * z_dept_fl / 20.0
                 self.addLine(
                     refl["x"], refl["y"] - paint_size,
                     refl["x"], refl["y"] + paint_size,

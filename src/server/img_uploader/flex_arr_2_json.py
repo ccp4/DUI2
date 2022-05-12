@@ -64,7 +64,8 @@ def get_template_info(exp_path, img_num):
 
 def list_p_arrange_exp(
     bbox_col = None, pan_col = None, hkl_col = None, n_imgs = None,
-    num_of_imgs_n_shift_lst = None, id_col = None, num_of_imagesets = 1
+    num_of_imgs_lst = None, imgs_shift_lst = None, id_col = None,
+    num_of_imagesets = 1
 ):
     print("n_imgs(list_p_arrange_exp) =", n_imgs)
     img_lst = []
@@ -95,17 +96,17 @@ def list_p_arrange_exp(
         if num_of_imagesets > 1:
             add_shift = 0
             for id_num in range(id_col[i]):
-                add_shift += num_of_imgs_n_shift_lst[id_num][0]
+                add_shift += num_of_imgs_lst[id_num]
 
             for ind_z in range(ref_box[4], ref_box[5]):
-                ind_z_shift = ind_z - num_of_imgs_n_shift_lst[id_col[i]][1]
+                ind_z_shift = ind_z - imgs_shift_lst[id_col[i]]
                 ind_z_shift += add_shift
                 if ind_z_shift >= 0 and ind_z_shift < n_imgs:
                     img_lst[ind_z_shift].append(box_dat)
 
         else:
             for ind_z in range(ref_box[4], ref_box[5]):
-                ind_z_shift = ind_z - num_of_imgs_n_shift_lst[0][1]
+                ind_z_shift = ind_z - imgs_shift_lst[0]
                 if ind_z_shift >= 0 and ind_z_shift < n_imgs:
                     img_lst[ind_z_shift].append(box_dat)
 
@@ -134,17 +135,20 @@ def get_refl_lst(expt_path, refl_path, img_num):
         pan_col = list(map(int, table["panel"]))
         bbox_col = list(map(list, table["bbox"]))
         id_col = list(map(int, table["id"]))
+        num_of_imgs_lst = []
+        imgs_shift_lst = []
 
-        num_of_imgs_n_shift_lst = []
         n_imgs = 0
         for single_sweep in all_sweeps:
             num_of_imgs = len(single_sweep.indices())
             n_imgs += num_of_imgs
             shift = single_sweep.get_scan().get_image_range()[0] - 1
-            num_of_imgs_n_shift_lst.append((num_of_imgs, shift))
+            num_of_imgs_lst.append(num_of_imgs)
+            imgs_shift_lst.append(shift)
 
         print("n_imgs =", n_imgs)
-        print("num_of_imgs_n_shift_lst =", num_of_imgs_n_shift_lst)
+        print("num_of_imgs_lst =", num_of_imgs_lst)
+        print("imgs_shift_lst =", imgs_shift_lst)
 
         box_flat_data_lst = []
         if n_imgs > 0:
@@ -156,8 +160,8 @@ def get_refl_lst(expt_path, refl_path, img_num):
                 hkl_col = None
 
             box_flat_data_lst = list_p_arrange_exp(
-                bbox_col, pan_col, hkl_col, n_imgs,
-                num_of_imgs_n_shift_lst, id_col, num_of_imagesets
+                bbox_col, pan_col, hkl_col, n_imgs, num_of_imgs_lst,
+                imgs_shift_lst, id_col, num_of_imagesets
             )
 
         try:
@@ -177,11 +181,10 @@ def get_refl_lst(expt_path, refl_path, img_num):
 
 def single_image_arrange_predic(
     xyzcal_col = None, pan_col = None, hkl_col = None, n_imgs = None,
-    num_of_imgs_n_shift_lst = None, id_col = None, num_of_imagesets = 1,
-    z_dept = 1, img_num = None
+    num_of_imgs_lst = None, imgs_shift_lst = None, id_col = None,
+    num_of_imagesets = 1, z_dept = 1, img_num = None
 ):
     print("z_dept(single_image_arrange_predic) =", z_dept)
-
     img_lst = []
     half_z_dept = float(z_dept) / 2.0
     for i, ref_xyx in enumerate(xyzcal_col):
@@ -192,13 +195,13 @@ def single_image_arrange_predic(
         if num_of_imagesets > 1:
             add_shift = 0
             for id_num in range(id_col[i]):
-                add_shift += num_of_imgs_n_shift_lst[id_num][0]
+                add_shift += num_of_imgs_lst[id_num]
+
 
             ind_z_ini = round(z_cord - half_z_dept)
             ind_z_end = round(z_cord + half_z_dept)
-
-            ind_z_ini_shift = ind_z_ini - num_of_imgs_n_shift_lst[id_col[i]][1]
-            ind_z_end_shift = ind_z_end - num_of_imgs_n_shift_lst[id_col[i]][1]
+            ind_z_ini_shift = ind_z_ini - imgs_shift_lst[id_col[i]]
+            ind_z_end_shift = ind_z_end - imgs_shift_lst[id_col[i]]
             ind_z_ini_shift += add_shift
             ind_z_end_shift += add_shift
 
@@ -221,8 +224,8 @@ def single_image_arrange_predic(
         else:
             ind_z_ini = round(z_cord - half_z_dept)
             ind_z_end = round(z_cord + half_z_dept)
-            ind_z_ini_shift = ind_z_ini - num_of_imgs_n_shift_lst[0][1]
-            ind_z_end_shift = ind_z_end - num_of_imgs_n_shift_lst[0][1]
+            ind_z_ini_shift = ind_z_ini - imgs_shift_lst[0]
+            ind_z_end_shift = ind_z_end - imgs_shift_lst[0]
             if(
                 ind_z_ini_shift >= 0 and ind_z_end_shift < n_imgs and
                 ind_z_ini_shift <= img_num and ind_z_end_shift >= img_num
@@ -238,8 +241,6 @@ def single_image_arrange_predic(
                         "local_hkl":local_hkl, "z_dist": z_dist
                     }
                 )
-
-
 
     refl_lst = img_lst
     print("len(refl_lst) =", len(refl_lst))
@@ -272,16 +273,19 @@ def get_refl_pred_lst(expt_path, refl_path, img_num, z_dept):
         xyzcal_col = list(map(list, table["xyzcal.px"]))
         id_col = list(map(int, table["id"]))
 
-        num_of_imgs_n_shift_lst = []
+        num_of_imgs_lst = []
+        imgs_shift_lst = []
         n_imgs = 0
         for single_sweep in all_sweeps:
             num_of_imgs = len(single_sweep.indices())
             n_imgs += num_of_imgs
             shift = single_sweep.get_scan().get_image_range()[0] - 1
-            num_of_imgs_n_shift_lst.append((num_of_imgs, shift))
+            num_of_imgs_lst.append(num_of_imgs)
+            imgs_shift_lst.append(shift)
 
         print("n_imgs =", n_imgs)
-        print("num_of_imgs_n_shift_lst =", num_of_imgs_n_shift_lst)
+        print("num_of_imgs_lst =", num_of_imgs_lst)
+        print("imgs_shift_lst =", imgs_shift_lst)
 
         box_flat_data_lst = []
         if n_imgs > 0:
@@ -293,11 +297,11 @@ def get_refl_pred_lst(expt_path, refl_path, img_num, z_dept):
                 hkl_col = None
 
             box_flat_data_lst = single_image_arrange_predic(
-                xyzcal_col = xyzcal_col, pan_col = pan_col,
-                hkl_col = hkl_col, n_imgs = n_imgs,
-                num_of_imgs_n_shift_lst = num_of_imgs_n_shift_lst,
-                id_col = id_col, num_of_imagesets = num_of_imagesets,
-                z_dept = z_dept, img_num = img_num
+                xyzcal_col = xyzcal_col, pan_col = pan_col, hkl_col = hkl_col,
+                n_imgs = n_imgs, num_of_imgs_lst = num_of_imgs_lst,
+                imgs_shift_lst = imgs_shift_lst, id_col = id_col,
+                num_of_imagesets = num_of_imagesets, z_dept = z_dept,
+                img_num = img_num
             )
 
         return box_flat_data_lst
@@ -305,7 +309,6 @@ def get_refl_pred_lst(expt_path, refl_path, img_num, z_dept):
     except KeyError:
         print("NOT found << xyzcal_col >> col")
         return [ [] ]
-
 
 
 def get_correct_img_num_n_sweep_num(experiments, img_num):
