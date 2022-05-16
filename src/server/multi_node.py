@@ -200,7 +200,7 @@ class CmdNode(object):
                     sol_num = int(lst_in[1])
 
                 except(IndexError, ValueError):
-                    print(" *** ERROR ***")
+                    print(" ***  err catch  ***")
                     print(" wrong solution number, defaulting to 1")
                     sol_num = 1
 
@@ -224,7 +224,7 @@ class CmdNode(object):
                     self.lst2run[-1].append(" " + str(sol_num))
 
             except KeyError:
-                print("KeyError from attempting to reindex")
+                print("Key err catch  from attempting to reindex")
 
         else:
             for expt_2_add in self._lst_expt_in:
@@ -254,7 +254,7 @@ class CmdNode(object):
             )
 
         except FileNotFoundError:
-            print("unable to run:", inner_lst[0], " <<FileNotFoundError>> ")
+            print("unable to run:", inner_lst[0], " <<FileNotFound err catch >> ")
             self.my_proc = None
             return
 
@@ -271,7 +271,7 @@ class CmdNode(object):
                 self.nod_req.wfile.write(bytes(str_nod_num , 'utf-8'))
 
             except BrokenPipeError:
-                print("\n *** BrokenPipeError *** while sending nod_num \n")
+                print("\n << BrokenPipe err catch  >> while sending nod_num \n")
 
         while self.my_proc.poll() is None or new_line != '':
             new_line = self.my_proc.stdout.readline()
@@ -294,14 +294,14 @@ class CmdNode(object):
                 break
 
         if n_Broken_Pipes > 0:
-            print("\n *** BrokenPipeError *** while sending output \n")
+            print("\n << BrokenPipe err catch >> while sending output \n")
 
         self.my_proc.stdout.close()
         if self.my_proc.poll() == 0:
             print("subprocess poll 0")
 
         else:
-            print("\n  *** ERROR *** \n\n poll =", self.my_proc.poll())
+            print("\n  ***  err catch  *** \n\n poll =", self.my_proc.poll())
             self.status = "Failed"
 
         if self.status != "Failed":
@@ -396,7 +396,7 @@ class CmdNode(object):
                 parent_proc.kill()
 
             except BrokenPipeError:
-                print("Broken Pipe Error")
+                print("Broken Pipe  err catch ")
 
             except AttributeError:
                 print("No PID for << None >> process")
@@ -442,7 +442,7 @@ class Runner(object):
                 node2run(uni_cmd, req_obj)
 
             except UnboundLocalError:
-                print("\n *** ERROR *** \n wrong line \n not running")
+                print("\n ***  err catch  *** \n wrong line \n not running")
                 print("uni_cmd =", uni_cmd)
 
             self._save_state()
@@ -553,7 +553,7 @@ class Runner(object):
                         self.step_list[lin2go].stop_me()
 
                     except IndexError:
-                        print("\n error, wrong line not logging \n")
+                        print("\n  err catch , wrong line not logging \n")
 
             else:
                 not_needed_for_now = '''
@@ -624,11 +624,11 @@ if __name__ == "__main__":
             print("\n")
 
         except EOFError:
-            print("Caught << EOFError >> \n  ... interrupting")
+            print("Caught << EOF err catch  >> \n  ... interrupting")
             sys.exit(0)
 
         except:
-            print("Caught << some error >> ... interrupting")
+            print("Caught << some  err catch  >> ... interrupting")
             sys.exit(1)
 
         cmd_dict = str2dic(cmd_str)

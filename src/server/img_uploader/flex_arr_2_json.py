@@ -54,11 +54,11 @@ def get_template_info(exp_path, img_num):
         return [str_json, img_with, img_height, img_path, new_img_num]
 
     except IndexError:
-        print(" *** IndexError in template ***")
+        print(" *** Index err catch  in template ***")
         return
 
     except OverflowError:
-        print(" *** OverflowError in template ***")
+        print(" *** Overflow err catch  in template ***")
         return
 
 
@@ -124,11 +124,11 @@ def get_refl_lst(expt_path, refl_path, img_num):
         table = flex.reflection_table.from_file(refl_path[0])
 
     except IndexError:
-        print("\n sending empty reflection (IndexError) \n")
+        print("\n sending empty reflection (Index err catch ) \n")
         return []
 
     except OSError:
-        print("\n sending empty reflection (OSError) \n")
+        print("\n sending empty reflection (OS err catch ) \n")
         return []
 
     try:
@@ -241,15 +241,15 @@ def get_refl_pred_lst(expt_path, refl_path, img_num, z_dept):
         table = flex.reflection_table.from_file(refl_path)
 
     except IndexError:
-        print("\n sending empty reflection (IndexError) \n")
+        print("\n sending empty reflection (Index err catch ) \n")
         return []
 
     except OSError:
-        print("\n sending empty reflection (OSError) \n")
+        print("\n sending empty reflection (OS err catch ) \n")
         return []
 
     except TypeError:
-        print("\n sending empty reflection (TypeError) \n")
+        print("\n sending empty reflection (Type err catch ) \n")
         return []
 
     try:

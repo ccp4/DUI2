@@ -190,11 +190,11 @@ def main():
                 self.wfile.write(bytes('/*EOF*/', 'utf-8'))
 
             except BrokenPipeError:
-                print("\n ** BrokenPipeError ** while sending EOF or JSON \n")
+                print("\n << BrokenPipe err catch >>  while sending EOF or JSON \n")
 
             except ConnectionResetError:
                 print(
-                    "\n ** ConnectionResetError ** while sending EOF or JSON\n"
+                    "\n << ConnectionReset err catch >> while sending EOF or JSON\n"
                 )
 
     ################################################ PROPER MAIN BROWSER
@@ -254,7 +254,7 @@ def main():
         except OSError:
             launch_success = False
 
-            print("OSError, trying again in",  n_secs, "secs")
+            print("OS err catch , trying again in",  n_secs, "secs")
             time.sleep(n_secs)
 
 

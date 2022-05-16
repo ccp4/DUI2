@@ -598,7 +598,7 @@ class MainObject(QObject):
             label2update = get_label_from_str_list(lst_log_lines)
 
         except TypeError:
-            label2update = "Error Loading Log"
+            label2update = " Error Loading Log"
 
         self.window.ReindexHeaderLabel.setText(label2update)
 

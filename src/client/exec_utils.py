@@ -79,7 +79,7 @@ def json_data_request(url, cmd):
             json_out = json.loads(str_lst)
 
     except ConnectionError:
-        print(" ... ConnectionError (json_data_request) ...")
+        print(" ... Connection err catch  (json_data_request) ...")
         json_out = None
 
     except requests.exceptions.RequestException:
@@ -119,11 +119,11 @@ class Mtz_Data_Request(QThread):
             print("type(mtz_data) =", type(mtz_data))
 
         except zlib.error:
-            print("zlib.error(Mtz_Data_Request)")
+            print("zlib. err catch(Mtz_Data_Request)")
             mtz_data = None
 
         except ConnectionError:
-            print("\n ConnectionError (Mtz_Data_Request) \n")
+            print("\n Connection err catch (Mtz_Data_Request) \n")
             mtz_data = None
 
         except requests.exceptions.RequestException:
@@ -164,7 +164,7 @@ class Run_n_Output(QThread):
                     self.first_line.emit(self.number)
 
                 except IndexError:
-                    print("\n *** Run_n_Output ... IndexError *** \n")
+                    print("\n *** Run_n_Output ... Index err catch *** \n")
                     not_yet_read = True
 
             else:

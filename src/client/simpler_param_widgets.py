@@ -561,7 +561,7 @@ class ImportWidget(QWidget):
             self.state_label.setText(input_parmeter)
 
         except IndexError:
-            print(" Not copying parameters from node (IndexError)")
+            print(" Not copying parameters from node (Index err catch )")
             self.imp_txt.setText("")
             self.state_label.setText("...")
 
@@ -1171,7 +1171,7 @@ class ExportWidget(QWidget):
             self.exp_txt.setText(inp_val)
 
         except IndexError:
-            print(" Not copying parameters from node (IndexError)")
+            print(" Not copying parameters from node (Index err catch )")
             self.exp_txt.setText("")
 
     def set_download_stat(self, do_enable = False, nod_num = None):

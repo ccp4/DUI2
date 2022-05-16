@@ -130,11 +130,11 @@ class LoadSliceMaskImage(QThread):
             np_array_out = arr_1d.reshape(d1, d2)
 
         except zlib.error:
-            print("zlib.error(load_slice_mask_img_json)")
+            print("zlib. err catch (load_slice_mask_img_json)")
             np_array_out = None
 
         except ConnectionError:
-            print("\n ConnectionError (load_slice_mask_img_json) \n")
+            print("\n Connection err catch (load_slice_mask_img_json) \n")
             np_array_out = None
 
         except requests.exceptions.RequestException:
@@ -145,7 +145,7 @@ class LoadSliceMaskImage(QThread):
 
         except json.decoder.JSONDecodeError:
             print(
-                "\n json.decoder.JSONDecodeError (load_slice_mask_img_json) \n"
+                "\n json.decoder.JSONDecode err catch (load_slice_mask_img_json) \n"
             )
             np_array_out = None
 
@@ -247,11 +247,11 @@ class LoadSliceImage(QThread):
             np_array_out = arr_1d.reshape(d1, d2)
 
         except zlib.error:
-            print("zlib.error(load_slice_img_json)")
+            print("zlib. err catch (load_slice_img_json)")
             np_array_out = None
 
         except ConnectionError:
-            print("\n ConnectionError (load_slice_img_json) \n")
+            print("\n Connection err catch (load_slice_img_json) \n")
             np_array_out = None
 
         except requests.exceptions.RequestException:
@@ -262,7 +262,7 @@ class LoadSliceImage(QThread):
 
         except json.decoder.JSONDecodeError:
             print(
-                "\n json.decoder.JSONDecodeError (load_slice_img_json) \n"
+                "\n json.decoder.JSONDecode err catch (load_slice_img_json) \n"
             )
             np_array_out = None
 
@@ -841,10 +841,10 @@ class DoImageView(QObject):
                 )
 
         except TypeError:
-            print("No reflection list to show (TypeError except)")
+            print("No reflection list to show (Type err catch except)")
 
         except IndexError:
-            print("No reflection list to show (IndexError except)")
+            print("No reflection list to show (Index err catch except)")
 
         self.refresh_img_n_refl()
 
@@ -863,10 +863,10 @@ class DoImageView(QObject):
                 )
 
         except TypeError:
-            print("No reflection << predict >> to show (TypeError except)")
+            print("No reflection << predict >> to show (Type err catch except)")
 
         except IndexError:
-            print("No reflection << predict >> to show (IndexError except)")
+            print("No reflection << predict >> to show (Index err catch except)")
 
         self.refresh_img_n_refl()
 

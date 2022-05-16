@@ -280,7 +280,7 @@ def get_par(par_def, lst_in):
             break
 
     if(lng_n1 == None):
-        print("Error 01")
+        print("err catch 01")
         return tup2dict(par_def)
 
     elif(lng_n1 == 1):
@@ -295,7 +295,7 @@ def get_par(par_def, lst_in):
                     par_out[pos][1] = lf_rg_lst[1]
 
     else:
-        print("Error 02")
+        print("err catch 02")
         return tup2dict(par_def)
 
     #TODO there is no way to check if the only argument is not the first one

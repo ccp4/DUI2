@@ -56,7 +56,7 @@ def main():
                 self.send_header('Content-type', 'text/plain')
                 self.end_headers()
                 self.wfile.write(bytes(
-                    'no command in request (KeyError) \n', 'utf-8'
+                    'no command in request (Key err catch ) \n', 'utf-8'
                 ))
                 self.wfile.write(bytes('/*EOF*/', 'utf-8'))
                 return
@@ -83,11 +83,11 @@ def main():
 
 
             except BrokenPipeError:
-                print("\n** BrokenPipeError ** while sending EOF or JSON\n")
+                print("\n** BrokenPipe err catch  ** while sending EOF or JSON\n")
 
             except ConnectionResetError:
                 print(
-                    "\n** ConnectionResetError ** while sending EOF or JSON\n"
+                    "\n** ConnectionReset err catch  ** while sending EOF or JSON\n"
                 )
 
         def do_GET(self):
@@ -101,7 +101,7 @@ def main():
                 print("tmp_cmd2lst =", tmp_cmd2lst)
 
             except KeyError:
-                print("no command in request (KeyError)")
+                print("no command in request (Key err catch )")
                 self.send_header('Content-type', 'text/plain')
                 self.end_headers()
                 self.wfile.write(bytes(
@@ -172,11 +172,11 @@ def main():
                 self.wfile.write(bytes('/*EOF*/', 'utf-8'))
 
             except BrokenPipeError:
-                print("\n ** BrokenPipeError ** while sending EOF or JSON \n")
+                print("\n ** BrokenPipe err catch  ** while sending EOF or JSON \n")
 
             except ConnectionResetError:
                 print(
-                    "\n ** ConnectionResetError ** while sending EOF or JSON\n"
+                    "\n ** ConnectionReset err catch  ** while sending EOF or JSON\n"
                 )
 
     ################################################ PROPER MAIN
@@ -249,7 +249,7 @@ def main():
 
         except OSError:
             launch_success = False
-            print("OSError, trying again in",  n_secs, "secs")
+            print("OS err catch , trying again in",  n_secs, "secs")
             time.sleep(n_secs)
 
 

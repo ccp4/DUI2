@@ -168,7 +168,7 @@ class DoLoadHTML(QObject):
                         )
 
                 except ConnectionError:
-                    print("\n ConnectionError (DoLoadHTML) \n")
+                    print("\n Connection err catch (DoLoadHTML) \n")
                     full_file = ''
 
                 except requests.exceptions.RequestException:
@@ -176,7 +176,7 @@ class DoLoadHTML(QObject):
                     full_file = self.failed_html
 
                 except zlib.error:
-                    print("\n zlib.error (DoLoadHTML) \n")
+                    print("\n zlib. err catch (DoLoadHTML) \n")
                     full_file = self.not_avail_html
 
             if len(full_file) < 5:
