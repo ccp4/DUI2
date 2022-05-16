@@ -290,7 +290,7 @@ class ImgGraphicsScene(QGraphicsScene):
         self.curr_pixmap = None
         self.my_mask_pix_map = None
 
-        self.ovelay_pen = QPen(
+        self.overlay_pen = QPen(
             Qt.white, 0.8, Qt.SolidLine,
             Qt.RoundCap, Qt.RoundJoin
         )
@@ -308,7 +308,7 @@ class ImgGraphicsScene(QGraphicsScene):
                 rectangle = QRectF(
                     refl["x"], refl["y"], refl["width"], refl["height"]
                 )
-                self.addRect(rectangle, self.ovelay_pen)
+                self.addRect(rectangle, self.overlay_pen)
 
         else:
             z_dept_fl = float(self.parent_obj.pop_display_menu.z_dept_combo.value())
@@ -318,12 +318,12 @@ class ImgGraphicsScene(QGraphicsScene):
                 self.addLine(
                     refl["x"], refl["y"] - paint_size,
                     refl["x"], refl["y"] + paint_size,
-                    self.ovelay_pen
+                    self.overlay_pen
                 )
                 self.addLine(
                     refl["x"] + paint_size, refl["y"],
                     refl["x"] - paint_size, refl["y"],
-                    self.ovelay_pen
+                    self.overlay_pen
                 )
 
         if self.my_mask_pix_map is not None:
@@ -350,14 +350,14 @@ class ImgGraphicsScene(QGraphicsScene):
                     rectangle = QRectF(
                         lst_num[0], lst_num[2], tmp_width, tmp_height
                     )
-                    self.addRect(rectangle, self.ovelay_pen)
+                    self.addRect(rectangle, self.overlay_pen)
 
                 elif pict[0] == 'untrusted.circle':
                     rectangle = QRectF(
                         lst_num[0] - lst_num[2], lst_num[1] - lst_num[2],
                         2 * lst_num[2], 2 * lst_num[2]
                     )
-                    self.addEllipse(rectangle, self.ovelay_pen)
+                    self.addEllipse(rectangle, self.overlay_pen)
 
                 elif pict[0] == 'untrusted.polygon':
                     siz_n_blk = (len(lst_num) - 2) / 2
@@ -366,7 +366,7 @@ class ImgGraphicsScene(QGraphicsScene):
                             self.addLine(
                                 lst_num[i * 2], lst_num[i * 2 + 1],
                                 lst_num[i * 2 + 2], lst_num[i * 2 + 3],
-                                self.ovelay_pen
+                                self.overlay_pen
                             )
 
         except TypeError:
@@ -390,7 +390,7 @@ class ImgGraphicsScene(QGraphicsScene):
         elif self.parent_obj.palette == "invert":
             overlay_colour = Qt.blue
 
-        self.ovelay_pen = QPen(
+        self.overlay_pen = QPen(
             overlay_colour, 0.8, Qt.SolidLine,
             Qt.RoundCap, Qt.RoundJoin
         )
@@ -401,7 +401,7 @@ class ImgGraphicsScene(QGraphicsScene):
             for refl in self.refl_list:
                 n_text = self.addSimpleText(str(refl["local_hkl"]))
                 n_text.setPos(refl["x"], refl["y"])
-                n_text.setPen(self.ovelay_pen)
+                n_text.setPen(self.overlay_pen)
 
         self.draw_temp_mask()
 
@@ -440,7 +440,7 @@ class ImgGraphicsScene(QGraphicsScene):
                 refl = self.refl_list[pos_min]
                 n_text = self.addSimpleText(str(refl["local_hkl"]))
                 n_text.setPos(refl["x"], refl["y"])
-                n_text.setPen(self.ovelay_pen)
+                n_text.setPen(self.overlay_pen)
 
             except (UnboundLocalError, TypeError, AttributeError):
                 prints_to_console_for_debugging = '''
@@ -798,6 +798,9 @@ class DoImageView(QObject):
 
         elif self.nod_or_path is False:
             print("No reflection list to show (known not to be)")
+            self.r_list0 = []
+            self.r_list1 = []
+            self.refresh_img_n_refl()
 
         if self.nod_or_path is not False:
             print("requesting reflection list (cmd=", my_cmd, ")")
@@ -843,9 +846,7 @@ class DoImageView(QObject):
         except IndexError:
             print("No reflection list to show (IndexError except)")
 
-        self.refresh_pixel_map()
-        if not self.easter_egg_active:
-            self.full_img_show()
+        self.refresh_img_n_refl()
 
     def after_requesting_predict_lst(self, req_tup):
         json_lst = req_tup
@@ -867,6 +868,9 @@ class DoImageView(QObject):
         except IndexError:
             print("No reflection << predict >> to show (IndexError except)")
 
+        self.refresh_img_n_refl()
+
+    def refresh_img_n_refl(self):
         self.refresh_pixel_map()
         if not self.easter_egg_active:
             self.full_img_show()
@@ -1333,7 +1337,7 @@ class DoImageView(QObject):
                     tmp_width = x1 - x2
                     tmp_height = y1 - y2
                     rectangle = QRectF(x2, y2, tmp_width, tmp_height)
-                    self.my_scene.addRect(rectangle, self.my_scene.green_pen)
+                    self.my_scene.addRect(rectangle, self.my_scene.overlay_pen)
 
                 elif self.mask_comp == "circ":
                     dx = float(x_pos - self.mask_x_ini)
@@ -1343,11 +1347,11 @@ class DoImageView(QObject):
                         self.mask_x_ini - r, self.mask_y_ini - r, 2 * r, 2 * r
                     )
                     self.my_scene.addEllipse(
-                        rectangle, self.my_scene.green_pen
+                        rectangle, self.my_scene.overlay_pen
                     )
                     self.my_scene.addLine(
                         self.mask_x_ini, self.mask_y_ini, x_pos,
-                        y_pos, self.my_scene.green_pen
+                        y_pos, self.my_scene.overlay_pen
                     )
 
                 elif self.mask_comp == "poly":
@@ -1357,7 +1361,7 @@ class DoImageView(QObject):
 
                     self.my_scene.addLine(
                         self.mask_x_ini, self.mask_y_ini, x_pos,
-                        y_pos, self.my_scene.green_pen
+                        y_pos, self.my_scene.overlay_pen
                     )
 
     def on_mouse_press(self, x_pos, y_pos):
