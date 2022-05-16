@@ -545,8 +545,8 @@ class PopDisplayMenu(QMenu):
         self.rad_but_pred.clicked.connect(self.sig_new_refl)
 
         self.z_dept_combo = QSpinBox(self)
-        self.z_dept_combo.setMinimum(0)
-        self.z_dept_combo.setMaximum(10)
+        self.z_dept_combo.setMinimum(1)
+        self.z_dept_combo.setMaximum(7)
         self.z_dept_combo.setValue(1)
         self.z_dept_combo.valueChanged.connect(self.sig_new_refl)
         predict_h_layout = QHBoxLayout()

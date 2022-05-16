@@ -531,9 +531,13 @@ class MainObject(QObject):
     def on_node_click(self, node_numb):
         if (
             self.new_node is not None and
+
             node_numb != self.curr_nod_num and
+            node_numb != self.new_node.number and
             self.window.NodeSelecCheck.checkState() and
-            self.curr_widg_key == "combine_experiments"
+            self.server_nod_lst[node_numb]["status"] == "Succeeded" and
+            #self.curr_widg_key == "combine_experiments" and
+            self.new_node.m_cmd_lst == ["dials.combine_experiments"]
         ):
             self.new_node.add_or_remove_parent(node_numb)
             self.display()
