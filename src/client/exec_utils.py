@@ -39,7 +39,7 @@ except ModuleNotFoundError:
     import format_utils
 
 
-def build_advanced_params_widget(cmd_str):
+def build_advanced_params_widget(cmd_str, h_box_search):
     cmd = {"nod_lst":"", "cmd_lst":[cmd_str]}
 
     data_init = ini_data()
@@ -50,7 +50,7 @@ def build_advanced_params_widget(cmd_str):
     lin_lst = format_utils.param_tree_2_lineal(lst_params)
     par_def = lin_lst()
     advanced_parameters = AdvancedParameters()
-    advanced_parameters.build_pars(par_def)
+    advanced_parameters.build_pars(par_def, h_box_search)
     return advanced_parameters
 
 

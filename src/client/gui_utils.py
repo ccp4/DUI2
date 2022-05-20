@@ -172,17 +172,25 @@ class AdvancedParameters(QWidget):
         self.font_point_size = sys_font.pointSize()
         self.setLayout(self.main_vbox)
 
-    def build_pars(self, lst_phil_obj):
+    def build_pars(self, lst_phil_obj, h_box_search):
+
+        h_box_search.addWidget(QLabel("Search:"))
+        self.search_input = QLineEdit()
+        self.search_input.textChanged.connect(self.search_changed)
+        h_box_search.addWidget(self.search_input)
+
         self.lst_par_line = lst_phil_obj
         print("Hi from build_pars")
+        self.norm_labl_font = QFont(
+            "Monospace", self.font_point_size, QFont.Bold
+        )
+
         for data_info in self.lst_par_line:
             label_str = "    " * data_info["indent"]
             label_str += data_info["name"]
             new_label = QLabel(label_str)
             new_label.setAutoFillBackground(True)
-            new_label.setFont(
-                QFont("Monospace", self.font_point_size, QFont.Bold)
-            )
+            new_label.setFont(self.norm_labl_font)
             data_info["Label"] = new_label
             new_hbox = QHBoxLayout()
 
@@ -321,6 +329,22 @@ class AdvancedParameters(QWidget):
             elif data_info["type"] == "other(s)":
                 par_str = str(data_info["default"])
                 data_info["widget"].setText(par_str)
+
+    def search_changed(self):
+        sender = self.sender()
+        str_value = str(sender.text())
+        print("searching for:", str_value)
+        for widget in self.children():
+            widget_path = None
+            if isinstance(widget, QLabel):
+                labl_text = str(widget.text())
+                if str_value in labl_text:
+                    widget.setFont(
+                        QFont("Monospace", self.font_point_size + 5, QFont.Bold)
+                    )
+
+                else:
+                    widget.setFont(self.norm_labl_font)
 
 
 def draw_quadratic_bezier_3_points(

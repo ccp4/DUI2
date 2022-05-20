@@ -93,7 +93,7 @@
                  </font>
                 </property>
                 <property name="currentIndex">
-                 <number>6</number>
+                 <number>11</number>
                 </property>
                 <widget class="QWidget" name="RootPage">
                  <layout class="QGridLayout" name="gridLayout_33">
@@ -107,8 +107,8 @@
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>84</width>
-                       <height>16</height>
+                       <width>256</width>
+                       <height>337</height>
                       </rect>
                      </property>
                     </widget>
@@ -128,8 +128,8 @@
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>84</width>
-                       <height>16</height>
+                       <width>256</width>
+                       <height>337</height>
                       </rect>
                      </property>
                     </widget>
@@ -149,8 +149,8 @@
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>84</width>
-                       <height>16</height>
+                       <width>256</width>
+                       <height>337</height>
                       </rect>
                      </property>
                     </widget>
@@ -180,8 +180,8 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>84</width>
-                           <height>16</height>
+                           <width>236</width>
+                           <height>288</height>
                           </rect>
                          </property>
                         </widget>
@@ -194,7 +194,7 @@
                       <string>Advanced</string>
                      </attribute>
                      <layout class="QGridLayout" name="gridLayout_3">
-                      <item row="0" column="0">
+                      <item row="1" column="0">
                        <widget class="QScrollArea" name="FindspotsAdvancedScrollArea">
                         <property name="widgetResizable">
                          <bool>true</bool>
@@ -204,12 +204,15 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>84</width>
-                           <height>16</height>
+                           <width>236</width>
+                           <height>280</height>
                           </rect>
                          </property>
                         </widget>
                        </widget>
+                      </item>
+                      <item row="0" column="0">
+                       <layout class="QHBoxLayout" name="FindspotsSearchLayout"/>
                       </item>
                      </layout>
                     </widget>
@@ -239,8 +242,8 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>84</width>
-                           <height>16</height>
+                           <width>236</width>
+                           <height>288</height>
                           </rect>
                          </property>
                         </widget>
@@ -253,7 +256,7 @@
                       <string>Advanced</string>
                      </attribute>
                      <layout class="QGridLayout" name="gridLayout_5">
-                      <item row="0" column="0">
+                      <item row="1" column="0">
                        <widget class="QScrollArea" name="IndexAdvancedScrollArea">
                         <property name="widgetResizable">
                          <bool>true</bool>
@@ -263,12 +266,15 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>84</width>
-                           <height>16</height>
+                           <width>236</width>
+                           <height>280</height>
                           </rect>
                          </property>
                         </widget>
                        </widget>
+                      </item>
+                      <item row="0" column="0">
+                       <layout class="QHBoxLayout" name="IndexSearchLayout"/>
                       </item>
                      </layout>
                     </widget>
@@ -298,8 +304,8 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>84</width>
-                           <height>16</height>
+                           <width>236</width>
+                           <height>288</height>
                           </rect>
                          </property>
                         </widget>
@@ -312,7 +318,7 @@
                       <string>Advanced</string>
                      </attribute>
                      <layout class="QGridLayout" name="gridLayout_7">
-                      <item row="0" column="0">
+                      <item row="1" column="0">
                        <widget class="QScrollArea" name="RefineBravaiAdvancedScrollArea">
                         <property name="widgetResizable">
                          <bool>true</bool>
@@ -322,12 +328,15 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>84</width>
-                           <height>16</height>
+                           <width>236</width>
+                           <height>280</height>
                           </rect>
                          </property>
                         </widget>
                        </widget>
+                      </item>
+                      <item row="0" column="0">
+                       <layout class="QHBoxLayout" name="RefineBravaisSearchLayout"/>
                       </item>
                      </layout>
                     </widget>
@@ -348,7 +357,7 @@
                        <x>0</x>
                        <y>0</y>
                        <width>256</width>
-                       <height>311</height>
+                       <height>316</height>
                       </rect>
                      </property>
                     </widget>
@@ -385,8 +394,8 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>84</width>
-                           <height>16</height>
+                           <width>236</width>
+                           <height>288</height>
                           </rect>
                          </property>
                         </widget>
@@ -399,7 +408,7 @@
                       <string>Advanced</string>
                      </attribute>
                      <layout class="QGridLayout" name="gridLayout_9">
-                      <item row="0" column="0">
+                      <item row="1" column="0">
                        <widget class="QScrollArea" name="RefineAdvancedScrollArea">
                         <property name="widgetResizable">
                          <bool>true</bool>
@@ -409,12 +418,15 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>84</width>
-                           <height>16</height>
+                           <width>236</width>
+                           <height>280</height>
                           </rect>
                          </property>
                         </widget>
                        </widget>
+                      </item>
+                      <item row="0" column="0">
+                       <layout class="QHBoxLayout" name="RefineSearchLayout"/>
                       </item>
                      </layout>
                     </widget>
@@ -444,8 +456,8 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>84</width>
-                           <height>16</height>
+                           <width>236</width>
+                           <height>288</height>
                           </rect>
                          </property>
                         </widget>
@@ -458,7 +470,7 @@
                       <string>Advanced</string>
                      </attribute>
                      <layout class="QGridLayout" name="gridLayout_11">
-                      <item row="0" column="0">
+                      <item row="1" column="0">
                        <widget class="QScrollArea" name="IntegrateAdvancedScrollArea">
                         <property name="widgetResizable">
                          <bool>true</bool>
@@ -468,12 +480,15 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>84</width>
-                           <height>16</height>
+                           <width>236</width>
+                           <height>280</height>
                           </rect>
                          </property>
                         </widget>
                        </widget>
+                      </item>
+                      <item row="0" column="0">
+                       <layout class="QHBoxLayout" name="IntegrateSearchLayout"/>
                       </item>
                      </layout>
                     </widget>
@@ -503,8 +518,8 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>84</width>
-                           <height>16</height>
+                           <width>236</width>
+                           <height>288</height>
                           </rect>
                          </property>
                         </widget>
@@ -517,7 +532,7 @@
                       <string>Advanced</string>
                      </attribute>
                      <layout class="QGridLayout" name="gridLayout_13">
-                      <item row="0" column="0">
+                      <item row="1" column="0">
                        <widget class="QScrollArea" name="SymmetryAdvancedScrollArea">
                         <property name="widgetResizable">
                          <bool>true</bool>
@@ -527,12 +542,15 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>84</width>
-                           <height>16</height>
+                           <width>236</width>
+                           <height>280</height>
                           </rect>
                          </property>
                         </widget>
                        </widget>
+                      </item>
+                      <item row="0" column="0">
+                       <layout class="QHBoxLayout" name="SymetrySearchLayout"/>
                       </item>
                      </layout>
                     </widget>
@@ -562,8 +580,8 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>84</width>
-                           <height>16</height>
+                           <width>236</width>
+                           <height>288</height>
                           </rect>
                          </property>
                         </widget>
@@ -576,7 +594,7 @@
                       <string>Advanced</string>
                      </attribute>
                      <layout class="QGridLayout" name="gridLayout_15">
-                      <item row="0" column="0">
+                      <item row="1" column="0">
                        <widget class="QScrollArea" name="ScaleAdvancedScrollArea">
                         <property name="widgetResizable">
                          <bool>true</bool>
@@ -586,12 +604,15 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>84</width>
-                           <height>16</height>
+                           <width>236</width>
+                           <height>280</height>
                           </rect>
                          </property>
                         </widget>
                        </widget>
+                      </item>
+                      <item row="0" column="0">
+                       <layout class="QHBoxLayout" name="ScaleSearchLayout"/>
                       </item>
                      </layout>
                     </widget>
@@ -621,8 +642,8 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>84</width>
-                           <height>16</height>
+                           <width>236</width>
+                           <height>251</height>
                           </rect>
                          </property>
                         </widget>
@@ -635,7 +656,7 @@
                       <string>Advanced</string>
                      </attribute>
                      <layout class="QGridLayout" name="gridLayout_17">
-                      <item row="0" column="0">
+                      <item row="1" column="0">
                        <widget class="QScrollArea" name="CombineAdvancedScrollArea">
                         <property name="widgetResizable">
                          <bool>true</bool>
@@ -645,12 +666,15 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>84</width>
-                           <height>16</height>
+                           <width>236</width>
+                           <height>243</height>
                           </rect>
                          </property>
                         </widget>
                        </widget>
+                      </item>
+                      <item row="0" column="0">
+                       <layout class="QHBoxLayout" name="CombineSearchLayout"/>
                       </item>
                      </layout>
                     </widget>
@@ -687,8 +711,8 @@
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>84</width>
-                       <height>16</height>
+                       <width>96</width>
+                       <height>26</height>
                       </rect>
                      </property>
                     </widget>
