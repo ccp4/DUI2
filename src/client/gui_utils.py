@@ -334,16 +334,21 @@ class AdvancedParameters(QWidget):
         sender = self.sender()
         str_value = str(sender.text())
         print("searching for:", str_value)
-        for widget in self.children():
-            widget_path = None
-            if isinstance(widget, QLabel):
-                labl_text = str(widget.text())
-                if str_value in labl_text:
-                    widget.setFont(
-                        QFont("Monospace", self.font_point_size + 5, QFont.Bold)
-                    )
+        if len(str_value) > 1:
+            for widget in self.children():
+                if isinstance(widget, QLabel):
+                    labl_text = str(widget.text())
+                    if str_value in labl_text:
+                        widget.setFont(
+                            QFont("Monospace", self.font_point_size + 5, QFont.Bold)
+                        )
 
-                else:
+                    else:
+                        widget.setFont(self.norm_labl_font)
+
+        else:
+            for widget in self.children():
+                if isinstance(widget, QLabel):
                     widget.setFont(self.norm_labl_font)
 
 
