@@ -324,6 +324,19 @@ class CmdNode(object):
         if self._lst_refl_out == []:
             self._lst_refl_out = list(self._lst_refl_in)
 
+        ###########################################################################
+        new_line = "START ... << Gen HTML repor + Gen reflection predicts >>\n"
+        if self.nod_req is not None:
+            try:
+                self.nod_req.wfile.write(bytes(new_line , 'utf-8'))
+
+            except BrokenPipeError:
+                n_Broken_Pipes += 1
+
+        else:
+            print(new_line[:-1])
+        ###########################################################################
+
         # running HTML report generation
         rep_lst_dat_in = ['dials.report']
         for expt_2_add in self._lst_expt_out:
@@ -382,6 +395,21 @@ class CmdNode(object):
         tmp_predic_path = self._run_dir + "/predicted.refl"
         if os.path.exists(tmp_predic_path):
             self._predic_refl = tmp_predic_path
+
+
+        ###########################################################################
+        new_line = "<< Gen HTML repor + Gen reflection predicts >> ... END \n"
+        if self.nod_req is not None:
+            try:
+                self.nod_req.wfile.write(bytes(new_line , 'utf-8'))
+
+            except BrokenPipeError:
+                n_Broken_Pipes += 1
+
+        else:
+            print(new_line[:-1])
+        ###########################################################################
+
 
     def stop_me(self):
         print("node", self.number, "status:", self.status)
