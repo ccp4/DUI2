@@ -104,6 +104,20 @@ def unalias_full_cmd(lst_in):
     return new_full_lst
 
 
+def add_log_line(new_line, nod_req):
+    if nod_req is not None:
+        try:
+            nod_req.wfile.write(bytes(new_line , 'utf-8'))
+            Error_Broken_Pipes = 0
+
+        except BrokenPipeError:
+            Error_Broken_Pipes = 1
+
+    else:
+        print(new_line[:-1])
+
+    return Error_Broken_Pipes
+
 
 class CmdNode(object):
     def __init__(self, parent_lst_in = None):
@@ -275,16 +289,7 @@ class CmdNode(object):
 
         while self.my_proc.poll() is None or new_line != '':
             new_line = self.my_proc.stdout.readline()
-            if self.nod_req is not None:
-                try:
-                    self.nod_req.wfile.write(bytes(new_line , 'utf-8'))
-
-                except BrokenPipeError:
-                    n_Broken_Pipes += 1
-
-            else:
-                print(new_line[:-1])
-
+            n_Broken_Pipes += add_log_line(new_line, self.nod_req)
             log_line_lst.append(new_line[:-1])
 
         for inv_pos in range(1, len(log_line_lst)):
@@ -324,18 +329,8 @@ class CmdNode(object):
         if self._lst_refl_out == []:
             self._lst_refl_out = list(self._lst_refl_in)
 
-        ###########################################################################
         new_line = "START ... << Gen HTML repor + Gen reflection predicts >>\n"
-        if self.nod_req is not None:
-            try:
-                self.nod_req.wfile.write(bytes(new_line , 'utf-8'))
-
-            except BrokenPipeError:
-                n_Broken_Pipes += 1
-
-        else:
-            print(new_line[:-1])
-        ###########################################################################
+        n_Broken_Pipes += add_log_line(new_line, self.nod_req)
 
         # running HTML report generation
         rep_lst_dat_in = ['dials.report']
@@ -346,8 +341,11 @@ class CmdNode(object):
             rep_lst_dat_in.append(refl_2_add)
 
         print("\n running:", rep_lst_dat_in, "\n")
-        lst_rep_out = []
 
+        new_line = "Generating HTML report\n"
+        n_Broken_Pipes += add_log_line(new_line, self.nod_req)
+
+        lst_rep_out = []
         rep_proc = subprocess.Popen(
             rep_lst_dat_in,
             shell = False,
@@ -364,6 +362,10 @@ class CmdNode(object):
         # in case needed there is the output of the report here:
         #print("report stdout <<< \n", lst_rep_out, "\n >>>")
 
+        new_line = "Done\n"
+        n_Broken_Pipes += add_log_line(new_line, self.nod_req)
+
+
         tmp_html_path = self._run_dir + "/dials.report.html"
         if os.path.exists(tmp_html_path):
             self._html_rep = tmp_html_path
@@ -374,8 +376,11 @@ class CmdNode(object):
             pred_lst_dat_in.append(expt_2_add)
 
         print("\n running:", pred_lst_dat_in, "\n")
-        lst_pred_out = []
 
+        new_line = "Generating Predictions\n"
+        n_Broken_Pipes += add_log_line(new_line, self.nod_req)
+
+        lst_pred_out = []
         pred_proc = subprocess.Popen(
             pred_lst_dat_in,
             shell = False,
@@ -392,24 +397,15 @@ class CmdNode(object):
         # in case needed there is the output of the prediction here:
         #print("predict stdout <<< \n", lst_pred_out, "\n >>>")
 
+        new_line = "Done\n"
+        n_Broken_Pipes += add_log_line(new_line, self.nod_req)
+
         tmp_predic_path = self._run_dir + "/predicted.refl"
         if os.path.exists(tmp_predic_path):
             self._predic_refl = tmp_predic_path
 
-
-        ###########################################################################
-        new_line = "<< Gen HTML repor + Gen reflection predicts >> ... END \n"
-        if self.nod_req is not None:
-            try:
-                self.nod_req.wfile.write(bytes(new_line , 'utf-8'))
-
-            except BrokenPipeError:
-                n_Broken_Pipes += 1
-
-        else:
-            print(new_line[:-1])
-        ###########################################################################
-
+        new_line = "<< Gen HTML repor + Gen reflection predicts >> ... END\n"
+        n_Broken_Pipes += add_log_line(new_line, self.nod_req)
 
     def stop_me(self):
         print("node", self.number, "status:", self.status)
