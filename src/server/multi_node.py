@@ -105,6 +105,9 @@ def unalias_full_cmd(lst_in):
 
 
 def add_log_line(new_line, nod_req):
+    if new_line[-1:] != "\n":
+        new_line += "\n"
+
     if nod_req is not None:
         try:
             nod_req.wfile.write(bytes(new_line , 'utf-8'))
@@ -329,7 +332,7 @@ class CmdNode(object):
         if self._lst_refl_out == []:
             self._lst_refl_out = list(self._lst_refl_in)
 
-        new_line = "START ... << Gen HTML repor + Gen reflection predicts >>\n"
+        new_line = "HTML Report + Reflection Prediction ... START"
         n_Broken_Pipes += add_log_line(new_line, self.nod_req)
 
         # running HTML report generation
@@ -342,7 +345,7 @@ class CmdNode(object):
 
         print("\n running:", rep_lst_dat_in, "\n")
 
-        new_line = "Generating HTML report\n"
+        new_line = "Generating HTML report"
         n_Broken_Pipes += add_log_line(new_line, self.nod_req)
 
         lst_rep_out = []
@@ -362,13 +365,16 @@ class CmdNode(object):
         # in case needed there is the output of the report here:
         #print("report stdout <<< \n", lst_rep_out, "\n >>>")
 
-        new_line = "Done\n"
-        n_Broken_Pipes += add_log_line(new_line, self.nod_req)
-
 
         tmp_html_path = self._run_dir + "/dials.report.html"
         if os.path.exists(tmp_html_path):
             self._html_rep = tmp_html_path
+            new_line = "HTML Report ready"
+
+        else:
+            new_line = "No need for HTML report in this step"
+
+        n_Broken_Pipes += add_log_line(new_line, self.nod_req)
 
         # running prediction generation
         pred_lst_dat_in = ['dials.predict']
@@ -377,7 +383,7 @@ class CmdNode(object):
 
         print("\n running:", pred_lst_dat_in, "\n")
 
-        new_line = "Generating Predictions\n"
+        new_line = "Generating Predictions"
         n_Broken_Pipes += add_log_line(new_line, self.nod_req)
 
         lst_pred_out = []
@@ -397,14 +403,17 @@ class CmdNode(object):
         # in case needed there is the output of the prediction here:
         #print("predict stdout <<< \n", lst_pred_out, "\n >>>")
 
-        new_line = "Done\n"
-        n_Broken_Pipes += add_log_line(new_line, self.nod_req)
 
         tmp_predic_path = self._run_dir + "/predicted.refl"
         if os.path.exists(tmp_predic_path):
             self._predic_refl = tmp_predic_path
+            new_line = "Reflection Prediction ready"
 
-        new_line = "<< Gen HTML repor + Gen reflection predicts >> ... END\n"
+        else:
+            new_line = "No need for Reflection Prediction in this step"
+
+        n_Broken_Pipes += add_log_line(new_line, self.nod_req)
+        new_line = "HTML Report + Reflection Prediction ... END"
         n_Broken_Pipes += add_log_line(new_line, self.nod_req)
 
     def stop_me(self):
