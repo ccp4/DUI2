@@ -4,6 +4,13 @@ try:
 except ImportError:
     import img_stream_ext
 
+try:
+    from img_uploader import img_stream_py
+
+except ImportError:
+
+    import img_stream_py
+
 from dials.array_family import flex
 import json
 import time
@@ -381,13 +388,13 @@ def get_json_w_2d_slise(experiments_list_path, img_num, inv_scale, x1, y1, x2, y
     data_xy_flex = my_sweep.get_raw_data(on_sweep_img_num)[pan_num].as_double()
 
     start_tm = time.time()
-    str_data = img_stream_ext.slice_arr_2_str(
+    str_data = img_stream_py.slice_arr_2_str(
         data_xy_flex, inv_scale,
         int(float(x1)), int(float(y1)),
         int(float(x2)), int(float(y2))
     )
     end_tm = time.time()
-    print("C++ bit took ", end_tm - start_tm)
+    print("Arr scale took ", end_tm - start_tm)
 
     if str_data == "Error":
         print('str_data == "Error"')
