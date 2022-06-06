@@ -1,10 +1,4 @@
 try:
-    from img_uploader import img_stream_ext
-
-except ImportError:
-    import img_stream_ext
-
-try:
     from img_uploader import img_stream_py
 
 except ImportError:
@@ -366,7 +360,7 @@ def get_json_w_mask_img_2d(experiments_list_path, img_num):
         mask_tup_obj = pickle.load(pick_file)
         pick_file.close()
         mask_flex = mask_tup_obj[0]
-        str_data = img_stream_ext.mask_arr_2_str(mask_flex)
+        str_data = img_stream_py.mask_arr_2_str(mask_flex)
 
     except FileNotFoundError:
         str_data = None
@@ -425,7 +419,7 @@ def get_json_w_2d_mask_slise(experiments_list_path, img_num, inv_scale, x1, y1, 
         mask_flex = mask_tup_obj[0]
 
         start_tm = time.time()
-        str_data = img_stream_ext.slice_mask_2_str(
+        str_data = img_stream_py.slice_mask_2_str(
             mask_flex, inv_scale,
             int(float(x1)), int(float(y1)),
             int(float(x2)), int(float(y2))
