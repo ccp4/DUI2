@@ -16,7 +16,7 @@ def slice_arr_2_str( data2d, inv_scale, x1, y1, x2, y2):
         return "Error"
 
     else:
-        print("\n ***  array bounding OK  *** \n")
+        print(" array bounding OK ")
 
     np_arr = scale_np_arr(big_np_arr[x1:x2,y1:y2], inv_scale)
 
@@ -97,7 +97,7 @@ def slice_mask_2_str(data2d, inv_scale, x1, y1, x2, y2):
         return "Error"
 
     else:
-        print("\n ***  array bounding OK  *** \n")
+        print(" array bounding OK ")
         slice_np_arr = bool_np_arr[x1:x2,y1:y2]
         a_d0 = slice_np_arr.shape[0]
         a_d1 = slice_np_arr.shape[1]

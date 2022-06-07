@@ -367,7 +367,9 @@ def get_json_w_mask_img_2d(experiments_list_path, img_num):
 
     return str_data
 
-def get_json_w_2d_slise(experiments_list_path, img_num, inv_scale, x1, y1, x2, y2):
+def get_json_w_2d_slise(
+    experiments_list_path, img_num, inv_scale, x1, y1, x2, y2
+):
     print("experiments_list_path, img_num:", experiments_list_path, img_num)
     pan_num = 0
     experiments_path = experiments_list_path[0]
@@ -388,7 +390,7 @@ def get_json_w_2d_slise(experiments_list_path, img_num, inv_scale, x1, y1, x2, y
         int(float(x2)), int(float(y2))
     )
     end_tm = time.time()
-    print("Arr scale took ", end_tm - start_tm)
+    print("Getting scaled slice of image took: ", end_tm - start_tm)
 
     if str_data == "Error":
         print('str_data == "Error"')
@@ -396,9 +398,10 @@ def get_json_w_2d_slise(experiments_list_path, img_num, inv_scale, x1, y1, x2, y
 
     return str_data
 
-####################################################################################
 
-def get_json_w_2d_mask_slise(experiments_list_path, img_num, inv_scale, x1, y1, x2, y2):
+def get_json_w_2d_mask_slise(
+    experiments_list_path, img_num, inv_scale, x1, y1, x2, y2
+):
     print("experiments_list_path, img_num:", experiments_list_path, img_num)
     pan_num = 0
     experiments_path = experiments_list_path[0]
@@ -425,7 +428,7 @@ def get_json_w_2d_mask_slise(experiments_list_path, img_num, inv_scale, x1, y1, 
             int(float(x2)), int(float(y2))
         )
         end_tm = time.time()
-        print("C++ bit took ", end_tm - start_tm)
+        print("Getting scaled slice of mask took ", end_tm - start_tm)
 
         if str_data == "Error":
             print('str_data == "Error"')
