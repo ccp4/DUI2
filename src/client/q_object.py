@@ -574,21 +574,26 @@ class MainObject(QObject):
             print("NO need to run << update_nxt_butt >>")
 
     def update_nxt_butt(self, str_key):
-        small_f_size = int(self.font_point_size * 0.85)
+        small_f_size = int(self.font_point_size * 0.75)
         small_font = QFont("OldEnglish", pointSize = small_f_size, italic=True)
         try:
             if(
                 self.server_nod_lst[self.curr_nod_num]["status"] == "Succeeded"
             ):
                 print("\nupdate_nxt_butt: key =", str_key, "\n")
-                for bt_labl in self.param_widgets[str_key]["nxt_widg_lst"]:
-                    nxt_butt = QPushButton(bt_labl)
-                    nxt_butt.cmd_str = bt_labl
+                for bt_str in self.param_widgets[str_key]["nxt_widg_lst"]:
+                    split_label = bt_str.replace("_", "\n")
+                    nxt_butt = QPushButton(split_label)
+                    nxt_butt.cmd_str = bt_str
                     nxt_butt.setFont(small_font)
                     nxt_butt.clicked.connect(self.nxt_clicked)
-                    nxt_butt.setIcon(self.param_widgets[bt_labl]["icon"])
+                    nxt_butt.setIcon(self.param_widgets[bt_str]["icon"])
                     nxt_butt.setIconSize(QSize(38, 42))
                     self.window.Next2RunLayout.addWidget(nxt_butt)
+
+                    #self.window.Next2RunLayout.setSpacing(0)
+
+                    self.window.Next2RunLayout.setMargin(0)
 
         except (IndexError, KeyError):
             print("no need to add next button")
