@@ -132,10 +132,25 @@
                  </font>
                 </property>
                 <property name="currentIndex">
-                 <number>11</number>
+                 <number>0</number>
                 </property>
                 <widget class="QWidget" name="RootPage">
                  <layout class="QGridLayout" name="gridLayout_33">
+                  <property name="leftMargin">
+                   <number>2</number>
+                  </property>
+                  <property name="topMargin">
+                   <number>2</number>
+                  </property>
+                  <property name="rightMargin">
+                   <number>2</number>
+                  </property>
+                  <property name="bottomMargin">
+                   <number>2</number>
+                  </property>
+                  <property name="spacing">
+                   <number>2</number>
+                  </property>
                   <item row="0" column="0">
                    <widget class="QScrollArea" name="RootScrollArea">
                     <property name="widgetResizable">
@@ -146,8 +161,8 @@
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>96</width>
-                       <height>26</height>
+                       <width>279</width>
+                       <height>359</height>
                       </rect>
                      </property>
                     </widget>
@@ -157,6 +172,21 @@
                 </widget>
                 <widget class="QWidget" name="ImportPage">
                  <layout class="QGridLayout" name="gridLayout_26">
+                  <property name="leftMargin">
+                   <number>2</number>
+                  </property>
+                  <property name="topMargin">
+                   <number>2</number>
+                  </property>
+                  <property name="rightMargin">
+                   <number>2</number>
+                  </property>
+                  <property name="bottomMargin">
+                   <number>2</number>
+                  </property>
+                  <property name="spacing">
+                   <number>2</number>
+                  </property>
                   <item row="1" column="0">
                    <widget class="QScrollArea" name="ImportScrollArea">
                     <property name="widgetResizable">
@@ -167,8 +197,8 @@
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>96</width>
-                       <height>26</height>
+                       <width>279</width>
+                       <height>359</height>
                       </rect>
                      </property>
                     </widget>
@@ -178,6 +208,21 @@
                 </widget>
                 <widget class="QWidget" name="MaskPage">
                  <layout class="QGridLayout" name="gridLayout_30">
+                  <property name="leftMargin">
+                   <number>2</number>
+                  </property>
+                  <property name="topMargin">
+                   <number>2</number>
+                  </property>
+                  <property name="rightMargin">
+                   <number>2</number>
+                  </property>
+                  <property name="bottomMargin">
+                   <number>2</number>
+                  </property>
+                  <property name="spacing">
+                   <number>2</number>
+                  </property>
                   <item row="0" column="0">
                    <widget class="QScrollArea" name="MaskScrollArea">
                     <property name="widgetResizable">
@@ -188,8 +233,8 @@
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>96</width>
-                       <height>26</height>
+                       <width>279</width>
+                       <height>359</height>
                       </rect>
                      </property>
                     </widget>
@@ -199,16 +244,46 @@
                 </widget>
                 <widget class="QWidget" name="FindspotsPage">
                  <layout class="QGridLayout" name="gridLayout_18">
+                  <property name="leftMargin">
+                   <number>2</number>
+                  </property>
+                  <property name="topMargin">
+                   <number>2</number>
+                  </property>
+                  <property name="rightMargin">
+                   <number>2</number>
+                  </property>
+                  <property name="bottomMargin">
+                   <number>2</number>
+                  </property>
+                  <property name="spacing">
+                   <number>2</number>
+                  </property>
                   <item row="0" column="0">
                    <widget class="QTabWidget" name="tabWidget">
                     <property name="currentIndex">
-                     <number>0</number>
+                     <number>1</number>
                     </property>
                     <widget class="QWidget" name="tab_simple">
                      <attribute name="title">
                       <string>Simple</string>
                      </attribute>
                      <layout class="QGridLayout" name="gridLayout">
+                      <property name="leftMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="topMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="rightMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="bottomMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="spacing">
+                       <number>2</number>
+                      </property>
                       <item row="0" column="0">
                        <widget class="QScrollArea" name="FindspotsSimplerScrollArea">
                         <property name="widgetResizable">
@@ -219,8 +294,8 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>96</width>
-                           <height>26</height>
+                           <width>267</width>
+                           <height>318</height>
                           </rect>
                          </property>
                         </widget>
@@ -233,6 +308,21 @@
                       <string>Advanced</string>
                      </attribute>
                      <layout class="QGridLayout" name="gridLayout_3">
+                      <property name="leftMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="topMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="rightMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="bottomMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="spacing">
+                       <number>2</number>
+                      </property>
                       <item row="1" column="0">
                        <widget class="QScrollArea" name="FindspotsAdvancedScrollArea">
                         <property name="widgetResizable">
@@ -243,8 +333,8 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>96</width>
-                           <height>26</height>
+                           <width>267</width>
+                           <height>314</height>
                           </rect>
                          </property>
                         </widget>
@@ -261,16 +351,46 @@
                 </widget>
                 <widget class="QWidget" name="IndexPage">
                  <layout class="QGridLayout" name="gridLayout_19">
+                  <property name="leftMargin">
+                   <number>2</number>
+                  </property>
+                  <property name="topMargin">
+                   <number>2</number>
+                  </property>
+                  <property name="rightMargin">
+                   <number>2</number>
+                  </property>
+                  <property name="bottomMargin">
+                   <number>2</number>
+                  </property>
+                  <property name="spacing">
+                   <number>2</number>
+                  </property>
                   <item row="0" column="0">
                    <widget class="QTabWidget" name="tabWidget_2">
                     <property name="currentIndex">
-                     <number>0</number>
+                     <number>1</number>
                     </property>
                     <widget class="QWidget" name="tab_simple_2">
                      <attribute name="title">
                       <string>Simple</string>
                      </attribute>
                      <layout class="QGridLayout" name="gridLayout_4">
+                      <property name="leftMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="topMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="rightMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="bottomMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="spacing">
+                       <number>2</number>
+                      </property>
                       <item row="0" column="0">
                        <widget class="QScrollArea" name="IndexSimplerScrollArea">
                         <property name="widgetResizable">
@@ -281,8 +401,8 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>96</width>
-                           <height>26</height>
+                           <width>267</width>
+                           <height>318</height>
                           </rect>
                          </property>
                         </widget>
@@ -295,6 +415,21 @@
                       <string>Advanced</string>
                      </attribute>
                      <layout class="QGridLayout" name="gridLayout_5">
+                      <property name="leftMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="topMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="rightMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="bottomMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="spacing">
+                       <number>2</number>
+                      </property>
                       <item row="1" column="0">
                        <widget class="QScrollArea" name="IndexAdvancedScrollArea">
                         <property name="widgetResizable">
@@ -305,8 +440,8 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>96</width>
-                           <height>26</height>
+                           <width>267</width>
+                           <height>314</height>
                           </rect>
                          </property>
                         </widget>
@@ -323,6 +458,21 @@
                 </widget>
                 <widget class="QWidget" name="RefinBrabPage">
                  <layout class="QGridLayout" name="gridLayout_20">
+                  <property name="leftMargin">
+                   <number>2</number>
+                  </property>
+                  <property name="topMargin">
+                   <number>2</number>
+                  </property>
+                  <property name="rightMargin">
+                   <number>2</number>
+                  </property>
+                  <property name="bottomMargin">
+                   <number>2</number>
+                  </property>
+                  <property name="spacing">
+                   <number>2</number>
+                  </property>
                   <item row="0" column="0">
                    <widget class="QTabWidget" name="tabWidget_3">
                     <property name="currentIndex">
@@ -333,6 +483,21 @@
                       <string>Simple</string>
                      </attribute>
                      <layout class="QGridLayout" name="gridLayout_6">
+                      <property name="leftMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="topMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="rightMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="bottomMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="spacing">
+                       <number>2</number>
+                      </property>
                       <item row="0" column="0">
                        <widget class="QScrollArea" name="RefineBravaiSimplerScrollArea">
                         <property name="widgetResizable">
@@ -343,8 +508,8 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>96</width>
-                           <height>26</height>
+                           <width>267</width>
+                           <height>318</height>
                           </rect>
                          </property>
                         </widget>
@@ -357,6 +522,21 @@
                       <string>Advanced</string>
                      </attribute>
                      <layout class="QGridLayout" name="gridLayout_7">
+                      <property name="leftMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="topMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="rightMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="bottomMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="spacing">
+                       <number>2</number>
+                      </property>
                       <item row="1" column="0">
                        <widget class="QScrollArea" name="RefineBravaiAdvancedScrollArea">
                         <property name="widgetResizable">
@@ -367,8 +547,8 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>96</width>
-                           <height>26</height>
+                           <width>259</width>
+                           <height>306</height>
                           </rect>
                          </property>
                         </widget>
@@ -385,6 +565,21 @@
                 </widget>
                 <widget class="QWidget" name="ReindexPage">
                  <layout class="QGridLayout" name="gridLayout_28">
+                  <property name="leftMargin">
+                   <number>2</number>
+                  </property>
+                  <property name="topMargin">
+                   <number>2</number>
+                  </property>
+                  <property name="rightMargin">
+                   <number>2</number>
+                  </property>
+                  <property name="bottomMargin">
+                   <number>2</number>
+                  </property>
+                  <property name="spacing">
+                   <number>2</number>
+                  </property>
                   <item row="1" column="0">
                    <widget class="QScrollArea" name="ReindexTableScrollArea">
                     <property name="widgetResizable">
@@ -395,8 +590,8 @@
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>96</width>
-                       <height>26</height>
+                       <width>279</width>
+                       <height>342</height>
                       </rect>
                      </property>
                     </widget>
@@ -413,6 +608,21 @@
                 </widget>
                 <widget class="QWidget" name="RefinePage">
                  <layout class="QGridLayout" name="gridLayout_21">
+                  <property name="leftMargin">
+                   <number>2</number>
+                  </property>
+                  <property name="topMargin">
+                   <number>2</number>
+                  </property>
+                  <property name="rightMargin">
+                   <number>2</number>
+                  </property>
+                  <property name="bottomMargin">
+                   <number>2</number>
+                  </property>
+                  <property name="spacing">
+                   <number>2</number>
+                  </property>
                   <item row="0" column="0">
                    <widget class="QTabWidget" name="tabWidget_4">
                     <property name="currentIndex">
@@ -423,6 +633,21 @@
                       <string>Simple</string>
                      </attribute>
                      <layout class="QGridLayout" name="gridLayout_8">
+                      <property name="leftMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="topMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="rightMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="bottomMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="spacing">
+                       <number>2</number>
+                      </property>
                       <item row="0" column="0">
                        <widget class="QScrollArea" name="RefineSimplerScrollArea">
                         <property name="widgetResizable">
@@ -433,8 +658,8 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>96</width>
-                           <height>26</height>
+                           <width>267</width>
+                           <height>318</height>
                           </rect>
                          </property>
                         </widget>
@@ -447,6 +672,21 @@
                       <string>Advanced</string>
                      </attribute>
                      <layout class="QGridLayout" name="gridLayout_9">
+                      <property name="leftMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="topMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="rightMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="bottomMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="spacing">
+                       <number>2</number>
+                      </property>
                       <item row="1" column="0">
                        <widget class="QScrollArea" name="RefineAdvancedScrollArea">
                         <property name="widgetResizable">
@@ -457,8 +697,8 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>96</width>
-                           <height>26</height>
+                           <width>267</width>
+                           <height>314</height>
                           </rect>
                          </property>
                         </widget>
@@ -475,6 +715,21 @@
                 </widget>
                 <widget class="QWidget" name="IntegratePage">
                  <layout class="QGridLayout" name="gridLayout_22">
+                  <property name="leftMargin">
+                   <number>2</number>
+                  </property>
+                  <property name="topMargin">
+                   <number>2</number>
+                  </property>
+                  <property name="rightMargin">
+                   <number>2</number>
+                  </property>
+                  <property name="bottomMargin">
+                   <number>2</number>
+                  </property>
+                  <property name="spacing">
+                   <number>2</number>
+                  </property>
                   <item row="0" column="0">
                    <widget class="QTabWidget" name="tabWidget_5">
                     <property name="currentIndex">
@@ -485,6 +740,21 @@
                       <string>Simple</string>
                      </attribute>
                      <layout class="QGridLayout" name="gridLayout_10">
+                      <property name="leftMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="topMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="rightMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="bottomMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="spacing">
+                       <number>2</number>
+                      </property>
                       <item row="0" column="0">
                        <widget class="QScrollArea" name="IntegrateSimplerScrollArea">
                         <property name="widgetResizable">
@@ -495,8 +765,8 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>96</width>
-                           <height>26</height>
+                           <width>267</width>
+                           <height>318</height>
                           </rect>
                          </property>
                         </widget>
@@ -509,6 +779,21 @@
                       <string>Advanced</string>
                      </attribute>
                      <layout class="QGridLayout" name="gridLayout_11">
+                      <property name="leftMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="topMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="rightMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="bottomMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="spacing">
+                       <number>2</number>
+                      </property>
                       <item row="1" column="0">
                        <widget class="QScrollArea" name="IntegrateAdvancedScrollArea">
                         <property name="widgetResizable">
@@ -519,8 +804,8 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>96</width>
-                           <height>26</height>
+                           <width>259</width>
+                           <height>306</height>
                           </rect>
                          </property>
                         </widget>
@@ -537,6 +822,21 @@
                 </widget>
                 <widget class="QWidget" name="SimmetryPage">
                  <layout class="QGridLayout" name="gridLayout_23">
+                  <property name="leftMargin">
+                   <number>2</number>
+                  </property>
+                  <property name="topMargin">
+                   <number>2</number>
+                  </property>
+                  <property name="rightMargin">
+                   <number>2</number>
+                  </property>
+                  <property name="bottomMargin">
+                   <number>2</number>
+                  </property>
+                  <property name="spacing">
+                   <number>2</number>
+                  </property>
                   <item row="0" column="0">
                    <widget class="QTabWidget" name="tabWidget_6">
                     <property name="currentIndex">
@@ -547,6 +847,21 @@
                       <string>Simple</string>
                      </attribute>
                      <layout class="QGridLayout" name="gridLayout_12">
+                      <property name="leftMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="topMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="rightMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="bottomMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="spacing">
+                       <number>2</number>
+                      </property>
                       <item row="0" column="0">
                        <widget class="QScrollArea" name="SymmetrySimplerScrollArea">
                         <property name="widgetResizable">
@@ -557,8 +872,8 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>96</width>
-                           <height>26</height>
+                           <width>267</width>
+                           <height>318</height>
                           </rect>
                          </property>
                         </widget>
@@ -571,6 +886,21 @@
                       <string>Advanced</string>
                      </attribute>
                      <layout class="QGridLayout" name="gridLayout_13">
+                      <property name="leftMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="topMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="rightMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="bottomMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="spacing">
+                       <number>2</number>
+                      </property>
                       <item row="1" column="0">
                        <widget class="QScrollArea" name="SymmetryAdvancedScrollArea">
                         <property name="widgetResizable">
@@ -581,8 +911,8 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>96</width>
-                           <height>26</height>
+                           <width>259</width>
+                           <height>306</height>
                           </rect>
                          </property>
                         </widget>
@@ -599,6 +929,21 @@
                 </widget>
                 <widget class="QWidget" name="ScalePage">
                  <layout class="QGridLayout" name="gridLayout_24">
+                  <property name="leftMargin">
+                   <number>2</number>
+                  </property>
+                  <property name="topMargin">
+                   <number>2</number>
+                  </property>
+                  <property name="rightMargin">
+                   <number>2</number>
+                  </property>
+                  <property name="bottomMargin">
+                   <number>2</number>
+                  </property>
+                  <property name="horizontalSpacing">
+                   <number>2</number>
+                  </property>
                   <item row="0" column="0">
                    <widget class="QTabWidget" name="tabWidget_7">
                     <property name="currentIndex">
@@ -609,6 +954,21 @@
                       <string>Simple</string>
                      </attribute>
                      <layout class="QGridLayout" name="gridLayout_14">
+                      <property name="leftMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="topMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="rightMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="bottomMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="spacing">
+                       <number>2</number>
+                      </property>
                       <item row="0" column="0">
                        <widget class="QScrollArea" name="ScaleSimplerScrollArea">
                         <property name="widgetResizable">
@@ -619,8 +979,8 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>96</width>
-                           <height>26</height>
+                           <width>267</width>
+                           <height>318</height>
                           </rect>
                          </property>
                         </widget>
@@ -633,6 +993,21 @@
                       <string>Advanced</string>
                      </attribute>
                      <layout class="QGridLayout" name="gridLayout_15">
+                      <property name="leftMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="topMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="rightMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="bottomMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="spacing">
+                       <number>2</number>
+                      </property>
                       <item row="1" column="0">
                        <widget class="QScrollArea" name="ScaleAdvancedScrollArea">
                         <property name="widgetResizable">
@@ -643,8 +1018,8 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>96</width>
-                           <height>26</height>
+                           <width>259</width>
+                           <height>306</height>
                           </rect>
                          </property>
                         </widget>
@@ -661,16 +1036,46 @@
                 </widget>
                 <widget class="QWidget" name="CombinePage">
                  <layout class="QGridLayout" name="gridLayout_25">
+                  <property name="leftMargin">
+                   <number>2</number>
+                  </property>
+                  <property name="topMargin">
+                   <number>2</number>
+                  </property>
+                  <property name="rightMargin">
+                   <number>2</number>
+                  </property>
+                  <property name="bottomMargin">
+                   <number>2</number>
+                  </property>
+                  <property name="spacing">
+                   <number>2</number>
+                  </property>
                   <item row="2" column="0" colspan="3">
                    <widget class="QTabWidget" name="tabWidget_8">
                     <property name="currentIndex">
-                     <number>0</number>
+                     <number>1</number>
                     </property>
                     <widget class="QWidget" name="tab_simple_8">
                      <attribute name="title">
                       <string>Simple</string>
                      </attribute>
                      <layout class="QGridLayout" name="gridLayout_16">
+                      <property name="leftMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="topMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="rightMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="bottomMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="spacing">
+                       <number>2</number>
+                      </property>
                       <item row="0" column="0">
                        <widget class="QScrollArea" name="CombineSimplerScrollArea">
                         <property name="widgetResizable">
@@ -681,8 +1086,8 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>246</width>
-                           <height>276</height>
+                           <width>267</width>
+                           <height>285</height>
                           </rect>
                          </property>
                         </widget>
@@ -695,6 +1100,21 @@
                       <string>Advanced</string>
                      </attribute>
                      <layout class="QGridLayout" name="gridLayout_17">
+                      <property name="leftMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="topMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="rightMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="bottomMargin">
+                       <number>2</number>
+                      </property>
+                      <property name="spacing">
+                       <number>2</number>
+                      </property>
                       <item row="1" column="0">
                        <widget class="QScrollArea" name="CombineAdvancedScrollArea">
                         <property name="widgetResizable">
@@ -705,8 +1125,8 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>236</width>
-                           <height>247</height>
+                           <width>267</width>
+                           <height>281</height>
                           </rect>
                          </property>
                         </widget>
