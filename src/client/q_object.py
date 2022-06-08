@@ -592,8 +592,7 @@ class MainObject(QObject):
                     self.window.Next2RunLayout.addWidget(nxt_butt)
 
                     #self.window.Next2RunLayout.setSpacing(0)
-
-                    self.window.Next2RunLayout.setMargin(0)
+                    #self.window.Next2RunLayout.setMargin(0)
 
         except (IndexError, KeyError):
             print("no need to add next button")
