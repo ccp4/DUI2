@@ -15,6 +15,21 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout_6">
+    <property name="spacing">
+     <number>2</number>
+    </property>
+    <property name="leftMargin">
+     <number>2</number>
+    </property>
+    <property name="topMargin">
+     <number>2</number>
+    </property>
+    <property name="rightMargin">
+     <number>2</number>
+    </property>
+    <property name="bottomMargin">
+     <number>2</number>
+    </property>
     <item>
      <widget class="QSplitter" name="MainHSplitter">
       <property name="orientation">
@@ -27,8 +42,14 @@
        <widget class="QGraphicsView" name="treeView"/>
        <widget class="QWidget" name="layoutWidget">
         <layout class="QVBoxLayout" name="verticalLayout_2">
+         <property name="spacing">
+          <number>2</number>
+         </property>
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <property name="spacing">
+            <number>2</number>
+           </property>
            <item>
             <widget class="QPushButton" name="RetryButton">
              <property name="text">
@@ -82,8 +103,26 @@
             <string>...</string>
            </property>
            <layout class="QGridLayout" name="gridLayout_2">
+            <property name="leftMargin">
+             <number>2</number>
+            </property>
+            <property name="topMargin">
+             <number>2</number>
+            </property>
+            <property name="rightMargin">
+             <number>2</number>
+            </property>
+            <property name="bottomMargin">
+             <number>2</number>
+            </property>
+            <property name="spacing">
+             <number>2</number>
+            </property>
             <item row="0" column="0">
              <layout class="QVBoxLayout" name="verticalLayout">
+              <property name="spacing">
+               <number>2</number>
+              </property>
               <item>
                <widget class="QStackedWidget" name="StackedParamsWidget">
                 <property name="font">
@@ -107,8 +146,8 @@
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>256</width>
-                       <height>337</height>
+                       <width>96</width>
+                       <height>26</height>
                       </rect>
                      </property>
                     </widget>
@@ -128,8 +167,8 @@
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>256</width>
-                       <height>337</height>
+                       <width>96</width>
+                       <height>26</height>
                       </rect>
                      </property>
                     </widget>
@@ -149,8 +188,8 @@
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>256</width>
-                       <height>337</height>
+                       <width>96</width>
+                       <height>26</height>
                       </rect>
                      </property>
                     </widget>
@@ -180,8 +219,8 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>236</width>
-                           <height>288</height>
+                           <width>96</width>
+                           <height>26</height>
                           </rect>
                          </property>
                         </widget>
@@ -204,8 +243,8 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>236</width>
-                           <height>280</height>
+                           <width>96</width>
+                           <height>26</height>
                           </rect>
                          </property>
                         </widget>
@@ -242,8 +281,8 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>236</width>
-                           <height>288</height>
+                           <width>96</width>
+                           <height>26</height>
                           </rect>
                          </property>
                         </widget>
@@ -266,8 +305,8 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>236</width>
-                           <height>280</height>
+                           <width>96</width>
+                           <height>26</height>
                           </rect>
                          </property>
                         </widget>
@@ -304,8 +343,8 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>236</width>
-                           <height>288</height>
+                           <width>96</width>
+                           <height>26</height>
                           </rect>
                          </property>
                         </widget>
@@ -328,8 +367,8 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>236</width>
-                           <height>280</height>
+                           <width>96</width>
+                           <height>26</height>
                           </rect>
                          </property>
                         </widget>
@@ -356,8 +395,8 @@
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>256</width>
-                       <height>316</height>
+                       <width>96</width>
+                       <height>26</height>
                       </rect>
                      </property>
                     </widget>
@@ -394,8 +433,8 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>236</width>
-                           <height>288</height>
+                           <width>96</width>
+                           <height>26</height>
                           </rect>
                          </property>
                         </widget>
@@ -418,8 +457,8 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>236</width>
-                           <height>280</height>
+                           <width>96</width>
+                           <height>26</height>
                           </rect>
                          </property>
                         </widget>
@@ -456,8 +495,8 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>236</width>
-                           <height>288</height>
+                           <width>96</width>
+                           <height>26</height>
                           </rect>
                          </property>
                         </widget>
@@ -480,8 +519,8 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>236</width>
-                           <height>280</height>
+                           <width>96</width>
+                           <height>26</height>
                           </rect>
                          </property>
                         </widget>
@@ -518,8 +557,8 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>236</width>
-                           <height>288</height>
+                           <width>96</width>
+                           <height>26</height>
                           </rect>
                          </property>
                         </widget>
@@ -542,8 +581,8 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>236</width>
-                           <height>280</height>
+                           <width>96</width>
+                           <height>26</height>
                           </rect>
                          </property>
                         </widget>
@@ -580,8 +619,8 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>236</width>
-                           <height>288</height>
+                           <width>96</width>
+                           <height>26</height>
                           </rect>
                          </property>
                         </widget>
@@ -604,8 +643,8 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>236</width>
-                           <height>280</height>
+                           <width>96</width>
+                           <height>26</height>
                           </rect>
                          </property>
                         </widget>
@@ -642,8 +681,8 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>236</width>
-                           <height>251</height>
+                           <width>246</width>
+                           <height>276</height>
                           </rect>
                          </property>
                         </widget>
@@ -667,7 +706,7 @@
                            <x>0</x>
                            <y>0</y>
                            <width>236</width>
-                           <height>243</height>
+                           <height>247</height>
                           </rect>
                          </property>
                         </widget>
@@ -724,6 +763,9 @@
               </item>
               <item>
                <layout class="QHBoxLayout" name="horizontalLayout_4">
+                <property name="spacing">
+                 <number>2</number>
+                </property>
                 <item>
                  <widget class="QPushButton" name="Reset2DefaultPushButton">
                   <property name="font">
@@ -753,7 +795,11 @@
                </layout>
               </item>
               <item>
-               <layout class="QHBoxLayout" name="Next2RunLayout"/>
+               <layout class="QHBoxLayout" name="Next2RunLayout">
+                <property name="spacing">
+                 <number>2</number>
+                </property>
+               </layout>
               </item>
              </layout>
             </item>
@@ -765,18 +811,39 @@
       </widget>
       <widget class="QWidget" name="layoutWidget">
        <layout class="QVBoxLayout" name="verticalLayout_3">
+        <property name="spacing">
+         <number>2</number>
+        </property>
         <item>
          <widget class="QTabWidget" name="OutputTabWidget">
           <property name="currentIndex">
-           <number>0</number>
+           <number>2</number>
           </property>
           <widget class="QWidget" name="ImageTab">
            <attribute name="title">
             <string>Image</string>
            </attribute>
            <layout class="QVBoxLayout" name="verticalLayout_5">
+            <property name="spacing">
+             <number>2</number>
+            </property>
+            <property name="leftMargin">
+             <number>2</number>
+            </property>
+            <property name="topMargin">
+             <number>2</number>
+            </property>
+            <property name="rightMargin">
+             <number>2</number>
+            </property>
+            <property name="bottomMargin">
+             <number>2</number>
+            </property>
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout">
+              <property name="spacing">
+               <number>2</number>
+              </property>
               <item>
                <widget class="QPushButton" name="PrevImgButton">
                 <property name="text">
@@ -867,6 +934,9 @@
             </item>
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_7">
+              <property name="spacing">
+               <number>2</number>
+              </property>
               <item>
                <widget class="QPushButton" name="DisplayButton">
                 <property name="text">
@@ -894,6 +964,9 @@
             </item>
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_5">
+              <property name="spacing">
+               <number>2</number>
+              </property>
               <item>
                <spacer name="horizontalSpacer_3">
                 <property name="orientation">
@@ -926,6 +999,21 @@
             <string>Log</string>
            </attribute>
            <layout class="QGridLayout" name="gridLayout_31">
+            <property name="leftMargin">
+             <number>2</number>
+            </property>
+            <property name="topMargin">
+             <number>2</number>
+            </property>
+            <property name="rightMargin">
+             <number>2</number>
+            </property>
+            <property name="bottomMargin">
+             <number>2</number>
+            </property>
+            <property name="spacing">
+             <number>2</number>
+            </property>
             <item row="0" column="0">
              <widget class="QTextEdit" name="incoming_text"/>
             </item>
@@ -936,6 +1024,21 @@
             <string>Report</string>
            </attribute>
            <layout class="QGridLayout" name="gridLayout_29">
+            <property name="leftMargin">
+             <number>2</number>
+            </property>
+            <property name="topMargin">
+             <number>2</number>
+            </property>
+            <property name="rightMargin">
+             <number>2</number>
+            </property>
+            <property name="bottomMargin">
+             <number>2</number>
+            </property>
+            <property name="spacing">
+             <number>2</number>
+            </property>
             <item row="0" column="0">
              <widget class="QWebEngineView" name="HtmlReport">
               <property name="url">
@@ -951,6 +1054,9 @@
         </item>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <property name="spacing">
+           <number>2</number>
+          </property>
           <item>
            <spacer name="horizontalSpacer_2">
             <property name="orientation">
