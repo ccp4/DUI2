@@ -36,14 +36,14 @@
        <enum>Qt::Horizontal</enum>
       </property>
       <property name="handleWidth">
-       <number>2</number>
+       <number>8</number>
       </property>
       <widget class="QSplitter" name="LeftVSplitter">
        <property name="orientation">
         <enum>Qt::Vertical</enum>
        </property>
        <property name="handleWidth">
-        <number>2</number>
+        <number>8</number>
        </property>
        <widget class="QGraphicsView" name="treeView"/>
        <widget class="QWidget" name="layoutWidget">
@@ -167,8 +167,8 @@
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>277</width>
-                       <height>359</height>
+                       <width>96</width>
+                       <height>26</height>
                       </rect>
                      </property>
                     </widget>
@@ -203,8 +203,8 @@
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>277</width>
-                       <height>359</height>
+                       <width>96</width>
+                       <height>26</height>
                       </rect>
                      </property>
                     </widget>
@@ -239,8 +239,8 @@
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>277</width>
-                       <height>358</height>
+                       <width>275</width>
+                       <height>355</height>
                       </rect>
                      </property>
                     </widget>
@@ -300,8 +300,8 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>265</width>
-                           <height>318</height>
+                           <width>96</width>
+                           <height>26</height>
                           </rect>
                          </property>
                         </widget>
@@ -339,8 +339,8 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>265</width>
-                           <height>314</height>
+                           <width>96</width>
+                           <height>26</height>
                           </rect>
                          </property>
                         </widget>
@@ -407,8 +407,8 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>265</width>
-                           <height>318</height>
+                           <width>96</width>
+                           <height>26</height>
                           </rect>
                          </property>
                         </widget>
@@ -446,8 +446,8 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>265</width>
-                           <height>314</height>
+                           <width>96</width>
+                           <height>26</height>
                           </rect>
                          </property>
                         </widget>
@@ -514,8 +514,8 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>265</width>
-                           <height>318</height>
+                           <width>96</width>
+                           <height>26</height>
                           </rect>
                          </property>
                         </widget>
@@ -596,8 +596,8 @@
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>277</width>
-                       <height>342</height>
+                       <width>96</width>
+                       <height>26</height>
                       </rect>
                      </property>
                     </widget>
@@ -664,8 +664,8 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>265</width>
-                           <height>318</height>
+                           <width>96</width>
+                           <height>26</height>
                           </rect>
                          </property>
                         </widget>
@@ -771,8 +771,8 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>265</width>
-                           <height>318</height>
+                           <width>96</width>
+                           <height>26</height>
                           </rect>
                          </property>
                         </widget>
@@ -878,8 +878,8 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>265</width>
-                           <height>318</height>
+                           <width>96</width>
+                           <height>26</height>
                           </rect>
                          </property>
                         </widget>
@@ -985,8 +985,8 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>265</width>
-                           <height>318</height>
+                           <width>96</width>
+                           <height>26</height>
                           </rect>
                          </property>
                         </widget>
@@ -1092,8 +1092,8 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>265</width>
-                           <height>285</height>
+                           <width>96</width>
+                           <height>26</height>
                           </rect>
                          </property>
                         </widget>
@@ -1131,8 +1131,8 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>265</width>
-                           <height>281</height>
+                           <width>96</width>
+                           <height>26</height>
                           </rect>
                          </property>
                         </widget>
@@ -1176,8 +1176,8 @@
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>269</width>
-                       <height>351</height>
+                       <width>96</width>
+                       <height>26</height>
                       </rect>
                      </property>
                     </widget>
@@ -1243,7 +1243,7 @@
         <item>
          <widget class="QTabWidget" name="OutputTabWidget">
           <property name="currentIndex">
-           <number>2</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="ImageTab">
            <attribute name="title">
@@ -1273,7 +1273,7 @@
               <item>
                <widget class="QPushButton" name="PrevImgButton">
                 <property name="text">
-                 <string> &lt; </string>
+                 <string>&lt;</string>
                 </property>
                </widget>
               </item>
@@ -1311,7 +1311,7 @@
               <item>
                <widget class="QPushButton" name="NextImgButton">
                 <property name="text">
-                 <string> &gt; </string>
+                 <string>&gt;</string>
                 </property>
                </widget>
               </item>
@@ -1366,7 +1366,14 @@
               <item>
                <widget class="QPushButton" name="DisplayButton">
                 <property name="text">
-                 <string>Display</string>
+                 <string> Display Info</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="ImgNumLabel">
+                <property name="text">
+                 <string>img #, path:</string>
                 </property>
                </widget>
               </item>

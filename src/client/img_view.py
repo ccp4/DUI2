@@ -747,9 +747,7 @@ class DoImageView(QObject):
                 )
             self.img_path = new_img_path
             self.main_obj.window.ImagePathText.setText(
-                str(
-                    "path img # " + str(self.cur_img_num) + " = "
-                    + self.img_path
+                str(str(self.cur_img_num) + " = " + self.img_path
                 )
             )
             print("New Img Num = ", json_data_lst[4])
