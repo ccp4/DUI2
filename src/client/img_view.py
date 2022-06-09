@@ -746,11 +746,9 @@ class DoImageView(QObject):
                     tmp_2d_arr / tmp_2d_arr.max()
                 )
             self.img_path = new_img_path
-            self.main_obj.window.ImagePathText.setText(
-                str(str(self.cur_img_num) + " = " + self.img_path
-                )
-            )
+            self.main_obj.window.ImagePathText.setText(str(self.img_path))
             print("New Img Num = ", json_data_lst[4])
+
         except (IndexError, TypeError):
             print("Not loaded new template in full")
 

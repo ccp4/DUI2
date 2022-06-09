@@ -1366,14 +1366,14 @@
               <item>
                <widget class="QPushButton" name="DisplayButton">
                 <property name="text">
-                 <string> Display Info</string>
+                 <string>Display Info ...</string>
                 </property>
                </widget>
               </item>
               <item>
                <widget class="QLabel" name="ImgNumLabel">
                 <property name="text">
-                 <string>img #, path:</string>
+                 <string> img path:</string>
                 </property>
                </widget>
               </item>
