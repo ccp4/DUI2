@@ -83,6 +83,32 @@ class find_scale_cmd(object):
         return self.found_scale
 
 
+class find_next_cmd(object):
+    '''
+    This class works as a function that internally navigates with
+    recursive calls to find the possible command to run
+    '''
+    def __init__(self, nod_lst_in, nod_num_lst, dfl_lst_in):
+        self.nod_lst = nod_lst_in
+        self.dfl_lst = dfl_lst_in
+        self.par_cmd_lst = []
+        for nod_num in nod_num_lst:
+            self.get_parent_num(nod_num)
+
+    def get_parent_num(self, nod_num):
+        self.par_cmd_lst.append(self.nod_lst[nod_num]["cmd2show"][0][6:])
+        for new_nod_num in self.nod_lst[nod_num]["parent_node_lst"]:
+            self.get_parent_num(new_nod_num)
+
+    def get_nxt_cmd(self):
+        fin_cmd_lst = []
+        for cmd in self.dfl_lst:
+            if cmd not in self.par_cmd_lst:
+                fin_cmd_lst.append(cmd)
+
+        return fin_cmd_lst
+
+
 class MainObject(QObject):
     def __init__(self, parent = None):
         super(MainObject, self).__init__(parent)
@@ -581,7 +607,22 @@ class MainObject(QObject):
                 self.server_nod_lst[self.curr_nod_num]["status"] == "Succeeded"
             ):
                 print("\nupdate_nxt_butt: key =", str_key, "\n")
-                for bt_str in self.param_widgets[str_key]["nxt_widg_lst"]:
+
+
+                try:
+                    fnd_nxt_cmd = find_next_cmd(
+                        self.server_nod_lst,
+                        self.server_nod_lst[self.curr_nod_num]["parent_node_lst"],
+                        self.param_widgets[str_key]["nxt_widg_lst"]
+                    )
+                    nxt_cmd_lst = fnd_nxt_cmd.get_nxt_cmd()
+                    print("next command lst =", nxt_cmd_lst)
+
+                except AttributeError:
+                    print("no need to find next command")
+
+
+                for bt_str in nxt_cmd_lst:
                     split_label = bt_str.replace("_", "\n")
                     nxt_butt = QPushButton(split_label)
                     nxt_butt.cmd_str = bt_str
@@ -596,6 +637,8 @@ class MainObject(QObject):
 
         except (IndexError, KeyError):
             print("no need to add next button")
+
+
 
     def nxt_clicked(self):
         self.nxt_key_clicked(self.sender().cmd_str)
