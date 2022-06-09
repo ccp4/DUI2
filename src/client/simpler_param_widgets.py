@@ -486,7 +486,9 @@ class ImportWidget(QWidget):
         )
 
         self.imp_txt = QLineEdit()
-        self.imp_txt.editingFinished.connect(self.line_changed)
+
+        #self.imp_txt.editingFinished.connect(self.line_changed)
+        self.imp_txt.textChanged.connect(self.line_changed)
 
         self.open_butt = QPushButton("\n Open Images \n")
         self.open_butt.clicked.connect(self.open_dir_widget)
