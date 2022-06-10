@@ -59,20 +59,13 @@ class find_scale_cmd(object):
     This class works as a function that internally navigates with
     recursive calls to find out if there is a << dials.scale >> command
     '''
-    def __init__(self, nod_lst, nod_num):
-        print(
-            "searching for Scale Command in history \n single node =",
-             nod_lst[nod_num]
-        )
+    def __init__(self, nod_lst, parent_num_lst):
         self.nod_lst = nod_lst
         self.found_scale = False
-        self.get_parent_num(nod_num)
+        for nod_num in parent_num_lst:
+            self.get_parent_num(nod_num)
 
     def get_parent_num(self, nod_num):
-        print(
-            "(number, cmd2show[0]) =", nod_num, ":",
-            self.nod_lst[nod_num]["cmd2show"][0]
-        )
         if self.nod_lst[nod_num]["cmd2show"][0] == "dials.scale":
             self.found_scale = True
 
@@ -86,7 +79,7 @@ class find_scale_cmd(object):
 class find_next_cmd(object):
     '''
     This class works as a function that internally navigates with
-    recursive calls to find the possible command to run
+    recursive calls to find the possible command to run next
     '''
     def __init__(
         self, nod_lst_in, parent_nod_num_lst, str_key, param_widgets
@@ -759,8 +752,12 @@ class MainObject(QObject):
     def search_in_parent_nodes(self):
         try:
             fnd_scl_cmd = find_scale_cmd(
-                self.server_nod_lst, self.new_node.parent_node_lst[0]
+                self.server_nod_lst, self.new_node.parent_node_lst
             )
+            '''
+            fnd_scl_cmd = find_scale_cmd(
+                self.server_nod_lst, self.new_node.parent_node_lst[0]
+            )'''
             fnd_scl = fnd_scl_cmd.foung_scale()
             print("found_scale =", fnd_scl)
             self.expr_widg.is_scale_parent(fnd_scl)
