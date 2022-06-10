@@ -31,7 +31,7 @@ from PySide2.QtGui import *
 from PySide2.QtWebEngineWidgets import QWebEngineView
 
 
-from gui_utils import TreeDirScene, widgets_defs, get_icons
+from gui_utils import TreeDirScene, widgets_defs, get_widget_def_dict
 from outputs import DoLoadHTML, ShowLog
 from img_view import DoImageView
 from reindex_table import ReindexTable, get_label_from_str_list
@@ -88,11 +88,19 @@ class find_next_cmd(object):
     This class works as a function that internally navigates with
     recursive calls to find the possible command to run
     '''
-    def __init__(self, nod_lst_in, nod_num_lst, dfl_lst_in):
+    def __init__(
+        self, nod_lst_in, parent_nod_num_lst, str_key, param_widgets
+    ):
         self.nod_lst = nod_lst_in
-        self.dfl_lst = dfl_lst_in
+        self.remove_combine = False
+        if str_key == "combine_experiments":
+            parent_num = parent_nod_num_lst[0]
+            str_key = self.nod_lst[parent_num]["cmd2show"][0][6:]
+            self.remove_combine = True
+
+        self.default_list = param_widgets[str_key]["nxt_widg_lst"]
         self.par_cmd_lst = []
-        for nod_num in nod_num_lst:
+        for nod_num in parent_nod_num_lst:
             self.get_parent_num(nod_num)
 
     def get_parent_num(self, nod_num):
@@ -102,9 +110,12 @@ class find_next_cmd(object):
 
     def get_nxt_cmd(self):
         fin_cmd_lst = []
-        for cmd in self.dfl_lst:
+        for cmd in self.default_list:
             if cmd not in self.par_cmd_lst:
                 fin_cmd_lst.append(cmd)
+
+        if self.remove_combine:
+            fin_cmd_lst.remove("combine_experiments")
 
         return fin_cmd_lst
 
@@ -254,7 +265,9 @@ class MainObject(QObject):
             sys.exit()
 
         tmp_widget_defs = widgets_defs
-        self.param_widgets = get_icons(widgets_defs, self.ui_dir_path)
+        self.param_widgets = get_widget_def_dict(
+            widgets_defs, self.ui_dir_path
+        )
 
         self.param_widgets["Root"]["simple"] = imp_widg
         self.param_widgets["Root"]["advanced"] = None
@@ -606,21 +619,18 @@ class MainObject(QObject):
             if(
                 self.server_nod_lst[self.curr_nod_num]["status"] == "Succeeded"
             ):
-                print("\nupdate_nxt_butt: key =", str_key, "\n")
-
-
                 try:
                     fnd_nxt_cmd = find_next_cmd(
                         self.server_nod_lst,
                         self.server_nod_lst[self.curr_nod_num]["parent_node_lst"],
-                        self.param_widgets[str_key]["nxt_widg_lst"]
+                        str_key, self.param_widgets
                     )
                     nxt_cmd_lst = fnd_nxt_cmd.get_nxt_cmd()
                     print("next command lst =", nxt_cmd_lst)
 
                 except AttributeError:
                     print("no need to find next command")
-
+                    nxt_cmd_lst = []
 
                 for bt_str in nxt_cmd_lst:
                     split_label = bt_str.replace("_", "\n")

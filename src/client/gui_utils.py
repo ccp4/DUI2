@@ -133,7 +133,7 @@ widgets_defs = {
 }
 
 
-def get_icons(in_dic, ui_path):
+def get_widget_def_dict(in_dic, ui_path):
     out_dic = {}
     print("Loading Icons")
     for key, value in in_dic.items():
