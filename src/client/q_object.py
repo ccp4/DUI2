@@ -30,8 +30,10 @@ from PySide2.QtGui import *
 
 from PySide2.QtWebEngineWidgets import QWebEngineView
 
-
-from gui_utils import TreeDirScene, widgets_defs, get_widget_def_dict
+from gui_utils import (
+    TreeDirScene, widgets_defs, get_widget_def_dict,
+    find_scale_cmd, find_next_cmd
+)
 from outputs import DoLoadHTML, ShowLog
 from img_view import DoImageView
 from reindex_table import ReindexTable, get_label_from_str_list
@@ -52,65 +54,6 @@ from simpler_param_widgets import (
     IntegrateSimplerParamTab, SymmetrySimplerParamTab,
     ScaleSimplerParamTab, CombineExperimentSimplerParamTab
 )
-
-
-class find_scale_cmd(object):
-    '''
-    This class works as a function that internally navigates with
-    recursive calls to find out if there is a << dials.scale >> command
-    '''
-    def __init__(self, nod_lst, parent_num_lst):
-        self.nod_lst = nod_lst
-        self.found_scale = False
-        for nod_num in parent_num_lst:
-            self.get_parent_num(nod_num)
-
-    def get_parent_num(self, nod_num):
-        if self.nod_lst[nod_num]["cmd2show"][0] == "dials.scale":
-            self.found_scale = True
-
-        for new_nod_num in self.nod_lst[nod_num]["parent_node_lst"]:
-            self.get_parent_num(new_nod_num)
-
-    def foung_scale(self):
-        return self.found_scale
-
-
-class find_next_cmd(object):
-    '''
-    This class works as a function that internally navigates with
-    recursive calls to find the possible command to run next
-    '''
-    def __init__(
-        self, nod_lst_in, parent_nod_num_lst, str_key, param_widgets
-    ):
-        self.nod_lst = nod_lst_in
-        self.remove_combine = False
-        if str_key == "combine_experiments":
-            parent_num = parent_nod_num_lst[0]
-            str_key = self.nod_lst[parent_num]["cmd2show"][0][6:]
-            self.remove_combine = True
-
-        self.default_list = param_widgets[str_key]["nxt_widg_lst"]
-        self.par_cmd_lst = []
-        for nod_num in parent_nod_num_lst:
-            self.get_parent_num(nod_num)
-
-    def get_parent_num(self, nod_num):
-        self.par_cmd_lst.append(self.nod_lst[nod_num]["cmd2show"][0][6:])
-        for new_nod_num in self.nod_lst[nod_num]["parent_node_lst"]:
-            self.get_parent_num(new_nod_num)
-
-    def get_nxt_cmd(self):
-        fin_cmd_lst = []
-        for cmd in self.default_list:
-            if cmd not in self.par_cmd_lst:
-                fin_cmd_lst.append(cmd)
-
-        if self.remove_combine:
-            fin_cmd_lst.remove("combine_experiments")
-
-        return fin_cmd_lst
 
 
 class MainObject(QObject):
