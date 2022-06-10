@@ -104,7 +104,7 @@ widgets_defs = {
         "tooltip"       : "dials.integrate ...",
         "icon"          : "resources/integrate.png",
         "main_cmd"      :["dials.integrate"],
-        "nxt_widg_lst"  :["scale", "symmetry", "export"]
+        "nxt_widg_lst"  :["scale", "symmetry", "combine_experiments", "export"]
     },
     "symmetry" : {
         "tooltip"       : "dials.symmetry ...",
