@@ -25,7 +25,12 @@ import subprocess, psutil
 import os, sys
 import glob, json
 
-from data_n_json import get_data_from_steps
+try:
+    from data_n_json import get_data_from_steps
+
+except ModuleNotFoundError:
+    from server.data_n_json import get_data_from_steps
+
 try:
     from shared_modules import format_utils
 

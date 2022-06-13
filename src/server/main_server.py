@@ -24,9 +24,17 @@ copyright (c) CCP4 - DLS
 import http.server, socketserver
 from urllib.parse import urlparse, parse_qs
 import json, os, zlib, sys, time
+try:
+    import multi_node
 
-import multi_node
-from data_n_json import iter_dict
+except ModuleNotFoundError:
+    from server import multi_node
+
+try:
+    from data_n_json import iter_dict
+
+except ModuleNotFoundError:
+    from server.data_n_json import iter_dict
 
 try:
     from shared_modules import format_utils
@@ -39,7 +47,7 @@ except ModuleNotFoundError:
     import format_utils
 
 
-def main():
+def main(par_def = None, connection_out = None):
     class ReqHandler(http.server.BaseHTTPRequestHandler):
         def do_POST(self):
             content_len = int(self.headers.get('Content-Length'))
@@ -172,7 +180,7 @@ def main():
                 self.wfile.write(bytes('/*EOF*/', 'utf-8'))
 
             except BrokenPipeError:
-                print("\n ** BrokenPipe err catch  ** while sending EOF or JSON \n")
+                print("\n BrokenPipe err catch  while sending EOF or JSON \n")
 
             except ConnectionResetError:
                 print(
@@ -181,13 +189,6 @@ def main():
 
     ################################################ PROPER MAIN
 
-    par_def = (
-        ("init_path", None),
-        ("port", 45678),
-        ("host", "localhost"),
-        #("host", "serverip"),
-        ("all_local", "False"),
-    )
 
     init_param = format_utils.get_par(par_def, sys.argv[1:])
     print("init_param =", init_param)
@@ -229,7 +230,7 @@ def main():
     cmd_tree_runner.run_get_data(cmd_dict)
 
     launch_success = False
-    n_secs = 5
+    n_secs = 2
     while launch_success == False:
         try:
             with socketserver.ThreadingTCPServer(
@@ -240,6 +241,10 @@ def main():
                     "\n serving at:\n  { host:", HOST, " port:", PORT, "}\n"
                 )
                 launch_success = True
+
+                connection_out.send(PORT)
+                connection_out.close()
+
                 try:
                     http_daemon.serve_forever()
 
@@ -248,10 +253,18 @@ def main():
                     http_daemon.server_close()
 
         except OSError:
+            PORT += 1
             launch_success = False
             print("OS err catch , trying again in",  n_secs, "secs")
             time.sleep(n_secs)
 
 
 if __name__ == "__main__":
-    main()
+    par_def = (
+        ("init_path", None),
+        ("port", 45678),
+        ("host", "localhost"),
+        #("host", "serverip"),
+        ("all_local", "False"),
+    )
+    main(par_def)

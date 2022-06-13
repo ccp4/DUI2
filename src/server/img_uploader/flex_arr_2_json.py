@@ -1,8 +1,8 @@
 try:
-    from img_uploader import img_stream_py
+    #from img_uploader import img_stream_py
+    from server.img_uploader import img_stream_py
 
 except ImportError:
-
     import img_stream_py
 
 from dials.array_family import flex
