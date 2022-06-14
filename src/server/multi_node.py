@@ -25,23 +25,8 @@ import subprocess, psutil
 import os, sys
 import glob, json
 
-try:
-    from data_n_json import get_data_from_steps
-
-except ModuleNotFoundError:
-    from server.data_n_json import get_data_from_steps
-
-try:
-    from shared_modules import format_utils
-
-except ModuleNotFoundError:
-    '''
-    This trick to import the format_utils module can be
-    removed once the project gets properly packaged
-    '''
-    comm_path = os.path.abspath(__file__)[0:-20] + "shared_modules"
-    sys.path.insert(1, comm_path)
-    import format_utils
+from server.data_n_json import get_data_from_steps
+from shared_modules import format_utils
 
 def fix_alias(short_in):
     pair_list = [
@@ -641,6 +626,7 @@ def str2dic(cmd_str):
 
 
 if __name__ == "__main__":
+    #FIXME: this does not import from here
 
     try:
         with open("run_data") as json_file:

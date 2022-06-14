@@ -38,11 +38,13 @@ from dials.command_line.combine_experiments import (
 )
 
 from dxtbx.model.experiment_list import ExperimentListFactory
+'''
 try:
     from img_uploader import flex_arr_2_json
 
 except ModuleNotFoundError:
-    from server.img_uploader import flex_arr_2_json
+'''
+from server.img_uploader import flex_arr_2_json
 
 
 def get_data_from_steps(uni_cmd, cmd_dict, step_list):
