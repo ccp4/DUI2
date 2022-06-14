@@ -32,12 +32,11 @@ from client.exec_utils import json_data_request
 
 def main(par_def = None, connection_out = None):
     data_init = ini_data()
-    data_init.set_data()
+    data_init.set_data(par_def)
     uni_url = data_init.get_url()
 
     print('get_if_local =', data_init.get_if_local(), 'get_url =', data_init.get_url())
 
-    #tmp_off = '''
     cmd = {"nod_lst":[""], "cmd_lst":["display"]}
     dummy_nod_lst = None
     n_secs = 3

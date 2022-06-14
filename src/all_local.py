@@ -17,14 +17,19 @@ if __name__ == '__main__':
         args = (server_par_def, pipe_server_2)
     )
     prcs_serv.start()
-    print(
-        "# time to launch client app with port =",  pipe_server_1.recv(), "\n"
-    )
+    new_port = pipe_server_1.recv()
+    print("# time to launch client app with port =",  new_port, "\n")
 
     pipe_client_1, pipe_client_2 = Pipe()
+
+    par_def = (
+        ("url", 'http://localhost:' + str(new_port) + '/'),
+        ("all_local", "true"),
+    )
+
     prcs_clien = Process(
         target = run_client.main,
-        args = (None, pipe_client_2)
+        args = (par_def, pipe_client_2)
     )
     prcs_clien.start()
 
