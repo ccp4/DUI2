@@ -46,7 +46,7 @@ def main():
         else:
             print("dummy_nod_lst != None ...\n launching GUI")
 
-    #QCoreApplication.setAttribute(Qt.AA_ShareOpenGLContexts)
+    QCoreApplication.setAttribute(Qt.AA_ShareOpenGLContexts)
     app = QApplication(sys.argv)
     m_obj = MainObject(parent = app)
     sys.exit(app.exec_())
