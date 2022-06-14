@@ -30,25 +30,25 @@ from PySide2.QtGui import *
 
 from PySide2.QtWebEngineWidgets import QWebEngineView
 
-from gui_utils import (
+from client.gui_utils import (
     TreeDirScene, widgets_defs, get_widget_def_dict,
     find_scale_cmd, find_next_cmd
 )
-from outputs import DoLoadHTML, ShowLog
-from img_view import DoImageView
-from reindex_table import ReindexTable, get_label_from_str_list
-from exec_utils import (
+from client.outputs import DoLoadHTML, ShowLog
+from client.img_view import DoImageView
+from client.reindex_table import ReindexTable, get_label_from_str_list
+from client.exec_utils import (
     build_advanced_params_widget, json_data_request, Run_n_Output,
     CommandParamControl
 )
 
-from init_firts import ini_data
+from client.init_firts import ini_data
 
-from simpler_param_widgets import RootWidg
-from simpler_param_widgets import ImportWidget
-from simpler_param_widgets import MaskWidget
-from simpler_param_widgets import ExportWidget
-from simpler_param_widgets import (
+from client.simpler_param_widgets import RootWidg
+from client.simpler_param_widgets import ImportWidget
+from client.simpler_param_widgets import MaskWidget
+from client.simpler_param_widgets import ExportWidget
+from client.simpler_param_widgets import (
     FindspotsSimplerParameterTab, IndexSimplerParamTab,
     RefineBravaiSimplerParamTab, RefineSimplerParamTab,
     IntegrateSimplerParamTab, SymmetrySimplerParamTab,

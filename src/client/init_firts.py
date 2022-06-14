@@ -2,19 +2,15 @@
 
 import os, sys
 
-try:
-    from shared_modules import format_utils
-
+#try:
+from shared_modules import format_utils
+'''
 except ModuleNotFoundError:
-    '''
-    This trick to import the format_utils module can be
-    removed once the project gets properly packaged
-    '''
     comm_path = os.path.abspath(__file__)[0:-20] + "shared_modules"
     print("comm_path(init_firts): ", comm_path, "\n")
     sys.path.insert(1, comm_path)
     import format_utils
-
+'''
 
 class ini_data(object):
     def __init__(self):

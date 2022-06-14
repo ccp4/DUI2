@@ -30,8 +30,8 @@ from PySide2.QtWidgets import *
 from PySide2 import QtUiTools
 from PySide2.QtGui import *
 
-from init_firts import ini_data
-from exec_utils import Mtz_Data_Request
+from client.init_firts import ini_data
+from client.exec_utils import Mtz_Data_Request
 
 def _get_all_direct_layout_widget_children(parent):
     """Walk a widget tree and get all non-QLayout direct children

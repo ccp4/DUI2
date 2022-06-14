@@ -31,15 +31,15 @@ from PySide2 import QtUiTools
 import numpy as np
 import json, zlib, time, requests
 
-from init_firts import ini_data
-from exec_utils import json_data_request
-from outputs import HandleLoadStatusLabel
+from client.init_firts import ini_data
+from client.exec_utils import json_data_request
+from client.outputs import HandleLoadStatusLabel
 
-from img_view_utils import (
+from client.img_view_utils import (
     crunch_min_max, np2bmp_monocrome, np2bmp_heat, np2bmp_mask,
     load_img_json_w_str, load_mask_img_json_w_str
 )
-from simpler_param_widgets import FileBrowser, build_template
+from client.simpler_param_widgets import FileBrowser, build_template
 
 class LoadFullMaskImage(QThread):
     image_loaded = Signal(tuple)

@@ -27,8 +27,8 @@ from PySide2.QtWidgets import *
 from PySide2 import QtUiTools
 from PySide2.QtGui import *
 
-from exec_utils import json_data_request
-from init_firts import ini_data
+from client.exec_utils import json_data_request
+from client.init_firts import ini_data
 
 class HandleLoadStatusLabel(QObject):
     def __init__(self, parent = None):

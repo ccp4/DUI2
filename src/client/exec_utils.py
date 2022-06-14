@@ -25,19 +25,9 @@ copyright (c) CCP4 - DLS
 from PySide2.QtCore import *
 import requests, json, os, sys, zlib
 
-from gui_utils import AdvancedParameters, widgets_defs
-from init_firts import ini_data
-
-
-try:
-    from shared_modules import format_utils
-
-except ModuleNotFoundError:
-    comm_path = os.path.abspath(__file__)[0:-20] + "shared_modules"
-    print("comm_path: ", comm_path, "\n")
-    sys.path.insert(1, comm_path)
-    import format_utils
-
+from client.gui_utils import AdvancedParameters, widgets_defs
+from client.init_firts import ini_data
+from shared_modules import format_utils
 
 def build_advanced_params_widget(cmd_str, h_box_search):
     cmd = {"nod_lst":"", "cmd_lst":[cmd_str]}
