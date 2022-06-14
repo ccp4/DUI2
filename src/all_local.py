@@ -13,6 +13,6 @@ if __name__ == '__main__':
     pipe_connect_1, pipe_connect_2 = Pipe()
     p = Process(target = run_server.main, args = (par_def, pipe_connect_2))
     p.start()
-    print("# port =",  pipe_connect_1.recv(), "\n")
+    print("# time to launch client app with port =",  pipe_connect_1.recv(), "\n")
     p.join()
     print("Closing naturally")
