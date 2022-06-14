@@ -49,8 +49,13 @@ def main(par_def = None, connection_out = None):
         else:
             print("dummy_nod_lst != None ...\n launching GUI")
 
+    connection_out.send("Ok")
+    connection_out.close()
+
     QCoreApplication.setAttribute(Qt.AA_ShareOpenGLContexts)
     app = QApplication(sys.argv)
     m_obj = MainObject(parent = app)
+    print("before sys.exit")
     sys.exit(app.exec_())
+    print("after sys.exit")
 

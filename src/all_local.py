@@ -33,7 +33,7 @@ if __name__ == '__main__':
     )
     prcs_clien.start()
 
-    print("# running client app =",  pipe_client_1.recv(), "\n")
+    print("# running client app ",  pipe_client_1.recv(), "\n")
     prcs_clien.join()
     print("Closing client naturally")
 
