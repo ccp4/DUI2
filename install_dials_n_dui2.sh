@@ -68,7 +68,7 @@ echo $SET_DIALS_ENV >> dui_client
 echo $CLIENT_EXE_CMD >> dui_client
 chmod +x dui_client
 
-SERVER_EXE_CMD="dials.python $INI_DIR_PATH/DUI2/src/server/main_server.py \$@"
+SERVER_EXE_CMD="dials.python $INI_DIR_PATH/DUI2/src/server/run_server.py \$@"
 echo $SET_W_ENG_FLAG > dui_server
 echo $SET_DIALS_ENV >> dui_server
 echo $SERVER_EXE_CMD >> dui_server
