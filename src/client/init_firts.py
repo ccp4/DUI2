@@ -23,14 +23,7 @@ class ini_data(object):
                 ("all_local", "False"),
             )
 
-            print("sys.argv =", sys.argv)
-            init_param = format_utils.get_par(par_def, sys.argv[1:])
-
-        else:
-            init_param = {
-                "url":       par_def[0][1],
-                "all_local": par_def[1][1]
-            }
+        init_param = format_utils.get_par(par_def, sys.argv[1:])
 
         print("init_param =", init_param)
         global uni_url
