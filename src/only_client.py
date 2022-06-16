@@ -1,4 +1,4 @@
-from multiprocessing import Process
+#from multiprocessing import Process
 from client import run_client
 
 if __name__ == '__main__':
@@ -7,11 +7,7 @@ if __name__ == '__main__':
         ("all_local", "true"),
     )
 
-    prcs_clien = Process(
-        target = run_client.main,
-        args = (par_def,)
-    )
-    prcs_clien.start()
-    prcs_clien.join()
+    run_client.main(par_def)
+
     print("Closing client naturally")
 
