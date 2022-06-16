@@ -20,12 +20,14 @@ if __name__ == '__main__':
     new_port = pipe_server_1.recv()
     print("# time to launch client app with port =",  new_port, "\n")
 
-    pipe_client_1, pipe_client_2 = Pipe()
-
     par_def = (
         ("url", 'http://localhost:' + str(new_port) + '/'),
         ("all_local", "true"),
     )
+
+    '''
+    pipe_client_1, pipe_client_2 = Pipe()
+
 
     prcs_clien = Process(
         target = run_client.main,
@@ -36,6 +38,11 @@ if __name__ == '__main__':
     print("# running client app ",  pipe_client_1.recv(), "\n")
     prcs_clien.join()
     print("Closing client naturally")
+    '''
+
+
+    run_client.main(par_def)
+
 
     prcs_serv.join()
     print("Closing server naturally")

@@ -27,10 +27,13 @@ from PySide2.QtCore import *
 from PySide2.QtWidgets import *
 
 from client.q_object import MainObject
+
+
 from client.init_firts import ini_data
 from client.exec_utils import json_data_request
 
-def main(par_def = None, connection_out = None):
+
+def main(par_def = None):
     data_init = ini_data()
     data_init.set_data(par_def)
     uni_url = data_init.get_url()
@@ -40,7 +43,9 @@ def main(par_def = None, connection_out = None):
     cmd = {"nod_lst":[""], "cmd_lst":["display"]}
     dummy_nod_lst = None
     n_secs = 3
+    print("here 1")
     while dummy_nod_lst == None:
+        print("here in loop")
         dummy_nod_lst = json_data_request(uni_url, cmd)
         if dummy_nod_lst == None:
             print("dummy_nod_lst =", dummy_nod_lst, ", waiting", n_secs, "secs ...")
@@ -49,10 +54,6 @@ def main(par_def = None, connection_out = None):
         else:
             print("dummy_nod_lst != None ...\n launching GUI")
 
-    connection_out.send("Ok")
-    connection_out.close()
-
-    QCoreApplication.setAttribute(Qt.AA_ShareOpenGLContexts)
     app = QApplication(sys.argv)
     m_obj = MainObject(parent = app)
     print("before sys.exit")

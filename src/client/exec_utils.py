@@ -46,12 +46,15 @@ def build_advanced_params_widget(cmd_str, h_box_search):
 
 def json_data_request(url, cmd):
     try:
+        print("attempting to request to:", url, ", with:", cmd)
         req_get = requests.get(url, stream = True, params = cmd, timeout = 3)
+        print("starting request")
         str_lst = ''
         line_str = ''
         json_out = ""
         times_loop = 10
         for count_times in range(times_loop):
+            print("count_times =", count_times)
             tmp_dat = req_get.raw.readline()
             line_str = str(tmp_dat.decode('utf-8'))
             if line_str[-7:] == '/*EOF*/':
@@ -75,6 +78,7 @@ def json_data_request(url, cmd):
     except requests.exceptions.RequestException:
         print(" ... requests.exceptions.RequestException (json_data_request)")
         json_out = None
+
 
     return json_out
 
