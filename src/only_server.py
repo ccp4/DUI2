@@ -6,7 +6,7 @@ server_par_def = (
     ("port", 45678),
     ("host", "localhost"),
     #("host", "serverip"),
-    ("all_local", "true"),
+    ("all_local", "false"),
 )
 
 if __name__ == '__main__':
