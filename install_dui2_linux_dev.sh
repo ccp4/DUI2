@@ -18,16 +18,11 @@ libtbx.conda update -n base conda -y
 printf "\n\n If the HTML report crashes, try running the following command:\n\n  "
 printf "cp /usr/lib/x86_64-linux-gnu/libstdc++.so.6 $INI_DIR_PATH/dials-v3-9-0/conda_base/lib/\n\n"
 
-printf "========================================\n"
-printf "#           INSTALLING MAMBA           #\n"
-printf "========================================\n\n"
-libtbx.conda install -c conda-forge mamba -y
-printf "Setting up mamba ...\n"
 libtbx.refresh
 printf "========================================\n"
 printf "#         INSTALLING DUI2 DEPS         #\n"
 printf "========================================\n\n"
-libtbx.mamba install pyside2 -y
+libtbx.conda install -c conda-forge pyside2 -y
 printf "========================================\n"
 printf "#           INSTALLING DUI2            #\n"
 printf "========================================\n\n"
