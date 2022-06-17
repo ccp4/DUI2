@@ -43,11 +43,6 @@ printf "========================================\n\n"
     printf "  using WGET intead of GIT  \n\n "
 }
 
-cd DUI2/src/server/img_uploader/
-printf "========================================\n"
-printf "#     COMPYLING DUI2 C++ EXTENSION     #\n"
-printf "========================================\n\n"
-dials.python compyling_boost_ext.py
 printf "========================================\n"
 printf "#       DIALS and DUI2 INSTALLED       #\n"
 printf "========================================\n\n"
@@ -62,22 +57,23 @@ CMD_TOOLS_PATH=$(pwd)
 SET_DIALS_ENV="source $INI_DIR_PATH/dials-v3-9-0/dials_env.sh"
 SET_W_ENG_FLAG="export QTWEBENGINE_CHROMIUM_FLAGS=\"--no-sandbox\""
 
-CLIENT_EXE_CMD="dials.python $INI_DIR_PATH/DUI2/src/client/main_client.py \$@"
+CLIENT_EXE_CMD="dials.python $INI_DIR_PATH/DUI2/src/only_client.py \$@"
 echo $SET_W_ENG_FLAG > dui_client
 echo $SET_DIALS_ENV >> dui_client
 echo $CLIENT_EXE_CMD >> dui_client
 chmod +x dui_client
 
-SERVER_EXE_CMD="dials.python $INI_DIR_PATH/DUI2/src/server/run_server.py \$@"
+SERVER_EXE_CMD="dials.python $INI_DIR_PATH/DUI2/src/only_server.py \$@"
 echo $SET_W_ENG_FLAG > dui_server
 echo $SET_DIALS_ENV >> dui_server
 echo $SERVER_EXE_CMD >> dui_server
 chmod +x dui_server
 
-ALL_LOCAL_CMD_N1="dui_server all_local=true &"
-ALL_LOCAL_CMD_N2="dui_client all_local=true"
-echo $ALL_LOCAL_CMD_N1 > dui_all_local
-echo $ALL_LOCAL_CMD_N2 >> dui_all_local
+ALL_LOCAL_CMD="dials.python $INI_DIR_PATH/DUI2/src/all_local.py \$@"
+echo $SET_W_ENG_FLAG > dui_all_local
+echo $SET_DIALS_ENV >> dui_all_local
+echo $ALL_LOCAL_CMD >> dui_all_local
+
 chmod +x dui_all_local
 
 printf " ... Done\n\n"
