@@ -1,5 +1,5 @@
-mkdir dials_n_dui_installs
-cd dials_n_dui_installs
+mkdir dui_dev
+cd dui_dev
 printf "========================================\n"
 printf "#        INSTALLING DIALS v3.9.0       #\n"
 printf "========================================\n\n"
@@ -75,7 +75,7 @@ printf " ... Done\n\n"
 printf "========================================\n"
 printf "#         DIALS and DUI2 READY         #\n"
 printf "========================================\n\n"
-printf " commands abailable: \n\n"
+printf " commands available: \n\n"
 printf "   dui_all_local,  dui_server,  dui_client\n\n"
 printf " To set enviromet to run DUI2 (including Dials) type:\n\n"
 printf "   export PATH=$CMD_TOOLS_PATH:\$PATH  \n\n"
