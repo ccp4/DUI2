@@ -268,6 +268,7 @@ class FileBrowser(QDialog):
         mainLayout.addLayout(bot_hbox)
 
         self.show_hidden_check.stateChanged.connect(self.redraw_dir)
+        self.t_view.doubleClicked[QModelIndex].connect(self.node_clicked)
         self.t_view.clicked[QModelIndex].connect(self.node_clicked)
         self.open_select_butt.clicked.connect(self.set_selection)
         self.cancel_butt.clicked.connect(self.cancel_opn)
@@ -331,6 +332,10 @@ class FileBrowser(QDialog):
         self.last_file_clicked = str_select_path
         print("item.file_path =", self.last_file_clicked)
 
+    def node_double_clicked(self, it_index):
+        self.last_file_clicked = str(item.file_path)
+        self.node_clicked(it_index)
+
     def cancel_opn(self):
         self.close()
 
@@ -347,6 +352,7 @@ class LocalFileBrowser(QDialog):
         self.fil_sys_mod = QFileSystemModel()
         self.fil_sys_mod.setRootPath(QDir.homePath())
         self.t_view =  QTreeView()
+        #print("dir(self.t_view) =", dir(self.t_view))
         self.t_view.setModel(self.fil_sys_mod)
         self.t_view.setSortingEnabled(True)
 
@@ -371,6 +377,7 @@ class LocalFileBrowser(QDialog):
         mainLayout.addLayout(bot_hbox)
 
         self.t_view.clicked.connect(self.node_clicked)
+        self.t_view.doubleClicked.connect(self.node_double_clicked)
         self.open_select_butt.clicked.connect(self.set_selection)
         self.cancel_butt.clicked.connect(self.cancel_opn)
 
@@ -396,6 +403,11 @@ class LocalFileBrowser(QDialog):
 
         self.dir_selected = is_dir
         self.last_file_clicked = str_select_path
+
+    def node_double_clicked(self, it_index):
+        index = self.t_view.currentIndex()
+        self.last_file_clicked = str(self.fil_sys_mod.filePath(index))
+        self.node_clicked(index)
 
     def set_selection(self):
         if self.last_file_clicked == None:
