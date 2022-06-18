@@ -15,9 +15,6 @@ cd $INI_DIR_PATH
 source dials-v3-9-0/dials_env.sh
 libtbx.conda update -n base conda -y
 
-printf "\n\n If the HTML report crashes, try running the following command:\n\n  "
-printf "cp /usr/lib/x86_64-linux-gnu/libstdc++.so.6 $INI_DIR_PATH/dials-v3-9-0/conda_base/lib/\n\n"
-
 libtbx.refresh
 printf "========================================\n"
 printf "#         INSTALLING DUI2 DEPS         #\n"
@@ -75,6 +72,8 @@ printf " ... Done\n\n"
 printf "========================================\n"
 printf "#         DIALS and DUI2 READY         #\n"
 printf "========================================\n\n"
+printf "\n\n If the HTML report crashes, try running the following command:\n\n  "
+printf "cp /usr/lib/x86_64-linux-gnu/libstdc++.so.6 $INI_DIR_PATH/dials-v3-9-0/conda_base/lib/\n\n"
 printf " commands available: \n\n"
 printf "   dui_all_local,  dui_server,  dui_client\n\n"
 printf " To set enviromet to run DUI2 (including Dials) type:\n\n"
