@@ -498,8 +498,6 @@ class ImportWidget(QWidget):
         )
 
         self.imp_txt = QLineEdit()
-
-        #self.imp_txt.editingFinished.connect(self.line_changed)
         self.imp_txt.textChanged.connect(self.line_changed)
 
         self.open_butt = QPushButton("\n Open Images \n")
@@ -555,29 +553,31 @@ class ImportWidget(QWidget):
 
     def update_all_pars(self, tup_lst_pars):
         print(
-            "update_all_pars(ImportWidget)",
+            "<< update_all_pars(ImportWidget) >>",
             tup_lst_pars
         )
 
         for n, par in enumerate(tup_lst_pars):
             print("n=", n, "par=", par)
 
-        #TODO in the future there will be more than one parameter to update,
-        #TODO the next try: will go inside a loop and consequently will be
-        #TODO different
         try:
-            inp_val = str(tup_lst_pars[0][0]["value"])
-            print("inp_val =", inp_val)
-            self.imp_txt.setText(inp_val)
+            for par_dic in tup_lst_pars[0]:
+                if(
+                    par_dic["name"] == "input.directory" or
+                    par_dic["name"] == "input.template"
+                ):
+                    if par_dic["name"] == "input.directory":
+                        self.dir_selected = True
 
-            input_parmeter = str(tup_lst_pars[0][0]["name"])
-            print("input_parmeter =", input_parmeter)
-            self.state_label.setText(input_parmeter)
+                    else:
+                        self.dir_selected = False
+
+                    self.imp_txt.setText(str(par_dic["value"]))
 
         except IndexError:
             print(" Not copying parameters from node (Index err catch )")
             self.imp_txt.setText("")
-            self.state_label.setText("...")
+            self.state_label.setText("   ...")
 
     def update_param(self, str_path, str_value):
         print(
