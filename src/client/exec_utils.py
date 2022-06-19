@@ -214,15 +214,17 @@ class CommandParamControl:
             build_lst = []
             for inner_par_val in inner_lst:
                 print("inner_par_val =", inner_par_val)
-                build_lst.append(
-                    {
-                        "name":str(inner_par_val[0]),
-                        "value":str(inner_par_val[1])
-                    }
-                )
+                try:
+                    build_lst.append(
+                        {
+                            "name":str(inner_par_val[0]),
+                            "value":str(inner_par_val[1])
+                        }
+                    )
+                except IndexError:
+                    print("index err catch, not adding new parameter")
 
             self.par_lst.append(build_lst)
-
 
     def set_custom_parameter(self, new_custom_parameter):
         is_same = False

@@ -451,6 +451,15 @@ def build_template(str_path_in):
 
     return template_str, star_str
 
+def get_lst_par_from_str(str_in):
+    lst_com = str_in.split(" ")
+    lst_pair = []
+    for comm in lst_com:
+        pair = comm.split("=")
+        if len(pair) == 2:
+            lst_pair.append(pair)
+
+    return lst_pair
 
 class RootWidg(QWidget):
     def __init__(self, parent = None):
@@ -496,9 +505,16 @@ class ImportWidget(QWidget):
         self.state_label.setFont(
             QFont("Monospace", font_point_size + 1, QFont.Bold)
         )
-
         self.imp_txt = QLineEdit()
         self.imp_txt.textChanged.connect(self.line_changed)
+
+        self.extra_label = QLabel("   ...")
+        self.extra_label.setFont(
+            QFont("Monospace", font_point_size + 1, QFont.Bold)
+        )
+        self.imp_extra_txt = QLineEdit()
+        self.imp_extra_txt.textChanged.connect(self.line_changed)
+
 
         self.open_butt = QPushButton("\n Open Images \n")
         self.open_butt.clicked.connect(self.open_dir_widget)
@@ -509,6 +525,11 @@ class ImportWidget(QWidget):
         self.main_vbox.addStretch()
         self.main_vbox.addWidget(self.state_label)
         self.main_vbox.addWidget(self.imp_txt)
+
+        self.main_vbox.addStretch()
+        self.main_vbox.addWidget(self.extra_label)
+        self.main_vbox.addWidget(self.imp_extra_txt)
+
         self.main_vbox.addStretch()
         self.setLayout(self.main_vbox)
 
@@ -549,7 +570,18 @@ class ImportWidget(QWidget):
             str_path = "input.template"
 
         self.state_label.setText(str_path)
-        self.all_items_changed.emit([[[str_path, str_value]]])
+
+        lst_par = [[str_path, str_value]]
+
+        ext_par = str(self.imp_extra_txt.text())
+        if len(ext_par) > 0:
+            lst_ext_par = get_lst_par_from_str(ext_par)
+            if len(lst_ext_par) > 0:
+                print("time to add:", lst_ext_par, "to command lst")
+                for single_ext_par in lst_ext_par:
+                    lst_par.append(single_ext_par)
+
+        self.all_items_changed.emit([lst_par])
 
     def update_all_pars(self, tup_lst_pars):
         print(
