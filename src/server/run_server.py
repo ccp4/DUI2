@@ -239,14 +239,3 @@ def main(par_def = None, connection_out = None):
             launch_success = False
             print("OS err catch , trying again in",  n_secs, "secs")
             time.sleep(n_secs)
-
-
-if __name__ == "__main__":
-    par_def = (
-        ("init_path", None),
-        ("port", 45678),
-        ("host", "localhost"),
-        #("host", "serverip"),
-        ("all_local", "False"),
-    )
-    main(par_def)

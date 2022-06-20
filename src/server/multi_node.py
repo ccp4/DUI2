@@ -625,39 +625,3 @@ def str2dic(cmd_str):
     return cmd_dict
 
 
-if __name__ == "__main__":
-    #FIXME: this does not import from here
-
-    try:
-        with open("run_data") as json_file:
-            runner_data = json.load(json_file)
-
-    except FileNotFoundError:
-        runner_data = None
-        print("Nothing to recover")
-
-    cmd_tree_runner = Runner(runner_data)
-    cmd_dict = str2dic("display")
-    cmd_tree_runner.run_get_data(cmd_dict)
-    cmd_str = ""
-
-    while cmd_str.strip() != "exit" and cmd_str.strip() != "quit":
-        try:
-            inp_str = "]]]>>> "
-            cmd_str = str(input(inp_str))
-            print("\n")
-
-        except EOFError:
-            print("Caught << EOF err catch  >> \n  ... interrupting")
-            sys.exit(0)
-
-        except:
-            print("Caught << some  err catch  >> ... interrupting")
-            sys.exit(1)
-
-        cmd_dict = str2dic(cmd_str)
-        cmd_tree_runner.run_dials_comand(cmd_dict)
-
-        cmd_dict = str2dic("display")
-        cmd_tree_runner.run_get_data(cmd_dict)
-

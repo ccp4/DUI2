@@ -25,19 +25,12 @@ import http.server, socketserver
 from urllib.parse import urlparse, parse_qs
 import json, os, zlib, sys, time
 
-from data_n_json import iter_dict
-from img_uploader import flex_arr_2_json
+from server.data_n_json import iter_dict
+from server.img_uploader import flex_arr_2_json
 
 from dxtbx.model.experiment_list import ExperimentListFactory
 
-try:
-    from shared_modules import format_utils
-
-except ModuleNotFoundError:
-    comm_path = os.path.abspath(__file__)[0:-30] + "shared_modules"
-    print("comm_path =", comm_path)
-    sys.path.insert(1, comm_path)
-    import format_utils
+from shared_modules import format_utils
 
 class Browser(object):
     def __init__(self, tree_dic_lst):
@@ -156,7 +149,8 @@ class Browser(object):
         return return_list
 
 
-def main():
+
+def main(par_def = None, connection_out = None):
     class ReqHandler(http.server.BaseHTTPRequestHandler):
         def do_GET(self):
             self.send_response(200)
@@ -257,6 +251,3 @@ def main():
             print("OS err catch , trying again in",  n_secs, "secs")
             time.sleep(n_secs)
 
-
-if __name__ == "__main__":
-    main()
