@@ -63,6 +63,7 @@ def fix_alias(short_in):
         ("gm",    "dials.generate_mask"                   ),
         ("am",    "dials.apply_mask"                      ),
         ("fd",    "dials.find_spots"                      ),
+        ("fr",    "dials.find_rotation_axis"              ),
         ("id",    "dials.index"                           ),
         ("rb",    "dials.refine_bravais_settings"         ),
         ("ri",    "dials.reindex"                         ),
