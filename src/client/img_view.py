@@ -1539,15 +1539,26 @@ class MainImgViewObject(QObject):
         self.open_widget.file_or_dir_selected.connect(self.set_selection)
 
 
+old2remove = '''
 def main():
-    QCoreApplication.setAttribute(Qt.AA_ShareOpenGLContexts)
     app = QApplication(sys.argv)
     m_obj = MainImgViewObject(parent = app)
     sys.exit(app.exec_())
+'''
 
 
-if __name__ == "__main__":
-    main()
+def main(par_def = None):
+    data_init = ini_data()
+    data_init.set_data(par_def)
+    uni_url = data_init.get_url()
+
+    print('get_if_local =', data_init.get_if_local(), 'get_url =', data_init.get_url())
+
+    app = QApplication(sys.argv)
+    m_obj = MainImgViewObject(parent = app)
+    print("before sys.exit")
+    sys.exit(app.exec_())
+    print("after sys.exit")
 
 
 
