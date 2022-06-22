@@ -1155,6 +1155,28 @@ class CombineExperimentSimplerParamTab(SimpleParamTab):
         self.build_pars()
 
 
+class OptionalWidget(QWidget):
+    all_items_changed = Signal(list)
+    def __init__(self, parent = None):
+        super(OptionalWidget, self).__init__(parent)
+
+        self.main_vbox = QVBoxLayout()
+        self.main_vbox.addStretch()
+        self.main_vbox.addWidget(QLabel("Dummy for now ..."))
+        self.main_vbox.addStretch()
+        self.setLayout(self.main_vbox)
+
+
+    def reset_pars(self):
+        print("reset_pars(OptionalWidget)")
+
+    def update_all_pars(self, tup_lst_pars):
+        print(
+            "update_all_pars(ImportWidget)",
+            tup_lst_pars
+        )
+
+
 class ExportWidget(QWidget):
     '''
         This widget is a simplified version of ImportWidget since
@@ -1208,7 +1230,7 @@ class ExportWidget(QWidget):
 
     def update_all_pars(self, tup_lst_pars):
         print(
-            "update_all_pars(ImportWidget)",
+            "update_all_pars(ExportWidget)",
             tup_lst_pars
         )
         try:

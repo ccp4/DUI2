@@ -29,19 +29,15 @@ from PySide2.QtGui import *
 import numpy as np
 
 
-try:
-    from shared_modules import format_utils
-
+#try:
+from shared_modules import format_utils
+'''
 except ModuleNotFoundError:
-    '''
-    This trick to import the format_utils module can be
-    removed once the project gets properly packaged
-    '''
     comm_path = os.path.abspath(__file__)[0:-19] + "shared_modules"
     print("comm_path: ", comm_path)
     sys.path.insert(1, comm_path)
     import format_utils
-
+'''
 
 widgets_defs = {
     "Root" : {
@@ -66,7 +62,7 @@ widgets_defs = {
         "tooltip"       : "dials.find_spots ...",
         "icon"          : "resources/find_spots.png",
         "main_cmd"      :["dials.find_spots"],
-        "nxt_widg_lst"  :["index", "combine_experiments"]
+        "nxt_widg_lst"  :["index", "combine_experiments", "optional"]
     },
     "index" : {
         "tooltip"       : "dials.index ...",
@@ -75,7 +71,8 @@ widgets_defs = {
         "nxt_widg_lst"  :[
             "refine_bravais_settings",
             "refine",
-            "combine_experiments"
+            "combine_experiments",
+            "optional"
         ]
     },
     "refine_bravais_settings" : {
@@ -88,7 +85,7 @@ widgets_defs = {
         "tooltip"       : "dials.reindex ...",
         "icon"          : "resources/reindex.png",
         "main_cmd"      :["dials.reindex"],
-        "nxt_widg_lst"  :["refine", "integrate", "combine_experiments"]
+        "nxt_widg_lst"  :["refine", "integrate", "combine_experiments", "optional"]
     },
     "refine" : {
         "tooltip"       : "dials.refine ...",
@@ -97,26 +94,27 @@ widgets_defs = {
         "nxt_widg_lst"  :[
             "integrate",
             "refine_bravais_settings",
-            "combine_experiments"
+            "combine_experiments",
+            "optional"
         ]
     },
     "integrate" : {
         "tooltip"       : "dials.integrate ...",
         "icon"          : "resources/integrate.png",
         "main_cmd"      :["dials.integrate"],
-        "nxt_widg_lst"  :["scale", "symmetry", "combine_experiments", "export"]
+        "nxt_widg_lst"  :["scale", "symmetry", "combine_experiments", "export", "optional"]
     },
     "symmetry" : {
         "tooltip"       : "dials.symmetry ...",
         "icon"          : "resources/symmetry.png",
         "main_cmd"      :["dials.symmetry"],
-        "nxt_widg_lst"  :["scale", "combine_experiments", "export"]
+        "nxt_widg_lst"  :["scale", "combine_experiments", "export", "optional"]
     },
     "scale" : {
         "tooltip"       : "dials.scale ...",
         "icon"          : "resources/scale.png",
         "main_cmd"      :["dials.scale"],
-        "nxt_widg_lst"  :["symmetry", "combine_experiments", "export"]
+        "nxt_widg_lst"  :["symmetry", "combine_experiments", "export", "optional"]
     },
     "export" : {
         "tooltip"       : "dials.export ...",
@@ -128,8 +126,17 @@ widgets_defs = {
         "tooltip"       : "dials.combine_experiments ...",
         "icon"          : "resources/combine.png",
         "main_cmd"      :["dials.combine_experiments"],
-        "nxt_widg_lst"  :["index", "refine", "integrate", "export"]
+        "nxt_widg_lst"  :["index", "refine", "integrate", "export", "optional"]
+    },
+
+    "optional" : {
+        "tooltip"       : "choose from a list",
+        "icon"          : "resources/optional.png",
+        "main_cmd"      :["dials.optional"],
+        "nxt_widg_lst"  :["find_spots", "index", "refine", "integrate", "export"]
     }
+
+
 }
 
 
@@ -560,6 +567,11 @@ def add_ready_node(old_lst_nodes, com_par):
         return new_lst
 
     except AttributeError:
+        print(" Attribute Err catch (add_ready_node) ")
+        return old_lst_nodes
+
+    except IndexError:
+        print(" Index Err catch (add_ready_node) ")
         return old_lst_nodes
 
 

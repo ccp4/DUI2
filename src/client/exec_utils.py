@@ -187,7 +187,6 @@ class CommandParamControl:
 
     def reset_all_params(self):
         self.par_lst = [[]]
-        #self.m_cmd_lst = []
         self.custm_param = None
 
     def set_parameter(self, new_name, new_value, lst_num = 0):

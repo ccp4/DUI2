@@ -48,6 +48,7 @@ from client.simpler_param_widgets import RootWidg
 from client.simpler_param_widgets import ImportWidget
 from client.simpler_param_widgets import MaskWidget
 from client.simpler_param_widgets import ExportWidget
+from client.simpler_param_widgets import OptionalWidget
 from client.simpler_param_widgets import (
     FindspotsSimplerParameterTab, IndexSimplerParamTab,
     RefineBravaiSimplerParamTab, RefineSimplerParamTab,
@@ -84,6 +85,18 @@ class MainObject(QObject):
             self.expr_widg.all_items_changed.connect(self.all_items_param_changed)
             self.expr_widg.find_scaled_before.connect(self.search_in_parent_nodes)
             self.window.ExportScrollArea.setWidget(self.expr_widg)
+
+            #########################################################################
+            self.optional_widg = OptionalWidget()
+            self.window.OptionalScrollArea.setWidget(self.optional_widg)
+
+            '''
+            op_advanced_parameters = build_advanced_params_widget(
+                "optional_params", self.window.OptionalSearchLayout
+            )
+            '''
+
+            #########################################################################
 
             self.mask_widg = MaskWidget()
             self.mask_widg.all_items_changed.connect(self.all_items_param_changed)
@@ -179,6 +192,7 @@ class MainObject(QObject):
                 ce_advanced_parameters
             )
 
+
             fd_advanced_parameters.twin_widg = find_simpl_widg
             find_simpl_widg.twin_widg = fd_advanced_parameters
             id_advanced_parameters.twin_widg = index_simpl_widg
@@ -269,6 +283,15 @@ class MainObject(QObject):
         self.param_widgets["export"]["simple"] = self.expr_widg
         self.param_widgets["export"]["advanced"] = None
         self.param_widgets["export"]["main_page"] = self.window.ExportPage
+
+
+        ############################################################################
+
+        self.param_widgets["optional"]["simple"] = self.optional_widg
+        self.param_widgets["optional"]["advanced"] = None
+        self.param_widgets["optional"]["main_page"] = self.window.OptionalPage
+
+        ############################################################################
 
         self.tree_scene = TreeDirScene(self)
         self.window.treeView.setScene(self.tree_scene)
@@ -428,15 +451,20 @@ class MainObject(QObject):
 
             self.do_image_view.update_tmp_mask(lst_tmp_par)
 
-            if(
-                self.new_node is not None and
-                self.new_node.m_cmd_lst[0] == "dials.generate_mask" and
-                self.new_node.number == self.curr_nod_num
-            ):
-                self.do_image_view.set_drag_mode(mask_mode = True)
+            try:
+                if(
+                    self.new_node is not None and
+                    self.new_node.m_cmd_lst[0] == "dials.generate_mask" and
+                    self.new_node.number == self.curr_nod_num
+                ):
+                    self.do_image_view.set_drag_mode(mask_mode = True)
 
-            else:
-                self.do_image_view.set_drag_mode(mask_mode = False)
+                else:
+                    self.do_image_view.set_drag_mode(mask_mode = False)
+
+            except IndexError:
+                    self.do_image_view.set_drag_mode(mask_mode = False)
+
 
             try:
                 img_num = int(self.window.ImgNumEdit.text())
@@ -517,7 +545,6 @@ class MainObject(QObject):
             node_numb != self.new_node.number and
             self.window.NodeSelecCheck.checkState() and
             self.server_nod_lst[node_numb]["status"] == "Succeeded" and
-            #self.curr_widg_key == "combine_experiments" and
             self.new_node.m_cmd_lst == ["dials.combine_experiments"]
         ):
             self.new_node.add_or_remove_parent(node_numb)
