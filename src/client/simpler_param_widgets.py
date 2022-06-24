@@ -1180,7 +1180,12 @@ class OptionalWidget(SimpleParamTab):
 
     def line_changed(self):
         str_full_line = self.imp_txt.text()
-        lst_par = [str_full_line.split("=")]
+        outer_lst_par = str_full_line.split(" ")
+        print("outer_lst_par =", outer_lst_par)
+        lst_par = []
+        for inner_par in outer_lst_par:
+            lst_par.append(inner_par.split("="))
+
         print("signaling: ", lst_par)
         self.all_items_changed.emit([lst_par])
 
