@@ -28,16 +28,7 @@ from PySide2 import QtUiTools
 from PySide2.QtGui import *
 import numpy as np
 
-
-#try:
 from shared_modules import format_utils
-'''
-except ModuleNotFoundError:
-    comm_path = os.path.abspath(__file__)[0:-19] + "shared_modules"
-    print("comm_path: ", comm_path)
-    sys.path.insert(1, comm_path)
-    import format_utils
-'''
 
 widgets_defs = {
     "Root" : {
@@ -85,7 +76,9 @@ widgets_defs = {
         "tooltip"       : "dials.reindex ...",
         "icon"          : "resources/reindex.png",
         "main_cmd"      :["dials.reindex"],
-        "nxt_widg_lst"  :["refine", "integrate", "combine_experiments", "optional"]
+        "nxt_widg_lst"  :[
+            "refine", "integrate", "combine_experiments", "optional"
+        ]
     },
     "refine" : {
         "tooltip"       : "dials.refine ...",
@@ -102,7 +95,9 @@ widgets_defs = {
         "tooltip"       : "dials.integrate ...",
         "icon"          : "resources/integrate.png",
         "main_cmd"      :["dials.integrate"],
-        "nxt_widg_lst"  :["scale", "symmetry", "combine_experiments", "export", "optional"]
+        "nxt_widg_lst"  :[
+            "scale", "symmetry", "combine_experiments", "export", "optional"
+        ]
     },
     "symmetry" : {
         "tooltip"       : "dials.symmetry ...",
@@ -114,7 +109,9 @@ widgets_defs = {
         "tooltip"       : "dials.scale ...",
         "icon"          : "resources/scale.png",
         "main_cmd"      :["dials.scale"],
-        "nxt_widg_lst"  :["symmetry", "combine_experiments", "export", "optional"]
+        "nxt_widg_lst"  :[
+            "symmetry", "combine_experiments", "export", "optional"
+        ]
     },
     "export" : {
         "tooltip"       : "dials.export ...",
@@ -122,21 +119,23 @@ widgets_defs = {
         "main_cmd"      :["dials.export"],
         "nxt_widg_lst"  :[]
     },
-    "combine_experiments" : {
-        "tooltip"       : "dials.combine_experiments ...",
-        "icon"          : "resources/combine.png",
-        "main_cmd"      :["dials.combine_experiments"],
-        "nxt_widg_lst"  :["index", "refine", "integrate", "export", "optional"]
+    "combine_experiments"   : {
+        "tooltip"           : "dials.combine_experiments ...",
+        "icon"              : "resources/combine.png",
+        "main_cmd"          :["dials.combine_experiments"],
+        "nxt_widg_lst"      :[
+            "index", "refine", "integrate", "export", "optional"
+        ]
     },
 
     "optional" : {
         "tooltip"       : "choose from a list",
         "icon"          : "resources/optional.png",
         "main_cmd"      :["dials.optional"],
-        "nxt_widg_lst"  :["find_spots", "index", "refine", "integrate", "export"]
+        "nxt_widg_lst"  :[
+            "find_spots", "index", "refine", "integrate", "export"
+        ]
     }
-
-
 }
 
 
@@ -406,7 +405,10 @@ class AdvancedParameters(QWidget):
                     labl_text = str(widget.text())
                     if str_value in labl_text:
                         widget.setFont(
-                            QFont("Monospace", self.font_point_size + 5, QFont.Bold)
+                            QFont(
+                                "Monospace",
+                                self.font_point_size + 5, QFont.Bold
+                            )
                         )
 
                     else:
@@ -773,7 +775,8 @@ class TreeDirScene(QGraphicsScene):
                             arr_col = self.get_pen_colour(node["stp_stat"])
                             draw_quadratic_bezier_3_points(
                                 self,
-                                my_parent_coord_x + self.f_width * 2.7, my_parent_coord_y,
+                                my_parent_coord_x + self.f_width * 2.7,
+                                my_parent_coord_y,
                                 my_coord_x + self.f_width * 0.5,
                                 my_parent_coord_y,
                                 my_coord_x + self.f_width * 0.5,
