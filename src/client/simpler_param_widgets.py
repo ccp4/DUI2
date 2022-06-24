@@ -1178,22 +1178,11 @@ class OptionalWidget(SimpleParamTab):
             tup_lst_pars
         )
 
-
     def line_changed(self):
-        print("line_changed")
         str_full_line = self.imp_txt.text()
-        lst_par = str_full_line.split("=")
-        '''
-        str_path = str_full_line.split("=")[0]
-        str_value = str_full_line.split("=")[1]
-        lst_par = [[str_path, str_value]]
-        '''
-
+        lst_par = [str_full_line.split("=")]
         print("signaling: ", lst_par)
-
         self.all_items_changed.emit([lst_par])
-
-
 
 
 

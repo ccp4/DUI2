@@ -89,6 +89,7 @@ class MainObject(QObject):
             #########################################################################
             self.optional_widg = OptionalWidget()
             self.window.OptionalScrollArea.setWidget(self.optional_widg)
+            self.optional_widg.all_items_changed.connect(self.all_items_param_changed)
 
             '''
             op_advanced_parameters = build_advanced_params_widget(
