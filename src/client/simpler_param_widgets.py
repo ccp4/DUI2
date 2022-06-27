@@ -1163,12 +1163,14 @@ class OptionalWidget(SimpleParamTab):
 
         self.main_vbox = QVBoxLayout()
 
+        self.main_vbox.addWidget(QLabel("Command:   dials...   ?"))
         self.com_imp_txt = QLineEdit()
         self.com_imp_txt.textChanged.connect(self.command_line_changed)
         self.main_vbox.addWidget(self.com_imp_txt)
 
         self.main_vbox.addStretch()
 
+        self.main_vbox.addWidget(QLabel("Parameter(s) ... ?"))
         self.par_imp_txt = QLineEdit()
         self.par_imp_txt.textChanged.connect(self.param_line_changed)
         self.main_vbox.addWidget(self.par_imp_txt)

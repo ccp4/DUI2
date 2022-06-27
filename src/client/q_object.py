@@ -530,6 +530,7 @@ class MainObject(QObject):
                 self.update_reindex_table_header(cur_nod["parent_node_lst"])
 
         except KeyError:
+            #TODO: put here some verification for the "optional" command
             print("command widget not there yet")
             return
 
