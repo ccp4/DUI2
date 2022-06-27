@@ -189,6 +189,12 @@ class CommandParamControl:
         self.par_lst = [[]]
         self.custm_param = None
 
+    def set_new_main_command(self, new_command):
+        print("CommandParamControl ... set_new_main_command:", new_command)
+        dials_command = "dials." + new_command
+        self.m_cmd_lst = [dials_command]
+        print("\n self.m_cmd_lst  =", self.m_cmd_lst)
+
     def set_parameter(self, new_name, new_value, lst_num = 0):
         print(" par_lst(set_parameter) ini =", self.par_lst)
         already_here = False

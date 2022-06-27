@@ -89,14 +89,12 @@ class MainObject(QObject):
             #########################################################################
             self.optional_widg = OptionalWidget()
             self.window.OptionalScrollArea.setWidget(self.optional_widg)
-            self.optional_widg.all_items_changed.connect(self.all_items_param_changed)
-
-            '''
-            op_advanced_parameters = build_advanced_params_widget(
-                "optional_params", self.window.OptionalSearchLayout
+            self.optional_widg.all_items_changed.connect(
+                self.all_items_param_changed
             )
-            '''
-
+            self.optional_widg.main_command_changed.connect(
+                self.new_main_command_changed
+            )
             #########################################################################
 
             self.mask_widg = MaskWidget()
@@ -687,6 +685,13 @@ class MainObject(QObject):
 
         except AttributeError:
             print("Not updating parameters, no (green node or twin widget)\n")
+
+
+    def new_main_command_changed(self, new_cmd_str):
+        if self.new_node.number == self.curr_nod_num:
+            print("\n Updating Command with", new_cmd_str, "\n")
+            self.new_node.reset_all_params()
+            self.new_node.set_new_main_command(new_cmd_str)
 
     def item_param_changed(self, str_path = None, str_value = None, lst_num = 0):
         try:

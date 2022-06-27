@@ -1157,14 +1157,22 @@ class CombineExperimentSimplerParamTab(SimpleParamTab):
 
 class OptionalWidget(SimpleParamTab):
     all_items_changed = Signal(list)
+    main_command_changed = Signal(str)
     def __init__(self, parent = None):
         super(OptionalWidget, self).__init__(parent)
 
         self.main_vbox = QVBoxLayout()
+
+        self.com_imp_txt = QLineEdit()
+        self.com_imp_txt.textChanged.connect(self.command_line_changed)
+        self.main_vbox.addWidget(self.com_imp_txt)
+
         self.main_vbox.addStretch()
-        self.imp_txt = QLineEdit()
-        self.imp_txt.textChanged.connect(self.line_changed)
-        self.main_vbox.addWidget(self.imp_txt)
+
+        self.par_imp_txt = QLineEdit()
+        self.par_imp_txt.textChanged.connect(self.param_line_changed)
+        self.main_vbox.addWidget(self.par_imp_txt)
+
         self.main_vbox.addStretch()
         self.setLayout(self.main_vbox)
 
@@ -1178,8 +1186,8 @@ class OptionalWidget(SimpleParamTab):
             tup_lst_pars
         )
 
-    def line_changed(self):
-        str_full_line = self.imp_txt.text()
+    def param_line_changed(self):
+        str_full_line = self.par_imp_txt.text()
         outer_lst_par = str_full_line.split(" ")
         print("outer_lst_par =", outer_lst_par)
         lst_par = []
@@ -1189,6 +1197,11 @@ class OptionalWidget(SimpleParamTab):
         print("signaling: ", lst_par)
         self.all_items_changed.emit([lst_par])
 
+    def command_line_changed(self):
+        print("command_line_changed(OptionalWidget)")
+        str_new_line = str(self.com_imp_txt.text())
+        print("emminting chage of main command:", str_new_line)
+        self.main_command_changed.emit(str_new_line)
 
 
 class ExportWidget(QWidget):
