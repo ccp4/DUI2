@@ -1162,21 +1162,21 @@ class OptionalWidget(SimpleParamTab):
         super(OptionalWidget, self).__init__(parent)
 
         self.main_vbox = QVBoxLayout()
-
         self.main_vbox.addWidget(QLabel("Command:   dials...   ?"))
-        self.main_vbox.addWidget(QLabel(str(cmd_lst)))
+
+        self.cmd_menu = DefaultComboBox(cmd_lst[0], cmd_lst)
+        self.cmd_menu.currentIndexChanged.connect(self.cmd_menu_changed)
+        self.main_vbox.addWidget(self.cmd_menu)
+        self.main_vbox.addStretch()
+
         self.com_imp_txt = QLineEdit()
         self.com_imp_txt.textChanged.connect(self.command_line_changed)
         self.main_vbox.addWidget(self.com_imp_txt)
-
-        self.main_vbox.addStretch()
-
         self.main_vbox.addWidget(QLabel("Parameter(s) ... ?"))
         self.par_imp_txt = QLineEdit()
         self.par_imp_txt.textChanged.connect(self.param_line_changed)
         self.main_vbox.addWidget(self.par_imp_txt)
-
-        self.main_vbox.addStretch()
+        #self.main_vbox.addStretch()
         self.setLayout(self.main_vbox)
 
 
@@ -1199,6 +1199,13 @@ class OptionalWidget(SimpleParamTab):
 
         print("signaling: ", lst_par)
         self.all_items_changed.emit([lst_par])
+
+    def cmd_menu_changed(self, value):
+        print("cmd_menu_changed")
+        sender = self.sender()
+        str_value = str(sender.item_list[value])
+        print("str_value =", str_value)
+        self.com_imp_txt.setText(str_value)
 
     def command_line_changed(self):
         print("command_line_changed(OptionalWidget)")
