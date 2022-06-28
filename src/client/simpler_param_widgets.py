@@ -1160,32 +1160,31 @@ class OptionalWidget(SimpleParamTab):
     main_command_changed = Signal(str)
     def __init__(self, parent = None, cmd_lst = None):
         super(OptionalWidget, self).__init__(parent)
-
-        self.main_vbox = QVBoxLayout()
-        self.main_vbox.addWidget(QLabel("Command:   dials...   ?"))
-
         cmd_men_lst = ["..."]
         for single_command in cmd_lst:
             cmd_men_lst.append(single_command)
 
         self.cmd_menu = DefaultComboBox(cmd_men_lst[0], cmd_men_lst)
-
-        #self.main_vbox.addStretch()
-
         self.com_imp_txt = QLineEdit()
         self.par_imp_txt = QLineEdit()
 
-        self.main_vbox.addWidget(self.cmd_menu)
-        self.main_vbox.addWidget(self.com_imp_txt)
-        self.main_vbox.addWidget(QLabel("Parameter(s) ... ?"))
+        self.right_vbox = QVBoxLayout()
+        self.right_vbox.addWidget(QLabel("Command:   dials...   ?"))
+        self.right_vbox.addWidget(self.cmd_menu)
 
+        self.top_hbox = QHBoxLayout()
+        self.top_hbox.addLayout(self.right_vbox)
+        self.top_hbox.addWidget(self.com_imp_txt)
+
+        self.main_vbox = QVBoxLayout()
+        self.main_vbox.addLayout(self.top_hbox)
+        self.main_vbox.addWidget(QLabel("Parameter(s) ... ?"))
+        self.main_vbox.addWidget(self.par_imp_txt)
+        self.setLayout(self.main_vbox)
 
         self.cmd_menu.currentIndexChanged.connect(self.cmd_menu_changed)
         self.com_imp_txt.textChanged.connect(self.command_line_changed)
         self.par_imp_txt.textChanged.connect(self.param_line_changed)
-
-        self.main_vbox.addWidget(self.par_imp_txt)
-        self.setLayout(self.main_vbox)
 
     def reset_pars(self):
         print("reset_pars(OptionalWidget)")
