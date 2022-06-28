@@ -1169,23 +1169,29 @@ class OptionalWidget(SimpleParamTab):
             cmd_men_lst.append(single_command)
 
         self.cmd_menu = DefaultComboBox(cmd_men_lst[0], cmd_men_lst)
-        self.cmd_menu.currentIndexChanged.connect(self.cmd_menu_changed)
-        self.main_vbox.addWidget(self.cmd_menu)
-        self.main_vbox.addStretch()
+
+        #self.main_vbox.addStretch()
 
         self.com_imp_txt = QLineEdit()
-        self.com_imp_txt.textChanged.connect(self.command_line_changed)
+        self.par_imp_txt = QLineEdit()
+
+        self.main_vbox.addWidget(self.cmd_menu)
         self.main_vbox.addWidget(self.com_imp_txt)
         self.main_vbox.addWidget(QLabel("Parameter(s) ... ?"))
-        self.par_imp_txt = QLineEdit()
+
+
+        self.cmd_menu.currentIndexChanged.connect(self.cmd_menu_changed)
+        self.com_imp_txt.textChanged.connect(self.command_line_changed)
         self.par_imp_txt.textChanged.connect(self.param_line_changed)
+
         self.main_vbox.addWidget(self.par_imp_txt)
-        #self.main_vbox.addStretch()
         self.setLayout(self.main_vbox)
 
     def reset_pars(self):
         print("reset_pars(OptionalWidget)")
         self.cmd_menu.setCurrentIndex(0)
+        self.com_imp_txt.setText("...")
+        self.par_imp_txt.setText("")
 
     def update_all_pars(self, tup_lst_pars):
         print(
