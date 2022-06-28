@@ -1183,9 +1183,9 @@ class OptionalWidget(SimpleParamTab):
         #self.main_vbox.addStretch()
         self.setLayout(self.main_vbox)
 
-
     def reset_pars(self):
         print("reset_pars(OptionalWidget)")
+        self.cmd_menu.setCurrentIndex(0)
 
     def update_all_pars(self, tup_lst_pars):
         print(
