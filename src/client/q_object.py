@@ -38,8 +38,8 @@ from client.outputs import DoLoadHTML, ShowLog
 from client.img_view import DoImageView
 from client.reindex_table import ReindexTable, get_label_from_str_list
 from client.exec_utils import (
-    build_advanced_params_widget, json_data_request, Run_n_Output,
-    CommandParamControl
+    get_optional_list, build_advanced_params_widget, json_data_request,
+    Run_n_Output, CommandParamControl
 )
 
 from client.init_firts import ini_data
@@ -87,7 +87,8 @@ class MainObject(QObject):
             self.window.ExportScrollArea.setWidget(self.expr_widg)
 
             #########################################################################
-            self.optional_widg = OptionalWidget()
+            self.opt_cmd_lst = get_optional_list("get_optional_command_list")
+            self.optional_widg = OptionalWidget(cmd_lst = self.opt_cmd_lst)
             self.window.OptionalScrollArea.setWidget(self.optional_widg)
             self.optional_widg.all_items_changed.connect(
                 self.all_items_param_changed
@@ -95,6 +96,7 @@ class MainObject(QObject):
             self.optional_widg.main_command_changed.connect(
                 self.new_main_command_changed
             )
+
             #########################################################################
 
             self.mask_widg = MaskWidget()
@@ -530,9 +532,18 @@ class MainObject(QObject):
                 self.update_reindex_table_header(cur_nod["parent_node_lst"])
 
         except KeyError:
-            #TODO: put here some verification for the "optional" command
-            print("command widget not there yet")
-            return
+            try:
+                if key2find in self.opt_cmd_lst:
+                    self.change_widget("optional")
+                    self.update_all_param()
+
+                else:
+                    print("command widget not there yet")
+                    return
+
+            except KeyError:
+                print("Key Err Catch (clicked_4_navigation) ")
+                return
 
         self.refresh_output()
         self.display()
@@ -582,19 +593,13 @@ class MainObject(QObject):
             if(
                 self.server_nod_lst[self.curr_nod_num]["status"] == "Succeeded"
             ):
-                try:
-                    fnd_nxt_cmd = find_next_cmd(
-                        self.server_nod_lst,
-                        self.server_nod_lst[self.curr_nod_num]["parent_node_lst"],
-                        str_key, self.param_widgets
-                    )
-                    nxt_cmd_lst = fnd_nxt_cmd.get_nxt_cmd()
-                    print("next command lst =", nxt_cmd_lst)
-
-                except AttributeError:
-                    print("no need to find next command")
-                    nxt_cmd_lst = []
-
+                fnd_nxt_cmd = find_next_cmd(
+                    self.server_nod_lst,
+                    self.server_nod_lst[self.curr_nod_num]["parent_node_lst"],
+                    str_key, self.param_widgets, self.opt_cmd_lst
+                )
+                nxt_cmd_lst = fnd_nxt_cmd.get_nxt_cmd()
+                print("next command lst =", nxt_cmd_lst)
                 for bt_str in nxt_cmd_lst:
                     split_label = bt_str.replace("_", "\n")
                     nxt_butt = QPushButton(split_label)
@@ -605,13 +610,11 @@ class MainObject(QObject):
                     nxt_butt.setIconSize(QSize(38, 42))
                     self.window.Next2RunLayout.addWidget(nxt_butt)
 
-                    #self.window.Next2RunLayout.setSpacing(0)
-                    #self.window.Next2RunLayout.setMargin(0)
+        except IndexError:
+            print("no need to add next button Index Err Catch")
 
-        except (IndexError, KeyError):
-            print("no need to add next button")
-
-
+        except KeyError:
+            print("no need to add next button Key Err Catch")
 
     def nxt_clicked(self):
         self.nxt_key_clicked(self.sender().cmd_str)

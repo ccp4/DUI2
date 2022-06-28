@@ -181,7 +181,8 @@ class find_next_cmd(object):
     recursive calls to find the possible command to run next
     '''
     def __init__(
-        self, nod_lst_in, parent_nod_num_lst, str_key, param_widgets
+        self, nod_lst_in, parent_nod_num_lst,
+        str_key, param_widgets, opt_cmd_lst
     ):
         self.nod_lst = nod_lst_in
         self.remove_combine = False
@@ -190,7 +191,18 @@ class find_next_cmd(object):
             str_key = self.nod_lst[parent_num]["cmd2show"][0][6:]
             self.remove_combine = True
 
-        self.default_list = param_widgets[str_key]["nxt_widg_lst"]
+        try:
+            self.default_list = param_widgets[str_key]["nxt_widg_lst"]
+
+        except KeyError:
+            if str_key in opt_cmd_lst:
+                parent_num = parent_nod_num_lst[0]
+                str_key = self.nod_lst[parent_num]["cmd2show"][0][6:]
+                self.default_list = param_widgets[str_key]["nxt_widg_lst"]
+
+            else:
+                self.default_list = []
+
         self.par_cmd_lst = []
         for nod_num in parent_nod_num_lst:
             self.get_parent_num(nod_num)

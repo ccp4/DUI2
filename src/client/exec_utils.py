@@ -29,6 +29,18 @@ from client.gui_utils import AdvancedParameters, widgets_defs
 from client.init_firts import ini_data
 from shared_modules import format_utils
 
+def get_optional_list(cmd_str):
+    cmd = {"nod_lst":"", "cmd_lst":[cmd_str]}
+
+    data_init = ini_data()
+    uni_url = data_init.get_url()
+    print("uni_url(get_optional_list) =", uni_url)
+
+    lst_opt = json_data_request(uni_url, cmd)
+
+    return lst_opt
+
+
 def build_advanced_params_widget(cmd_str, h_box_search):
     cmd = {"nod_lst":"", "cmd_lst":[cmd_str]}
 

@@ -1158,12 +1158,13 @@ class CombineExperimentSimplerParamTab(SimpleParamTab):
 class OptionalWidget(SimpleParamTab):
     all_items_changed = Signal(list)
     main_command_changed = Signal(str)
-    def __init__(self, parent = None):
+    def __init__(self, parent = None, cmd_lst = None):
         super(OptionalWidget, self).__init__(parent)
 
         self.main_vbox = QVBoxLayout()
 
         self.main_vbox.addWidget(QLabel("Command:   dials...   ?"))
+        self.main_vbox.addWidget(QLabel(str(cmd_lst)))
         self.com_imp_txt = QLineEdit()
         self.com_imp_txt.textChanged.connect(self.command_line_changed)
         self.main_vbox.addWidget(self.com_imp_txt)
