@@ -69,6 +69,8 @@ def fix_alias(short_in):
         ("it",      "dials.integrate"                       ),
         ("sm",      "dials.symmetry"                        ),
         ("sc",      "dials.scale"                           ),
+        ("mg",      "dials.merge"                           ),
+
         ("ce",      "dials.combine_experiments"             ),
         ("ex",      "dials.export"                          ),
     ]

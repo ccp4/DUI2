@@ -383,13 +383,14 @@ class build_json_data(object):
 
 def get_cmd_opt_list():
     command_list = [
-        "find_spots"                      ,
-        "find_rotation_axis"              ,
-        "index"                           ,
-        "refine"                          ,
-        "integrate"                       ,
-        "symmetry"                        ,
-        "scale"                           ,
+        "find_spots"                        ,
+        "find_rotation_axis"                ,
+        "index"                             ,
+        "refine"                            ,
+        "integrate"                         ,
+        "symmetry"                          ,
+        "scale"                             ,
+        "merge"                             ,
     ]
     return command_list
 

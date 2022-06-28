@@ -1164,7 +1164,11 @@ class OptionalWidget(SimpleParamTab):
         self.main_vbox = QVBoxLayout()
         self.main_vbox.addWidget(QLabel("Command:   dials...   ?"))
 
-        self.cmd_menu = DefaultComboBox(cmd_lst[0], cmd_lst)
+        cmd_men_lst = ["..."]
+        for single_command in cmd_lst:
+            cmd_men_lst.append(single_command)
+
+        self.cmd_menu = DefaultComboBox(cmd_men_lst[0], cmd_men_lst)
         self.cmd_menu.currentIndexChanged.connect(self.cmd_menu_changed)
         self.main_vbox.addWidget(self.cmd_menu)
         self.main_vbox.addStretch()
