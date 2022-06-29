@@ -186,6 +186,7 @@ class find_next_cmd(object):
     ):
         self.nod_lst = nod_lst_in
         self.remove_combine = False
+        #TODO fix this wat to do twise the same, next IF vs TRY later
         if str_key == "combine_experiments":
             parent_num = parent_nod_num_lst[0]
             str_key = self.nod_lst[parent_num]["cmd2show"][0][6:]
@@ -194,6 +195,7 @@ class find_next_cmd(object):
         try:
             self.default_list = param_widgets[str_key]["nxt_widg_lst"]
 
+        #TODO fix this wat to do twise the same, next TRY vs IF previous
         except KeyError:
             if str_key in opt_cmd_lst:
                 parent_num = parent_nod_num_lst[0]

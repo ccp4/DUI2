@@ -501,33 +501,40 @@ class ImportWidget(QWidget):
         sys_font = QFont()
         font_point_size = sys_font.pointSize()
 
+
         self.state_label = QLabel("   ...")
         self.state_label.setFont(
             QFont("Monospace", font_point_size + 1, QFont.Bold)
         )
         self.imp_txt = QLineEdit()
-        self.imp_txt.textChanged.connect(self.line_changed)
-
         self.extra_label = QLabel("   ...")
         self.extra_label.setFont(
             QFont("Monospace", font_point_size + 1, QFont.Bold)
         )
         self.imp_extra_txt = QLineEdit()
-        self.imp_extra_txt.textChanged.connect(self.line_changed)
-
-
         self.open_butt = QPushButton("\n Open Images \n")
+
+        self.check_rot_axs = QCheckBox("Invert rotation axis")
+        self.check_dist = QCheckBox("Set distance = 2193")
+
+        self.imp_txt.textChanged.connect(self.line_changed)
+        self.imp_extra_txt.textChanged.connect(self.line_changed)
         self.open_butt.clicked.connect(self.open_dir_widget)
+        self.check_rot_axs.stateChanged.connect(self.rot_axs_changed)
+        self.check_dist.stateChanged.connect(self.dist_changed)
 
         self.main_vbox = QVBoxLayout()
-        self.main_vbox.addStretch()
         self.main_vbox.addWidget(self.open_butt)
-        self.main_vbox.addStretch()
         self.main_vbox.addWidget(self.state_label)
         self.main_vbox.addWidget(self.imp_txt)
 
         self.main_vbox.addStretch()
-        self.main_vbox.addWidget(self.extra_label)
+
+        self.small_hbox = QHBoxLayout()
+        self.small_hbox.addWidget(self.check_rot_axs)
+        self.small_hbox.addWidget(self.check_dist)
+        self.main_vbox.addLayout(self.small_hbox)
+
         self.main_vbox.addWidget(self.imp_extra_txt)
 
         self.main_vbox.addStretch()
@@ -582,6 +589,16 @@ class ImportWidget(QWidget):
                     lst_par.append(single_ext_par)
 
         self.all_items_changed.emit([lst_par])
+
+    def rot_axs_changed(self, stat):
+        print("rot_axs_changed(ImportWidget)", stat)
+        if int(stat) == 2:
+            self.imp_extra_txt.setText("invert_rotation_axis=True")
+
+    def dist_changed(self, stat):
+        print("dist_changed(ImportWidget)", stat)
+        if int(stat) == 2:
+            self.imp_extra_txt.setText("distance=2193")
 
     def update_all_pars(self, tup_lst_pars):
         print(
