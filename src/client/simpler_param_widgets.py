@@ -593,12 +593,24 @@ class ImportWidget(QWidget):
     def rot_axs_changed(self, stat):
         print("rot_axs_changed(ImportWidget)", stat)
         if int(stat) == 2:
-            self.imp_extra_txt.setText("invert_rotation_axis=True")
+            self.check_dist.setChecked(False)
+            new_par_str = "invert_rotation_axis=True"
+
+        else:
+            new_par_str = ""
+
+        self.imp_extra_txt.setText(new_par_str)
 
     def dist_changed(self, stat):
         print("dist_changed(ImportWidget)", stat)
         if int(stat) == 2:
-            self.imp_extra_txt.setText("distance=2193")
+            self.check_rot_axs.setChecked(False)
+            new_par_str = "distance=2193"
+
+        else:
+            new_par_str = ""
+
+        self.imp_extra_txt.setText(new_par_str)
 
     def update_all_pars(self, tup_lst_pars):
         print(
