@@ -891,9 +891,9 @@ class IndexSimplerParamTab(SimpleParamTab):
         unit_cell_line.setValidator(validatorUC)
         unit_cell_line.local_path = "indexing.known_symmetry.unit_cell"
         unit_cell_line.editingFinished.connect(self.line_changed)
-        
+
         check_dist = QCheckBox("Set detector.fix=distance")
-        check_dist.stateChanged.connect(self.dist_changed)
+        check_dist.stateChanged.connect(self.detec_fix_changed)
 
         self.main_v_layout.addLayout(hbox_method)
         qf = QFormLayout()
@@ -911,10 +911,10 @@ class IndexSimplerParamTab(SimpleParamTab):
     def reset_pars(self):
         self.clearLayout(self.main_v_layout)
         self.build_pars()
-        
 
-    def dist_changed(self, stat):
-        print("dist_changed(ImportWidget)", stat)
+
+    def detec_fix_changed(self, stat):
+        print("detec_fix_changed(ImportWidget)", stat)
         if int(stat) == 2:
             print("time to add << detector.fix=distance >>")
             self.do_emit_signal(
@@ -923,9 +923,9 @@ class IndexSimplerParamTab(SimpleParamTab):
 
         else:
             print("time to remove << detector.fix=distance >>")
-            
-        to_use = '''detector.fix=distance'''
-        #{'name': 'refinement.parameterisation.detector.fix', 'value': 'distance'}
+            self.do_emit_signal(
+                "refinement.parameterisation.detector.fix", "None"
+            )
 
 
 class RefineBravaiSimplerParamTab(SimpleParamTab):
