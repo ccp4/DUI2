@@ -956,6 +956,7 @@ class RefineBravaiSimplerParamTab(SimpleParamTab):
         self.build_pars()
         self.setLayout(self.main_v_layout)
 
+
     def build_pars(self):
         hbox_lay_outlier_algorithm = QHBoxLayout()
         label_outlier_algorithm = QLabel("Outlier rejection algorithm")
@@ -964,9 +965,15 @@ class RefineBravaiSimplerParamTab(SimpleParamTab):
         box_outlier_algorithm = DefaultComboBox(
             "refinement.reflections.outlier.algorithm", ["null", "Auto", "mcd",
             "tukey", "sauter_poon"], default_index=1)
+
+        self.detec_fix = QCheckBox("Set detector.fix=distance")
+
         box_outlier_algorithm.currentIndexChanged.connect(self.combobox_changed)
+        self.detec_fix.stateChanged.connect(self.detec_fix_changed)
+
         hbox_lay_outlier_algorithm.addWidget(box_outlier_algorithm)
         self.main_v_layout.addLayout(hbox_lay_outlier_algorithm)
+        self.main_v_layout.addWidget(self.detec_fix)
 
         self.main_v_layout.addStretch()
 
@@ -977,6 +984,41 @@ class RefineBravaiSimplerParamTab(SimpleParamTab):
     def reset_pars(self):
         self.clearLayout(self.main_v_layout)
         self.build_pars()
+
+
+
+    def detec_fix_changed(self, stat):
+        print("detec_fix_changed(ImportWidget)", stat)
+        if int(stat) == 2:
+            print("time to add << detector.fix=distance >>")
+            self.do_emit_signal(
+                "refinement.parameterisation.detector.fix", "distance"
+            )
+
+        else:
+            print("time to remove << detector.fix=distance >>")
+            self.do_emit_signal(
+                "refinement.parameterisation.detector.fix", "None"
+            )
+
+
+    def special_check_up(self, param_in, value_in):
+        print(
+            "special_check_up(IndexSimplerParamTab): param_in, value_in",
+            param_in, value_in
+        )
+        if(
+            param_in == "refinement.parameterisation.detector.fix"
+            and value_in == "distance"
+        ):
+            self.detec_fix.setChecked(True)
+
+        elif(
+            param_in == "refinement.parameterisation.detector.fix"
+            and value_in != "distance"
+        ):
+            self.detec_fix.setChecked(False)
+
 
 
 class RefineSimplerParamTab(SimpleParamTab):
