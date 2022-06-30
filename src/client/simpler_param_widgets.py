@@ -88,6 +88,14 @@ class SimpleParamTab(QWidget):
 
     def update_param(self, param_in, value_in):
         print("\n update_param (Simple)", param_in, value_in)
+        print("\n before << special_check_up >> \n")
+        try:
+            self.special_check_up(param_in, value_in)
+
+        except AttributeError:
+            print("no twin widget to update or no special_check_up function")
+
+        print("\n after << special_check_up >> \n")
 
         for widget in self.children():
             widget_path = None
@@ -129,6 +137,7 @@ class SimpleParamTab(QWidget):
                         widget.setCurrentText(str(value_in))
 
                     self.do_emit = True
+
 
     def update_all_pars(self, tup_lst_pars):
         print("\n (Simple Widget) \n time to update par to:", tup_lst_pars, "\n")
@@ -892,8 +901,8 @@ class IndexSimplerParamTab(SimpleParamTab):
         unit_cell_line.local_path = "indexing.known_symmetry.unit_cell"
         unit_cell_line.editingFinished.connect(self.line_changed)
 
-        check_dist = QCheckBox("Set detector.fix=distance")
-        check_dist.stateChanged.connect(self.detec_fix_changed)
+        self.detec_fix = QCheckBox("Set detector.fix=distance")
+        self.detec_fix.stateChanged.connect(self.detec_fix_changed)
 
         self.main_v_layout.addLayout(hbox_method)
         qf = QFormLayout()
@@ -902,7 +911,7 @@ class IndexSimplerParamTab(SimpleParamTab):
         qf.addRow(unit_cell_label, unit_cell_line)
         self.main_v_layout.addLayout(qf)
 
-        self.main_v_layout.addWidget(check_dist)
+        self.main_v_layout.addWidget(self.detec_fix)
 
         self.main_v_layout.addStretch()
 
@@ -911,7 +920,6 @@ class IndexSimplerParamTab(SimpleParamTab):
     def reset_pars(self):
         self.clearLayout(self.main_v_layout)
         self.build_pars()
-
 
     def detec_fix_changed(self, stat):
         print("detec_fix_changed(ImportWidget)", stat)
@@ -926,6 +934,23 @@ class IndexSimplerParamTab(SimpleParamTab):
             self.do_emit_signal(
                 "refinement.parameterisation.detector.fix", "None"
             )
+
+    def special_check_up(self, param_in, value_in):
+        print(
+            "special_check_up(IndexSimplerParamTab): param_in, value_in",
+            param_in, value_in
+        )
+        if(
+            param_in == "refinement.parameterisation.detector.fix"
+            and value_in == "distance"
+        ):
+            self.detec_fix.setChecked(True)
+
+        elif(
+            param_in == "refinement.parameterisation.detector.fix"
+            and value_in != "distance"
+        ):
+            self.detec_fix.setChecked(False)
 
 
 class RefineBravaiSimplerParamTab(SimpleParamTab):

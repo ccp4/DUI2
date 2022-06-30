@@ -698,11 +698,11 @@ class MainObject(QObject):
             self.new_node.set_new_main_command(new_cmd_str)
 
     def item_param_changed(self, str_path = None, str_value = None, lst_num = 0):
-        try:
-            self.sender().twin_widg.update_param(str_path, str_value)
+        #try:
+        self.sender().twin_widg.update_param(str_path, str_value)
 
-        except AttributeError:
-            print("no twin widget to update")
+        #except AttributeError:
+        #    print("no twin widget to update")
 
         try:
             if(
