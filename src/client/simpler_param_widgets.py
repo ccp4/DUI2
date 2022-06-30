@@ -798,15 +798,14 @@ class FindspotsSimplerParameterTab(SimpleParamTab):
         xds_gain_spn_bx = QDoubleSpinBox()
         xds_gain_spn_bx.local_path = "spotfinder.threshold.dispersion.gain"
         xds_gain_spn_bx.setValue(1.0)
-        xds_gain_spn_bx.editingFinished.connect(self.spnbox_finished)
-
+        xds_gain_spn_bx.valueChanged.connect(self.spnbox_finished)
         xds_sigma_background_label = QLabel("Sigma background")
         xds_sigma_background_spn_bx = QDoubleSpinBox()
         xds_sigma_background_spn_bx.setValue(6.0)
         xds_sigma_background_spn_bx.local_path = (
             "spotfinder.threshold.dispersion.sigma_background"
         )
-        xds_sigma_background_spn_bx.editingFinished.connect(self.spnbox_finished)
+        xds_sigma_background_spn_bx.valueChanged.connect(self.spnbox_finished)
 
         xds_sigma_strong_label = QLabel("Sigma strong")
         xds_sigma_strong_spn_bx = QDoubleSpinBox()
@@ -814,7 +813,7 @@ class FindspotsSimplerParameterTab(SimpleParamTab):
         xds_sigma_strong_spn_bx.local_path = (
             "spotfinder.threshold.dispersion.sigma_strong"
         )
-        xds_sigma_strong_spn_bx.editingFinished.connect(self.spnbox_finished)
+        xds_sigma_strong_spn_bx.valueChanged.connect(self.spnbox_finished)
 
         xds_global_threshold_label = QLabel("Global threshold")
         xds_global_threshold_spn_bx = QDoubleSpinBox()
@@ -822,7 +821,7 @@ class FindspotsSimplerParameterTab(SimpleParamTab):
         xds_global_threshold_spn_bx.local_path = (
             "spotfinder.threshold.dispersion.global_threshold"
         )
-        xds_global_threshold_spn_bx.editingFinished.connect(self.spnbox_finished)
+        xds_global_threshold_spn_bx.valueChanged.connect(self.spnbox_finished)
 
         xds_gain_hb = QHBoxLayout()
         xds_gain_hb.addWidget(xds_gain_label)
@@ -882,7 +881,7 @@ class IndexSimplerParamTab(SimpleParamTab):
         max_cell_spn_bx.setSingleStep(5.0)
         max_cell_spn_bx.local_path = "indexing.max_cell"
         max_cell_spn_bx.setSpecialValueText("Auto")
-        max_cell_spn_bx.editingFinished.connect(self.spnbox_finished)
+        max_cell_spn_bx.valueChanged.connect(self.spnbox_finished)
 
         space_group_label = QLabel("Space group")
         space_group_line = QLineEdit()
@@ -891,7 +890,7 @@ class IndexSimplerParamTab(SimpleParamTab):
         validatorHM = QRegExpValidator(regex)
         space_group_line.setValidator(validatorHM)
         space_group_line.local_path = "indexing.known_symmetry.space_group"
-        space_group_line.editingFinished.connect(self.line_changed)
+        space_group_line.textChanged.connect(self.line_changed)
 
         unit_cell_label = QLabel("Unit cell")
         unit_cell_line = QLineEdit()
@@ -899,7 +898,7 @@ class IndexSimplerParamTab(SimpleParamTab):
         validatorUC = QRegExpValidator(regex)
         unit_cell_line.setValidator(validatorUC)
         unit_cell_line.local_path = "indexing.known_symmetry.unit_cell"
-        unit_cell_line.editingFinished.connect(self.line_changed)
+        unit_cell_line.textChanged.connect(self.line_changed)
 
         self.detec_fix = QCheckBox("Set detector.fix=distance")
         self.detec_fix.stateChanged.connect(self.detec_fix_changed)
@@ -1082,7 +1081,7 @@ class IntegrateSimplerParamTab(SimpleParamTab):
         d_min_spn_bx.setSpecialValueText("None")
         d_min_spn_bx.setValue(0.0)
         hbox_d_min.addWidget(d_min_spn_bx)
-        d_min_spn_bx.editingFinished.connect(self.spnbox_finished)
+        d_min_spn_bx.valueChanged.connect(self.spnbox_finished)
         self.main_v_layout.addLayout(hbox_d_min)
 
         self.main_v_layout.addStretch()
@@ -1119,7 +1118,7 @@ class SymmetrySimplerParamTab(SimpleParamTab):
         d_min_spn_bx.setValue(0.0)
         hbox_d_min.addWidget(d_min_spn_bx)
 
-        d_min_spn_bx.editingFinished.connect(self.spnbox_finished)
+        d_min_spn_bx.valueChanged.connect(self.spnbox_finished)
 
         self.main_v_layout.addLayout(hbox_d_min)
         self.main_v_layout.addStretch()
@@ -1176,7 +1175,7 @@ class ScaleSimplerParamTab(SimpleParamTab):
         hbox_d_min.addWidget(d_min_label)
         hbox_d_min.addWidget(d_min_spn_bx)
 
-        d_min_spn_bx.editingFinished.connect(self.spnbox_finished)
+        d_min_spn_bx.valueChanged.connect(self.spnbox_finished)
 
         self.main_v_layout.addLayout(hbox_lay_mod)
         self.main_v_layout.addLayout(hbox_lay_wgh_opt_err)
@@ -1314,7 +1313,7 @@ class ExportWidget(QWidget):
         )
 
         self.exp_txt = QLineEdit()
-        self.exp_txt.editingFinished.connect(self.line_changed)
+        self.exp_txt.textChanged.connect(self.line_changed)
         self.downl_but = QPushButton("Download MTZ")
         self.downl_but.clicked.connect(self.download_mtz)
         self.progress_label = QLabel("...")
