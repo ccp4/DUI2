@@ -66,7 +66,7 @@ class MainObject(QObject):
         print("ui_path =", ui_path)
 
         self.window = QtUiTools.QUiLoader().load(ui_path)
-        self.window.setWindowTitle("CCP4 DUI Cloud")
+        self.window.setWindowTitle("CCP4 DUI2")
 
         data_init = ini_data()
         self.uni_url = data_init.get_url()
@@ -86,7 +86,6 @@ class MainObject(QObject):
             self.expr_widg.find_scaled_before.connect(self.search_in_parent_nodes)
             self.window.ExportScrollArea.setWidget(self.expr_widg)
 
-            #########################################################################
             self.opt_cmd_lst = get_optional_list("get_optional_command_list")
             self.optional_widg = OptionalWidget(cmd_lst = self.opt_cmd_lst)
             self.window.OptionalScrollArea.setWidget(self.optional_widg)
@@ -96,8 +95,6 @@ class MainObject(QObject):
             self.optional_widg.main_command_changed.connect(
                 self.new_main_command_changed
             )
-
-            #########################################################################
 
             self.mask_widg = MaskWidget()
             self.mask_widg.all_items_changed.connect(self.all_items_param_changed)
@@ -193,7 +190,6 @@ class MainObject(QObject):
                 ce_advanced_parameters
             )
 
-
             fd_advanced_parameters.twin_widg = find_simpl_widg
             find_simpl_widg.twin_widg = fd_advanced_parameters
             id_advanced_parameters.twin_widg = index_simpl_widg
@@ -285,14 +281,9 @@ class MainObject(QObject):
         self.param_widgets["export"]["advanced"] = None
         self.param_widgets["export"]["main_page"] = self.window.ExportPage
 
-
-        ############################################################################
-
         self.param_widgets["optional"]["simple"] = self.optional_widg
         self.param_widgets["optional"]["advanced"] = None
         self.param_widgets["optional"]["main_page"] = self.window.OptionalPage
-
-        ############################################################################
 
         self.tree_scene = TreeDirScene(self)
         self.window.treeView.setScene(self.tree_scene)
@@ -379,9 +370,7 @@ class MainObject(QObject):
         cmd = {"nod_lst":"", "cmd_lst":["closed"]}
         resp = json_data_request(self.uni_url, cmd)
         print("resp =", resp)
-
         print("\n aboutToQuit ... 2\n")
-
 
     def import_init(self):
         loop = QEventLoop()
