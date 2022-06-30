@@ -85,17 +85,13 @@ class SimpleParamTab(QWidget):
                 else:
                     self.clearLayout(item.layout())
 
-
     def update_param(self, param_in, value_in):
         print("\n update_param (Simple)", param_in, value_in)
-        print("\n before << special_check_up >> \n")
         try:
             self.special_check_up(param_in, value_in)
 
         except AttributeError:
-            print("no twin widget to update or no special_check_up function")
-
-        print("\n after << special_check_up >> \n")
+            print("no special_check_up function")
 
         for widget in self.children():
             widget_path = None
