@@ -91,7 +91,6 @@ def json_data_request(url, cmd):
         print(" ... requests.exceptions.RequestException (json_data_request)")
         json_out = None
 
-
     return json_out
 
 

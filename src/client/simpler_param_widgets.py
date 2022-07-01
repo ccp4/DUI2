@@ -128,12 +128,10 @@ class SimpleParamTab(QWidget):
                             print("value_in =", value_in, "\n")
                             print("skipping attempt to convert string to float \n")
 
-
                     if isinstance(widget, DefaultComboBox):
                         widget.setCurrentText(str(value_in))
 
                     self.do_emit = True
-
 
     def update_all_pars(self, tup_lst_pars):
         print("\n (Simple Widget) \n time to update par to:", tup_lst_pars, "\n")
@@ -208,7 +206,6 @@ def iter_tree(my_dict, currentItem, show_hidden, icon_dict):
             new_item = QTreeWidgetItem(currentItem)
             new_item.file_path = child_dict["file_path"]
             if child_dict["isdir"]:
-                #new_item_text = new_item_text + "  ...  [ Dir ]"
                 new_item.isdir = True
                 my_icon = icon_dict["Dir"]
 
@@ -823,8 +820,6 @@ class FindspotsSimplerParameterTab(SimpleParamTab):
         self.set_d_max = QCheckBox("Set d_max=20")
         self.set_d_max.stateChanged.connect(self.set_d_max_changed)
 
-
-
         xds_gain_hb = QHBoxLayout()
         xds_gain_hb.addWidget(xds_gain_label)
         xds_gain_hb.addWidget(xds_gain_spn_bx)
@@ -844,7 +839,6 @@ class FindspotsSimplerParameterTab(SimpleParamTab):
         xds_global_threshold_hb.addWidget(xds_global_threshold_label)
         xds_global_threshold_hb.addWidget(xds_global_threshold_spn_bx)
         self.main_v_layout.addLayout(xds_global_threshold_hb)
-
 
         self.main_v_layout.addWidget(self.set_d_max)
 
@@ -995,7 +989,6 @@ class RefineBravaiSimplerParamTab(SimpleParamTab):
         self.build_pars()
         self.setLayout(self.main_v_layout)
 
-
     def build_pars(self):
         hbox_lay_outlier_algorithm = QHBoxLayout()
         label_outlier_algorithm = QLabel("Outlier rejection algorithm")
@@ -1024,8 +1017,6 @@ class RefineBravaiSimplerParamTab(SimpleParamTab):
         self.clearLayout(self.main_v_layout)
         self.build_pars()
 
-
-
     def detec_fix_changed(self, stat):
         print("detec_fix_changed(ImportWidget)", stat)
         if int(stat) == 2:
@@ -1039,7 +1030,6 @@ class RefineBravaiSimplerParamTab(SimpleParamTab):
             self.do_emit_signal(
                 "refinement.parameterisation.detector.fix", "None"
             )
-
 
     def special_check_up(self, param_in, value_in):
         print(
@@ -1057,7 +1047,6 @@ class RefineBravaiSimplerParamTab(SimpleParamTab):
             and value_in != "distance"
         ):
             self.detec_fix.setChecked(False)
-
 
 
 class RefineSimplerParamTab(SimpleParamTab):
@@ -1084,8 +1073,6 @@ class RefineSimplerParamTab(SimpleParamTab):
         box_scan_varying.currentIndexChanged.connect(self.combobox_changed)
         hbox_lay_scan_varying.addWidget(box_scan_varying)
         self.main_v_layout.addLayout(hbox_lay_scan_varying)
-
-        ###########################################################################
 
         hbox_lay_outlier_algorithm = QHBoxLayout()
         label_outlier_algorithm = QLabel("Outlier rejection algorithm")
@@ -1116,7 +1103,6 @@ class RefineSimplerParamTab(SimpleParamTab):
         self.clearLayout(self.main_v_layout)
         self.build_pars()
 
-
     def detec_fix_changed(self, stat):
         print("detec_fix_changed(ImportWidget)", stat)
         if int(stat) == 2:
@@ -1130,7 +1116,6 @@ class RefineSimplerParamTab(SimpleParamTab):
             self.do_emit_signal(
                 "refinement.parameterisation.detector.fix", "None"
             )
-
 
     def special_check_up(self, param_in, value_in):
         print(
@@ -1148,7 +1133,6 @@ class RefineSimplerParamTab(SimpleParamTab):
             and value_in != "distance"
         ):
             self.detec_fix.setChecked(False)
-
 
 
 class IntegrateSimplerParamTab(SimpleParamTab):
@@ -1534,7 +1518,6 @@ class TmpTstWidget(QWidget):
         #my_widget = SymmetrySimplerParamTab(self)
         #my_widget = ScaleSimplerParamTab(self)
         #my_widget = CombineExperimentSimplerParamTab(self)
-
 
         my_box = QVBoxLayout()
         my_box.addWidget(my_widget)

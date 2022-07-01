@@ -679,7 +679,6 @@ class MainObject(QObject):
         except AttributeError:
             print("Not updating parameters, no (green node or twin widget)\n")
 
-
     def new_main_command_changed(self, new_cmd_str):
         if self.new_node.number == self.curr_nod_num:
             print("\n Updating Command with", new_cmd_str, "\n")
