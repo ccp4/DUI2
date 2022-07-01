@@ -680,10 +680,14 @@ class MainObject(QObject):
             print("Not updating parameters, no (green node or twin widget)\n")
 
     def new_main_command_changed(self, new_cmd_str):
-        if self.new_node.number == self.curr_nod_num:
-            print("\n Updating Command with", new_cmd_str, "\n")
-            self.new_node.reset_all_params()
-            self.new_node.set_new_main_command(new_cmd_str)
+        try:
+            if self.new_node.number == self.curr_nod_num:
+                print("\n Updating Command with", new_cmd_str, "\n")
+                self.new_node.reset_all_params()
+                self.new_node.set_new_main_command(new_cmd_str)
+
+        except AttributeError:
+            print("Not updating parameters, no (green node or twin widget)\n")
 
     def item_param_changed(self, str_path = None, str_value = None, lst_num = 0):
         self.sender().twin_widg.update_param(str_path, str_value)

@@ -603,7 +603,11 @@ class TreeDirScene(QGraphicsScene):
         ui_dir_path = os.path.dirname(os.path.abspath(__file__))
         self.px_map = {}
         for key_str, def_item in widgets_defs.items():
+
             icon_path = ui_dir_path + os.sep + def_item["icon"]
+
+            print("\n\nicon_path =", icon_path)
+
             tmp_px_map = QPixmap(icon_path)
             siz = QSize(self.f_width * 4.1, self.f_height * 1.6)
             self.px_map[key_str] = tmp_px_map.scaled(siz)
