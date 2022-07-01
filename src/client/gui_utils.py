@@ -603,14 +603,12 @@ class TreeDirScene(QGraphicsScene):
         ui_dir_path = os.path.dirname(os.path.abspath(__file__))
         self.px_map = {}
         for key_str, def_item in widgets_defs.items():
-
             icon_path = ui_dir_path + os.sep + def_item["icon"]
-
-            print("\n\nicon_path =", icon_path)
-
             tmp_px_map = QPixmap(icon_path)
             siz = QSize(self.f_width * 4.1, self.f_height * 1.6)
             self.px_map[key_str] = tmp_px_map.scaled(siz)
+
+        print("px_map =", self.px_map)
 
         self.blue_brush = QBrush(Qt.blue, Qt.SolidPattern)
         self.red_brush = QBrush(Qt.red, Qt.SolidPattern)
@@ -842,14 +840,15 @@ class TreeDirScene(QGraphicsScene):
                 )
                 try:
                     tmp_pxm = self.addPixmap(self.px_map[node["str_cmd"]])
-                    tmp_pxm.setPos(
-                        my_coord_x - self.f_width * 2.6 + self.f_width * 0.9,
-                        my_coord_y - self.f_height * 0.9 + self.f_height * 0.1
-                    )
 
                 except KeyError:
-                    #print("One node without 'str_cmd' ")
-                    pass
+                    tmp_pxm = self.addPixmap(self.px_map["optional"])
+
+                tmp_pxm.setPos(
+                    my_coord_x - self.f_width * 2.6 + self.f_width * 0.9,
+                    my_coord_y - self.f_height * 0.9 + self.f_height * 0.1
+                )
+
 
                 my_coord_x ,my_coord_y = self.get_coords(pos, -0.6)
                 n_text = self.addSimpleText(str(node["number"]))
