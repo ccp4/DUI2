@@ -950,7 +950,7 @@ class IndexSimplerParamTab(SimpleParamTab):
         self.build_pars()
 
     def detec_fix_changed(self, stat):
-        print("detec_fix_changed(ImportWidget)", stat)
+        print("detec_fix_changed(IndexSimplerParamTab)", stat)
         if int(stat) == 2:
             print("time to add << detector.fix=distance >>")
             self.do_emit_signal(
@@ -1018,7 +1018,7 @@ class RefineBravaiSimplerParamTab(SimpleParamTab):
         self.build_pars()
 
     def detec_fix_changed(self, stat):
-        print("detec_fix_changed(ImportWidget)", stat)
+        print("detec_fix_changed(RefineBravaiSimplerParamTab)", stat)
         if int(stat) == 2:
             print("time to add << detector.fix=distance >>")
             self.do_emit_signal(
@@ -1033,7 +1033,7 @@ class RefineBravaiSimplerParamTab(SimpleParamTab):
 
     def special_check_up(self, param_in, value_in):
         print(
-            "special_check_up(IndexSimplerParamTab): param_in, value_in",
+            "special_check_up(RefineBravaiSimplerParamTab): param_in, value_in",
             param_in, value_in
         )
         if(
@@ -1104,7 +1104,7 @@ class RefineSimplerParamTab(SimpleParamTab):
         self.build_pars()
 
     def detec_fix_changed(self, stat):
-        print("detec_fix_changed(ImportWidget)", stat)
+        print("detec_fix_changed(RefineSimplerParamTab)", stat)
         if int(stat) == 2:
             print("time to add << detector.fix=distance >>")
             self.do_emit_signal(
@@ -1119,7 +1119,7 @@ class RefineSimplerParamTab(SimpleParamTab):
 
     def special_check_up(self, param_in, value_in):
         print(
-            "special_check_up(IndexSimplerParamTab): param_in, value_in",
+            "special_check_up(RefineSimplerParamTab): param_in, value_in",
             param_in, value_in
         )
         if(
