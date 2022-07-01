@@ -819,6 +819,12 @@ class FindspotsSimplerParameterTab(SimpleParamTab):
         )
         xds_global_threshold_spn_bx.valueChanged.connect(self.spnbox_finished)
 
+
+        self.set_d_max = QCheckBox("Set d_max=20")
+        self.set_d_max.stateChanged.connect(self.set_d_max_changed)
+
+
+
         xds_gain_hb = QHBoxLayout()
         xds_gain_hb.addWidget(xds_gain_label)
         xds_gain_hb.addWidget(xds_gain_spn_bx)
@@ -840,12 +846,45 @@ class FindspotsSimplerParameterTab(SimpleParamTab):
         self.main_v_layout.addLayout(xds_global_threshold_hb)
 
 
+        self.main_v_layout.addWidget(self.set_d_max)
+
         self.main_v_layout.addStretch()
         self.lst_var_widg = _get_all_direct_layout_widget_children(self.main_v_layout)
 
     def reset_pars(self):
         self.clearLayout(self.main_v_layout)
         self.build_pars()
+
+    def set_d_max_changed(self, stat):
+        print("set_d_max_changed(Spotfinding)", stat)
+        if int(stat) == 2:
+            print("time to add << Set d_max=20 >>")
+            self.do_emit_signal(
+                "spotfinder.filter.d_max", "20"
+            )
+
+        else:
+            print("time to remove << Set d_max=20 >>")
+            self.do_emit_signal(
+                "spotfinder.filter.d_max", "None"
+            )
+
+    def special_check_up(self, param_in, value_in):
+        print(
+            "special_check_up(Spotfinding): param_in, value_in",
+            param_in, value_in
+        )
+        if(
+            param_in == "spotfinder.filter.d_max"
+            and value_in == "20"
+        ):
+            self.set_d_max.setChecked(True)
+
+        elif(
+            param_in == "spotfinder.filter.d_max"
+            and value_in != "20"
+        ):
+            self.set_d_max.setChecked(False)
 
 
 class IndexSimplerParamTab(SimpleParamTab):
