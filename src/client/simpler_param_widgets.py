@@ -514,7 +514,7 @@ class ImportWidget(QWidget):
             QFont("Monospace", font_point_size + 1, QFont.Bold)
         )
         self.imp_extra_txt = QLineEdit()
-        self.open_butt = QPushButton("\n Open Images \n")
+        self.open_butt = QPushButton("  Open Images  ")
 
         self.check_rot_axs = QCheckBox("Invert rotation axis")
         self.check_dist = QCheckBox("Set distance = 2193")
@@ -526,9 +526,9 @@ class ImportWidget(QWidget):
         self.check_dist.stateChanged.connect(self.dist_changed)
 
         self.main_vbox = QVBoxLayout()
-        self.main_vbox.addWidget(self.open_butt)
         self.main_vbox.addWidget(self.state_label)
         self.main_vbox.addWidget(self.imp_txt)
+        self.main_vbox.addWidget(self.open_butt)
 
         self.main_vbox.addStretch()
 

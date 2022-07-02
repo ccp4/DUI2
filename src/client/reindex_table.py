@@ -291,7 +291,7 @@ def get_label_from_str_list(log_data):
                 ini_num = num
 
             if single_line[:6] == "+-----":
-                end_num = num - 1
+                end_num = num
                 break
 
         print("ini_num =", ini_num)
@@ -302,6 +302,7 @@ def get_label_from_str_list(log_data):
         for label_line in lst_str:
             full_label_str += label_line
 
+
         return full_label_str
 
 
@@ -309,9 +310,11 @@ class MainWindow(QMainWindow):
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent)
 
-        #full_json_path = "/scratch/dui_tst/X4_wide/dui_files/bravais_summary.json"
-        full_json_path = "/home/lui-temp/xrd_data/tst_area/run4/bravais_summary.json"
-        full_log_path = "/home/lui-temp/xrd_data/tst_area/run4/out.log"
+        #full_json_path = "/home/lui-temp/xrd_data/tst_area/run4/bravais_summary.json"
+        #full_log_path = "/home/lui-temp/xrd_data/tst_area/run4/out.log"
+
+        full_json_path = "/tmp/run6/bravais_summary.json"
+        full_log_path = "/tmp/run6/out.log"
 
         with open(full_json_path) as json_file:
             json_data = json.load(json_file)
