@@ -22,7 +22,7 @@ copyright (c) CCP4 - DLS
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 import subprocess, psutil
-import os, sys
+import os, sys, shutil
 import glob, json
 
 from server.data_n_json import get_data_from_steps
@@ -326,38 +326,48 @@ class CmdNode(object):
         new_line = "HTML Report + Reflection Prediction ... START"
         n_Broken_Pipes += add_log_line(new_line, self.nod_req)
 
-        # running HTML report generation
-        rep_lst_dat_in = ['dials.report']
-        for expt_2_add in self._lst_expt_out:
-            rep_lst_dat_in.append(expt_2_add)
-
-        for refl_2_add in self._lst_refl_out:
-            rep_lst_dat_in.append(refl_2_add)
-
-        print("\n running:", rep_lst_dat_in, "\n")
-
-        new_line = "Generating HTML report"
-        n_Broken_Pipes += add_log_line(new_line, self.nod_req)
-
-        lst_rep_out = []
-        rep_proc = subprocess.Popen(
-            rep_lst_dat_in,
-            shell = False,
-            cwd = self._run_dir,
-            stdout = subprocess.PIPE,
-            stderr = subprocess.STDOUT,
-            universal_newlines = True
-        )
-        while rep_proc.poll() is None or new_line != '':
-            new_line = rep_proc.stdout.readline()
-            lst_rep_out.append(new_line)
-
-        rep_proc.stdout.close()
-        # in case needed there is the output of the report here:
-        #print("report stdout <<< \n", lst_rep_out, "\n >>>")
-
-
         tmp_html_path = self._run_dir + "/dials.report.html"
+
+        # if dials.(scale/merge) already generated an html file better use it
+        tmp_scale_html_path = self._run_dir + "/dials.scale.html"
+        tmp_merge_html_path = self._run_dir + "/dials.merge.html"
+        if os.path.exists(tmp_scale_html_path):
+            shutil.copy(tmp_scale_html_path, tmp_html_path)
+
+        elif os.path.exists(tmp_merge_html_path):
+            shutil.copy(tmp_merge_html_path, tmp_html_path)
+
+        else:
+            # running HTML report generation
+            rep_lst_dat_in = ['dials.report']
+            for expt_2_add in self._lst_expt_out:
+                rep_lst_dat_in.append(expt_2_add)
+
+            for refl_2_add in self._lst_refl_out:
+                rep_lst_dat_in.append(refl_2_add)
+
+            print("\n running:", rep_lst_dat_in, "\n")
+
+            new_line = "Generating HTML report"
+            n_Broken_Pipes += add_log_line(new_line, self.nod_req)
+
+            lst_rep_out = []
+            rep_proc = subprocess.Popen(
+                rep_lst_dat_in,
+                shell = False,
+                cwd = self._run_dir,
+                stdout = subprocess.PIPE,
+                stderr = subprocess.STDOUT,
+                universal_newlines = True
+            )
+            while rep_proc.poll() is None or new_line != '':
+                new_line = rep_proc.stdout.readline()
+                lst_rep_out.append(new_line)
+
+            rep_proc.stdout.close()
+            # in case needed there is the output of the report here:
+            #print("report stdout <<< \n", lst_rep_out, "\n >>>")
+
         if os.path.exists(tmp_html_path):
             self._html_rep = tmp_html_path
             new_line = "HTML Report ready"

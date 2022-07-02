@@ -82,6 +82,7 @@ class DoLoadHTML(QObject):
         self.uni_url = data_init.get_url()
 
         self.l_stat = HandleLoadStatusLabel(self.main_obj)
+
         self.main_obj.window.HtmlReport.loadStarted.connect(
             self.l_stat.load_started
         )
@@ -183,7 +184,15 @@ class DoLoadHTML(QObject):
                 self.main_obj.window.HtmlReport.setHtml(self.not_avail_html)
 
             else:
-                self.main_obj.window.HtmlReport.setHtml(full_file)
+
+                tmp_file = open("/tmp/temp_repo.html", "w")
+                tmp_file.write(full_file)
+                tmp_file.close()
+
+                #self.main_obj.window.HtmlReport.setHtml(full_file)
+                self.main_obj.window.HtmlReport.load(
+                    QUrl.fromLocalFile("/tmp/temp_repo.html")
+                )
 
             print("Show HTML ... End")
 
