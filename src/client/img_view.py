@@ -581,7 +581,12 @@ class PopDisplayMenu(QMenu):
 
     def i_min_changed(self, value):
         print("i_min_changed; value=", value)
-        self.i_min = int(value)
+        try:
+            self.i_min = int(value)
+
+        except ValueError:
+            self.i_min = 0
+
         self.i_min_max_changed()
 
     def i_max_changed(self, value):
