@@ -96,7 +96,7 @@ widgets_defs = {
         "icon"          : "resources/integrate.png",
         "main_cmd"      :["dials.integrate"],
         "nxt_widg_lst"  :[
-            "scale", "symmetry", "combine_experiments", "export", "optional"
+            "symmetry", "scale", "combine_experiments", "export", "optional"
         ]
     },
     "symmetry" : {
@@ -221,7 +221,11 @@ class find_next_cmd(object):
                 fin_cmd_lst.append(cmd)
 
         if self.remove_combine:
-            fin_cmd_lst.remove("combine_experiments")
+            try:
+                fin_cmd_lst.remove("combine_experiments")
+
+            except ValueError:
+                return ["optional"]
 
         return fin_cmd_lst
 
