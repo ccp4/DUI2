@@ -96,7 +96,8 @@ def unalias_full_cmd(lst_in):
 
 
 def add_log_line(new_line, nod_req):
-    if new_line[-1:] != "\n":
+    if new_line[-1:] != "\n" and len(new_line) > 1:
+        print("<<< adding \\n >>> to output line:", new_line)
         new_line += "\n"
 
     if nod_req is not None:
@@ -292,9 +293,6 @@ class CmdNode(object):
                 print("inv_pos =", inv_pos)
                 break
 
-        if n_Broken_Pipes > 0:
-            print("\n << BrokenPipe err catch >> while sending output \n")
-
         self.my_proc.stdout.close()
         if self.my_proc.poll() == 0:
             print("subprocess poll 0")
@@ -416,6 +414,9 @@ class CmdNode(object):
         n_Broken_Pipes += add_log_line(new_line, self.nod_req)
         new_line = "HTML Report + Reflection Prediction ... END"
         n_Broken_Pipes += add_log_line(new_line, self.nod_req)
+
+        if n_Broken_Pipes > 0:
+            print("\n << BrokenPipe err catch >> while sending output \n")
 
     def stop_me(self):
         print("node", self.number, "status:", self.status)
