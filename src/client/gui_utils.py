@@ -612,8 +612,6 @@ class TreeDirScene(QGraphicsScene):
             siz = QSize(self.f_width * 4.1, self.f_height * 1.6)
             self.px_map[key_str] = tmp_px_map.scaled(siz)
 
-        print("px_map =", self.px_map)
-
         self.blue_brush = QBrush(Qt.blue, Qt.SolidPattern)
         self.red_brush = QBrush(Qt.red, Qt.SolidPattern)
         self.green_brush = QBrush(Qt.darkGreen, Qt.SolidPattern)

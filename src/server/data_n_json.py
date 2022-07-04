@@ -391,9 +391,9 @@ def get_cmd_opt_list():
         "symmetry"                          ,
         "scale"                             ,
         "merge"                             ,
+        "cosym"                             ,
     ]
     return command_list
-
 
 
 def get_param_list(cmd_str):
