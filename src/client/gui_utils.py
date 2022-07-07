@@ -442,23 +442,24 @@ def draw_quadratic_bezier_3_points(
         scene_obj, p1x, p1y, p2x, p2y, p3x, p3y,
         lin_pen, row_size, col_size
 ):
-    arrow_head = True
-    curved_corners = True
-
+    arrow_head = False
+    curved_corners = True    
+    arrow_head_W = 1.0 / 4.0
+    arrow_head_H = 1.0 / 8.0
     if arrow_head:
         if p1x == p2x:
             scene_obj.addLine(
-                p3x, p3y, p3x - col_size / 3, p3y - row_size / 3, lin_pen
+                p3x, p3y, p3x - col_size * arrow_head_W, p3y - row_size * arrow_head_H, lin_pen
             )
             scene_obj.addLine(
-                p3x, p3y, p3x - col_size / 3, p3y + row_size / 3, lin_pen
+                p3x, p3y, p3x - col_size * arrow_head_W, p3y + row_size * arrow_head_H, lin_pen
             )
         else:
             scene_obj.addLine(
-                p3x, p3y, p3x - col_size / 3, p3y - row_size / 3, lin_pen
+                p3x, p3y, p3x - col_size * arrow_head_W, p3y - row_size * arrow_head_H, lin_pen
             )
             scene_obj.addLine(
-                p3x, p3y, p3x + col_size / 3, p3y - row_size / 3, lin_pen
+                p3x, p3y, p3x + col_size * arrow_head_W, p3y - row_size * arrow_head_H, lin_pen
             )
 
     if curved_corners:
