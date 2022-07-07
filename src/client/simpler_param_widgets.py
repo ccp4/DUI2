@@ -822,6 +822,9 @@ class FindspotsSimplerParameterTab(SimpleParamTab):
         self.set_d_min = QCheckBox("Set d_min=2.5")
         self.set_d_min.stateChanged.connect(self.set_d_min_changed)
 
+        self.set_rad_pro_alg = QCheckBox("Set threshold.algorithm=radial_profile")
+        self.set_rad_pro_alg.stateChanged.connect(self.set_alg_changed)
+
         xds_gain_hb = QHBoxLayout()
         xds_gain_hb.addWidget(xds_gain_label)
         xds_gain_hb.addWidget(xds_gain_spn_bx)
@@ -842,8 +845,10 @@ class FindspotsSimplerParameterTab(SimpleParamTab):
         xds_global_threshold_hb.addWidget(xds_global_threshold_spn_bx)
         self.main_v_layout.addLayout(xds_global_threshold_hb)
 
+        self.main_v_layout.addWidget(QLabel("\n Electron Diffraction Parameters"))
         self.main_v_layout.addWidget(self.set_d_max)
         self.main_v_layout.addWidget(self.set_d_min)
+        self.main_v_layout.addWidget(self.set_rad_pro_alg)
 
         self.main_v_layout.addStretch()
         self.lst_var_widg = _get_all_direct_layout_widget_children(self.main_v_layout)
@@ -880,6 +885,24 @@ class FindspotsSimplerParameterTab(SimpleParamTab):
                 "spotfinder.filter.d_min", "None"
             )
 
+    def set_alg_changed(self, stat):
+        print("set_alg_changed(Spotfinding)", stat)
+        if int(stat) == 2:
+            print("time to add << Set algorithm=radial_profile >>")
+            self.do_emit_signal(
+                "spotfinder.threshold.algorithm", "radial_profile"
+            )
+
+        else:
+            print("time to remove << Set algorithm=radial_profile >>")
+            self.do_emit_signal(
+                "spotfinder.threshold.algorithm", "dispersion_extended"
+            )
+
+        #time to add: "spotfinder.threshold.algorithm=radial_profile"
+        #default = dispersion_extended
+
+
     def special_check_up(self, param_in, value_in):
         print(
             "special_check_up(Spotfinding): param_in, value_in",
@@ -908,6 +931,18 @@ class FindspotsSimplerParameterTab(SimpleParamTab):
             and value_in != "2.5"
         ):
             self.set_d_min.setChecked(False)
+
+        if(
+            param_in == "spotfinder.threshold.algorithm"
+            and value_in == "radial_profile"
+        ):
+            self.set_rad_pro_alg.setChecked(True)
+
+        elif(
+            param_in == "spotfinder.threshold.algorithm"
+            and value_in != "radial_profile"
+        ):
+            self.set_rad_pro_alg.setChecked(False)
 
 
 class IndexSimplerParamTab(SimpleParamTab):
