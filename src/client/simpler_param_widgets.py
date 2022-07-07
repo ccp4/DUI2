@@ -816,9 +816,11 @@ class FindspotsSimplerParameterTab(SimpleParamTab):
         )
         xds_global_threshold_spn_bx.valueChanged.connect(self.spnbox_finished)
 
-
         self.set_d_max = QCheckBox("Set d_max=20")
         self.set_d_max.stateChanged.connect(self.set_d_max_changed)
+
+        self.set_d_min = QCheckBox("Set d_min=2.5")
+        self.set_d_min.stateChanged.connect(self.set_d_min_changed)
 
         xds_gain_hb = QHBoxLayout()
         xds_gain_hb.addWidget(xds_gain_label)
@@ -841,6 +843,7 @@ class FindspotsSimplerParameterTab(SimpleParamTab):
         self.main_v_layout.addLayout(xds_global_threshold_hb)
 
         self.main_v_layout.addWidget(self.set_d_max)
+        self.main_v_layout.addWidget(self.set_d_min)
 
         self.main_v_layout.addStretch()
         self.lst_var_widg = _get_all_direct_layout_widget_children(self.main_v_layout)
@@ -863,6 +866,20 @@ class FindspotsSimplerParameterTab(SimpleParamTab):
                 "spotfinder.filter.d_max", "None"
             )
 
+    def set_d_min_changed(self, stat):
+        print("set_d_min_changed(Spotfinding)", stat)
+        if int(stat) == 2:
+            print("time to add << Set d_min=2.5 >>")
+            self.do_emit_signal(
+                "spotfinder.filter.d_min", "2.5"
+            )
+
+        else:
+            print("time to remove << Set d_min=2.5 >>")
+            self.do_emit_signal(
+                "spotfinder.filter.d_min", "None"
+            )
+
     def special_check_up(self, param_in, value_in):
         print(
             "special_check_up(Spotfinding): param_in, value_in",
@@ -879,6 +896,18 @@ class FindspotsSimplerParameterTab(SimpleParamTab):
             and value_in != "20"
         ):
             self.set_d_max.setChecked(False)
+
+        if(
+            param_in == "spotfinder.filter.d_min"
+            and value_in == "2.5"
+        ):
+            self.set_d_min.setChecked(True)
+
+        elif(
+            param_in == "spotfinder.filter.d_min"
+            and value_in != "2.5"
+        ):
+            self.set_d_min.setChecked(False)
 
 
 class IndexSimplerParamTab(SimpleParamTab):
