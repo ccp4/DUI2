@@ -779,9 +779,10 @@ class FindspotsSimplerParameterTab(SimpleParamTab):
     in the spot-finder, this widget is the first to appear once the button
     "Find Sots" is clicked
     """
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, add_rad_prof = False):
         super(FindspotsSimplerParameterTab, self).__init__()
         self.do_emit = True
+        self.add_rad_prof = add_rad_prof
         self.main_v_layout = QVBoxLayout()
         self.build_pars()
         self.setLayout(self.main_v_layout)
@@ -822,8 +823,9 @@ class FindspotsSimplerParameterTab(SimpleParamTab):
         self.set_d_min = QCheckBox("Set d_min=2.5")
         self.set_d_min.stateChanged.connect(self.set_d_min_changed)
 
-        self.set_rad_pro_alg = QCheckBox("Set threshold.algorithm=radial_profile")
-        self.set_rad_pro_alg.stateChanged.connect(self.set_alg_changed)
+        if self.add_rad_prof:
+            self.set_rad_pro_alg = QCheckBox("Set threshold.algorithm=radial_profile")
+            self.set_rad_pro_alg.stateChanged.connect(self.set_alg_changed)
 
         xds_gain_hb = QHBoxLayout()
         xds_gain_hb.addWidget(xds_gain_label)
@@ -848,7 +850,8 @@ class FindspotsSimplerParameterTab(SimpleParamTab):
         self.main_v_layout.addWidget(QLabel("\n Electron Diffraction Parameters"))
         self.main_v_layout.addWidget(self.set_d_max)
         self.main_v_layout.addWidget(self.set_d_min)
-        self.main_v_layout.addWidget(self.set_rad_pro_alg)
+        if self.add_rad_prof:
+            self.main_v_layout.addWidget(self.set_rad_pro_alg)
 
         self.main_v_layout.addStretch()
         self.lst_var_widg = _get_all_direct_layout_widget_children(self.main_v_layout)

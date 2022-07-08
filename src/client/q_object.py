@@ -102,16 +102,39 @@ class MainObject(QObject):
             self.mask_widg.component_changed.connect(self.mask_comp_changed)
             self.window.MaskScrollArea.setWidget(self.mask_widg)
 
-            find_simpl_widg = FindspotsSimplerParameterTab()
-            find_simpl_widg.item_changed.connect(self.item_param_changed)
-            self.window.FindspotsSimplerScrollArea.setWidget(find_simpl_widg)
             fd_advanced_parameters = build_advanced_params_widget(
                 "find_spots_params", self.window.FindspotsSearchLayout
             )
+            rad_pr_add = False
+            for par_line in fd_advanced_parameters.lst_par_line:
+                if par_line["full_path"] == "spotfinder.threshold.algorithm":
+                    lst_opt = par_line["opt_lst"]
+                    print("lst_opt =", lst_opt)
+                    if("radial_profile" in lst_opt):
+                        print(
+                            "Time to ADD << spotfinder.threshold.algorithm >>",
+                            "to simple Params as a tick box"
+                        )
+                        rad_pr_add = True
+
+                    else:
+                        print(
+                            "NO Need to add",
+                            "<< spotfinder.threshold.algorithm >>",
+                            "to simple Params as a tick box"
+                        )
+                        rad_pr_add = False
+
             fd_advanced_parameters.item_changed.connect(self.item_param_changed)
             self.window.FindspotsAdvancedScrollArea.setWidget(
                 fd_advanced_parameters
             )
+
+            find_simpl_widg = FindspotsSimplerParameterTab(
+                add_rad_prof = rad_pr_add
+            )
+            find_simpl_widg.item_changed.connect(self.item_param_changed)
+            self.window.FindspotsSimplerScrollArea.setWidget(find_simpl_widg)
 
             index_simpl_widg = IndexSimplerParamTab()
             index_simpl_widg.item_changed.connect(self.item_param_changed)
