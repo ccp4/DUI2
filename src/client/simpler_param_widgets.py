@@ -1006,6 +1006,7 @@ class IndexSimplerParamTab(SimpleParamTab):
         qf.addRow(unit_cell_label, unit_cell_line)
         self.main_v_layout.addLayout(qf)
 
+        self.main_v_layout.addWidget(QLabel("\n Electron Diffraction Parameter"))
         self.main_v_layout.addWidget(self.detec_fix)
 
         self.main_v_layout.addStretch()
@@ -1072,6 +1073,7 @@ class RefineBravaiSimplerParamTab(SimpleParamTab):
 
         hbox_lay_outlier_algorithm.addWidget(box_outlier_algorithm)
         self.main_v_layout.addLayout(hbox_lay_outlier_algorithm)
+        self.main_v_layout.addWidget(QLabel("\n Electron Diffraction Parameter"))
         self.main_v_layout.addWidget(self.detec_fix)
 
         self.main_v_layout.addStretch()
@@ -1155,6 +1157,7 @@ class RefineSimplerParamTab(SimpleParamTab):
 
         self.detec_fix = QCheckBox("Set detector.fix=distance")
         self.detec_fix.stateChanged.connect(self.detec_fix_changed)
+        self.main_v_layout.addWidget(QLabel("\n Electron Diffraction Parameter"))
         self.main_v_layout.addWidget(self.detec_fix)
 
         self.main_v_layout.addStretch()
