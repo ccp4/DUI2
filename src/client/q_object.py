@@ -68,6 +68,12 @@ class MainObject(QObject):
         self.window = QtUiTools.QUiLoader().load(ui_path)
         self.window.setWindowTitle("CCP4 DUI2")
 
+        dui2_icon = QIcon()
+        st_icon_path = self.ui_dir_path + os.sep + "resources" \
+            + os.sep + "DIALS_Logo_smaller_centred.png"
+        dui2_icon.addFile(st_icon_path, mode = QIcon.Normal)
+        self.window.setWindowIcon(dui2_icon)
+
         data_init = ini_data()
         self.uni_url = data_init.get_url()
         run_local = data_init.get_if_local()
