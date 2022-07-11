@@ -28,8 +28,8 @@ import glob, json
 from server.data_n_json import get_data_from_steps
 from shared_modules import format_utils
 
-def fix_alias(short_in):
-    pair_list = [
+def get_pair_list():
+    return [
         ("d",       "display"                               ),
         ("h",       "history"                               ),
         ("dt",      "dir_tree"                              ),
@@ -70,10 +70,12 @@ def fix_alias(short_in):
         ("sm",      "dials.symmetry"                        ),
         ("sc",      "dials.scale"                           ),
         ("mg",      "dials.merge"                           ),
-
         ("ce",      "dials.combine_experiments"             ),
         ("ex",      "dials.export"                          ),
     ]
+
+def fix_alias(short_in):
+    pair_list = get_pair_list()
     long_out = short_in
     for pair in pair_list:
         if pair[0] == short_in:
@@ -112,6 +114,17 @@ def add_log_line(new_line, nod_req):
         print(new_line[:-1])
 
     return Error_Broken_Pipes
+
+
+def find_if_in_list(inner_command):
+    print("find_if_in_list(multi_node)=", inner_command)
+    pair_list = get_pair_list()
+    found_command = False
+    for pair in pair_list:
+        if inner_command == pair[1]:
+            found_command = True
+
+    return found_command
 
 
 class CmdNode(object):
@@ -250,21 +263,37 @@ class CmdNode(object):
     def run_cmd(self, req_obj = None):
         self.nod_req = req_obj
         self.status = "Busy"
+        print("self.full_cmd_lst =", self.full_cmd_lst)
         inner_lst = self.full_cmd_lst[-1]
-        try:
-            print("\n Running:", inner_lst, "\n")
-            self.my_proc = subprocess.Popen(
-                inner_lst,
-                shell = False,
-                cwd = self._run_dir,
-                stdout = subprocess.PIPE,
-                stderr = subprocess.STDOUT,
-                universal_newlines = True
-            )
 
-        except FileNotFoundError:
-            print("unable to run:", inner_lst[0], " <<FileNotFound err catch >> ")
-            self.my_proc = None
+        is_valid_command = find_if_in_list(inner_lst[0])
+        print("is_valid_command =", is_valid_command)
+        if is_valid_command:
+            try:
+                print("\n Running:", inner_lst, "\n")
+                self.my_proc = subprocess.Popen(
+                    inner_lst,
+                    shell = False,
+                    cwd = self._run_dir,
+                    stdout = subprocess.PIPE,
+                    stderr = subprocess.STDOUT,
+                    universal_newlines = True
+                )
+
+            except FileNotFoundError:
+                print(
+                    "unable to run:", inner_lst[0],
+                    " <<FileNotFound err catch >> "
+                )
+                self.my_proc = None
+                return
+
+        else:
+            print(
+                "\n\n" + "#" * 80 + "\n" +
+                " NOT Dials Command, NOT Running \n" +
+                "#" * 80 + "\n\n"
+            )
             return
 
         new_line = None
