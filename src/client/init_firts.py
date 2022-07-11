@@ -1,16 +1,7 @@
 #uni_url = 'None'
 
 import os, sys
-
-#try:
 from shared_modules import format_utils
-'''
-except ModuleNotFoundError:
-    comm_path = os.path.abspath(__file__)[0:-20] + "shared_modules"
-    print("comm_path(init_firts): ", comm_path, "\n")
-    sys.path.insert(1, comm_path)
-    import format_utils
-'''
 
 class ini_data(object):
     def __init__(self):

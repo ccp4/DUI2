@@ -36,16 +36,8 @@ from dials.command_line.symmetry import phil_scope as phil_scope_symmetry
 from dials.command_line.combine_experiments import (
     phil_scope as phil_scope_combine_params
 )
-
 from dxtbx.model.experiment_list import ExperimentListFactory
-'''
-try:
-    from img_uploader import flex_arr_2_json
-
-except ModuleNotFoundError:
-'''
 from server.img_uploader import flex_arr_2_json
-
 
 def get_data_from_steps(uni_cmd, cmd_dict, step_list):
     return_list = []
