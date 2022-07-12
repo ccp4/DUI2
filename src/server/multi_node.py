@@ -98,6 +98,17 @@ def unalias_full_cmd(lst_in):
     return new_full_lst
 
 
+def find_if_in_list(inner_command):
+    print("find_if_in_list(multi_node)=", inner_command)
+    pair_list = get_pair_list()
+    found_command = False
+    for pair in pair_list:
+        if inner_command == pair[1]:
+            found_command = True
+
+    return found_command
+
+
 def add_log_line(new_line, nod_req):
     if new_line[-1:] != "\n" and len(new_line) > 1:
         print("<<< adding \\n >>> to output line:", new_line)
@@ -115,17 +126,6 @@ def add_log_line(new_line, nod_req):
         print(new_line[:-1])
 
     return Error_Broken_Pipes
-
-
-def find_if_in_list(inner_command):
-    print("find_if_in_list(multi_node)=", inner_command)
-    pair_list = get_pair_list()
-    found_command = False
-    for pair in pair_list:
-        if inner_command == pair[1]:
-            found_command = True
-
-    return found_command
 
 
 class CmdNode(object):
