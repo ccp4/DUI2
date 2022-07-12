@@ -69,6 +69,7 @@ def get_pair_list():
         ("it",      "dials.integrate"                       ),
         ("sm",      "dials.symmetry"                        ),
         ("sc",      "dials.scale"                           ),
+        ("cs",      "dials.cosym"                           ),
         ("mg",      "dials.merge"                           ),
         ("ce",      "dials.combine_experiments"             ),
         ("ex",      "dials.export"                          ),
@@ -290,10 +291,11 @@ class CmdNode(object):
 
         else:
             print(
-                "\n\n" + "#" * 80 + "\n" +
-                " NOT Dials Command, NOT Running \n" +
+                "\n\n" + "#" * 80 + "\n " + inner_lst[0] +
+                " is NOT a Dials Command, NOT Running it \n" +
                 "#" * 80 + "\n\n"
             )
+            self.status = "Failed"
             return
 
         new_line = None
