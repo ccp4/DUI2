@@ -67,7 +67,7 @@ def main(par_def = None, connection_out = None):
                         "cmd_lst":cmd_lst}
 
             try:
-                cmd_tree_runner.run_dials_comand(cmd_dict, self)
+                cmd_tree_runner.run_dials_command(cmd_dict, self)
                 print("sending /*EOF*/")
                 self.wfile.write(bytes('/*EOF*/', 'utf-8'))
 

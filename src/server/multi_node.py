@@ -492,7 +492,7 @@ class Runner(object):
         else:
             self._recover_state(recovery_data)
 
-    def run_dials_comand(self, cmd_dict, req_obj = None):
+    def run_dials_command(self, cmd_dict, req_obj = None):
         unalias_cmd_lst = unalias_full_cmd(cmd_dict["cmd_lst"])
         print("\n cmd_lst: ", unalias_cmd_lst)
 
@@ -611,7 +611,7 @@ class Runner(object):
                 print("received closed command")
 
             elif uni_cmd == ["stop"]:
-                #TODO: consider moving this to << run_dials_comand >> (do_POST)
+                #TODO: consider moving this to << run_dials_command >> (do_POST)
                 for lin2go in cmd_dict["nod_lst"]:
                     try:
                         stat2add = self.step_list[lin2go].status
