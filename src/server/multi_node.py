@@ -43,7 +43,7 @@ def get_pair_list():
         ("gis",     "get_image_slice"                       ),
         ("gmi",     "get_mask_image"                        ),
         ("gmis",    "get_mask_image_slice"                  ),
-        ("grl",     "get_reflection_list"                   ),
+        ("grp",     "get_predictions"                       ),
         ("grl",     "get_reflection_list"                   ),
         ("gld",     "get_lambda"                            ),
         ("gb",      "get_bravais_sum"                       ),
@@ -57,8 +57,6 @@ def get_pair_list():
         ("scp",     "scale_params"                          ),
         ("cep",     "combine_experiments_params"            ),
         ("ip",      "dials.import"                          ),
-        #TODO: consider removing or replacing next command
-        ("mg",      "dials.modify_geometry"                 ),
         ("gm",      "dials.generate_mask"                   ),
         ("am",      "dials.apply_mask"                      ),
         ("fd",      "dials.find_spots"                      ),
