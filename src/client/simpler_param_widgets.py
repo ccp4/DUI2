@@ -166,6 +166,9 @@ class SimpleParamTab(QWidget):
 
         self.do_emit_signal(str_path, str_value)
 
+    def set_ed_pars(self):
+        print("set_ed_pars(SimpleParamTab)")
+
 
 class ProgBarBox(QProgressDialog):
     def __init__(self, max_val=100, min_val=0, text="Working", parent = None):
@@ -482,6 +485,9 @@ class RootWidg(QWidget):
     def reset_pars(self):
         print("reset_pars(Root) ... dummy")
 
+    def set_ed_pars(self):
+        print("set_ed_pars(SimpleParamTab)")
+
     def update_all_pars(self, tup_lst_pars):
         print("update_all_pars(Root)", tup_lst_pars, "... dummy")
 
@@ -568,6 +574,9 @@ class ImportWidget(QWidget):
 
     def reset_pars(self):
         self.imp_txt.setText("")
+
+    def set_ed_pars(self):
+        print("set_ed_pars(SimpleParamTab)")
 
     def line_changed(self):
         print("line_changed")
@@ -711,6 +720,9 @@ class MaskWidget(QWidget):
         print("\n reset_pars(MaskWidget) \n")
         self.comp_list = []
         self.update_comp_label()
+
+    def set_ed_pars(self):
+        print("set_ed_pars(SimpleParamTab)")
 
     def update_comp_label(self):
         label_str = ""
@@ -859,6 +871,11 @@ class FindspotsSimplerParameterTab(SimpleParamTab):
     def reset_pars(self):
         self.clearLayout(self.main_v_layout)
         self.build_pars()
+
+    def set_ed_pars(self):
+        print("set_ed_pars(SimpleParamTab)")
+        self.set_d_max.setChecked(True)
+        self.set_d_min.setChecked(True)
 
     def set_d_max_changed(self, stat):
         print("set_d_max_changed(Spotfinding)", stat)
@@ -1017,6 +1034,10 @@ class IndexSimplerParamTab(SimpleParamTab):
         self.clearLayout(self.main_v_layout)
         self.build_pars()
 
+    def set_ed_pars(self):
+        print("set_ed_pars(SimpleParamTab)")
+        self.detec_fix.setChecked(True)
+
     def detec_fix_changed(self, stat):
         print("detec_fix_changed(IndexSimplerParamTab)", stat)
         if int(stat) == 2:
@@ -1085,6 +1106,10 @@ class RefineBravaiSimplerParamTab(SimpleParamTab):
     def reset_pars(self):
         self.clearLayout(self.main_v_layout)
         self.build_pars()
+
+    def set_ed_pars(self):
+        print("set_ed_pars(SimpleParamTab)")
+        self.detec_fix.setChecked(True)
 
     def detec_fix_changed(self, stat):
         print("detec_fix_changed(RefineBravaiSimplerParamTab)", stat)
@@ -1172,6 +1197,10 @@ class RefineSimplerParamTab(SimpleParamTab):
     def reset_pars(self):
         self.clearLayout(self.main_v_layout)
         self.build_pars()
+
+    def set_ed_pars(self):
+        print("set_ed_pars(SimpleParamTab)")
+        self.detec_fix.setChecked(True)
 
     def detec_fix_changed(self, stat):
         print("detec_fix_changed(RefineSimplerParamTab)", stat)
@@ -1505,6 +1534,10 @@ class ExportWidget(QWidget):
 
     def reset_pars(self):
         self.find_scaled_before.emit()
+
+    def set_ed_pars(self):
+        print("set_ed_pars(SimpleParamTab)")
+
 
     def is_scale_parent(self, scale_in_parents):
         if scale_in_parents:

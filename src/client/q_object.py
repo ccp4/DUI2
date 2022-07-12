@@ -745,15 +745,24 @@ class MainObject(QObject):
         if local_main_cmd == ['dials.export']:
             self.param_widgets[self.curr_widg_key]["simple"].reset_pars()
 
+        cmd = {
+            "nod_lst":self.new_node.parent_node_lst, "cmd_lst":["get_lambda"]
+        }
+        json_lamb = json_data_request(self.uni_url, cmd)
+        try:
+            lamb = json_lamb[0]
+            print("lamb =", lamb)
+            if lamb < 0.06:
+                self.param_widgets[self.curr_widg_key]["simple"].set_ed_pars()
+
+        except (TypeError, IndexError, AttributeError):
+            print(" Err Catch Loading Lamda")
+
     def search_in_parent_nodes(self):
         try:
             fnd_scl_cmd = find_scale_cmd(
                 self.server_nod_lst, self.new_node.parent_node_lst
             )
-            '''
-            fnd_scl_cmd = find_scale_cmd(
-                self.server_nod_lst, self.new_node.parent_node_lst[0]
-            )'''
             fnd_scl = fnd_scl_cmd.foung_scale()
             print("found_scale =", fnd_scl)
             self.expr_widg.is_scale_parent(fnd_scl)
