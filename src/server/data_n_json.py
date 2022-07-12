@@ -243,6 +243,21 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
                 )
                 return_list = []
 
+    elif uni_cmd[0] == "get_lambda":
+        for lin2go in cmd_dict["nod_lst"]:
+            try:
+                print("generating lambda for line:", lin2go)
+                experiments = ExperimentListFactory.from_json_file(
+                    step_list[lin2go]._lst_expt_out[0]
+                )
+                return_list = [experiments.beams()[0].get_wavelength()]
+
+            except (IndexError, AttributeError, ValueError):
+                print(
+                    "\n  err catch , wrong line, not sending lambda \n"
+                )
+                return_list = []
+
     elif uni_cmd[0] == "get_predictions":
         print("running << get_predictions >> ")
         for lin2go in cmd_dict["nod_lst"]:
