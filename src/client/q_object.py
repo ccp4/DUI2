@@ -357,6 +357,8 @@ class MainObject(QObject):
         self.window.CmdSend2server.setEnabled(True)
         self.window.ReqStopButton.setEnabled(True)
 
+        self.window.RecipLattButton.clicked.connect(self.RecipLattClicked)
+
         try:
             self.do_load_html = DoLoadHTML(self)
             self.window.HtmlReport.setHtml(self.do_load_html.not_avail_html)
@@ -510,6 +512,9 @@ class MainObject(QObject):
 
             except AttributeError:
                 print("removing HtmlReport for old vesion of PySide2 ")
+
+    def RecipLattClicked(self):
+        print("RecipLattClicked")
 
     def mask_comp_changed(self, mask_comp):
         self.do_image_view.set_mask_comp(mask_comp)
