@@ -75,6 +75,38 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
                     "\n  err catch , wrong line, sending empty mtz \n"
                 )
 
+    elif uni_cmd[0] == "get_experiments_file":
+        for lin2go in cmd_dict["nod_lst"]:
+            try:
+                print("compresing experiments file from node #:", lin2go)
+                exp_path = str(step_list[lin2go]._lst_expt_out[0])
+                with open(exp_path, 'rb') as fil_h1:
+                    exp_byt_data = fil_h1.read()
+
+                return_list = exp_byt_data
+
+            except (IndexError, FileNotFoundError):
+                print(
+                    "\n  err catch , wrong line," +
+                    " NOT sending experiments file \n"
+                )
+
+    elif uni_cmd[0] == "get_reflections_file":
+        for lin2go in cmd_dict["nod_lst"]:
+            try:
+                print("compresing reflection file from node #:", lin2go)
+                ref_path = str(step_list[lin2go]._lst_refl_out[0])
+                with open(ref_path, 'rb') as fil_h2:
+                    ref_byt_data = fil_h2.read()
+
+                return_list = ref_byt_data
+
+            except (IndexError, FileNotFoundError):
+                print(
+                    "\n  err catch , wrong line," +
+                    " NOT sending experiments or reflections \n"
+                )
+
     elif uni_cmd == ["get_report"]:
         for lin2go in cmd_dict["nod_lst"]:
             try:

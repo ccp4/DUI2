@@ -45,6 +45,10 @@ def get_pair_list():
         ("gmis",    "get_mask_image_slice"                  ),
         ("grp",     "get_predictions"                       ),
         ("grl",     "get_reflection_list"                   ),
+
+        ("gef",     "get_experiments_file"                  ),
+        ("grf",     "get_reflections_file"                  ),
+
         ("gld",     "get_lambda"                            ),
         ("gb",      "get_bravais_sum"                       ),
         ("st",      "stop"                                  ),
