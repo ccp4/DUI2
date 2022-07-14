@@ -34,12 +34,12 @@ from client.init_firts import ini_data
 class LoadFile(QThread):
     file_loaded = Signal(tuple)
     def __init__(
-        self, unit_URL = None, cur_nod_num = None,
+        self, unit_URL = None, cur_nod_num = None, com2req = None
     ):
         super(LoadFile, self).__init__()
         self.uni_url = unit_URL
         self.cur_nod_num = cur_nod_num
-        self.cmd = "get_reflections_file"
+        self.cmd = com2req
 
     def run(self):
         print("launching ", self.cmd, "for node: ", self.cur_nod_num)
@@ -62,21 +62,40 @@ class HandleReciprocalLatticeView(QObject):
         print("HandleReciprocalLatticeView(__init__)")
         data_init = ini_data()
         self.uni_url = data_init.get_url()
+        self.tmp_ref_path = "/tmp/req_file.refl"
+        self.tmp_exp_path = "/tmp/req_file.expt"
 
     def launch_RL_view(self, nod_num):
         print("Launching Reciprocal Lattice View for node: ", nod_num)
+        self.cur_nod_num = nod_num
         self.exp_load_thread = LoadFile(
-            unit_URL = self.uni_url, cur_nod_num = nod_num
+            unit_URL = self.uni_url, cur_nod_num = self.cur_nod_num,
+            com2req = "get_experiments_file"
         )
-        self.exp_load_thread.file_loaded.connect(self.new_file)
+        self.exp_load_thread.file_loaded.connect(self.new_exp_file)
         self.exp_load_thread.start()
 
-    def new_file(self, tup_dat):
+    def new_exp_file(self, tup_dat):
         compresed = tup_dat[2]
-        #full_file = zlib.decompress(compresed).decode('utf-8')
+        full_file = zlib.decompress(compresed).decode('utf-8')
+
+        tmp_file = open(self.tmp_exp_path, "w")
+        tmp_file.write(full_file)
+        tmp_file.close()
+
+        print("command ", tup_dat[1], " finished for node ", tup_dat[0])
+        self.ref_load_thread = LoadFile(
+            unit_URL = self.uni_url, cur_nod_num = self.cur_nod_num,
+            com2req = "get_reflections_file"
+        )
+        self.ref_load_thread.file_loaded.connect(self.new_ref_file)
+        self.ref_load_thread.start()
+
+    def new_ref_file(self, tup_dat):
+        compresed = tup_dat[2]
         full_file = zlib.decompress(compresed)
 
-        tmp_file = open("/tmp/req_file.refl", "wb")
+        tmp_file = open(self.tmp_ref_path, "wb")
         tmp_file.write(full_file)
         tmp_file.close()
         print("command ", tup_dat[1], " finished for node ", tup_dat[0])
