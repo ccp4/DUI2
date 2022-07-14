@@ -30,6 +30,58 @@ from PySide2.QtGui import *
 from client.exec_utils import json_data_request
 from client.init_firts import ini_data
 
+
+class LoadFile(QThread):
+    file_loaded = Signal(tuple)
+    def __init__(
+        self, unit_URL = None, cur_nod_num = None,
+    ):
+        super(LoadFile, self).__init__()
+        self.uni_url = unit_URL
+        self.cur_nod_num = cur_nod_num
+        self.cmd = "get_reflections_file"
+
+    def run(self):
+        print("launching ", self.cmd, "for node: ", self.cur_nod_num)
+        my_cmd = {"nod_lst" : [self.cur_nod_num],
+                  "cmd_lst" : [self.cmd]}
+        req_gt = requests.get(
+            self.uni_url, stream = True, params = my_cmd
+        )
+        compresed = req_gt.content
+        print("... File request ended")
+
+        self.file_loaded.emit(
+            (self.cur_nod_num, self.cmd, compresed)
+        )
+
+class HandleReciprocalLatticeView(QObject):
+    def __init__(self, parent = None):
+        super(HandleReciprocalLatticeView, self).__init__(parent)
+        self.main_obj = parent
+        print("HandleReciprocalLatticeView(__init__)")
+        data_init = ini_data()
+        self.uni_url = data_init.get_url()
+
+    def launch_RL_view(self, nod_num):
+        print("Launching Reciprocal Lattice View for node: ", nod_num)
+        self.exp_load_thread = LoadFile(
+            unit_URL = self.uni_url, cur_nod_num = nod_num
+        )
+        self.exp_load_thread.file_loaded.connect(self.new_file)
+        self.exp_load_thread.start()
+
+    def new_file(self, tup_dat):
+        compresed = tup_dat[2]
+        #full_file = zlib.decompress(compresed).decode('utf-8')
+        full_file = zlib.decompress(compresed)
+
+        tmp_file = open("/tmp/req_file.refl", "wb")
+        tmp_file.write(full_file)
+        tmp_file.close()
+        print("command ", tup_dat[1], " finished for node ", tup_dat[0])
+
+
 class HandleLoadStatusLabel(QObject):
     def __init__(self, parent = None):
         super(HandleLoadStatusLabel, self).__init__(parent)

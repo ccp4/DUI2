@@ -34,7 +34,7 @@ from client.gui_utils import (
     TreeDirScene, widgets_defs, get_widget_def_dict,
     find_scale_cmd, find_next_cmd
 )
-from client.outputs import DoLoadHTML, ShowLog
+from client.outputs import DoLoadHTML, ShowLog, HandleReciprocalLatticeView
 from client.img_view import DoImageView
 from client.reindex_table import ReindexTable, get_label_from_str_list
 from client.exec_utils import (
@@ -357,6 +357,7 @@ class MainObject(QObject):
         self.window.CmdSend2server.setEnabled(True)
         self.window.ReqStopButton.setEnabled(True)
 
+        self.recip_latt = HandleReciprocalLatticeView(self)
         self.window.RecipLattButton.clicked.connect(self.RecipLattClicked)
 
         try:
@@ -515,6 +516,7 @@ class MainObject(QObject):
 
     def RecipLattClicked(self):
         print("RecipLattClicked")
+        self.recip_latt.launch_RL_view(self.curr_nod_num)
 
     def mask_comp_changed(self, mask_comp):
         self.do_image_view.set_mask_comp(mask_comp)
