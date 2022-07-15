@@ -32,28 +32,53 @@ from client.init_firts import ini_data
 
 import subprocess
 
-class LoadFile(QThread):
-    file_loaded = Signal(tuple)
+class LoadFiles(QThread):
+    files_loaded = Signal(dict)
     def __init__(
         self, unit_URL = None, cur_nod_num = None, com2req = None
     ):
-        super(LoadFile, self).__init__()
+        super(LoadFiles, self).__init__()
         self.uni_url = unit_URL
         self.cur_nod_num = cur_nod_num
         self.cmd = com2req
+        self.loaded_files_path = {
+            "tmp_exp_path"  :"/tmp/req_file.expt",
+            "tmp_ref_path"  :"/tmp/req_file.refl",
+        }
 
     def run(self):
-        print("launching ", self.cmd, "for node: ", self.cur_nod_num)
+        print("launching << get_experiments_file >> for node: ", self.cur_nod_num)
         my_cmd = {"nod_lst" : [self.cur_nod_num],
-                  "cmd_lst" : [self.cmd]}
-        req_gt = requests.get(
+                  "cmd_lst" : ["get_experiments_file"]}
+        req1_gt = requests.get(
             self.uni_url, stream = True, params = my_cmd
         )
-        compresed = req_gt.content
+        exp_compresed = req1_gt.content
         print("... File request ended")
-        self.file_loaded.emit(
-            (self.cur_nod_num, self.cmd, compresed)
+
+        full_exp_file = zlib.decompress(exp_compresed).decode('utf-8')
+        tmp_file = open(self.loaded_files_path["tmp_exp_path"], "w")
+        tmp_file.write(full_exp_file)
+        tmp_file.close()
+        print("command 1, finished for node ", self.cur_nod_num)
+
+
+        my_cmd = {"nod_lst" : [self.cur_nod_num],
+                  "cmd_lst" : ["get_reflections_file"]}
+        req2_gt = requests.get(
+            self.uni_url, stream = True, params = my_cmd
         )
+        ref_compresed = req2_gt.content
+        print("... File request ended")
+
+        full_ref_file = zlib.decompress(ref_compresed)
+
+        tmp_file = open(self.loaded_files_path["tmp_ref_path"], "wb")
+        tmp_file.write(full_ref_file)
+        tmp_file.close()
+        print("command2, finished for node ", self.cur_nod_num)
+        self.files_loaded.emit(self.loaded_files_path)
+
 
 class HandleReciprocalLatticeView(QObject):
     def __init__(self, parent = None):
@@ -62,47 +87,24 @@ class HandleReciprocalLatticeView(QObject):
         print("HandleReciprocalLatticeView(__init__)")
         data_init = ini_data()
         self.uni_url = data_init.get_url()
-        self.tmp_ref_path = "/tmp/req_file.refl"
-        self.tmp_exp_path = "/tmp/req_file.expt"
 
     def launch_RL_view(self, nod_num):
         print("Launching Reciprocal Lattice View for node: ", nod_num)
         self.cur_nod_num = nod_num
-        self.exp_load_thread = LoadFile(
-            unit_URL = self.uni_url, cur_nod_num = self.cur_nod_num,
-            com2req = "get_experiments_file"
+        self.exp_load_thread = LoadFiles(
+            unit_URL = self.uni_url, cur_nod_num = self.cur_nod_num
         )
-        self.exp_load_thread.file_loaded.connect(self.new_exp_file)
+        self.exp_load_thread.files_loaded.connect(self.new_exp_file)
         self.exp_load_thread.start()
 
-    def new_exp_file(self, tup_dat):
-        compresed = tup_dat[2]
-        full_file = zlib.decompress(compresed).decode('utf-8')
-        tmp_file = open(self.tmp_exp_path, "w")
-        tmp_file.write(full_file)
-        tmp_file.close()
-        print("command ", tup_dat[1], " finished for node ", tup_dat[0])
+        #LaunchReciprocalLattice
 
-        self.ref_load_thread = LoadFile(
-            unit_URL = self.uni_url, cur_nod_num = self.cur_nod_num,
-            com2req = "get_reflections_file"
-        )
-        self.ref_load_thread.file_loaded.connect(self.new_ref_file)
-        self.ref_load_thread.start()
-
-    def new_ref_file(self, tup_dat):
-        compresed = tup_dat[2]
-        full_file = zlib.decompress(compresed)
-
-        tmp_file = open(self.tmp_ref_path, "wb")
-        tmp_file.write(full_file)
-        tmp_file.close()
-        print("command ", tup_dat[1], " finished for node ", tup_dat[0])
+    def new_exp_file(self, loaded_files):
 
         ###########################  next lines better go inside a QThread
         cmd_lst = [
             "dials.reciprocal_lattice_viewer",
-            "/tmp/req_file.expt", "/tmp/req_file.refl",
+            loaded_files["tmp_exp_path"], loaded_files["tmp_ref_path"],
         ]
         try:
             print("\n Running:", cmd_lst, "\n")
