@@ -80,31 +80,17 @@ class LoadFiles(QThread):
         self.files_loaded.emit(self.loaded_files_path)
 
 
-class HandleReciprocalLatticeView(QObject):
-    def __init__(self, parent = None):
-        super(HandleReciprocalLatticeView, self).__init__(parent)
-        self.main_obj = parent
-        print("HandleReciprocalLatticeView(__init__)")
-        data_init = ini_data()
-        self.uni_url = data_init.get_url()
+class LaunchReciprocalLattice(QThread):
+    files_loaded = Signal(dict)
+    def __init__(self, exp_path, ref_path):
+        super(LaunchReciprocalLattice, self).__init__()
+        self.exp_path = exp_path
+        self.ref_path = ref_path
 
-    def launch_RL_view(self, nod_num):
-        print("Launching Reciprocal Lattice View for node: ", nod_num)
-        self.cur_nod_num = nod_num
-        self.exp_load_thread = LoadFiles(
-            unit_URL = self.uni_url, cur_nod_num = self.cur_nod_num
-        )
-        self.exp_load_thread.files_loaded.connect(self.new_exp_file)
-        self.exp_load_thread.start()
-
-        #LaunchReciprocalLattice
-
-    def new_exp_file(self, loaded_files):
-
-        ###########################  next lines better go inside a QThread
+    def run(self):
         cmd_lst = [
             "dials.reciprocal_lattice_viewer",
-            loaded_files["tmp_exp_path"], loaded_files["tmp_ref_path"],
+            self.exp_path, self.ref_path,
         ]
         try:
             print("\n Running:", cmd_lst, "\n")
@@ -135,6 +121,35 @@ class HandleReciprocalLatticeView(QObject):
 
         else:
             print("\n  ***  err catch  *** \n\n poll =", self.my_proc.poll())
+
+
+class HandleReciprocalLatticeView(QObject):
+    def __init__(self, parent = None):
+        super(HandleReciprocalLatticeView, self).__init__(parent)
+        self.main_obj = parent
+        print("HandleReciprocalLatticeView(__init__)")
+        data_init = ini_data()
+        self.uni_url = data_init.get_url()
+
+    def launch_RL_view(self, nod_num):
+        print("Launching Reciprocal Lattice View for node: ", nod_num)
+        self.cur_nod_num = nod_num
+        self.load_thread = LoadFiles(
+            unit_URL = self.uni_url, cur_nod_num = self.cur_nod_num
+        )
+        self.load_thread.files_loaded.connect(self.new_exp_file)
+        self.load_thread.start()
+
+    def new_exp_file(self, loaded_files):
+
+        self.launch_RL_thread = LaunchReciprocalLattice(
+            loaded_files["tmp_exp_path"], loaded_files["tmp_ref_path"]
+        )
+        self.launch_RL_thread.finished.connect(self.ended)
+        self.launch_RL_thread.start()
+
+    def ended(self):
+        print("RL viewer ended")
 
 
 class HandleLoadStatusLabel(QObject):
