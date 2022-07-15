@@ -118,8 +118,20 @@ class LaunchReciprocalLattice(QThread):
             print("subprocess poll 0")
 
         else:
-            print("\n  ***  err catch  *** \n\n poll =", self.my_proc.poll())
+            print("\n  ***  err catch  *** \n poll =", self.my_proc.poll())
 
+    def kill_proc(self):
+        copyed = '''
+            try:
+                pid_num = self.my_proc.pid
+                parent_proc = psutil.Process(pid_num)
+                for child in parent_proc.children(recursive=True):
+                    child.kill()
+
+                parent_proc.kill()
+        '''
+
+        self.my_proc.kill()
 
 class HandleReciprocalLatticeView(QObject):
     def __init__(self, parent = None):
@@ -130,8 +142,29 @@ class HandleReciprocalLatticeView(QObject):
         self.uni_url = data_init.get_url()
 
     def launch_RL_view(self, nod_num):
+
+        copyed = '''
+            try:
+                self.load_slice_image.quit()
+                self.load_slice_image.wait()
+
+            except AttributeError:
+                print("first slice of image loading")
+
+            self.load_slice_image = LoadSliceImage(...)
+            self.load_slice_image.slice_loaded.connect(...)
+            self.load_slice_image.start()
+        '''
+
         print("Launching Reciprocal Lattice View for node: ", nod_num)
         self.cur_nod_num = nod_num
+        try:
+            self.load_thread.quit()
+            self.load_thread.wait()
+
+        except AttributeError:
+            print("Not loading files yet")
+
         self.load_thread = LoadFiles(
             unit_URL = self.uni_url, cur_nod_num = self.cur_nod_num
         )
@@ -139,6 +172,15 @@ class HandleReciprocalLatticeView(QObject):
         self.load_thread.start()
 
     def new_files(self, loaded_files):
+
+        try:
+            self.launch_RL_thread.kill_proc()
+            self.launch_RL_thread.quit()
+            self.launch_RL_thread.wait()
+
+        except AttributeError:
+            print("No RL launched yet")
+
         self.launch_RL_thread = LaunchReciprocalLattice(
             loaded_files["tmp_exp_path"], loaded_files["tmp_ref_path"]
         )

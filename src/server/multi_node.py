@@ -458,11 +458,11 @@ class CmdNode(object):
             print("attempting to stop the execution of node", self.number)
             try:
                 pid_num = self.my_proc.pid
-                parent_proc = psutil.Process(pid_num)
-                for child in parent_proc.children(recursive=True):
+                main_proc = psutil.Process(pid_num)
+                for child in main_proc.children(recursive=True):
                     child.kill()
 
-                parent_proc.kill()
+                main_proc.kill()
 
             except BrokenPipeError:
                 print("Broken Pipe  err catch ")
