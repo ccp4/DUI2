@@ -30,6 +30,7 @@ from PySide2.QtGui import *
 from client.exec_utils import json_data_request
 from client.init_firts import ini_data
 
+import subprocess
 
 class LoadFile(QThread):
     file_loaded = Signal(tuple)
@@ -100,6 +101,41 @@ class HandleReciprocalLatticeView(QObject):
         tmp_file.close()
         print("command ", tup_dat[1], " finished for node ", tup_dat[0])
 
+        ###########################  next lines better go inside a QThread
+        cmd_lst = [
+            "dials.reciprocal_lattice_viewer",
+            "/tmp/req_file.expt", "/tmp/req_file.refl",
+        ]
+        try:
+            print("\n Running:", cmd_lst, "\n")
+            self.my_proc = subprocess.Popen(
+                cmd_lst,
+                shell = False,
+                stdout = subprocess.PIPE,
+                stderr = subprocess.STDOUT,
+                universal_newlines = True
+            )
+
+        except FileNotFoundError:
+            print(
+                "unable to run:", cmd_lst,
+                " <<FileNotFound err catch >> "
+            )
+            self.my_proc = None
+            return
+
+        new_line = None
+        while self.my_proc.poll() is None or new_line != '':
+            new_line = self.my_proc.stdout.readline()
+            if len(new_line) > 1:
+                print(new_line)
+
+        self.my_proc.stdout.close()
+        if self.my_proc.poll() == 0:
+            print("subprocess poll 0")
+
+        else:
+            print("\n  ***  err catch  *** \n\n poll =", self.my_proc.poll())
 
 class HandleLoadStatusLabel(QObject):
     def __init__(self, parent = None):
