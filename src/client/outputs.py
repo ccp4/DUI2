@@ -51,7 +51,6 @@ class LoadFile(QThread):
         )
         compresed = req_gt.content
         print("... File request ended")
-
         self.file_loaded.emit(
             (self.cur_nod_num, self.cmd, compresed)
         )
@@ -79,12 +78,11 @@ class HandleReciprocalLatticeView(QObject):
     def new_exp_file(self, tup_dat):
         compresed = tup_dat[2]
         full_file = zlib.decompress(compresed).decode('utf-8')
-
         tmp_file = open(self.tmp_exp_path, "w")
         tmp_file.write(full_file)
         tmp_file.close()
-
         print("command ", tup_dat[1], " finished for node ", tup_dat[0])
+
         self.ref_load_thread = LoadFile(
             unit_URL = self.uni_url, cur_nod_num = self.cur_nod_num,
             com2req = "get_reflections_file"
@@ -109,8 +107,7 @@ class HandleReciprocalLatticeView(QObject):
         try:
             print("\n Running:", cmd_lst, "\n")
             self.my_proc = subprocess.Popen(
-                cmd_lst,
-                shell = False,
+                cmd_lst, shell = False,
                 stdout = subprocess.PIPE,
                 stderr = subprocess.STDOUT,
                 universal_newlines = True
@@ -136,6 +133,7 @@ class HandleReciprocalLatticeView(QObject):
 
         else:
             print("\n  ***  err catch  *** \n\n poll =", self.my_proc.poll())
+
 
 class HandleLoadStatusLabel(QObject):
     def __init__(self, parent = None):
