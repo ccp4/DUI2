@@ -35,12 +35,11 @@ import subprocess
 class LoadFiles(QThread):
     files_loaded = Signal(dict)
     def __init__(
-        self, unit_URL = None, cur_nod_num = None, com2req = None
+        self, unit_URL = None, cur_nod_num = None
     ):
         super(LoadFiles, self).__init__()
         self.uni_url = unit_URL
         self.cur_nod_num = cur_nod_num
-        self.cmd = com2req
         self.loaded_files_path = {
             "tmp_exp_path"  :"/tmp/req_file.expt",
             "tmp_ref_path"  :"/tmp/req_file.refl",
@@ -61,7 +60,6 @@ class LoadFiles(QThread):
         tmp_file.write(full_exp_file)
         tmp_file.close()
         print("command 1, finished for node ", self.cur_nod_num)
-
 
         my_cmd = {"nod_lst" : [self.cur_nod_num],
                   "cmd_lst" : ["get_reflections_file"]}
@@ -137,11 +135,10 @@ class HandleReciprocalLatticeView(QObject):
         self.load_thread = LoadFiles(
             unit_URL = self.uni_url, cur_nod_num = self.cur_nod_num
         )
-        self.load_thread.files_loaded.connect(self.new_exp_file)
+        self.load_thread.files_loaded.connect(self.new_files)
         self.load_thread.start()
 
-    def new_exp_file(self, loaded_files):
-
+    def new_files(self, loaded_files):
         self.launch_RL_thread = LaunchReciprocalLattice(
             loaded_files["tmp_exp_path"], loaded_files["tmp_ref_path"]
         )
