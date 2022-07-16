@@ -130,6 +130,9 @@ class LaunchReciprocalLattice(QThread):
 
             main_proc.kill()
 
+        except psutil.NoSuchProcess:
+            print("Err Catch NoSuchProcess")
+
         except AttributeError:
             print("No PID for << None >> process")
 
