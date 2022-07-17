@@ -136,7 +136,6 @@ class LaunchReciprocalLattice(QThread):
         except AttributeError:
             print("No PID for << None >> process")
 
-        #self.my_proc.kill()
 
 class HandleReciprocalLatticeView(QObject):
     def __init__(self, parent = None):
@@ -148,21 +147,28 @@ class HandleReciprocalLatticeView(QObject):
 
     def launch_RL_view(self, nod_num):
         print("Launching Reciprocal Lattice View for node: ", nod_num)
-        self.cur_nod_num = nod_num
+        self.quit_kill_all()
+        self.load_thread = LoadFiles(
+            unit_URL = self.uni_url, cur_nod_num = nod_num
+        )
+        self.load_thread.files_loaded.connect(self.new_files)
+        self.load_thread.start()
+
+    def new_files(self, loaded_files):
+
+        self.launch_RL_thread = LaunchReciprocalLattice(
+            loaded_files["tmp_exp_path"], loaded_files["tmp_ref_path"]
+        )
+        self.launch_RL_thread.finished.connect(self.ended)
+        self.launch_RL_thread.start()
+
+    def quit_kill_all(self):
         try:
             self.load_thread.quit()
             self.load_thread.wait()
 
         except AttributeError:
             print("Not loading files yet")
-
-        self.load_thread = LoadFiles(
-            unit_URL = self.uni_url, cur_nod_num = self.cur_nod_num
-        )
-        self.load_thread.files_loaded.connect(self.new_files)
-        self.load_thread.start()
-
-    def new_files(self, loaded_files):
 
         try:
             self.launch_RL_thread.kill_proc()
@@ -171,12 +177,6 @@ class HandleReciprocalLatticeView(QObject):
 
         except AttributeError:
             print("No RL launched yet")
-
-        self.launch_RL_thread = LaunchReciprocalLattice(
-            loaded_files["tmp_exp_path"], loaded_files["tmp_ref_path"]
-        )
-        self.launch_RL_thread.finished.connect(self.ended)
-        self.launch_RL_thread.start()
 
     def ended(self):
         print("RL viewer ended")
