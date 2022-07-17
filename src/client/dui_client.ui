@@ -1515,6 +1515,15 @@
               </property>
              </widget>
             </item>
+            <item row="1" column="0">
+             <widget class="QPushButton" name="RecipLattStopButton">
+              <property name="text">
+               <string>
+ Close Reciprocal Lattice Viewer 
+</string>
+              </property>
+             </widget>
+            </item>
            </layout>
           </widget>
          </widget>

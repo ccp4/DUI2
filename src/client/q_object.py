@@ -358,7 +358,12 @@ class MainObject(QObject):
         self.window.ReqStopButton.setEnabled(True)
 
         self.recip_latt = HandleReciprocalLatticeView(self)
-        self.window.RecipLattOpenButton.clicked.connect(self.RecipLattClicked)
+        self.window.RecipLattOpenButton.clicked.connect(
+            self.RecipLattOpenClicked
+        )
+        self.window.RecipLattStopButton.clicked.connect(
+            self.RecipLattCloseClicked
+        )
 
         try:
             self.do_load_html = DoLoadHTML(self)
@@ -514,9 +519,13 @@ class MainObject(QObject):
             except AttributeError:
                 print("removing HtmlReport for old vesion of PySide2 ")
 
-    def RecipLattClicked(self):
-        print("RecipLattClicked")
+    def RecipLattOpenClicked(self):
+        print("RecipLattOpenClicked")
         self.recip_latt.launch_RL_view(self.curr_nod_num)
+
+    def RecipLattCloseClicked(self):
+        print("RecipLattCloseClicked")
+        self.recip_latt.quit_kill_all()
 
     def mask_comp_changed(self, mask_comp):
         self.do_image_view.set_mask_comp(mask_comp)
