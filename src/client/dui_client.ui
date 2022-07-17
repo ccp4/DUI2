@@ -164,8 +164,8 @@
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>299</width>
-                       <height>344</height>
+                       <width>298</width>
+                       <height>343</height>
                       </rect>
                      </property>
                     </widget>
@@ -1261,7 +1261,7 @@
         <item>
          <widget class="QTabWidget" name="OutputTabWidget">
           <property name="currentIndex">
-           <number>0</number>
+           <number>3</number>
           </property>
           <widget class="QWidget" name="ImageTab">
            <attribute name="title">
@@ -1491,8 +1491,8 @@
              <number>2</number>
             </property>
             <item row="0" column="0">
-             <widget class="QWebEngineView" name="HtmlReport">
-              <property name="url">
+             <widget class="QWebEngineView" name="HtmlReport" native="true">
+              <property name="url" stdset="0">
                <url>
                 <string>about:blank</string>
                </url>
@@ -1507,12 +1507,10 @@
            </attribute>
            <layout class="QGridLayout" name="gridLayout_35">
             <item row="0" column="0">
-             <widget class="QPushButton" name="RecipLattButton">
+             <widget class="QPushButton" name="RecipLattOpenButton">
               <property name="text">
                <string>
-
  Open Reciprocal Lattice Viewer 
-
 </string>
               </property>
              </widget>
@@ -1560,7 +1558,7 @@
      <x>0</x>
      <y>0</y>
      <width>1092</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>

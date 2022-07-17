@@ -358,7 +358,7 @@ class MainObject(QObject):
         self.window.ReqStopButton.setEnabled(True)
 
         self.recip_latt = HandleReciprocalLatticeView(self)
-        self.window.RecipLattButton.clicked.connect(self.RecipLattClicked)
+        self.window.RecipLattOpenButton.clicked.connect(self.RecipLattClicked)
 
         try:
             self.do_load_html = DoLoadHTML(self)
