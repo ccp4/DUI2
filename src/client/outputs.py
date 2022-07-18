@@ -154,6 +154,8 @@ class HandleReciprocalLatticeView(QObject):
         data_init = ini_data()
         self.uni_url = data_init.get_url()
         self.running = False
+        self.main_obj.window.progressBar.setRange(0, 100)
+        self.main_obj.window.progressBar.setValue(0)
 
     def launch_RL_view(self, nod_num):
         print("Launching Reciprocal Lattice View for node: ", nod_num)
@@ -166,6 +168,7 @@ class HandleReciprocalLatticeView(QObject):
 
         self.load_thread.start()
         self.running = True
+        self.main_obj.window.progressBar.setValue(10)
 
     def new_files(self, loaded_files):
         self.launch_RL_thread = LaunchReciprocalLattice(
@@ -174,10 +177,12 @@ class HandleReciprocalLatticeView(QObject):
         self.launch_RL_thread.finished.connect(self.ended)
         self.launch_RL_thread.start()
         self.running = True
+        self.main_obj.window.progressBar.setValue(40)
 
     def failed_loading(self):
         print("\n not running reciprocal_lattice_viewer, wrong node \n")
         self.running = False
+        self.main_obj.window.progressBar.setValue(0)
 
     def quit_kill_all(self):
         try:
@@ -196,6 +201,7 @@ class HandleReciprocalLatticeView(QObject):
             print("No RL launched yet")
 
         self.running = False
+        self.main_obj.window.progressBar.setValue(0)
 
     def change_node(self, new_node):
         print("\n \n changing node (HandleReciprocalLatticeView) to: ", new_node)
@@ -206,6 +212,7 @@ class HandleReciprocalLatticeView(QObject):
     def ended(self):
         print("RL viewer ended")
         self.running = False
+        self.main_obj.window.progressBar.setValue(0)
 
 
 class HandleLoadStatusLabel(QObject):
