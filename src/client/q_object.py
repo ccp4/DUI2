@@ -404,6 +404,7 @@ class MainObject(QObject):
 
     def close_event(self):
         print("\n aboutToQuit ... 1\n")
+        self.recip_latt.quit_kill_all()
         cmd = {"nod_lst":"", "cmd_lst":["closed"]}
         resp = json_data_request(self.uni_url, cmd)
         print("resp =", resp)
