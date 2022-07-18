@@ -35,6 +35,7 @@ import subprocess, psutil
 class LoadFiles(QThread):
     files_loaded = Signal(dict)
     loading_failed = Signal()
+    progressing = Signal(int)
     def __init__(
         self, unit_URL = None, cur_nod_num = None
     ):
@@ -47,9 +48,11 @@ class LoadFiles(QThread):
         }
 
     def run(self):
+
         print("launching << get_experiments_file >> for node: ", self.cur_nod_num)
         my_cmd = {"nod_lst" : [self.cur_nod_num],
                   "cmd_lst" : ["get_experiments_file"]}
+
         req1_gt = requests.get(
             self.uni_url, stream = True, params = my_cmd
         )
@@ -69,10 +72,25 @@ class LoadFiles(QThread):
 
         my_cmd = {"nod_lst" : [self.cur_nod_num],
                   "cmd_lst" : ["get_reflections_file"]}
+        '''
         req2_gt = requests.get(
             self.uni_url, stream = True, params = my_cmd
         )
         ref_compresed = req2_gt.content
+        '''
+        req_get = requests.get(self.uni_url, stream=True, params = my_cmd)
+        total_size = int(req_get.headers.get('content-length', 0)) + 1
+        print("total_size =", total_size)
+        block_size = 65536
+        downloaded_size = 0
+        ref_compresed = bytes()
+        for data in req_get.iter_content(block_size):
+            ref_compresed += data
+            downloaded_size += block_size
+            progress = int(100.0 * (downloaded_size / total_size))
+            self.progressing.emit(progress)
+            #print(progress)
+        #############################################################################
         print("... File request ended")
         try:
             full_ref_file = zlib.decompress(ref_compresed)
@@ -165,10 +183,13 @@ class HandleReciprocalLatticeView(QObject):
         )
         self.load_thread.files_loaded.connect(self.new_files)
         self.load_thread.loading_failed.connect(self.failed_loading)
+        self.load_thread.progressing.connect(self.p_bar_pos)
 
         self.load_thread.start()
         self.running = True
-        self.main_obj.window.progressBar.setValue(10)
+
+    def p_bar_pos(self, pos):
+        self.main_obj.window.progressBar.setValue(pos)
 
     def new_files(self, loaded_files):
         self.launch_RL_thread = LaunchReciprocalLattice(
