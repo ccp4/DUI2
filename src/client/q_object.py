@@ -519,6 +519,9 @@ class MainObject(QObject):
             except AttributeError:
                 print("removing HtmlReport for old vesion of PySide2 ")
 
+        elif tab_index == 3:
+            self.recip_latt.change_node(self.curr_nod_num)
+
     def RecipLattOpenClicked(self):
         print("RecipLattOpenClicked")
         self.recip_latt.launch_RL_view(self.curr_nod_num)

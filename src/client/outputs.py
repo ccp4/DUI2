@@ -121,7 +121,6 @@ class LaunchReciprocalLattice(QThread):
             print("\n  ***  err catch  *** \n poll =", self.my_proc.poll())
 
     def kill_proc(self):
-
         try:
             pid_num = self.my_proc.pid
             main_proc = psutil.Process(pid_num)
@@ -144,6 +143,7 @@ class HandleReciprocalLatticeView(QObject):
         print("HandleReciprocalLatticeView(__init__)")
         data_init = ini_data()
         self.uni_url = data_init.get_url()
+        self.running = False
 
     def launch_RL_view(self, nod_num):
         print("Launching Reciprocal Lattice View for node: ", nod_num)
@@ -153,14 +153,15 @@ class HandleReciprocalLatticeView(QObject):
         )
         self.load_thread.files_loaded.connect(self.new_files)
         self.load_thread.start()
+        self.running = True
 
     def new_files(self, loaded_files):
-
         self.launch_RL_thread = LaunchReciprocalLattice(
             loaded_files["tmp_exp_path"], loaded_files["tmp_ref_path"]
         )
         self.launch_RL_thread.finished.connect(self.ended)
         self.launch_RL_thread.start()
+        self.running = True
 
     def quit_kill_all(self):
         try:
@@ -178,8 +179,17 @@ class HandleReciprocalLatticeView(QObject):
         except AttributeError:
             print("No RL launched yet")
 
+        self.running = False
+
+    def change_node(self, new_node):
+        print("\n \n changing node (HandleReciprocalLatticeView) to: ", new_node)
+        print("Running =", self.running, "\n\n")
+        if self.running:
+            self.launch_RL_view(new_node)
+
     def ended(self):
         print("RL viewer ended")
+        self.running = False
 
 
 class HandleLoadStatusLabel(QObject):
