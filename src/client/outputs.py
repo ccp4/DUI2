@@ -34,6 +34,7 @@ import subprocess, psutil
 
 class LoadFiles(QThread):
     files_loaded = Signal(dict)
+    loading_failed = Signal()
     def __init__(
         self, unit_URL = None, cur_nod_num = None
     ):
@@ -54,12 +55,17 @@ class LoadFiles(QThread):
         )
         exp_compresed = req1_gt.content
         print("... File request ended")
+        try:
+            full_exp_file = zlib.decompress(exp_compresed).decode('utf-8')
+            tmp_file = open(self.loaded_files_path["tmp_exp_path"], "w")
+            tmp_file.write(full_exp_file)
+            tmp_file.close()
+            print("command 1, finished for node ", self.cur_nod_num)
 
-        full_exp_file = zlib.decompress(exp_compresed).decode('utf-8')
-        tmp_file = open(self.loaded_files_path["tmp_exp_path"], "w")
-        tmp_file.write(full_exp_file)
-        tmp_file.close()
-        print("command 1, finished for node ", self.cur_nod_num)
+        except zlib.error:
+            print("zlib.err catch loading expt file")
+            self.loading_failed.emit()
+            return
 
         my_cmd = {"nod_lst" : [self.cur_nod_num],
                   "cmd_lst" : ["get_reflections_file"]}
@@ -68,18 +74,22 @@ class LoadFiles(QThread):
         )
         ref_compresed = req2_gt.content
         print("... File request ended")
+        try:
+            full_ref_file = zlib.decompress(ref_compresed)
+            tmp_file = open(self.loaded_files_path["tmp_ref_path"], "wb")
+            tmp_file.write(full_ref_file)
+            tmp_file.close()
+            print("command2, finished for node ", self.cur_nod_num)
 
-        full_ref_file = zlib.decompress(ref_compresed)
+        except zlib.error:
+            print("zlib.err catch loading refl file")
+            self.loading_failed.emit()
+            return
 
-        tmp_file = open(self.loaded_files_path["tmp_ref_path"], "wb")
-        tmp_file.write(full_ref_file)
-        tmp_file.close()
-        print("command2, finished for node ", self.cur_nod_num)
         self.files_loaded.emit(self.loaded_files_path)
 
 
 class LaunchReciprocalLattice(QThread):
-    files_loaded = Signal(dict)
     def __init__(self, exp_path, ref_path):
         super(LaunchReciprocalLattice, self).__init__()
         self.exp_path = exp_path
@@ -152,6 +162,8 @@ class HandleReciprocalLatticeView(QObject):
             unit_URL = self.uni_url, cur_nod_num = nod_num
         )
         self.load_thread.files_loaded.connect(self.new_files)
+        self.load_thread.loading_failed.connect(self.failed_loading)
+
         self.load_thread.start()
         self.running = True
 
@@ -162,6 +174,10 @@ class HandleReciprocalLatticeView(QObject):
         self.launch_RL_thread.finished.connect(self.ended)
         self.launch_RL_thread.start()
         self.running = True
+
+    def failed_loading(self):
+        print("\n not running reciprocal_lattice_viewer, wrong node \n")
+        self.running = False
 
     def quit_kill_all(self):
         try:
