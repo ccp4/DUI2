@@ -53,10 +53,10 @@ class LoadFiles(QThread):
         my_cmd = {"nod_lst" : [self.cur_nod_num],
                   "cmd_lst" : ["get_experiments_file"]}
 
-        req1_gt = requests.get(
+        self.req = requests.get(
             self.uni_url, stream = True, params = my_cmd
         )
-        exp_compresed = req1_gt.content
+        exp_compresed = self.req.content
         print("... File request ended")
         try:
             full_exp_file = zlib.decompress(exp_compresed).decode('utf-8')
@@ -73,13 +73,13 @@ class LoadFiles(QThread):
         my_cmd = {"nod_lst" : [self.cur_nod_num],
                   "cmd_lst" : ["get_reflections_file"]}
 
-        req_get = requests.get(self.uni_url, stream=True, params = my_cmd)
-        total_size = int(req_get.headers.get('content-length', 0)) + 1
+        self.req = requests.get(self.uni_url, stream=True, params = my_cmd)
+        total_size = int(self.req.headers.get('content-length', 0)) + 1
         print("total_size =", total_size)
         block_size = int(total_size / 10)
         downloaded_size = 0
         ref_compresed = bytes()
-        for data in req_get.iter_content(block_size):
+        for data in self.req.iter_content(block_size):
             ref_compresed += data
             downloaded_size += block_size
             progress = int(100.0 * (downloaded_size / total_size))
@@ -99,6 +99,10 @@ class LoadFiles(QThread):
             return
 
         self.files_loaded.emit(self.loaded_files_path)
+
+    def kill_proc(self):
+        print("\n\n kill_proc(LoadFiles) \n\n")
+        self.req.close()
 
 
 class LaunchReciprocalLattice(QThread):
@@ -143,12 +147,20 @@ class LaunchReciprocalLattice(QThread):
             print("\n  ***  err catch  *** \n poll =", self.my_proc.poll())
 
     def kill_proc(self):
+        if os.path.exists(self.exp_path):
+            os.remove(self.exp_path)
+
+        if os.path.exists(self.exp_path):
+            os.remove(self.exp_path)
+
         try:
             pid_num = self.my_proc.pid
             main_proc = psutil.Process(pid_num)
+            print("try 2 kill children procs")
             for child in main_proc.children(recursive=True):
                 child.kill()
 
+            print("try 2 kill main proc")
             main_proc.kill()
 
         except psutil.NoSuchProcess:
@@ -203,6 +215,7 @@ class HandleReciprocalLatticeView(QObject):
 
     def quit_kill_all(self):
         try:
+            self.load_thread.kill_proc()
             self.load_thread.quit()
             self.load_thread.wait()
 
