@@ -443,7 +443,7 @@ def draw_quadratic_bezier_3_points(
         lin_pen, row_size, col_size
 ):
     arrow_head = False
-    curved_corners = True    
+    curved_corners = True
     arrow_head_W = 1.0 / 4.0
     arrow_head_H = 1.0 / 8.0
     if arrow_head:

@@ -72,16 +72,11 @@ class LoadFiles(QThread):
 
         my_cmd = {"nod_lst" : [self.cur_nod_num],
                   "cmd_lst" : ["get_reflections_file"]}
-        '''
-        req2_gt = requests.get(
-            self.uni_url, stream = True, params = my_cmd
-        )
-        ref_compresed = req2_gt.content
-        '''
+
         req_get = requests.get(self.uni_url, stream=True, params = my_cmd)
         total_size = int(req_get.headers.get('content-length', 0)) + 1
         print("total_size =", total_size)
-        block_size = 65536
+        block_size = int(total_size / 10)
         downloaded_size = 0
         ref_compresed = bytes()
         for data in req_get.iter_content(block_size):
@@ -89,8 +84,7 @@ class LoadFiles(QThread):
             downloaded_size += block_size
             progress = int(100.0 * (downloaded_size / total_size))
             self.progressing.emit(progress)
-            #print(progress)
-        #############################################################################
+
         print("... File request ended")
         try:
             full_ref_file = zlib.decompress(ref_compresed)
@@ -186,10 +180,12 @@ class HandleReciprocalLatticeView(QObject):
         self.load_thread.progressing.connect(self.p_bar_pos)
 
         self.load_thread.start()
+        self.main_obj.window.progressBar.setValue(5)
         self.running = True
 
     def p_bar_pos(self, pos):
-        self.main_obj.window.progressBar.setValue(pos)
+        in_pos = int(float(pos) * 0.8 + 10.0)
+        self.main_obj.window.progressBar.setValue(in_pos)
 
     def new_files(self, loaded_files):
         self.launch_RL_thread = LaunchReciprocalLattice(
@@ -198,7 +194,7 @@ class HandleReciprocalLatticeView(QObject):
         self.launch_RL_thread.finished.connect(self.ended)
         self.launch_RL_thread.start()
         self.running = True
-        self.main_obj.window.progressBar.setValue(40)
+        self.main_obj.window.progressBar.setValue(95)
 
     def failed_loading(self):
         print("\n not running reciprocal_lattice_viewer, wrong node \n")
