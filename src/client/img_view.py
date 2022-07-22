@@ -1524,13 +1524,11 @@ class MainImgViewObject(QObject):
         self.dir_selected = isdir
         self.window.IntroPathEdit.setText(self.nod_or_path)
 
-
         my_cmd_lst = ["get_template 0"]
         my_cmd = {"path"    : self.nod_or_path,
                   "cmd_lst" : my_cmd_lst}
 
         json_data_lst = json_data_request(self.uni_url, my_cmd)
-
 
         new_templ = json_data_lst[0]
         self.img_d1_d2 = (json_data_lst[1], json_data_lst[2])
@@ -1542,14 +1540,6 @@ class MainImgViewObject(QObject):
         self.open_widget = FileBrowser(self.window)
         self.open_widget.resize(self.open_widget.size() * 2)
         self.open_widget.file_or_dir_selected.connect(self.set_selection)
-
-
-old2remove = '''
-def main():
-    app = QApplication(sys.argv)
-    m_obj = MainImgViewObject(parent = app)
-    sys.exit(app.exec_())
-'''
 
 
 def main(par_def = None):
