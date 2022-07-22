@@ -76,7 +76,6 @@ class MainObject(QObject):
 
         data_init = ini_data()
         self.uni_url = data_init.get_url()
-        run_local = data_init.get_if_local()
 
         self.reseting = False
         try:

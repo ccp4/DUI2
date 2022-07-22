@@ -643,7 +643,14 @@ class DoImageView(QObject):
         )
 
         self.main_obj.window.EasterEggButton.clicked.connect(self.easter_egg)
-        self.easter_egg_active = False
+
+        data_init = ini_data()
+        self.run_local = data_init.get_if_local()
+        if self.run_local:
+            self.easter_egg_active = False
+
+        else:
+            self.easter_egg_active = True
 
         self.i_min_max = [-2, 50]
         self.palette = "grayscale"
