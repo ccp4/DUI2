@@ -201,17 +201,16 @@ class HandleReciprocalLatticeView(QObject):
         in_pos = int(float(pos) * 0.8 + 10.0)
         self.main_obj.window.progressBar.setValue(in_pos)
 
-    def new_files(self, loaded_files):
-
+    def new_files(self, paths_n_nod_num):
+        self.paths_n_nod_num = paths_n_nod_num
         print("new_files(HandleReciprocalLatticeView)")
-        print("loaded_files from node:", loaded_files["cur_nod_num"])
+        print("nod_num from node:", self.paths_n_nod_num["cur_nod_num"])
         print("supposed to be in node: ... TODO")
-        self.get_nod_num.emit(loaded_files["cur_nod_num"])
-        self.do_launch_RL(loaded_files)
+        self.get_nod_num.emit(self.paths_n_nod_num["cur_nod_num"])
 
-    def do_launch_RL(self, loaded_files):
+    def do_launch_RL(self):
         self.launch_RL_thread = LaunchReciprocalLattice(
-            loaded_files["tmp_exp_path"], loaded_files["tmp_ref_path"]
+            self.paths_n_nod_num["tmp_exp_path"], self.paths_n_nod_num["tmp_ref_path"]
         )
         self.launch_RL_thread.finished.connect(self.ended)
         self.launch_RL_thread.start()

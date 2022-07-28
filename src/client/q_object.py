@@ -536,9 +536,12 @@ class MainObject(QObject):
         print("verify_nod_num(loaded_nod_num) n=", loaded_nod_num)
         if self.curr_nod_num == loaded_nod_num:
             print("same node as when clicked")
+            self.recip_latt.do_launch_RL()
 
         else:
             print("time to relaunch RL view for node:", self.curr_nod_num)
+            self.recip_latt.quit_kill_all()
+            self.recip_latt.launch_RL_view(self.curr_nod_num)
 
     def mask_comp_changed(self, mask_comp):
         self.do_image_view.set_mask_comp(mask_comp)
