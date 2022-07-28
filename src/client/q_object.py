@@ -357,6 +357,7 @@ class MainObject(QObject):
         self.window.ReqStopButton.setEnabled(True)
 
         self.recip_latt = HandleReciprocalLatticeView(self)
+        self.recip_latt.get_nod_num.connect(self.verify_nod_num)
         self.window.RecipLattOpenButton.clicked.connect(
             self.RecipLattOpenClicked
         )
@@ -529,6 +530,15 @@ class MainObject(QObject):
     def RecipLattCloseClicked(self):
         print("RecipLattCloseClicked")
         self.recip_latt.quit_kill_all()
+
+    def verify_nod_num(self, loaded_nod_num):
+        print("verify_nod_num(Main QObject), num=", self.curr_nod_num)
+        print("verify_nod_num(loaded_nod_num) n=", loaded_nod_num)
+        if self.curr_nod_num == loaded_nod_num:
+            print("same node as when clicked")
+
+        else:
+            print("time to relaunch RL view for node:", self.curr_nod_num)
 
     def mask_comp_changed(self, mask_comp):
         self.do_image_view.set_mask_comp(mask_comp)

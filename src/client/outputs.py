@@ -42,9 +42,10 @@ class LoadFiles(QThread):
         super(LoadFiles, self).__init__()
         self.uni_url = unit_URL
         self.cur_nod_num = cur_nod_num
-        self.loaded_files_path = {
+        self.files_path_n_nod_num = {
             "tmp_exp_path"  :"/tmp/req_file.expt",
             "tmp_ref_path"  :"/tmp/req_file.refl",
+            "cur_nod_num"   :int(cur_nod_num)
         }
 
     def run(self):
@@ -60,7 +61,7 @@ class LoadFiles(QThread):
         print("... File request ended")
         try:
             full_exp_file = zlib.decompress(exp_compresed).decode('utf-8')
-            tmp_file = open(self.loaded_files_path["tmp_exp_path"], "w")
+            tmp_file = open(self.files_path_n_nod_num["tmp_exp_path"], "w")
             tmp_file.write(full_exp_file)
             tmp_file.close()
             print("command 1, finished for node ", self.cur_nod_num)
@@ -88,7 +89,7 @@ class LoadFiles(QThread):
         print("... File request ended")
         try:
             full_ref_file = zlib.decompress(ref_compresed)
-            tmp_file = open(self.loaded_files_path["tmp_ref_path"], "wb")
+            tmp_file = open(self.files_path_n_nod_num["tmp_ref_path"], "wb")
             tmp_file.write(full_ref_file)
             tmp_file.close()
             print("command2, finished for node ", self.cur_nod_num)
@@ -98,7 +99,7 @@ class LoadFiles(QThread):
             self.loading_failed.emit()
             return
 
-        self.files_loaded.emit(self.loaded_files_path)
+        self.files_loaded.emit(self.files_path_n_nod_num)
 
     def kill_proc(self):
         print("\n\n kill_proc(LoadFiles) \n\n")
@@ -171,6 +172,7 @@ class LaunchReciprocalLattice(QThread):
 
 
 class HandleReciprocalLatticeView(QObject):
+    get_nod_num = Signal(int)
     def __init__(self, parent = None):
         super(HandleReciprocalLatticeView, self).__init__(parent)
         self.main_obj = parent
@@ -200,6 +202,14 @@ class HandleReciprocalLatticeView(QObject):
         self.main_obj.window.progressBar.setValue(in_pos)
 
     def new_files(self, loaded_files):
+
+        print("new_files(HandleReciprocalLatticeView)")
+        print("loaded_files from node:", loaded_files["cur_nod_num"])
+        print("supposed to be in node: ... TODO")
+        self.get_nod_num.emit(loaded_files["cur_nod_num"])
+        self.do_launch_RL(loaded_files)
+
+    def do_launch_RL(self, loaded_files):
         self.launch_RL_thread = LaunchReciprocalLattice(
             loaded_files["tmp_exp_path"], loaded_files["tmp_ref_path"]
         )
