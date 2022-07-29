@@ -1024,7 +1024,7 @@ class DoImageView(QObject):
             self.old_nod_num != self.cur_nod_num or
             self.old_img_num != self.cur_img_num
         ):
-            print("scaled or dragged image")
+            print("scaled, dragged or changed image")
             self.slice_show_img()
 
         self.old_x1 = self.x1
@@ -1159,7 +1159,7 @@ class DoImageView(QObject):
         self.l_stat.load_progress(progress)
 
     def slice_show_img(self):
-        if self.full_image_loaded == False:
+        if self.full_image_loaded == False and self.easter_egg_active:
             self.l_stat.load_started()
 
             try:
