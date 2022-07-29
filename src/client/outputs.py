@@ -58,13 +58,12 @@ class LoadFiles(QThread):
             self.uni_url, stream = True, params = my_cmd
         )
         exp_compresed = self.req.content
-        print("... File request ended")
         try:
             full_exp_file = zlib.decompress(exp_compresed).decode('utf-8')
             tmp_file = open(self.files_path_n_nod_num["tmp_exp_path"], "w")
             tmp_file.write(full_exp_file)
             tmp_file.close()
-            print("command 1, finished for node ", self.cur_nod_num)
+            print("request 1, finished for node ", self.cur_nod_num)
 
         except zlib.error:
             print("zlib.err catch loading expt file")
@@ -77,7 +76,7 @@ class LoadFiles(QThread):
         self.req = requests.get(self.uni_url, stream=True, params = my_cmd)
         total_size = int(self.req.headers.get('content-length', 0)) + 1
         print("total_size =", total_size)
-        block_size = int(total_size / 10)
+        block_size = int(total_size / 16)
         downloaded_size = 0
         ref_compresed = bytes()
         for data in self.req.iter_content(block_size):
@@ -86,13 +85,12 @@ class LoadFiles(QThread):
             progress = int(100.0 * (downloaded_size / total_size))
             self.progressing.emit(progress)
 
-        print("... File request ended")
         try:
             full_ref_file = zlib.decompress(ref_compresed)
             tmp_file = open(self.files_path_n_nod_num["tmp_ref_path"], "wb")
             tmp_file.write(full_ref_file)
             tmp_file.close()
-            print("command2, finished for node ", self.cur_nod_num)
+            print("request 2, finished for node ", self.cur_nod_num)
 
         except zlib.error:
             print("zlib.err catch loading refl file")
@@ -198,7 +196,7 @@ class HandleReciprocalLatticeView(QObject):
         self.running = True
 
     def p_bar_pos(self, pos):
-        in_pos = int(float(pos) * 0.8 + 10.0)
+        in_pos = int(float(pos) * 0.9 + 10.0)
         self.main_obj.window.progressBar.setValue(in_pos)
 
     def new_files(self, paths_n_nod_num):
@@ -215,7 +213,7 @@ class HandleReciprocalLatticeView(QObject):
         self.launch_RL_thread.finished.connect(self.ended)
         self.launch_RL_thread.start()
         self.running = True
-        self.main_obj.window.progressBar.setValue(95)
+        self.main_obj.window.progressBar.setValue(100)
 
     def failed_loading(self):
         print("\n not running reciprocal_lattice_viewer, wrong node \n")

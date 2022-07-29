@@ -532,8 +532,10 @@ class MainObject(QObject):
         self.recip_latt.quit_kill_all()
 
     def verify_nod_num(self, loaded_nod_num):
-        print("verify_nod_num(Main QObject), num=", self.curr_nod_num)
-        print("verify_nod_num(loaded_nod_num) n=", loaded_nod_num)
+        print(
+            "verify_nod_num \n",
+            " (Main QObject)=", self.curr_nod_num, "(loaded)=", loaded_nod_num
+        )
         if self.curr_nod_num == loaded_nod_num:
             print("same node as when clicked")
             self.recip_latt.do_launch_RL()
