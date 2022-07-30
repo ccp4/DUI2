@@ -49,7 +49,6 @@ class LoadFiles(QThread):
         }
 
     def run(self):
-
         print("launching << get_experiments_file >> for node: ", self.cur_nod_num)
         my_cmd = {"nod_lst" : [self.cur_nod_num],
                   "cmd_lst" : ["get_experiments_file"]}
@@ -63,13 +62,14 @@ class LoadFiles(QThread):
             tmp_file = open(self.files_path_n_nod_num["tmp_exp_path"], "w")
             tmp_file.write(full_exp_file)
             tmp_file.close()
-            print("request 1, finished for node ", self.cur_nod_num)
+            print("request expt, finished for node ", self.cur_nod_num)
 
         except zlib.error:
             print("zlib.err catch loading expt file")
             self.loading_failed.emit()
             return
 
+        print("launching << get_reflections_file >> for node: ", self.cur_nod_num)
         my_cmd = {"nod_lst" : [self.cur_nod_num],
                   "cmd_lst" : ["get_reflections_file"]}
 
@@ -90,7 +90,7 @@ class LoadFiles(QThread):
             tmp_file = open(self.files_path_n_nod_num["tmp_ref_path"], "wb")
             tmp_file.write(full_ref_file)
             tmp_file.close()
-            print("request 2, finished for node ", self.cur_nod_num)
+            print("request refl, finished for node ", self.cur_nod_num)
 
         except zlib.error:
             print("zlib.err catch loading refl file")
@@ -100,7 +100,7 @@ class LoadFiles(QThread):
         self.files_loaded.emit(self.files_path_n_nod_num)
 
     def kill_proc(self):
-        print("\n\n kill_proc(LoadFiles) \n\n")
+        print("\n kill_proc(LoadFiles) \n")
         self.req.close()
 
 
@@ -203,12 +203,12 @@ class HandleReciprocalLatticeView(QObject):
         self.paths_n_nod_num = paths_n_nod_num
         print("new_files(HandleReciprocalLatticeView)")
         print("nod_num from node:", self.paths_n_nod_num["cur_nod_num"])
-        print("supposed to be in node: ... TODO")
         self.get_nod_num.emit(self.paths_n_nod_num["cur_nod_num"])
 
     def do_launch_RL(self):
         self.launch_RL_thread = LaunchReciprocalLattice(
-            self.paths_n_nod_num["tmp_exp_path"], self.paths_n_nod_num["tmp_ref_path"]
+            self.paths_n_nod_num["tmp_exp_path"],
+            self.paths_n_nod_num["tmp_ref_path"]
         )
         self.launch_RL_thread.finished.connect(self.ended)
         self.launch_RL_thread.start()
@@ -241,8 +241,8 @@ class HandleReciprocalLatticeView(QObject):
         self.main_obj.window.progressBar.setValue(0)
 
     def change_node(self, new_node):
-        print("\n \n changing node (HandleReciprocalLatticeView) to: ", new_node)
-        print("Running =", self.running, "\n\n")
+        print("\n changing node (HandleReciprocalLatticeView) to: ", new_node)
+        print("Running =", self.running, "\n")
         if self.running:
             self.launch_RL_view(new_node)
 
@@ -284,7 +284,6 @@ class HandleLoadStatusLabel(QObject):
             '  Loading: ' + str_progress + " %  "
         )
         self.main_obj.parent_app.processEvents()
-        #print("load_progress (HandleLoadStatusLabel):", progress)
 
     def load_finished(self):
         self.main_obj.window.OutuputStatLabel.setStyleSheet(
@@ -371,7 +370,6 @@ class DoLoadHTML(QObject):
                     print("... html request ended")
 
                     full_file = zlib.decompress(compresed).decode('utf-8')
-                    #print("full_file =", full_file)
 
                     found_html = False
                     for html_info in self.lst_html:
@@ -406,14 +404,13 @@ class DoLoadHTML(QObject):
                 self.main_obj.window.HtmlReport.setHtml(self.not_avail_html)
 
             else:
-
-                tmp_file = open("/tmp/temp_repo.html", "w")
+                tmp_htmp_path = "/tmp/temp_repo.html"
+                tmp_file = open(tmp_htmp_path, "w")
                 tmp_file.write(full_file)
                 tmp_file.close()
 
-                #self.main_obj.window.HtmlReport.setHtml(full_file)
                 self.main_obj.window.HtmlReport.load(
-                    QUrl.fromLocalFile("/tmp/temp_repo.html")
+                    QUrl.fromLocalFile(tmp_htmp_path)
                 )
 
             print("Show HTML ... End")

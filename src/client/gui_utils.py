@@ -186,7 +186,7 @@ class find_next_cmd(object):
     ):
         self.nod_lst = nod_lst_in
         self.remove_combine = False
-        #TODO fix this wat to do twise the same, next IF vs TRY later
+        #TODO fix this what to do twise the same, next IF vs TRY later
         if str_key == "combine_experiments":
             parent_num = parent_nod_num_lst[0]
             str_key = self.nod_lst[parent_num]["cmd2show"][0][6:]
@@ -195,7 +195,7 @@ class find_next_cmd(object):
         try:
             self.default_list = param_widgets[str_key]["nxt_widg_lst"]
 
-        #TODO fix this wat to do twise the same, next TRY vs IF previous
+        #TODO fix this what to do twise the same, next TRY vs IF previous
         except KeyError:
             if str_key in opt_cmd_lst:
                 parent_num = parent_nod_num_lst[0]
@@ -627,18 +627,15 @@ class TreeDirScene(QGraphicsScene):
         self.black_pen = QPen(
             Qt.black, 1.6, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
         )
-
         self.green_pen = QPen(
             Qt.green, 1.6, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
         )
         self.dark_green_pen = QPen(
             Qt.darkGreen, 1.6, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
         )
-
         self.red_pen = QPen(
             Qt.red, 1.6, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
         )
-
         self.blue_pen = QPen(
             Qt.blue, 1.6, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
         )
@@ -852,7 +849,6 @@ class TreeDirScene(QGraphicsScene):
                     my_coord_y - self.f_height * 0.9 + self.f_height * 0.1
                 )
 
-
                 my_coord_x ,my_coord_y = self.get_coords(pos, -0.6)
                 n_text = self.addSimpleText(str(node["number"]))
                 n_text.setPos(my_coord_x - self.f_width * 0.7,
@@ -885,7 +881,6 @@ class TreeDirScene(QGraphicsScene):
                         dx1 + self.f_width, dy1,
                         self.dark_blue_pen, self.white_brush
                     )
-
                     right_x1, down_y1 = self.get_coords(
                         pos + 0.3, max_indent + nod_bar_pos
                     )
@@ -899,11 +894,6 @@ class TreeDirScene(QGraphicsScene):
                         dx1 + self.f_width, dy1,
                         self.dark_blue_pen, self.dark_blue_brush
                     )
-                    to_desynchronize_bars = '''
-                    nod_bar_pos += 0.1
-                    if nod_bar_pos > 3:
-                        nod_bar_pos = 1
-                    #'''
 
                 cmd_text = self.addSimpleText(str(node["str_cmd"]))
                 x1, y1 = self.get_coords(pos - 0.3, max_indent + 5)

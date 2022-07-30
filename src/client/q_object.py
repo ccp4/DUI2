@@ -392,8 +392,10 @@ class MainObject(QObject):
         self.change_widget(self.curr_widg_key)
         self.thrd_lst = []
 
-        self.window.MainHSplitter.setStretchFactor(0, 1)
+        TODO_look_at_this = '''
+        self.window.MainHSplitter.setStretchFactor(0, 3)
         self.window.MainHSplitter.setStretchFactor(1, 2)
+        '''
         self.window.LeftVSplitter.setStretchFactor(0, 3)
         self.window.LeftVSplitter.setStretchFactor(1, 1)
 
@@ -493,7 +495,6 @@ class MainObject(QObject):
             except IndexError:
                     self.do_image_view.set_drag_mode(mask_mode = False)
 
-
             try:
                 img_num = int(self.window.ImgNumEdit.text())
 
@@ -522,6 +523,7 @@ class MainObject(QObject):
 
         elif tab_index == 3:
             self.recip_latt.change_node(self.curr_nod_num)
+            #TODO close RL view when the user changes to a different tab
 
     def RecipLattOpenClicked(self):
         print("RecipLattOpenClicked")
