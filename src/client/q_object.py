@@ -377,6 +377,7 @@ class MainObject(QObject):
         self.do_image_view = DoImageView(self)
         self.do_image_view.new_mask_comp.connect(self.get_new_mask_comp)
 
+        self.curr_outp_tab = self.window.OutputTabWidget.currentIndex()
         self.window.OutputTabWidget.currentChanged.connect(self.refresh_output)
         self.window.ImgNumEdit.editingFinished.connect(self.img_num_changed)
         self.window.PrevImgButton.clicked.connect(self.prev_img)
@@ -523,7 +524,11 @@ class MainObject(QObject):
 
         elif tab_index == 3:
             self.recip_latt.change_node(self.curr_nod_num)
-            #TODO close RL view when the user changes to a different tab
+
+        if self.curr_outp_tab == 3 and tab_index != 3:
+            self.recip_latt.quit_kill_all()
+
+        self.curr_outp_tab = tab_index
 
     def RecipLattOpenClicked(self):
         print("RecipLattOpenClicked")
