@@ -32,11 +32,18 @@ class ini_data(object):
 
         print("\n run_local =", run_local, "\n")
 
+    def set_tmp_dir(self, dir_path_in):
+        global tmp_dir
+        tmp_dir = dir_path_in
+
     def get_if_local(self):
         return run_local
 
     def get_url(self):
         return uni_url
+
+    def get_tmp_dir(self):
+        return tmp_dir
 
 
 if __name__ == "__main__":

@@ -37,14 +37,14 @@ class LoadFiles(QThread):
     loading_failed = Signal()
     progressing = Signal(int)
     def __init__(
-        self, unit_URL = None, cur_nod_num = None
+        self, unit_URL = None, cur_nod_num = None, tmp_dir = None
     ):
         super(LoadFiles, self).__init__()
         self.uni_url = unit_URL
         self.cur_nod_num = cur_nod_num
         self.files_path_n_nod_num = {
-            "tmp_exp_path"  :"/tmp/req_file.expt",
-            "tmp_ref_path"  :"/tmp/req_file.refl",
+            "tmp_exp_path"  :tmp_dir + os.sep + "req_file.expt",
+            "tmp_ref_path"  :tmp_dir + os.sep + "req_file.refl",
             "cur_nod_num"   :int(cur_nod_num)
         }
 
@@ -177,6 +177,8 @@ class HandleReciprocalLatticeView(QObject):
         print("HandleReciprocalLatticeView(__init__)")
         data_init = ini_data()
         self.uni_url = data_init.get_url()
+        self.tmp_dir = data_init.get_tmp_dir()
+        print("tmp_dir =", self.tmp_dir)
         self.running = False
         self.main_obj.window.progressBar.setRange(0, 100)
         self.main_obj.window.progressBar.setValue(0)
@@ -185,7 +187,8 @@ class HandleReciprocalLatticeView(QObject):
         print("Launching Reciprocal Lattice View for node: ", nod_num)
         self.quit_kill_all()
         self.load_thread = LoadFiles(
-            unit_URL = self.uni_url, cur_nod_num = nod_num
+            unit_URL = self.uni_url, cur_nod_num = nod_num,
+            tmp_dir = self.tmp_dir
         )
         self.load_thread.files_loaded.connect(self.new_files)
         self.load_thread.loading_failed.connect(self.failed_loading)

@@ -21,16 +21,26 @@ copyright (c) CCP4 - DLS
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-import sys, time
+import os, sys, time, shutil
 
 from PySide2.QtCore import *
 from PySide2.QtWidgets import *
 
 from client.q_object import MainObject
 
-
 from client.init_firts import ini_data
 from client.exec_utils import json_data_request
+
+def create_tmp_dir():
+    path2add = os.getcwd() + os.sep + "run_dui_tmp"
+    try:
+        shutil.rmtree(path2add)
+
+    except FileNotFoundError:
+        print("No need to remove non existent dir")
+
+    os.mkdir(path2add)
+    return path2add
 
 
 def main(par_def = None):
@@ -38,7 +48,12 @@ def main(par_def = None):
     data_init.set_data(par_def)
     uni_url = data_init.get_url()
 
-    print('get_if_local =', data_init.get_if_local(), 'get_url =', data_init.get_url())
+    tmp_dat_dir = create_tmp_dir()
+    print("creating ", tmp_dat_dir, "for temporary files")
+
+    data_init.set_tmp_dir(tmp_dat_dir)
+
+    print('get_if_local =', data_init.get_if_local(), 'get_url =', uni_url)
 
     cmd = {"nod_lst":[""], "cmd_lst":["display"]}
     dummy_nod_lst = None
