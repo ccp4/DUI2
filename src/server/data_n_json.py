@@ -431,6 +431,7 @@ def get_cmd_opt_list():
         "scale"                             ,
         "merge"                             ,
         "cosym"                             ,
+        "slice_sequence"                    ,
     ]
     return command_list
 
