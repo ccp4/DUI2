@@ -26,6 +26,7 @@ import os, sys, shutil
 import glob, json
 
 from server.data_n_json import get_data_from_steps
+from server.init_first import ini_data
 from shared_modules import format_utils
 
 def get_pair_list():
@@ -132,6 +133,10 @@ def add_log_line(new_line, nod_req):
 
 class CmdNode(object):
     def __init__(self, parent_lst_in = None):
+
+        data_init = ini_data()
+        self.win_exe = data_init.get_win_exe()
+
         self.parent_node_lst = []
         try:
             for single_parent in parent_lst_in:
@@ -273,7 +278,10 @@ class CmdNode(object):
         print("is_valid_command =", is_valid_command)
         if is_valid_command:
             try:
-                inner_lst[0] += ".exe"
+                print("self.win_exe =", self.win_exe)
+                if self.win_exe:
+                    inner_lst[0] += ".exe"
+
                 print("\n Running:", inner_lst, "\n")
                 self.my_proc = subprocess.Popen(
                     inner_lst,
@@ -384,7 +392,9 @@ class CmdNode(object):
             n_Broken_Pipes += add_log_line(new_line, self.nod_req)
 
             lst_rep_out = []
-            rep_lst_dat_in[0] += ".exe"
+            if self.win_exe:
+                rep_lst_dat_in[0] += ".exe"
+
             rep_proc = subprocess.Popen(
                 rep_lst_dat_in,
                 shell = False,
@@ -420,7 +430,9 @@ class CmdNode(object):
         new_line = "Generating Predictions"
         n_Broken_Pipes += add_log_line(new_line, self.nod_req)
 
-        pred_lst_dat_in[0] += ".exe"
+        if self.win_exe:
+            pred_lst_dat_in[0] += ".exe"
+
         lst_pred_out = []
         pred_proc = subprocess.Popen(
             pred_lst_dat_in,

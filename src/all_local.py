@@ -8,7 +8,9 @@ server_par_def = (
     ("host", "localhost"),
     #("host", "serverip"),
     ("all_local", "true"),
+    ("windows_exe", "false"),
 )
+
 
 if __name__ == '__main__':
     pipe_server_1, pipe_server_2 = Pipe()
@@ -20,12 +22,12 @@ if __name__ == '__main__':
     new_port = pipe_server_1.recv()
     print("# time to launch client app with port =",  new_port, "\n")
 
-    par_def = (
-        ("url", 'http://localhost:' + str(new_port) + '/'),
-        ("all_local", "true"),
+    client_par_def = (
+            ("url", 'http://localhost:' + str(new_port) + '/'),
+            ("all_local", "true"),
+            ("windows_exe", "false"),
     )
-
-    run_client.main(par_def)
+    run_client.main(client_par_def)
 
     prcs_serv.join()
     print("Closing server naturally")

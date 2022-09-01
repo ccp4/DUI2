@@ -12,6 +12,7 @@ class ini_data(object):
             par_def = (
                 ("url", 'http://localhost:45678/'),
                 ("all_local", "False"),
+                ("windows_exe", "False"),
             )
 
         init_param = format_utils.get_par(par_def, sys.argv[1:])
@@ -32,6 +33,14 @@ class ini_data(object):
 
         print("\n run_local =", run_local, "\n")
 
+        global win_exe
+        if init_param["windows_exe"].lower() == "true":
+            win_exe = True
+
+        else:
+            win_exe = False
+
+        print("\n win_exe =", win_exe, "\n")
     def set_tmp_dir(self, dir_path_in):
         global tmp_dir
         tmp_dir = dir_path_in
@@ -44,6 +53,9 @@ class ini_data(object):
 
     def get_tmp_dir(self):
         return tmp_dir
+
+    def get_win_exe(self):
+        return win_exe
 
 
 if __name__ == "__main__":

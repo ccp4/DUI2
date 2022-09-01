@@ -28,6 +28,7 @@ import json, os, zlib, sys, time
 from server import multi_node
 from server.data_n_json import iter_dict
 from shared_modules import format_utils
+from server.init_first import ini_data
 
 def main(par_def = None, connection_out = None):
     print("                                                                                                ")
@@ -206,9 +207,11 @@ def main(par_def = None, connection_out = None):
 
     ################################################ PROPER MAIN
 
+    data_init = ini_data()
+    data_init.set_data(par_def)
 
     init_param = format_utils.get_par(par_def, sys.argv[1:])
-    print("init_param =", init_param)
+    print("init_param(server) =", init_param)
 
     PORT = int(init_param["port"])
     HOST = init_param["host"]
@@ -231,7 +234,6 @@ def main(par_def = None, connection_out = None):
         "\n using init path as: <<", tree_ini_path, ">> \n"
     )
     tree_dic_lst = iter_dict(tree_ini_path, 0)
-
     try:
         with open("run_data") as json_file:
             runner_data = json.load(json_file)
