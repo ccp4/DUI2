@@ -116,6 +116,7 @@ class LaunchReciprocalLattice(QThread):
             self.exp_path, self.ref_path,
         ]
         try:
+            cmd_lst[0] += ".exe"
             print("\n Running:", cmd_lst, "\n")
             self.my_proc = subprocess.Popen(
                 cmd_lst, shell = False,

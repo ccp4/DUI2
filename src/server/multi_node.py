@@ -273,6 +273,7 @@ class CmdNode(object):
         print("is_valid_command =", is_valid_command)
         if is_valid_command:
             try:
+                inner_lst[0] += ".exe"
                 print("\n Running:", inner_lst, "\n")
                 self.my_proc = subprocess.Popen(
                     inner_lst,
@@ -383,6 +384,7 @@ class CmdNode(object):
             n_Broken_Pipes += add_log_line(new_line, self.nod_req)
 
             lst_rep_out = []
+            rep_lst_dat_in[0] += ".exe"
             rep_proc = subprocess.Popen(
                 rep_lst_dat_in,
                 shell = False,
@@ -418,6 +420,7 @@ class CmdNode(object):
         new_line = "Generating Predictions"
         n_Broken_Pipes += add_log_line(new_line, self.nod_req)
 
+        pred_lst_dat_in[0] += ".exe"
         lst_pred_out = []
         pred_proc = subprocess.Popen(
             pred_lst_dat_in,
