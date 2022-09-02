@@ -416,6 +416,16 @@ class DoLoadHTML(QObject):
             else:
                 tmp_html_path = self.tmp_dir + os.sep + "temp_repo.html"
                 tmp_file = open(tmp_html_path, "w")
+                #
+                # if Windows fails to run the next code line, type:
+                #
+                # set PYTHONUTF8=1
+                #
+                # before evoking the following:
+                #
+                # python .. DUI2\src\only_client.py \
+                # url=http://supercomputo.cimav.edu.mx:45678 windows_exe=true
+                #
                 tmp_file.write(full_file)
                 tmp_file.close()
 
