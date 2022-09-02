@@ -9,6 +9,7 @@ class ini_data(object):
 
     def set_data(self, par_def = None):
         init_param = format_utils.get_par(par_def, sys.argv[1:])
+        print("init_param =", init_param)
         global win_exe
         if init_param["windows_exe"].lower() == "true":
             win_exe = True
