@@ -1,3 +1,11 @@
+# Full installer of DUI2
+#
+# this script install DUI2 in the location where is being called from
+# includes installation of:
+# - Dials
+# - PySide2
+# - DUI2
+#
 mkdir dui_dev
 cd dui_dev
 printf "========================================\n"
@@ -6,13 +14,13 @@ printf "========================================\n\n"
 INI_DIR_PATH=$(pwd)
 mkdir dials_installer_tmp
 cd dials_installer_tmp
-wget https://github.com/dials/dials/releases/download/v3.9.0/dials-v3-9-0-linux-x86_64.tar.xz
+wget https://github.com/dials/dials/releases/download/v3.11.1/dials-v3-11-1-linux-x86_64.tar.xz
 printf "decompressing the dials installer, this might take a few minutes ... \n\n"
-tar -xf dials-v3-9-0-linux-x86_64.tar.xz
+tar -xf dials-v3-11-1-linux-x86_64.tar.xz
 cd dials-installer
 ./install --prefix=$INI_DIR_PATH
 cd $INI_DIR_PATH
-source dials-v3-9-0/dials_env.sh
+source dials-v3-11-1/dials_env.sh
 libtbx.conda update -n base conda -y
 
 libtbx.refresh
@@ -46,7 +54,7 @@ cd dui_cmd_tools
 
 CMD_TOOLS_PATH=$(pwd)
 
-SET_DIALS_ENV="source $INI_DIR_PATH/dials-v3-9-0/dials_env.sh"
+SET_DIALS_ENV="source $INI_DIR_PATH/dials-v3-11-1/dials_env.sh"
 SET_W_ENG_FLAG="export QTWEBENGINE_CHROMIUM_FLAGS=\"--no-sandbox\""
 
 CLIENT_EXE_CMD="dials.python $INI_DIR_PATH/DUI2/src/only_client.py \$@"
@@ -73,9 +81,9 @@ printf "========================================\n"
 printf "#         DIALS and DUI2 READY         #\n"
 printf "========================================\n\n"
 printf "\n\n If the HTML report crashes, try running the following command:\n\n  "
-printf "cp /usr/lib/x86_64-linux-gnu/libstdc++.so.6 $INI_DIR_PATH/dials-v3-9-0/conda_base/lib/\n\n"
+printf "cp /usr/lib/x86_64-linux-gnu/libstdc++.so.6 $INI_DIR_PATH/dials-v3-11-1/conda_base/lib/\n\n"
 printf "   or (depending of your linux distro)  \n\n  "
-printf "cp /usr/lib64/libstdc++.so.6 $INI_DIR_PATH/dials-v3-9-0/conda_base/lib/\n\n"
+printf "cp /usr/lib64/libstdc++.so.6 $INI_DIR_PATH/dials-v3-11-1/conda_base/lib/\n\n"
 printf " commands available: \n\n"
 printf "   dui_all_local,  dui_server,  dui_client\n\n"
 printf " To set enviromet to run DUI2 (including Dials) type:\n\n"
