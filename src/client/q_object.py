@@ -356,6 +356,10 @@ class MainObject(QObject):
         self.window.CmdSend2server.setEnabled(True)
         self.window.ReqStopButton.setEnabled(True)
 
+        self.window.check_skip_predict_n_report.stateChanged.connect(
+            self.predict_n_report_changed
+        )
+
         self.recip_latt = HandleReciprocalLatticeView(self)
         self.recip_latt.get_nod_num.connect(self.verify_nod_num)
         self.window.RecipLattOpenButton.clicked.connect(
@@ -402,8 +406,24 @@ class MainObject(QObject):
 
         self.parent_app.aboutToQuit.connect(self.close_event)
 
+        self.window.actionExit.triggered.connect(self.exit_triggered)
+        self.window.actionReset_Control_Graph.triggered.connect(
+            self.reset_graph_triggered
+        )
+        self.window.actionBright_Fonts.triggered.connect(
+            self.bright_fonts_triggered
+        )
         self.window.show()
         self.import_init()
+
+    def bright_fonts_triggered(self):
+        print("bright_fonts_triggered(QObject)")
+
+    def reset_graph_triggered(self):
+        print("reset_graph_triggered(QObject)")
+
+    def exit_triggered(self):
+        print("exit_triggered(QObject)")
 
     def close_event(self):
         print("\n aboutToQuit ... 1\n")
@@ -973,3 +993,8 @@ class MainObject(QObject):
             print(
                 "something went wrong with the request launch"
             )
+
+    def predict_n_report_changed(self):
+        print("predict_n_report_changed(QObject)")
+
+
