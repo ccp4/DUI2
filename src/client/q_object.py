@@ -418,6 +418,7 @@ class MainObject(QObject):
 
     def bright_fonts_triggered(self):
         print("bright_fonts_triggered(QObject)")
+        self.log_show.set_bright_on_off()
 
     def reset_graph_triggered(self):
         print("reset_graph_triggered(QObject)")
