@@ -474,7 +474,7 @@ class RootWidg(QWidget):
 
         big_label = QLabel("Root:")
         big_label.setFont(
-            QFont("Monospace", font_point_size + 3, QFont.Bold)
+            QFont("Menlo", font_point_size + 3, QFont.Bold)
         )
         self.main_vbox = QVBoxLayout()
         self.main_vbox.addWidget(
@@ -512,12 +512,12 @@ class ImportWidget(QWidget):
 
         self.state_label = QLabel("   ...")
         self.state_label.setFont(
-            QFont("Monospace", font_point_size + 1, QFont.Bold)
+            QFont("Menlo", font_point_size + 1, QFont.Bold)
         )
         self.imp_txt = QLineEdit()
         self.extra_label = QLabel("   ...")
         self.extra_label.setFont(
-            QFont("Monospace", font_point_size + 1, QFont.Bold)
+            QFont("Menlo", font_point_size + 1, QFont.Bold)
         )
         self.imp_extra_txt = QLineEdit()
         self.open_butt = QPushButton("  Open Images  ")
@@ -668,7 +668,7 @@ class MaskWidget(QWidget):
 
         self.cmd_label = QLabel("")
         self.cmd_label.setFont(QFont(
-            "Monospace", font_point_size -1, QFont.Bold
+            "Menlo", font_point_size -1, QFont.Bold
         ))
 
         self.main_vbox = QVBoxLayout()
@@ -1507,7 +1507,7 @@ class ExportWidget(QWidget):
 
         state_label = QLabel("mtz output name:")
         state_label.setFont(
-            QFont("Monospace", font_point_size + 1, QFont.Bold)
+            QFont("Menlo", font_point_size + 1, QFont.Bold)
         )
 
         self.exp_txt = QLineEdit()

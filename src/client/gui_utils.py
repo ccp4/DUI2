@@ -265,7 +265,7 @@ class AdvancedParameters(QWidget):
         self.lst_par_line = lst_phil_obj
         print("Hi from build_pars")
         self.norm_labl_font = QFont(
-            "Monospace", self.font_point_size, QFont.Bold
+            "Menlo", self.font_point_size, QFont.Bold
         )
 
         for data_info in self.lst_par_line:
@@ -424,7 +424,7 @@ class AdvancedParameters(QWidget):
                     if str_value in labl_text:
                         widget.setFont(
                             QFont(
-                                "Monospace",
+                                "Menlo",
                                 self.font_point_size + 5, QFont.Bold
                             )
                         )
@@ -600,7 +600,7 @@ class TreeDirScene(QGraphicsScene):
     node_clicked = Signal(int)
     def __init__(self, parent = None):
         super(TreeDirScene, self).__init__(parent)
-        self.setFont(QFont("Monospace"))
+        self.setFont(QFont("Menlo"))
         fm = QFontMetrics(self.font())
         self.f_width = fm.width("0")
         self.f_height = fm.height()
