@@ -613,44 +613,8 @@ class TreeDirScene(QGraphicsScene):
             siz = QSize(self.f_width * 4.1, self.f_height * 1.6)
             self.px_map[key_str] = tmp_px_map.scaled(siz)
 
-        self.blue_brush = QBrush(Qt.blue, Qt.SolidPattern)
-        self.red_brush = QBrush(Qt.red, Qt.SolidPattern)
-        self.green_brush = QBrush(Qt.darkGreen, Qt.SolidPattern)
-        self.dark_blue_brush = QBrush(Qt.darkBlue, Qt.SolidPattern)
-        self.cyan_brush = QBrush(Qt.cyan, Qt.SolidPattern)
-        self.gray_brush = QBrush(Qt.gray, Qt.SolidPattern)
-        self.light_gray_brush = QBrush(Qt.lightGray, Qt.SolidPattern)
-        self.white_brush = QBrush(Qt.white, Qt.SolidPattern)
-        self.invisible_brush = QBrush(Qt.white, Qt.NoBrush)
-        self.blue_gradient_brush = QBrush(Qt.blue, Qt.SolidPattern)
+        self.set_pen_n_buch(True)
 
-        self.black_pen = QPen(
-            Qt.black, 1.6, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
-        )
-        self.green_pen = QPen(
-            Qt.green, 1.6, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
-        )
-        self.dark_green_pen = QPen(
-            Qt.darkGreen, 1.6, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
-        )
-        self.red_pen = QPen(
-            Qt.red, 1.6, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
-        )
-        self.blue_pen = QPen(
-            Qt.blue, 1.6, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
-        )
-        self.dark_blue_pen = QPen(
-            Qt.darkBlue, 1.9, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
-        )
-        self.cyan_pen = QPen(
-            Qt.cyan, 2, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
-        )
-        self.gray_pen = QPen(
-            Qt.gray, 2, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
-        )
-        self.white_pen = QPen(
-            Qt.white, 2, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
-        )
         self.lst_nod_pos = []
         self.nod_lst = None
 
@@ -660,6 +624,90 @@ class TreeDirScene(QGraphicsScene):
         timer = QTimer(self)
         timer.timeout.connect(self.refresh_bars)
         timer.start(500)
+
+    def set_pen_n_buch(self, reg_col):
+        #self.gray_brush = QBrush(Qt.gray, Qt.SolidPattern)
+        if reg_col:
+            self.font_blue_brush = QBrush(Qt.blue, Qt.SolidPattern)
+            self.font_red_brush = QBrush(Qt.darkRed, Qt.SolidPattern)
+            self.font_green_brush = QBrush(Qt.darkGreen, Qt.SolidPattern)
+            self.dark_blue_brush = QBrush(Qt.darkBlue, Qt.SolidPattern)
+            self.cyan_brush = QBrush(Qt.cyan, Qt.SolidPattern)
+            self.light_gray_brush = QBrush(Qt.lightGray, Qt.SolidPattern)
+            #self.light_gray_brush = QBrush(Qt.gray, Qt.SolidPattern)
+            self.white_brush = QBrush(Qt.white, Qt.SolidPattern)
+            #self.white_brush = QBrush(Qt.black, Qt.SolidPattern)
+            self.invisible_brush = QBrush(Qt.white, Qt.NoBrush)
+            self.blue_gradient_brush = QBrush(Qt.blue, Qt.SolidPattern)
+
+            self.black_pen = QPen(
+                Qt.black, 1.6, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
+            )
+            self.green_pen = QPen(
+                Qt.green, 1.6, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
+            )
+            self.dark_green_pen = QPen(
+                Qt.darkGreen, 1.6, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
+            )
+            self.red_pen = QPen(
+                Qt.red, 1.6, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
+            )
+            self.blue_pen = QPen(
+                Qt.blue, 1.6, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
+            )
+            self.dark_blue_pen = QPen(
+                Qt.darkBlue, 1.9, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
+            )
+            self.cyan_pen = QPen(
+                Qt.cyan, 2, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
+            )
+            self.gray_pen = QPen(
+                Qt.gray, 2, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
+            )
+            self.white_pen = QPen(
+                Qt.white, 2, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
+            )
+
+        else:
+            self.font_blue_brush = QBrush(Qt.cyan, Qt.SolidPattern)
+            self.font_red_brush = QBrush(Qt.red, Qt.SolidPattern)
+            self.font_green_brush = QBrush(Qt.green, Qt.SolidPattern)
+            self.dark_blue_brush = QBrush(Qt.darkBlue, Qt.SolidPattern)
+            self.cyan_brush = QBrush(Qt.cyan, Qt.SolidPattern)
+            self.light_gray_brush = QBrush(Qt.lightGray, Qt.SolidPattern)
+            #self.light_gray_brush = QBrush(Qt.gray, Qt.SolidPattern)
+            self.white_brush = QBrush(Qt.white, Qt.SolidPattern)
+            #self.white_brush = QBrush(Qt.black, Qt.SolidPattern)
+            self.invisible_brush = QBrush(Qt.white, Qt.NoBrush)
+            self.blue_gradient_brush = QBrush(Qt.blue, Qt.SolidPattern)
+
+            self.black_pen = QPen(
+                Qt.black, 1.6, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
+            )
+            self.green_pen = QPen(
+                Qt.green, 1.6, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
+            )
+            self.dark_green_pen = QPen(
+                Qt.darkGreen, 1.6, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
+            )
+            self.red_pen = QPen(
+                Qt.red, 1.6, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
+            )
+            self.blue_pen = QPen(
+                Qt.blue, 1.6, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
+            )
+            self.dark_blue_pen = QPen(
+                Qt.darkBlue, 1.9, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
+            )
+            self.cyan_pen = QPen(
+                Qt.cyan, 2, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
+            )
+            self.gray_pen = QPen(
+                Qt.gray, 2, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
+            )
+            self.white_pen = QPen(
+                Qt.white, 2, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
+            )
 
     def refresh_bars(self):
         do_refresh = False
@@ -689,13 +737,13 @@ class TreeDirScene(QGraphicsScene):
 
     def get_brush_colour(self, stat):
         if stat == "S":
-            brush_col = self.blue_brush
+            brush_col = self.font_blue_brush
 
         elif stat == "F":
-            brush_col = self.red_brush
+            brush_col = self.font_red_brush
 
         else:
-            brush_col = self.green_brush
+            brush_col = self.font_green_brush
 
         return brush_col
 
@@ -899,7 +947,7 @@ class TreeDirScene(QGraphicsScene):
                 x1, y1 = self.get_coords(pos - 0.3, max_indent + 5)
                 cmd_text.setPos(x1, y1)
                 cmd_text.setBrush(brush_col)
-                cmd_text.setFont(QFont("Monospace"))
+                cmd_text.setFont(QFont("Menlo"))
 
             self.update()
 
