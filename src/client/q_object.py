@@ -313,6 +313,8 @@ class MainObject(QObject):
         self.param_widgets["optional"]["advanced"] = None
         self.param_widgets["optional"]["main_page"] = self.window.OptionalPage
 
+        self.regular_colours = True
+
         self.tree_scene = TreeDirScene(self)
         self.window.treeView.setScene(self.tree_scene)
 
@@ -417,8 +419,8 @@ class MainObject(QObject):
         self.import_init()
 
     def bright_fonts_triggered(self):
-        print("bright_fonts_triggered(QObject)")
-        self.log_show.set_bright_on_off()
+        self.regular_colours = not self.regular_colours
+        self.log_show.set_colours(self.regular_colours)
 
     def reset_graph_triggered(self):
         print("reset_graph_triggered(QObject)")

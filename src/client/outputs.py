@@ -457,16 +457,10 @@ class ShowLog(QObject):
         self.main_obj.window.incoming_text.setFont(my_font)
         self.main_obj.window.incoming_text.setCurrentFont(my_font)
 
-        self.regl_font_colr = True
-        self.set_colours()
+        self.set_colours(True)
 
-    def set_bright_on_off(self):
-        self.regl_font_colr = not self.regl_font_colr
-        print("self.regl_font_colr =", self.regl_font_colr)
-        self.set_colours()
-
-    def set_colours(self):
-        if self.regl_font_colr:
+    def set_colours(self, regl_font_colr):
+        if regl_font_colr:
             self.red_color = QColor(255, 0, 0)
             self.green_color = QColor(0, 155, 0)
             self.blue_color = QColor(0, 0, 255)
@@ -475,6 +469,8 @@ class ShowLog(QObject):
             self.red_color = QColor(255, 155, 155)
             self.green_color = QColor(155, 255, 155)
             self.blue_color = QColor(155, 155, 255)
+
+
 
     def __call__(self, nod_p_num = 0, do_request = False, stat = "Busy"):
         print("Do Request =", do_request)
