@@ -442,7 +442,7 @@ def draw_quadratic_bezier_3_points(
         scene_obj, p1x, p1y, p2x, p2y, p3x, p3y,
         lin_pen, row_size, col_size
 ):
-    arrow_head = False
+    arrow_head = True
     curved_corners = True
     arrow_head_W = 1.0 / 4.0
     arrow_head_H = 1.0 / 8.0
@@ -626,45 +626,27 @@ class TreeDirScene(QGraphicsScene):
         timer.start(500)
 
     def set_pen_n_buch(self, reg_col):
-        #self.gray_brush = QBrush(Qt.gray, Qt.SolidPattern)
         if reg_col:
             self.font_blue_brush = QBrush(Qt.blue, Qt.SolidPattern)
             self.font_red_brush = QBrush(Qt.darkRed, Qt.SolidPattern)
             self.font_green_brush = QBrush(Qt.darkGreen, Qt.SolidPattern)
-            self.dark_blue_brush = QBrush(Qt.darkBlue, Qt.SolidPattern)
-            self.cyan_brush = QBrush(Qt.cyan, Qt.SolidPattern)
-            self.light_gray_brush = QBrush(Qt.lightGray, Qt.SolidPattern)
-            #self.light_gray_brush = QBrush(Qt.gray, Qt.SolidPattern)
-            self.white_brush = QBrush(Qt.white, Qt.SolidPattern)
-            #self.white_brush = QBrush(Qt.black, Qt.SolidPattern)
+            self.cursor_brush = QBrush(Qt.cyan, Qt.SolidPattern)
+            self.first_gray_brush = QBrush(Qt.lightGray, Qt.SolidPattern)
+            self.another_gray_brush = QBrush(Qt.white, Qt.SolidPattern)
             self.invisible_brush = QBrush(Qt.white, Qt.NoBrush)
-            self.blue_gradient_brush = QBrush(Qt.blue, Qt.SolidPattern)
-
-            self.black_pen = QPen(
-                Qt.black, 1.6, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
-            )
-            self.green_pen = QPen(
-                Qt.green, 1.6, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
-            )
-            self.dark_green_pen = QPen(
+            self.arrow_green_pen = QPen(
                 Qt.darkGreen, 1.6, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
             )
-            self.red_pen = QPen(
-                Qt.red, 1.6, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
+            self.arrow_red_pen = QPen(
+                Qt.darkRed, 1.6, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
             )
-            self.blue_pen = QPen(
+            self.arrow_blue_pen = QPen(
                 Qt.blue, 1.6, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
-            )
-            self.dark_blue_pen = QPen(
-                Qt.darkBlue, 1.9, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
-            )
-            self.cyan_pen = QPen(
-                Qt.cyan, 2, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
             )
             self.gray_pen = QPen(
                 Qt.gray, 2, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
             )
-            self.white_pen = QPen(
+            self.rectang_pen = QPen(
                 Qt.white, 2, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
             )
 
@@ -672,41 +654,24 @@ class TreeDirScene(QGraphicsScene):
             self.font_blue_brush = QBrush(Qt.cyan, Qt.SolidPattern)
             self.font_red_brush = QBrush(Qt.red, Qt.SolidPattern)
             self.font_green_brush = QBrush(Qt.green, Qt.SolidPattern)
-            self.dark_blue_brush = QBrush(Qt.darkBlue, Qt.SolidPattern)
-            self.cyan_brush = QBrush(Qt.cyan, Qt.SolidPattern)
-            self.light_gray_brush = QBrush(Qt.lightGray, Qt.SolidPattern)
-            #self.light_gray_brush = QBrush(Qt.gray, Qt.SolidPattern)
-            self.white_brush = QBrush(Qt.white, Qt.SolidPattern)
-            #self.white_brush = QBrush(Qt.black, Qt.SolidPattern)
+            self.cursor_brush = QBrush(Qt.blue, Qt.SolidPattern)
+            self.first_gray_brush = QBrush(Qt.gray, Qt.SolidPattern)
+            self.another_gray_brush = QBrush(Qt.darkGray, Qt.SolidPattern)
             self.invisible_brush = QBrush(Qt.white, Qt.NoBrush)
-            self.blue_gradient_brush = QBrush(Qt.blue, Qt.SolidPattern)
-
-            self.black_pen = QPen(
-                Qt.black, 1.6, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
-            )
-            self.green_pen = QPen(
+            self.arrow_green_pen = QPen(
                 Qt.green, 1.6, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
             )
-            self.dark_green_pen = QPen(
-                Qt.darkGreen, 1.6, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
-            )
-            self.red_pen = QPen(
+            self.arrow_red_pen = QPen(
                 Qt.red, 1.6, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
             )
-            self.blue_pen = QPen(
-                Qt.blue, 1.6, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
-            )
-            self.dark_blue_pen = QPen(
-                Qt.darkBlue, 1.9, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
-            )
-            self.cyan_pen = QPen(
-                Qt.cyan, 2, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
+            self.arrow_blue_pen = QPen(
+                Qt.cyan, 1.6, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
             )
             self.gray_pen = QPen(
                 Qt.gray, 2, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
             )
-            self.white_pen = QPen(
-                Qt.white, 2, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
+            self.rectang_pen = QPen(
+                Qt.darkGray, 2, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
             )
 
     def refresh_bars(self):
@@ -725,13 +690,13 @@ class TreeDirScene(QGraphicsScene):
 
     def get_pen_colour(self, stat):
         if stat == "S":
-            pen_col = self.blue_pen
+            pen_col = self.arrow_blue_pen
 
         elif stat == "F":
-            pen_col = self.red_pen
+            pen_col = self.arrow_red_pen
 
         else:
-            pen_col = self.dark_green_pen
+            pen_col = self.arrow_green_pen
 
         return pen_col
 
@@ -787,7 +752,7 @@ class TreeDirScene(QGraphicsScene):
             self.addRect(
                 left_x - self.f_width, up_y,
                 dx + self.f_width, dy,
-                self.gray_pen, self.light_gray_brush
+                self.gray_pen, self.first_gray_brush
             )
             for i in range(int((len(self.nod_lst) - 1) / 2 + 1)):
                 pos = i * 2
@@ -795,7 +760,7 @@ class TreeDirScene(QGraphicsScene):
                 self.addRect(
                     left_x, my_y - self.f_height,
                     dx - self.f_width, self.f_height * 2,
-                    self.white_pen, self.white_brush
+                    self.rectang_pen, self.another_gray_brush
                 )
 
             for pos, node in enumerate(self.nod_lst):
@@ -814,7 +779,7 @@ class TreeDirScene(QGraphicsScene):
                     self.addRect(
                         left_x1 - self.f_width, up_y1,
                         dx1 + self.f_width, dy1,
-                        rect_border_colour, self.cyan_brush
+                        rect_border_colour, self.cursor_brush
                     )
 
             row_size, col_size = self.get_coords(0.5, 0.5)
@@ -901,7 +866,7 @@ class TreeDirScene(QGraphicsScene):
                 n_text = self.addSimpleText(str(node["number"]))
                 n_text.setPos(my_coord_x - self.f_width * 0.7,
                             my_coord_y - self.f_height * 0.5)
-                n_text.setBrush(self.dark_blue_brush)
+                n_text.setBrush(self.font_blue_brush)
 
                 my_coord_x ,my_coord_y = self.get_coords(
                     pos, max_indent * 1.2 + max_cmd_len * 0.3 + 6.1
@@ -909,14 +874,14 @@ class TreeDirScene(QGraphicsScene):
                 n_text = self.addSimpleText(str(node["number"]))
                 n_text.setPos(my_coord_x - self.f_width * 0.7,
                             my_coord_y - self.f_height * 0.5)
-                n_text.setBrush(self.dark_blue_brush)
+                n_text.setBrush(self.font_blue_brush)
 
                 stat_text = self.addSimpleText(str(node["stp_stat"]))
                 stat_text.setPos(
                     self.f_width * 0.5,
                     my_coord_y - self.f_height * 0.5
                 )
-                stat_text.setBrush(self.dark_blue_brush)
+                stat_text.setBrush(self.font_blue_brush)
                 if str(node["stp_stat"]) == "B":
                     right_x1, down_y1 = self.get_coords(
                         pos + 0.3, max_indent + 1
@@ -927,7 +892,7 @@ class TreeDirScene(QGraphicsScene):
                     self.addRect(
                         left_x1 - self.f_width, up_y1,
                         dx1 + self.f_width, dy1,
-                        self.dark_blue_pen, self.white_brush
+                        self.arrow_blue_pen, self.another_gray_brush
                     )
                     right_x1, down_y1 = self.get_coords(
                         pos + 0.3, max_indent + nod_bar_pos
@@ -940,7 +905,7 @@ class TreeDirScene(QGraphicsScene):
                     self.addRect(
                         left_x1 - self.f_width, up_y1,
                         dx1 + self.f_width, dy1,
-                        self.dark_blue_pen, self.dark_blue_brush
+                        self.arrow_blue_pen, self.font_blue_brush
                     )
 
                 cmd_text = self.addSimpleText(str(node["str_cmd"]))
