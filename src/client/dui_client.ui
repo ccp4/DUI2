@@ -1432,7 +1432,7 @@
                <widget class="QLineEdit" name="ImagePathText">
                 <property name="font">
                  <font>
-                  <family>Menlo</family>
+                  <family>Courier</family>
                  </font>
                 </property>
                </widget>

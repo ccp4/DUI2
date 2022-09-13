@@ -265,7 +265,7 @@ class ReindexTable(QTableWidget):
                         item.setForeground(Qt.black)
 
                 item.setFont(
-                    QFont("Menlo", self.sys_font_point_size)
+                    QFont("Courier", self.sys_font_point_size)
                 )  # , QFont.Bold))
                 self.setItem(row, col, item)
 

@@ -450,7 +450,7 @@ class ShowLog(QObject):
 
         sys_font = QFont()
         font_point_size = sys_font.pointSize()
-        my_font = QFont("Menlo", font_point_size, QFont.Bold)
+        my_font = QFont("Courier", font_point_size, QFont.Bold)
         my_font.setFixedPitch(True)
 
         self.main_obj.window.incoming_text.setFont(my_font)
