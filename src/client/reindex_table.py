@@ -160,8 +160,8 @@ class ReindexTable(QTableWidget):
 
         self.set_colours(True)
 
-    def set_colours(self, regular):
-        if regular:
+    def set_colours(self, regular_colours):
+        if regular_colours:
             self.for_col = Qt.black
             self.bak_col = Qt.white
 

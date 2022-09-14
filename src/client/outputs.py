@@ -458,8 +458,8 @@ class ShowLog(QObject):
 
         self.set_colours(True)
 
-    def set_colours(self, regl_font_colr):
-        if regl_font_colr:
+    def set_colours(self, regular_colours):
+        if regular_colours:
             self.red_color = QColor(255, 0, 0)
             self.green_color = QColor(0, 155, 0)
             self.blue_color = QColor(0, 0, 255)

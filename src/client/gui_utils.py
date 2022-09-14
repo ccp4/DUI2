@@ -613,7 +613,7 @@ class TreeDirScene(QGraphicsScene):
             siz = QSize(self.f_width * 4.1, self.f_height * 1.6)
             self.px_map[key_str] = tmp_px_map.scaled(siz)
 
-        self.set_pen_n_buch(True)
+        self.set_colours(True)
 
         self.lst_nod_pos = []
         self.nod_lst = None
@@ -625,8 +625,8 @@ class TreeDirScene(QGraphicsScene):
         timer.timeout.connect(self.refresh_bars)
         timer.start(500)
 
-    def set_pen_n_buch(self, reg_col):
-        if reg_col:
+    def set_colours(self, regular_colours):
+        if regular_colours:
             self.font_blue_brush = QBrush(Qt.blue, Qt.SolidPattern)
             self.font_red_brush = QBrush(Qt.darkRed, Qt.SolidPattern)
             self.font_green_brush = QBrush(Qt.darkGreen, Qt.SolidPattern)
@@ -892,7 +892,7 @@ class TreeDirScene(QGraphicsScene):
                     self.addRect(
                         left_x1 - self.f_width, up_y1,
                         dx1 + self.f_width, dy1,
-                        self.arrow_blue_pen, self.another_gray_brush
+                        self.arrow_green_pen, self.another_gray_brush
                     )
                     right_x1, down_y1 = self.get_coords(
                         pos + 0.3, max_indent + nod_bar_pos
@@ -905,7 +905,7 @@ class TreeDirScene(QGraphicsScene):
                     self.addRect(
                         left_x1 - self.f_width, up_y1,
                         dx1 + self.f_width, dy1,
-                        self.arrow_blue_pen, self.font_blue_brush
+                        self.arrow_green_pen, self.font_green_brush
                     )
 
                 cmd_text = self.addSimpleText(str(node["str_cmd"]))

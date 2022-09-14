@@ -421,7 +421,7 @@ class MainObject(QObject):
     def bright_fonts_triggered(self):
         self.regular_colours = not self.regular_colours
         self.log_show.set_colours(self.regular_colours)
-        self.tree_scene.set_pen_n_buch(self.regular_colours)
+        self.tree_scene.set_colours(self.regular_colours)
         self.r_index_widg.set_colours(self.regular_colours)
 
     def reset_graph_triggered(self):
