@@ -22,7 +22,6 @@ copyright (c) CCP4 - DLS
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 import json
-import logging
 import sys
 import os
 
@@ -159,6 +158,17 @@ class ReindexTable(QTableWidget):
         self.sys_font_point_size = sys_font.pointSize()
         # self.show()
 
+        self.set_colours(True)
+
+    def set_colours(self, regular):
+        if regular:
+            self.for_col = Qt.black
+            self.bak_col = Qt.white
+
+        else:
+            self.for_col = Qt.white
+            self.bak_col = Qt.black
+
     def opt_clicked(self, row, col):
         print("Solution clicked = ", row + 1)
         v_sliderValue = self.v_sliderBar.value()
@@ -260,9 +270,9 @@ class ReindexTable(QTableWidget):
                             item.setBackground(QColor(50, 50, 50, 50))
 
                         else:
-                            item.setBackground(Qt.white)
+                            item.setBackground(self.bak_col)
 
-                        item.setForeground(Qt.black)
+                        item.setForeground(self.for_col)
 
                 item.setFont(
                     QFont("Courier", self.sys_font_point_size)

@@ -422,6 +422,7 @@ class MainObject(QObject):
         self.regular_colours = not self.regular_colours
         self.log_show.set_colours(self.regular_colours)
         self.tree_scene.set_pen_n_buch(self.regular_colours)
+        self.r_index_widg.set_colours(self.regular_colours)
 
     def reset_graph_triggered(self):
         print("reset_graph_triggered(QObject)")
