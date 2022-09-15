@@ -164,8 +164,8 @@
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>379</width>
-                       <height>346</height>
+                       <width>403</width>
+                       <height>340</height>
                       </rect>
                      </property>
                     </widget>
@@ -200,8 +200,8 @@
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>281</width>
-                       <height>346</height>
+                       <width>96</width>
+                       <height>26</height>
                       </rect>
                      </property>
                     </widget>
@@ -236,8 +236,8 @@
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>281</width>
-                       <height>346</height>
+                       <width>96</width>
+                       <height>26</height>
                       </rect>
                      </property>
                     </widget>
@@ -297,8 +297,8 @@
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>269</width>
-                           <height>305</height>
+                           <width>96</width>
+                           <height>26</height>
                           </rect>
                          </property>
                         </widget>
@@ -1647,7 +1647,7 @@
     <property name="title">
      <string>view</string>
     </property>
-    <addaction name="actionBright_Fonts"/>
+    <addaction name="actionBright_on_off"/>
    </widget>
    <addaction name="menu_file"/>
    <addaction name="menu_view"/>
@@ -1657,9 +1657,9 @@
     <string>Exit</string>
    </property>
   </action>
-  <action name="actionBright_Fonts">
+  <action name="actionBright_on_off">
    <property name="text">
-    <string>Bright Fonts (On/Off)</string>
+    <string>Invert Brightness</string>
    </property>
   </action>
   <action name="actionReset_Control_Graph">

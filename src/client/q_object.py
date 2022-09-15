@@ -412,7 +412,7 @@ class MainObject(QObject):
         self.window.actionReset_Control_Graph.triggered.connect(
             self.reset_graph_triggered
         )
-        self.window.actionBright_Fonts.triggered.connect(
+        self.window.actionBright_on_off.triggered.connect(
             self.bright_fonts_triggered
         )
         self.window.show()
