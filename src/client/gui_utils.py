@@ -804,7 +804,7 @@ class TreeDirScene(QGraphicsScene):
                             arr_col = self.get_pen_colour(node["stp_stat"])
                             draw_quadratic_bezier_3_points(
                                 self,
-                                my_parent_coord_x + self.f_width * 2.7,
+                                my_parent_coord_x + self.f_width * 2.4,
                                 my_parent_coord_y,
                                 my_coord_x + self.f_width * 0.5,
                                 my_parent_coord_y,
@@ -848,7 +848,7 @@ class TreeDirScene(QGraphicsScene):
                     my_coord_x - self.f_width * 1.4,
                     my_coord_y - self.f_height * 0.9,
                     self.f_width * 3.6,
-                    self.f_height * 1.8,
+                    self.f_height * 1.7,
                     border_colour, self.invisible_brush
                 )
                 try:
