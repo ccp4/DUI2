@@ -442,11 +442,11 @@ def draw_quadratic_bezier_3_points(
         scene_obj, p1x, p1y, p2x, p2y, p3x, p3y,
         lin_pen, row_size, col_size
 ):
-    arrow_head = True
-    curved_corners = True
+    arrowhead = scene_obj.arrowhead
+    sharp_turns = scene_obj.sharp_turns
     arrow_head_W = 1.0 / 4.0
     arrow_head_H = 1.0 / 8.0
-    if arrow_head:
+    if arrowhead:
         if p1x == p2x:
             scene_obj.addLine(
                 p3x, p3y, p3x - col_size * arrow_head_W, p3y - row_size * arrow_head_H, lin_pen
@@ -462,7 +462,7 @@ def draw_quadratic_bezier_3_points(
                 p3x, p3y, p3x + col_size * arrow_head_H, p3y - row_size * arrow_head_W, lin_pen
             )
 
-    if curved_corners:
+    if sharp_turns:
         if p1x == p2x:
             vert_lin_y = p3y - row_size
             vert_lin_x = p1x
@@ -614,6 +614,8 @@ class TreeDirScene(QGraphicsScene):
             self.px_map[key_str] = tmp_px_map.scaled(siz)
 
         self.set_colours(True)
+        self.set_sharp_turns(True)
+        self.set_arrowhead(True)
 
         self.lst_nod_pos = []
         self.nod_lst = None
@@ -624,6 +626,14 @@ class TreeDirScene(QGraphicsScene):
         timer = QTimer(self)
         timer.timeout.connect(self.refresh_bars)
         timer.start(500)
+
+    def set_sharp_turns(self, sharp_turns_on):
+        self.sharp_turns = sharp_turns_on
+        print("self.sharp_turns =", self.sharp_turns)
+
+    def set_arrowhead(self, arrowhead_on):
+        self.arrowhead = arrowhead_on
+        print("self.arrowhead =", self.arrowhead)
 
     def set_colours(self, regular_colours):
         if regular_colours:
@@ -866,7 +876,7 @@ class TreeDirScene(QGraphicsScene):
                 n_text = self.addSimpleText(str(node["number"]))
                 n_text.setPos(my_coord_x - self.f_width * 0.7,
                             my_coord_y - self.f_height * 0.5)
-                n_text.setBrush(self.font_blue_brush)
+                n_text.setBrush(brush_col)
 
                 my_coord_x ,my_coord_y = self.get_coords(
                     pos, max_indent * 1.2 + max_cmd_len * 0.3 + 6.1
@@ -874,14 +884,14 @@ class TreeDirScene(QGraphicsScene):
                 n_text = self.addSimpleText(str(node["number"]))
                 n_text.setPos(my_coord_x - self.f_width * 0.7,
                             my_coord_y - self.f_height * 0.5)
-                n_text.setBrush(self.font_blue_brush)
+                n_text.setBrush(brush_col)
 
                 stat_text = self.addSimpleText(str(node["stp_stat"]))
                 stat_text.setPos(
                     self.f_width * 0.5,
                     my_coord_y - self.f_height * 0.5
                 )
-                stat_text.setBrush(self.font_blue_brush)
+                stat_text.setBrush(brush_col)
                 if str(node["stp_stat"]) == "B":
                     right_x1, down_y1 = self.get_coords(
                         pos + 0.3, max_indent + 1

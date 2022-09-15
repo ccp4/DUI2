@@ -314,6 +314,8 @@ class MainObject(QObject):
         self.param_widgets["optional"]["main_page"] = self.window.OptionalPage
 
         self.regular_colours = True
+        self.arrowhead_on = True
+        self.sharp_turns_on = True
 
         self.tree_scene = TreeDirScene(self)
         self.window.treeView.setScene(self.tree_scene)
@@ -415,8 +417,23 @@ class MainObject(QObject):
         self.window.actionBright_on_off.triggered.connect(
             self.bright_fonts_triggered
         )
+
+        self.window.actionArrowhead.triggered.connect(
+            self.arrowhead_triggered
+        )
+        self.window.actionSharpTurns.triggered.connect(
+            self.sharp_turns_triggered
+        )
         self.window.show()
         self.import_init()
+
+    def sharp_turns_triggered(self):
+        self.sharp_turns_on = not self.sharp_turns_on
+        self.tree_scene.set_sharp_turns(self.sharp_turns_on)
+
+    def arrowhead_triggered(self):
+        self.arrowhead_on = not self.arrowhead_on
+        self.tree_scene.set_arrowhead(self.arrowhead_on)
 
     def bright_fonts_triggered(self):
         self.regular_colours = not self.regular_colours
