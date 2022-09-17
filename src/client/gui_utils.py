@@ -285,7 +285,8 @@ class AdvancedParameters(QWidget):
 
             data_info["widget"] = None
             if data_info["type"] == "scope":
-                new_label.setStyleSheet("color: rgba(105, 105, 105, 255)")
+                new_label.my_style = "color: rgba(105, 105, 105, 255)"
+                new_label.setStyleSheet(new_label.my_style)
                 new_hbox.addWidget(new_label)
 
             elif(
@@ -293,7 +294,8 @@ class AdvancedParameters(QWidget):
                  or
                  data_info["type"] == "choice")
             ):
-                new_label.setStyleSheet("color: rgba(0, 0, 0, 255)")
+                new_label.my_style = "color: rgba(0, 0, 0, 255)"
+                new_label.setStyleSheet(new_label.my_style)
                 new_hbox.addWidget(new_label)
 
                 new_combo = MyQComboBox()
@@ -319,7 +321,8 @@ class AdvancedParameters(QWidget):
                 data_info["widget"] = new_combo
 
             elif data_info["type"] == "other(s)":
-                new_label.setStyleSheet("color: rgba(0, 0, 0, 255)")
+                new_label.my_style = "color: rgba(0, 0, 0, 255)"
+                new_label.setStyleSheet(new_label.my_style)
                 new_hbox.addWidget(new_label)
                 par_str = str(data_info["default"])
                 new_txt_in = QLineEdit()
@@ -424,18 +427,21 @@ class AdvancedParameters(QWidget):
                     if str_value in labl_text:
                         widget.setFont(
                             QFont(
-                                "Courier",
-                                self.font_point_size + 5, QFont.Bold
+                                "Arial",
+                                self.font_point_size + 10, QFont.Bold
                             )
                         )
+                        widget.setStyleSheet("color: rgba(155, 255, 155, 255)")
 
                     else:
                         widget.setFont(self.norm_labl_font)
+                        widget.setStyleSheet(widget.my_style)
 
         else:
             for widget in self.children():
                 if isinstance(widget, QLabel):
                     widget.setFont(self.norm_labl_font)
+                    widget.setStyleSheet(widget.my_style)
 
 
 def draw_quadratic_bezier_3_points(
