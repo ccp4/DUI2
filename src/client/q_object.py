@@ -446,6 +446,7 @@ class MainObject(QObject):
 
     def exit_triggered(self):
         print("exit_triggered(QObject)")
+        self.parent_app.exit()
 
     def close_event(self):
         print("\n aboutToQuit ... 1\n")
