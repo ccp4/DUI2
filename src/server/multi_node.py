@@ -501,14 +501,17 @@ class Runner(object):
     def __init__(self, recovery_data):
         self.tree_output = format_utils.TreeShow()
         if recovery_data == None:
-            root_node = CmdNode()
-            root_node.set_root()
-            self.step_list = [root_node]
-            self.bigger_lin = 0
-            #self.lst_cmd_in = []
+            self.start_from_zero()
 
         else:
             self._recover_state(recovery_data)
+
+    def start_from_zero(self):
+        root_node = CmdNode()
+        root_node.set_root()
+        self.step_list = [root_node]
+        self.bigger_lin = 0
+        #self.lst_cmd_in = []
 
     def run_dials_command(self, cmd_dict, req_obj = None):
         unalias_cmd_lst = unalias_full_cmd(cmd_dict["cmd_lst"])
@@ -530,6 +533,25 @@ class Runner(object):
                 print("uni_cmd =", uni_cmd)
 
             self._save_state()
+
+    def run_dui_command(self, cmd_dict, req_obj = None):
+        unalias_cmd_lst = unalias_full_cmd(cmd_dict["cmd_lst"])
+
+        if req_obj is not None:
+            try:
+                if unalias_cmd_lst == [['reset_graph']]:
+                    print("\n  Dui2 CMD( cmd_lst )= ", unalias_cmd_lst, "\n ")
+                    req_obj.send_response(201)
+                    req_obj.send_header('Content-type', 'text/plain')
+                    req_obj.end_headers()
+                    req_obj.wfile.write(bytes(
+                        "err.code=0\n" , 'utf-8')
+                    )
+                    self.start_from_zero()
+
+            except BrokenPipeError:
+                print("\n << BrokenPipe err catch  >> while sending nod_num \n")
+
 
     def _create_step(self, prev_step_lst):
         new_step = CmdNode(parent_lst_in = prev_step_lst)
@@ -627,9 +649,6 @@ class Runner(object):
             elif uni_cmd == ["closed"]:
                 return_list = ["closed received"]
                 print("received closed command")
-
-            elif uni_cmd == ["reset_graph"]:
-                print("\n\n running << reset_graph >> \n\n")
 
             elif uni_cmd == ["stop"]:
                 #TODO: consider moving this to << run_dials_command >> (do_POST)

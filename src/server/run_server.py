@@ -102,19 +102,42 @@ def main(par_def = None, connection_out = None):
             cmd_dict = {"nod_lst":nod_lst,
                         "cmd_lst":cmd_lst}
 
-            try:
-                cmd_tree_runner.run_dials_command(cmd_dict, self)
-                print("sending /*EOF*/")
-                self.wfile.write(bytes('/*EOF*/', 'utf-8'))
+            found_dials_command = False
+            print("cmd_lst = ", cmd_lst)
+            for inner_lst in cmd_lst:
+                for single_str in inner_lst:
+                    if "dials" in single_str:
+                        found_dials_command = True
 
+                    print("single_str = ", single_str)
 
-            except BrokenPipeError:
-                print("\n** BrokenPipe err catch  ** while sending EOF or JSON\n")
+            if found_dials_command:
+                try:
+                    cmd_tree_runner.run_dials_command(cmd_dict, self)
+                    print("sending /*EOF*/ (Dials CMD)")
+                    self.wfile.write(bytes('/*EOF*/', 'utf-8'))
 
-            except ConnectionResetError:
-                print(
-                    "\n** ConnectionReset err catch  ** while sending EOF or JSON\n"
-                )
+                except BrokenPipeError:
+                    print("\n** BrokenPipe err catch  ** while sending EOF or JSON\n")
+
+                except ConnectionResetError:
+                    print(
+                        "\n** ConnectionReset err catch  ** while sending EOF or JSON\n"
+                    )
+
+            else:
+                try:
+                    cmd_tree_runner.run_dui_command(cmd_dict, self)
+                    print("sending /*EOF*/ (Dui2 CMD)")
+                    self.wfile.write(bytes('/*EOF*/', 'utf-8'))
+
+                except BrokenPipeError:
+                    print("\n** BrokenPipe err catch  ** while sending EOF or JSON\n")
+
+                except ConnectionResetError:
+                    print(
+                        "\n** ConnectionReset err catch  ** while sending EOF or JSON\n"
+                    )
 
         def do_GET(self):
 

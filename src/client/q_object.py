@@ -427,6 +427,9 @@ class MainObject(QObject):
         self.window.show()
         self.import_init()
 
+    def predict_n_report_changed(self):
+        print("predict_n_report_changed(QObject)")
+
     def sharp_turns_triggered(self):
         self.sharp_turns_on = not self.sharp_turns_on
         self.tree_scene.set_sharp_turns(self.sharp_turns_on)
@@ -440,15 +443,6 @@ class MainObject(QObject):
         self.log_show.set_colours(self.regular_colours)
         self.tree_scene.set_colours(self.regular_colours)
         self.r_index_widg.set_colours(self.regular_colours)
-
-    def reset_graph_triggered(self):
-        print("reset_graph_triggered(QObject)")
-
-        cmd = {"nod_lst":"", "cmd_lst":["reset_graph"]}
-        self.server_nod_lst = json_data_request(self.uni_url, cmd)
-
-
-        self.request_display()
 
     def exit_triggered(self):
         print("exit_triggered(QObject)")
@@ -1005,7 +999,7 @@ class MainObject(QObject):
             self.thrd_lst.append(new_thrd)
 
         except requests.exceptions.RequestException:
-            print("something went wrong with the request launch")
+            print("something went wrong with the request of Dials comand")
             #TODO: put inside this << except >> some way to kill << new_thrd >>
 
     def line_n1_in(self, nod_num_in):
@@ -1025,10 +1019,30 @@ class MainObject(QObject):
 
         except requests.exceptions.RequestException:
             print(
-                "something went wrong with the request launch"
+                "something went wrong with the Stop request"
             )
 
-    def predict_n_report_changed(self):
-        print("predict_n_report_changed(QObject)")
+    def reset_graph_triggered(self):
+        print("reset_graph_triggered(QObject)")
+        cmd = {"nod_lst":"", "cmd_lst":["reset_graph"]}
+        print("cmd =", cmd)
+        try:
+            new_req_post = requests.post(
+                self.uni_url, stream = True, data = cmd
+            )
+            new_thrd = Run_n_Output(new_req_post)
+            new_thrd.first_line.connect(self.respose_n1_from_reset)
+            new_thrd.finished.connect(self.request_display)
+            new_thrd.start()
+            self.thrd_lst.append(new_thrd)
+
+        except requests.exceptions.RequestException:
+            print(
+                "something went wrong with the << reset_graph >> request"
+            )
+            #TODO: put inside this << except >> some way to kill << new_thrd >>
+
+    def respose_n1_from_reset(self, line):
+        print("respose_from_reset(err code):", line)
 
 
