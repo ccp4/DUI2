@@ -446,6 +446,11 @@ class MainObject(QObject):
 
     def exit_triggered(self):
         print("exit_triggered(QObject)")
+        msgBox  = QMessageBox()
+        txt_exit =  "If you are closing by accident, you don\'t need to worry.    \n"
+        txt_exit += "Just launch Dui2 again and it will pickup just where it left off.  "
+        msgBox.setText(txt_exit)
+        msgBox.exec()
         self.parent_app.exit()
 
     def close_event(self):
