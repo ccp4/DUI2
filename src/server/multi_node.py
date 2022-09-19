@@ -35,6 +35,7 @@ def get_pair_list():
         ("h",       "history"                               ),
         ("dt",      "dir_tree"                              ),
         ("dl",      "display_log"                           ),
+        ("rg",      "reset_graph"                           ),
         ("cl",      "closed"                                ),
         ("gol",     "get_optional_command_list"             ),
         ("gr",      "get_report"                            ),
@@ -626,6 +627,9 @@ class Runner(object):
             elif uni_cmd == ["closed"]:
                 return_list = ["closed received"]
                 print("received closed command")
+
+            elif uni_cmd == ["reset_graph"]:
+                print("\n\n running << reset_graph >> \n\n")
 
             elif uni_cmd == ["stop"]:
                 #TODO: consider moving this to << run_dials_command >> (do_POST)

@@ -444,6 +444,12 @@ class MainObject(QObject):
     def reset_graph_triggered(self):
         print("reset_graph_triggered(QObject)")
 
+        cmd = {"nod_lst":"", "cmd_lst":["reset_graph"]}
+        self.server_nod_lst = json_data_request(self.uni_url, cmd)
+
+
+        self.request_display()
+
     def exit_triggered(self):
         print("exit_triggered(QObject)")
         msgBox  = QMessageBox()
