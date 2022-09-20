@@ -323,7 +323,6 @@ class DoLoadHTML(QObject):
         self.main_obj.window.HtmlReport.loadFinished.connect(
             self.l_stat.load_finished
         )
-        self.lst_html = []
 
         first_half = """<html>
             <head>
@@ -336,6 +335,7 @@ class DoLoadHTML(QObject):
             </body>
             </html>"""
 
+        self.reset_lst_html()
         self.not_avail_html = first_half \
         + "There is no report available for this step." \
         + second_half
@@ -347,6 +347,9 @@ class DoLoadHTML(QObject):
         self.failed_html = first_half \
         + "  Failed Connection" \
         + second_half
+
+    def reset_lst_html(self):
+        self.lst_html = []
 
     def __call__(self, do_request = False):
         print("Do Request =", do_request)

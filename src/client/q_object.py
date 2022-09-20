@@ -1027,6 +1027,7 @@ class MainObject(QObject):
         cmd = {"nod_lst":"", "cmd_lst":["reset_graph"]}
         print("cmd =", cmd)
         try:
+            self.do_load_html.reset_lst_html()
             new_req_post = requests.post(
                 self.uni_url, stream = True, data = cmd
             )

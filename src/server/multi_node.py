@@ -197,10 +197,10 @@ class CmdNode(object):
         self.nod_req = req_obj
         self.run_cmd(self.nod_req)
 
-    def set_root(self, run_dir = "/tmp/tst/", lst_expt = "/tmp/tst/imported.expt"):
+    def set_root(self):
         base_dir = os.getcwd()
         self.set_base_dir(base_dir)
-        self._run_dir = run_dir
+        self._run_dir = base_dir
         self._lst_expt_in = []
         self._lst_refl_in = []
         self.full_cmd_lst = [['Root']]
@@ -547,11 +547,25 @@ class Runner(object):
                     req_obj.wfile.write(bytes(
                         "err.code=0\n" , 'utf-8')
                     )
-                    self.start_from_zero()
+                    self.clear_run_dirs_n_reset()
+                    req_obj.wfile.write(bytes(
+                        "Reset tree ... Done\n" , 'utf-8')
+                    )
 
             except BrokenPipeError:
                 print("\n << BrokenPipe err catch  >> while sending nod_num \n")
 
+    def clear_run_dirs_n_reset(self):
+        for uni in self.step_list:
+            try:
+                if uni.lst2run != [['dials.Root']]:
+                    shutil.rmtree(str(uni._run_dir))
+
+            except FileNotFoundError:
+                print("FileNotFound err catch for file", uni._run_dir)
+
+        os.remove("run_data")
+        self.start_from_zero()
 
     def _create_step(self, prev_step_lst):
         new_step = CmdNode(parent_lst_in = prev_step_lst)
