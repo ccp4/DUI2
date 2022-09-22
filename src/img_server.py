@@ -7,6 +7,7 @@ server_par_def = (
     ("host", "localhost"),
     #("host", "serverip"),
     ("all_local", "false"),
+    ("windows_exe", "false"),
 )
 
 if __name__ == '__main__':
