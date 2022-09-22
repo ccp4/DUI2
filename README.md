@@ -20,15 +20,16 @@ Clone the DUI2 repository (pre-release branch):
 
 There are three available command line tools in the final product:
 
-1. Server App (Which actually runs Dials commands)
-
-TBD
-
-2. Client App (GUI front end)
-
-TBD
-
-3. Fully local App (running both, server and client locally)
+1. Fully local App (running both, server and client locally)
 
       dials.python DUI2/src/all_local.py
+
+2. Server App (Which actually runs Dials commands)
+
+TBD
+
+3. Client App (GUI front end)
+
+TBD
+
 
