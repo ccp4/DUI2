@@ -17,11 +17,6 @@ Clone the DUI2 repository (pre-release branch):
 
        git clone -b V0.9 https://github.com/ccp4/DUI2.git
 
-Run the DUI2 launcher script
-
-      dials.python DUI2/src/all_local.py
-
-
 
 There are three available command line tools in the final product:
 
@@ -35,4 +30,5 @@ TBD
 
 3. Fully local App (running both, server and client locally)
 
+      dials.python DUI2/src/all_local.py
 
