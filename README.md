@@ -7,19 +7,19 @@ This project relies on an installation of Python3 with Dials, PySide2 and Reques
 
 ## Installation
 
-    This assumes you have already installed DIALS and have a BASH shell active with the DIALS environment sourced (. dials_env.sh).
+This assumes you have already installed DIALS and have a BASH shell active with the DIALS environment sourced (. dials_env.sh).
 
-    First install `pyside2`:
+First install `pyside2`:
 
-          libtbx.conda install -c conda-forge pyside2
+      libtbx.conda install -c conda-forge pyside2
 
-    Clone the DUI2 repository (pre-release branch):
+Clone the DUI2 repository (pre-release branch):
 
-           git clone -b V0.9 https://github.com/ccp4/DUI2.git
+       git clone -b V0.9 https://github.com/ccp4/DUI2.git
 
-    Run the DUI2 launcher script
+Run the DUI2 launcher script
 
-          dials.python DUI2/src/all_local.py
+      dials.python DUI2/src/all_local.py
 
 
 
