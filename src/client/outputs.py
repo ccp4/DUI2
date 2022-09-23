@@ -366,6 +366,9 @@ class DoLoadHTML(QObject):
 
     def open_browser_clicked(self):
         print("open_browser_clicked(DoLoadHTML)")
+        import webbrowser
+        webbrowser.open(self.new_file_path)
+
 
     def __call__(self, do_request = False):
         print("Do Request =", do_request)
@@ -443,6 +446,7 @@ class DoLoadHTML(QObject):
 
             else:
                 tmp_html_path = self.tmp_dir + os.sep + "temp_repo.html"
+                self.new_file_path = str(tmp_html_path)
                 tmp_file = open(tmp_html_path, "w")
                 #
                 # if Windows fails to run the next code line, type:
