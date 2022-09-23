@@ -313,15 +313,25 @@ class DoLoadHTML(QObject):
         self.tmp_dir = data_init.get_tmp_dir()
 
         self.l_stat = HandleLoadStatusLabel(self.main_obj)
+        try:
+            self.main_obj.window.HtmlReport.loadStarted.connect(
+                self.l_stat.load_started
+            )
+            self.main_obj.window.HtmlReport.loadProgress.connect(
+                self.l_stat.load_progress
+            )
+            self.main_obj.window.HtmlReport.loadFinished.connect(
+                self.l_stat.load_finished
+            )
 
-        self.main_obj.window.HtmlReport.loadStarted.connect(
-            self.l_stat.load_started
+        except AttributeError:
+            print("tmp HtmlReport OFF # 1")
+
+        self.main_obj.window.DownloadReportButton.clicked.connect(
+            self.download_clicked
         )
-        self.main_obj.window.HtmlReport.loadProgress.connect(
-            self.l_stat.load_progress
-        )
-        self.main_obj.window.HtmlReport.loadFinished.connect(
-            self.l_stat.load_finished
+        self.main_obj.window.OpenBrowserButton.clicked.connect(
+            self.open_browser_clicked
         )
 
         first_half = """<html>
@@ -351,6 +361,12 @@ class DoLoadHTML(QObject):
     def reset_lst_html(self):
         self.lst_html = []
 
+    def download_clicked(self):
+        print("download_clicked(DoLoadHTML)")
+
+    def open_browser_clicked(self):
+        print("open_browser_clicked(DoLoadHTML)")
+
     def __call__(self, do_request = False):
         print("Do Request =", do_request)
         if do_request:
@@ -368,7 +384,12 @@ class DoLoadHTML(QObject):
 
             if not found_html:
                 print("not found_html #1, Local Mem")
-                self.main_obj.window.HtmlReport.setHtml(self.loading_html)
+                try:
+                    self.main_obj.window.HtmlReport.setHtml(self.loading_html)
+
+                except AttributeError:
+                    print("tmp HtmlReport OFF # 2")
+
                 self.l_stat.load_started()
                 try:
                     cmd = {
@@ -414,7 +435,11 @@ class DoLoadHTML(QObject):
                     full_file = self.not_avail_html
 
             if len(full_file) < 5:
-                self.main_obj.window.HtmlReport.setHtml(self.not_avail_html)
+                try:
+                    self.main_obj.window.HtmlReport.setHtml(self.not_avail_html)
+
+                except AttributeError:
+                    print("tmp HtmlReport OFF # 3")
 
             else:
                 tmp_html_path = self.tmp_dir + os.sep + "temp_repo.html"
@@ -431,15 +456,22 @@ class DoLoadHTML(QObject):
                 #
                 tmp_file.write(full_file)
                 tmp_file.close()
+                try:
+                    self.main_obj.window.HtmlReport.load(
+                        QUrl.fromLocalFile(tmp_html_path)
+                    )
 
-                self.main_obj.window.HtmlReport.load(
-                    QUrl.fromLocalFile(tmp_html_path)
-                )
+                except AttributeError:
+                    print("tmp HtmlReport OFF # 4")
 
             print("Show HTML ... End")
 
         else:
-            self.main_obj.window.HtmlReport.setHtml(self.not_avail_html)
+            try:
+                self.main_obj.window.HtmlReport.setHtml(self.not_avail_html)
+
+            except AttributeError:
+                print("tmp HtmlReport OFF # 5")
 
 
 class ShowLog(QObject):

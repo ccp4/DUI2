@@ -373,12 +373,12 @@ class MainObject(QObject):
             self.RecipLattCloseClicked
         )
 
+        self.do_load_html = DoLoadHTML(self)
         try:
-            self.do_load_html = DoLoadHTML(self)
             self.window.HtmlReport.setHtml(self.do_load_html.not_avail_html)
 
         except AttributeError:
-            print("removing HtmlReport for old vesion of PySide2 ")
+            print("tmp HtmlReport not used QObject ")
 
         self.log_show = ShowLog(self)
 
@@ -564,11 +564,12 @@ class MainObject(QObject):
             )
 
         elif tab_index == 2:
-            try:
-                self.do_load_html(do_request = fnd_cur_nod)
-
+            #try:
+            self.do_load_html(do_request = fnd_cur_nod)
+            '''
             except AttributeError:
                 print("removing HtmlReport for old vesion of PySide2 ")
+            '''
 
         elif tab_index == 3:
             self.recip_latt.change_node(self.curr_nod_num)

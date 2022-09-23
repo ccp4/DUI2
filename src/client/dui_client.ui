@@ -164,8 +164,8 @@
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>403</width>
-                       <height>340</height>
+                       <width>394</width>
+                       <height>347</height>
                       </rect>
                      </property>
                     </widget>
@@ -593,7 +593,7 @@
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>76</width>
+                       <width>92</width>
                        <height>16</height>
                       </rect>
                      </property>
@@ -1173,7 +1173,7 @@
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>68</width>
+                       <width>84</width>
                        <height>16</height>
                       </rect>
                      </property>
@@ -1194,7 +1194,7 @@
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>68</width>
+                       <width>84</width>
                        <height>16</height>
                       </rect>
                      </property>
@@ -1507,32 +1507,51 @@
            <attribute name="title">
             <string>Report</string>
            </attribute>
-           <layout class="QGridLayout" name="gridLayout_29">
-            <property name="leftMargin">
-             <number>2</number>
+           <widget class="QWidget" name="">
+            <property name="geometry">
+             <rect>
+              <x>2</x>
+              <y>2</y>
+              <width>343</width>
+              <height>43</height>
+             </rect>
             </property>
-            <property name="topMargin">
-             <number>2</number>
-            </property>
-            <property name="rightMargin">
-             <number>2</number>
-            </property>
-            <property name="bottomMargin">
-             <number>2</number>
-            </property>
-            <property name="spacing">
-             <number>2</number>
-            </property>
-            <item row="0" column="0">
-             <widget class="QWebEngineView" name="HtmlReport" native="true">
-              <property name="url" stdset="0">
-               <url>
-                <string>about:blank</string>
-               </url>
-              </property>
-             </widget>
-            </item>
-           </layout>
+            <layout class="QGridLayout" name="gridLayout_29">
+             <item row="0" column="0">
+              <widget class="QWebEngineView" name="HtmlReport" native="true">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="url" stdset="0">
+                <url>
+                 <string>about:blank</string>
+                </url>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <layout class="QHBoxLayout" name="horizontalLayout_4">
+               <item>
+                <widget class="QPushButton" name="OpenBrowserButton">
+                 <property name="text">
+                  <string>Open Report in Web Browser</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="DownloadReportButton">
+                 <property name="text">
+                  <string>Download Report</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
           </widget>
           <widget class="QWidget" name="ReciprocalViewTab">
            <attribute name="title">
@@ -1633,7 +1652,7 @@
      <x>0</x>
      <y>0</y>
      <width>1446</width>
-     <height>30</height>
+     <height>29</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_file">
