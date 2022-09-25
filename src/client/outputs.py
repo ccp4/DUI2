@@ -325,7 +325,7 @@ class DoLoadHTML(QObject):
             )
 
         except AttributeError:
-            print("tmp HtmlReport OFF # 1")
+            print("not working HtmlView # 1")
 
         self.main_obj.window.DownloadReportButton.clicked.connect(
             self.download_clicked
@@ -389,7 +389,7 @@ class DoLoadHTML(QObject):
                     self.main_obj.window.HtmlReport.setHtml(self.loading_html)
 
                 except AttributeError:
-                    print("tmp HtmlReport OFF # 2")
+                    print("not working HtmlView # 2")
 
                 self.l_stat.load_started()
                 try:
@@ -442,7 +442,7 @@ class DoLoadHTML(QObject):
                     self.main_obj.window.HtmlReport.setHtml(self.not_avail_html)
 
                 except AttributeError:
-                    print("tmp HtmlReport OFF # 3")
+                    print("not working HtmlView # 3")
 
             else:
                 curr_htmp_file_name = "report_node_" + str(nod_p_num) + ".html"
@@ -467,16 +467,17 @@ class DoLoadHTML(QObject):
                     )
 
                 except AttributeError:
-                    print("tmp HtmlReport OFF # 4")
+                    print("not working HtmlView # 4")
 
             print("Show HTML ... End")
+            self.l_stat.load_finished()
 
         else:
             try:
                 self.main_obj.window.HtmlReport.setHtml(self.not_avail_html)
 
             except AttributeError:
-                print("tmp HtmlReport OFF # 5")
+                print("not working HtmlView # 5")
 
 
 class ShowLog(QObject):
