@@ -327,11 +327,9 @@ class DoLoadHTML(QObject):
         except AttributeError:
             print("tmp HtmlReport OFF # 1")
 
-        '''
         self.main_obj.window.DownloadReportButton.clicked.connect(
             self.download_clicked
         )
-        '''
         self.main_obj.window.OpenBrowserButton.clicked.connect(
             self.open_browser_clicked
         )

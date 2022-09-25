@@ -593,7 +593,7 @@
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>92</width>
+                       <width>71</width>
                        <height>16</height>
                       </rect>
                      </property>
@@ -1173,7 +1173,7 @@
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>84</width>
+                       <width>63</width>
                        <height>16</height>
                       </rect>
                      </property>
@@ -1194,7 +1194,7 @@
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>84</width>
+                       <width>63</width>
                        <height>16</height>
                       </rect>
                      </property>
@@ -1523,6 +1523,13 @@
             <property name="spacing">
              <number>2</number>
             </property>
+            <item row="0" column="0">
+             <widget class="QPushButton" name="OpenBrowserButton">
+              <property name="text">
+               <string>Open Report in Web Browser</string>
+              </property>
+             </widget>
+            </item>
             <item row="1" column="0">
              <widget class="QWebEngineView" name="HtmlReport" native="true">
               <property name="url" stdset="0">
@@ -1532,10 +1539,10 @@
               </property>
              </widget>
             </item>
-            <item row="0" column="0">
-             <widget class="QPushButton" name="OpenBrowserButton">
+            <item row="2" column="0">
+             <widget class="QPushButton" name="DownloadReportButton">
               <property name="text">
-               <string>Open Report in Web Browser</string>
+               <string>Download Report</string>
               </property>
              </widget>
             </item>
