@@ -30,7 +30,7 @@ from PySide2.QtGui import *
 from client.exec_utils import json_data_request
 from client.init_firts import ini_data
 
-import subprocess, psutil
+import subprocess, psutil, webbrowser
 
 class LoadFiles(QThread):
     files_loaded = Signal(dict)
@@ -366,9 +366,7 @@ class DoLoadHTML(QObject):
 
     def open_browser_clicked(self):
         print("open_browser_clicked(DoLoadHTML)")
-        import webbrowser
         webbrowser.open(self.new_file_path)
-
 
     def __call__(self, do_request = False):
         print("Do Request =", do_request)
@@ -430,7 +428,9 @@ class DoLoadHTML(QObject):
                     full_file = ''
 
                 except requests.exceptions.RequestException:
-                    print("\n requests.exceptions.RequestException (DoLoadHTML) \n")
+                    print(
+                        "\nrequests.exceptions.RequestException (DoLoadHTML)\n"
+                    )
                     full_file = self.failed_html
 
                 except zlib.error:
@@ -445,7 +445,8 @@ class DoLoadHTML(QObject):
                     print("tmp HtmlReport OFF # 3")
 
             else:
-                tmp_html_path = self.tmp_dir + os.sep + "temp_repo.html"
+                curr_htmp_file_name = "report_node_" + str(nod_p_num) + ".html"
+                tmp_html_path = self.tmp_dir + os.sep + curr_htmp_file_name
                 self.new_file_path = str(tmp_html_path)
                 tmp_file = open(tmp_html_path, "w")
                 #
