@@ -30,7 +30,7 @@ from PySide2.QtGui import *
 from client.exec_utils import json_data_request
 from client.init_firts import ini_data
 
-import subprocess, psutil, webbrowser
+import subprocess, psutil, shutil, webbrowser
 
 class LoadFiles(QThread):
     files_loaded = Signal(dict)
@@ -363,6 +363,14 @@ class DoLoadHTML(QObject):
 
     def download_clicked(self):
         print("download_clicked(DoLoadHTML)")
+        ini_file = os.getcwd() + os.sep + "report.html"
+        fileResul = QFileDialog.getSaveFileName(
+            self.main_obj.window.HtmlReport, "Download HTML File",
+            ini_file, "Html Report (*.html)"
+        )
+        entered_file_name = fileResul[0]
+        shutil.copy(self.new_file_path, entered_file_name)
+        print(entered_file_name, " writen to disk")
 
     def open_browser_clicked(self):
         print("open_browser_clicked(DoLoadHTML)")
