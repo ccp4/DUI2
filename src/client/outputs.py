@@ -192,15 +192,17 @@ class HandleReciprocalLatticeView(QObject):
     def launch_RL_view(self, nod_num):
         print("Launching Reciprocal Lattice View for node: ", nod_num)
         self.quit_kill_all()
-        self.load_thread = LoadFiles(
-            unit_URL = self.uni_url, cur_nod_num = nod_num,
-            tmp_dir = self.tmp_dir
-        )
-        self.load_thread.files_loaded.connect(self.new_files)
-        self.load_thread.loading_failed.connect(self.failed_loading)
-        self.load_thread.progressing.connect(self.p_bar_pos)
+        self.load_thread_lst = [
+            LoadFiles(
+                unit_URL = self.uni_url, cur_nod_num = nod_num,
+                tmp_dir = self.tmp_dir
+            )
+        ]
+        self.load_thread_lst[0].files_loaded.connect(self.new_files)
+        self.load_thread_lst[0].loading_failed.connect(self.failed_loading)
+        self.load_thread_lst[0].progressing.connect(self.p_bar_pos)
 
-        self.load_thread.start()
+        self.load_thread_lst[0].start()
         self.main_obj.window.progressBar.setValue(5)
         self.running = True
 
@@ -215,12 +217,14 @@ class HandleReciprocalLatticeView(QObject):
         self.get_nod_num.emit(self.paths_n_nod_num["cur_nod_num"])
 
     def do_launch_RL(self):
-        self.launch_RL_thread = LaunchReciprocalLattice(
-            self.paths_n_nod_num["tmp_exp_path"],
-            self.paths_n_nod_num["tmp_ref_path"]
-        )
-        self.launch_RL_thread.finished.connect(self.ended)
-        self.launch_RL_thread.start()
+        self.launch_RL_thread_lst = [
+            LaunchReciprocalLattice(
+                self.paths_n_nod_num["tmp_exp_path"],
+                self.paths_n_nod_num["tmp_ref_path"]
+            )
+        ]
+        self.launch_RL_thread_lst[0].finished.connect(self.ended)
+        self.launch_RL_thread_lst[0].start()
         self.running = True
         self.main_obj.window.progressBar.setValue(100)
 
@@ -231,17 +235,17 @@ class HandleReciprocalLatticeView(QObject):
 
     def quit_kill_all(self):
         try:
-            self.load_thread.kill_proc()
-            self.load_thread.quit()
-            self.load_thread.wait()
+            self.load_thread_lst[0].kill_proc()
+            self.load_thread_lst[0].quit()
+            self.load_thread_lst[0].wait()
 
         except AttributeError:
             print("Not loading files yet")
 
         try:
-            self.launch_RL_thread.kill_proc()
-            self.launch_RL_thread.quit()
-            self.launch_RL_thread.wait()
+            self.launch_RL_thread_lst[0].kill_proc()
+            self.launch_RL_thread_lst[0].quit()
+            self.launch_RL_thread_lst[0].wait()
 
         except AttributeError:
             print("No RL launched yet")

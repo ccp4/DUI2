@@ -593,7 +593,7 @@
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>80</width>
+                       <width>94</width>
                        <height>16</height>
                       </rect>
                      </property>
@@ -1173,7 +1173,7 @@
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>66</width>
+                       <width>80</width>
                        <height>16</height>
                       </rect>
                      </property>
@@ -1194,7 +1194,7 @@
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>66</width>
+                       <width>80</width>
                        <height>16</height>
                       </rect>
                      </property>
@@ -1553,33 +1553,28 @@
             <string>Reciprocal Lattice</string>
            </attribute>
            <layout class="QGridLayout" name="gridLayout_35">
-            <item row="2" column="0">
-             <widget class="QProgressBar" name="progressBar">
-              <property name="value">
-               <number>0</number>
+            <item row="4" column="0">
+             <spacer name="horizontalSpacer_6">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
               </property>
-             </widget>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
             </item>
-            <item row="1" column="0">
-             <widget class="QPushButton" name="RecipLattOpenButton">
+            <item row="4" column="1">
+             <widget class="QCheckBox" name="ReLauncCheckBox">
               <property name="text">
-               <string>
- Open Reciprocal Lattice Viewer 
-</string>
+               <string>Close and Reopen when navigating</string>
               </property>
              </widget>
             </item>
-            <item row="3" column="0">
-             <widget class="QPushButton" name="RecipLattStopButton">
-              <property name="text">
-               <string>
- Close Reciprocal Lattice Viewer 
-</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="0">
-             <spacer name="verticalSpacer">
+            <item row="3" column="0" colspan="2">
+             <spacer name="verticalSpacer_2">
               <property name="orientation">
                <enum>Qt::Vertical</enum>
               </property>
@@ -1591,8 +1586,24 @@
               </property>
              </spacer>
             </item>
-            <item row="4" column="0">
-             <spacer name="verticalSpacer_2">
+            <item row="2" column="0" colspan="2">
+             <widget class="QProgressBar" name="progressBar">
+              <property name="value">
+               <number>0</number>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0" colspan="2">
+             <widget class="QPushButton" name="RecipLattOpenButton">
+              <property name="text">
+               <string>
+ Open Reciprocal Lattice Viewer 
+</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0" colspan="2">
+             <spacer name="verticalSpacer">
               <property name="orientation">
                <enum>Qt::Vertical</enum>
               </property>

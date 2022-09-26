@@ -369,9 +369,11 @@ class MainObject(QObject):
         self.window.RecipLattOpenButton.clicked.connect(
             self.RecipLattOpenClicked
         )
+        '''
         self.window.RecipLattStopButton.clicked.connect(
             self.RecipLattCloseClicked
         )
+        '''
 
         self.do_load_html = DoLoadHTML(self)
         try:
@@ -583,9 +585,11 @@ class MainObject(QObject):
         print("RecipLattOpenClicked")
         self.recip_latt.launch_RL_view(self.curr_nod_num)
 
+        '''
     def RecipLattCloseClicked(self):
         print("RecipLattCloseClicked")
         self.recip_latt.quit_kill_all()
+        '''
 
     def verify_nod_num(self, loaded_nod_num):
         print(
