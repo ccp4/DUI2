@@ -186,23 +186,23 @@ class HandleReciprocalLatticeView(QObject):
         self.tmp_dir = data_init.get_tmp_dir()
         print("tmp_dir =", self.tmp_dir)
         self.running = False
+
+
         self.main_obj.window.progressBar.setRange(0, 100)
         self.main_obj.window.progressBar.setValue(0)
 
     def launch_RL_view(self, nod_num):
         print("Launching Reciprocal Lattice View for node: ", nod_num)
         self.quit_kill_all()
-        self.load_thread_lst = [
-            LoadFiles(
-                unit_URL = self.uni_url, cur_nod_num = nod_num,
-                tmp_dir = self.tmp_dir
-            )
-        ]
-        self.load_thread_lst[0].files_loaded.connect(self.new_files)
-        self.load_thread_lst[0].loading_failed.connect(self.failed_loading)
-        self.load_thread_lst[0].progressing.connect(self.p_bar_pos)
-
-        self.load_thread_lst[0].start()
+        new_load_thread = LoadFiles(
+            unit_URL = self.uni_url, cur_nod_num = nod_num,
+            tmp_dir = self.tmp_dir
+        )
+        new_load_thread.files_loaded.connect(self.new_files)
+        new_load_thread.loading_failed.connect(self.failed_loading)
+        new_load_thread.progressing.connect(self.p_bar_pos)
+        new_load_thread.start()
+        self.load_thread_lst.append(new_load_thread)
         self.main_obj.window.progressBar.setValue(5)
         self.running = True
 
@@ -217,14 +217,13 @@ class HandleReciprocalLatticeView(QObject):
         self.get_nod_num.emit(self.paths_n_nod_num["cur_nod_num"])
 
     def do_launch_RL(self):
-        self.launch_RL_thread_lst = [
-            LaunchReciprocalLattice(
-                self.paths_n_nod_num["tmp_exp_path"],
-                self.paths_n_nod_num["tmp_ref_path"]
-            )
-        ]
-        self.launch_RL_thread_lst[0].finished.connect(self.ended)
-        self.launch_RL_thread_lst[0].start()
+        new_launch_RL_thread = LaunchReciprocalLattice(
+            self.paths_n_nod_num["tmp_exp_path"],
+            self.paths_n_nod_num["tmp_ref_path"]
+        )
+        new_launch_RL_thread.finished.connect(self.ended)
+        new_launch_RL_thread.start()
+        self.launch_RL_thread_lst.append(new_launch_RL_thread)
         self.running = True
         self.main_obj.window.progressBar.setValue(100)
 
@@ -235,21 +234,34 @@ class HandleReciprocalLatticeView(QObject):
 
     def quit_kill_all(self):
         try:
-            self.load_thread_lst[0].kill_proc()
-            self.load_thread_lst[0].quit()
-            self.load_thread_lst[0].wait()
+            for load_thread in self.load_thread_lst:
+                try:
+                    load_thread.kill_proc()
+                    load_thread.quit()
+                    load_thread.wait()
+
+                except AttributeError:
+                    print("Not loading files yet")
 
         except AttributeError:
             print("Not loading files yet")
 
+        self.load_thread_lst = []
+
         try:
-            self.launch_RL_thread_lst[0].kill_proc()
-            self.launch_RL_thread_lst[0].quit()
-            self.launch_RL_thread_lst[0].wait()
+            for launch_RL_thread in self.launch_RL_thread_lst:
+                try:
+                    launch_RL_thread.kill_proc()
+                    launch_RL_thread.quit()
+                    launch_RL_thread.wait()
+
+                except AttributeError:
+                    print("No RL launched yet")
 
         except AttributeError:
             print("No RL launched yet")
 
+        self.launch_RL_thread_lst = []
         self.running = False
         self.main_obj.window.progressBar.setValue(0)
 
