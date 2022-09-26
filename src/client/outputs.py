@@ -185,15 +185,12 @@ class HandleReciprocalLatticeView(QObject):
         self.uni_url = data_init.get_url()
         self.tmp_dir = data_init.get_tmp_dir()
         print("tmp_dir =", self.tmp_dir)
-        self.running = False
-
-
+        self.quit_kill_all()
         self.main_obj.window.progressBar.setRange(0, 100)
         self.main_obj.window.progressBar.setValue(0)
 
     def launch_RL_view(self, nod_num):
         print("Launching Reciprocal Lattice View for node: ", nod_num)
-        self.quit_kill_all()
         new_load_thread = LoadFiles(
             unit_URL = self.uni_url, cur_nod_num = nod_num,
             tmp_dir = self.tmp_dir
@@ -204,7 +201,6 @@ class HandleReciprocalLatticeView(QObject):
         new_load_thread.start()
         self.load_thread_lst.append(new_load_thread)
         self.main_obj.window.progressBar.setValue(5)
-        self.running = True
 
     def p_bar_pos(self, pos):
         in_pos = int(float(pos) * 0.9 + 10.0)
@@ -224,12 +220,10 @@ class HandleReciprocalLatticeView(QObject):
         new_launch_RL_thread.finished.connect(self.ended)
         new_launch_RL_thread.start()
         self.launch_RL_thread_lst.append(new_launch_RL_thread)
-        self.running = True
         self.main_obj.window.progressBar.setValue(100)
 
     def failed_loading(self):
         print("\n not running reciprocal_lattice_viewer, wrong node \n")
-        self.running = False
         self.main_obj.window.progressBar.setValue(0)
 
     def quit_kill_all(self):
@@ -262,18 +256,14 @@ class HandleReciprocalLatticeView(QObject):
             print("No RL launched yet")
 
         self.launch_RL_thread_lst = []
-        self.running = False
         self.main_obj.window.progressBar.setValue(0)
 
     def change_node(self, new_node):
         print("\n changing node (HandleReciprocalLatticeView) to: ", new_node)
-        print("Running =", self.running, "\n")
-        if self.running:
-            self.launch_RL_view(new_node)
+        self.launch_RL_view(new_node)
 
     def ended(self):
         print("RL viewer ended")
-        self.running = False
         self.main_obj.window.progressBar.setValue(0)
 
 

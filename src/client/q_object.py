@@ -566,17 +566,17 @@ class MainObject(QObject):
             )
 
         elif tab_index == 2:
-            #try:
             self.do_load_html(do_request = fnd_cur_nod)
-            '''
-            except AttributeError:
-                print("removing HtmlReport for old vesion of PySide2 ")
-            '''
 
-        elif tab_index == 3:
+        elif tab_index == 3 and self.window.ReLauncCheckBox.isChecked():
+            self.recip_latt.quit_kill_all()
             self.recip_latt.change_node(self.curr_nod_num)
 
-        if self.curr_outp_tab == 3 and tab_index != 3:
+        if(
+            self.curr_outp_tab == 3 and
+            tab_index != 3 and
+            self.window.ReLauncCheckBox.isChecked()
+        ):
             self.recip_latt.quit_kill_all()
 
         self.curr_outp_tab = tab_index
@@ -584,12 +584,6 @@ class MainObject(QObject):
     def RecipLattOpenClicked(self):
         print("RecipLattOpenClicked")
         self.recip_latt.launch_RL_view(self.curr_nod_num)
-
-        '''
-    def RecipLattCloseClicked(self):
-        print("RecipLattCloseClicked")
-        self.recip_latt.quit_kill_all()
-        '''
 
     def verify_nod_num(self, loaded_nod_num):
         print(
