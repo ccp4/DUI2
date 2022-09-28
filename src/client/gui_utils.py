@@ -770,6 +770,10 @@ class TreeDirScene(QGraphicsScene):
                 dx + self.f_width, dy,
                 self.gray_pen, self.first_gray_brush
             )
+            self.setSceneRect(
+                left_x - self.f_width, up_y,
+                dx + self.f_width, dy,
+            )
             for i in range(int((len(self.nod_lst) - 1) / 2 + 1)):
                 pos = i * 2
                 my_x, my_y = self.get_coords(pos, -1)
