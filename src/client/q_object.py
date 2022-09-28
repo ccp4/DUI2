@@ -619,7 +619,7 @@ class MainObject(QObject):
             cur_nod = self.server_nod_lst[node_numb]
 
         except IndexError:
-            cur_nod = self.tree_scene.paint_nod_lst[node_numb]
+            cur_nod = self.tree_scene.nod_lst_2_paint[node_numb]
 
         cmd_ini = cur_nod["cmd2show"][0]
         key2find = cmd_ini[6:]
