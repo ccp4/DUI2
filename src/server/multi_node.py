@@ -313,7 +313,7 @@ class CmdNode(object):
         new_line = None
         log_line_lst = []
         self.log_file_path = self._run_dir + "/out.log"
-        n_Broken_Pipes = 0
+        self.n_Broken_Pipes = 0
         if self.nod_req is not None:
             try:
                 self.nod_req.send_response(201)
@@ -327,7 +327,7 @@ class CmdNode(object):
 
         while self.my_proc.poll() is None or new_line != '':
             new_line = self.my_proc.stdout.readline()
-            n_Broken_Pipes += add_log_line(new_line, self.nod_req)
+            self.n_Broken_Pipes += add_log_line(new_line, self.nod_req)
             log_line_lst.append(new_line[:-1])
 
         for inv_pos in range(1, len(log_line_lst)):
@@ -364,8 +364,16 @@ class CmdNode(object):
         if self._lst_refl_out == []:
             self._lst_refl_out = list(self._lst_refl_in)
 
+        self.generate_predict_n_report(self.nod_req)
+
+        if self.n_Broken_Pipes > 0:
+            print("\n << BrokenPipe err catch >> while sending output \n")
+
+    def generate_predict_n_report(self, req_obj = None):
+        self.nod_req = req_obj
+
         new_line = "HTML Report + Reflection Prediction ... START"
-        n_Broken_Pipes += add_log_line(new_line, self.nod_req)
+        self.n_Broken_Pipes += add_log_line(new_line, self.nod_req)
 
         tmp_html_path = self._run_dir + "/dials.report.html"
 
@@ -390,7 +398,7 @@ class CmdNode(object):
             print("\n running:", rep_lst_dat_in, "\n")
 
             new_line = "Generating HTML report"
-            n_Broken_Pipes += add_log_line(new_line, self.nod_req)
+            self.n_Broken_Pipes += add_log_line(new_line, self.nod_req)
 
             lst_rep_out = []
             if self.win_exe:
@@ -419,7 +427,7 @@ class CmdNode(object):
         else:
             new_line = "No need for HTML report in this step"
 
-        n_Broken_Pipes += add_log_line(new_line, self.nod_req)
+        self.n_Broken_Pipes += add_log_line(new_line, self.nod_req)
 
         # running prediction generation
         pred_lst_dat_in = ['dials.predict']
@@ -429,7 +437,7 @@ class CmdNode(object):
         print("\n running:", pred_lst_dat_in, "\n")
 
         new_line = "Generating Predictions"
-        n_Broken_Pipes += add_log_line(new_line, self.nod_req)
+        self.n_Broken_Pipes += add_log_line(new_line, self.nod_req)
 
         if self.win_exe:
             pred_lst_dat_in[0] += ".exe"
@@ -460,11 +468,11 @@ class CmdNode(object):
         else:
             new_line = "No need for Reflection Prediction in this step"
 
-        n_Broken_Pipes += add_log_line(new_line, self.nod_req)
+        self.n_Broken_Pipes += add_log_line(new_line, self.nod_req)
         new_line = "HTML Report + Reflection Prediction ... END"
-        n_Broken_Pipes += add_log_line(new_line, self.nod_req)
+        self.n_Broken_Pipes += add_log_line(new_line, self.nod_req)
 
-        if n_Broken_Pipes > 0:
+        if self.n_Broken_Pipes > 0:
             print("\n << BrokenPipe err catch >> while sending output \n")
 
     def stop_me(self):
@@ -555,6 +563,53 @@ class Runner(object):
             except BrokenPipeError:
                 print("\n << BrokenPipe err catch  >> while sending nod_num \n")
 
+    def run_get_data(self, cmd_dict):
+
+        unalias_cmd_lst = unalias_full_cmd(cmd_dict["cmd_lst"])
+        print("\n cmd_lst: ", unalias_cmd_lst)
+
+        return_list = []
+        for uni_cmd in unalias_cmd_lst:
+            if uni_cmd == ["display"]:
+                return_list = format_utils.get_lst2show(self.step_list)
+                self.tree_output(return_list)
+                self.tree_output.print_output()
+
+            elif uni_cmd == ["dir_tree"]:
+                str_dir_tree = json.dumps(self._dir_tree_dict)
+                byt_data = bytes(str_dir_tree.encode('utf-8'))
+                return_list = byt_data
+
+            elif uni_cmd == ["history"]:
+                #return_list = self.lst_cmd_in
+                print("history command is temporarily off")
+
+            elif uni_cmd == ["closed"]:
+                return_list = ["closed received"]
+                print("received closed command")
+
+            elif uni_cmd == ["stop"]:
+                #TODO: consider moving this to << run_dials_command >> (do_POST)
+                for lin2go in cmd_dict["nod_lst"]:
+                    try:
+                        stat2add = self.step_list[lin2go].status
+                        return_list.append([stat2add])
+                        self.step_list[lin2go].stop_me()
+
+                    except IndexError:
+                        print("\n  err catch , wrong line not logging \n")
+
+            else:
+                not_needed_for_now = '''
+                print(
+                    "running run_get_data(", uni_cmd, ", "
+                    ,cmd_dict, ", ", self.step_list, ")"
+                )
+                '''
+                return_list = get_data_from_steps(uni_cmd, cmd_dict, self.step_list)
+
+        return return_list
+
     def clear_run_dirs_n_reset(self):
         for uni in self.step_list:
             try:
@@ -639,52 +694,6 @@ class Runner(object):
     def set_dir_tree(self, tree_dic_lst):
         self._dir_tree_dict = tree_dic_lst
 
-    def run_get_data(self, cmd_dict):
-
-        unalias_cmd_lst = unalias_full_cmd(cmd_dict["cmd_lst"])
-        print("\n cmd_lst: ", unalias_cmd_lst)
-
-        return_list = []
-        for uni_cmd in unalias_cmd_lst:
-            if uni_cmd == ["display"]:
-                return_list = format_utils.get_lst2show(self.step_list)
-                self.tree_output(return_list)
-                self.tree_output.print_output()
-
-            elif uni_cmd == ["dir_tree"]:
-                str_dir_tree = json.dumps(self._dir_tree_dict)
-                byt_data = bytes(str_dir_tree.encode('utf-8'))
-                return_list = byt_data
-
-            elif uni_cmd == ["history"]:
-                #return_list = self.lst_cmd_in
-                print("history command is temporarily off")
-
-            elif uni_cmd == ["closed"]:
-                return_list = ["closed received"]
-                print("received closed command")
-
-            elif uni_cmd == ["stop"]:
-                #TODO: consider moving this to << run_dials_command >> (do_POST)
-                for lin2go in cmd_dict["nod_lst"]:
-                    try:
-                        stat2add = self.step_list[lin2go].status
-                        return_list.append([stat2add])
-                        self.step_list[lin2go].stop_me()
-
-                    except IndexError:
-                        print("\n  err catch , wrong line not logging \n")
-
-            else:
-                not_needed_for_now = '''
-                print(
-                    "running run_get_data(", uni_cmd, ", "
-                    ,cmd_dict, ", ", self.step_list, ")"
-                )
-                '''
-                return_list = get_data_from_steps(uni_cmd, cmd_dict, self.step_list)
-
-        return return_list
 
 
 def str2dic(cmd_str):
