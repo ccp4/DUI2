@@ -360,10 +360,6 @@ class MainObject(QObject):
         self.window.CmdSend2server.setEnabled(True)
         self.window.ReqStopButton.setEnabled(True)
 
-        self.window.check_skip_predict_n_report.stateChanged.connect(
-            self.predict_n_report_changed
-        )
-
         self.recip_latt = HandleReciprocalLatticeView(self)
         self.recip_latt.get_nod_num.connect(self.verify_nod_num)
         self.window.RecipLattOpenButton.clicked.connect(
@@ -428,9 +424,6 @@ class MainObject(QObject):
         )
         self.window.show()
         self.import_init()
-
-    def predict_n_report_changed(self):
-        print("predict_n_report_changed(QObject)")
 
     def sharp_turns_triggered(self):
         self.sharp_turns_on = not self.sharp_turns_on
