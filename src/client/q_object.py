@@ -979,6 +979,7 @@ class MainObject(QObject):
             new_thrd = Run_n_Output(new_req_post)
             new_thrd.new_line_out.connect(self.log_show.add_line)
             new_thrd.first_line.connect(self.line_n1_in)
+            new_thrd.about_to_end.connect(self.thread_to_end)
             new_thrd.finished.connect(self.request_display)
             new_thrd.finished.connect(self.check_nxt_btn)
             new_thrd.finished.connect(self.refresh_output)
@@ -1032,5 +1033,25 @@ class MainObject(QObject):
 
     def respose_n1_from_reset(self, line):
         print("respose_from_reset(err code):", line)
+
+    def thread_to_end(self, nod_num_out):
+        print("thread_to_end(QObject)")
+        cmd = {"nod_lst":[nod_num_out], "cmd_lst":["run_predict_n_report"]}
+        print("cmd =", cmd)
+        try:
+            self.do_load_html.reset_lst_html()
+            new_req_post = requests.post(
+                self.uni_url, stream = True, data = cmd
+            )
+            new_thrd = Run_n_Output(new_req_post)
+            new_thrd.finished.connect(self.refresh_output)
+            new_thrd.start()
+            self.thrd_lst.append(new_thrd)
+
+        except requests.exceptions.RequestException:
+            print(
+                "something went wrong with the << reset_graph >> request"
+            )
+            #TODO: put inside this << except >> some way to kill << new_thrd >>
 
 

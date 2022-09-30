@@ -143,6 +143,7 @@ class Mtz_Data_Request(QThread):
 class Run_n_Output(QThread):
     new_line_out = Signal(str, int, str)
     first_line = Signal(int)
+    about_to_end = Signal(int)
     def __init__(self, request):
         super(Run_n_Output, self).__init__()
         self.request = request
@@ -176,6 +177,8 @@ class Run_n_Output(QThread):
                 self.new_line_out.emit(line_str, self.number, "Busy")
 
             self.usleep(1)
+
+        self.about_to_end.emit(self.number)
 
 
 class CommandParamControl:

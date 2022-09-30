@@ -23,7 +23,7 @@ copyright (c) CCP4 - DLS
 
 import subprocess, psutil
 import os, sys, shutil
-import glob, json
+import glob, json, time
 
 from server.data_n_json import get_data_from_steps
 from server.init_first import ini_data
@@ -428,6 +428,12 @@ class CmdNode(object):
             new_line = "No need for HTML report in this step"
 
         self.n_Broken_Pipes += add_log_line(new_line, self.nod_req)
+
+        about2remove = '''
+        print("waiting 5 seconds for testing")
+        time.sleep(5)
+        print("5 seconds for testing ... Done")
+        '''
 
         # running prediction generation
         pred_lst_dat_in = ['dials.predict']
