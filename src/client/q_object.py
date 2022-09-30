@@ -365,11 +365,6 @@ class MainObject(QObject):
         self.window.RecipLattOpenButton.clicked.connect(
             self.RecipLattOpenClicked
         )
-        '''
-        self.window.RecipLattStopButton.clicked.connect(
-            self.RecipLattCloseClicked
-        )
-        '''
 
         self.do_load_html = DoLoadHTML(self)
         try:

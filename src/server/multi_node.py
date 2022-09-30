@@ -37,6 +37,7 @@ def get_pair_list():
         ("dl",      "display_log"                           ),
         ("rg",      "reset_graph"                           ),
         ("cl",      "closed"                                ),
+        ("pr",      "run_predict_n_report"                  ),
         ("gol",     "get_optional_command_list"             ),
         ("gr",      "get_report"                            ),
         ("gmt",     "get_mtz"                               ),
@@ -364,12 +365,11 @@ class CmdNode(object):
         if self._lst_refl_out == []:
             self._lst_refl_out = list(self._lst_refl_in)
 
-        self.generate_predict_n_report(self.nod_req)
-
         if self.n_Broken_Pipes > 0:
             print("\n << BrokenPipe err catch >> while sending output \n")
 
     def generate_predict_n_report(self, req_obj = None):
+        self.n_Broken_Pipes = 0
         self.nod_req = req_obj
 
         new_line = "HTML Report + Reflection Prediction ... START"
@@ -547,8 +547,8 @@ class Runner(object):
 
         if req_obj is not None:
             try:
+                print("\n  Dui2 CMD( cmd_lst )= ", unalias_cmd_lst, "\n ")
                 if unalias_cmd_lst == [['reset_graph']]:
-                    print("\n  Dui2 CMD( cmd_lst )= ", unalias_cmd_lst, "\n ")
                     req_obj.send_response(201)
                     req_obj.send_header('Content-type', 'text/plain')
                     req_obj.end_headers()
@@ -560,8 +560,25 @@ class Runner(object):
                         "Reset tree ... Done\n" , 'utf-8')
                     )
 
+                elif unalias_cmd_lst == [['run_predict_n_report']]:
+                    req_obj.send_response(201)
+                    req_obj.send_header('Content-type', 'text/plain')
+                    req_obj.end_headers()
+                    req_obj.wfile.write(bytes(
+                        "err.code=0\n" , 'utf-8')
+                    )
+                    for lin2go in cmd_dict["nod_lst"]:
+                        for node in self.step_list:
+                            if node.number == lin2go:
+                                self.run_predict_n_report(node, req_obj)
+
+                    req_obj.wfile.write(bytes(
+                        "run_predict_n_report ... Done\n" , 'utf-8')
+                    )
             except BrokenPipeError:
-                print("\n << BrokenPipe err catch  >> while sending nod_num \n")
+                print(
+                    "\n << BrokenPipe err catch >> while running Dui command\n"
+                )
 
     def run_get_data(self, cmd_dict):
 
@@ -621,6 +638,16 @@ class Runner(object):
 
         os.remove("run_data")
         self.start_from_zero()
+
+    def run_predict_n_report(self, node, req_obj):
+        req_obj.wfile.write(
+            bytes(
+                " running predict and report for node:" +
+                str(node.number) + " \n" , 'utf-8'
+            )
+        )
+        node.generate_predict_n_report(req_obj)
+        req_obj.wfile.write(bytes(" ... Done \n" , 'utf-8'))
 
     def _create_step(self, prev_step_lst):
         new_step = CmdNode(parent_lst_in = prev_step_lst)
