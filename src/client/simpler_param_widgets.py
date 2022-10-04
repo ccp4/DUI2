@@ -1430,16 +1430,15 @@ class OptionalWidget(SimpleParamTab):
     main_command_changed = Signal(str)
     def __init__(self, parent = None, cmd_lst = None):
         super(OptionalWidget, self).__init__(parent)
-        cmd_men_lst = ["..."]
-        for single_command in cmd_lst:
-            cmd_men_lst.append(single_command)
 
-        self.cmd_menu = DefaultComboBox(cmd_men_lst[0], cmd_men_lst)
         self.com_imp_txt = QLineEdit()
-        self.par_imp_txt = QLineEdit()
+        completer = QCompleter(cmd_lst, self)
+        completer.setCaseSensitivity(Qt.CaseInsensitive)
+        self.com_imp_txt.setCompleter(completer)
 
         self.right_vbox = QVBoxLayout()
         self.right_vbox.addWidget(QLabel("Command:   dials...   ?"))
+        self.cmd_menu = DefaultComboBox(None, cmd_lst)
         self.right_vbox.addWidget(self.cmd_menu)
 
         self.top_hbox = QHBoxLayout()
@@ -1449,6 +1448,7 @@ class OptionalWidget(SimpleParamTab):
         self.main_vbox = QVBoxLayout()
         self.main_vbox.addLayout(self.top_hbox)
         self.main_vbox.addWidget(QLabel("Parameter(s) ... ?"))
+        self.par_imp_txt = QLineEdit()
         self.main_vbox.addWidget(self.par_imp_txt)
         self.setLayout(self.main_vbox)
 
@@ -1459,7 +1459,7 @@ class OptionalWidget(SimpleParamTab):
     def reset_pars(self):
         print("reset_pars(OptionalWidget)")
         self.cmd_menu.setCurrentIndex(0)
-        self.com_imp_txt.setText("...")
+        self.com_imp_txt.setText("")
         self.par_imp_txt.setText("")
 
     def update_all_pars(self, tup_lst_pars):
