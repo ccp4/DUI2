@@ -130,9 +130,14 @@ class MainObject(QObject):
                         )
                         rad_pr_add = False
 
-            fd_advanced_parameters.item_changed.connect(self.item_param_changed)
+            fd_advanced_parameters.item_changed.connect(
+                self.item_param_changed
+            )
             self.window.FindspotsAdvancedScrollArea.setWidget(
                 fd_advanced_parameters
+            )
+            fd_advanced_parameters.set_scroll_parent(
+                self.window.FindspotsAdvancedScrollArea
             )
 
             find_simpl_widg = FindspotsSimplerParameterTab(

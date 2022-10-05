@@ -255,12 +255,20 @@ class AdvancedParameters(QWidget):
         self.font_point_size = sys_font.pointSize()
         self.setLayout(self.main_vbox)
 
+    def set_scroll_parent(self, scroll_parent):
+        self.my_scroll_area = scroll_parent
+
     def build_pars(self, lst_phil_obj, h_box_search):
 
         h_box_search.addWidget(QLabel("Search:"))
+
         self.search_input = QLineEdit()
         self.search_input.textChanged.connect(self.search_changed)
         h_box_search.addWidget(self.search_input)
+
+        self.fnd_nxt = QPushButton("Find Next")
+        self.fnd_nxt.clicked.connect(self.find_next_search_click)
+        h_box_search.addWidget(self.fnd_nxt)
 
         self.lst_par_line = lst_phil_obj
         print("Hi from build_pars")
@@ -416,15 +424,28 @@ class AdvancedParameters(QWidget):
                 par_str = str(data_info["default"])
                 data_info["widget"].setText(par_str)
 
+    def find_next_search_click(self):
+        print("find_next_search_click(AdvancedParameters)")
+        self.num_fnd_widg += 1
+        if self.num_fnd_widg >= len(self.lst_found_widg):
+            self.num_fnd_widg = 0
+
+        self.my_scroll_area.ensureWidgetVisible(
+            self.lst_found_widg[self.num_fnd_widg]
+        )
+
     def search_changed(self):
         sender = self.sender()
         str_value = str(sender.text())
         print("searching for:", str_value)
+        self.lst_found_widg = []
+        self.num_fnd_widg = 0
         if len(str_value) > 1:
             for widget in self.children():
                 if isinstance(widget, QLabel):
                     labl_text = str(widget.text())
                     if str_value in labl_text:
+                        self.lst_found_widg.append(widget)
                         widget.setFont(
                             QFont(
                                 "Arial",
