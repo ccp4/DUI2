@@ -429,10 +429,13 @@ class AdvancedParameters(QWidget):
         self.num_fnd_widg += 1
         if self.num_fnd_widg >= len(self.lst_found_widg):
             self.num_fnd_widg = 0
+        try:
+            self.my_scroll_area.ensureWidgetVisible(
+                self.lst_found_widg[self.num_fnd_widg]
+            )
 
-        self.my_scroll_area.ensureWidgetVisible(
-            self.lst_found_widg[self.num_fnd_widg]
-        )
+        except IndexError:
+            print("No match found")
 
     def search_changed(self):
         sender = self.sender()
