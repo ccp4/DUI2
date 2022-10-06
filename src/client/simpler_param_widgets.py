@@ -99,7 +99,9 @@ class SimpleParamTab(QWidget):
                 widget_path = widget.local_path
                 widget_value = str(widget.text())
 
-            if isinstance(widget, QDoubleSpinBox) or isinstance(widget, QSpinBox):
+            if isinstance(widget, QDoubleSpinBox) or isinstance(
+                widget, QSpinBox
+            ):
                 widget_path = widget.local_path
                 widget_value = str(widget.value())
 
@@ -126,7 +128,9 @@ class SimpleParamTab(QWidget):
                         except ValueError:
                             print("\n param_in =", param_in)
                             print("value_in =", value_in, "\n")
-                            print("skipping attempt to convert string to float \n")
+                            print(
+                                "skipping convertion of string to float \n"
+                            )
 
                     if isinstance(widget, DefaultComboBox):
                         widget.setCurrentText(str(value_in))
@@ -499,7 +503,8 @@ class ImportWidget(QWidget):
     '''
         This widget behaves differently from mos of the other  << simple >>
         parameter widgets, every time the user changes a parameter DUI should
-        refresh all parameter since there are some parameter that exclude others
+        refresh all parameter since there are some parameter that exclude
+        others
     '''
     all_items_changed = Signal(list)
     def __init__(self, parent = None):
@@ -751,15 +756,20 @@ class MaskWidget(QWidget):
             self.comp_list.append(inner_lst_pair)
 
         elif comp_dict["type"] == "poly":
-            if self.comp_list == [] or self.comp_list[-1][0] != "untrusted.polygon":
+            if(
+                self.comp_list == [] or
+                self.comp_list[-1][0] != "untrusted.polygon"
+            ):
                 inner_lst_pair = [
                     "untrusted.polygon",
-                    str(comp_dict["x_end"]) + "," + str(comp_dict["y_end"]) + ","
+                    str(comp_dict["x_end"]) + ","
+                    + str(comp_dict["y_end"]) + ","
                 ]
                 self.comp_list.append(inner_lst_pair)
 
             elif self.comp_list[-1][0] == "untrusted.polygon":
-                str_tail = str(comp_dict["x_end"]) + "," + str(comp_dict["y_end"]) + ","
+                str_tail = str(comp_dict["x_end"]) + "," \
+                         + str(comp_dict["y_end"]) + ","
                 self.comp_list[-1][1] += str_tail
 
         self.comp_list_update()
@@ -859,14 +869,18 @@ class FindspotsSimplerParameterTab(SimpleParamTab):
         xds_global_threshold_hb.addWidget(xds_global_threshold_spn_bx)
         self.main_v_layout.addLayout(xds_global_threshold_hb)
 
-        self.main_v_layout.addWidget(QLabel("\n Electron Diffraction Parameters"))
+        self.main_v_layout.addWidget(
+            QLabel("\n Electron Diffraction Parameters")
+        )
         self.main_v_layout.addWidget(self.set_d_max)
         self.main_v_layout.addWidget(self.set_d_min)
         if self.add_rad_prof:
             self.main_v_layout.addWidget(self.set_rad_pro_alg)
 
         self.main_v_layout.addStretch()
-        self.lst_var_widg = _get_all_direct_layout_widget_children(self.main_v_layout)
+        self.lst_var_widg = _get_all_direct_layout_widget_children(
+            self.main_v_layout
+        )
 
     def reset_pars(self):
         self.clearLayout(self.main_v_layout)
@@ -1023,12 +1037,16 @@ class IndexSimplerParamTab(SimpleParamTab):
         qf.addRow(unit_cell_label, unit_cell_line)
         self.main_v_layout.addLayout(qf)
 
-        self.main_v_layout.addWidget(QLabel("\n Electron Diffraction Parameter"))
+        self.main_v_layout.addWidget(
+            QLabel("\n Electron Diffraction Parameter")
+        )
         self.main_v_layout.addWidget(self.detec_fix)
 
         self.main_v_layout.addStretch()
 
-        self.lst_var_widg = _get_all_direct_layout_widget_children(self.main_v_layout)
+        self.lst_var_widg = _get_all_direct_layout_widget_children(
+            self.main_v_layout
+        )
 
     def reset_pars(self):
         self.clearLayout(self.main_v_layout)
@@ -1089,12 +1107,16 @@ class RefineBravaiSimplerParamTab(SimpleParamTab):
 
         self.detec_fix = QCheckBox("Set detector.fix=distance")
 
-        box_outlier_algorithm.currentIndexChanged.connect(self.combobox_changed)
+        box_outlier_algorithm.currentIndexChanged.connect(
+            self.combobox_changed
+        )
         self.detec_fix.stateChanged.connect(self.detec_fix_changed)
 
         hbox_lay_outlier_algorithm.addWidget(box_outlier_algorithm)
         self.main_v_layout.addLayout(hbox_lay_outlier_algorithm)
-        self.main_v_layout.addWidget(QLabel("\n Electron Diffraction Parameter"))
+        self.main_v_layout.addWidget(
+            QLabel("\n Electron Diffraction Parameter")
+        )
         self.main_v_layout.addWidget(self.detec_fix)
 
         self.main_v_layout.addStretch()
@@ -1162,8 +1184,10 @@ class RefineSimplerParamTab(SimpleParamTab):
         label_scan_varying = QLabel("Scan varying refinement")
         hbox_lay_scan_varying.addWidget(label_scan_varying)
 
-        box_scan_varying = DefaultComboBox("refinement.parameterisation.scan_varying",
-            ["True", "False", "Auto"], default_index=2)
+        box_scan_varying = DefaultComboBox(
+            "refinement.parameterisation.scan_varying",
+            ["True", "False", "Auto"], default_index=2
+        )
         box_scan_varying.currentIndexChanged.connect(self.combobox_changed)
         hbox_lay_scan_varying.addWidget(box_scan_varying)
         self.main_v_layout.addLayout(hbox_lay_scan_varying)
@@ -1175,14 +1199,18 @@ class RefineSimplerParamTab(SimpleParamTab):
         box_outlier_algorithm = DefaultComboBox(
             "refinement.reflections.outlier.algorithm", ["null", "Auto", "mcd",
             "tukey", "sauter_poon"], default_index=1)
-        box_outlier_algorithm.currentIndexChanged.connect(self.combobox_changed)
+        box_outlier_algorithm.currentIndexChanged.connect(
+            self.combobox_changed
+        )
 
         hbox_lay_outlier_algorithm.addWidget(box_outlier_algorithm)
         self.main_v_layout.addLayout(hbox_lay_outlier_algorithm)
 
         self.detec_fix = QCheckBox("Set detector.fix=distance")
         self.detec_fix.stateChanged.connect(self.detec_fix_changed)
-        self.main_v_layout.addWidget(QLabel("\n Electron Diffraction Parameter"))
+        self.main_v_layout.addWidget(
+            QLabel("\n Electron Diffraction Parameter")
+        )
         self.main_v_layout.addWidget(self.detec_fix)
 
         self.main_v_layout.addStretch()
