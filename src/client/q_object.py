@@ -867,7 +867,7 @@ class MainObject(QObject):
         try:
             lamb = json_lamb[0]
             print("lamb =", lamb)
-            if lamb < 0.06:
+            if lamb < 0.05:
                 self.param_widgets[self.curr_widg_key]["simple"].set_ed_pars()
 
         except (TypeError, IndexError, AttributeError):
