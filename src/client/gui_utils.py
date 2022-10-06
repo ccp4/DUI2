@@ -479,17 +479,25 @@ def draw_quadratic_bezier_3_points(
     if arrowhead:
         if p1x == p2x:
             scene_obj.addLine(
-                p3x, p3y, p3x - col_size * arrow_head_W, p3y - row_size * arrow_head_H, lin_pen
+                p3x, p3y,
+                p3x - col_size * arrow_head_W, p3y - row_size * arrow_head_H,
+                lin_pen
             )
             scene_obj.addLine(
-                p3x, p3y, p3x - col_size * arrow_head_W, p3y + row_size * arrow_head_H, lin_pen
+                p3x, p3y,
+                p3x - col_size * arrow_head_W, p3y + row_size * arrow_head_H,
+                lin_pen
             )
         else:
             scene_obj.addLine(
-                p3x, p3y, p3x - col_size * arrow_head_H, p3y - row_size * arrow_head_W, lin_pen
+                p3x, p3y,
+                p3x - col_size * arrow_head_H, p3y - row_size * arrow_head_W,
+                lin_pen
             )
             scene_obj.addLine(
-                p3x, p3y, p3x + col_size * arrow_head_H, p3y - row_size * arrow_head_W, lin_pen
+                p3x, p3y,
+                p3x + col_size * arrow_head_H, p3y - row_size * arrow_head_W,
+                lin_pen
             )
 
     if sharp_turns:
@@ -829,7 +837,9 @@ class TreeDirScene(QGraphicsScene):
             row_size, col_size = self.get_coords(0.5, 0.5)
             for pos, node in enumerate(self.nod_lst):
                 if len(node["par_lst"]) > 1:
-                    my_coord_x ,my_coord_y = self.get_coords(pos, node["indent"])
+                    my_coord_x ,my_coord_y = self.get_coords(
+                        pos, node["indent"]
+                    )
                     lst2connect = []
                     for par_pos, prev in enumerate(self.nod_lst[0:pos]):
                         if prev["number"] in node["par_lst"]:
@@ -842,16 +852,16 @@ class TreeDirScene(QGraphicsScene):
 
                     for lst_item in lst2connect:
                         if lst_item[0] != max_pos:
-                            my_parent_coord_x, my_parent_coord_y = self.get_coords(
+                            parent_x, parent_y = self.get_coords(
                                 lst_item[0], lst_item[1]
                             )
                             arr_col = self.get_pen_colour(node["stp_stat"])
                             draw_quadratic_bezier_3_points(
                                 self,
-                                my_parent_coord_x + self.f_width * 2.4,
-                                my_parent_coord_y,
+                                parent_x + self.f_width * 2.4,
+                                parent_y,
                                 my_coord_x + self.f_width * 0.5,
-                                my_parent_coord_y,
+                                parent_y,
                                 my_coord_x + self.f_width * 0.5,
                                 my_coord_y - self.f_height * 0.95,
                                 arr_col, row_size, col_size
@@ -862,15 +872,15 @@ class TreeDirScene(QGraphicsScene):
                 if pos > 0:
                     for inner_row, inner_node in enumerate(self.nod_lst):
                         if inner_node["number"] == node["low_par_nod_num"]:
-                            my_parent_coord_x, my_parent_coord_y = self.get_coords(
+                            parent_x, parent_y = self.get_coords(
                                 inner_row, node["parent_indent"]
                             )
                             arr_col = self.get_pen_colour(node["stp_stat"])
                             draw_quadratic_bezier_3_points(
                                 self,
-                                my_parent_coord_x,
-                                my_parent_coord_y + self.f_height * 0.9,
-                                my_parent_coord_x, my_coord_y,
+                                parent_x,
+                                parent_y + self.f_height * 0.9,
+                                parent_x, my_coord_y,
                                 my_coord_x - self.f_width * 1.6,
                                 my_coord_y,
                                 arr_col, row_size, col_size
