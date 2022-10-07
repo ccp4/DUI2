@@ -1337,19 +1337,17 @@ class SymmetrySimplerParamTab(SimpleParamTab):
         hbox_d_min = QHBoxLayout()
         hbox_d_min.addWidget(label_d_min)
 
-        d_min_spn_bx = QDoubleSpinBox()
-        d_min_spn_bx.local_path = "d_min"
-        d_min_spn_bx.setSpecialValueText("Auto")
-        d_min_spn_bx.setValue(0.0)
-        hbox_d_min.addWidget(d_min_spn_bx)
-
-        d_min_spn_bx.valueChanged.connect(self.spnbox_finished)
+        d_min_line = QLineEdit()
+        d_min_line.setPlaceholderText("Auto")
+        d_min_line.local_path = "d_min"
+        d_min_line.textChanged.connect(self.line_changed)
+        hbox_d_min.addWidget(d_min_line)
 
         self.main_v_layout.addLayout(hbox_d_min)
         self.main_v_layout.addStretch()
 
         self.lst_var_widg = []
-        self.lst_var_widg.append(d_min_spn_bx)
+        self.lst_var_widg.append(d_min_line)
         self.lst_var_widg.append(label_d_min)
 
     def reset_pars(self):
