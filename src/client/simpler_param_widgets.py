@@ -1004,11 +1004,11 @@ class IndexSimplerParamTab(SimpleParamTab):
         hbox_method.addWidget(box_method_62)
 
         max_cell_label = QLabel("Max cell")
-        max_cell_spn_bx = QDoubleSpinBox()
-        max_cell_spn_bx.setSingleStep(5.0)
-        max_cell_spn_bx.local_path = "indexing.max_cell"
-        max_cell_spn_bx.setSpecialValueText("Auto")
-        max_cell_spn_bx.valueChanged.connect(self.spnbox_finished)
+        max_cell_line = QLineEdit()
+        max_cell_line.setPlaceholderText("Auto")
+        max_cell_line.local_path = "indexing.max_cell"
+        max_cell_line.textChanged.connect(self.line_changed)
+
 
         space_group_label = QLabel("Space group")
         space_group_line = QLineEdit()
@@ -1032,7 +1032,7 @@ class IndexSimplerParamTab(SimpleParamTab):
 
         self.main_v_layout.addLayout(hbox_method)
         qf = QFormLayout()
-        qf.addRow(max_cell_label, max_cell_spn_bx)
+        qf.addRow(max_cell_label, max_cell_line)
         qf.addRow(space_group_label, space_group_line)
         qf.addRow(unit_cell_label, unit_cell_line)
         self.main_v_layout.addLayout(qf)
