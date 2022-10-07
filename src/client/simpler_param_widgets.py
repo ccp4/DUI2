@@ -1009,7 +1009,6 @@ class IndexSimplerParamTab(SimpleParamTab):
         max_cell_line.local_path = "indexing.max_cell"
         max_cell_line.textChanged.connect(self.line_changed)
 
-
         space_group_label = QLabel("Space group")
         space_group_line = QLineEdit()
         # Simple validator to allow only characters in H-M symbols
@@ -1302,12 +1301,12 @@ class IntegrateSimplerParamTab(SimpleParamTab):
         hbox_d_min = QHBoxLayout()
         label_d_min = QLabel("High resolution limit")
         hbox_d_min.addWidget(label_d_min)
-        d_min_spn_bx = QDoubleSpinBox()
-        d_min_spn_bx.local_path = "prediction.d_min"
-        d_min_spn_bx.setSpecialValueText("None")
-        d_min_spn_bx.setValue(0.0)
-        hbox_d_min.addWidget(d_min_spn_bx)
-        d_min_spn_bx.valueChanged.connect(self.spnbox_finished)
+        d_min_line = QLineEdit()
+        d_min_line.setPlaceholderText("None")
+        d_min_line.local_path = "prediction.d_min"
+        d_min_line.textChanged.connect(self.line_changed)
+        hbox_d_min.addWidget(d_min_line)
+
         self.main_v_layout.addLayout(hbox_d_min)
 
         self.main_v_layout.addStretch()
