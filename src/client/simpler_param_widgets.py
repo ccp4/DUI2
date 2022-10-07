@@ -1391,14 +1391,13 @@ class ScaleSimplerParamTab(SimpleParamTab):
 
         hbox_d_min = QHBoxLayout()
         d_min_label = QLabel("High resolution limit")
-        d_min_spn_bx = QDoubleSpinBox()
-        d_min_spn_bx.local_path = "cut_data.d_min"
-        d_min_spn_bx.setSpecialValueText("None")
-        d_min_spn_bx.setValue(0.0)
         hbox_d_min.addWidget(d_min_label)
-        hbox_d_min.addWidget(d_min_spn_bx)
 
-        d_min_spn_bx.valueChanged.connect(self.spnbox_finished)
+        d_min_line = QLineEdit()
+        d_min_line.setPlaceholderText("None")
+        d_min_line.local_path = "cut_data.d_min"
+        d_min_line.textChanged.connect(self.line_changed)
+        hbox_d_min.addWidget(d_min_line)
 
         self.main_v_layout.addLayout(hbox_lay_mod)
         self.main_v_layout.addLayout(hbox_lay_wgh_opt_err)
@@ -1410,7 +1409,7 @@ class ScaleSimplerParamTab(SimpleParamTab):
         self.lst_var_widg.append(label_mod)
         self.lst_var_widg.append(box_wgh_opt_err)
         self.lst_var_widg.append(label_wgh_opt_err)
-        self.lst_var_widg.append(d_min_spn_bx)
+        self.lst_var_widg.append(d_min_line)
         self.lst_var_widg.append(d_min_label)
 
     def reset_pars(self):
