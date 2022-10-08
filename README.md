@@ -26,10 +26,9 @@ There are three available command line tools in the final product:
 
 2. Server App (Which actually runs Dials commands)
 
-TBD
+       dials.python DUI2/src/only_server.py host=MY_HOST port=MY_PORT init_path=/PATH/TO/USER/DATA
 
 3. Client App (GUI front end)
 
-TBD
-
+       dials.python DUI2/src/only_client.py url=http://...[URL of the server]
 
