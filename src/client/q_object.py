@@ -87,8 +87,12 @@ class MainObject(QObject):
             self.window.ImportScrollArea.setWidget(imp_widg)
 
             self.expr_widg = ExportWidget()
-            self.expr_widg.all_items_changed.connect(self.all_items_param_changed)
-            self.expr_widg.find_scaled_before.connect(self.search_in_parent_nodes)
+            self.expr_widg.all_items_changed.connect(
+                self.all_items_param_changed
+            )
+            self.expr_widg.find_scaled_before.connect(
+                self.search_in_parent_nodes
+            )
             self.window.ExportScrollArea.setWidget(self.expr_widg)
 
             self.opt_cmd_lst = get_optional_list("get_optional_command_list")
@@ -102,7 +106,9 @@ class MainObject(QObject):
             )
 
             self.mask_widg = MaskWidget()
-            self.mask_widg.all_items_changed.connect(self.all_items_param_changed)
+            self.mask_widg.all_items_changed.connect(
+                self.all_items_param_changed
+            )
             self.mask_widg.all_items_changed.connect(self.tmp_mask_changed)
             self.mask_widg.component_changed.connect(self.mask_comp_changed)
             self.window.MaskScrollArea.setWidget(self.mask_widg)
@@ -167,7 +173,8 @@ class MainObject(QObject):
                 refi_brv_simpl_widg
             )
             rb_advanced_parameters = build_advanced_params_widget(
-                "refine_bravais_settings_params", self.window.RefineBravaisSearchLayout
+                "refine_bravais_settings_params",
+                self.window.RefineBravaisSearchLayout
             )
             rb_advanced_parameters.item_changed.connect(
                 self.item_param_changed
@@ -293,7 +300,9 @@ class MainObject(QObject):
 
         self.param_widgets["find_spots"]["simple"] = find_simpl_widg
         self.param_widgets["find_spots"]["advanced"] = fd_advanced_parameters
-        self.param_widgets["find_spots"]["main_page"] = self.window.FindspotsPage
+        self.param_widgets[
+            "find_spots"
+        ]["main_page"] = self.window.FindspotsPage
 
         self.param_widgets["apply_mask"]["simple"] = self.mask_widg
         self.param_widgets["apply_mask"]["advanced"] = None
@@ -325,7 +334,9 @@ class MainObject(QObject):
 
         self.param_widgets["integrate"]["simple"] = integr_simpl_widg
         self.param_widgets["integrate"]["advanced"] = it_advanced_parameters
-        self.param_widgets["integrate"]["main_page"] = self.window.IntegratePage
+        self.param_widgets[
+            "integrate"
+        ]["main_page"] = self.window.IntegratePage
 
         self.param_widgets["symmetry"]["simple"] = sym_simpl_widg
         self.param_widgets["symmetry"]["advanced"] = sm_advanced_parameters
@@ -476,8 +487,10 @@ class MainObject(QObject):
     def exit_triggered(self):
         print("exit_triggered(QObject)")
         msgBox  = QMessageBox()
-        txt_exit =  "If you are closing by accident, you don\'t need to worry.    \n"
-        txt_exit += "Just launch Dui2 again and it will pickup just where it left off.  "
+        txt_exit =  "If you are closing by accident,"
+        txt_exit += " you don\'t need to worry.    \n"
+        txt_exit += "Just launch Dui2 again and "
+        txt_exit += "it will pickup just where it left off.  "
         msgBox.setText(txt_exit)
         msgBox.exec()
         self.parent_app.exit()
@@ -960,9 +973,13 @@ class MainObject(QObject):
     def check_if_exported(self):
         try:
             if(
-                self.server_nod_lst[self.curr_nod_num]["status"]  == "Succeeded"
+                self.server_nod_lst[self.curr_nod_num][
+                    "status"
+                ]  == "Succeeded"
                 and
-                self.server_nod_lst[self.curr_nod_num]["cmd2show"][0] == "dials.export"
+                self.server_nod_lst[self.curr_nod_num][
+                    "cmd2show"
+                ][0] == "dials.export"
             ):
                 enabl = True
 
@@ -972,7 +989,9 @@ class MainObject(QObject):
         except IndexError:
             enabl = False
 
-        self.expr_widg.set_download_stat(do_enable = enabl, nod_num = self.curr_nod_num)
+        self.expr_widg.set_download_stat(
+            do_enable = enabl, nod_num = self.curr_nod_num
+        )
 
     def display(self):
         self.tree_scene.draw_tree_graph(
