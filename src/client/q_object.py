@@ -32,7 +32,7 @@ from PySide2.QtWebEngineWidgets import QWebEngineView
 
 from client.gui_utils import (
     TreeDirScene, widgets_defs, get_widget_def_dict,
-    find_scale_cmd, find_next_cmd
+    find_scale_cmd, find_next_cmd, check_if_predict_n_report
 )
 from client.outputs import DoLoadHTML, ShowLog, HandleReciprocalLatticeView
 from client.img_view import DoImageView
@@ -803,6 +803,9 @@ class MainObject(QObject):
         )
         self.check_nxt_btn()
         self.curr_widg_key = str_key
+        self.window.RunPedictAndReportCheckBox.setChecked(
+            check_if_predict_n_report(str_key)
+        )
 
     def reset_param(self):
         self.reseting = True

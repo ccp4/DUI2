@@ -29,6 +29,7 @@ from client.gui_utils import AdvancedParameters, widgets_defs
 from client.init_firts import ini_data
 from shared_modules import format_utils
 
+
 def get_optional_list(cmd_str):
     cmd = {"nod_lst":"", "cmd_lst":[cmd_str]}
 

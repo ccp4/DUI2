@@ -30,6 +30,20 @@ import numpy as np
 
 from shared_modules import format_utils
 
+def check_if_predict_n_report(str_key):
+    should_skip = True
+    if str_key in [
+        "import",
+        "refine_bravais_settings",
+        "generate_mask",
+        "apply_mask",
+        "export",
+    ]:
+        return False
+
+    else:
+        return True
+
 widgets_defs = {
     "Root" : {
         "tooltip"       : "Root node ... Not supposed to run any code",
