@@ -143,11 +143,12 @@ class Mtz_Data_Request(QThread):
 class Run_n_Output(QThread):
     new_line_out = Signal(str, int, str)
     first_line = Signal(int)
-    about_to_end = Signal(int)
-    def __init__(self, request):
+    about_to_end = Signal(int, bool)
+    def __init__(self, request, do_pred_n_rept = False):
         super(Run_n_Output, self).__init__()
         self.request = request
         self.number = None
+        self.do_predict_n_report = do_pred_n_rept
 
     def run(self):
         line_str = ''
@@ -178,7 +179,7 @@ class Run_n_Output(QThread):
 
             self.usleep(1)
 
-        self.about_to_end.emit(self.number)
+        self.about_to_end.emit(self.number, self.do_predict_n_report)
 
 
 class CommandParamControl:
