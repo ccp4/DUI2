@@ -1426,23 +1426,37 @@ class CombineExperimentSimplerParamTab(SimpleParamTab):
         self.setLayout(self.main_v_layout)
 
     def build_pars(self):
-        hbox_lay_dummy_1 = QHBoxLayout()
-        label_dummy_1 = QLabel("Dummy TMP selector")
+        self.main_v_layout.addWidget(QLabel("Reference From Experiment"))
 
-        hbox_lay_dummy_1.addWidget(label_dummy_1)
-        box_dummy_2 = DefaultComboBox(
-            "scope_1.scope_2.definition", [
-                "opt 1", "opt 2", "None", "Auto"
-            ], default_index=1)
-        box_dummy_2.currentIndexChanged.connect(self.combobox_changed)
-        hbox_lay_dummy_1.addWidget(box_dummy_2)
-        self.main_v_layout.addLayout(hbox_lay_dummy_1)
+        beam_line = QLineEdit()
+        beam_line.setPlaceholderText("None")
+        beam_line.local_path = "reference_from_experiment.beam"
+        beam_line.textChanged.connect(self.line_changed)
 
+        hbox_beam = QHBoxLayout()
+        label_beam = QLabel("  -  beam")
+        hbox_beam.addWidget(label_beam)
+        hbox_beam.addWidget(beam_line)
+
+        detec_line = QLineEdit()
+        detec_line.setPlaceholderText("None")
+        detec_line.local_path = "reference_from_experiment.detector"
+        detec_line.textChanged.connect(self.line_changed)
+
+        hbox_detec = QHBoxLayout()
+        label_detec = QLabel("  -  detector")
+        hbox_detec.addWidget(label_detec)
+        hbox_detec.addWidget(detec_line)
+
+        self.main_v_layout.addLayout(hbox_beam)
+        self.main_v_layout.addLayout(hbox_detec)
         self.main_v_layout.addStretch()
 
         self.lst_var_widg = []
-        self.lst_var_widg.append(box_dummy_2)
-        self.lst_var_widg.append(label_dummy_1)
+        self.lst_var_widg.append(label_beam)
+        self.lst_var_widg.append(beam_line)
+        self.lst_var_widg.append(label_detec)
+        self.lst_var_widg.append(detec_line)
 
     def reset_pars(self):
         self.clearLayout(self.main_v_layout)
