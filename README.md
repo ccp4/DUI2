@@ -40,13 +40,13 @@ First download install script for `DUI2`:
 
       curl -L -O https://raw.githubusercontent.com/ccp4/DUI2/master/install_dui2_after_ccp4_w_curl.sh
 
-Run the downloaded script (bash):
+Run the downloaded script with `bash`:
 
       bash install_dui2_after_ccp4_w_curl.sh
 
 Follow the instruction at the end of the script.
 
-The same tools as if installed with conda and git are available, just different ways to invoke:
+The same tools as if installed with git and conda are available, just different ways to invoke:
 
 1. Fully local App (running both, server and client locally):
 
