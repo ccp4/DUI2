@@ -4,13 +4,16 @@ INI_DIR_PATH=$(pwd)
 printf "========================================\n"
 printf "#           DOWNLOADING DUI2            #\n"
 printf "========================================\n\n"
-curl -L -O https://github.com/ccp4/DUI2/archive/refs/tags/v0.91.zip
+#TAG_VER="v0.91.zip"
+TAG_VER="0.91"
+TO_CURL="https://github.com/ccp4/DUI2/archive/refs/tags/v$TAG_VER.zip"
+curl -L -O $TO_CURL
 printf "========================================\n"
 printf "#       DUI2 DOWNLOADED (as .zip)      #\n"
 printf "========================================\n\n"
-unzip v0.91.zip
-mv DUI2-0.91 DUI2
-rm v0.91.zip
+mv "v$TAG_VER.zip" DUI2.zip
+unzip DUI2.zip
+rm DUI2.zip
 printf "========================================\n"
 printf "  Done   \n"
 printf "========================================\n\n"
@@ -18,13 +21,13 @@ printf "Setting up launchers ...\n"
 mkdir dui_cmd_tools
 cd dui_cmd_tools
 CMD_TOOLS_PATH=$(pwd)
-CLIENT_EXE_CMD="dials.python $INI_DIR_PATH/DUI2/src/only_client.py \$@"
+CLIENT_EXE_CMD="dials.python $INI_DIR_PATH/DUI2-$TAG_VER/src/only_client.py \$@"
 echo $CLIENT_EXE_CMD > dui_client
 chmod +x dui_client
-SERVER_EXE_CMD="dials.python $INI_DIR_PATH/DUI2/src/only_server.py \$@"
+SERVER_EXE_CMD="dials.python $INI_DIR_PATH/DUI2-$TAG_VER/src/only_server.py \$@"
 echo $SERVER_EXE_CMD > dui_server
 chmod +x dui_server
-ALL_LOCAL_CMD="dials.python $INI_DIR_PATH/DUI2/src/all_local.py \$@"
+ALL_LOCAL_CMD="dials.python $INI_DIR_PATH/DUI2-$TAG_VER/src/all_local.py \$@"
 echo $ALL_LOCAL_CMD > dui_all_local
 chmod +x dui_all_local
 printf " ... Done\n\n"
