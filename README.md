@@ -15,7 +15,7 @@ First install `pyside2`:
 
 Clone the DUI2 repository (pre-release branch):
 
-       git clone -b V0.9 https://github.com/ccp4/DUI2.git
+       git clone -b v0.91 https://github.com/ccp4/DUI2.git
 
 
 There are three available command line tools in the final product:
