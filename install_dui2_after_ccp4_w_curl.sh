@@ -9,7 +9,7 @@ printf "========================================\n"
 printf "#       DUI2 DOWNLOADED (as .zip)      #\n"
 printf "========================================\n\n"
 unzip v0.91.zip
-mv DUI2-master DUI2
+mv DUI2-0.91 DUI2
 rm v0.91.zip
 printf "========================================\n"
 printf "  Done   \n"
