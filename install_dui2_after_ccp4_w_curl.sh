@@ -4,15 +4,14 @@ INI_DIR_PATH=$(pwd)
 printf "========================================\n"
 printf "#           DOWNLOADING DUI2            #\n"
 printf "========================================\n\n"
-curl -L -O https://github.com/ccp4/DUI2/archive/refs/heads/master.zip
+curl -L -O https://github.com/ccp4/DUI2/archive/refs/tags/v0.91.zip
 printf "========================================\n"
 printf "#       DUI2 DOWNLOADED (as .zip)      #\n"
 printf "========================================\n\n"
-unzip master.zip
+unzip v0.91.zip
 mv DUI2-master DUI2
-rm master.zip
+rm v0.91.zip
 printf "========================================\n"
-printf "  using CURL intead of GIT  \n "
 printf "  Done   \n"
 printf "========================================\n\n"
 printf "Setting up launchers ...\n"
