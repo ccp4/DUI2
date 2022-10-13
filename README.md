@@ -4,7 +4,7 @@ client/server implementation of DUI (Dials User Interface)
 
 ## Requirements
 
-This project relies on an installation of `Python3` with `dials`, `PySide2` and `requests` among other dependencies, there are two ways to install DUI2:
+This project relies on an installation of `python3` with `dials`, `PySide2` and `requests` among other dependencies. There are two ways to install DUI2:
 
 ## Option 1, Installation with curl and ccp4
 
@@ -36,7 +36,7 @@ There are three available command line tools after installation:
 
 ## Option 2, Installation with git and conda
 
-This assumes you have already installed DIALS and have a BASH shell active with the DIALS environment sourced (. dials_env.sh).
+This assumes you have already installed DIALS and have a BASH shell active with the DIALS environment sourced, for example: `. dials_env.sh`.
 
 First install `pyside2`:
 
