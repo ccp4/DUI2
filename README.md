@@ -8,7 +8,7 @@ This project relies on an installation of `python3` with `dials`, `PySide2` and 
 
 ## Option 1, Installation with curl and ccp4
 
-This assumes you have already installed and set up CCP4, which include `dials` and `PySide2`.
+This assumes you have already installed and set up CCP4, which include `dials` and `pyside2`.
 
 First download install script for `DUI2`:
 
