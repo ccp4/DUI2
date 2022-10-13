@@ -14,7 +14,7 @@ First download install script for `DUI2`:
 
       curl -L -O https://raw.githubusercontent.com/ccp4/DUI2/master/install_dui2_after_ccp4_w_curl.sh
 
-Run the downloaded script with `bash`:
+Next run the downloaded script with `bash`:
 
       bash install_dui2_after_ccp4_w_curl.sh
 
@@ -42,7 +42,7 @@ First install `pyside2`:
 
       libtbx.conda install -c conda-forge pyside2
 
-Clone the DUI2 repository (pre-release branch):
+Next clone the DUI2 repository (pre-release branch):
 
        git clone -b v0.91 https://github.com/ccp4/DUI2.git
 
