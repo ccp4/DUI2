@@ -54,9 +54,9 @@ The same tools as if installed with git and conda are available, just different 
 
 2. Server App (Which actually runs Dials commands)
 
-       dui_server
+       dui_server host=MY_HOST port=MY_PORT init_path=/PATH/TO/USER/DATA
 
 3. Client App (GUI front end that talks to the server app)
 
-       dui_client
+       dui_client url=http://...[URL of the server]
 
