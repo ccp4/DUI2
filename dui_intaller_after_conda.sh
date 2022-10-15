@@ -2,7 +2,6 @@ echo " ################################################# "
 echo " #   simplified DUI2 installer for developers    # "
 echo " ################################################# "
 echo " "
-echo " "
 echo " installing git "
 echo " "
 conda install -c conda-forge git -y
