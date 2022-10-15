@@ -288,32 +288,30 @@ class ReindexTable(QTableWidget):
         print("\n reset_pars(ReindexTable) \n")
 
     def del_opts_lst(self):
-
         print("del_opts_lst")
         self.clear()
         self.setRowCount(1)
         self.setColumnCount(1)
 
+
 def get_label_from_str_list(log_data):
+    for num, single_line in enumerate(log_data):
+        if single_line[:6] == "Chiral":
+            ini_num = num
 
-        for num, single_line in enumerate(log_data):
-            if single_line[:6] == "Chiral":
-                ini_num = num
+        if single_line[:6] == "+-----":
+            end_num = num
+            break
 
-            if single_line[:6] == "+-----":
-                end_num = num
-                break
+    print("ini_num =", ini_num)
+    print("end_num =", end_num)
 
-        print("ini_num =", ini_num)
-        print("end_num =", end_num)
+    lst_str = log_data[ini_num:end_num]
+    full_label_str = ""
+    for label_line in lst_str:
+        full_label_str += label_line
 
-        lst_str = log_data[ini_num:end_num]
-        full_label_str = ""
-        for label_line in lst_str:
-            full_label_str += label_line
-
-
-        return full_label_str
+    return full_label_str
 
 
 class MainWindow(QMainWindow):

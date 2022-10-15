@@ -570,7 +570,6 @@ class PopDisplayMenu(QMenu):
         print("new_ref_list")
         self.new_ref_list.emit()
 
-
     def palette_changed_by_user(self, new_palette_num):
         self.palette = self.palette_lst[new_palette_num]
         print("self.palette =", self.palette)
@@ -1067,7 +1066,6 @@ class DoImageView(QObject):
 
         except TypeError:
             (self.x1, self.y1, self.x2, self.y2) = (-1, -1, -1, -1)
-
 
     def get_scale_label(self):
         avg_scale = float(

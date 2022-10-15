@@ -524,8 +524,6 @@ class ShowLog(QObject):
             self.green_color = QColor(155, 255, 155)
             self.blue_color = QColor(155, 155, 255)
 
-
-
     def __call__(self, nod_p_num = 0, do_request = False, stat = "Busy"):
         print("Do Request =", do_request)
         if do_request:

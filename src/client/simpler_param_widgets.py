@@ -662,6 +662,7 @@ class ImportWidget(QWidget):
             str_path, str_value, "... dummy"
         )
 
+
 class MaskWidget(QWidget):
     all_items_changed = Signal(list)
     component_changed = Signal(str)
@@ -936,7 +937,6 @@ class FindspotsSimplerParameterTab(SimpleParamTab):
         #time to add: "spotfinder.threshold.algorithm=radial_profile"
         #default = dispersion_extended
 
-
     def special_check_up(self, param_in, value_in):
         print(
             "special_check_up(Spotfinding): param_in, value_in",
@@ -1178,7 +1178,6 @@ class RefineSimplerParamTab(SimpleParamTab):
         self.setLayout(self.main_v_layout)
 
     def build_pars(self):
-
         hbox_lay_scan_varying = QHBoxLayout()
         label_scan_varying = QLabel("Scan varying refinement")
         hbox_lay_scan_varying.addWidget(label_scan_varying)
@@ -1575,7 +1574,6 @@ class ExportWidget(QWidget):
 
     def set_ed_pars(self):
         print("set_ed_pars(SimpleParamTab)")
-
 
     def is_scale_parent(self, scale_in_parents):
         if scale_in_parents:

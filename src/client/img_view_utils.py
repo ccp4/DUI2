@@ -23,6 +23,7 @@ def load_img_json_w_str(
         print("d1, d2 =", d1, d2)
         arr_1d = np.fromstring(str_data, dtype = float, sep = ',')
         np_array_out = arr_1d.reshape(d1, d2)
+
     except zlib.error:
         print("zlib. err catch (load_img_json_w_str)")
         return None
@@ -65,8 +66,8 @@ def load_mask_img_json_w_str(
         print("d1, d2 =", d1, d2)
         n_tup = tuple(str_data)
         arr_1d = np.asarray(n_tup, dtype = 'float')
-
         np_array_out = arr_1d.reshape(d1, d2)
+
     except zlib.error:
         print("zlib. err catch (load_img_json_w_str)")
         return None
