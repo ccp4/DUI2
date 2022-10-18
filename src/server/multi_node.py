@@ -606,12 +606,12 @@ class Runner(object):
 
         node2run = self._create_step(tmp_parent_lst_in)
         for uni_cmd in unalias_cmd_lst:
-            #try:
-            node2run(uni_cmd, req_obj)
+            try:
+                node2run(uni_cmd, req_obj)
 
-            #except UnboundLocalError:
-            #    print("\n ***  err catch  *** \n wrong line \n not running")
-            #    print("uni_cmd =", uni_cmd)
+            except UnboundLocalError:
+                print("\n ***  err catch  *** \n wrong line \n not running")
+                print("uni_cmd =", uni_cmd)
 
             self._save_state()
 

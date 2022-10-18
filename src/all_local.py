@@ -3,11 +3,10 @@
 # to be useful) - will get closed on process end.
 
 # comment the next 3 lines if you want to see your log prints
-#import sys, datetime
-#filename = datetime.datetime.now().strftime("DUI2-debug%y%m%d-%H%M%S.txt")
-#sys.stdout = open(filename, "w")
+import sys, datetime
+filename = datetime.datetime.now().strftime("DUI2-debug%y%m%d-%H%M%S.txt")
+sys.stdout = open(filename, "w")
 
-#to_remove = '''
 from multiprocessing import Process, Pipe
 from server import run_server
 from client import run_client
@@ -41,17 +40,3 @@ if __name__ == '__main__':
 
     prcs_serv.join()
     print("Closing server naturally")
-
-    tmp_working_on = '''
-from shared_modules import all_local_server
-server_par_def = (
-    ("init_path", None),
-    ("port", 45678),
-    ("host", "localhost"),
-    ("all_local", "true"),
-    ("windows_exe", "false"),
-)
-'''
-
-if __name__ == '__main__':
-        all_local_server.main(server_par_def)
