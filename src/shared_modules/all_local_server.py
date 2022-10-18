@@ -33,79 +33,7 @@ from server.init_first import ini_data
 class ReqHandler(object):
     def __init__(self, runner_in):
         self.tree_runner = runner_in
-    to_remove = '''
-    def do_POST(self):
-        content_len = int(self.headers.get('Content-Length'))
-        post_body = self.rfile.read(content_len)
-        body_str = str(post_body.decode('utf-8'))
-        url_dict = parse_qs(body_str)
-        print("\n url_dict =", url_dict, "\n")
-        try:
-            tmp_cmd2lst = url_dict["cmd_lst"]
-            print("tmp_cmd2lst =", tmp_cmd2lst)
 
-        except KeyError:
-            print("no command in request (KeyError)")
-            self.send_header('Content-type', 'text/plain')
-            self.end_headers()
-            self.wfile.write(bytes(
-                'no command in request (Key err catch ) \n', 'utf-8'
-            ))
-            self.wfile.write(bytes('/*EOF*/', 'utf-8'))
-            return
-
-        cmd_lst = []
-        for inner_str in tmp_cmd2lst:
-            cmd_lst.append(inner_str.split(" "))
-
-        nod_lst = []
-        try:
-            for inner_str in url_dict["nod_lst"]:
-                nod_lst.append(int(inner_str))
-
-        except KeyError:
-            print("no node number provided")
-
-        cmd_dict = {"nod_lst":nod_lst,
-                    "cmd_lst":cmd_lst}
-
-        found_dials_command = False
-        print("cmd_lst = ", cmd_lst)
-        for inner_lst in cmd_lst:
-            for single_str in inner_lst:
-                if "dials" in single_str:
-                    found_dials_command = True
-
-                print("single_str = ", single_str)
-
-        if found_dials_command:
-            try:
-                self.tree_runner.run_dials_command(cmd_dict, self)
-                print("sending /*EOF*/ (Dials CMD)")
-                self.wfile.write(bytes('/*EOF*/', 'utf-8'))
-
-            except BrokenPipeError:
-                print("\n** BrokenPipe err catch  ** while sending EOF or JSON\n")
-
-            except ConnectionResetError:
-                print(
-                    "\n** ConnectionReset err catch  ** while sending EOF or JSON\n"
-                )
-
-        else:
-            try:
-                self.tree_runner.run_dui_command(cmd_dict, self)
-                print("sending /*EOF*/ (Dui2 CMD)")
-                self.wfile.write(bytes('/*EOF*/', 'utf-8'))
-
-            except BrokenPipeError:
-                print("\n** BrokenPipe err catch  ** while sending EOF or JSON\n")
-
-            except ConnectionResetError:
-                print(
-                    "\n** ConnectionReset err catch  ** while sending EOF or JSON\n"
-                )
-    '''
     def fake_post(self, url_dict):
         print("\n url_dict =", url_dict, "\n")
 
@@ -147,25 +75,16 @@ class ReqHandler(object):
             #self.wfile.write(bytes('/*EOF*/', 'utf-8'))
             print('/*EOF*/')
 
-    def do_GET(self):
 
+    def fake_get(self, url_dict):
+        '''
         self.send_response(200)
         url_path = self.path
         url_dict = parse_qs(urlparse(url_path).query)
-        print("\n url_dict =", url_dict, "\n")
-        try:
-            tmp_cmd2lst = url_dict["cmd_lst"]
-            print("tmp_cmd2lst =", tmp_cmd2lst)
+        '''
 
-        except KeyError:
-            print("no command in request (Key err catch )")
-            self.send_header('Content-type', 'text/plain')
-            self.end_headers()
-            self.wfile.write(bytes(
-                'no command in request (KeyError) \n', 'utf-8'
-            ))
-            self.wfile.write(bytes('/*EOF*/', 'utf-8'))
-            return
+        print("\n url_dict =", url_dict, "\n")
+        tmp_cmd2lst = url_dict["cmd_lst"]
 
         cmd_lst = []
         for inner_str in tmp_cmd2lst:
@@ -181,102 +100,32 @@ class ReqHandler(object):
 
         cmd_dict = {"nod_lst":nod_lst,
                     "cmd_lst":cmd_lst}
-        try:
-            #lst_out = []
-            lst_out = self.tree_runner.run_get_data(cmd_dict)
 
-            if type(lst_out) is list or type(lst_out) is dict:
-                self.send_header('Content-type', 'text/plain')
-                self.end_headers()
-                json_str = json.dumps(lst_out) + '\n'
-                self.wfile.write(bytes(json_str, 'utf-8'))
+        lst_out = self.tree_runner.run_get_data(cmd_dict)
 
-                if lst_out == ['closed received']:
-                    print("Client app closed")
-                    print("run_local =", run_local)
-                    sep_lin = "#" * 44 + "\n"
-                    if run_local == True:
-                        print(
-                            "\n " + sep_lin,
-                            " closing the server as it is running in ",
-                            "\n  the same computer as the client \n",
-                            sep_lin,
-                        )
-                        self.server.shutdown()
+        if type(lst_out) is list or type(lst_out) is dict:
+            json_str = json.dumps(lst_out) + '\n'
 
-                    else:
-                        print(
-                            "\n " + sep_lin,
-                            " keeping server running as the client might",
-                            "\n  need to continue processing the same \n",
-                            " images latter \n",
-                            sep_lin,
-                        )
-
-            elif type(lst_out) is bytes:
-                byt_data = zlib.compress(lst_out)
-                siz_dat = str(len(byt_data))
-                print("size =", siz_dat)
-
-                self.send_header('Content-type', 'application/zlib')
-                self.send_header('Content-Length', siz_dat)
-                self.end_headers()
-
-                self.wfile.write(bytes(byt_data))
+            #self.wfile.write(bytes(json_str, 'utf-8'))
+            print(json_str)
 
 
-            print("sending /*EOF*/")
-            self.wfile.write(bytes('/*EOF*/', 'utf-8'))
+        elif type(lst_out) is bytes:
+            byt_data = zlib.compress(lst_out)
+            siz_dat = str(len(byt_data))
+            print("size =", siz_dat)
 
-        except BrokenPipeError:
-            print("\n BrokenPipe err catch  while sending EOF or JSON \n")
+            #self.wfile.write(bytes(byt_data))
+            print(bytes(byt_data))
 
-        except ConnectionResetError:
-            print(
-                "\n ** ConnectionReset err catch  ** while sending EOF or JSON\n"
-            )
 
+        print("sending /*EOF*/")
+        #self.wfile.write(bytes('/*EOF*/', 'utf-8'))
+        print('/*EOF*/')
 
 
 def main(par_def = None, connection_out = None):
-    print("                                                                                                ")
-    print("                                                          .. .. .....                           ")
-    print("                                                   ........................                     ")
-    print("                                              ........................'..'..'...                ")
-    print("                                           ..............................'..'..'..              ")
-    print("                                         ................................'..'..'.....           ")
-    print("                                       ........................................'....'..         ")
-    print("                                    ................................................'....       ")
-    print("                                   .......................................................      ")
-    print("             ................     ........'..........'.....................................     ")
-    print("         .......'..'..''..'..'...'...'.....................................................'    ")
-    print("       .'.'..'.''.''..'..'..''..'...........'..............................................'.   ")
-    print("     ..'.'.''..'....'...''..'......'...'.......'...........................................'..  ")
-    print("   .'.''''.'..,',,,','','..'..',,''.......','.'.......,,..........'.......'..'.............'..  ")
-    print("  .''.'.'.''',k0O00O00OOOkd,..'xKO,..''.'lkKKOo..''..;0Kk.....'....'d00KK0KKKKKKc.............. ")
-    print("  .'.'.''''..,O00olllollok0O,''x0O'.....x00do0Kd.....cKKk'.........xK0olllllcllo,.............. ")
-    print(" .''''''.'..',k00;'..'..'o00;'.x0O'.'..o0Kx.'oK0d'..'cXXk...'......xK0cclc::::;'..............' ")
-    print(" ''''.'.''''''kK0;''''..'dKO;..d0O,'..l0K0l:::O00d...:K0x...'......,dO00KKKKKKKKd.............' ")
-    print(" ''''''''.''.,k0O;..'..''d0O,..xK0,'.cO00000KK00KKo'.:K0k......'..........''.:KX0'............. ")
-    print(" '''''''''''',O0Okkxxxxxk00o..'x0O;.;00k'','',,:0K0c..d0KkxxkkkkkOlckkxkkkkkkOKXx.............. ")
-    print(" ''''''''''.',lddddddddooo:'.''ldo'.loo;.'......,odo'.':oddddooodx::dddddoodddl:............... ")
-    print(" .''''''.'''''','',,,,,,','.',,,,,'.','.,''.,,...,...''..''..'...''.''........................  ")
-    print("  .''''''''''',,',,,,;'',,,,',,,;;,,,,,,;''.,,'.,,'',,''','',,..,,'',..','.''',''.............  ")
-    print("   .''''''.'''''.''.''''''.''..'''.''..'...''..''.......'...'................................   ")
-    print("    .''''''''''.'''''..''.'''..'..''..'''..'...'...'...........'............................    ")
-    print("      .'''''''''''.''.'''.''..''''''..'...''..''......'...'................................     ")
-    print("        .''''''''''''.''..''.''... ..'''..'...'..''...'..........'.......................       ")
-    print("          ...'''''''.''''''.....     .'..'..'''..'.......'...'.........................         ")
-    print("                ..........             .''..''..'...'...'..........'.................           ")
-    print("                                         ..''..''..'...'...'...'...................             ")
-    print("                                           ....'..'...''..'.......................              ")
-    print("                                              ...''..''..'..'...'.............                  ")
-    print("                                                    ....'..''..'..........                      ")
-    print("                                                                                                ")
-
-
-    ################################################ PROPER MAIN
-
+    format_utils.print_logo()
     data_init = ini_data()
     data_init.set_data(par_def)
 
@@ -325,5 +174,7 @@ def main(par_def = None, connection_out = None):
 
         full_cmd = {"nod_lst":[parent], "cmd_lst":[cmd]}
         my_handler.fake_post(full_cmd)
+        #my_handler.fake_get(full_cmd)
+        my_handler.fake_get({"nod_lst":[0], "cmd_lst":["display"]})
 
     print("\n ... Done")
