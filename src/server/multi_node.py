@@ -186,10 +186,10 @@ def add_log_line(new_line, nod_req):
         print("<<< adding \\n >>> to output line:", new_line)
         new_line += "\n"
 
+    Error_Broken_Pipes = 0
     if nod_req is not None:
         try:
             nod_req.wfile.write(bytes(new_line , 'utf-8'))
-            Error_Broken_Pipes = 0
 
         except BrokenPipeError:
             Error_Broken_Pipes = 1
@@ -606,12 +606,12 @@ class Runner(object):
 
         node2run = self._create_step(tmp_parent_lst_in)
         for uni_cmd in unalias_cmd_lst:
-            try:
-                node2run(uni_cmd, req_obj)
+            #try:
+            node2run(uni_cmd, req_obj)
 
-            except UnboundLocalError:
-                print("\n ***  err catch  *** \n wrong line \n not running")
-                print("uni_cmd =", uni_cmd)
+            #except UnboundLocalError:
+            #    print("\n ***  err catch  *** \n wrong line \n not running")
+            #    print("uni_cmd =", uni_cmd)
 
             self._save_state()
 
