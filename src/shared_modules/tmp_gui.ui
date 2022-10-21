@@ -17,12 +17,15 @@
    <item row="0" column="0">
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="QTextEdit" name="textEdit"/>
+      <widget class="QTextEdit" name="OutTextEdit"/>
      </item>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <widget class="QLineEdit" name="lineEdit"/>
+        <widget class="QSpinBox" name="NumSpinBox"/>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="CmdLineEdit"/>
        </item>
        <item>
         <widget class="QPushButton" name="RunPushButton">
