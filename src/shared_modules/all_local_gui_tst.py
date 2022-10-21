@@ -1,4 +1,4 @@
-import sys, os, time
+import sys, os, time, json
 from PySide2.QtCore import *
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
@@ -10,15 +10,14 @@ from server.init_first import ini_data
 
 
 class my_one(QThread):
-    def __init__(self, times_in = 3):
+    def __init__(self, handler, cmd_in):
         super(my_one, self).__init__()
-        self.times = times_in
+        self.my_handler = handler
+        self.my_cmd = cmd_in
 
     def run(self):
-        print("times entered =", self.times)
-        for rept in range(self.times):
-            print("rep n", rept, " of ", self.times)
-            time.sleep(1)
+        self.my_handler.fake_post(self.my_cmd)
+        self.my_handler.fake_get({"nod_lst":[0], "cmd_lst":["display"]})
 
 
 class MultiRunner(QObject):
@@ -26,8 +25,8 @@ class MultiRunner(QObject):
         super(MultiRunner, self).__init__()
         self.thread_lst = []
 
-    def run_one_work(self):
-        new_thread = my_one(len(self.thread_lst) + 1)
+    def run_one_work(self, handler, cmd_in):
+        new_thread = my_one(handler, cmd_in)
         new_thread.start()
         self.thread_lst.append(new_thread)
 
@@ -51,17 +50,15 @@ class MainGuiObject(QObject):
 
     def run_one_clicked(self):
         print("run_one_clicked(MainGuiObject)")
-        self.m_run.run_one_work()
-
-        cmd_in = str(self.window.NumSpinBox.value())
-        cmd_in += "," + self.window.CmdLineEdit.text()
-        print(cmd_in)
-        self.window.OutTextEdit.insertPlainText(cmd_in)
+        cmd_in = {
+            "nod_lst":[int(self.window.NumSpinBox.value())],
+            "cmd_lst":[str(self.window.CmdLineEdit.text())]
+        }
+        self.window.OutTextEdit.insertPlainText(str(cmd_in))
+        self.m_run.run_one_work(self.handler, cmd_in)
 
 
 def main(par_def = None):
-
-    ########################################################################################################
     format_utils.print_logo()
     data_init = ini_data()
     data_init.set_data(par_def)
@@ -96,8 +93,6 @@ def main(par_def = None):
         cmd_runner = multi_node.Runner(None)
 
     cmd_runner.set_dir_tree(tree_dic_lst)
-
-    ########################################################################################################
     app = QApplication(sys.argv)
     m_obj = MainGuiObject(parent = app, cmd_tree_runner = cmd_runner)
     sys.exit(app.exec_())
