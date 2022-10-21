@@ -46,10 +46,10 @@ class MainImgViewObject(QObject):
         print("run_one_clicked(MainImgViewObject)")
         self.m_run.run_one_work()
 
-        txt_in = str(self.window.NumSpinBox.value())
-        txt_in += "," + self.window.CmdLineEdit.text()
-        print(txt_in)
-        self.window.OutTextEdit.insertPlainText(txt_in)
+        cmd_in = str(self.window.NumSpinBox.value())
+        cmd_in += "," + self.window.CmdLineEdit.text()
+        print(cmd_in)
+        self.window.OutTextEdit.insertPlainText(cmd_in)
 
 
 def main():
