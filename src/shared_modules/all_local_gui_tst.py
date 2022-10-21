@@ -31,8 +31,12 @@ class MainImgViewObject(QObject):
     def __init__(self, parent = None):
         super(MainImgViewObject, self).__init__(parent)
         self.parent_app = parent
-        self.window = QtUiTools.QUiLoader().load("tmp_gui.ui")
-        self.window.setWindowTitle("test")
+
+        self.ui_dir_path = os.path.dirname(os.path.abspath(__file__))
+        ui_path = self.ui_dir_path + os.sep + "tmp_gui.ui"
+        self.window = QtUiTools.QUiLoader().load(ui_path)
+        self.window.setWindowTitle("Test DUI2")
+
         print("inside QObject")
         self.m_run = MultiRunner()
         self.window.RunPushButton.clicked.connect(self.run_one_clicked)
