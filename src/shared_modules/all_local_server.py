@@ -109,7 +109,6 @@ class ReqHandler(object):
             #self.wfile.write(bytes(json_str, 'utf-8'))
             print(json_str)
 
-
         elif type(lst_out) is bytes:
             byt_data = zlib.compress(lst_out)
             siz_dat = str(len(byt_data))
@@ -118,13 +117,12 @@ class ReqHandler(object):
             #self.wfile.write(bytes(byt_data))
             print(bytes(byt_data))
 
-
         print("sending /*EOF*/")
         #self.wfile.write(bytes('/*EOF*/', 'utf-8'))
         print('/*EOF*/')
 
 
-def main(par_def = None, connection_out = None):
+def main(par_def = None):
     format_utils.print_logo()
     data_init = ini_data()
     data_init.set_data(par_def)

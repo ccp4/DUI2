@@ -3,6 +3,11 @@ from PySide2.QtCore import *
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 from PySide2 import QtUiTools
+from shared_modules import all_local_server, format_utils
+from server.data_n_json import iter_dict
+from server import multi_node
+from server.init_first import ini_data
+
 
 class my_one(QThread):
     def __init__(self, times_in = 3):
@@ -27,10 +32,12 @@ class MultiRunner(QObject):
         self.thread_lst.append(new_thread)
 
 
-class MainImgViewObject(QObject):
-    def __init__(self, parent = None):
-        super(MainImgViewObject, self).__init__(parent)
+class MainGuiObject(QObject):
+    def __init__(self, parent = None, cmd_tree_runner = None):
+        super(MainGuiObject, self).__init__(parent)
         self.parent_app = parent
+
+        self.handler = all_local_server.ReqHandler(cmd_tree_runner)
 
         self.ui_dir_path = os.path.dirname(os.path.abspath(__file__))
         ui_path = self.ui_dir_path + os.sep + "tmp_gui.ui"
@@ -43,7 +50,7 @@ class MainImgViewObject(QObject):
         self.window.show()
 
     def run_one_clicked(self):
-        print("run_one_clicked(MainImgViewObject)")
+        print("run_one_clicked(MainGuiObject)")
         self.m_run.run_one_work()
 
         cmd_in = str(self.window.NumSpinBox.value())
@@ -52,9 +59,47 @@ class MainImgViewObject(QObject):
         self.window.OutTextEdit.insertPlainText(cmd_in)
 
 
-def main():
+def main(par_def = None):
+
+    ########################################################################################################
+    format_utils.print_logo()
+    data_init = ini_data()
+    data_init.set_data(par_def)
+
+    init_param = format_utils.get_par(par_def, sys.argv[1:])
+    print("init_param(server) =", init_param)
+
+    PORT = int(init_param["port"])
+    HOST = init_param["host"]
+
+    run_local = True
+
+    print("\n run_local =", run_local, "\n")
+
+    tree_ini_path = init_param["init_path"]
+    if tree_ini_path == None:
+        print("\n NOT GIVEN init_path")
+        print(" using the dir from where the commad 'dui_server' was invoqued")
+        tree_ini_path = os.getcwd()
+
+    print(
+        "\n using init path as: <<", tree_ini_path, ">> \n"
+    )
+    tree_dic_lst = iter_dict(tree_ini_path, 0)
+    try:
+        with open("run_data") as json_file:
+            runner_data = json.load(json_file)
+
+        cmd_runner = multi_node.Runner(runner_data)
+
+    except FileNotFoundError:
+        cmd_runner = multi_node.Runner(None)
+
+    cmd_runner.set_dir_tree(tree_dic_lst)
+
+    ########################################################################################################
     app = QApplication(sys.argv)
-    m_obj = MainImgViewObject(parent = app)
+    m_obj = MainGuiObject(parent = app, cmd_tree_runner = cmd_runner)
     sys.exit(app.exec_())
 
 
