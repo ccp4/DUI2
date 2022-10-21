@@ -52,8 +52,6 @@ class MainImgViewObject(QObject):
         self.window.OutTextEdit.insertPlainText(txt_in)
 
 
-
-
 def main():
     app = QApplication(sys.argv)
     m_obj = MainImgViewObject(parent = app)
