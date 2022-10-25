@@ -1,61 +1,28 @@
 import sys, os, time, json
-from PySide2.QtCore import *
-from PySide2.QtWidgets import *
-from PySide2.QtGui import *
-from PySide2 import QtUiTools
 from shared_modules import all_local_server, format_utils
 from server.data_n_json import iter_dict
 from server import multi_node
 from server.init_first import ini_data
 
 
-class my_one(QThread):
-    def __init__(self, handler, cmd_in):
-        super(my_one, self).__init__()
-        self.my_handler = handler
-        self.my_cmd = cmd_in
-
-    def run(self):
-        self.my_handler.fake_post(self.my_cmd)
-        self.my_handler.fake_get({"nod_lst":[0], "cmd_lst":["display"]})
-
-
-class MultiRunner(QObject):
-    def __init__(self):
-        super(MultiRunner, self).__init__()
-        self.thread_lst = []
-
-    def run_one_work(self, handler, cmd_in):
-        new_thread = my_one(handler, cmd_in)
-        new_thread.start()
-        self.thread_lst.append(new_thread)
-
-
-class MainGuiObject(QObject):
-    def __init__(self, parent = None, cmd_tree_runner = None):
-        super(MainGuiObject, self).__init__(parent)
-        self.parent_app = parent
-
+class cli_object(object):
+    def __init__(self, cmd_tree_runner = None):
         self.handler = all_local_server.ReqHandler(cmd_tree_runner)
-
-        self.ui_dir_path = os.path.dirname(os.path.abspath(__file__))
-        ui_path = self.ui_dir_path + os.sep + "tmp_gui.ui"
-        self.window = QtUiTools.QUiLoader().load(ui_path)
-        self.window.setWindowTitle("Test DUI2")
-
         print("inside QObject")
-        self.m_run = MultiRunner()
-        self.window.RunPushButton.clicked.connect(self.run_one_clicked)
-        self.window.show()
 
-    def run_one_clicked(self):
-        print("run_one_clicked(MainGuiObject)")
+    def run_cmd(self, str_in):
+
+        try:
+            [nod_num, str_cmd] = str_in.split(",")
+
+        except ValueError:
+            print("Value Err Catch")
+
         cmd_in = {
-            "nod_lst":[int(self.window.NumSpinBox.value())],
-            "cmd_lst":[str(self.window.CmdLineEdit.text())]
+            "nod_lst":[int(nod_num)], "cmd_lst":[str(str_cmd)]
         }
-        self.window.OutTextEdit.insertPlainText(str(cmd_in))
-        self.m_run.run_one_work(self.handler, cmd_in)
+        self.handler.fake_post(cmd_in)
+        self.handler.fake_get({"nod_lst":[0], "cmd_lst":["display"]})
 
 
 def main(par_def = None):
@@ -93,9 +60,14 @@ def main(par_def = None):
         cmd_runner = multi_node.Runner(None)
 
     cmd_runner.set_dir_tree(tree_dic_lst)
-    app = QApplication(sys.argv)
-    m_obj = MainGuiObject(parent = app, cmd_tree_runner = cmd_runner)
-    sys.exit(app.exec_())
+
+
+    m_obj = cli_object(cmd_tree_runner = cmd_runner)
+
+    for cmd_repeat in range(10):
+        str_in = input("type: \"Node,command\":")
+        m_obj.run_cmd(str_in)
+
 
 
 if __name__ == "__main__":
