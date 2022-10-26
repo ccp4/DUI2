@@ -33,9 +33,6 @@ def main(par_def = None):
     init_param = format_utils.get_par(par_def, sys.argv[1:])
     print("init_param(server) =", init_param)
 
-    PORT = int(init_param["port"])
-    HOST = init_param["host"]
-
     run_local = True
 
     print("\n run_local =", run_local, "\n")
@@ -67,7 +64,6 @@ def main(par_def = None):
     for cmd_repeat in range(10):
         str_in = input("type: \"Node,command\":")
         m_obj.run_cmd(str_in)
-
 
 
 if __name__ == "__main__":

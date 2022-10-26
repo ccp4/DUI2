@@ -66,8 +66,8 @@ def main(par_def = None):
     init_param = format_utils.get_par(par_def, sys.argv[1:])
     print("init_param(server) =", init_param)
 
-    PORT = int(init_param["port"])
-    HOST = init_param["host"]
+    #PORT = int(init_param["port"])
+    #HOST = init_param["host"]
 
     run_local = True
 
