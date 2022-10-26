@@ -25,7 +25,7 @@ import subprocess, psutil
 import os, sys, shutil
 import glob, json, time
 
-from server.data_n_json import get_data_from_steps
+from server.data_n_json import get_data_from_steps, spit_out
 from server.init_first import ini_data
 from shared_modules import format_utils
 
@@ -182,20 +182,28 @@ def find_if_in_list(inner_command):
 
 
 def add_log_line(new_line, nod_req):
+    '''
     if new_line[-1:] != "\n" and len(new_line) > 1:
         print("<<< adding \\n >>> to output line:", new_line)
         new_line += "\n"
+    '''
 
     Error_Broken_Pipes = 0
-    if nod_req is not None:
-        try:
-            nod_req.wfile.write(bytes(new_line , 'utf-8'))
 
-        except BrokenPipeError:
-            Error_Broken_Pipes = 1
+    #if nod_req is not None:
+    try:
+        #nod_req.wfile.write(bytes(new_line , 'utf-8'))
+        spit_out(
+            str_out = new_line, req_obj = nod_req, out_type = 'utf-8'
+        )
 
-    else:
-        print(new_line[:-1])
+    except BrokenPipeError:
+        Error_Broken_Pipes = 1
+
+    #else:
+    #    print(new_line[:-1])
+
+
 
     return Error_Broken_Pipes
 
@@ -388,7 +396,10 @@ class CmdNode(object):
                 self.nod_req.send_header('Content-type', 'text/plain')
                 self.nod_req.end_headers()
                 str_nod_num = "node.number=" + str(self.number) + "\n"
-                self.nod_req.wfile.write(bytes(str_nod_num , 'utf-8'))
+                spit_out(
+                    str_out = str_nod_num, req_obj = self.nod_req,
+                    out_type = 'utf-8'
+                )
 
             except BrokenPipeError:
                 print("\n << BrokenPipe err catch  >> while sending nod_num \n")
@@ -625,28 +636,32 @@ class Runner(object):
                     req_obj.send_response(201)
                     req_obj.send_header('Content-type', 'text/plain')
                     req_obj.end_headers()
-                    req_obj.wfile.write(bytes(
-                        "err.code=0\n" , 'utf-8')
+                    spit_out(
+                        str_out = "err.code=0", req_obj = req_obj,
+                        out_type = 'utf-8'
                     )
                     self.clear_run_dirs_n_reset()
-                    req_obj.wfile.write(bytes(
-                        "Reset tree ... Done\n" , 'utf-8')
+                    spit_out(
+                        str_out = "Reset tree ... Done",
+                        req_obj = req_obj, out_type = 'utf-8'
                     )
 
                 elif unalias_cmd_lst == [['run_predict_n_report']]:
                     req_obj.send_response(201)
                     req_obj.send_header('Content-type', 'text/plain')
                     req_obj.end_headers()
-                    req_obj.wfile.write(bytes(
-                        "err.code=0\n" , 'utf-8')
+                    spit_out(
+                        str_out = "err.code=0",
+                        req_obj = req_obj, out_type = 'utf-8'
                     )
                     for lin2go in cmd_dict["nod_lst"]:
                         for node in self.step_list:
                             if node.number == lin2go:
                                 self.run_predict_n_report(node, req_obj)
 
-                    req_obj.wfile.write(bytes(
-                        "run_predict_n_report ... Done\n" , 'utf-8')
+                    spit_out(
+                        str_out = "run_predict_n_report ... Done",
+                        req_obj = req_obj, out_type = 'utf-8'
                     )
             except BrokenPipeError:
                 print(
@@ -713,14 +728,15 @@ class Runner(object):
         self.start_from_zero()
 
     def run_predict_n_report(self, node, req_obj):
-        req_obj.wfile.write(
-            bytes(
-                " running predict and report for node:" +
-                str(node.number) + " \n" , 'utf-8'
-            )
+        str_out = " running predict and report for node:" + str(node.number)
+        spit_out(
+            str_out = str_out, req_obj = req_obj, out_type = 'utf-8'
         )
         node.generate_predict_n_report(req_obj)
-        req_obj.wfile.write(bytes(" ... Done \n" , 'utf-8'))
+        spit_out(
+            str_out = " ... Done ", req_obj = req_obj,
+            out_type = 'utf-8'
+        )
 
     def _create_step(self, prev_step_lst):
         new_step = CmdNode(parent_lst_in = prev_step_lst)

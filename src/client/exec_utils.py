@@ -70,12 +70,13 @@ def json_data_request(url, cmd):
             print("count_times =", count_times)
             tmp_dat = req_get.raw.readline()
             line_str = str(tmp_dat.decode('utf-8'))
-            if line_str[-7:] == '/*EOF*/':
+            if '/*EOF*/' in line_str:
                 print('/*EOF*/ received')
                 break
 
             else:
                 str_lst = line_str
+                #print("str_lst =", str_lst)
 
             if count_times == times_loop - 1:
                 print('to many "lines" in http response')
@@ -157,7 +158,7 @@ class Run_n_Output(QThread):
         while True:
             tmp_dat = self.request.raw.readline()
             line_str = str(tmp_dat.decode('utf-8'))
-            if line_str[-7:] == '/*EOF*/':
+            if '/*EOF*/' in line_str :
                 #TODO: consider a different Signal to say finished
                 print('>>  /*EOF*/  <<')
                 break

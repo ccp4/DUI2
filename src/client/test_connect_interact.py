@@ -47,7 +47,7 @@ if __name__ == "__main__":
             #tmp_dat = req_post.raw.readline()
             line_str = str(tmp_dat.decode('utf-8'))
 
-            if line_str[-7:] == '/*EOF*/':
+            if '/*EOF*/' in line_str:
                 print('/*EOF*/ received')
                 break
 

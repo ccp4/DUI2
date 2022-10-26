@@ -39,6 +39,26 @@ from dials.command_line.combine_experiments import (
 from dxtbx.model.experiment_list import ExperimentListFactory
 from server.img_uploader import flex_arr_2_json
 
+
+def spit_out(str_out = None, req_obj = None, out_type = None):
+    if out_type == 'utf-8':
+        if req_obj is None:
+            print(" .... ", str(str_out[:-1]), " .... ")
+
+        else:
+            #print("str_out =", str_out)
+            #str_out += "\n"
+            req_obj.wfile.write(bytes(str_out, 'utf-8'))
+
+    else:
+        if req_obj is None:
+            print(" .... ", str_out , " .... ")
+
+        else:
+            req_obj.wfile.write(bytes(str_out))
+
+
+
 def get_data_from_steps(uni_cmd, cmd_dict, step_list):
     return_list = []
     if uni_cmd == ["display_log"]:

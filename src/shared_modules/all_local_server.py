@@ -26,7 +26,7 @@ copyright (c) CCP4 - DLS
 import json, os, zlib, sys, time
 
 from server import multi_node
-from server.data_n_json import iter_dict
+from server.data_n_json import iter_dict, spit_out
 from shared_modules import format_utils
 from server.init_first import ini_data
 
@@ -68,12 +68,14 @@ class ReqHandler(object):
             self.tree_runner.run_dials_command(cmd_dict, None)
             print("sending /*EOF*/ (Dials CMD)")
             #self.wfile.write(bytes('/*EOF*/', 'utf-8'))
-            print('/*EOF*/')
+            spit_out(str_out = '/*EOF*/', out_type = 'utf-8')
+            #print('/*EOF*/')
 
         else:
             print("sending /*EOF*/ (Dui2 CMD)")
             #self.wfile.write(bytes('/*EOF*/', 'utf-8'))
-            print('/*EOF*/')
+            spit_out(str_out = '/*EOF*/', out_type = 'utf-8')
+            #print('/*EOF*/')
 
 
     def fake_get(self, url_dict):
@@ -107,19 +109,25 @@ class ReqHandler(object):
             json_str = json.dumps(lst_out) + '\n'
 
             #self.wfile.write(bytes(json_str, 'utf-8'))
-            print(json_str)
+            spit_out(str_out = json_str, out_type = 'utf-8')
+            #print(json_str)
 
         elif type(lst_out) is bytes:
             byt_data = zlib.compress(lst_out)
             siz_dat = str(len(byt_data))
-            print("size =", siz_dat)
+
+            #print("size =", siz_dat)
+            spit_out(str_out = "size =" + " " + str(siz_dat))
 
             #self.wfile.write(bytes(byt_data))
-            print(bytes(byt_data))
+            spit_out(str_out = bytes(byt_data))
+            #print(bytes(byt_data))
+
 
         print("sending /*EOF*/")
         #self.wfile.write(bytes('/*EOF*/', 'utf-8'))
-        print('/*EOF*/')
+        spit_out(str_out = '/*EOF*/', out_type = 'utf-8')
+        #print('/*EOF*/')
 
 
 def main(par_def = None):

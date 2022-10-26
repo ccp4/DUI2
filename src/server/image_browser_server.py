@@ -25,7 +25,7 @@ import http.server, socketserver
 from urllib.parse import urlparse, parse_qs
 import json, os, zlib, sys, time
 
-from server.data_n_json import iter_dict
+from server.data_n_json import iter_dict, spit_out
 from server.img_uploader import flex_arr_2_json
 
 from dxtbx.model.experiment_list import ExperimentListFactory
@@ -167,7 +167,9 @@ def main(par_def = None, connection_out = None):
                     self.send_header('Content-type', 'text/plain')
                     self.end_headers()
                     json_str = json.dumps(lst_out) + '\n'
-                    self.wfile.write(bytes(json_str, 'utf-8'))
+                    spit_out(
+                        str_out = json_str, req_obj = self, out_type = 'utf-8'
+                    )
 
                 elif type(lst_out) is bytes:
                     byt_data = zlib.compress(lst_out)
@@ -177,11 +179,12 @@ def main(par_def = None, connection_out = None):
                     self.send_header('Content-type', 'application/zlib')
                     self.send_header('Content-Length', siz_dat)
                     self.end_headers()
-
-                    self.wfile.write(bytes(byt_data))
+                    spit_out(str_out = byt_data, req_obj = self)
 
                 print("sending /*EOF*/")
-                self.wfile.write(bytes('/*EOF*/', 'utf-8'))
+                spit_out(
+                    str_out = '/*EOF*/', req_obj = self, out_type = 'utf-8'
+                )
 
             except BrokenPipeError:
                 print("\n << BrokenPipe err catch >>  while sending EOF or JSON \n")

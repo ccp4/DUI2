@@ -26,9 +26,10 @@ from urllib.parse import urlparse, parse_qs
 import json, os, zlib, sys, time
 
 from server import multi_node
-from server.data_n_json import iter_dict
+from server.data_n_json import iter_dict, spit_out
 from server.init_first import ini_data
 from shared_modules import format_utils
+
 
 def main(par_def = None, connection_out = None):
     format_utils.print_logo()
@@ -47,10 +48,14 @@ def main(par_def = None, connection_out = None):
                 print("no command in request (KeyError)")
                 self.send_header('Content-type', 'text/plain')
                 self.end_headers()
-                self.wfile.write(bytes(
-                    'no command in request (Key err catch ) \n', 'utf-8'
-                ))
-                self.wfile.write(bytes('/*EOF*/', 'utf-8'))
+                spit_out(
+                    str_out = 'no command in request (Key err catch ) ',
+                    req_obj = self, out_type = 'utf-8'
+                )
+                spit_out(
+                    str_out = '/*EOF*/', req_obj = self,
+                    out_type = 'utf-8'
+                )
                 return
 
             cmd_lst = []
@@ -81,7 +86,10 @@ def main(par_def = None, connection_out = None):
                 try:
                     cmd_tree_runner.run_dials_command(cmd_dict, self)
                     print("sending /*EOF*/ (Dials CMD)")
-                    self.wfile.write(bytes('/*EOF*/', 'utf-8'))
+                    spit_out(
+                        str_out = '/*EOF*/', req_obj = self,
+                        out_type = 'utf-8',
+                    )
 
                 except BrokenPipeError:
                     print("\n** BrokenPipe err catch  ** while sending EOF or JSON\n")
@@ -95,7 +103,10 @@ def main(par_def = None, connection_out = None):
                 try:
                     cmd_tree_runner.run_dui_command(cmd_dict, self)
                     print("sending /*EOF*/ (Dui2 CMD)")
-                    self.wfile.write(bytes('/*EOF*/', 'utf-8'))
+                    spit_out(
+                        str_out = '/*EOF*/', req_obj = self,
+                        out_type = 'utf-8'
+                    )
 
                 except BrokenPipeError:
                     print("\n** BrokenPipe err catch  ** while sending EOF or JSON\n")
@@ -119,10 +130,13 @@ def main(par_def = None, connection_out = None):
                 print("no command in request (Key err catch )")
                 self.send_header('Content-type', 'text/plain')
                 self.end_headers()
-                self.wfile.write(bytes(
-                    'no command in request (KeyError) \n', 'utf-8'
-                ))
-                self.wfile.write(bytes('/*EOF*/', 'utf-8'))
+                spit_out(
+                    str_out = 'no command in request (KeyError) ',
+                    req_obj = self, out_type = 'utf-8'
+                )
+                spit_out(
+                    str_out = '/*EOF*/', req_obj = self, out_type = 'utf-8'
+                )
                 return
 
             cmd_lst = []
@@ -147,8 +161,10 @@ def main(par_def = None, connection_out = None):
                     self.send_header('Content-type', 'text/plain')
                     self.end_headers()
                     json_str = json.dumps(lst_out) + '\n'
-                    self.wfile.write(bytes(json_str, 'utf-8'))
-
+                    spit_out(
+                        str_out = json_str, req_obj = self,
+                        out_type = 'utf-8'
+                    )
                     if lst_out == ['closed received']:
                         print("Client app closed")
                         print("run_local =", run_local)
@@ -179,12 +195,12 @@ def main(par_def = None, connection_out = None):
                     self.send_header('Content-type', 'application/zlib')
                     self.send_header('Content-Length', siz_dat)
                     self.end_headers()
-
-                    self.wfile.write(bytes(byt_data))
-
+                    spit_out(str_out = byt_data, req_obj = self)
 
                 print("sending /*EOF*/")
-                self.wfile.write(bytes('/*EOF*/', 'utf-8'))
+                spit_out(
+                    str_out = '/*EOF*/', req_obj = self, out_type = 'utf-8'
+                )
 
             except BrokenPipeError:
                 print("\n BrokenPipe err catch  while sending EOF or JSON \n")
