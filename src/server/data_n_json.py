@@ -41,23 +41,31 @@ from server.img_uploader import flex_arr_2_json
 
 
 def spit_out(str_out = None, req_obj = None, out_type = None):
-    if out_type == 'utf-8':
-        if req_obj is None:
+
+    if req_obj is None:
+        if out_type == 'utf-8':
             print(" .... ", str(str_out[:-1]), " .... ")
 
         else:
-            #print("str_out =", str_out)
-            #str_out += "\n"
-            req_obj.wfile.write(bytes(str_out, 'utf-8'))
-
-    else:
-        if req_obj is None:
             print(" .... ", str_out , " .... ")
+
+    elif(
+        type(req_obj).__name__ == 'ReqHandler'
+    ):
+
+        #<class 'server.run_server.main.<locals>.ReqHandler'>
+        #<class 'server.run_server.main.<locals>.ReqHandler'>
+
+        if out_type == 'utf-8':
+            req_obj.wfile.write(bytes(str_out, 'utf-8'))
 
         else:
             req_obj.wfile.write(bytes(str_out))
 
 
+    else:
+        print("type(req_obj) =", type(req_obj))
+        print("type(req_obj).__name__=", type(req_obj).__name__)
 
 def get_data_from_steps(uni_cmd, cmd_dict, step_list):
     return_list = []

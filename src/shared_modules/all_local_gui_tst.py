@@ -8,17 +8,32 @@ from server.data_n_json import iter_dict
 from server import multi_node
 from server.init_first import ini_data
 
+class to_print(object):
+    def __init__(self, refer_to):
+        self.my_ref = refer_to
+
+    def write(self, to_write):
+        self.my_ref.to_spit(to_write)
 
 class my_one(QThread):
     def __init__(self, handler, cmd_in):
         super(my_one, self).__init__()
         self.my_handler = handler
         self.my_cmd = cmd_in
+        self.printing = to_print(self)
 
     def run(self):
-        self.my_handler.fake_post(self.my_cmd)
+        #self.my_handler.fake_post(self.my_cmd)
+        self.my_handler.fake_post(url_dict = self.my_cmd, call_obj = self)
+
         self.my_handler.fake_get({"nod_lst":[0], "cmd_lst":["display"]})
 
+    def wfile(self, to_write):
+        print("time to print:", to_write)
+        write = self.printing
+
+    def to_spit(self, to_write):
+        print("printing >>> ", to_write)
 
 class MultiRunner(QObject):
     def __init__(self):

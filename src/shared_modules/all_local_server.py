@@ -34,7 +34,7 @@ class ReqHandler(object):
     def __init__(self, runner_in):
         self.tree_runner = runner_in
 
-    def fake_post(self, url_dict):
+    def fake_post(self, url_dict = None, call_obj = None):
         print("\n url_dict =", url_dict, "\n")
 
         tmp_cmd2lst = url_dict["cmd_lst"]
@@ -68,15 +68,18 @@ class ReqHandler(object):
             self.tree_runner.run_dials_command(cmd_dict, None)
             print("sending /*EOF*/ (Dials CMD)")
             #self.wfile.write(bytes('/*EOF*/', 'utf-8'))
-            spit_out(str_out = '/*EOF*/', out_type = 'utf-8')
-            #print('/*EOF*/')
+            #spit_out(str_out = '/*EOF*/', out_type = 'utf-8')
+            spit_out(
+                str_out = '/*EOF*/', req_obj = call_obj, out_type = 'utf-8'
+            )
 
         else:
             print("sending /*EOF*/ (Dui2 CMD)")
             #self.wfile.write(bytes('/*EOF*/', 'utf-8'))
-            spit_out(str_out = '/*EOF*/', out_type = 'utf-8')
-            #print('/*EOF*/')
-
+            #spit_out(str_out = '/*EOF*/', out_type = 'utf-8')
+            spit_out(
+                str_out = '/*EOF*/', req_obj = call_obj, out_type = 'utf-8'
+            )
 
     def fake_get(self, url_dict):
         '''
@@ -109,8 +112,10 @@ class ReqHandler(object):
             json_str = json.dumps(lst_out) + '\n'
 
             #self.wfile.write(bytes(json_str, 'utf-8'))
-            spit_out(str_out = json_str, out_type = 'utf-8')
-            #print(json_str)
+            #spit_out(str_out = json_str, out_type = 'utf-8')
+            spit_out(
+                str_out = json_str, req_obj = call_obj, out_type = 'utf-8'
+            )
 
         elif type(lst_out) is bytes:
             byt_data = zlib.compress(lst_out)
