@@ -395,6 +395,11 @@ class CmdNode(object):
                 self.nod_req.send_response(201)
                 self.nod_req.send_header('Content-type', 'text/plain')
                 self.nod_req.end_headers()
+
+            except AttributeError:
+                print("Attribute Err catch, not supposed send header info")
+
+            try:
                 str_nod_num = "node.number=" + str(self.number) + "\n"
                 spit_out(
                     str_out = str_nod_num, req_obj = self.nod_req,
@@ -605,7 +610,7 @@ class Runner(object):
         self.bigger_lin = 0
         #self.lst_cmd_in = []
 
-    def run_dials_command(self, cmd_dict, req_obj = None):
+    def run_dials_command(self, cmd_dict = None, req_obj = None):
         unalias_cmd_lst = unalias_full_cmd(cmd_dict["cmd_lst"])
         print("\n cmd_lst: ", unalias_cmd_lst)
 
@@ -633,9 +638,17 @@ class Runner(object):
             try:
                 print("\n  Dui2 CMD( cmd_lst )= ", unalias_cmd_lst, "\n ")
                 if unalias_cmd_lst == [['reset_graph']]:
-                    req_obj.send_response(201)
-                    req_obj.send_header('Content-type', 'text/plain')
-                    req_obj.end_headers()
+                    try:
+                        req_obj.send_response(201)
+                        req_obj.send_header('Content-type', 'text/plain')
+                        req_obj.end_headers()
+
+                    except AttributeError:
+                        print(
+                            "Attribute Err catch," +
+                            " not supposed send header info"
+                        )
+
                     spit_out(
                         str_out = "err.code=0", req_obj = req_obj,
                         out_type = 'utf-8'
@@ -647,9 +660,17 @@ class Runner(object):
                     )
 
                 elif unalias_cmd_lst == [['run_predict_n_report']]:
-                    req_obj.send_response(201)
-                    req_obj.send_header('Content-type', 'text/plain')
-                    req_obj.end_headers()
+                    try:
+                        req_obj.send_response(201)
+                        req_obj.send_header('Content-type', 'text/plain')
+                        req_obj.end_headers()
+
+                    except AttributeError:
+                        print(
+                            "Attribute Err catch," +
+                            " not supposed send header info"
+                        )
+
                     spit_out(
                         str_out = "err.code=0",
                         req_obj = req_obj, out_type = 'utf-8'

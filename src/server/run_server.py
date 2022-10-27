@@ -46,8 +46,16 @@ def main(par_def = None, connection_out = None):
 
             except KeyError:
                 print("no command in request (KeyError)")
-                self.send_header('Content-type', 'text/plain')
-                self.end_headers()
+                try:
+                    self.send_header('Content-type', 'text/plain')
+                    self.end_headers()
+
+                except AttributeError:
+                    print(
+                        "Attribute Err catch," +
+                        " not supposed send header info"
+                    )
+
                 spit_out(
                     str_out = 'no command in request (Key err catch ) ',
                     req_obj = self, out_type = 'utf-8'
@@ -118,7 +126,12 @@ def main(par_def = None, connection_out = None):
 
         def do_GET(self):
 
-            self.send_response(200)
+            try:
+                self.send_response(200)
+
+            except AttributeError:
+                print("Attribute Err catch, not supposed send header info")
+
             url_path = self.path
             url_dict = parse_qs(urlparse(url_path).query)
             print("\n url_dict =", url_dict, "\n")
@@ -128,8 +141,13 @@ def main(par_def = None, connection_out = None):
 
             except KeyError:
                 print("no command in request (Key err catch )")
-                self.send_header('Content-type', 'text/plain')
-                self.end_headers()
+                try:
+                    self.send_header('Content-type', 'text/plain')
+                    self.end_headers()
+
+                except AttributeError:
+                    print("Attribute Err catch, not supposed send header info")
+
                 spit_out(
                     str_out = 'no command in request (KeyError) ',
                     req_obj = self, out_type = 'utf-8'
@@ -158,8 +176,16 @@ def main(par_def = None, connection_out = None):
                 lst_out = cmd_tree_runner.run_get_data(cmd_dict)
 
                 if type(lst_out) is list or type(lst_out) is dict:
-                    self.send_header('Content-type', 'text/plain')
-                    self.end_headers()
+                    try:
+                        self.send_header('Content-type', 'text/plain')
+                        self.end_headers()
+
+                    except AttributeError:
+                        print(
+                            "Attribute Err catch," +
+                            " not supposed send header info"
+                        )
+
                     json_str = json.dumps(lst_out) + '\n'
                     spit_out(
                         str_out = json_str, req_obj = self,
@@ -191,10 +217,17 @@ def main(par_def = None, connection_out = None):
                     byt_data = zlib.compress(lst_out)
                     siz_dat = str(len(byt_data))
                     print("size =", siz_dat)
+                    try:
+                        self.send_header('Content-type', 'application/zlib')
+                        self.send_header('Content-Length', siz_dat)
+                        self.end_headers()
 
-                    self.send_header('Content-type', 'application/zlib')
-                    self.send_header('Content-Length', siz_dat)
-                    self.end_headers()
+                    except AttributeError:
+                        print(
+                            "Attribute Err catch," +
+                            " not supposed send header info"
+                        )
+
                     spit_out(str_out = byt_data, req_obj = self)
 
                 print("sending /*EOF*/")

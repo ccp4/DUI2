@@ -49,23 +49,20 @@ def spit_out(str_out = None, req_obj = None, out_type = None):
         else:
             print(" .... ", str_out , " .... ")
 
-    elif(
-        type(req_obj).__name__ == 'ReqHandler'
-    ):
-
-        #<class 'server.run_server.main.<locals>.ReqHandler'>
-        #<class 'server.run_server.main.<locals>.ReqHandler'>
-
+    elif 'ReqHandler' in str(type(req_obj)):
         if out_type == 'utf-8':
             req_obj.wfile.write(bytes(str_out, 'utf-8'))
 
         else:
             req_obj.wfile.write(bytes(str_out))
 
-
     else:
-        print("type(req_obj) =", type(req_obj))
-        print("type(req_obj).__name__=", type(req_obj).__name__)
+        if out_type == 'utf-8':
+            req_obj.call_back_tst(str_out)
+
+        else:
+            print(" .... ", str_out , " .... ")
+
 
 def get_data_from_steps(uni_cmd, cmd_dict, step_list):
     return_list = []

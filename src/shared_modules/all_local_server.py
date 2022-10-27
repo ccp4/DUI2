@@ -65,29 +65,19 @@ class ReqHandler(object):
                 print("single_str = ", single_str)
 
         if found_dials_command:
-            self.tree_runner.run_dials_command(cmd_dict, None)
+            self.tree_runner.run_dials_command(cmd_dict, call_obj)
             print("sending /*EOF*/ (Dials CMD)")
-            #self.wfile.write(bytes('/*EOF*/', 'utf-8'))
-            #spit_out(str_out = '/*EOF*/', out_type = 'utf-8')
             spit_out(
                 str_out = '/*EOF*/', req_obj = call_obj, out_type = 'utf-8'
             )
 
         else:
             print("sending /*EOF*/ (Dui2 CMD)")
-            #self.wfile.write(bytes('/*EOF*/', 'utf-8'))
-            #spit_out(str_out = '/*EOF*/', out_type = 'utf-8')
             spit_out(
                 str_out = '/*EOF*/', req_obj = call_obj, out_type = 'utf-8'
             )
 
-    def fake_get(self, url_dict):
-        '''
-        self.send_response(200)
-        url_path = self.path
-        url_dict = parse_qs(urlparse(url_path).query)
-        '''
-
+    def fake_get(self, url_dict = None, call_obj = None):
         print("\n url_dict =", url_dict, "\n")
         tmp_cmd2lst = url_dict["cmd_lst"]
 

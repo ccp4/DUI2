@@ -8,34 +8,29 @@ from server.data_n_json import iter_dict
 from server import multi_node
 from server.init_first import ini_data
 
-class to_print(object):
-    def __init__(self, refer_to):
-        self.my_ref = refer_to
-
-    def write(self, to_write):
-        self.my_ref.to_spit(to_write)
-
 class my_one(QThread):
+    printing = Signal(str)
     def __init__(self, handler, cmd_in):
         super(my_one, self).__init__()
         self.my_handler = handler
         self.my_cmd = cmd_in
-        self.printing = to_print(self)
 
     def run(self):
-        #self.my_handler.fake_post(self.my_cmd)
-        self.my_handler.fake_post(url_dict = self.my_cmd, call_obj = self)
+        self.my_handler.fake_post(
+            url_dict = self.my_cmd, call_obj = self
+        )
+        self.my_handler.fake_get(
+            url_dict = {"nod_lst":[0], "cmd_lst":["display"]},
+            call_obj = self
+        )
 
-        self.my_handler.fake_get({"nod_lst":[0], "cmd_lst":["display"]})
+    def call_back_tst(self, str_out):
+        print("..call_back_tst..", str_out)
+        self.printing.emit(str_out)
 
-    def wfile(self, to_write):
-        print("time to print:", to_write)
-        write = self.printing
-
-    def to_spit(self, to_write):
-        print("printing >>> ", to_write)
 
 class MultiRunner(QObject):
+    printing = Signal(str)
     def __init__(self):
         super(MultiRunner, self).__init__()
         self.thread_lst = []
@@ -43,7 +38,11 @@ class MultiRunner(QObject):
     def run_one_work(self, handler, cmd_in):
         new_thread = my_one(handler, cmd_in)
         new_thread.start()
+        new_thread.printing.connect(self.console_out)
         self.thread_lst.append(new_thread)
+
+    def console_out(self, str_out):
+        self.printing.emit(str_out)
 
 
 class MainGuiObject(QObject):
@@ -60,6 +59,7 @@ class MainGuiObject(QObject):
 
         print("inside QObject")
         self.m_run = MultiRunner()
+        self.m_run.printing.connect(self.console_out)
         self.window.RunPushButton.clicked.connect(self.run_one_clicked)
         self.window.show()
 
@@ -72,6 +72,9 @@ class MainGuiObject(QObject):
         self.window.OutTextEdit.insertPlainText(str(cmd_in))
         self.m_run.run_one_work(self.handler, cmd_in)
 
+    def console_out(self, str_out):
+        self.window.OutTextEdit.insertPlainText(str_out)
+
 
 def main(par_def = None):
     format_utils.print_logo()
@@ -80,9 +83,6 @@ def main(par_def = None):
 
     init_param = format_utils.get_par(par_def, sys.argv[1:])
     print("init_param(server) =", init_param)
-
-    #PORT = int(init_param["port"])
-    #HOST = init_param["host"]
 
     run_local = True
 
