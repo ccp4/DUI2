@@ -29,6 +29,14 @@ from client.gui_utils import AdvancedParameters, widgets_defs
 from client.init_firts import ini_data
 from shared_modules import format_utils
 
+def get_request_shot(params_in = None, main_handler = None):
+    if main_handler == None:
+        data_init = ini_data()
+        uni_url = data_init.get_url()
+        req = requests.get(uni_url, stream = True, params = params_in)
+        data_out = req.content
+        return data_out
+
 
 def get_optional_list(cmd_str):
     cmd = {"nod_lst":"", "cmd_lst":[cmd_str]}

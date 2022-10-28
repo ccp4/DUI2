@@ -629,7 +629,7 @@ class Runner(object):
                 print("\n ***  err catch  *** \n wrong line \n not running")
                 print("uni_cmd =", uni_cmd)
 
-            self._save_state()
+        self._save_state()
 
     def run_dui_command(self, cmd_dict, req_obj = None):
         unalias_cmd_lst = unalias_full_cmd(cmd_dict["cmd_lst"])
@@ -688,6 +688,8 @@ class Runner(object):
                 print(
                     "\n << BrokenPipe err catch >> while running Dui command\n"
                 )
+
+        self._save_state()
 
     def run_get_data(self, cmd_dict):
 

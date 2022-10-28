@@ -32,7 +32,7 @@ import numpy as np
 import json, zlib, time, requests
 
 from client.init_firts import ini_data
-from client.exec_utils import json_data_request
+from client.exec_utils import json_data_request, get_request_shot
 from client.outputs import HandleLoadStatusLabel
 
 from client.img_view_utils import (
@@ -40,6 +40,7 @@ from client.img_view_utils import (
     load_img_json_w_str, load_mask_img_json_w_str
 )
 from client.simpler_param_widgets import FileBrowser, build_template
+
 
 class LoadFullMaskImage(QThread):
     image_loaded = Signal(tuple)

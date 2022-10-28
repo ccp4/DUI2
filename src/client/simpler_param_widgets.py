@@ -31,7 +31,8 @@ from PySide2 import QtUiTools
 from PySide2.QtGui import *
 
 from client.init_firts import ini_data
-from client.exec_utils import Mtz_Data_Request
+from client.exec_utils import Mtz_Data_Request, get_request_shot
+
 
 def _get_all_direct_layout_widget_children(parent):
     """Walk a widget tree and get all non-QLayout direct children
@@ -289,10 +290,14 @@ class FileBrowser(QDialog):
         data_init = ini_data()
         uni_url = data_init.get_url()
 
+        to_remove = '''
         req_get = requests.get(
             uni_url, stream = True, params = cmd
         )
         compresed = req_get.content
+        '''
+        compresed = get_request_shot(params_in = cmd)
+
         dic_str = zlib.decompress(compresed)
         self.dir_tree_dict = json.loads(dic_str)
 

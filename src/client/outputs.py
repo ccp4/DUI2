@@ -29,6 +29,7 @@ from PySide2.QtGui import *
 
 from client.exec_utils import json_data_request
 from client.init_firts import ini_data
+from client.exec_utils import get_request_shot
 
 import subprocess, psutil, shutil, webbrowser
 
@@ -56,10 +57,15 @@ class LoadFiles(QThread):
         my_cmd = {"nod_lst" : [self.cur_nod_num],
                   "cmd_lst" : ["get_experiments_file"]}
 
+
+        to_remove = '''
         self.req = requests.get(
             self.uni_url, stream = True, params = my_cmd
         )
         exp_compresed = self.req.content
+        '''
+        exp_compresed = get_request_shot(params_in = my_cmd)
+
         try:
             full_exp_file = zlib.decompress(exp_compresed).decode('utf-8')
             tmp_file = open(self.files_path_n_nod_num["tmp_exp_path"], "w")
@@ -418,10 +424,15 @@ class DoLoadHTML(QObject):
                         "cmd_lst":["get_report"]
                     }
                     print("staring html request ...")
+
+                    to_remove = '''
                     req_gt = requests.get(
                         self.uni_url, stream = True, params = cmd
                     )
                     compresed = req_gt.content
+                    '''
+                    compresed = get_request_shot(params_in = cmd)
+
                     print("... html request ended")
 
                     full_file = zlib.decompress(compresed).decode('utf-8')
