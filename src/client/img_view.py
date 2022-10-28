@@ -606,12 +606,8 @@ class LoadInThread(QThread):
 
     def run(self):
         print("\n Loading with QThread ... Start", self.cmd, " \n")
-        response = json_data_request(
-            self.uni_url, self.cmd
-        )
-        self.request_loaded.emit(
-            (response)
-        )
+        response = json_data_request(params_in = self.cmd)
+        self.request_loaded.emit((response))
         print("\n Loading with QThread ... End ", self.cmd, " \n")
 
 
@@ -1534,7 +1530,7 @@ class MainImgViewObject(QObject):
         my_cmd = {"path"    : self.nod_or_path,
                   "cmd_lst" : my_cmd_lst}
 
-        json_data_lst = json_data_request(self.uni_url, my_cmd)
+        json_data_lst = json_data_request(params_in = my_cmd)
 
         new_templ = json_data_lst[0]
         self.img_d1_d2 = (json_data_lst[1], json_data_lst[2])

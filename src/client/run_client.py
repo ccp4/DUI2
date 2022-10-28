@@ -61,7 +61,7 @@ def main(par_def = None):
     print("here 1")
     while dummy_nod_lst == None:
         print("here in loop")
-        dummy_nod_lst = json_data_request(uni_url, cmd)
+        dummy_nod_lst = json_data_request(params_in = cmd)
         if dummy_nod_lst == None:
             print("dummy_nod_lst =", dummy_nod_lst, ", waiting", n_secs, "secs ...")
             time.sleep(n_secs)

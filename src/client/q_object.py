@@ -499,7 +499,7 @@ class MainObject(QObject):
         print("\n aboutToQuit ... 1\n")
         self.recip_latt.quit_kill_all()
         cmd = {"nod_lst":"", "cmd_lst":["closed"]}
-        resp = json_data_request(self.uni_url, cmd)
+        resp = json_data_request(params_in = cmd)
         print("resp =", resp)
         print("\n aboutToQuit ... 2\n")
 
@@ -767,7 +767,7 @@ class MainObject(QObject):
 
     def update_reindex_table_header(self, nod_lst):
         cmd = {"nod_lst":nod_lst, "cmd_lst":["display_log"]}
-        json_log = json_data_request(self.uni_url, cmd)
+        json_log = json_data_request(params_in = cmd)
         try:
             lst_log_lines = json_log[0]
             label2update = get_label_from_str_list(lst_log_lines)
@@ -785,7 +785,7 @@ class MainObject(QObject):
                 "nod_lst":[self.curr_nod_num],
                 "cmd_lst":["get_bravais_sum"]
             }
-            json_data_lst = json_data_request(self.uni_url, cmd)
+            json_data_lst = json_data_request(params_in = cmd)
             self.r_index_widg.add_opts_lst(
                 json_data = json_data_lst[0]
             )
@@ -879,7 +879,7 @@ class MainObject(QObject):
         cmd = {
             "nod_lst":self.new_node.parent_node_lst, "cmd_lst":["get_lambda"]
         }
-        json_lamb = json_data_request(self.uni_url, cmd)
+        json_lamb = json_data_request(params_in = cmd)
         try:
             lamb = json_lamb[0]
             print("lamb =", lamb)
@@ -1006,7 +1006,7 @@ class MainObject(QObject):
 
     def request_display(self):
         cmd = {"nod_lst":"", "cmd_lst":["display"]}
-        self.server_nod_lst = json_data_request(self.uni_url, cmd)
+        self.server_nod_lst = json_data_request(params_in = cmd)
         self.display()
 
     def on_clone(self):
@@ -1069,7 +1069,7 @@ class MainObject(QObject):
         cmd = {"nod_lst":nod_lst, "cmd_lst":["stop"]}
         print("cmd =", cmd)
         try:
-            lst_params = json_data_request(self.uni_url, cmd)
+            lst_params = json_data_request(params_in = cmd)
 
         except requests.exceptions.RequestException:
             print(

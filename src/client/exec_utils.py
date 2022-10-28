@@ -37,43 +37,48 @@ def get_request_shot(params_in = None, main_handler = None):
         data_out = req.content
         return data_out
 
-def json_data_request(url, cmd):
-    try:
-        print("attempting to request to:", url, ", with:", cmd)
-        req_get = requests.get(url, stream = True, params = cmd, timeout = 3)
-        print("starting request")
-        str_lst = ''
-        line_str = ''
-        json_out = ""
-        times_loop = 10
-        for count_times in range(times_loop):
-            print("count_times =", count_times)
-            tmp_dat = req_get.raw.readline()
-            line_str = str(tmp_dat.decode('utf-8'))
-            if '/*EOF*/' in line_str:
-                print('/*EOF*/ received')
-                break
+def json_data_request(params_in = None, main_handler = None):
+    if main_handler == None:
+        data_init = ini_data()
+        uni_url = data_init.get_url()
+        try:
+            print("attempting to request to:", uni_url, ", with:", params_in)
+            req_get = requests.get(
+                uni_url, stream = True, params = params_in, timeout = 3
+            )
+            print("starting request")
+            str_lst = ''
+            line_str = ''
+            json_out = ""
+            times_loop = 10
+            for count_times in range(times_loop):
+                print("count_times =", count_times)
+                tmp_dat = req_get.raw.readline()
+                line_str = str(tmp_dat.decode('utf-8'))
+                if '/*EOF*/' in line_str:
+                    print('/*EOF*/ received')
+                    break
 
-            else:
-                str_lst = line_str
-                #print("str_lst =", str_lst)
+                else:
+                    str_lst = line_str
+                    #print("str_lst =", str_lst)
 
-            if count_times == times_loop - 1:
-                print('to many "lines" in http response')
-                json_out = None
+                if count_times == times_loop - 1:
+                    print('to many "lines" in http response')
+                    json_out = None
 
-        if json_out is not None:
-            json_out = json.loads(str_lst)
+            if json_out is not None:
+                json_out = json.loads(str_lst)
 
-    except ConnectionError:
-        print(" ... Connection err catch  (json_data_request) ...")
-        json_out = None
+        except ConnectionError:
+            print(" ... Connection err catch  (json_data_request) ...")
+            json_out = None
 
-    except requests.exceptions.RequestException:
-        print(" ... requests.exceptions.RequestException (json_data_request)")
-        json_out = None
+        except requests.exceptions.RequestException:
+            print(" ... requests.exceptions.RequestException (json_data_request)")
+            json_out = None
 
-    return json_out
+        return json_out
 
 
 def get_optional_list(cmd_str):
@@ -83,7 +88,7 @@ def get_optional_list(cmd_str):
     uni_url = data_init.get_url()
     print("uni_url(get_optional_list) =", uni_url)
 
-    lst_opt = json_data_request(uni_url, cmd)
+    lst_opt = json_data_request(params_in = cmd)
 
     return lst_opt
 
@@ -95,7 +100,7 @@ def build_advanced_params_widget(cmd_str, h_box_search):
     uni_url = data_init.get_url()
     print("uni_url(build_advanced_params_widget) =", uni_url)
 
-    lst_params = json_data_request(uni_url, cmd)
+    lst_params = json_data_request(params_in = cmd)
     lin_lst = format_utils.param_tree_2_lineal(lst_params)
     par_def = lin_lst()
     advanced_parameters = AdvancedParameters()
