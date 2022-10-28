@@ -83,13 +83,7 @@ def json_data_request(params_in = None, main_handler = None):
 
 def get_optional_list(cmd_str):
     cmd = {"nod_lst":"", "cmd_lst":[cmd_str]}
-
-    data_init = ini_data()
-    uni_url = data_init.get_url()
-    print("uni_url(get_optional_list) =", uni_url)
-
     lst_opt = json_data_request(params_in = cmd)
-
     return lst_opt
 
 
@@ -108,20 +102,19 @@ def build_advanced_params_widget(cmd_str, h_box_search):
     return advanced_parameters
 
 
-
-
-class Mtz_Data_Request(QThread):
-    update_progress = Signal(int)
-    done_download = Signal(bytes)
-    def __init__(self, url, cmd):
-        super(Mtz_Data_Request, self).__init__()
-        self.url = url
-        self.cmd = cmd
+class get_request_real_time(QThread):
+    prog_new_stat = Signal(int)
+    load_ended = Signal(bytes)
+    def __init__(self, params_in = None, main_handler = None):
+        super(get_request_real_time, self).__init__()
+        data_init = ini_data()
+        self.url = data_init.get_url()
+        self.params = params_in
 
     def run(self):
         try:
             req_get = requests.get(
-                self.url, stream = True, params = self.cmd, timeout = 3
+                self.url, stream = True, params = self.params, timeout = 3
             )
             total_size = int(req_get.headers.get('content-length', 0)) + 1
             print("total_size =", total_size)
@@ -133,26 +126,46 @@ class Mtz_Data_Request(QThread):
                 compresed += data
                 downloaded_size += block_size
                 progress = int(100.0 * (downloaded_size / total_size))
-                self.update_progress.emit(progress)
+                self.prog_new_stat.emit(progress)
 
-            mtz_data = zlib.decompress(compresed)
+            end_data = zlib.decompress(compresed)
             print("mtz downloaded")
-            print("type(mtz_data) =", type(mtz_data))
+            print("type(end_data) =", type(end_data))
 
         except zlib.error:
             print("zlib. err catch(Mtz_Data_Request)")
-            mtz_data = None
+            end_data = None
 
         except ConnectionError:
             print("\n Connection err catch (Mtz_Data_Request) \n")
-            mtz_data = None
+            end_data = None
 
         except requests.exceptions.RequestException:
             print(
                 "\n requests.exceptions.RequestException (Mtz_Data_Request) \n"
             )
-            mtz_data = None
+            end_data = None
 
+        self.load_ended.emit(end_data)
+
+
+class Mtz_Data_Request(QThread):
+    update_progress = Signal(int)
+    done_download = Signal(bytes)
+    def __init__(self, cmd):
+        super(Mtz_Data_Request, self).__init__()
+        self.cmd = cmd
+
+    def run(self):
+        self.r_time_req = get_request_real_time(params_in = self.cmd)
+        self.r_time_req.prog_new_stat.connect(self.new_progress)
+        self.r_time_req.load_ended.connect(self.finishing)
+        self.r_time_req.start()
+
+    def new_progress(self, prog_persent):
+        self.update_progress.emit(prog_persent)
+
+    def finishing(self, mtz_data):
         self.done_download.emit(mtz_data)
 
 

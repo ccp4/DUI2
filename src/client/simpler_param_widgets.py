@@ -1621,7 +1621,7 @@ class ExportWidget(QWidget):
             data_init = ini_data()
             uni_url = data_init.get_url()
             cmd = {"nod_lst":[self.cur_nod_num], "cmd_lst":["get_mtz"]}
-            self.dowl_thrd = Mtz_Data_Request(uni_url, cmd)
+            self.dowl_thrd = Mtz_Data_Request(cmd)
             self.dowl_thrd.update_progress.connect(self.show_new_progress)
             self.dowl_thrd.done_download.connect(self.save_mtz_on_disc)
             self.dowl_thrd.finished.connect(self.restore_p_label)
