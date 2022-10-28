@@ -15,10 +15,6 @@ def load_img_json_w_str(
     try:
         start_tm = time.time()
 
-        to_remove = '''
-        req_get = requests.get(uni_url, stream = True, params = my_cmd)
-        compresed = req_get.content
-        '''
         compresed = get_request_shot(params_in = my_cmd)
 
         dic_str = zlib.decompress(compresed)
@@ -62,10 +58,6 @@ def load_mask_img_json_w_str(
     try:
         start_tm = time.time()
 
-        to_remove = '''
-        req_get = requests.get(uni_url, stream = True, params = my_cmd)
-        compresed = req_get.content
-        '''
         compresed = get_request_shot(params_in = my_cmd)
 
         dic_str = zlib.decompress(compresed)

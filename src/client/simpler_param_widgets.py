@@ -290,12 +290,6 @@ class FileBrowser(QDialog):
         data_init = ini_data()
         uni_url = data_init.get_url()
 
-        to_remove = '''
-        req_get = requests.get(
-            uni_url, stream = True, params = cmd
-        )
-        compresed = req_get.content
-        '''
         compresed = get_request_shot(params_in = cmd)
 
         dic_str = zlib.decompress(compresed)

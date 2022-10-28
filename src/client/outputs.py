@@ -57,13 +57,6 @@ class LoadFiles(QThread):
         my_cmd = {"nod_lst" : [self.cur_nod_num],
                   "cmd_lst" : ["get_experiments_file"]}
 
-
-        to_remove = '''
-        self.req = requests.get(
-            self.uni_url, stream = True, params = my_cmd
-        )
-        exp_compresed = self.req.content
-        '''
         exp_compresed = get_request_shot(params_in = my_cmd)
 
         try:
@@ -425,12 +418,6 @@ class DoLoadHTML(QObject):
                     }
                     print("staring html request ...")
 
-                    to_remove = '''
-                    req_gt = requests.get(
-                        self.uni_url, stream = True, params = cmd
-                    )
-                    compresed = req_gt.content
-                    '''
                     compresed = get_request_shot(params_in = cmd)
 
                     print("... html request ended")
