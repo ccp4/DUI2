@@ -49,7 +49,10 @@ class LoadFiles(QThread):
         }
 
     def run(self):
-        print("launching << get_experiments_file >> for node: ", self.cur_nod_num)
+        print(
+            "launching << get_experiments_file >> for node: ",
+            self.cur_nod_num
+        )
         my_cmd = {"nod_lst" : [self.cur_nod_num],
                   "cmd_lst" : ["get_experiments_file"]}
 
@@ -69,7 +72,10 @@ class LoadFiles(QThread):
             self.loading_failed.emit()
             return
 
-        print("launching << get_reflections_file >> for node: ", self.cur_nod_num)
+        print(
+            "launching << get_reflections_file >> for node: ",
+            self.cur_nod_num
+        )
         my_cmd = {"nod_lst" : [self.cur_nod_num],
                   "cmd_lst" : ["get_reflections_file"]}
 
@@ -453,7 +459,9 @@ class DoLoadHTML(QObject):
 
             if len(full_file) < 5:
                 try:
-                    self.main_obj.window.HtmlReport.setHtml(self.not_avail_html)
+                    self.main_obj.window.HtmlReport.setHtml(
+                        self.not_avail_html
+                    )
 
                 except AttributeError:
                     print("not working HtmlView # 3")
@@ -551,17 +559,27 @@ class ShowLog(QObject):
 
                 self.main_obj.window.incoming_text.clear()
                 if stat == "Busy":
-                    self.main_obj.window.incoming_text.setTextColor(self.green_color)
+                    self.main_obj.window.incoming_text.setTextColor(
+                        self.green_color
+                    )
 
                 elif stat == "Succeeded":
-                    self.main_obj.window.incoming_text.setTextColor(self.blue_color)
+                    self.main_obj.window.incoming_text.setTextColor(
+                        self.blue_color
+                    )
 
                 else:
-                    self.main_obj.window.incoming_text.setTextColor(self.red_color)
+                    self.main_obj.window.incoming_text.setTextColor(
+                        self.red_color
+                    )
 
                 for single_log_line in lst_log_lines:
-                    self.main_obj.window.incoming_text.insertPlainText(single_log_line)
-                    self.main_obj.window.incoming_text.moveCursor(QTextCursor.End)
+                    self.main_obj.window.incoming_text.insertPlainText(
+                        single_log_line
+                    )
+                    self.main_obj.window.incoming_text.moveCursor(
+                        QTextCursor.End
+                    )
 
             except IndexError:
                 self.show_ready_log()
