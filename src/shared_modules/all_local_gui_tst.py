@@ -8,10 +8,10 @@ from server.data_n_json import iter_dict
 from server import multi_node
 from server.init_first import ini_data
 
-class my_one(QThread):
+class connect_thread(QThread):
     printing = Signal(str)
     def __init__(self, handler, cmd_in):
-        super(my_one, self).__init__()
+        super(connect_thread, self).__init__()
         self.my_handler = handler
         self.my_cmd = cmd_in
 
@@ -24,8 +24,8 @@ class my_one(QThread):
             call_obj = self
         )
 
-    def call_back_tst(self, str_out):
-        print("..call_back_tst..", str_out)
+    def call_back_str(self, str_out):
+        print("..call_back_str..", str_out)
         self.printing.emit(str_out)
 
 
@@ -36,7 +36,7 @@ class MultiRunner(QObject):
         self.thread_lst = []
 
     def run_one_work(self, handler, cmd_in):
-        new_thread = my_one(handler, cmd_in)
+        new_thread = connect_thread(handler, cmd_in)
         new_thread.start()
         new_thread.printing.connect(self.console_out)
         self.thread_lst.append(new_thread)
