@@ -98,8 +98,8 @@ class get_request_real_time(QThread):
             total_size = int(req_get.headers.get('content-length', 0)) + 1
             print("total_size =", total_size)
 
-            #block_size = 65536
-            block_size = 1024
+            block_size = 65536
+            #block_size = 1024
             downloaded_size = 0
             compresed = bytes()
             for data in req_get.iter_content(block_size):
@@ -127,42 +127,6 @@ class get_request_real_time(QThread):
             end_data = None
 
         self.load_ended.emit(end_data)
-
-        to_consider = '''
-        except zlib.error:
-            print("zlib. err catch (load_slice_img_json)")
-            np_array_out = None
-
-        except ConnectionError:
-            print("\n Connection err catch (load_slice_img_json) \n")
-            np_array_out = None
-
-        except requests.exceptions.RequestException:
-            print(
-                "\n requests.exceptions.RequestException (load_slice_img_json) \n"
-            )
-            np_array_out = None
-
-        except json.decoder.JSONDecodeError:
-            print(
-                "\n json.decoder.JSONDecode err catch (load_slice_img_json) \n"
-            )
-            np_array_out = None
-
-        try:
-            tmp_file = open(self.files_path_n_nod_num["tmp_ref_path"], "wb")
-            tmp_file.write(full_ref_file)
-            tmp_file.close()
-            print("request refl, finished for node ", self.cur_nod_num)
-
-        except TypeError:
-            print("Type Err catch loading refl file")
-            self.loading_failed.emit()
-            return
-
-        self.files_loaded.emit(self.files_path_n_nod_num)
-
-        '''
 
 
 def get_optional_list(cmd_str):
