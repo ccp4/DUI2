@@ -29,7 +29,7 @@ from PySide2.QtGui import *
 
 from client.exec_utils import json_data_request
 from client.init_firts import ini_data
-from client.exec_utils import get_request_shot
+from client.exec_utils import get_request_shot, get_request_real_time
 
 import subprocess, psutil, shutil, webbrowser
 
@@ -41,7 +41,7 @@ class LoadFiles(QThread):
         self, unit_URL = None, cur_nod_num = None, tmp_dir = None
     ):
         super(LoadFiles, self).__init__()
-        self.uni_url = unit_URL
+        #self.uni_url = unit_URL
         self.cur_nod_num = cur_nod_num
         self.files_path_n_nod_num = {
             "tmp_exp_path"  :tmp_dir + os.sep + "req_file.expt",
@@ -77,7 +77,7 @@ class LoadFiles(QThread):
         )
         my_cmd = {"nod_lst" : [self.cur_nod_num],
                   "cmd_lst" : ["get_reflections_file"]}
-
+        to_remove = '''
         self.req = requests.get(self.uni_url, stream=True, params = my_cmd)
         total_size = int(self.req.headers.get('content-length', 0)) + 1
         print("total_size =", total_size)
@@ -89,16 +89,26 @@ class LoadFiles(QThread):
             downloaded_size += block_size
             progress = int(100.0 * (downloaded_size / total_size))
             self.progressing.emit(progress)
+        '''
 
+        self.req_r_time = get_request_real_time(params_in = my_cmd)
+        self.req_r_time.prog_new_stat.connect(self.emit_progr)
+        self.req_r_time.load_ended.connect(self.unzip_n_emit_end)
+        self.req_r_time.start()
+
+    def emit_progr(self, percent_progr):
+        self.progressing.emit(percent_progr)
+
+    def unzip_n_emit_end(self, full_ref_file):
         try:
-            full_ref_file = zlib.decompress(ref_compresed)
+
             tmp_file = open(self.files_path_n_nod_num["tmp_ref_path"], "wb")
             tmp_file.write(full_ref_file)
             tmp_file.close()
             print("request refl, finished for node ", self.cur_nod_num)
 
-        except zlib.error:
-            print("zlib.err catch loading refl file")
+        except TypeError:
+            print("Type Err catch loading refl file")
             self.loading_failed.emit()
             return
 
