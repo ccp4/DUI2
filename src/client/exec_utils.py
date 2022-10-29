@@ -93,13 +93,15 @@ class get_request_real_time(QThread):
     def run(self):
         try:
             req_get = requests.get(
-                self.url, stream = True, params = self.params, timeout = 3
+                self.url, stream = True, params = self.params, timeout = 20
             )
             total_size = int(req_get.headers.get('content-length', 0)) + 1
             print("total_size =", total_size)
             block_size = int(total_size / 6 * 1024)
-            if block_size > 65536:
-                block_size = 65536
+            max_size = 16384
+            #max_size = 65536
+            if block_size > max_size:
+                block_size = max_size
 
             print("block_size =", block_size)
 
@@ -112,7 +114,7 @@ class get_request_real_time(QThread):
                 self.prog_new_stat.emit(progress)
 
             end_data = zlib.decompress(compresed)
-            print("mtz downloaded")
+            print("get_request_real_time ... downloaded")
             print("type(end_data) =", type(end_data))
 
         except zlib.error:
