@@ -97,9 +97,12 @@ class get_request_real_time(QThread):
             )
             total_size = int(req_get.headers.get('content-length', 0)) + 1
             print("total_size =", total_size)
+            block_size = int(total_size / 6 * 1024)
+            if block_size > 65536:
+                block_size = 65536
 
-            block_size = 65536
-            #block_size = 1024
+            print("block_size =", block_size)
+
             downloaded_size = 0
             compresed = bytes()
             for data in req_get.iter_content(block_size):
