@@ -77,19 +77,6 @@ class LoadFiles(QThread):
         )
         my_cmd = {"nod_lst" : [self.cur_nod_num],
                   "cmd_lst" : ["get_reflections_file"]}
-        to_remove = '''
-        self.req = requests.get(self.uni_url, stream=True, params = my_cmd)
-        total_size = int(self.req.headers.get('content-length', 0)) + 1
-        print("total_size =", total_size)
-        block_size = int(total_size / 16)
-        downloaded_size = 0
-        ref_compresed = bytes()
-        for data in self.req.iter_content(block_size):
-            ref_compresed += data
-            downloaded_size += block_size
-            progress = int(100.0 * (downloaded_size / total_size))
-            self.progressing.emit(progress)
-        '''
 
         self.req_r_time = get_request_real_time(params_in = my_cmd)
         self.req_r_time.prog_new_stat.connect(self.emit_progr)
