@@ -1638,6 +1638,7 @@ class ExportWidget(QWidget):
 
     def restore_p_label(self):
         self.progress_label.setText("...")
+        self.dowl_thrd.exit()
         print("Done Download")
 
 

@@ -112,16 +112,16 @@ class get_request_real_time(QThread):
             print("type(end_data) =", type(end_data))
 
         except zlib.error:
-            print("zlib. err catch(Mtz_Data_Request)")
+            print("zlib. err catch(get_request_real_time)")
             end_data = None
 
         except ConnectionError:
-            print("\n Connection err catch (Mtz_Data_Request) \n")
+            print("\n Connection err catch (get_request_real_time) \n")
             end_data = None
 
         except requests.exceptions.RequestException:
             print(
-                "\n requests.exceptions.RequestException (Mtz_Data_Request) \n"
+                "\n requests.exceptions.RequestException (get_request_real_time) \n"
             )
             end_data = None
 
@@ -193,12 +193,14 @@ class Mtz_Data_Request(QThread):
     def __init__(self, cmd):
         super(Mtz_Data_Request, self).__init__()
         self.cmd = cmd
+        self.r_time_req_lst = []
 
     def run(self):
-        self.r_time_req = get_request_real_time(params_in = self.cmd)
-        self.r_time_req.prog_new_stat.connect(self.new_progress)
-        self.r_time_req.load_ended.connect(self.finishing)
-        self.r_time_req.start()
+        new_r_time_req = get_request_real_time(params_in = self.cmd)
+        new_r_time_req.prog_new_stat.connect(self.new_progress)
+        new_r_time_req.load_ended.connect(self.finishing)
+        new_r_time_req.start()
+        self.r_time_req_lst.append(new_r_time_req)
 
     def new_progress(self, prog_persent):
         self.update_progress.emit(prog_persent)

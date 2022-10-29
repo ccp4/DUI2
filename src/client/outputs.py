@@ -87,6 +87,8 @@ class LoadFiles(QThread):
         self.progressing.emit(percent_progr)
 
     def unzip_n_emit_end(self, full_ref_file):
+        self.req_r_time.quit()
+        self.req_r_time.wait()
         try:
             tmp_file = open(self.files_path_n_nod_num["tmp_ref_path"], "wb")
             tmp_file.write(full_ref_file)

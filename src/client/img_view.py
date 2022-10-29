@@ -88,6 +88,7 @@ class LoadSliceMaskImage(QThread):
         self.x2 =           x2
         self.y2 =           y2
         self.exp_path =     path_in
+        self.r_time_req_lst = []
 
     def run(self):
         print("loading mask slice of image ")
@@ -101,10 +102,11 @@ class LoadSliceMaskImage(QThread):
                   "path"    : self.exp_path,
                   "cmd_lst" : my_cmd_lst}
 
-        self.req_r_time = get_request_real_time(params_in = my_cmd)
-        self.req_r_time.prog_new_stat.connect(self.emit_progr)
-        self.req_r_time.load_ended.connect(self.emit_n_end)
-        self.req_r_time.start()
+        new_r_time_req = get_request_real_time(params_in = my_cmd)
+        new_r_time_req.prog_new_stat.connect(self.emit_progr)
+        new_r_time_req.load_ended.connect(self.emit_n_end)
+        new_r_time_req.start()
+        self.r_time_req_lst.append(new_r_time_req)
 
     def emit_progr(self, percent_progr):
         self.progressing.emit(percent_progr)
@@ -180,6 +182,7 @@ class LoadSliceImage(QThread):
         self.x2 =           x2
         self.y2 =           y2
         self.exp_path =     path_in
+        self.r_time_req_lst = []
 
     def run(self):
         print("loading slice of image ")
@@ -194,10 +197,11 @@ class LoadSliceImage(QThread):
                   "path"    : self.exp_path,
                   "cmd_lst" : my_cmd_lst}
 
-        self.req_r_time = get_request_real_time(params_in = my_cmd)
-        self.req_r_time.prog_new_stat.connect(self.emit_progr)
-        self.req_r_time.load_ended.connect(self.emit_n_end)
-        self.req_r_time.start()
+        new_r_time_req = get_request_real_time(params_in = my_cmd)
+        new_r_time_req.prog_new_stat.connect(self.emit_progr)
+        new_r_time_req.load_ended.connect(self.emit_n_end)
+        new_r_time_req.start()
+        self.r_time_req_lst.append(new_r_time_req)
 
     def emit_progr(self, percent_progr):
         self.progressing.emit(percent_progr)
@@ -1106,6 +1110,11 @@ class DoImageView(QObject):
             self.l_stat.load_started()
 
             try:
+
+                for in_qthread in self.load_slice_image.r_time_req_lst:
+                    in_qthread.quit()
+                    in_qthread.wait()
+
                 self.load_slice_image.quit()
                 self.load_slice_image.wait()
 
@@ -1113,6 +1122,10 @@ class DoImageView(QObject):
                 print("first slice of image loading")
 
             try:
+                for in_qthread in self.load_slice_mask_image.r_time_req_lst:
+                    in_qthread.quit()
+                    in_qthread.wait()
+
                 self.load_slice_mask_image.quit()
                 self.load_slice_mask_image.wait()
 
