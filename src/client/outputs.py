@@ -88,7 +88,6 @@ class LoadFiles(QThread):
 
     def unzip_n_emit_end(self, full_ref_file):
         try:
-
             tmp_file = open(self.files_path_n_nod_num["tmp_ref_path"], "wb")
             tmp_file.write(full_ref_file)
             tmp_file.close()
