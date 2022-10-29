@@ -91,66 +91,33 @@ class LoadSliceMaskImage(QThread):
 
     def run(self):
         print("loading mask slice of image ")
-
         my_cmd_lst = [
             "gmis " + str(self.img_num) +
             " inv_scale=" + str(self.inv_scale) +
             " view_rect=" + str(self.x1) + "," + str(self.y1) +
                       "," + str(self.x2) + "," + str(self.y2)
         ]
-
         my_cmd = {"nod_lst" : self.nod_num_lst,
                   "path"    : self.exp_path,
                   "cmd_lst" : my_cmd_lst}
-        start_tm = time.time()
 
-        try:
-            req_get = requests.get(self.uni_url, stream=True, params = my_cmd)
-            total_size = int(req_get.headers.get('content-length', 0)) + 1
-            print("total_size =", total_size)
-            block_size = 65536
-            downloaded_size = 0
-            compresed = bytes()
-            for data in req_get.iter_content(block_size):
-                compresed += data
-                downloaded_size += block_size
-                progress = int(100.0 * (downloaded_size / total_size))
-                self.progressing.emit(progress)
+        self.req_r_time = get_request_real_time(params_in = my_cmd)
+        self.req_r_time.prog_new_stat.connect(self.emit_progr)
+        self.req_r_time.load_ended.connect(self.emit_n_end)
+        self.req_r_time.start()
 
-            dic_str = zlib.decompress(compresed)
-            arr_dic = json.loads(dic_str)
-            end_tm = time.time()
-            print("slice IMG request took ", end_tm - start_tm, "sec")
+    def emit_progr(self, percent_progr):
+        self.progressing.emit(percent_progr)
 
-            str_data = arr_dic["str_data"]
-            d1 = arr_dic["d1"]
-            d2 = arr_dic["d2"]
-            print("d1, d2 =", d1, d2)
-
-            n_tup = tuple(str_data)
-            arr_1d = np.asarray(n_tup, dtype = 'float')
-
-            np_array_out = arr_1d.reshape(d1, d2)
-
-        except zlib.error:
-            print("zlib. err catch (load_slice_mask_img_json)")
-            np_array_out = None
-
-        except ConnectionError:
-            print("\n Connection err catch (load_slice_mask_img_json) \n")
-            np_array_out = None
-
-        except requests.exceptions.RequestException:
-            print(
-                "\n requests.exceptions.RequestException (load_slice_mask_img_json) \n"
-            )
-            np_array_out = None
-
-        except json.decoder.JSONDecodeError:
-            print(
-                "\n json.decoder.JSONDecode err catch (load_slice_mask_img_json) \n"
-            )
-            np_array_out = None
+    def emit_n_end(self, byte_json):
+        arr_dic = json.loads(byte_json)
+        str_data = arr_dic["str_data"]
+        d1 = arr_dic["d1"]
+        d2 = arr_dic["d2"]
+        print("d1, d2 =", d1, d2)
+        n_tup = tuple(str_data)
+        arr_1d = np.asarray(n_tup, dtype = 'float')
+        np_array_out = arr_1d.reshape(d1, d2)
 
         self.slice_loaded.emit(
             {
