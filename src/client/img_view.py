@@ -110,14 +110,19 @@ class LoadSliceMaskImage(QThread):
         self.progressing.emit(percent_progr)
 
     def emit_n_end(self, byte_json):
-        arr_dic = json.loads(byte_json)
-        str_data = arr_dic["str_data"]
-        d1 = arr_dic["d1"]
-        d2 = arr_dic["d2"]
-        print("d1, d2 =", d1, d2)
-        n_tup = tuple(str_data)
-        arr_1d = np.asarray(n_tup, dtype = 'float')
-        np_array_out = arr_1d.reshape(d1, d2)
+        try:
+            arr_dic = json.loads(byte_json)
+
+            str_data = arr_dic["str_data"]
+            d1 = arr_dic["d1"]
+            d2 = arr_dic["d2"]
+            print("d1, d2 =", d1, d2)
+            n_tup = tuple(str_data)
+            arr_1d = np.asarray(n_tup, dtype = 'float')
+            np_array_out = arr_1d.reshape(d1, d2)
+
+        except TypeError:
+            np_array_out = None
 
         self.slice_loaded.emit(
             {
@@ -198,13 +203,17 @@ class LoadSliceImage(QThread):
         self.progressing.emit(percent_progr)
 
     def emit_n_end(self, byte_json):
-        arr_dic = json.loads(byte_json)
-        str_data = arr_dic["str_data"]
-        d1 = arr_dic["d1"]
-        d2 = arr_dic["d2"]
-        print("d1, d2 =", d1, d2)
-        arr_1d = np.fromstring(str_data, dtype = float, sep = ',')
-        np_array_out = arr_1d.reshape(d1, d2)
+        try:
+            arr_dic = json.loads(byte_json)
+            str_data = arr_dic["str_data"]
+            d1 = arr_dic["d1"]
+            d2 = arr_dic["d2"]
+            print("d1, d2 =", d1, d2)
+            arr_1d = np.fromstring(str_data, dtype = float, sep = ',')
+            np_array_out = arr_1d.reshape(d1, d2)
+
+        except TypeError:
+            np_array_out = None
 
         self.slice_loaded.emit(
             {
