@@ -73,8 +73,8 @@ class MainGuiObject(QObject):
         self.m_run.run_one_work(self.handler, cmd_in)
 
     def console_out(self, str_out):
+        self.window.OutTextEdit.moveCursor(QTextCursor.End)
         self.window.OutTextEdit.insertPlainText(str_out)
-
 
 def main(par_def = None):
     format_utils.print_logo()
