@@ -164,17 +164,25 @@ class Mtz_Data_Request(QThread):
         self.r_time_req_lst = []
 
     def run(self):
-        new_r_time_req = get_request_real_time(params_in = self.cmd)
-        new_r_time_req.prog_new_stat.connect(self.new_progress)
-        new_r_time_req.load_ended.connect(self.finishing)
-        new_r_time_req.start()
-        self.r_time_req_lst.append(new_r_time_req)
+        self.say_goodbye()
+        self.r_time_req = get_request_real_time(params_in = self.cmd)
+        self.r_time_req.prog_new_stat.connect(self.new_progress)
+        self.r_time_req.load_ended.connect(self.finishing)
+        self.r_time_req.start()
 
     def new_progress(self, prog_persent):
         self.update_progress.emit(prog_persent)
 
     def finishing(self, mtz_data):
         self.done_download.emit(mtz_data)
+
+    def say_goodbye(self):
+        try:
+            self.r_time_req.quit()
+            self.r_time_req.wait()
+
+        except AttributeError:
+            print("not found QThread(get_request_real_time)")
 
 
 class Run_n_Output(QThread):
