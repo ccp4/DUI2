@@ -81,27 +81,6 @@ def json_data_request(params_in = None, main_handler = None):
         return json_out
 
 
-def get_optional_list(cmd_str):
-    cmd = {"nod_lst":"", "cmd_lst":[cmd_str]}
-    lst_opt = json_data_request(params_in = cmd)
-    return lst_opt
-
-
-def build_advanced_params_widget(cmd_str, h_box_search):
-    cmd = {"nod_lst":"", "cmd_lst":[cmd_str]}
-
-    data_init = ini_data()
-    uni_url = data_init.get_url()
-    print("uni_url(build_advanced_params_widget) =", uni_url)
-
-    lst_params = json_data_request(params_in = cmd)
-    lin_lst = format_utils.param_tree_2_lineal(lst_params)
-    par_def = lin_lst()
-    advanced_parameters = AdvancedParameters()
-    advanced_parameters.build_pars(par_def, h_box_search)
-    return advanced_parameters
-
-
 class get_request_real_time(QThread):
     prog_new_stat = Signal(int)
     load_ended = Signal(bytes)
@@ -147,6 +126,29 @@ class get_request_real_time(QThread):
             end_data = None
 
         self.load_ended.emit(end_data)
+
+
+def get_optional_list(cmd_str):
+    cmd = {"nod_lst":"", "cmd_lst":[cmd_str]}
+    lst_opt = json_data_request(params_in = cmd)
+    return lst_opt
+
+
+def build_advanced_params_widget(cmd_str, h_box_search):
+    cmd = {"nod_lst":"", "cmd_lst":[cmd_str]}
+
+    data_init = ini_data()
+    uni_url = data_init.get_url()
+    print("uni_url(build_advanced_params_widget) =", uni_url)
+
+    lst_params = json_data_request(params_in = cmd)
+    lin_lst = format_utils.param_tree_2_lineal(lst_params)
+    par_def = lin_lst()
+    advanced_parameters = AdvancedParameters()
+    advanced_parameters.build_pars(par_def, h_box_search)
+    return advanced_parameters
+
+
 
 
 class Mtz_Data_Request(QThread):
