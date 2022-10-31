@@ -290,7 +290,8 @@ class FileBrowser(QDialog):
         data_init = ini_data()
         uni_url = data_init.get_url()
 
-        compresed = get_request_shot(params_in = cmd)
+        req_shot = get_request_shot(params_in = cmd)
+        compresed = req_shot.result_out()
 
         dic_str = zlib.decompress(compresed)
         self.dir_tree_dict = json.loads(dic_str)

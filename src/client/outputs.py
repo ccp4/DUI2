@@ -57,7 +57,8 @@ class LoadFiles(QThread):
         my_cmd = {"nod_lst" : [self.cur_nod_num],
                   "cmd_lst" : ["get_experiments_file"]}
 
-        exp_compresed = get_request_shot(params_in = my_cmd)
+        req_shot = get_request_shot(params_in = my_cmd)
+        exp_compresed = req_shot.result_out()
 
         try:
             full_exp_file = zlib.decompress(exp_compresed).decode('utf-8')
@@ -419,7 +420,8 @@ class DoLoadHTML(QObject):
                     }
                     print("staring html request ...")
 
-                    compresed = get_request_shot(params_in = cmd)
+                    req_shot = get_request_shot(params_in = cmd)
+                    compresed = req_shot.result_out()
 
                     print("... html request ended")
 

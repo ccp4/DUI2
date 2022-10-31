@@ -29,15 +29,29 @@ from client.gui_utils import AdvancedParameters, widgets_defs
 from client.init_firts import ini_data
 from shared_modules import format_utils
 
-def get_request_shot(params_in = None, main_handler = None):
-    if main_handler == None:
-        data_init = ini_data()
-        uni_url = data_init.get_url()
-        req = requests.get(uni_url, stream = True, params = params_in)
-        data_out = req.content
-        return data_out
+#def get_request_shot(params_in = None, main_handler = None):
+class get_request_shot(QObject):
+    def __init__(self, parent = None, params_in = None, main_handler = None):
+        super(get_request_shot, self).__init__(parent)
+        if main_handler == None:
+            data_init = ini_data()
+            uni_url = data_init.get_url()
+            req = requests.get(uni_url, stream = True, params = params_in)
+            data_out = req.content
+            self.to_return = data_out
 
-#def json_data_request(params_in = None, main_handler = None):
+        else:
+            print("main_handler =", main_handler)
+            main_handler.run_from_main_dui(params_in, self)
+
+    def get_it(self, data_comming):
+        print("data_comming =", data_comming)
+        self.to_return = data_comming
+
+    def result_out(self):
+        return self.to_return
+
+
 
 class json_data_request(QObject):
     def __init__(self, parent = None, params_in = None, main_handler = None):

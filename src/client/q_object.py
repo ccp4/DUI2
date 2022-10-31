@@ -502,7 +502,9 @@ class MainObject(QObject):
         print("\n aboutToQuit ... 1\n")
         self.recip_latt.quit_kill_all()
         cmd = {"nod_lst":"", "cmd_lst":["closed"]}
-        lst_req = json_data_request(params_in = cmd)
+        lst_req = json_data_request(
+            params_in = cmd, main_handler = self.runner_handler
+        )
         resp = lst_req.result_out()
         print("resp =", resp)
         print("\n aboutToQuit ... 2\n")
@@ -675,7 +677,9 @@ class MainObject(QObject):
                     "nod_lst":cur_nod["parent_node_lst"],
                     "cmd_lst":["get_bravais_sum"]
                 }
-                lst_req = json_data_request(params_in = cmd)
+                lst_req = json_data_request(
+                    params_in = cmd, main_handler = self.runner_handler
+                )
                 json_data_lst = lst_req.result_out()
                 self.r_index_widg.add_opts_lst(
                     json_data = json_data_lst[0]
@@ -772,7 +776,9 @@ class MainObject(QObject):
 
     def update_reindex_table_header(self, nod_lst):
         cmd = {"nod_lst":nod_lst, "cmd_lst":["display_log"]}
-        lst_req = json_data_request(params_in = cmd)
+        lst_req = json_data_request(
+            params_in = cmd, main_handler = self.runner_handler
+        )
         json_log = lst_req.result_out()
         try:
             lst_log_lines = json_log[0]
@@ -791,7 +797,9 @@ class MainObject(QObject):
                 "nod_lst":[self.curr_nod_num],
                 "cmd_lst":["get_bravais_sum"]
             }
-            lst_req = json_data_request(params_in = cmd)
+            lst_req = json_data_request(
+                params_in = cmd, main_handler = self.runner_handler
+            )
             json_data_lst = lst_req.result_out()
             self.r_index_widg.add_opts_lst(
                 json_data = json_data_lst[0]
@@ -886,7 +894,9 @@ class MainObject(QObject):
         cmd = {
             "nod_lst":self.new_node.parent_node_lst, "cmd_lst":["get_lambda"]
         }
-        lst_req = json_data_request(params_in = cmd)
+        lst_req = json_data_request(
+            params_in = cmd, main_handler = self.runner_handler
+        )
         json_lamb = lst_req.result_out()
         try:
             lamb = json_lamb[0]
@@ -1014,7 +1024,9 @@ class MainObject(QObject):
 
     def request_display(self):
         cmd = {"nod_lst":"", "cmd_lst":["display"]}
-        lst_req = json_data_request(params_in = cmd)
+        lst_req = json_data_request(
+            params_in = cmd, main_handler = self.runner_handler
+        )
         self.server_nod_lst = lst_req.result_out()
         self.display()
 
@@ -1079,7 +1091,9 @@ class MainObject(QObject):
         cmd = {"nod_lst":nod_lst, "cmd_lst":["stop"]}
         print("cmd =", cmd)
         try:
-            lst_req = json_data_request(params_in = cmd)
+            lst_req = json_data_request(
+                params_in = cmd, main_handler = self.runner_handler
+            )
             lst_params = lst_req.result_out()
 
         except requests.exceptions.RequestException:
