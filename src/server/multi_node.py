@@ -26,7 +26,6 @@ import os, sys, shutil
 import glob, json, time
 
 from server.data_n_json import get_data_from_steps, spit_out
-from server.init_first import ini_data
 from shared_modules import format_utils
 
 def get_pair_list():
@@ -209,9 +208,10 @@ def add_log_line(new_line, nod_req):
 
 
 class CmdNode(object):
-    def __init__(self, parent_lst_in = None):
+    def __init__(self, parent_lst_in = None, data_init = None):
+        if data_init == None:
+            data_init = ini_data()
 
-        data_init = ini_data()
         self.win_exe = data_init.get_win_exe()
 
         self.parent_node_lst = []
@@ -595,8 +595,15 @@ class CmdNode(object):
 
 
 class Runner(object):
-    def __init__(self, recovery_data):
+    def __init__(self, recovery_data = None, dat_ini = None):
         self.tree_output = format_utils.TreeShow()
+        if dat_ini == None:
+            from server.init_first import ini_data
+            self.data_init = ini_data()
+
+        else:
+            self.data_init = dat_ini
+
         if recovery_data == None:
             self.start_from_zero()
 
@@ -604,7 +611,7 @@ class Runner(object):
             self._recover_state(recovery_data)
 
     def start_from_zero(self):
-        root_node = CmdNode()
+        root_node = CmdNode(parent_lst_in = None, data_init = self.data_init)
         root_node.set_root()
         self.step_list = [root_node]
         self.bigger_lin = 0
@@ -762,7 +769,9 @@ class Runner(object):
         )
 
     def _create_step(self, prev_step_lst):
-        new_step = CmdNode(parent_lst_in = prev_step_lst)
+        new_step = CmdNode(
+            parent_lst_in = prev_step_lst, data_init = self.data_init
+        )
         tmp_big = 0
         for node in self.step_list:
             if node.number > tmp_big:
@@ -812,7 +821,9 @@ class Runner(object):
 
         lst_nod = recovery_data["step_list"]
         for uni_dic in lst_nod:
-            new_node = CmdNode()
+            new_node = CmdNode(
+                parent_lst_in = None, data_init = self.data_init
+            )
             new_node._base_dir       = uni_dic["_base_dir"]
             new_node.full_cmd_lst    = uni_dic["full_cmd_lst"]
             new_node.lst2run         = uni_dic["lst2run"]

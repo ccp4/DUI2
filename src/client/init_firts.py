@@ -19,17 +19,22 @@ class ini_data(object):
 
         print("init_param =", init_param)
         global uni_url
-        uni_url = init_param["url"]
-        print(
-            "\n init_param['all_local'] =",
-            init_param["all_local"], "\n"
-        )
-        global run_local
-        if init_param["all_local"].lower() == "true":
-            run_local = True
+        try:
+            uni_url = init_param["url"]
 
-        else:
-            run_local = False
+        except KeyError:
+            uni_url = None
+
+        global run_local
+        try:
+            if init_param["all_local"].lower() == "true":
+                run_local = True
+
+            else:
+                run_local = False
+
+        except KeyError:
+            run_local = True
 
         print("\n run_local =", run_local, "\n")
 

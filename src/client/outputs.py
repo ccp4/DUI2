@@ -543,7 +543,8 @@ class ShowLog(QObject):
             try:
                 if not found_nod_num:
                     cmd = {"nod_lst":[nod_p_num], "cmd_lst":["display_log"]}
-                    json_log = json_data_request(params_in = cmd)
+                    lst_req = json_data_request(params_in = cmd)
+                    json_log = lst_req.result_out()
                     try:
                         lst_log_lines = json_log[0]
                         self.lst_node_log_out.append(

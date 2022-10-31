@@ -37,48 +37,64 @@ def get_request_shot(params_in = None, main_handler = None):
         data_out = req.content
         return data_out
 
-def json_data_request(params_in = None, main_handler = None):
-    if main_handler == None:
-        data_init = ini_data()
-        uni_url = data_init.get_url()
-        try:
-            print("attempting to request to:", uni_url, ", with:", params_in)
-            req_get = requests.get(
-                uni_url, stream = True, params = params_in, timeout = 3
-            )
-            print("starting request")
-            str_lst = ''
-            line_str = ''
-            json_out = ""
-            times_loop = 10
-            for count_times in range(times_loop):
-                print("count_times =", count_times)
-                tmp_dat = req_get.raw.readline()
-                line_str = str(tmp_dat.decode('utf-8'))
-                if '/*EOF*/' in line_str:
-                    print('/*EOF*/ received')
-                    break
+#def json_data_request(params_in = None, main_handler = None):
 
-                else:
-                    str_lst = line_str
-                    #print("str_lst =", str_lst)
+class json_data_request(QObject):
+    def __init__(self, parent = None, params_in = None, main_handler = None):
+        super(json_data_request, self).__init__(parent)
+        if main_handler == None:
+            data_init = ini_data()
+            uni_url = data_init.get_url()
+            try:
+                print("attempting to request to:", uni_url, ", with:", params_in)
+                req_get = requests.get(
+                    uni_url, stream = True, params = params_in, timeout = 3
+                )
+                print("starting request")
+                str_lst = ''
+                line_str = ''
+                json_out = ""
+                times_loop = 10
+                for count_times in range(times_loop):
+                    print("count_times =", count_times)
+                    tmp_dat = req_get.raw.readline()
+                    line_str = str(tmp_dat.decode('utf-8'))
+                    if '/*EOF*/' in line_str:
+                        print('/*EOF*/ received')
+                        break
 
-                if count_times == times_loop - 1:
-                    print('to many "lines" in http response')
-                    json_out = None
+                    else:
+                        str_lst = line_str
+                        #print("str_lst =", str_lst)
 
-            if json_out is not None:
-                json_out = json.loads(str_lst)
+                    if count_times == times_loop - 1:
+                        print('to many "lines" in http response')
+                        json_out = None
 
-        except ConnectionError:
-            print(" ... Connection err catch  (json_data_request) ...")
-            json_out = None
+                if json_out is not None:
+                    json_out = json.loads(str_lst)
 
-        except requests.exceptions.RequestException:
-            print(" ... requests.exceptions.RequestException (json_data_request)")
-            json_out = None
+            except ConnectionError:
+                print(" ... Connection err catch  (json_data_request) ...")
+                json_out = None
 
-        return json_out
+            except requests.exceptions.RequestException:
+                print(" ... requests.exceptions.RequestException (json_data_request)")
+                json_out = None
+
+            #return json_out
+            self.to_return = json_out
+
+        else:
+            print("main_handler =", main_handler)
+            main_handler.run_from_main_dui(params_in, self)
+
+    def get_it(self, data_comming):
+        print("data_comming =", data_comming)
+        self.to_return = data_comming
+
+    def result_out(self):
+        return self.to_return
 
 
 class get_request_real_time(QThread):
@@ -134,9 +150,10 @@ class get_request_real_time(QThread):
         self.load_ended.emit(end_data)
 
 
-def get_optional_list(cmd_str):
+def get_optional_list(cmd_str, handler_in):
     cmd = {"nod_lst":"", "cmd_lst":[cmd_str]}
-    lst_opt = json_data_request(params_in = cmd)
+    lst_req = json_data_request(params_in = cmd, main_handler = handler_in)
+    lst_opt = lst_req.result_out()
     return lst_opt
 
 
@@ -147,7 +164,8 @@ def build_advanced_params_widget(cmd_str, h_box_search):
     uni_url = data_init.get_url()
     print("uni_url(build_advanced_params_widget) =", uni_url)
 
-    lst_params = json_data_request(params_in = cmd)
+    lst_req = json_data_request(params_in = cmd)
+    lst_params = lst_req.result_out()
     lin_lst = format_utils.param_tree_2_lineal(lst_params)
     par_def = lin_lst()
     advanced_parameters = AdvancedParameters()

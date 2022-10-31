@@ -74,19 +74,22 @@ def load_mask_img_json_w_str(
         np_array_out = arr_1d.reshape(d1, d2)
 
     except zlib.error:
-        print("zlib. err catch (load_img_json_w_str)")
+        print("zlib. err catch (load_mask_img_json_w_str)")
         return None
 
     except ConnectionError:
-        print("\n Connection err catch  (load_img_json_w_str) \n")
+        print("\n Connection err catch  (load_mask_img_json_w_str) \n")
         return None
 
     except requests.exceptions.RequestException:
-        print("\n requests.exceptions.RequestException (load_img_json_w_str) \n")
+        print(
+            "\n requests.exceptions.RequestException" +
+            " (load_mask_img_json_w_str) \n"
+        )
         return None
 
     except ZeroDivisionError:
-        print("\n ZeroDivision err catch (load_img_json_w_str) \n")
+        print("\n ZeroDivision err catch (load_mask_img_json_w_str) \n")
         return None
 
     return np_array_out

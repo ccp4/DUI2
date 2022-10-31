@@ -58,9 +58,10 @@ from client.simpler_param_widgets import (
 
 
 class MainObject(QObject):
-    def __init__(self, parent = None):
+    def __init__(self, parent = None, multi_runner = None):
         super(MainObject, self).__init__(parent)
         self.parent_app = parent
+        self.runner_handler = multi_runner
         self.ui_dir_path = os.path.dirname(os.path.abspath(__file__))
         ui_path = self.ui_dir_path + os.sep + "dui_client.ui"
         print("ui_path =", ui_path)
@@ -95,7 +96,9 @@ class MainObject(QObject):
             )
             self.window.ExportScrollArea.setWidget(self.expr_widg)
 
-            self.opt_cmd_lst = get_optional_list("get_optional_command_list")
+            self.opt_cmd_lst = get_optional_list(
+                "get_optional_command_list", self.runner_handler
+            )
             self.optional_widg = OptionalWidget(cmd_lst = self.opt_cmd_lst)
             self.window.OptionalScrollArea.setWidget(self.optional_widg)
             self.optional_widg.all_items_changed.connect(
@@ -499,7 +502,8 @@ class MainObject(QObject):
         print("\n aboutToQuit ... 1\n")
         self.recip_latt.quit_kill_all()
         cmd = {"nod_lst":"", "cmd_lst":["closed"]}
-        resp = json_data_request(params_in = cmd)
+        lst_req = json_data_request(params_in = cmd)
+        resp = lst_req.result_out()
         print("resp =", resp)
         print("\n aboutToQuit ... 2\n")
 
@@ -671,7 +675,8 @@ class MainObject(QObject):
                     "nod_lst":cur_nod["parent_node_lst"],
                     "cmd_lst":["get_bravais_sum"]
                 }
-                json_data_lst = json_data_request(self.uni_url, cmd)
+                lst_req = json_data_request(params_in = cmd)
+                json_data_lst = lst_req.result_out()
                 self.r_index_widg.add_opts_lst(
                     json_data = json_data_lst[0]
                 )
@@ -767,7 +772,8 @@ class MainObject(QObject):
 
     def update_reindex_table_header(self, nod_lst):
         cmd = {"nod_lst":nod_lst, "cmd_lst":["display_log"]}
-        json_log = json_data_request(params_in = cmd)
+        lst_req = json_data_request(params_in = cmd)
+        json_log = lst_req.result_out()
         try:
             lst_log_lines = json_log[0]
             label2update = get_label_from_str_list(lst_log_lines)
@@ -785,7 +791,8 @@ class MainObject(QObject):
                 "nod_lst":[self.curr_nod_num],
                 "cmd_lst":["get_bravais_sum"]
             }
-            json_data_lst = json_data_request(params_in = cmd)
+            lst_req = json_data_request(params_in = cmd)
+            json_data_lst = lst_req.result_out()
             self.r_index_widg.add_opts_lst(
                 json_data = json_data_lst[0]
             )
@@ -879,7 +886,8 @@ class MainObject(QObject):
         cmd = {
             "nod_lst":self.new_node.parent_node_lst, "cmd_lst":["get_lambda"]
         }
-        json_lamb = json_data_request(params_in = cmd)
+        lst_req = json_data_request(params_in = cmd)
+        json_lamb = lst_req.result_out()
         try:
             lamb = json_lamb[0]
             print("lamb =", lamb)
@@ -1006,7 +1014,8 @@ class MainObject(QObject):
 
     def request_display(self):
         cmd = {"nod_lst":"", "cmd_lst":["display"]}
-        self.server_nod_lst = json_data_request(params_in = cmd)
+        lst_req = json_data_request(params_in = cmd)
+        self.server_nod_lst = lst_req.result_out()
         self.display()
 
     def on_clone(self):
@@ -1063,13 +1072,15 @@ class MainObject(QObject):
         self.new_node = None
 
     def req_stop(self):
+        #TODO: consider if this should be a << POST >> request
         print("req_stop")
         nod_lst = [str(self.curr_nod_num)]
         print("\n nod_lst", nod_lst)
         cmd = {"nod_lst":nod_lst, "cmd_lst":["stop"]}
         print("cmd =", cmd)
         try:
-            lst_params = json_data_request(params_in = cmd)
+            lst_req = json_data_request(params_in = cmd)
+            lst_params = lst_req.result_out()
 
         except requests.exceptions.RequestException:
             print(

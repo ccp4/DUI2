@@ -29,11 +29,11 @@ from PySide2.QtGui import *
 from PySide2 import QtUiTools
 
 import numpy as np
-import json, zlib, time, requests
+import json, time, requests
 
 from client.init_firts import ini_data
 from client.exec_utils import (
-    json_data_request, get_request_shot, get_request_real_time
+    json_data_request, get_request_real_time
 )
 from client.outputs import HandleLoadStatusLabel
 
@@ -564,7 +564,9 @@ class LoadInThread(QThread):
 
     def run(self):
         print("\n Loading with QThread ... Start", self.cmd, " \n")
-        response = json_data_request(params_in = self.cmd)
+        lst_req = json_data_request(params_in = self.cmd)
+        response = lst_req.result_out()
+
         self.request_loaded.emit((response))
         print("\n Loading with QThread ... End ", self.cmd, " \n")
 
@@ -1490,7 +1492,8 @@ class MainImgViewObject(QObject):
         my_cmd = {"path"    : self.nod_or_path,
                   "cmd_lst" : my_cmd_lst}
 
-        json_data_lst = json_data_request(params_in = my_cmd)
+        lst_req = json_data_request(params_in = my_cmd)
+        json_data_lst = lst_req.result_out()
 
         new_templ = json_data_lst[0]
         self.img_d1_d2 = (json_data_lst[1], json_data_lst[2])
