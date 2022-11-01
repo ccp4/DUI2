@@ -114,16 +114,15 @@ class ReqHandler(object):
             siz_dat = str(len(byt_data))
 
             #print("size =", siz_dat)
-            spit_out(str_out = "size =" + " " + str(siz_dat))
+            spit_out(str_out = "size =" + " " + str(siz_dat), req_obj = call_obj)
 
             #self.wfile.write(bytes(byt_data))
-            spit_out(str_out = bytes(byt_data))
+            spit_out(str_out = bytes(byt_data), req_obj = call_obj)
             #print(bytes(byt_data))
 
 
         print("sending /*EOF*/")
         #self.wfile.write(bytes('/*EOF*/', 'utf-8'))
-        spit_out(str_out = '/*EOF*/', out_type = 'utf-8')
-        #print('/*EOF*/')
+        #spit_out(str_out = '/*EOF*/', req_obj = call_obj, out_type = 'utf-8')
 
 

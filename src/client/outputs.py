@@ -57,20 +57,26 @@ class LoadFiles(QThread):
         my_cmd = {"nod_lst" : [self.cur_nod_num],
                   "cmd_lst" : ["get_experiments_file"]}
 
-        req_shot = get_request_shot(params_in = my_cmd)
-        exp_compresed = req_shot.result_out()
-
-        try:
-            full_exp_file = zlib.decompress(exp_compresed).decode('utf-8')
-            tmp_file = open(self.files_path_n_nod_num["tmp_exp_path"], "w")
-            tmp_file.write(full_exp_file)
-            tmp_file.close()
-            print("request expt, finished for node ", self.cur_nod_num)
-
-        except zlib.error:
-            print("zlib.err catch loading expt file")
+        req_shot = get_request_shot(params_in = my_cmd, main_handler = None)
+        exp_req = req_shot.result_out()
+        if exp_req == None:
             self.loading_failed.emit()
             return
+
+        full_exp_file = exp_req.decode('utf-8')
+
+        #try:
+
+            #full_exp_file = zlib.decompress(exp_compresed).decode('utf-8')
+        tmp_file = open(self.files_path_n_nod_num["tmp_exp_path"], "w")
+        tmp_file.write(full_exp_file)
+        tmp_file.close()
+        print("request expt, finished for node ", self.cur_nod_num)
+
+        #except zlib.error:
+        #    print("zlib.err catch loading expt file")
+        #    self.loading_failed.emit()
+        #    return
 
         print(
             "launching << get_reflections_file >> for node: ",
@@ -420,12 +426,21 @@ class DoLoadHTML(QObject):
                     }
                     print("staring html request ...")
 
-                    req_shot = get_request_shot(params_in = cmd)
-                    compresed = req_shot.result_out()
+                    req_shot = get_request_shot(
+                        params_in = cmd, main_handler = None
+                    )
+
+                    #compresed = req_shot.result_out()
+                    #full_file = zlib.decompress(compresed).decode('utf-8')
+
+                    req_file = req_shot.result_out()
+                    if req_file == None:
+                        full_file = self.not_avail_html
+
+                    else:
+                        full_file = req_file.decode('utf-8')
 
                     print("... html request ended")
-
-                    full_file = zlib.decompress(compresed).decode('utf-8')
 
                     found_html = False
                     for html_info in self.lst_html:
@@ -454,9 +469,11 @@ class DoLoadHTML(QObject):
                     )
                     full_file = self.failed_html
 
+                    '''
                 except zlib.error:
                     print("\n zlib. err catch (DoLoadHTML) \n")
                     full_file = self.not_avail_html
+                    '''
 
             if len(full_file) < 5:
                 try:

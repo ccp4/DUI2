@@ -5,7 +5,8 @@ from client.init_firts import ini_data
 from client.exec_utils import get_request_shot
 
 def load_img_json_w_str(
-    uni_url = None, nod_num_lst = [1], img_num = 0, exp_path = None
+    uni_url = None, nod_num_lst = [1], img_num = 0,
+    exp_path = None, main_handler = None
 ):
     my_cmd_lst = ["gi " + str(img_num)]
     my_cmd = {"nod_lst" : nod_num_lst,
@@ -15,10 +16,13 @@ def load_img_json_w_str(
     try:
         start_tm = time.time()
 
-        req_shot = get_request_shot(params_in = my_cmd)
-        compresed = req_shot.result_out()
+        req_shot = get_request_shot(
+            params_in = my_cmd, main_handler = main_handler
+        )
+        #compresed = req_shot.result_out()
+        #dic_str = zlib.decompress(compresed)
+        dic_str = req_shot.result_out()
 
-        dic_str = zlib.decompress(compresed)
         arr_dic = json.loads(dic_str)
         end_tm = time.time()
         print("full IMG request took ", end_tm - start_tm, "sec")
@@ -29,8 +33,8 @@ def load_img_json_w_str(
         arr_1d = np.fromstring(str_data, dtype = float, sep = ',')
         np_array_out = arr_1d.reshape(d1, d2)
 
-    except zlib.error:
-        print("zlib. err catch (load_img_json_w_str)")
+    except TypeError:
+        print("\n Type err catch  (load_img_json_w_str) \n")
         return None
 
     except ConnectionError:
@@ -49,7 +53,8 @@ def load_img_json_w_str(
 
 
 def load_mask_img_json_w_str(
-    uni_url = None, nod_num_lst = [1], img_num = 0, exp_path = None
+    uni_url = None, nod_num_lst = [1], img_num = 0,
+    exp_path = None, main_handler = None
 ):
     my_cmd_lst = ["gmi " + str(img_num)]
     my_cmd = {"nod_lst" : nod_num_lst,
@@ -59,10 +64,13 @@ def load_mask_img_json_w_str(
     try:
         start_tm = time.time()
 
-        req_shot = get_request_shot(params_in = my_cmd)
-        compresed = req_shot.result_out()
+        req_shot = get_request_shot(
+            params_in = my_cmd, main_handler = main_handler
+        )
 
-        dic_str = zlib.decompress(compresed)
+        #compresed = req_shot.result_out()
+        #dic_str = zlib.decompress(compresed)
+        dic_str =  req_shot.result_out()
         arr_dic = json.loads(dic_str)
         end_tm = time.time()
         print("full Mask IMG request took ", end_tm - start_tm, "sec")
@@ -75,8 +83,8 @@ def load_mask_img_json_w_str(
         arr_1d = np.asarray(n_tup, dtype = 'float')
         np_array_out = arr_1d.reshape(d1, d2)
 
-    except zlib.error:
-        print("zlib. err catch (load_mask_img_json_w_str)")
+    except TypeError:
+        print("\n Type err catch  (load_mask_img_json_w_str) \n")
         return None
 
     except ConnectionError:

@@ -18,8 +18,11 @@ class connect_thread(QThread):
         )
 
     def call_back_str(self, data_out):
-        #print("[call_back_str] <<<", data_out, ">>>")
-        self.my_caller.get_it(data_out)
+        self.my_caller.get_it_str(data_out)
+
+    def call_back_bin(self, data_out):
+        self.my_caller.get_it_bin(data_out)
+
 
 class MultiRunner(QObject):
     def __init__(self):
@@ -30,7 +33,8 @@ class MultiRunner(QObject):
         self.n_thread = connect_thread(handler, cmd_in, obj_out)
         self.thread_lst.append(self.n_thread)
         self.n_thread.start()
-        return self.n_thread
+        while not self.n_thread.isFinished():
+            time.sleep(0.1)
 
 
 class MainGuiObject(QObject):
@@ -39,12 +43,8 @@ class MainGuiObject(QObject):
         self.parent_app = parent
         self.handler = all_local_server.ReqHandler(cmd_tree_runner)
         print("inside QObject")
-        self.dui_txt_out = None
         self.m_run = MultiRunner()
 
     def run_from_main_dui(self, cmd_in, dui_handle):
         print("cmd_in(run_from_main_dui) =", cmd_in)
-        self.dui_txt_out = dui_handle
-        this_thread = self.m_run.run_one_work(self.handler, cmd_in, dui_handle)
-        while not this_thread.isFinished():
-            time.sleep(0.05)
+        self.m_run.run_one_work(self.handler, cmd_in, dui_handle)

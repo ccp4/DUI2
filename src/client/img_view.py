@@ -48,13 +48,14 @@ class LoadFullMaskImage(QThread):
     image_loaded = Signal(tuple)
     def __init__(
         self, unit_URL = None, cur_nod_num = None,
-        cur_img_num = None, path_in = None
+        cur_img_num = None, path_in = None, handler_in = None
     ):
         super(LoadFullMaskImage, self).__init__()
         self.uni_url = unit_URL
         self.cur_nod_num = cur_nod_num
         self.cur_img_num = cur_img_num
         self.exp_path = path_in
+        self.handler_in = handler_in
 
     def run(self):
         print("loading full image ", self.cur_img_num, " in full resolution")
@@ -62,7 +63,8 @@ class LoadFullMaskImage(QThread):
             self.uni_url,
             nod_num_lst = [self.cur_nod_num],
             img_num = self.cur_img_num,
-            exp_path = self.exp_path
+            exp_path = self.exp_path,
+            main_handler = self.handler_in
         )
         self.image_loaded.emit(
             (self.cur_nod_num, self.cur_img_num, np_full_img)
@@ -145,13 +147,15 @@ class LoadFullImage(QThread):
     image_loaded = Signal(tuple)
     def __init__(
         self, unit_URL = None, cur_nod_num = None,
-        cur_img_num = None, path_in = None
+        cur_img_num = None, path_in = None, handler_in = None
     ):
         super(LoadFullImage, self).__init__()
         self.uni_url = unit_URL
         self.cur_nod_num = cur_nod_num
         self.cur_img_num = cur_img_num
         self.exp_path = path_in
+        self.handler_in = handler_in
+
 
     def run(self):
         print("loading image ", self.cur_img_num, " in full resolution")
@@ -159,7 +163,8 @@ class LoadFullImage(QThread):
             self.uni_url,
             nod_num_lst = [self.cur_nod_num],
             img_num = self.cur_img_num,
-            exp_path = self.exp_path
+            exp_path = self.exp_path,
+            main_handler = self.handler_in
         )
         self.image_loaded.emit(
             (self.cur_nod_num, self.cur_img_num, np_full_img)
@@ -961,14 +966,16 @@ class DoImageView(QObject):
             unit_URL = self.uni_url,
             cur_nod_num = self.cur_nod_num,
             cur_img_num = self.cur_img_num,
-            path_in = self.exp_path
+            path_in = self.exp_path,
+            handler_in = self.my_handler
         )
 
         self.load_full_mask_image = LoadFullMaskImage(
             unit_URL = self.uni_url,
             cur_nod_num = self.cur_nod_num,
             cur_img_num = self.cur_img_num,
-            path_in = self.exp_path
+            path_in = self.exp_path,
+            handler_in = self.my_handler
         )
 
         self.load_full_image.image_loaded.connect(self.new_full_img)
