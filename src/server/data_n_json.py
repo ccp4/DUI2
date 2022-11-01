@@ -42,7 +42,7 @@ from server.img_uploader import flex_arr_2_json
 
 def spit_out(str_out = None, req_obj = None, out_type = None):
 
-    #print("req_obj(spit_out) =", req_obj)
+    print("req_obj(spit_out) =", req_obj)
 
     if req_obj is None:
         if out_type == 'utf-8':

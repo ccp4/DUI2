@@ -23,7 +23,7 @@ copyright (c) CCP4 - DLS
 
 
 from PySide2.QtCore import *
-import requests, json, os, sys, zlib
+import requests, json, os, sys, zlib, time
 
 from client.gui_utils import AdvancedParameters, widgets_defs
 from client.init_firts import ini_data
@@ -45,18 +45,26 @@ class get_request_shot(QObject):
                 self.to_return = None
 
         else:
+            self.done = False
             print("main_handler(get_request_shot) =", main_handler)
             main_handler.run_from_main_dui(params_in, self)
             #self.to_return = None
 
     def get_it_str(self, data_comming):
         self.to_return = data_comming
+        self.done = True
 
     def get_it_bin(self, data_comming):
         print("type(data_comming) = ", type(data_comming))
         self.to_return = data_comming
+        self.done = True
+
 
     def result_out(self):
+        while self.done == False:
+            time.sleep(0.1)
+
+
         return self.to_return
 
 

@@ -45,6 +45,6 @@ class MainGuiObject(QObject):
         print("inside QObject")
         self.m_run = MultiRunner()
 
-    def run_from_main_dui(self, cmd_in, dui_handle):
+    def run_from_main_dui(self, cmd_in, dui_obj):
         print("cmd_in(run_from_main_dui) =", cmd_in)
-        self.m_run.run_one_work(self.handler, cmd_in, dui_handle)
+        self.m_run.run_one_work(self.handler, cmd_in, dui_obj)

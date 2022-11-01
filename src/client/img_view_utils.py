@@ -45,6 +45,10 @@ def load_img_json_w_str(
         print("\n requests.exceptions.RequestException (load_img_json_w_str) \n")
         return None
 
+    except json.decoder.JSONDecodeError:
+        print("\n json.decoder.JSON Decode Err catch (load_img_json_w_str) \n")
+        return None
+
     except ZeroDivisionError:
         print("\n ZeroDivision err catch (load_img_json_w_str) \n")
         return None

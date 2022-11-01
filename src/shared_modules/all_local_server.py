@@ -110,15 +110,19 @@ class ReqHandler(object):
             )
 
         elif type(lst_out) is bytes:
-            byt_data = zlib.compress(lst_out)
-            siz_dat = str(len(byt_data))
+
+            #byt_data = zlib.compress(lst_out)
+            #siz_dat = str(len(byt_data))
+
+            #byt_data = zlib.compress(lst_out)
+            siz_dat = str(len(lst_out))
 
             #print("size =", siz_dat)
             spit_out(str_out = "size =" + " " + str(siz_dat), req_obj = call_obj)
 
             #self.wfile.write(bytes(byt_data))
-            spit_out(str_out = bytes(byt_data), req_obj = call_obj)
-            #print(bytes(byt_data))
+            spit_out(str_out = lst_out, req_obj = call_obj)
+
 
 
         print("sending /*EOF*/")
