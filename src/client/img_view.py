@@ -556,15 +556,18 @@ class PopDisplayMenu(QMenu):
 class LoadInThread(QThread):
     request_loaded = Signal(tuple)
     def __init__(
-        self, unit_URL = None, cmd_in = None
+        self, unit_URL = None, cmd_in = None, handler_in = None
     ):
         super(LoadInThread, self).__init__()
         self.uni_url = unit_URL
         self.cmd = cmd_in
+        self.my_handler = handler_in
 
     def run(self):
         print("\n Loading with QThread ... Start", self.cmd, " \n")
-        lst_req = json_data_request(params_in = self.cmd)
+        lst_req = json_data_request(
+            params_in = self.cmd, main_handler = self.my_handler
+        )
         response = lst_req.result_out()
 
         self.request_loaded.emit((response))
@@ -576,6 +579,7 @@ class DoImageView(QObject):
     def __init__(self, parent = None):
         super(DoImageView, self).__init__(parent)
         self.main_obj = parent
+        self.my_handler = parent.runner_handler
 
         data_init = ini_data()
         self.uni_url = data_init.get_url()
@@ -676,7 +680,9 @@ class DoImageView(QObject):
         except AttributeError:
             print("first reflection list loading")
 
-        self.ld_tpl_thread = LoadInThread(self.uni_url, my_cmd)
+        self.ld_tpl_thread = LoadInThread(
+            self.uni_url, my_cmd, self.my_handler
+        )
         self.ld_tpl_thread.request_loaded.connect(
             self.after_requesting_template
         )
@@ -1439,6 +1445,7 @@ class MainImgViewObject(QObject):
     def __init__(self, parent = None):
         super(MainImgViewObject, self).__init__(parent)
         self.parent_app = parent
+        self.my_handler = parent.runner_handler
         self.ui_dir_path = os.path.dirname(os.path.abspath(__file__))
         ui_path = self.ui_dir_path + os.sep + "view_client.ui"
         print("ui_path =", ui_path)
@@ -1492,7 +1499,9 @@ class MainImgViewObject(QObject):
         my_cmd = {"path"    : self.nod_or_path,
                   "cmd_lst" : my_cmd_lst}
 
-        lst_req = json_data_request(params_in = my_cmd)
+        lst_req = json_data_request(
+            params_in = my_cmd, main_handler = self.my_handler
+        )
         json_data_lst = lst_req.result_out()
 
         new_templ = json_data_lst[0]

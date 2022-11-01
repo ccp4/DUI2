@@ -45,7 +45,7 @@ class get_request_shot(QObject):
             main_handler.run_from_main_dui(params_in, self)
 
     def get_it(self, data_comming):
-        print("data_comming =", data_comming)
+        #print("data_comming =", data_comming)
         self.to_return = data_comming
 
     def result_out(self):
@@ -104,7 +104,7 @@ class json_data_request(QObject):
             main_handler.run_from_main_dui(params_in, self)
 
     def get_it(self, data_comming):
-        print("data_comming =", data_comming)
+        #print("data_comming =", data_comming)
         self.to_return = data_comming
 
     def result_out(self):
@@ -171,15 +171,18 @@ def get_optional_list(cmd_str, handler_in):
     return lst_opt
 
 
-def build_advanced_params_widget(cmd_str, h_box_search):
+def build_advanced_params_widget(cmd_str, h_box_search, handler_in):
     cmd = {"nod_lst":"", "cmd_lst":[cmd_str]}
 
     data_init = ini_data()
     uni_url = data_init.get_url()
     print("uni_url(build_advanced_params_widget) =", uni_url)
 
-    lst_req = json_data_request(params_in = cmd)
+    lst_req = json_data_request(params_in = cmd, main_handler = handler_in)
     lst_params = lst_req.result_out()
+
+    #print("lst_params =", lst_params)
+
     lin_lst = format_utils.param_tree_2_lineal(lst_params)
     par_def = lin_lst()
     advanced_parameters = AdvancedParameters()

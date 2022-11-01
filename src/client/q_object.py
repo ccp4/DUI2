@@ -79,214 +79,226 @@ class MainObject(QObject):
         self.uni_url = data_init.get_url()
 
         self.reseting = False
-        try:
-            root_widg = RootWidg()
-            self.window.RootScrollArea.setWidget(root_widg)
+        #try:
 
-            imp_widg = ImportWidget()
-            imp_widg.all_items_changed.connect(self.all_items_param_changed)
-            self.window.ImportScrollArea.setWidget(imp_widg)
 
-            self.expr_widg = ExportWidget()
-            self.expr_widg.all_items_changed.connect(
-                self.all_items_param_changed
-            )
-            self.expr_widg.find_scaled_before.connect(
-                self.search_in_parent_nodes
-            )
-            self.window.ExportScrollArea.setWidget(self.expr_widg)
+        root_widg = RootWidg()
+        self.window.RootScrollArea.setWidget(root_widg)
 
-            self.opt_cmd_lst = get_optional_list(
-                "get_optional_command_list", self.runner_handler
-            )
-            self.optional_widg = OptionalWidget(cmd_lst = self.opt_cmd_lst)
-            self.window.OptionalScrollArea.setWidget(self.optional_widg)
-            self.optional_widg.all_items_changed.connect(
-                self.all_items_param_changed
-            )
-            self.optional_widg.main_command_changed.connect(
-                self.new_main_command_changed
-            )
+        imp_widg = ImportWidget()
+        imp_widg.all_items_changed.connect(self.all_items_param_changed)
+        self.window.ImportScrollArea.setWidget(imp_widg)
 
-            self.mask_widg = MaskWidget()
-            self.mask_widg.all_items_changed.connect(
-                self.all_items_param_changed
-            )
-            self.mask_widg.all_items_changed.connect(self.tmp_mask_changed)
-            self.mask_widg.component_changed.connect(self.mask_comp_changed)
-            self.window.MaskScrollArea.setWidget(self.mask_widg)
+        self.expr_widg = ExportWidget()
+        self.expr_widg.all_items_changed.connect(
+            self.all_items_param_changed
+        )
+        self.expr_widg.find_scaled_before.connect(
+            self.search_in_parent_nodes
+        )
+        self.window.ExportScrollArea.setWidget(self.expr_widg)
 
-            fd_advanced_parameters = build_advanced_params_widget(
-                "find_spots_params", self.window.FindspotsSearchLayout
-            )
-            rad_pr_add = False
-            for par_line in fd_advanced_parameters.lst_par_line:
-                if par_line["full_path"] == "spotfinder.threshold.algorithm":
-                    lst_opt = par_line["opt_lst"]
-                    print("lst_opt =", lst_opt)
-                    if("radial_profile" in lst_opt):
-                        print(
-                            "Time to ADD << spotfinder.threshold.algorithm >>",
-                            "to simple Params as a tick box"
-                        )
-                        rad_pr_add = True
+        self.opt_cmd_lst = get_optional_list(
+            "get_optional_command_list", self.runner_handler
+        )
+        self.optional_widg = OptionalWidget(cmd_lst = self.opt_cmd_lst)
+        self.window.OptionalScrollArea.setWidget(self.optional_widg)
+        self.optional_widg.all_items_changed.connect(
+            self.all_items_param_changed
+        )
+        self.optional_widg.main_command_changed.connect(
+            self.new_main_command_changed
+        )
 
-                    else:
-                        print(
-                            "NO Need to add",
-                            "<< spotfinder.threshold.algorithm >>",
-                            "to simple Params as a tick box"
-                        )
-                        rad_pr_add = False
+        self.mask_widg = MaskWidget()
+        self.mask_widg.all_items_changed.connect(
+            self.all_items_param_changed
+        )
+        self.mask_widg.all_items_changed.connect(self.tmp_mask_changed)
+        self.mask_widg.component_changed.connect(self.mask_comp_changed)
+        self.window.MaskScrollArea.setWidget(self.mask_widg)
 
-            fd_advanced_parameters.item_changed.connect(
-                self.item_param_changed
-            )
-            self.window.FindspotsAdvancedScrollArea.setWidget(
-                fd_advanced_parameters
-            )
-            fd_advanced_parameters.set_scroll_parent(
-                self.window.FindspotsAdvancedScrollArea
-            )
+        fd_advanced_parameters = build_advanced_params_widget(
+            "find_spots_params", self.window.FindspotsSearchLayout,
+            self.runner_handler
+        )
+        rad_pr_add = False
+        for par_line in fd_advanced_parameters.lst_par_line:
+            if par_line["full_path"] == "spotfinder.threshold.algorithm":
+                lst_opt = par_line["opt_lst"]
+                print("lst_opt =", lst_opt)
+                if("radial_profile" in lst_opt):
+                    print(
+                        "Time to ADD << spotfinder.threshold.algorithm >>",
+                        "to simple Params as a tick box"
+                    )
+                    rad_pr_add = True
 
-            find_simpl_widg = FindspotsSimplerParameterTab(
-                add_rad_prof = rad_pr_add
-            )
-            find_simpl_widg.item_changed.connect(self.item_param_changed)
-            self.window.FindspotsSimplerScrollArea.setWidget(find_simpl_widg)
+                else:
+                    print(
+                        "NO Need to add",
+                        "<< spotfinder.threshold.algorithm >>",
+                        "to simple Params as a tick box"
+                    )
+                    rad_pr_add = False
 
-            index_simpl_widg = IndexSimplerParamTab()
-            index_simpl_widg.item_changed.connect(self.item_param_changed)
-            self.window.IndexSimplerScrollArea.setWidget(index_simpl_widg)
-            id_advanced_parameters = build_advanced_params_widget(
-                "index_params", self.window.IndexSearchLayout
-            )
-            id_advanced_parameters.item_changed.connect(
-                self.item_param_changed
-            )
-            self.window.IndexAdvancedScrollArea.setWidget(
-                id_advanced_parameters
-            )
-            id_advanced_parameters.set_scroll_parent(
-                self.window.IndexAdvancedScrollArea
-            )
-            refi_brv_simpl_widg = RefineBravaiSimplerParamTab()
-            refi_brv_simpl_widg.item_changed.connect(self.item_param_changed)
-            self.window.RefineBravaiSimplerScrollArea.setWidget(
-                refi_brv_simpl_widg
-            )
-            rb_advanced_parameters = build_advanced_params_widget(
-                "refine_bravais_settings_params",
-                self.window.RefineBravaisSearchLayout
-            )
-            rb_advanced_parameters.item_changed.connect(
-                self.item_param_changed
-            )
-            self.window.RefineBravaiAdvancedScrollArea.setWidget(
-                rb_advanced_parameters
-            )
-            rb_advanced_parameters.set_scroll_parent(
-                self.window.RefineBravaiAdvancedScrollArea
-            )
-            self.r_index_widg = ReindexTable()
-            self.window.ReindexHeaderLabel.setText("...")
-            self.window.ReindexTableScrollArea.setWidget(self.r_index_widg)
+        fd_advanced_parameters.item_changed.connect(
+            self.item_param_changed
+        )
+        self.window.FindspotsAdvancedScrollArea.setWidget(
+            fd_advanced_parameters
+        )
+        fd_advanced_parameters.set_scroll_parent(
+            self.window.FindspotsAdvancedScrollArea
+        )
 
-            ref_simpl_widg = RefineSimplerParamTab()
-            ref_simpl_widg.item_changed.connect(self.item_param_changed)
-            self.window.RefineSimplerScrollArea.setWidget(ref_simpl_widg)
-            rf_advanced_parameters = build_advanced_params_widget(
-                "refine_params", self.window.RefineSearchLayout
-            )
-            rf_advanced_parameters.item_changed.connect(
-                self.item_param_changed
-            )
-            self.window.RefineAdvancedScrollArea.setWidget(
-                rf_advanced_parameters
-            )
-            rf_advanced_parameters.set_scroll_parent(
-                self.window.RefineAdvancedScrollArea
-            )
-            integr_simpl_widg = IntegrateSimplerParamTab()
-            integr_simpl_widg.item_changed.connect(self.item_param_changed)
-            self.window.IntegrateSimplerScrollArea.setWidget(integr_simpl_widg)
-            it_advanced_parameters = build_advanced_params_widget(
-                "integrate_params", self.window.IntegrateSearchLayout
-            )
-            it_advanced_parameters.item_changed.connect(
-                self.item_param_changed
-            )
-            self.window.IntegrateAdvancedScrollArea.setWidget(
-                it_advanced_parameters
-            )
-            it_advanced_parameters.set_scroll_parent(
-                self.window.IntegrateAdvancedScrollArea
-            )
-            sym_simpl_widg = SymmetrySimplerParamTab()
-            sym_simpl_widg.item_changed.connect(self.item_param_changed)
-            self.window.SymmetrySimplerScrollArea.setWidget(sym_simpl_widg)
-            sm_advanced_parameters = build_advanced_params_widget(
-                "symmetry_params", self.window.SymetrySearchLayout
-            )
-            sm_advanced_parameters.item_changed.connect(
-                self.item_param_changed
-            )
-            self.window.SymmetryAdvancedScrollArea.setWidget(
-                sm_advanced_parameters
-            )
-            sm_advanced_parameters.set_scroll_parent(
-                self.window.SymmetryAdvancedScrollArea
-            )
-            scale_simpl_widg = ScaleSimplerParamTab()
-            scale_simpl_widg.item_changed.connect(self.item_param_changed)
-            self.window.ScaleSimplerScrollArea.setWidget(scale_simpl_widg)
-            sc_advanced_parameters = build_advanced_params_widget(
-                "scale_params", self.window.ScaleSearchLayout
-            )
-            sc_advanced_parameters.item_changed.connect(
-                self.item_param_changed
-            )
-            self.window.ScaleAdvancedScrollArea.setWidget(
-                sc_advanced_parameters
-            )
-            sc_advanced_parameters.set_scroll_parent(
-                self.window.ScaleAdvancedScrollArea
-            )
-            comb_simpl_widg = CombineExperimentSimplerParamTab()
-            comb_simpl_widg.item_changed.connect(self.item_param_changed)
-            self.window.CombineSimplerScrollArea.setWidget(comb_simpl_widg)
-            ce_advanced_parameters = build_advanced_params_widget(
-                "combine_experiments_params", self.window.CombineSearchLayout
-            )
-            ce_advanced_parameters.item_changed.connect(
-                self.item_param_changed
-            )
-            self.window.CombineAdvancedScrollArea.setWidget(
-                ce_advanced_parameters
-            )
-            ce_advanced_parameters.set_scroll_parent(
-                self.window.CombineAdvancedScrollArea
-            )
-            fd_advanced_parameters.twin_widg = find_simpl_widg
-            find_simpl_widg.twin_widg = fd_advanced_parameters
-            id_advanced_parameters.twin_widg = index_simpl_widg
-            index_simpl_widg.twin_widg = id_advanced_parameters
-            rb_advanced_parameters.twin_widg = refi_brv_simpl_widg
-            refi_brv_simpl_widg.twin_widg = rb_advanced_parameters
-            rf_advanced_parameters.twin_widg = ref_simpl_widg
-            ref_simpl_widg.twin_widg = rf_advanced_parameters
-            it_advanced_parameters.twin_widg = integr_simpl_widg
-            integr_simpl_widg.twin_widg = it_advanced_parameters
-            sm_advanced_parameters.twin_widg = sym_simpl_widg
-            sym_simpl_widg.twin_widg = sm_advanced_parameters
-            sc_advanced_parameters.twin_widg = scale_simpl_widg
-            scale_simpl_widg.twin_widg = sc_advanced_parameters
-            ce_advanced_parameters.twin_widg = comb_simpl_widg
-            comb_simpl_widg.twin_widg = ce_advanced_parameters
+        find_simpl_widg = FindspotsSimplerParameterTab(
+            add_rad_prof = rad_pr_add
+        )
+        find_simpl_widg.item_changed.connect(self.item_param_changed)
+        self.window.FindspotsSimplerScrollArea.setWidget(find_simpl_widg)
 
+        index_simpl_widg = IndexSimplerParamTab()
+        index_simpl_widg.item_changed.connect(self.item_param_changed)
+        self.window.IndexSimplerScrollArea.setWidget(index_simpl_widg)
+        id_advanced_parameters = build_advanced_params_widget(
+            "index_params", self.window.IndexSearchLayout,
+            self.runner_handler
+        )
+        id_advanced_parameters.item_changed.connect(
+            self.item_param_changed
+        )
+        self.window.IndexAdvancedScrollArea.setWidget(
+            id_advanced_parameters
+        )
+        id_advanced_parameters.set_scroll_parent(
+            self.window.IndexAdvancedScrollArea
+        )
+        refi_brv_simpl_widg = RefineBravaiSimplerParamTab()
+        refi_brv_simpl_widg.item_changed.connect(self.item_param_changed)
+        self.window.RefineBravaiSimplerScrollArea.setWidget(
+            refi_brv_simpl_widg
+        )
+        rb_advanced_parameters = build_advanced_params_widget(
+            "refine_bravais_settings_params",
+            self.window.RefineBravaisSearchLayout,
+            self.runner_handler
+        )
+        rb_advanced_parameters.item_changed.connect(
+            self.item_param_changed
+        )
+        self.window.RefineBravaiAdvancedScrollArea.setWidget(
+            rb_advanced_parameters
+        )
+        rb_advanced_parameters.set_scroll_parent(
+            self.window.RefineBravaiAdvancedScrollArea
+        )
+        self.r_index_widg = ReindexTable()
+        self.window.ReindexHeaderLabel.setText("...")
+        self.window.ReindexTableScrollArea.setWidget(self.r_index_widg)
+
+        ref_simpl_widg = RefineSimplerParamTab()
+        ref_simpl_widg.item_changed.connect(self.item_param_changed)
+        self.window.RefineSimplerScrollArea.setWidget(ref_simpl_widg)
+        rf_advanced_parameters = build_advanced_params_widget(
+            "refine_params", self.window.RefineSearchLayout,
+            self.runner_handler
+        )
+        rf_advanced_parameters.item_changed.connect(
+            self.item_param_changed
+        )
+        self.window.RefineAdvancedScrollArea.setWidget(
+            rf_advanced_parameters
+        )
+        rf_advanced_parameters.set_scroll_parent(
+            self.window.RefineAdvancedScrollArea
+        )
+        integr_simpl_widg = IntegrateSimplerParamTab()
+        integr_simpl_widg.item_changed.connect(self.item_param_changed)
+        self.window.IntegrateSimplerScrollArea.setWidget(integr_simpl_widg)
+        it_advanced_parameters = build_advanced_params_widget(
+            "integrate_params", self.window.IntegrateSearchLayout,
+            self.runner_handler
+        )
+        it_advanced_parameters.item_changed.connect(
+            self.item_param_changed
+        )
+        self.window.IntegrateAdvancedScrollArea.setWidget(
+            it_advanced_parameters
+        )
+        it_advanced_parameters.set_scroll_parent(
+            self.window.IntegrateAdvancedScrollArea
+        )
+        sym_simpl_widg = SymmetrySimplerParamTab()
+        sym_simpl_widg.item_changed.connect(self.item_param_changed)
+        self.window.SymmetrySimplerScrollArea.setWidget(sym_simpl_widg)
+        sm_advanced_parameters = build_advanced_params_widget(
+            "symmetry_params", self.window.SymetrySearchLayout,
+            self.runner_handler
+        )
+        sm_advanced_parameters.item_changed.connect(
+            self.item_param_changed
+        )
+        self.window.SymmetryAdvancedScrollArea.setWidget(
+            sm_advanced_parameters
+        )
+        sm_advanced_parameters.set_scroll_parent(
+            self.window.SymmetryAdvancedScrollArea
+        )
+        scale_simpl_widg = ScaleSimplerParamTab()
+        scale_simpl_widg.item_changed.connect(self.item_param_changed)
+        self.window.ScaleSimplerScrollArea.setWidget(scale_simpl_widg)
+        sc_advanced_parameters = build_advanced_params_widget(
+            "scale_params", self.window.ScaleSearchLayout,
+            self.runner_handler
+        )
+        sc_advanced_parameters.item_changed.connect(
+            self.item_param_changed
+        )
+        self.window.ScaleAdvancedScrollArea.setWidget(
+            sc_advanced_parameters
+        )
+        sc_advanced_parameters.set_scroll_parent(
+            self.window.ScaleAdvancedScrollArea
+        )
+        comb_simpl_widg = CombineExperimentSimplerParamTab()
+        comb_simpl_widg.item_changed.connect(self.item_param_changed)
+        self.window.CombineSimplerScrollArea.setWidget(comb_simpl_widg)
+        ce_advanced_parameters = build_advanced_params_widget(
+            "combine_experiments_params", self.window.CombineSearchLayout,
+            self.runner_handler
+        )
+        ce_advanced_parameters.item_changed.connect(
+            self.item_param_changed
+        )
+        self.window.CombineAdvancedScrollArea.setWidget(
+            ce_advanced_parameters
+        )
+        ce_advanced_parameters.set_scroll_parent(
+            self.window.CombineAdvancedScrollArea
+        )
+        fd_advanced_parameters.twin_widg = find_simpl_widg
+        find_simpl_widg.twin_widg = fd_advanced_parameters
+        id_advanced_parameters.twin_widg = index_simpl_widg
+        index_simpl_widg.twin_widg = id_advanced_parameters
+        rb_advanced_parameters.twin_widg = refi_brv_simpl_widg
+        refi_brv_simpl_widg.twin_widg = rb_advanced_parameters
+        rf_advanced_parameters.twin_widg = ref_simpl_widg
+        ref_simpl_widg.twin_widg = rf_advanced_parameters
+        it_advanced_parameters.twin_widg = integr_simpl_widg
+        integr_simpl_widg.twin_widg = it_advanced_parameters
+        sm_advanced_parameters.twin_widg = sym_simpl_widg
+        sym_simpl_widg.twin_widg = sm_advanced_parameters
+        sc_advanced_parameters.twin_widg = scale_simpl_widg
+        scale_simpl_widg.twin_widg = sc_advanced_parameters
+        ce_advanced_parameters.twin_widg = comb_simpl_widg
+        comb_simpl_widg.twin_widg = ce_advanced_parameters
+
+        '''
         except TypeError:
             print("failed to connect to server on:", self.uni_url)
             sys.exit()
+        '''
 
         tmp_widget_defs = widgets_defs
         self.param_widgets = get_widget_def_dict(

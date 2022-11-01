@@ -18,6 +18,11 @@ if __name__ == '__main__':
     data_init = ini_data()
     data_init.set_data(par_def = par_def)
 
+    tmp_dat_dir = format_utils.create_tmp_dir()
+    print("creating ", tmp_dat_dir, "for temporary files")
+
+    data_init.set_tmp_dir(tmp_dat_dir)
+
     init_param = format_utils.get_par(par_def, sys.argv[1:])
     run_local = True
     tree_ini_path = init_param["init_path"]

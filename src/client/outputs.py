@@ -545,7 +545,10 @@ class ShowLog(QObject):
             try:
                 if not found_nod_num:
                     cmd = {"nod_lst":[nod_p_num], "cmd_lst":["display_log"]}
-                    lst_req = json_data_request(params_in = cmd)
+                    lst_req = json_data_request(
+                        params_in = cmd,
+                        main_handler = self.main_obj.runner_handler
+                    )
                     json_log = lst_req.result_out()
                     try:
                         lst_log_lines = json_log[0]

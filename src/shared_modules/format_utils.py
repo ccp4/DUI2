@@ -21,7 +21,19 @@ copyright (c) CCP4 - DLS
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-import json
+import json, os, shutil
+
+def create_tmp_dir():
+    path2add = os.getcwd() + os.sep + "run_dui_tmp"
+    try:
+        shutil.rmtree(path2add)
+
+    except FileNotFoundError:
+        print("No need to remove non existent dir")
+
+    os.mkdir(path2add)
+    return path2add
+
 
 def print_logo():
     print("                                                                                                ")

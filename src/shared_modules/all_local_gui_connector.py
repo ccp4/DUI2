@@ -18,7 +18,7 @@ class connect_thread(QThread):
         )
 
     def call_back_str(self, data_out):
-        print("[call_back_str] <<<", data_out, ">>>")
+        #print("[call_back_str] <<<", data_out, ">>>")
         self.my_caller.get_it(data_out)
 
 class MultiRunner(QObject):
