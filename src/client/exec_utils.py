@@ -44,6 +44,8 @@ class get_request_shot(QObject):
                 print("zlib. err catch (get_request_shot)")
                 self.to_return = None
 
+            self.done = True
+
         else:
             self.done = False
             print("main_handler(get_request_shot) =", main_handler)
@@ -64,9 +66,7 @@ class get_request_shot(QObject):
         while self.done == False:
             time.sleep(0.1)
 
-
         return self.to_return
-
 
 
 class json_data_request(QObject):
