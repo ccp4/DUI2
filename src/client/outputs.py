@@ -326,7 +326,7 @@ class DoLoadHTML(QObject):
     def __init__(self, parent = None):
         super(DoLoadHTML, self).__init__(parent)
         self.main_obj = parent
-
+        self.my_handler = parent.runner_handler
         data_init = ini_data()
         self.uni_url = data_init.get_url()
         self.tmp_dir = data_init.get_tmp_dir()
@@ -427,7 +427,7 @@ class DoLoadHTML(QObject):
                     print("staring html request ...")
 
                     req_shot = get_request_shot(
-                        params_in = cmd, main_handler = None
+                        params_in = cmd, main_handler = self.my_handler
                     )
 
                     #compresed = req_shot.result_out()
@@ -458,6 +458,10 @@ class DoLoadHTML(QObject):
                                 "html_report"   :full_file
                             }
                         )
+
+                except AttributeError:
+                    print("\n Connection err catch (DoLoadHTML) \n")
+                    full_file = ''
 
                 except ConnectionError:
                     print("\n Connection err catch (DoLoadHTML) \n")
