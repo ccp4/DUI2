@@ -38,7 +38,8 @@ class LoadFiles(QThread):
     loading_failed = Signal()
     progressing = Signal(int)
     def __init__(
-        self, unit_URL = None, cur_nod_num = None, tmp_dir = None
+        self, unit_URL = None, cur_nod_num = None,
+        tmp_dir = None, main_handler = None
     ):
         super(LoadFiles, self).__init__()
         #self.uni_url = unit_URL
@@ -48,6 +49,7 @@ class LoadFiles(QThread):
             "tmp_ref_path"  :tmp_dir + os.sep + "req_file.refl",
             "cur_nod_num"   :int(cur_nod_num)
         }
+        self.my_handler = main_handler
 
     def run(self):
         print(
@@ -57,7 +59,9 @@ class LoadFiles(QThread):
         my_cmd = {"nod_lst" : [self.cur_nod_num],
                   "cmd_lst" : ["get_experiments_file"]}
 
-        req_shot = get_request_shot(params_in = my_cmd, main_handler = None)
+        req_shot = get_request_shot(
+            params_in = my_cmd, main_handler = self.my_handler
+        )
         exp_req = req_shot.result_out()
         if exp_req == None:
             self.loading_failed.emit()
@@ -85,7 +89,9 @@ class LoadFiles(QThread):
         my_cmd = {"nod_lst" : [self.cur_nod_num],
                   "cmd_lst" : ["get_reflections_file"]}
 
-        self.req_r_time = get_request_real_time(params_in = my_cmd)
+        self.req_r_time = get_request_real_time(
+            params_in = my_cmd, main_handler = self.my_handler
+        )
         self.req_r_time.prog_new_stat.connect(self.emit_progr)
         self.req_r_time.load_ended.connect(self.unzip_n_emit_end)
         self.req_r_time.start()
@@ -193,6 +199,7 @@ class HandleReciprocalLatticeView(QObject):
     def __init__(self, parent = None):
         super(HandleReciprocalLatticeView, self).__init__(parent)
         self.main_obj = parent
+        self.my_handler = parent.runner_handler
         print("HandleReciprocalLatticeView(__init__)")
         data_init = ini_data()
         self.uni_url = data_init.get_url()
@@ -206,7 +213,7 @@ class HandleReciprocalLatticeView(QObject):
         print("Launching Reciprocal Lattice View for node: ", nod_num)
         new_load_thread = LoadFiles(
             unit_URL = self.uni_url, cur_nod_num = nod_num,
-            tmp_dir = self.tmp_dir
+            tmp_dir = self.tmp_dir, main_handler = self.my_handler
         )
         new_load_thread.files_loaded.connect(self.new_files)
         new_load_thread.loading_failed.connect(self.failed_loading)

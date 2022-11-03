@@ -140,49 +140,69 @@ class get_request_real_time(QThread):
         data_init = ini_data()
         self.url = data_init.get_url()
         self.params = params_in
+        self.my_handler = main_handler
 
     def run(self):
-        try:
-            req_get = requests.get(
-                self.url, stream = True, params = self.params, timeout = 20
-            )
-            total_size = int(req_get.headers.get('content-length', 0)) + 1
-            print("total_size =", total_size)
-            block_size = int(total_size / 6 * 1024)
-            max_size = 16384
-            #max_size = 65536
-            if block_size > max_size:
-                block_size = max_size
+        if self.my_handler == None:
+            try:
+                req_get = requests.get(
+                    self.url, stream = True, params = self.params, timeout = 20
+                )
+                total_size = int(req_get.headers.get('content-length', 0)) + 1
+                print("total_size =", total_size)
+                block_size = int(total_size / 6 * 1024)
+                max_size = 16384
+                #max_size = 65536
+                if block_size > max_size:
+                    block_size = max_size
 
-            print("block_size =", block_size)
+                print("block_size =", block_size)
 
-            downloaded_size = 0
-            compresed = bytes()
-            for data in req_get.iter_content(block_size):
-                compresed += data
-                downloaded_size += block_size
-                progress = int(100.0 * (downloaded_size / total_size))
-                self.prog_new_stat.emit(progress)
+                downloaded_size = 0
+                compresed = bytes()
+                for data in req_get.iter_content(block_size):
+                    compresed += data
+                    downloaded_size += block_size
+                    progress = int(100.0 * (downloaded_size / total_size))
+                    self.prog_new_stat.emit(progress)
 
-            end_data = zlib.decompress(compresed)
-            print("get_request_real_time ... downloaded")
-            print("type(end_data) =", type(end_data))
+                end_data = zlib.decompress(compresed)
+                print("get_request_real_time ... downloaded")
+                print("type(end_data) =", type(end_data))
 
-        except zlib.error:
-            print("zlib. err catch(get_request_real_time)")
-            end_data = None
+            except zlib.error:
+                print("zlib. err catch(get_request_real_time)")
+                end_data = None
 
-        except ConnectionError:
-            print("\n Connection err catch (get_request_real_time) \n")
-            end_data = None
+            except ConnectionError:
+                print("\n Connection err catch (get_request_real_time) \n")
+                end_data = None
 
-        except requests.exceptions.RequestException:
-            print(
-                "\n requests.exceptions.RequestException (get_request_real_time) \n"
-            )
-            end_data = None
+            except requests.exceptions.RequestException:
+                print(
+                    "\n requests.exceptions.RequestException (get_request_real_time) \n"
+                )
+                end_data = None
 
-        self.load_ended.emit(end_data)
+            self.load_ended.emit(end_data)
+
+        else:
+            print("self.my_handler =", self.my_handler)
+            self.my_handler.run_from_main_dui(self.params, self)
+            self.prog_new_stat.emit(50)
+
+    def get_it_str(self, data_comming):
+        self.to_return = data_comming
+        self.load_ended.emit(data_comming)
+
+    def get_it_bin(self, data_comming):
+        self.to_return = data_comming
+        self.load_ended.emit(data_comming)
+
+
+    def result_out(self):
+        return self.to_return
+
 
 
 def get_optional_list(cmd_str, handler_in):
