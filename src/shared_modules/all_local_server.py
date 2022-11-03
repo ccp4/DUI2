@@ -99,31 +99,16 @@ class ReqHandler(object):
         lst_out = self.tree_runner.run_get_data(cmd_dict)
 
         if type(lst_out) is list or type(lst_out) is dict:
-            '''print("\n *** type(lst_out)", type(lst_out))
-            json_str = json.dumps(lst_out) + '\n'
-            spit_out(
-                str_out = json_str, req_obj = call_obj, out_type = 'utf-8'
-            )'''
-
             spit_out(
                 str_out = lst_out, req_obj = call_obj, out_type = 'utf-8'
             )
 
         elif type(lst_out) is bytes:
-
-            #byt_data = zlib.compress(lst_out)
-            #siz_dat = str(len(byt_data))
-
-            #byt_data = zlib.compress(lst_out)
             siz_dat = str(len(lst_out))
-
-            #print("size =", siz_dat)
-            spit_out(str_out = "size =" + " " + str(siz_dat), req_obj = call_obj)
-
-            #self.wfile.write(bytes(byt_data))
+            spit_out(
+                str_out = "size =" + " " + str(siz_dat), req_obj = call_obj
+            )
             spit_out(str_out = lst_out, req_obj = call_obj)
-
-
 
         print("sending /*EOF*/")
         #self.wfile.write(bytes('/*EOF*/', 'utf-8'))

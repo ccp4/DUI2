@@ -187,10 +187,9 @@ class get_request_real_time(QThread):
             self.load_ended.emit(end_data)
 
         else:
-            self.prog_new_stat.emit(20)
             print("self.my_handler =", self.my_handler)
             self.my_handler.run_from_main_dui(self.params, self)
-            self.prog_new_stat.emit(50)
+            self.prog_new_stat.emit(5)
 
     def get_it_str(self, data_comming):
         self.to_return = data_comming
@@ -239,14 +238,17 @@ def build_advanced_params_widget(cmd_str, h_box_search, handler_in):
 class Mtz_Data_Request(QThread):
     update_progress = Signal(int)
     done_download = Signal(bytes)
-    def __init__(self, cmd):
+    def __init__(self, cmd, main_handler):
         super(Mtz_Data_Request, self).__init__()
         self.cmd = cmd
+        self.my_handler = main_handler
         self.r_time_req_lst = []
 
     def run(self):
         self.say_goodbye()
-        self.r_time_req = get_request_real_time(params_in = self.cmd)
+        self.r_time_req = get_request_real_time(
+            params_in = self.cmd, main_handler = self.my_handler
+        )
         self.r_time_req.prog_new_stat.connect(self.new_progress)
         self.r_time_req.load_ended.connect(self.finishing)
         self.r_time_req.start()

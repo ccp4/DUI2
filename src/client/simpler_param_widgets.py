@@ -1565,6 +1565,10 @@ class ExportWidget(QWidget):
         self.main_vbox.addStretch()
         self.setLayout(self.main_vbox)
 
+    def set_parent(self, parent = None):
+        self.my_handler = parent.runner_handler
+        #self.my_handler = None
+
     def line_changed(self):
         print("\n line_changed")
         str_value = self.exp_txt.text()
@@ -1618,7 +1622,7 @@ class ExportWidget(QWidget):
             data_init = ini_data()
             uni_url = data_init.get_url()
             cmd = {"nod_lst":[self.cur_nod_num], "cmd_lst":["get_mtz"]}
-            self.dowl_thrd = Mtz_Data_Request(cmd)
+            self.dowl_thrd = Mtz_Data_Request(cmd, self.my_handler)
             self.dowl_thrd.update_progress.connect(self.show_new_progress)
             self.dowl_thrd.done_download.connect(self.save_mtz_on_disc)
             self.dowl_thrd.finished.connect(self.restore_p_label)
@@ -1633,9 +1637,12 @@ class ExportWidget(QWidget):
         )
 
     def save_mtz_on_disc(self, mtz_info):
+        print("type(mtz_info) = ", type(mtz_info))
+        #print("mtz_info = ", mtz_info)
         self.progress_label.setText("...")
+        #file_out = open(self.file_name, "wb")
         file_out = open(self.file_name, "wb")
-        file_out.write(mtz_info)
+        file_out.write(bytes(mtz_info, encoding='utf8'))
         file_out.close()
         print(self.file_name, " writen to disk")
 

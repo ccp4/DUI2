@@ -90,6 +90,9 @@ class MainObject(QObject):
         self.window.ImportScrollArea.setWidget(imp_widg)
 
         self.expr_widg = ExportWidget()
+        self.expr_widg.set_parent(self)
+        #self.expr_widg = ExportWidget(self)
+
         self.expr_widg.all_items_changed.connect(
             self.all_items_param_changed
         )

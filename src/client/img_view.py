@@ -349,10 +349,7 @@ class ImgGraphicsScene(QGraphicsScene):
             pass
 
     def __call__(self, new_pixmap, refl_list1, new_temp_mask):
-        bkp_in_case = '''
-    def __call__(self, new_pixmap, refl_list0, new_temp_mask):
-        self.refl_list = refl_list0
-        '''
+
         self.refl_list = refl_list1
         if self.parent_obj.palette == "heat":
             overlay_colour = Qt.green
@@ -799,7 +796,9 @@ class DoImageView(QObject):
             except AttributeError:
                 print("first reflection list loading")
 
-            self.ld_ref_thread = LoadInThread(self.uni_url, my_cmd)
+            self.ld_ref_thread = LoadInThread(
+                self.uni_url, my_cmd, self.my_handler
+            )
             if self.pop_display_menu.rad_but_obs.isChecked():
                 self.ld_ref_thread.request_loaded.connect(
                     self.after_requesting_ref_lst
