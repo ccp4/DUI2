@@ -48,14 +48,14 @@ class LoadFullMaskImage(QThread):
     image_loaded = Signal(tuple)
     def __init__(
         self, unit_URL = None, cur_nod_num = None,
-        cur_img_num = None, path_in = None, handler_in = None
+        cur_img_num = None, path_in = None, main_handler = None
     ):
         super(LoadFullMaskImage, self).__init__()
         self.uni_url = unit_URL
         self.cur_nod_num = cur_nod_num
         self.cur_img_num = cur_img_num
         self.exp_path = path_in
-        self.handler_in = handler_in
+        self.my_handler = main_handler
 
     def run(self):
         print("loading full image ", self.cur_img_num, " in full resolution")
@@ -64,7 +64,7 @@ class LoadFullMaskImage(QThread):
             nod_num_lst = [self.cur_nod_num],
             img_num = self.cur_img_num,
             exp_path = self.exp_path,
-            main_handler = self.handler_in
+            main_handler = self.my_handler
         )
         self.image_loaded.emit(
             (self.cur_nod_num, self.cur_img_num, np_full_img)
@@ -78,7 +78,7 @@ class LoadSliceMaskImage(QThread):
         self, unit_URL = None, nod_num_lst = None,
         img_num = None, inv_scale = None,
         x1 = None, y1 = None, x2 = None, y2 = None,
-        path_in = None
+        path_in = None, main_handler = None
     ):
         super(LoadSliceMaskImage, self).__init__()
         self.uni_url =      unit_URL
@@ -91,6 +91,7 @@ class LoadSliceMaskImage(QThread):
         self.y2 =           y2
         self.exp_path =     path_in
         self.r_time_req_lst = []
+        self.my_handler = main_handler
 
     def run(self):
         print("loading mask slice of image ")
@@ -104,7 +105,9 @@ class LoadSliceMaskImage(QThread):
                   "path"    : self.exp_path,
                   "cmd_lst" : my_cmd_lst}
 
-        self.r_time_req = get_request_real_time(params_in = my_cmd)
+        self.r_time_req = get_request_real_time(
+            params_in = my_cmd, main_handler = self.my_handler
+        )
         self.r_time_req.prog_new_stat.connect(self.emit_progr)
         self.r_time_req.load_ended.connect(self.emit_n_end)
         self.r_time_req.start()
@@ -123,6 +126,9 @@ class LoadSliceMaskImage(QThread):
             n_tup = tuple(str_data)
             arr_1d = np.asarray(n_tup, dtype = 'float')
             np_array_out = arr_1d.reshape(d1, d2)
+
+        except json.decoder.JSONDecodeError:
+            np_array_out = None
 
         except TypeError:
             np_array_out = None
@@ -147,14 +153,14 @@ class LoadFullImage(QThread):
     image_loaded = Signal(tuple)
     def __init__(
         self, unit_URL = None, cur_nod_num = None,
-        cur_img_num = None, path_in = None, handler_in = None
+        cur_img_num = None, path_in = None, main_handler = None
     ):
         super(LoadFullImage, self).__init__()
         self.uni_url = unit_URL
         self.cur_nod_num = cur_nod_num
         self.cur_img_num = cur_img_num
         self.exp_path = path_in
-        self.handler_in = handler_in
+        self.my_handler = main_handler
 
 
     def run(self):
@@ -164,7 +170,7 @@ class LoadFullImage(QThread):
             nod_num_lst = [self.cur_nod_num],
             img_num = self.cur_img_num,
             exp_path = self.exp_path,
-            main_handler = self.handler_in
+            main_handler = self.my_handler
         )
         self.image_loaded.emit(
             (self.cur_nod_num, self.cur_img_num, np_full_img)
@@ -178,7 +184,7 @@ class LoadSliceImage(QThread):
         self, unit_URL = None, nod_num_lst = None,
         img_num = None, inv_scale = None,
         x1 = None, y1 = None, x2 = None, y2 = None,
-        path_in = None
+        path_in = None, main_handler = None
     ):
         super(LoadSliceImage, self).__init__()
         self.uni_url =      unit_URL
@@ -191,6 +197,7 @@ class LoadSliceImage(QThread):
         self.y2 =           y2
         self.exp_path =     path_in
         self.r_time_req_lst = []
+        self.my_handler = main_handler
 
     def run(self):
         print("loading slice of image ")
@@ -205,7 +212,9 @@ class LoadSliceImage(QThread):
                   "path"    : self.exp_path,
                   "cmd_lst" : my_cmd_lst}
 
-        self.r_time_req = get_request_real_time(params_in = my_cmd)
+        self.r_time_req = get_request_real_time(
+            params_in = my_cmd, main_handler = self.my_handler
+        )
         self.r_time_req.prog_new_stat.connect(self.emit_progr)
         self.r_time_req.load_ended.connect(self.emit_n_end)
         self.r_time_req.start()
@@ -222,6 +231,9 @@ class LoadSliceImage(QThread):
             print("d1, d2 =", d1, d2)
             arr_1d = np.fromstring(str_data, dtype = float, sep = ',')
             np_array_out = arr_1d.reshape(d1, d2)
+
+        except json.decoder.JSONDecodeError:
+            np_array_out = None
 
         except TypeError:
             np_array_out = None
@@ -561,12 +573,12 @@ class PopDisplayMenu(QMenu):
 class LoadInThread(QThread):
     request_loaded = Signal(tuple)
     def __init__(
-        self, unit_URL = None, cmd_in = None, handler_in = None
+        self, unit_URL = None, cmd_in = None, main_handler = None
     ):
         super(LoadInThread, self).__init__()
         self.uni_url = unit_URL
         self.cmd = cmd_in
-        self.my_handler = handler_in
+        self.my_handler = main_handler
 
     def run(self):
         print("\n Loading with QThread ... Start", self.cmd, " \n")
@@ -967,7 +979,7 @@ class DoImageView(QObject):
             cur_nod_num = self.cur_nod_num,
             cur_img_num = self.cur_img_num,
             path_in = self.exp_path,
-            handler_in = self.my_handler
+            main_handler = self.my_handler
         )
 
         self.load_full_mask_image = LoadFullMaskImage(
@@ -975,7 +987,7 @@ class DoImageView(QObject):
             cur_nod_num = self.cur_nod_num,
             cur_img_num = self.cur_img_num,
             path_in = self.exp_path,
-            handler_in = self.my_handler
+            main_handler = self.my_handler
         )
 
         self.load_full_image.image_loaded.connect(self.new_full_img)
@@ -1158,7 +1170,8 @@ class DoImageView(QObject):
                 y1 = self.y1,
                 x2 = self.x2,
                 y2 = self.y2,
-                path_in = self.exp_path
+                path_in = self.exp_path,
+                main_handler = self.my_handler
             )
             self.load_slice_image.slice_loaded.connect(
                 self.new_slice_img
@@ -1178,7 +1191,8 @@ class DoImageView(QObject):
                 y1 = self.y1,
                 x2 = self.x2,
                 y2 = self.y2,
-                path_in = self.exp_path
+                path_in = self.exp_path,
+                main_handler = self.my_handler
             )
             self.load_slice_mask_image.slice_loaded.connect(
                 self.new_slice_mask_img

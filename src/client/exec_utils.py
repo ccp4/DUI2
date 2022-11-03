@@ -187,16 +187,19 @@ class get_request_real_time(QThread):
             self.load_ended.emit(end_data)
 
         else:
+            self.prog_new_stat.emit(20)
             print("self.my_handler =", self.my_handler)
             self.my_handler.run_from_main_dui(self.params, self)
             self.prog_new_stat.emit(50)
 
     def get_it_str(self, data_comming):
         self.to_return = data_comming
+        self.prog_new_stat.emit(95)
         self.load_ended.emit(data_comming)
 
     def get_it_bin(self, data_comming):
         self.to_return = data_comming
+        self.prog_new_stat.emit(95)
         self.load_ended.emit(data_comming)
 
 
