@@ -69,9 +69,6 @@ def load_mask_img_json_w_str(
         req_shot = get_request_shot(
             params_in = my_cmd, main_handler = main_handler
         )
-
-        #compresed = req_shot.result_out()
-        #dic_str = zlib.decompress(compresed)
         dic_str =  req_shot.result_out()
         arr_dic = json.loads(dic_str)
         end_tm = time.time()
