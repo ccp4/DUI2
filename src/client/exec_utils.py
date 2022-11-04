@@ -267,57 +267,66 @@ class req_post_n_output(QThread):
     new_line_out = Signal(str, int, str)
     first_line = Signal(int)
     about_to_end = Signal(int, bool)
-    def __init__(self, do_pred_n_rept = False, cmd_in = None):
+    def __init__(
+        self, do_pred_n_rept = False, cmd_in = None, main_handler = None
+    ):
         super(req_post_n_output, self).__init__()
 
         data_init = ini_data()
         self.uni_url = data_init.get_url()
         self.cmd = cmd_in
-
+        self.my_handler = main_handler
         self.number = None
         self.do_predict_n_report = do_pred_n_rept
 
     def run(self):
-        try:
-            self.request = requests.post(
-                self.uni_url, stream = True, data = self.cmd
-            )
+        if self.my_handler == None:
+            try:
+                self.request = requests.post(
+                    self.uni_url, stream = True, data = self.cmd
+                )
 
-            line_str = ''
-            not_yet_read = True
-            while True:
-                tmp_dat = self.request.raw.readline()
-                line_str = str(tmp_dat.decode('utf-8'))
-                if '/*EOF*/' in line_str :
-                    #TODO: consider a different Signal to say finished
-                    print('>>  /*EOF*/  <<')
-                    break
+                line_str = ''
+                not_yet_read = True
+                while True:
+                    tmp_dat = self.request.raw.readline()
+                    line_str = str(tmp_dat.decode('utf-8'))
+                    if '/*EOF*/' in line_str :
+                        #TODO: consider a different Signal to say finished
+                        print('>>  /*EOF*/  <<')
+                        break
 
-                if not_yet_read:
-                    not_yet_read = False
+                    if not_yet_read:
+                        not_yet_read = False
 
-                    try:
-                        nod_p_num = int(line_str.split("=")[1])
-                        self.number = nod_p_num
-                        print("\n QThread.number =", self.number)
-                        self.first_line.emit(self.number)
+                        try:
+                            nod_p_num = int(line_str.split("=")[1])
+                            self.number = nod_p_num
+                            print("\n QThread.number =", self.number)
+                            self.first_line.emit(self.number)
 
-                    except IndexError:
-                        print(
-                            "\n req_post_n_output ... Index err catch \n"
-                        )
-                        not_yet_read = True
+                        except IndexError:
+                            print(
+                                "\n req_post_n_output ... Index err catch \n"
+                            )
+                            not_yet_read = True
 
-                else:
-                    self.new_line_out.emit(line_str, self.number, "Busy")
+                    else:
+                        self.new_line_out.emit(line_str, self.number, "Busy")
 
-                self.usleep(1)
+                    self.usleep(1)
 
-            self.about_to_end.emit(self.number, self.do_predict_n_report)
+                self.about_to_end.emit(self.number, self.do_predict_n_report)
 
-        except requests.exceptions.RequestException:
-            print("something went wrong with the request of ", str(self.cmd))
-            #TODO: put inside this << except >> some way to kill << new_thrd >>
+            except requests.exceptions.RequestException:
+                print(
+                    "something went wrong with the request of ",
+                    str(self.cmd)
+                )
+                #TODO: put inside this [except] some way to kill [self]
+
+        else:
+            print("TODO")
 
 
 class CommandParamControl:

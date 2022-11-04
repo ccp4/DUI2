@@ -1071,10 +1071,13 @@ class MainObject(QObject):
         print("cmd =", cmd)
         self.window.incoming_text.clear()
         self.window.incoming_text.setTextColor(self.log_show.green_color)
-        do_pred_n_rept = bool(
+        do_predictions_n_report = bool(
             self.window.RunPedictAndReportCheckBox.checkState()
         )
-        post_thread = req_post_n_output(cmd_in = cmd, do_pred_n_rept = do_pred_n_rept)
+        post_thread = req_post_n_output(
+            cmd_in = cmd, do_pred_n_rept = do_predictions_n_report,
+            main_handler = self.runner_handler
+        )
         post_thread.new_line_out.connect(self.log_show.add_line)
         post_thread.first_line.connect(self.line_n1_in)
         post_thread.about_to_end.connect(self.after_thread_end)
@@ -1095,7 +1098,9 @@ class MainObject(QObject):
         cmd = {"nod_lst":nod_lst, "cmd_lst":[["stop"]]}
         print("cmd =", cmd)
 
-        post_thread = req_post_n_output(cmd_in = cmd)
+        post_thread = req_post_n_output(
+            cmd_in = cmd, main_handler = self.runner_handler
+        )
         post_thread.finished.connect(self.post_ended)
         post_thread.start()
         self.thrd_lst.append(post_thread)
@@ -1106,7 +1111,9 @@ class MainObject(QObject):
         print("cmd =", cmd)
         try:
             self.do_load_html.reset_lst_html()
-            post_thread = req_post_n_output(cmd_in = cmd)
+            post_thread = req_post_n_output(
+                cmd_in = cmd, main_handler = self.runner_handler
+            )
             post_thread.first_line.connect(self.respose_n1_from_reset)
             post_thread.finished.connect(self.post_ended)
             post_thread.start()
@@ -1116,7 +1123,7 @@ class MainObject(QObject):
             print(
                 "something went wrong with the << reset_graph >> request"
             )
-            #TODO: put inside this << except >> some way to kill << new_thrd >>
+            #TODO: put inside this [except] some way to kill [post_thread]
 
     def respose_n1_from_reset(self, line):
         print("respose_from_reset(err code):", line)
@@ -1127,7 +1134,9 @@ class MainObject(QObject):
             cmd = {"nod_lst":[nod_num_out], "cmd_lst":["run_predict_n_report"]}
             print("cmd =", cmd)
             self.do_load_html.reset_lst_html()
-            new_thrd = req_post_n_output(cmd_in = cmd)
+            new_thrd = req_post_n_output(
+                cmd_in = cmd, main_handler = self.runner_handler
+            )
             new_thrd.finished.connect(self.refresh_output)
             new_thrd.start()
             self.thrd_lst.append(new_thrd)
