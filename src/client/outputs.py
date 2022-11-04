@@ -21,7 +21,7 @@ copyright (c) CCP4 - DLS
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-import sys, os, requests, zlib
+import sys, os, requests
 from PySide2.QtCore import *
 from PySide2.QtWidgets import *
 from PySide2 import QtUiTools
@@ -443,9 +443,6 @@ class DoLoadHTML(QObject):
                         params_in = cmd, main_handler = self.my_handler
                     )
 
-                    #compresed = req_shot.result_out()
-                    #full_file = zlib.decompress(compresed).decode('utf-8')
-
                     req_file = req_shot.result_out()
                     if req_file == None:
                         full_file = self.not_avail_html
@@ -485,12 +482,6 @@ class DoLoadHTML(QObject):
                         "\nrequests.exceptions.RequestException (DoLoadHTML)\n"
                     )
                     full_file = self.failed_html
-
-                    '''
-                except zlib.error:
-                    print("\n zlib. err catch (DoLoadHTML) \n")
-                    full_file = self.not_avail_html
-                    '''
 
             if len(full_file) < 5:
                 try:

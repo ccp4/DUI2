@@ -23,7 +23,7 @@ copyright (c) CCP4 - DLS
 
 #import http.server, socketserver
 #from urllib.parse import urlparse, parse_qs
-import json, os, zlib, sys, time
+import json, os, sys, time
 
 from server import multi_node
 from server.data_n_json import iter_dict, spit_out

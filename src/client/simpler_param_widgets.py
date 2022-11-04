@@ -21,7 +21,7 @@ copyright (c) CCP4 - DLS
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-import os, sys, zlib, json, requests
+import os, sys, json, requests
 
 default_max_nproc = 4
 
@@ -291,9 +291,6 @@ class FileBrowser(QDialog):
         uni_url = data_init.get_url()
 
         req_shot = get_request_shot(params_in = cmd, main_handler = None)
-
-        #compresed = req_shot.result_out()
-        #dic_str = zlib.decompress(compresed)
         dic_str = req_shot.result_out()
 
         self.dir_tree_dict = json.loads(dic_str)
