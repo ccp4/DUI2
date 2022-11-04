@@ -1638,12 +1638,15 @@ class ExportWidget(QWidget):
 
     def save_mtz_on_disc(self, mtz_info):
         print("type(mtz_info) = ", type(mtz_info))
-        #print("mtz_info = ", mtz_info)
         self.progress_label.setText("...")
-        #file_out = open(self.file_name, "wb")
         file_out = open(self.file_name, "wb")
-        #file_out.write(bytes(mtz_info, encoding='utf8'))
-        file_out.write(mtz_info)
+        try:
+            file_out.write(mtz_info)
+
+        except TypeError:
+            print("Type Err catch (save_mtz_on_disc)")
+            #file_out.write(bytes(mtz_info))
+
         file_out.close()
         print(self.file_name, " writen to disk")
 
