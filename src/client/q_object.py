@@ -1071,20 +1071,16 @@ class MainObject(QObject):
         print("cmd =", cmd)
         self.window.incoming_text.clear()
         self.window.incoming_text.setTextColor(self.log_show.green_color)
-
         do_pred_n_rept = bool(
             self.window.RunPedictAndReportCheckBox.checkState()
         )
-
-        new_thrd = req_post_n_output(cmd_in = cmd, do_pred_n_rept = do_pred_n_rept)
-        new_thrd.new_line_out.connect(self.log_show.add_line)
-        new_thrd.first_line.connect(self.line_n1_in)
-        new_thrd.about_to_end.connect(self.after_thread_end)
-        new_thrd.finished.connect(self.request_display)
-        new_thrd.finished.connect(self.check_nxt_btn)
-        new_thrd.finished.connect(self.refresh_output)
-        new_thrd.start()
-        self.thrd_lst.append(new_thrd)
+        post_thread = req_post_n_output(cmd_in = cmd, do_pred_n_rept = do_pred_n_rept)
+        post_thread.new_line_out.connect(self.log_show.add_line)
+        post_thread.first_line.connect(self.line_n1_in)
+        post_thread.about_to_end.connect(self.after_thread_end)
+        post_thread.finished.connect(self.post_ended)
+        post_thread.start()
+        self.thrd_lst.append(post_thread)
 
     def line_n1_in(self, nod_num_in):
         self.request_display()
@@ -1096,18 +1092,14 @@ class MainObject(QObject):
         print("req_stop")
         nod_lst = [str(self.curr_nod_num)]
         print("\n nod_lst", nod_lst)
-        cmd = {"nod_lst":nod_lst, "cmd_lst":["stop"]}
+        cmd = {"nod_lst":nod_lst, "cmd_lst":[["stop"]]}
         print("cmd =", cmd)
-        try:
-            lst_req = json_data_request(
-                params_in = cmd, main_handler = self.runner_handler
-            )
-            lst_params = lst_req.result_out()
 
-        except requests.exceptions.RequestException:
-            print(
-                "something went wrong with the Stop request"
-            )
+        post_thread = req_post_n_output(cmd_in = cmd)
+        post_thread.finished.connect(self.post_ended)
+        post_thread.start()
+        self.thrd_lst.append(post_thread)
+
 
     def reset_graph_triggered(self):
         print("reset_graph_triggered(QObject)")
@@ -1115,11 +1107,11 @@ class MainObject(QObject):
         print("cmd =", cmd)
         try:
             self.do_load_html.reset_lst_html()
-            new_thrd = req_post_n_output(cmd_in = cmd)
-            new_thrd.first_line.connect(self.respose_n1_from_reset)
-            new_thrd.finished.connect(self.request_display)
-            new_thrd.start()
-            self.thrd_lst.append(new_thrd)
+            post_thread = req_post_n_output(cmd_in = cmd)
+            post_thread.first_line.connect(self.respose_n1_from_reset)
+            post_thread.finished.connect(self.post_ended)
+            post_thread.start()
+            self.thrd_lst.append(post_thread)
 
         except requests.exceptions.RequestException:
             print(
@@ -1140,4 +1132,9 @@ class MainObject(QObject):
             new_thrd.finished.connect(self.refresh_output)
             new_thrd.start()
             self.thrd_lst.append(new_thrd)
+
+    def post_ended(self):
+        self.request_display()
+        self.check_nxt_btn()
+        self.refresh_output()
 

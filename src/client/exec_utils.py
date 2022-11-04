@@ -303,7 +303,9 @@ class req_post_n_output(QThread):
                         self.first_line.emit(self.number)
 
                     except IndexError:
-                        print("\n *** req_post_n_output ... Index err catch *** \n")
+                        print(
+                            "\n req_post_n_output ... Index err catch \n"
+                        )
                         not_yet_read = True
 
                 else:
@@ -314,7 +316,7 @@ class req_post_n_output(QThread):
             self.about_to_end.emit(self.number, self.do_predict_n_report)
 
         except requests.exceptions.RequestException:
-            print("something went wrong with the request of Dials comand")
+            print("something went wrong with the request of ", str(self.cmd))
             #TODO: put inside this << except >> some way to kill << new_thrd >>
 
 

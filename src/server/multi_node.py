@@ -691,6 +691,21 @@ class Runner(object):
                         str_out = "run_predict_n_report ... Done",
                         req_obj = req_obj, out_type = 'utf-8'
                     )
+
+                elif unalias_cmd_lst == [["stop"]]:
+                    for lin2go in cmd_dict["nod_lst"]:
+                        try:
+                            stat2add = self.step_list[lin2go].status
+                            self.step_list[lin2go].stop_me()
+
+                        except IndexError:
+                            print("\n  err catch , wrong line not logging \n")
+
+                        spit_out(
+                            str_out = str(stat2add),
+                            req_obj = req_obj, out_type = 'utf-8'
+                        )
+
             except BrokenPipeError:
                 print(
                     "\n << BrokenPipe err catch >> while running Dui command\n"
@@ -722,17 +737,6 @@ class Runner(object):
             elif uni_cmd == ["closed"]:
                 return_list = ["closed received"]
                 print("received closed command")
-
-            elif uni_cmd == ["stop"]:
-                #TODO: consider moving this to << run_dials_command >> (do_POST)
-                for lin2go in cmd_dict["nod_lst"]:
-                    try:
-                        stat2add = self.step_list[lin2go].status
-                        return_list.append([stat2add])
-                        self.step_list[lin2go].stop_me()
-
-                    except IndexError:
-                        print("\n  err catch , wrong line not logging \n")
 
             else:
                 not_needed_for_now = '''
