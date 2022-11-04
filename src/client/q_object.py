@@ -39,7 +39,7 @@ from client.img_view import DoImageView
 from client.reindex_table import ReindexTable, get_label_from_str_list
 from client.exec_utils import (
     get_optional_list, build_advanced_params_widget, json_data_request,
-    Run_n_Output, CommandParamControl
+    req_post_n_output, CommandParamControl
 )
 
 from client.init_firts import ini_data
@@ -75,12 +75,14 @@ class MainObject(QObject):
         dui2_icon.addFile(st_icon_path, mode = QIcon.Normal)
         self.window.setWindowIcon(dui2_icon)
 
+        to_remove = '''
         data_init = ini_data()
         self.uni_url = data_init.get_url()
+        '''
 
         self.reseting = False
-        #try:
 
+        #try:
 
         root_widg = RootWidg()
         self.window.RootScrollArea.setWidget(root_widg)
@@ -1074,28 +1076,19 @@ class MainObject(QObject):
             self.window.RunPedictAndReportCheckBox.checkState()
         )
 
-        try:
-            new_req_post = requests.post(
-                self.uni_url, stream = True, data = cmd
-            )
-            new_thrd = Run_n_Output(new_req_post, do_pred_n_rept)
-            new_thrd.new_line_out.connect(self.log_show.add_line)
-            new_thrd.first_line.connect(self.line_n1_in)
-            new_thrd.about_to_end.connect(self.thread_to_end)
-            new_thrd.finished.connect(self.request_display)
-            new_thrd.finished.connect(self.check_nxt_btn)
-            new_thrd.finished.connect(self.refresh_output)
-            new_thrd.start()
-            self.thrd_lst.append(new_thrd)
-
-        except requests.exceptions.RequestException:
-            print("something went wrong with the request of Dials comand")
-            #TODO: put inside this << except >> some way to kill << new_thrd >>
+        new_thrd = req_post_n_output(cmd_in = cmd, do_pred_n_rept = do_pred_n_rept)
+        new_thrd.new_line_out.connect(self.log_show.add_line)
+        new_thrd.first_line.connect(self.line_n1_in)
+        new_thrd.about_to_end.connect(self.after_thread_end)
+        new_thrd.finished.connect(self.request_display)
+        new_thrd.finished.connect(self.check_nxt_btn)
+        new_thrd.finished.connect(self.refresh_output)
+        new_thrd.start()
+        self.thrd_lst.append(new_thrd)
 
     def line_n1_in(self, nod_num_in):
         self.request_display()
         print("line_n1_in(nod_num_in) = ", nod_num_in)
-        #TODO: consider if this line goes in << request_launch >>
         self.new_node = None
 
     def req_stop(self):
@@ -1122,10 +1115,7 @@ class MainObject(QObject):
         print("cmd =", cmd)
         try:
             self.do_load_html.reset_lst_html()
-            new_req_post = requests.post(
-                self.uni_url, stream = True, data = cmd
-            )
-            new_thrd = Run_n_Output(new_req_post)
+            new_thrd = req_post_n_output(cmd_in = cmd)
             new_thrd.first_line.connect(self.respose_n1_from_reset)
             new_thrd.finished.connect(self.request_display)
             new_thrd.start()
@@ -1140,26 +1130,14 @@ class MainObject(QObject):
     def respose_n1_from_reset(self, line):
         print("respose_from_reset(err code):", line)
 
-    def thread_to_end(self, nod_num_out, do_pred_n_rept):
-        print("thread_to_end(QObject)")
+    def after_thread_end(self, nod_num_out, do_pred_n_rept):
+        print("after_thread_end(QObject)")
         if do_pred_n_rept:
             cmd = {"nod_lst":[nod_num_out], "cmd_lst":["run_predict_n_report"]}
             print("cmd =", cmd)
-            try:
-                self.do_load_html.reset_lst_html()
-                new_req_post = requests.post(
-                    self.uni_url, stream = True, data = cmd
-                )
-                new_thrd = Run_n_Output(new_req_post)
-                new_thrd.finished.connect(self.refresh_output)
-                new_thrd.start()
-                self.thrd_lst.append(new_thrd)
-
-            except requests.exceptions.RequestException:
-                print(
-                    "something went wrong with the << reset_graph >> request"
-                )
-                #TODO: put inside this << except >> some way
-                #TODO: to kill << new_thrd >>
-
+            self.do_load_html.reset_lst_html()
+            new_thrd = req_post_n_output(cmd_in = cmd)
+            new_thrd.finished.connect(self.refresh_output)
+            new_thrd.start()
+            self.thrd_lst.append(new_thrd)
 

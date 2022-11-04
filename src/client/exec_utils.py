@@ -210,9 +210,11 @@ def get_optional_list(cmd_str, handler_in):
 def build_advanced_params_widget(cmd_str, h_box_search, handler_in):
     cmd = {"nod_lst":"", "cmd_lst":[cmd_str]}
 
+    to_remove = '''
     data_init = ini_data()
     uni_url = data_init.get_url()
     print("uni_url(build_advanced_params_widget) =", uni_url)
+    '''
 
     lst_req = json_data_request(params_in = cmd, main_handler = handler_in)
     lst_params = lst_req.result_out()
@@ -261,46 +263,59 @@ class Mtz_Data_Request(QThread):
             print("not found QThread(get_request_real_time)")
 
 
-class Run_n_Output(QThread):
+class req_post_n_output(QThread):
     new_line_out = Signal(str, int, str)
     first_line = Signal(int)
     about_to_end = Signal(int, bool)
-    def __init__(self, request, do_pred_n_rept = False):
-        super(Run_n_Output, self).__init__()
-        self.request = request
+    def __init__(self, do_pred_n_rept = False, cmd_in = None):
+        super(req_post_n_output, self).__init__()
+
+        data_init = ini_data()
+        self.uni_url = data_init.get_url()
+        self.cmd = cmd_in
+
         self.number = None
         self.do_predict_n_report = do_pred_n_rept
 
     def run(self):
-        line_str = ''
-        not_yet_read = True
-        while True:
-            tmp_dat = self.request.raw.readline()
-            line_str = str(tmp_dat.decode('utf-8'))
-            if '/*EOF*/' in line_str :
-                #TODO: consider a different Signal to say finished
-                print('>>  /*EOF*/  <<')
-                break
+        try:
+            self.request = requests.post(
+                self.uni_url, stream = True, data = self.cmd
+            )
 
-            if not_yet_read:
-                not_yet_read = False
+            line_str = ''
+            not_yet_read = True
+            while True:
+                tmp_dat = self.request.raw.readline()
+                line_str = str(tmp_dat.decode('utf-8'))
+                if '/*EOF*/' in line_str :
+                    #TODO: consider a different Signal to say finished
+                    print('>>  /*EOF*/  <<')
+                    break
 
-                try:
-                    nod_p_num = int(line_str.split("=")[1])
-                    self.number = nod_p_num
-                    print("\n QThread.number =", self.number)
-                    self.first_line.emit(self.number)
+                if not_yet_read:
+                    not_yet_read = False
 
-                except IndexError:
-                    print("\n *** Run_n_Output ... Index err catch *** \n")
-                    not_yet_read = True
+                    try:
+                        nod_p_num = int(line_str.split("=")[1])
+                        self.number = nod_p_num
+                        print("\n QThread.number =", self.number)
+                        self.first_line.emit(self.number)
 
-            else:
-                self.new_line_out.emit(line_str, self.number, "Busy")
+                    except IndexError:
+                        print("\n *** req_post_n_output ... Index err catch *** \n")
+                        not_yet_read = True
 
-            self.usleep(1)
+                else:
+                    self.new_line_out.emit(line_str, self.number, "Busy")
 
-        self.about_to_end.emit(self.number, self.do_predict_n_report)
+                self.usleep(1)
+
+            self.about_to_end.emit(self.number, self.do_predict_n_report)
+
+        except requests.exceptions.RequestException:
+            print("something went wrong with the request of Dials comand")
+            #TODO: put inside this << except >> some way to kill << new_thrd >>
 
 
 class CommandParamControl:
