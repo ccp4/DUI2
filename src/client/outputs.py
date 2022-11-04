@@ -392,12 +392,21 @@ class DoLoadHTML(QObject):
             ini_file, "Html Report (*.html)"
         )
         entered_file_name = fileResul[0]
-        shutil.copy(self.new_file_path, entered_file_name)
+        try:
+            shutil.copy(self.new_file_path, entered_file_name)  ###
+
+        except AttributeError:
+            print("Attribute Err catch, no path for HTML file (Download)")
+
         print(entered_file_name, " writen to disk")
 
     def open_browser_clicked(self):
         print("open_browser_clicked(DoLoadHTML)")
-        webbrowser.open(self.new_file_path)
+        try:
+            webbrowser.open(self.new_file_path)
+
+        except AttributeError:
+            print("Attribute Err catch, no path for HTML file (OpenBrowser)")
 
     def __call__(self, do_request = False):
         print("Do Request =", do_request)
