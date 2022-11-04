@@ -1100,7 +1100,6 @@ class MainObject(QObject):
         post_thread.start()
         self.thrd_lst.append(post_thread)
 
-
     def reset_graph_triggered(self):
         print("reset_graph_triggered(QObject)")
         cmd = {"nod_lst":"", "cmd_lst":["reset_graph"]}
