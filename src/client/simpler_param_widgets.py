@@ -1642,7 +1642,8 @@ class ExportWidget(QWidget):
         self.progress_label.setText("...")
         #file_out = open(self.file_name, "wb")
         file_out = open(self.file_name, "wb")
-        file_out.write(bytes(mtz_info, encoding='utf8'))
+        #file_out.write(bytes(mtz_info, encoding='utf8'))
+        file_out.write(mtz_info)
         file_out.close()
         print(self.file_name, " writen to disk")
 

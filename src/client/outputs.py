@@ -67,20 +67,17 @@ class LoadFiles(QThread):
             self.loading_failed.emit()
             return
 
-        full_exp_file = exp_req.decode('utf-8')
+        try:
+            full_exp_file = exp_req.decode('utf-8')
 
-        #try:
+        except AttributeError:
+            self.loading_failed.emit()
+            return
 
-            #full_exp_file = zlib.decompress(exp_compresed).decode('utf-8')
         tmp_file = open(self.files_path_n_nod_num["tmp_exp_path"], "w")
         tmp_file.write(full_exp_file)
         tmp_file.close()
         print("request expt, finished for node ", self.cur_nod_num)
-
-        #except zlib.error:
-        #    print("zlib.err catch loading expt file")
-        #    self.loading_failed.emit()
-        #    return
 
         print(
             "launching << get_reflections_file >> for node: ",
