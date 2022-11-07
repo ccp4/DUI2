@@ -76,7 +76,9 @@ class json_data_request(QObject):
             data_init = ini_data()
             uni_url = data_init.get_url()
             try:
-                print("attempting to request to:", uni_url, ", with:", params_in)
+                print(
+                    "attempting to request to:", uni_url, ", with:", params_in
+                )
                 req_get = requests.get(
                     uni_url, stream = True, params = params_in, timeout = 3
                 )
@@ -109,7 +111,9 @@ class json_data_request(QObject):
                 json_out = None
 
             except requests.exceptions.RequestException:
-                print(" ... requests.exceptions.RequestException (json_data_request)")
+                print(
+                    "..requests.exceptions.RequestException (json_data_request)"
+                )
                 json_out = None
 
             #return json_out
@@ -180,7 +184,8 @@ class get_request_real_time(QThread):
 
             except requests.exceptions.RequestException:
                 print(
-                    "\n requests.exceptions.RequestException (get_request_real_time) \n"
+                    "\n requests.exceptions.RequestException" +
+                    " (get_request_real_time) \n"
                 )
                 end_data = None
 
