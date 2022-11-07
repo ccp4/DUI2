@@ -38,8 +38,8 @@ from client.outputs import DoLoadHTML, ShowLog, HandleReciprocalLatticeView
 from client.img_view import DoImageView
 from client.reindex_table import ReindexTable, get_label_from_str_list
 from client.exec_utils import (
-    get_optional_list, build_advanced_params_widget, json_data_request,
-    req_post_n_output, CommandParamControl
+    get_optional_list, build_advanced_params_widget, get_req_json_dat,
+    post_req_w_output, CommandParamControl
 )
 
 from client.init_firts import ini_data
@@ -519,7 +519,7 @@ class MainObject(QObject):
         print("\n aboutToQuit ... 1\n")
         self.recip_latt.quit_kill_all()
         cmd = {"nod_lst":"", "cmd_lst":["closed"]}
-        lst_req = json_data_request(
+        lst_req = get_req_json_dat(
             params_in = cmd, main_handler = self.runner_handler
         )
         resp = lst_req.result_out()
@@ -694,7 +694,7 @@ class MainObject(QObject):
                     "nod_lst":cur_nod["parent_node_lst"],
                     "cmd_lst":["get_bravais_sum"]
                 }
-                lst_req = json_data_request(
+                lst_req = get_req_json_dat(
                     params_in = cmd, main_handler = self.runner_handler
                 )
                 json_data_lst = lst_req.result_out()
@@ -793,7 +793,7 @@ class MainObject(QObject):
 
     def update_reindex_table_header(self, nod_lst):
         cmd = {"nod_lst":nod_lst, "cmd_lst":["display_log"]}
-        lst_req = json_data_request(
+        lst_req = get_req_json_dat(
             params_in = cmd, main_handler = self.runner_handler
         )
         json_log = lst_req.result_out()
@@ -814,7 +814,7 @@ class MainObject(QObject):
                 "nod_lst":[self.curr_nod_num],
                 "cmd_lst":["get_bravais_sum"]
             }
-            lst_req = json_data_request(
+            lst_req = get_req_json_dat(
                 params_in = cmd, main_handler = self.runner_handler
             )
             json_data_lst = lst_req.result_out()
@@ -911,7 +911,7 @@ class MainObject(QObject):
         cmd = {
             "nod_lst":self.new_node.parent_node_lst, "cmd_lst":["get_lambda"]
         }
-        lst_req = json_data_request(
+        lst_req = get_req_json_dat(
             params_in = cmd, main_handler = self.runner_handler
         )
         json_lamb = lst_req.result_out()
@@ -1041,7 +1041,7 @@ class MainObject(QObject):
 
     def request_display(self):
         cmd = {"nod_lst":"", "cmd_lst":["display"]}
-        lst_req = json_data_request(
+        lst_req = get_req_json_dat(
             params_in = cmd, main_handler = self.runner_handler
         )
         self.server_nod_lst = lst_req.result_out()
@@ -1074,7 +1074,7 @@ class MainObject(QObject):
         do_predictions_n_report = bool(
             self.window.RunPedictAndReportCheckBox.checkState()
         )
-        post_thread = req_post_n_output(
+        post_thread = post_req_w_output(
             cmd_in = cmd, do_pred_n_rept = do_predictions_n_report,
             main_handler = self.runner_handler
         )
@@ -1098,7 +1098,7 @@ class MainObject(QObject):
         cmd = {"nod_lst":nod_lst, "cmd_lst":[["stop"]]}
         print("cmd =", cmd)
 
-        post_thread = req_post_n_output(
+        post_thread = post_req_w_output(
             cmd_in = cmd, main_handler = self.runner_handler
         )
         post_thread.finished.connect(self.post_ended)
@@ -1111,7 +1111,7 @@ class MainObject(QObject):
         print("cmd =", cmd)
         try:
             self.do_load_html.reset_lst_html()
-            post_thread = req_post_n_output(
+            post_thread = post_req_w_output(
                 cmd_in = cmd, main_handler = self.runner_handler
             )
             post_thread.first_line.connect(self.respose_n1_from_reset)
@@ -1134,7 +1134,7 @@ class MainObject(QObject):
             cmd = {"nod_lst":[nod_num_out], "cmd_lst":["run_predict_n_report"]}
             print("cmd =", cmd)
             self.do_load_html.reset_lst_html()
-            new_thrd = req_post_n_output(
+            new_thrd = post_req_w_output(
                 cmd_in = cmd, main_handler = self.runner_handler
             )
             new_thrd.finished.connect(self.refresh_output)

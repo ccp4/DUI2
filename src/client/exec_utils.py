@@ -69,9 +69,9 @@ class get_request_shot(QObject):
         return self.to_return
 
 
-class json_data_request(QObject):
+class get_req_json_dat(QObject):
     def __init__(self, parent = None, params_in = None, main_handler = None):
-        super(json_data_request, self).__init__(parent)
+        super(get_req_json_dat, self).__init__(parent)
         if main_handler == None:
             data_init = ini_data()
             uni_url = data_init.get_url()
@@ -107,12 +107,12 @@ class json_data_request(QObject):
                     json_out = json.loads(str_lst)
 
             except ConnectionError:
-                print(" ... Connection err catch  (json_data_request) ...")
+                print(" ... Connection err catch  (get_req_json_dat) ...")
                 json_out = None
 
             except requests.exceptions.RequestException:
                 print(
-                    "..requests.exceptions.RequestException (json_data_request)"
+                    "..requests.exceptions.RequestException (get_req_json_dat)"
                 )
                 json_out = None
 
@@ -207,7 +207,7 @@ class get_request_real_time(QThread):
 
 def get_optional_list(cmd_str, handler_in):
     cmd = {"nod_lst":"", "cmd_lst":[cmd_str]}
-    lst_req = json_data_request(params_in = cmd, main_handler = handler_in)
+    lst_req = get_req_json_dat(params_in = cmd, main_handler = handler_in)
     lst_opt = lst_req.result_out()
     return lst_opt
 
@@ -221,7 +221,7 @@ def build_advanced_params_widget(cmd_str, h_box_search, handler_in):
     print("uni_url(build_advanced_params_widget) =", uni_url)
     '''
 
-    lst_req = json_data_request(params_in = cmd, main_handler = handler_in)
+    lst_req = get_req_json_dat(params_in = cmd, main_handler = handler_in)
     lst_params = lst_req.result_out()
 
     #print("lst_params =", lst_params)
@@ -268,14 +268,14 @@ class Mtz_Data_Request(QThread):
             print("not found QThread(get_request_real_time)")
 
 
-class req_post_n_output(QThread):
+class post_req_w_output(QThread):
     new_line_out = Signal(str, int, str)
     first_line = Signal(int)
     about_to_end = Signal(int, bool)
     def __init__(
         self, do_pred_n_rept = False, cmd_in = None, main_handler = None
     ):
-        super(req_post_n_output, self).__init__()
+        super(post_req_w_output, self).__init__()
 
         data_init = ini_data()
         self.uni_url = data_init.get_url()
@@ -312,7 +312,7 @@ class req_post_n_output(QThread):
 
                         except IndexError:
                             print(
-                                "\n req_post_n_output ... Index err catch \n"
+                                "\n post_req_w_output ... Index err catch \n"
                             )
                             not_yet_read = True
 

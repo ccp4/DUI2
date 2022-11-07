@@ -27,7 +27,7 @@ from PySide2.QtWidgets import *
 from PySide2 import QtUiTools
 from PySide2.QtGui import *
 
-from client.exec_utils import json_data_request
+from client.exec_utils import get_req_json_dat
 from client.init_firts import ini_data
 from client.exec_utils import get_request_shot, get_request_real_time
 
@@ -570,7 +570,7 @@ class ShowLog(QObject):
             try:
                 if not found_nod_num:
                     cmd = {"nod_lst":[nod_p_num], "cmd_lst":["display_log"]}
-                    lst_req = json_data_request(
+                    lst_req = get_req_json_dat(
                         params_in = cmd,
                         main_handler = self.main_obj.runner_handler
                     )

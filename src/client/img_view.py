@@ -33,7 +33,7 @@ import json, time, requests
 
 from client.init_firts import ini_data
 from client.exec_utils import (
-    json_data_request, get_request_real_time
+    get_req_json_dat, get_request_real_time
 )
 from client.outputs import HandleLoadStatusLabel
 
@@ -579,7 +579,7 @@ class LoadInThread(QThread):
 
     def run(self):
         print("\n Loading with QThread ... Start", self.cmd, " \n")
-        lst_req = json_data_request(
+        lst_req = get_req_json_dat(
             params_in = self.cmd, main_handler = self.my_handler
         )
         response = lst_req.result_out()
@@ -1244,9 +1244,7 @@ class DoImageView(QObject):
         m11 = self.main_obj.window.imageView.transform().m11()
         m22 = self.main_obj.window.imageView.transform().m22()
         if m11 < 0 or m22 < 0:
-            print(
-                "\n re-inverting image from m11, m22 =", m11, m22, "\n",
-            )
+            print("re-inverting image from m11, m22 =", m11, m22)
             self.main_obj.window.imageView.setMatrix(
                 QMatrix(
                     float(abs(m11)), float(0.0), float(0.0),
@@ -1519,7 +1517,7 @@ class MainImgViewObject(QObject):
         my_cmd = {"path"    : self.nod_or_path,
                   "cmd_lst" : my_cmd_lst}
 
-        lst_req = json_data_request(
+        lst_req = get_req_json_dat(
             params_in = my_cmd, main_handler = self.my_handler
         )
         json_data_lst = lst_req.result_out()

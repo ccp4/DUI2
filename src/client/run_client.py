@@ -29,7 +29,7 @@ from PySide2.QtWidgets import *
 from client.q_object import MainObject
 
 from client.init_firts import ini_data
-from client.exec_utils import json_data_request
+from client.exec_utils import get_req_json_dat
 
 from shared_modules import format_utils
 
@@ -51,7 +51,7 @@ def main(par_def = None):
     print("here 1")
     while dummy_nod_lst == None:
         print("here in loop")
-        lst_req = json_data_request(params_in = cmd, main_handler = None)
+        lst_req = get_req_json_dat(params_in = cmd, main_handler = None)
         dummy_nod_lst = lst_req.result_out()
         if dummy_nod_lst == None:
             print("dummy_nod_lst =", dummy_nod_lst, ", waiting", n_secs, "secs ...")
