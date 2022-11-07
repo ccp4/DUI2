@@ -49,7 +49,7 @@ class get_request_shot(QObject):
         else:
             self.done = False
             print("main_handler(get_request_shot) =", main_handler)
-            main_handler.run_from_main_dui(params_in, self)
+            main_handler.get_from_main_dui(params_in, self)
             #self.to_return = None
 
     def get_it_str(self, data_comming):
@@ -121,7 +121,7 @@ class get_req_json_dat(QObject):
 
         else:
             print("main_handler =", main_handler)
-            main_handler.run_from_main_dui(params_in, self)
+            main_handler.get_from_main_dui(params_in, self)
 
     def get_it_str(self, data_comming):
         #print("data_comming =", data_comming)
@@ -194,7 +194,7 @@ class get_request_real_time(QThread):
         else:
             self.prog_new_stat.emit(50)
             print("self.my_handler =", self.my_handler)
-            self.my_handler.run_from_main_dui(self.params, self)
+            self.my_handler.get_from_main_dui(self.params, self)
 
     def get_it_str(self, data_comming):
         self.prog_new_stat.emit(95)
@@ -269,8 +269,8 @@ class Mtz_Data_Request(QThread):
 
 
 class post_req_w_output(QThread):
-    new_line_out = Signal(str, int, str)
     first_line = Signal(int)
+    new_line_out = Signal(str, int, str)
     about_to_end = Signal(int, bool)
     def __init__(
         self, do_pred_n_rept = False, cmd_in = None, main_handler = None
@@ -332,6 +332,12 @@ class post_req_w_output(QThread):
 
         else:
             print("TODO")
+            self.my_handler.post_from_main_dui(self.cmd, self)
+
+    def get_it_str(self, data_comming):
+        print("data_comming =", data_comming)
+        #self.to_return = data_comming
+
 
 
 class CommandParamControl:
