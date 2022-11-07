@@ -38,6 +38,7 @@ class connect_post_thread(QThread):
 
     def call_back_str(self, data_out):
         self.my_caller.get_it_str(data_out)
+        print("data going(connect_post_thread)=", data_out)
 
 
 class MultiRunner(QObject):

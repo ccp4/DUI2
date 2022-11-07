@@ -331,13 +331,31 @@ class post_req_w_output(QThread):
                 #TODO: put inside this [except] some way to kill [self]
 
         else:
-            print("TODO")
+            self.already_read = False
             self.my_handler.post_from_main_dui(self.cmd, self)
 
-    def get_it_str(self, data_comming):
-        print("data_comming =", data_comming)
-        #self.to_return = data_comming
+    def get_it_str(self, line_str):
+        print("line_str(post_req_w_output) =", line_str)
 
+        if not self.already_read:
+            try:
+                nod_p_num = int(line_str.split("=")[1])
+                self.number = nod_p_num
+                self.first_line.emit(self.number)
+                self.already_read = True
+
+            except IndexError:
+                print(
+                    "\n post_req_w_output ... Index err catch \n"
+                )
+
+        elif '/*EOF*/' in line_str :
+            self.about_to_end.emit(self.number, self.do_predict_n_report)
+            self.quit()
+            #self.wait()
+
+        else:
+            self.new_line_out.emit(line_str, self.number, "Busy")
 
 
 class CommandParamControl:
