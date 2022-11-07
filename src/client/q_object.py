@@ -1095,7 +1095,8 @@ class MainObject(QObject):
         print("req_stop")
         nod_lst = [str(self.curr_nod_num)]
         print("\n nod_lst", nod_lst)
-        cmd = {"nod_lst":nod_lst, "cmd_lst":[["stop"]]}
+        #cmd = {"nod_lst":nod_lst, "cmd_lst":[["stop"]]}
+        cmd = {"nod_lst":nod_lst, "cmd_lst":["stop"]}
         print("cmd =", cmd)
 
         post_thread = post_req_w_output(
@@ -1129,7 +1130,6 @@ class MainObject(QObject):
         print("respose_from_reset(err code):", line)
 
     def after_thread_end(self, nod_num_out, do_pred_n_rept):
-        print("after_thread_end(QObject)")
         if do_pred_n_rept:
             cmd = {"nod_lst":[nod_num_out], "cmd_lst":["run_predict_n_report"]}
             print("cmd =", cmd)

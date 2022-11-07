@@ -59,7 +59,7 @@ def spit_out(str_out = None, req_obj = None, out_type = None):
     else:
         if out_type == 'utf-8':
             req_obj.call_back_str(str_out)
-            print("<< YES utf-8, len=", len(str_out) , ">>")
+            #print("<< YES utf-8, len=", len(str_out) , ">>")
 
         else:
             req_obj.call_back_bin(str_out)

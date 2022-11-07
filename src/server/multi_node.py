@@ -397,7 +397,7 @@ class CmdNode(object):
                 self.nod_req.end_headers()
 
             except AttributeError:
-                print("Attribute Err catch, not supposed send header info")
+                print("Attribute Err catch, not supposed send header info #2")
 
             try:
                 str_nod_num = "node.number=" + str(self.number) + "\n"
@@ -511,12 +511,6 @@ class CmdNode(object):
             new_line = "No need for HTML report in this step"
 
         self.n_Broken_Pipes += add_log_line(new_line, self.nod_req)
-
-        about2remove = '''
-        print("waiting 5 seconds for testing")
-        time.sleep(5)
-        print("5 seconds for testing ... Done")
-        '''
 
         # running prediction generation
         pred_lst_dat_in = ['dials.predict']

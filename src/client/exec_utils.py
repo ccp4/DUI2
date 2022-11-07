@@ -331,12 +331,16 @@ class post_req_w_output(QThread):
                 #TODO: put inside this [except] some way to kill [self]
 
         else:
+            self.done = False
             self.already_read = False
             self.my_handler.post_from_main_dui(self.cmd, self)
 
-    def get_it_str(self, line_str):
-        print("line_str(post_req_w_output) =", line_str)
+            while self.done == False:
+                time.sleep(0.1)
 
+        print("ended post QThread")
+
+    def get_it_str(self, line_str):
         if not self.already_read:
             try:
                 nod_p_num = int(line_str.split("=")[1])
@@ -345,14 +349,13 @@ class post_req_w_output(QThread):
                 self.already_read = True
 
             except IndexError:
-                print(
-                    "\n post_req_w_output ... Index err catch \n"
-                )
+                print("\n post_req_w_output ... Index err catch \n")
 
         elif '/*EOF*/' in line_str :
             self.about_to_end.emit(self.number, self.do_predict_n_report)
-            self.quit()
-            #self.wait()
+            self.done = True
+            self.exit()
+            self.wait()
 
         else:
             self.new_line_out.emit(line_str, self.number, "Busy")

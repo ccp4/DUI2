@@ -130,7 +130,7 @@ def main(par_def = None, connection_out = None):
                 self.send_response(200)
 
             except AttributeError:
-                print("Attribute Err catch, not supposed send header info")
+                print("Attribute Err catch, not supposed send header info #3")
 
             url_path = self.path
             url_dict = parse_qs(urlparse(url_path).query)
@@ -146,7 +146,9 @@ def main(par_def = None, connection_out = None):
                     self.end_headers()
 
                 except AttributeError:
-                    print("Attribute Err catch, not supposed send header info")
+                    print(
+                        "Attribute Err catch, not supposed send header info #4"
+                    )
 
                 spit_out(
                     str_out = 'no command in request (KeyError) ',

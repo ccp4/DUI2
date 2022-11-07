@@ -157,7 +157,7 @@ def main(par_def = None, connection_out = None):
                 self.send_response(200)
 
             except AttributeError:
-                print("Attribute Err catch, not supposed send header info")
+                print("Attribute Err catch, not supposed send header info #1")
 
             url_path = self.path
             url_dict = parse_qs(urlparse(url_path).query)
