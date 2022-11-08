@@ -310,9 +310,9 @@ class MainObject(QObject):
             widgets_defs, self.ui_dir_path
         )
 
-        self.param_widgets["Root"]["simple"] = imp_widg
-        self.param_widgets["Root"]["advanced"] = None
-        self.param_widgets["Root"]["main_page"] = self.window.RootPage
+        self.param_widgets["root"]["simple"] = imp_widg
+        self.param_widgets["root"]["advanced"] = None
+        self.param_widgets["root"]["main_page"] = self.window.RootPage
 
         self.param_widgets["import"]["simple"] = imp_widg
         self.param_widgets["import"]["advanced"] = None
@@ -454,7 +454,7 @@ class MainObject(QObject):
         self.window.PrevImgButton.clicked.connect(self.prev_img)
         self.window.NextImgButton.clicked.connect(self.next_img)
 
-        self.curr_widg_key = "Root"
+        self.curr_widg_key = "root"
         self.new_node = None
         self.curr_nod_num = 0
 

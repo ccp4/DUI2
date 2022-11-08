@@ -45,8 +45,8 @@ def check_if_predict_n_report(str_key):
         return True
 
 widgets_defs = {
-    "Root" : {
-        "tooltip"       : "Root node ... Not supposed to run any code",
+    "root" : {
+        "tooltip"       : "root node ... Not supposed to run any code",
         "icon"          : "resources/root.png",
         "main_cmd"      :["# root node"],
         "nxt_widg_lst"  :["import"]

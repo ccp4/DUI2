@@ -475,7 +475,7 @@ class RootWidg(QWidget):
         sys_font = QFont()
         font_point_size = sys_font.pointSize()
 
-        big_label = QLabel("Root:")
+        big_label = QLabel("root:")
         big_label.setFont(
             QFont("Courier", font_point_size + 3, QFont.Bold)
         )
@@ -486,16 +486,16 @@ class RootWidg(QWidget):
         self.setLayout(self.main_vbox)
 
     def reset_pars(self):
-        print("reset_pars(Root) ... dummy")
+        print("reset_pars(root) ... dummy")
 
     def set_ed_pars(self):
         print("set_ed_pars(SimpleParamTab)")
 
     def update_all_pars(self, tup_lst_pars):
-        print("update_all_pars(Root)", tup_lst_pars, "... dummy")
+        print("update_all_pars(root)", tup_lst_pars, "... dummy")
 
     def update_param(self, str_path, str_value):
-        print("update_param(Root)", str_path, str_value, "... dummy")
+        print("update_param(root)", str_path, str_value, "... dummy")
 
 
 class ImportWidget(QWidget):

@@ -279,8 +279,8 @@ class CmdNode(object):
         self._run_dir = base_dir
         self._lst_expt_in = []
         self._lst_refl_in = []
-        self.full_cmd_lst = [['Root']]
-        self.lst2run = [['dials.Root']]
+        self.full_cmd_lst = [['root']]
+        self.lst2run = [['dials.root']]
         self.status = "Succeeded"
 
     def set_base_dir(self, dir_in = None):
@@ -746,7 +746,7 @@ class Runner(object):
     def clear_run_dirs_n_reset(self):
         for uni in self.step_list:
             try:
-                if uni.lst2run != [['dials.Root']]:
+                if uni.lst2run != [['dials.root']]:
                     shutil.rmtree(str(uni._run_dir))
 
             except FileNotFoundError:
