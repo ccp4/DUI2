@@ -149,11 +149,18 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
                 byt_data = bytes(str_file.encode('utf-8'))
                 return_list = byt_data
 
-            except (IndexError, FileNotFoundError):
+            except IndexError:
                 print(
-                    "\n  err catch , wrong line, sending empty html \n"
+                    "\n  Index Err catch, sending empty html list\n"
                 )
                 return_list = []
+
+            except FileNotFoundError:
+                print(
+                    "\n  FileNotFound Err catch, sending empty html list \n"
+                )
+                return_list = []
+
 
     elif uni_cmd[0] == "get_template":
         for lin2go in cmd_dict["nod_lst"]:

@@ -298,7 +298,7 @@ class post_req_w_output(QThread):
                     line_str = str(tmp_dat.decode('utf-8'))
                     if '/*EOF*/' in line_str :
                         #TODO: consider a different Signal to say finished
-                        print('>>  /*EOF*/  <<')
+                        print('>>  /*EOF*/  <<', str(self.cmd))
                         break
 
                     if not_yet_read:

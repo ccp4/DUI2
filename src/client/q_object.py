@@ -21,7 +21,7 @@ copyright (c) CCP4 - DLS
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-import os, sys, requests
+import os, sys, requests, time
 
 from PySide2.QtCore import *
 from PySide2.QtWidgets import *
@@ -1141,8 +1141,10 @@ class MainObject(QObject):
             new_thrd.start()
             self.thrd_lst.append(new_thrd)
 
+        else:
+            self.refresh_output()
+
     def post_ended(self):
         self.request_display()
         self.check_nxt_btn()
-        self.refresh_output()
 

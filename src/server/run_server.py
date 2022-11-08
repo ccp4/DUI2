@@ -232,7 +232,7 @@ def main(par_def = None, connection_out = None):
 
                     spit_out(str_out = byt_data, req_obj = self)
 
-                print("sending /*EOF*/")
+                print("sending /*EOF*/ (Get)")
                 spit_out(
                     str_out = '/*EOF*/', req_obj = self, out_type = 'utf-8'
                 )
