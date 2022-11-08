@@ -1274,28 +1274,6 @@ class IntegrateSimplerParamTab(SimpleParamTab):
 
     def build_pars(self):
 
-        PrFit_lay_out = QHBoxLayout()
-        label_PrFit = QLabel("Use profile fitting")
-        PrFit_lay_out.addWidget(label_PrFit)
-
-        PrFit_comb_bx = DefaultComboBox("integration.profile.fitting",
-            ["True", "False", "Auto"])
-        PrFit_comb_bx.currentIndexChanged.connect(self.combobox_changed)
-
-        PrFit_lay_out.addWidget(PrFit_comb_bx)
-        self.main_v_layout.addLayout(PrFit_lay_out)
-
-        hbox_lay_algorithm_53 = QHBoxLayout()
-        label_algorithm_53 = QLabel("Background algorithm")
-        hbox_lay_algorithm_53.addWidget(label_algorithm_53)
-
-        box_algorithm_53 = DefaultComboBox("integration.background.algorithm",
-            ["simple", "null", "median", "gmodel", "glm"], default_index=4)
-        box_algorithm_53.currentIndexChanged.connect(self.combobox_changed)
-
-        hbox_lay_algorithm_53.addWidget(box_algorithm_53)
-        self.main_v_layout.addLayout(hbox_lay_algorithm_53)
-
         hbox_d_min = QHBoxLayout()
         label_d_min = QLabel("High resolution limit")
         hbox_d_min.addWidget(label_d_min)
@@ -1304,8 +1282,42 @@ class IntegrateSimplerParamTab(SimpleParamTab):
         d_min_line.local_path = "prediction.d_min"
         d_min_line.textChanged.connect(self.line_changed)
         hbox_d_min.addWidget(d_min_line)
-
         self.main_v_layout.addLayout(hbox_d_min)
+
+        ##############################################################################
+        hbox_d_max = QHBoxLayout()
+        d_max_label = QLabel("Low resolution limit")
+        hbox_d_max.addWidget(d_max_label)
+        d_max_line = QLineEdit()
+        d_max_line.setPlaceholderText("None")
+        d_max_line.local_path = "prediction.d_max"
+        d_max_line.textChanged.connect(self.line_changed)
+        hbox_d_max.addWidget(d_max_line)
+        self.main_v_layout.addLayout(hbox_d_max)
+        ##############################################################################
+
+        hbox_lay_algorithm_53 = QHBoxLayout()
+        label_algorithm_53 = QLabel("Background algorithm")
+        hbox_lay_algorithm_53.addWidget(label_algorithm_53)
+        box_algorithm_53 = DefaultComboBox("integration.background.algorithm",
+            ["Auto", "glm", "gmodel", "null", "simple"], default_index=0)
+        box_algorithm_53.currentIndexChanged.connect(self.combobox_changed)
+        hbox_lay_algorithm_53.addWidget(box_algorithm_53)
+        self.main_v_layout.addLayout(hbox_lay_algorithm_53)
+
+
+
+
+        consider_2_remove = '''
+        PrFit_lay_out = QHBoxLayout()
+        label_PrFit = QLabel("Use profile fitting")
+        PrFit_lay_out.addWidget(label_PrFit)
+        PrFit_comb_bx = DefaultComboBox("integration.profile.fitting",
+            ["True", "False", "Auto"])
+        PrFit_comb_bx.currentIndexChanged.connect(self.combobox_changed)
+        PrFit_lay_out.addWidget(PrFit_comb_bx)
+        self.main_v_layout.addLayout(PrFit_lay_out)
+        '''
 
         self.main_v_layout.addStretch()
         #self.box_nproc.item_list = None
@@ -1370,36 +1382,47 @@ class ScaleSimplerParamTab(SimpleParamTab):
 
         #TODO: review the parameters here, they need updating
 
-        hbox_lay_mod = QHBoxLayout()
-        label_mod = QLabel("Model")
-
-        hbox_lay_mod.addWidget(label_mod)
-        box_mod = DefaultComboBox("model", ["physical", "array", "KB"])
-        box_mod.currentIndexChanged.connect(self.combobox_changed)
-        hbox_lay_mod.addWidget(box_mod)
-
-        hbox_lay_wgh_opt_err = QHBoxLayout()
-        label_wgh_opt_err = QLabel("Error optimisation model")
-
-        hbox_lay_wgh_opt_err.addWidget(label_wgh_opt_err)
-        box_wgh_opt_err = DefaultComboBox("weighting.error_model.error_model",
-            ["basic", "None"])
-        box_wgh_opt_err.currentIndexChanged.connect(self.combobox_changed)
-        hbox_lay_wgh_opt_err.addWidget(box_wgh_opt_err)
-
         hbox_d_min = QHBoxLayout()
         d_min_label = QLabel("High resolution limit")
         hbox_d_min.addWidget(d_min_label)
-
         d_min_line = QLineEdit()
         d_min_line.setPlaceholderText("None")
         d_min_line.local_path = "cut_data.d_min"
         d_min_line.textChanged.connect(self.line_changed)
         hbox_d_min.addWidget(d_min_line)
-
-        self.main_v_layout.addLayout(hbox_lay_mod)
-        self.main_v_layout.addLayout(hbox_lay_wgh_opt_err)
         self.main_v_layout.addLayout(hbox_d_min)
+
+        ##############################################################################
+        hbox_d_max = QHBoxLayout()
+        d_max_label = QLabel("Low resolution limit")
+        hbox_d_max.addWidget(d_max_label)
+        d_max_line = QLineEdit()
+        d_max_line.setPlaceholderText("None")
+        d_max_line.local_path = "cut_data.d_max"
+        d_max_line.textChanged.connect(self.line_changed)
+        hbox_d_max.addWidget(d_max_line)
+        self.main_v_layout.addLayout(hbox_d_max)
+        ##############################################################################
+
+        hbox_lay_mod = QHBoxLayout()
+        label_mod = QLabel("Model")
+        hbox_lay_mod.addWidget(label_mod)
+        box_mod = DefaultComboBox("model", ["physical", "array", "KB"])
+        box_mod.currentIndexChanged.connect(self.combobox_changed)
+        hbox_lay_mod.addWidget(box_mod)
+        self.main_v_layout.addLayout(hbox_lay_mod)
+
+
+        hbox_lay_wgh_opt_err = QHBoxLayout()
+        label_wgh_opt_err = QLabel("Error optimisation model")
+        hbox_lay_wgh_opt_err.addWidget(label_wgh_opt_err)
+        box_wgh_opt_err = DefaultComboBox("weighting.error_model.error_model",
+            ["basic", "None"])
+        box_wgh_opt_err.currentIndexChanged.connect(self.combobox_changed)
+        hbox_lay_wgh_opt_err.addWidget(box_wgh_opt_err)
+        self.main_v_layout.addLayout(hbox_lay_wgh_opt_err)
+
+
         self.main_v_layout.addStretch()
 
         self.lst_var_widg = []
