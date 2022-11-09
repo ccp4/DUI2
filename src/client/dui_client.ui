@@ -1145,7 +1145,7 @@
                   <item row="0" column="0">
                    <widget class="QCheckBox" name="NodeSelecCheck">
                     <property name="text">
-                     <string>Select Experiment</string>
+                     <string>Select experiment</string>
                     </property>
                     <property name="checked">
                      <bool>true</bool>
@@ -1155,7 +1155,7 @@
                   <item row="0" column="1" colspan="2">
                    <widget class="QPushButton" name="ClearParentButton">
                     <property name="text">
-                     <string>Unselect All</string>
+                     <string>Unselect all</string>
                     </property>
                    </widget>
                   </item>
@@ -1219,7 +1219,7 @@
                    </font>
                   </property>
                   <property name="text">
-                   <string>   Reset to Default    </string>
+                   <string>   Reset to default    </string>
                   </property>
                  </widget>
                 </item>
@@ -1362,14 +1362,14 @@
               <item>
                <widget class="QLabel" name="InvScaleLabel">
                 <property name="text">
-                 <string>scale = 1.00</string>
+                 <string>Scale = 1.00</string>
                 </property>
                </widget>
               </item>
               <item>
                <widget class="QPushButton" name="ZoomInButton">
                 <property name="text">
-                 <string>Zoom In</string>
+                 <string>Zoom in</string>
                 </property>
                </widget>
               </item>
@@ -1383,7 +1383,7 @@
               <item>
                <widget class="QPushButton" name="ZoomOutButton">
                 <property name="text">
-                 <string>Zoom Out</string>
+                 <string>Zoom out</string>
                 </property>
                </widget>
               </item>
@@ -1397,14 +1397,14 @@
               <item>
                <widget class="QPushButton" name="DisplayButton">
                 <property name="text">
-                 <string>Display Info ...</string>
+                 <string>Display info ...</string>
                 </property>
                </widget>
               </item>
               <item>
                <widget class="QLabel" name="ImgNumLabel">
                 <property name="text">
-                 <string> Img Path:</string>
+                 <string> Image path:</string>
                 </property>
                </widget>
               </item>
@@ -1506,14 +1506,14 @@
             <item row="1" column="0">
              <widget class="QPushButton" name="OpenBrowserButton">
               <property name="text">
-               <string>Open Report in Web Browser</string>
+               <string>Open report in web browser</string>
               </property>
              </widget>
             </item>
             <item row="1" column="1">
              <widget class="QPushButton" name="DownloadReportButton">
               <property name="text">
-               <string>Download Report</string>
+               <string>Download report</string>
               </property>
              </widget>
             </item>
@@ -1530,7 +1530,7 @@
           </widget>
           <widget class="QWidget" name="ReciprocalViewTab">
            <attribute name="title">
-            <string>Reciprocal Lattice</string>
+            <string>Reciprocal lattice</string>
            </attribute>
            <layout class="QGridLayout" name="gridLayout_35">
             <item row="4" column="0">
@@ -1549,7 +1549,7 @@
             <item row="4" column="1">
              <widget class="QCheckBox" name="ReLauncCheckBox">
               <property name="text">
-               <string>Close and Reopen when navigating</string>
+               <string>Close and reopen when navigating</string>
               </property>
              </widget>
             </item>
@@ -1577,7 +1577,7 @@
              <widget class="QPushButton" name="RecipLattOpenButton">
               <property name="text">
                <string>
- Open Reciprocal Lattice Viewer 
+ Open reciprocal lattice viewer
 </string>
               </property>
              </widget>
@@ -1666,12 +1666,12 @@
   </action>
   <action name="actionBright_on_off">
    <property name="text">
-    <string>Invert Brightness</string>
+    <string>Invert brightness</string>
    </property>
   </action>
   <action name="actionReset_Control_Graph">
    <property name="text">
-    <string>Reset Control Graph</string>
+    <string>Reset control graph</string>
    </property>
   </action>
   <action name="actionExit">
@@ -1681,12 +1681,12 @@
   </action>
   <action name="actionArrowhead">
    <property name="text">
-    <string>Add / Remove Arrowhead</string>
+    <string>Add / Remove arrowhead</string>
    </property>
   </action>
   <action name="actionSharpTurns">
    <property name="text">
-    <string>Add / Remove Sharp Turns</string>
+    <string>Add / Remove sharp turns</string>
    </property>
   </action>
  </widget>

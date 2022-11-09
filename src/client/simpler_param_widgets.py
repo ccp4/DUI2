@@ -524,7 +524,7 @@ class ImportWidget(QWidget):
             QFont("Courier", font_point_size + 1, QFont.Bold)
         )
         self.imp_extra_txt = QLineEdit()
-        self.open_butt = QPushButton("  Open Images  ")
+        self.open_butt = QPushButton("  Open images  ")
 
         self.check_rot_axs = QCheckBox("Invert rotation axis")
         self.check_dist = QCheckBox("Set distance = 2193")
@@ -870,7 +870,7 @@ class FindspotsSimplerParameterTab(SimpleParamTab):
         self.main_v_layout.addLayout(xds_global_threshold_hb)
 
         self.main_v_layout.addWidget(
-            QLabel("\n Electron Diffraction Parameters")
+            QLabel("\n Electron diffraction parameters")
         )
         self.main_v_layout.addWidget(self.set_d_max)
         self.main_v_layout.addWidget(self.set_d_min)
@@ -1036,7 +1036,7 @@ class IndexSimplerParamTab(SimpleParamTab):
         self.main_v_layout.addLayout(qf)
 
         self.main_v_layout.addWidget(
-            QLabel("\n Electron Diffraction Parameter")
+            QLabel("\n Electron diffraction parameter")
         )
         self.main_v_layout.addWidget(self.detec_fix)
 
@@ -1113,7 +1113,7 @@ class RefineBravaiSimplerParamTab(SimpleParamTab):
         hbox_lay_outlier_algorithm.addWidget(box_outlier_algorithm)
         self.main_v_layout.addLayout(hbox_lay_outlier_algorithm)
         self.main_v_layout.addWidget(
-            QLabel("\n Electron Diffraction Parameter")
+            QLabel("\n Electron diffraction parameter")
         )
         self.main_v_layout.addWidget(self.detec_fix)
 
@@ -1206,7 +1206,7 @@ class RefineSimplerParamTab(SimpleParamTab):
         self.detec_fix = QCheckBox("Set detector.fix=distance")
         self.detec_fix.stateChanged.connect(self.detec_fix_changed)
         self.main_v_layout.addWidget(
-            QLabel("\n Electron Diffraction Parameter")
+            QLabel("\n Electron diffraction parameter")
         )
         self.main_v_layout.addWidget(self.detec_fix)
 
@@ -1571,7 +1571,7 @@ class ExportWidget(QWidget):
 
         self.exp_txt = QLineEdit()
         self.exp_txt.textChanged.connect(self.line_changed)
-        self.downl_but = QPushButton("Download MTZ")
+        self.downl_but = QPushButton("Download/save .mtz file")
         self.downl_but.clicked.connect(self.download_mtz)
         self.progress_label = QLabel("...")
 

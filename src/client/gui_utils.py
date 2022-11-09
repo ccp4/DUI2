@@ -280,7 +280,7 @@ class AdvancedParameters(QWidget):
         self.search_input.textChanged.connect(self.search_changed)
         h_box_search.addWidget(self.search_input)
 
-        self.fnd_nxt = QPushButton("Find Next")
+        self.fnd_nxt = QPushButton("Find next")
         self.fnd_nxt.clicked.connect(self.find_next_search_click)
         h_box_search.addWidget(self.fnd_nxt)
 
