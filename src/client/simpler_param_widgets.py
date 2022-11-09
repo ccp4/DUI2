@@ -1447,7 +1447,7 @@ class CombineExperimentSimplerParamTab(SimpleParamTab):
         self.setLayout(self.main_v_layout)
 
     def build_pars(self):
-        self.main_v_layout.addWidget(QLabel("Reference From Experiment"))
+        self.main_v_layout.addWidget(QLabel("Reference from experiment"))
 
         beam_line = QLineEdit()
         beam_line.setPlaceholderText("None")
