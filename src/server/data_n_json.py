@@ -21,7 +21,7 @@ copyright (c) CCP4 - DLS
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-import json, os
+import json, os, glob
 import libtbx.phil
 from dials.command_line.find_spots import phil_scope as phil_scope_find_spots
 from dials.command_line.index import working_phil as phil_scope_index
@@ -87,9 +87,10 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
         for lin2go in cmd_dict["nod_lst"]:
             try:
                 print("compresing mtz generated from node #:", lin2go)
+
                 mtz_dir_path = step_list[lin2go]._run_dir
-                mtz_name = step_list[lin2go].lst2run[0][-1][11:]
-                mtz_path = mtz_dir_path + os.sep + mtz_name
+                print("mtz_dir_path =", mtz_dir_path)
+                mtz_path = glob.glob(mtz_dir_path + os.sep + "*.mtz")[0]
                 print("mtz_path =", mtz_path)
 
                 with open(mtz_path, 'rb') as fil_h:
@@ -97,9 +98,14 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
 
                 return_list = byt_data
 
-            except (IndexError, FileNotFoundError):
+            except IndexError:
                 print(
-                    "\n  err catch , wrong line, sending empty mtz \n"
+                    "\n Index Err catch , sending empty mtz \n"
+                )
+
+            except FileNotFoundError:
+                print(
+                    "\n FileNotFound Err catch , sending empty mtz \n"
                 )
 
     elif uni_cmd[0] == "get_experiments_file":

@@ -48,6 +48,7 @@ from client.simpler_param_widgets import RootWidg
 from client.simpler_param_widgets import ImportWidget
 from client.simpler_param_widgets import MaskWidget
 from client.simpler_param_widgets import ExportWidget
+from client.simpler_param_widgets import MergeWidget
 from client.simpler_param_widgets import OptionalWidget
 from client.simpler_param_widgets import (
     FindspotsSimplerParameterTab, IndexSimplerParamTab,
@@ -93,8 +94,6 @@ class MainObject(QObject):
 
         self.expr_widg = ExportWidget()
         self.expr_widg.set_parent(self)
-        #self.expr_widg = ExportWidget(self)
-
         self.expr_widg.all_items_changed.connect(
             self.all_items_param_changed
         )
@@ -102,6 +101,16 @@ class MainObject(QObject):
             self.search_in_parent_nodes
         )
         self.window.ExportScrollArea.setWidget(self.expr_widg)
+
+        self.merg_widg = MergeWidget()
+        self.merg_widg.set_parent(self)
+        self.merg_widg.all_items_changed.connect(
+            self.all_items_param_changed
+        )
+        self.merg_widg.find_scaled_before.connect(
+            self.search_in_parent_nodes
+        )
+        self.window.MergeScrollArea.setWidget(self.merg_widg)
 
         self.opt_cmd_lst = get_optional_list(
             "get_optional_command_list", self.runner_handler
@@ -378,6 +387,10 @@ class MainObject(QObject):
         self.param_widgets["export"]["simple"] = self.expr_widg
         self.param_widgets["export"]["advanced"] = None
         self.param_widgets["export"]["main_page"] = self.window.ExportPage
+
+        self.param_widgets["merge"]["simple"] = self.merg_widg
+        self.param_widgets["merge"]["advanced"] = None
+        self.param_widgets["merge"]["main_page"] = self.window.MergePage
 
         self.param_widgets["optional"]["simple"] = self.optional_widg
         self.param_widgets["optional"]["advanced"] = None
@@ -908,6 +921,9 @@ class MainObject(QObject):
         if local_main_cmd == ['dials.export']:
             self.param_widgets[self.curr_widg_key]["simple"].reset_pars()
 
+        if local_main_cmd == ['dials.merge']:
+            self.param_widgets[self.curr_widg_key]["simple"].reset_pars()
+
         cmd = {
             "nod_lst":self.new_node.parent_node_lst, "cmd_lst":["get_lambda"]
         }
@@ -931,7 +947,19 @@ class MainObject(QObject):
             )
             fnd_scl = fnd_scl_cmd.foung_scale()
             print("found_scale =", fnd_scl)
-            self.expr_widg.is_scale_parent(fnd_scl)
+            if(
+                self.server_nod_lst[self.curr_nod_num][
+                    "cmd2show"
+                ][0] == "dials.export"
+            ):
+                self.expr_widg.is_scale_parent1(fnd_scl)
+
+            elif(
+                self.server_nod_lst[self.curr_nod_num][
+                    "cmd2show"
+                ][0] == "dials.merge"
+            ):
+                self.merg_widg.is_scale_parent2(fnd_scl)
 
         except AttributeError:
             print("no need to find scale step as parent")
@@ -1006,18 +1034,26 @@ class MainObject(QObject):
             print("only clone (F or S)")
             self.window.RetryButton.setEnabled(True)
 
-        self.check_if_exported()
+        self.check_if_exported_or_merged()
 
-    def check_if_exported(self):
+    def check_if_exported_or_merged(self):
         try:
             if(
                 self.server_nod_lst[self.curr_nod_num][
                     "status"
                 ]  == "Succeeded"
                 and
-                self.server_nod_lst[self.curr_nod_num][
-                    "cmd2show"
-                ][0] == "dials.export"
+                (
+                    self.server_nod_lst[self.curr_nod_num][
+                        "cmd2show"
+                    ][0] == "dials.export"
+
+                    or
+
+                    self.server_nod_lst[self.curr_nod_num][
+                        "cmd2show"
+                    ][0] == "dials.merge"
+                )
             ):
                 enabl = True
 
@@ -1026,10 +1062,26 @@ class MainObject(QObject):
 
         except IndexError:
             enabl = False
+        try:
+            if(
+                self.server_nod_lst[self.curr_nod_num][
+                    "cmd2show"
+                ][0] == "dials.export"
+            ):
+                self.expr_widg.set_download_stat(
+                    do_enable = enabl, nod_num = self.curr_nod_num
+                )
 
-        self.expr_widg.set_download_stat(
-            do_enable = enabl, nod_num = self.curr_nod_num
-        )
+            elif(
+                self.server_nod_lst[self.curr_nod_num][
+                    "cmd2show"
+                ][0] == "dials.merge"
+            ):
+                self.merg_widg.set_download_stat(
+                    do_enable = enabl, nod_num = self.curr_nod_num
+                )
+        except IndexError:
+            print("Index Err Catch (check_if_exported_or_merged)")
 
     def display(self):
         self.tree_scene.draw_tree_graph(

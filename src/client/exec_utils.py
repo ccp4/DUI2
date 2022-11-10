@@ -152,7 +152,9 @@ class get_request_real_time(QThread):
                 req_get = requests.get(
                     self.url, stream = True, params = self.params, timeout = 20
                 )
-                total_size = int(req_get.headers.get('content-length', 0)) + 1
+                req_head = req_get.headers.get('content-length', 0)
+                print("req_head =", req_head)
+                total_size = int() + 1
                 print("total_size =", total_size)
                 block_size = int(total_size / 6 * 1024)
                 max_size = 16384
@@ -175,7 +177,7 @@ class get_request_real_time(QThread):
                 print("type(end_data) =", type(end_data))
 
             except zlib.error:
-                print("zlib. err catch(get_request_real_time)")
+                print("zlib. err catch(get_request_real_time) <<")
                 end_data = None
 
             except ConnectionError:

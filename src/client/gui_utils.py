@@ -38,6 +38,7 @@ def check_if_predict_n_report(str_key):
         "generate_mask",
         "apply_mask",
         "export",
+        "merge",
     ]:
         return False
 
@@ -117,14 +118,16 @@ widgets_defs = {
         "tooltip"       : "dials.symmetry ...",
         "icon"          : "resources/symmetry.png",
         "main_cmd"      :["dials.symmetry"],
-        "nxt_widg_lst"  :["scale", "combine_experiments", "export", "optional"]
+        "nxt_widg_lst"  :[
+            "scale", "combine_experiments", "export", "merge", "optional"
+        ]
     },
     "scale" : {
         "tooltip"       : "dials.scale ...",
         "icon"          : "resources/scale.png",
         "main_cmd"      :["dials.scale"],
         "nxt_widg_lst"  :[
-            "symmetry", "combine_experiments", "export", "optional"
+            "symmetry", "combine_experiments", "export", "merge", "optional"
         ]
     },
     "export" : {
@@ -133,12 +136,18 @@ widgets_defs = {
         "main_cmd"      :["dials.export"],
         "nxt_widg_lst"  :[]
     },
+    "merge" : {
+        "tooltip"       : "dials.merge ...",
+        "icon"          : "resources/export.png",
+        "main_cmd"      :["dials.merge"],
+        "nxt_widg_lst"  :[]
+    },
     "combine_experiments"   : {
         "tooltip"           : "dials.combine_experiments ...",
         "icon"              : "resources/combine.png",
         "main_cmd"          :["dials.combine_experiments"],
         "nxt_widg_lst"      :[
-            "index", "refine", "integrate", "export", "optional"
+            "index", "refine", "integrate", "export", "merge", "optional"
         ]
     },
 
@@ -147,7 +156,7 @@ widgets_defs = {
         "icon"          : "resources/optional.png",
         "main_cmd"      :["dials.optional"],
         "nxt_widg_lst"  :[
-            "find_spots", "index", "refine", "integrate", "export"
+            "find_spots", "index", "refine", "integrate", "export", "merge",
         ]
     }
 }
