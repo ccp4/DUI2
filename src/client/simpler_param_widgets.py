@@ -527,13 +527,19 @@ class ImportWidget(QWidget):
         self.open_butt = QPushButton("  Open images  ")
 
         self.check_rot_axs = QCheckBox("Invert rotation axis")
-        self.check_dist = QCheckBox("Set distance = 2193")
+
+        #TODO discus how to fix import for ED
+        #TODO before removing the next line entirely
+        #self.check_dist = QCheckBox("Set distance = 2193")
 
         self.imp_txt.textChanged.connect(self.line_changed)
         self.imp_extra_txt.textChanged.connect(self.line_changed)
         self.open_butt.clicked.connect(self.open_dir_widget)
         self.check_rot_axs.stateChanged.connect(self.rot_axs_changed)
-        self.check_dist.stateChanged.connect(self.dist_changed)
+
+        #TODO discus how to fix import for ED
+        #TODO before removing the next line entirely
+        #self.check_dist.stateChanged.connect(self.dist_changed)
 
         self.main_vbox = QVBoxLayout()
         self.main_vbox.addWidget(self.state_label)
@@ -544,7 +550,11 @@ class ImportWidget(QWidget):
 
         self.small_hbox = QHBoxLayout()
         self.small_hbox.addWidget(self.check_rot_axs)
-        self.small_hbox.addWidget(self.check_dist)
+
+        #TODO discus how to fix import for ED
+        #TODO before removing the next line entirely
+        #self.small_hbox.addWidget(self.check_dist)
+
         self.main_vbox.addLayout(self.small_hbox)
 
         self.main_vbox.addWidget(self.imp_extra_txt)
@@ -608,7 +618,9 @@ class ImportWidget(QWidget):
     def rot_axs_changed(self, stat):
         print("rot_axs_changed(ImportWidget)", stat)
         if int(stat) == 2:
-            self.check_dist.setChecked(False)
+            #TODO discus how to fix import for ED
+            #TODO before removing the next line entirely
+            #self.check_dist.setChecked(False)
             new_par_str = "invert_rotation_axis=True"
 
         else:
