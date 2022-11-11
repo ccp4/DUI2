@@ -194,7 +194,7 @@ class find_scale_cmd(object):
         for new_nod_num in self.nod_lst[nod_num]["parent_node_lst"]:
             self.get_parent_num(new_nod_num)
 
-    def foung_scale(self):
+    def founded_scale(self):
         return self.found_scale
 
 

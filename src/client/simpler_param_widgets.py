@@ -1581,8 +1581,8 @@ class ExportWidget(QWidget):
             QFont("Courier", font_point_size + 1, QFont.Bold)
         )
 
-        self.exp_txt1 = QLineEdit()
-        self.exp_txt1.textChanged.connect(self.line_changed)
+        self.exp_txt = QLineEdit()
+        self.exp_txt.textChanged.connect(self.line_changed)
         self.downl_but = QPushButton("Download/save .mtz file")
         self.downl_but.clicked.connect(self.download_mtz)
         self.progress_label = QLabel("...")
@@ -1590,7 +1590,7 @@ class ExportWidget(QWidget):
         self.main_vbox = QVBoxLayout()
         self.main_vbox.addStretch()
         self.main_vbox.addWidget(state_label)
-        self.main_vbox.addWidget(self.exp_txt1)
+        self.main_vbox.addWidget(self.exp_txt)
         self.main_vbox.addStretch()
         self.main_vbox.addWidget(self.downl_but)
         self.main_vbox.addWidget(self.progress_label)
@@ -1603,7 +1603,7 @@ class ExportWidget(QWidget):
 
     def line_changed(self):
         print("\n line_changed")
-        str_value = self.exp_txt1.text()
+        str_value = self.exp_txt.text()
         self.all_items_changed.emit([[["mtz.hklout", str_value]]])
         print("str_value =", str_value)
 
@@ -1615,10 +1615,10 @@ class ExportWidget(QWidget):
 
     def is_scale_parent1(self, scale_in_parents):
         if scale_in_parents:
-            self.exp_txt1.setText("scaled.mtz")
+            self.exp_txt.setText("scaled.mtz")
 
         else:
-            self.exp_txt1.setText("integrated.mtz")
+            self.exp_txt.setText("integrated.mtz")
 
         self.line_changed()
 
@@ -1630,20 +1630,20 @@ class ExportWidget(QWidget):
         try:
             inp_val = str(tup_lst_pars[0][0]["value"])
             print("inp_val =", inp_val)
-            self.exp_txt1.setText(inp_val)
+            self.exp_txt.setText(inp_val)
 
         except IndexError:
             print(" Not copying parameters from node (Index err catch )")
-            self.exp_txt1.setText("")
+            self.exp_txt.setText("")
 
     def set_download_stat(self, do_enable = False, nod_num = None):
         self.setEnabled(True)
-        self.exp_txt1.setEnabled(not do_enable)
+        self.exp_txt.setEnabled(not do_enable)
         self.downl_but.setEnabled(do_enable)
         self.cur_nod_num = nod_num
 
     def download_mtz(self):
-        ini_file = os.getcwd() + os.sep + self.exp_txt1.text()
+        ini_file = os.getcwd() + os.sep + self.exp_txt.text()
         fileResul = QFileDialog.getSaveFileName(
             self, "Download MTZ File", ini_file, "Intensity  (*.mtz)"
         )
@@ -1707,8 +1707,8 @@ class MergeWidget(QWidget):
             QFont("Courier", font_point_size + 1, QFont.Bold)
         )
 
-        self.exp_txt2 = QLineEdit()
-        self.exp_txt2.textChanged.connect(self.line_changed)
+        self.exp_txt = QLineEdit()
+        self.exp_txt.textChanged.connect(self.line_changed)
         self.downl_but = QPushButton("Download/save .mtz file")
         self.downl_but.clicked.connect(self.download_mtz)
         self.progress_label = QLabel("...")
@@ -1716,7 +1716,7 @@ class MergeWidget(QWidget):
         self.main_vbox = QVBoxLayout()
         self.main_vbox.addStretch()
         self.main_vbox.addWidget(state_label)
-        self.main_vbox.addWidget(self.exp_txt2)
+        self.main_vbox.addWidget(self.exp_txt)
         self.main_vbox.addStretch()
         self.main_vbox.addWidget(self.downl_but)
         self.main_vbox.addWidget(self.progress_label)
@@ -1729,7 +1729,7 @@ class MergeWidget(QWidget):
 
     def line_changed(self):
         print("\n line_changed")
-        str_value = self.exp_txt2.text()
+        str_value = self.exp_txt.text()
         self.all_items_changed.emit([[["output.mtz", str_value]]])
         #self.all_items_changed.emit([[["mtz.hklout", str_value]]])
         print("str_value =", str_value)
@@ -1742,10 +1742,10 @@ class MergeWidget(QWidget):
 
     def is_scale_parent2(self, scale_in_parents):
         if scale_in_parents:
-            self.exp_txt2.setText("scaled.mtz")
+            self.exp_txt.setText("scaled.mtz")
 
         else:
-            self.exp_txt2.setText("integrated.mtz")
+            self.exp_txt.setText("integrated.mtz")
 
         self.line_changed()
 
@@ -1757,20 +1757,20 @@ class MergeWidget(QWidget):
         try:
             inp_val = str(tup_lst_pars[0][0]["value"])
             print("inp_val =", inp_val)
-            self.exp_txt2.setText(inp_val)
+            self.exp_txt.setText(inp_val)
 
         except IndexError:
             print(" Not copying parameters from node (Index err catch )")
-            self.exp_txt2.setText("")
+            self.exp_txt.setText("")
 
     def set_download_stat(self, do_enable = False, nod_num = None):
         self.setEnabled(True)
-        self.exp_txt2.setEnabled(not do_enable)
+        self.exp_txt.setEnabled(not do_enable)
         self.downl_but.setEnabled(do_enable)
         self.cur_nod_num = nod_num
 
     def download_mtz(self):
-        ini_file = os.getcwd() + os.sep + self.exp_txt2.text()
+        ini_file = os.getcwd() + os.sep + self.exp_txt.text()
         fileResul = QFileDialog.getSaveFileName(
             self, "Download MTZ File", ini_file, "Intensity  (*.mtz)"
         )

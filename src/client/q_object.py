@@ -98,7 +98,7 @@ class MainObject(QObject):
             self.all_items_param_changed
         )
         self.expr_widg.find_scaled_before.connect(
-            self.search_in_parent_nodes
+            self.search_in_parent_nodes_exp
         )
         self.window.ExportScrollArea.setWidget(self.expr_widg)
 
@@ -108,7 +108,7 @@ class MainObject(QObject):
             self.all_items_param_changed
         )
         self.merg_widg.find_scaled_before.connect(
-            self.search_in_parent_nodes
+            self.search_in_parent_nodes_mer
         )
         self.window.MergeScrollArea.setWidget(self.merg_widg)
 
@@ -940,29 +940,33 @@ class MainObject(QObject):
         except (TypeError, IndexError, AttributeError):
             print(" Err Catch Loading Lamda")
 
-    def search_in_parent_nodes(self):
+    def search_in_parent_nodes_exp(self):
         try:
             fnd_scl_cmd = find_scale_cmd(
                 self.server_nod_lst, self.new_node.parent_node_lst
             )
-            fnd_scl = fnd_scl_cmd.foung_scale()
-            print("found_scale =", fnd_scl)
-            if(
-                self.server_nod_lst[self.curr_nod_num][
-                    "cmd2show"
-                ][0] == "dials.export"
-            ):
-                self.expr_widg.is_scale_parent1(fnd_scl)
-
-            elif(
-                self.server_nod_lst[self.curr_nod_num][
-                    "cmd2show"
-                ][0] == "dials.merge"
-            ):
-                self.merg_widg.is_scale_parent2(fnd_scl)
+            fnd_scl = fnd_scl_cmd.founded_scale()
 
         except AttributeError:
-            print("no need to find scale step as parent")
+            print("Attribute Err Catch (search_in_parent_nodes_exp)")
+            fnd_scl = False
+
+        print("found_scale =", fnd_scl)
+        self.expr_widg.is_scale_parent1(fnd_scl)
+
+    def search_in_parent_nodes_mer(self):
+        try:
+            fnd_scl_cmd = find_scale_cmd(
+                self.server_nod_lst, self.new_node.parent_node_lst
+            )
+            fnd_scl = fnd_scl_cmd.founded_scale()
+
+        except AttributeError:
+            print("Attribute Err Catch (search_in_parent_nodes_mer)")
+            fnd_scl = False
+
+        print("found_scale =", fnd_scl)
+        self.merg_widg.is_scale_parent2(fnd_scl)
 
     def update_all_param(self):
         tmp_cmd_par = CommandParamControl()
