@@ -38,7 +38,6 @@ def check_if_predict_n_report(str_key):
         "generate_mask",
         "apply_mask",
         "export",
-        "merge",
     ]:
         return False
 
