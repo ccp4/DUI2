@@ -1604,6 +1604,9 @@ class ExportWidget(QWidget):
     def line_changed(self):
         print("\n line_changed")
         str_value = self.exp_txt.text()
+        if str_value[-3:] != "mtz":
+            str_value = str_value + ".mtz"
+
         self.all_items_changed.emit([[["mtz.hklout", str_value]]])
         print("str_value =", str_value)
 
@@ -1730,8 +1733,9 @@ class MergeWidget(QWidget):
     def line_changed(self):
         print("\n line_changed")
         str_value = self.exp_txt.text()
+        if str_value[-3:] != "mtz":
+            str_value = str_value + ".mtz"
         self.all_items_changed.emit([[["output.mtz", str_value]]])
-        #self.all_items_changed.emit([[["mtz.hklout", str_value]]])
         print("str_value =", str_value)
 
     def reset_pars(self):
