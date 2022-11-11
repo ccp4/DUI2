@@ -894,7 +894,9 @@ class MainObject(QObject):
         except AttributeError:
             print("Not updating parameters, no (green node or twin widget)\n")
 
-    def item_param_changed(self, str_path = None, str_value = None, lst_num = 0):
+    def item_param_changed(
+        self, str_path = None, str_value = None, lst_num = 0
+    ):
         self.sender().twin_widg.update_param(str_path, str_value)
         try:
             if(
