@@ -45,7 +45,7 @@ First install `pyside2`:
 
 Next clone the DUI2 repository (pre-release branch):
 
-       git clone -b v0.95 https://github.com/ccp4/DUI2.git
+       git clone -b v0.96 https://github.com/ccp4/DUI2.git
 
 The same tools as if installed with `curl` and `CCP4` are available, just different ways to invoke them:
 
