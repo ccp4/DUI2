@@ -76,14 +76,7 @@ class MainObject(QObject):
         dui2_icon.addFile(st_icon_path, mode = QIcon.Normal)
         self.window.setWindowIcon(dui2_icon)
 
-        to_remove = '''
-        data_init = ini_data()
-        self.uni_url = data_init.get_url()
-        '''
-
         self.reseting = False
-
-        #try:
 
         root_widg = RootWidg()
         self.window.RootScrollArea.setWidget(root_widg)
@@ -307,12 +300,6 @@ class MainObject(QObject):
         scale_simpl_widg.twin_widg = sc_advanced_parameters
         ce_advanced_parameters.twin_widg = comb_simpl_widg
         comb_simpl_widg.twin_widg = ce_advanced_parameters
-
-        '''
-        except TypeError:
-            print("failed to connect to server on:", self.uni_url)
-            sys.exit()
-        '''
 
         tmp_widget_defs = widgets_defs
         self.param_widgets = get_widget_def_dict(
