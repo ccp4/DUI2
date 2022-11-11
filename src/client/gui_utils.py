@@ -137,7 +137,7 @@ widgets_defs = {
     },
     "merge" : {
         "tooltip"       : "dials.merge ...",
-        "icon"          : "resources/export.png",
+        "icon"          : "resources/merge.png",
         "main_cmd"      :["dials.merge"],
         "nxt_widg_lst"  :[]
     },
