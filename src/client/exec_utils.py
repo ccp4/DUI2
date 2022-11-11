@@ -154,7 +154,7 @@ class get_request_real_time(QThread):
                 )
                 req_head = req_get.headers.get('content-length', 0)
                 print("req_head =", req_head)
-                total_size = int() + 1
+                total_size = int(req_head) + 1
                 print("total_size =", total_size)
                 block_size = int(total_size / 6 * 1024)
                 max_size = 16384
