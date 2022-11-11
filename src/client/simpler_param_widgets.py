@@ -1745,12 +1745,17 @@ class MergeWidget(QWidget):
         print("set_ed_pars(SimpleParamTab)")
 
     def is_scale_parent2(self, scale_in_parents):
+        #TODO the logics of next if block should go before
+        #TODO desiding if << dials.merge >> is allowed yet:
+        '''
         if scale_in_parents:
-            self.exp_txt.setText("scaled.mtz")
+            self.exp_txt.setText("merged.mtz")
 
         else:
             self.exp_txt.setText("integrated.mtz")
+        '''
 
+        self.exp_txt.setText("merged.mtz")
         self.line_changed()
 
     def update_all_pars(self, tup_lst_pars):
