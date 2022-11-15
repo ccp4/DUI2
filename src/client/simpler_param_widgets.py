@@ -1640,6 +1640,7 @@ class ExportWidget(QWidget):
             self.exp_txt.setText("")
 
     def set_download_stat(self, do_enable = False, nod_num = None):
+        print("do_enable(set_download_stat) =", do_enable)
         self.setEnabled(True)
         self.exp_txt.setEnabled(not do_enable)
         self.downl_but.setEnabled(do_enable)
@@ -1773,6 +1774,7 @@ class MergeWidget(QWidget):
             self.exp_txt.setText("")
 
     def set_download_stat(self, do_enable = False, nod_num = None):
+        print("do_enable(set_download_stat) =", do_enable)
         self.setEnabled(True)
         self.exp_txt.setEnabled(not do_enable)
         self.downl_but.setEnabled(do_enable)

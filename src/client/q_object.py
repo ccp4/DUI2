@@ -1031,22 +1031,19 @@ class MainObject(QObject):
 
     def check_if_exported_or_merged(self):
         try:
+            if self.curr_widg_key == "export":
+                my_widg = self.expr_widg
+
+            elif self.curr_widg_key == "merge":
+                my_widg = self.merg_widg
+
+            else:
+                my_widg = None
+
             if(
                 self.server_nod_lst[self.curr_nod_num][
                     "status"
                 ]  == "Succeeded"
-                and
-                (
-                    self.server_nod_lst[self.curr_nod_num][
-                        "cmd2show"
-                    ][0] == "dials.export"
-
-                    or
-
-                    self.server_nod_lst[self.curr_nod_num][
-                        "cmd2show"
-                    ][0] == "dials.merge"
-                )
             ):
                 enabl = True
 
@@ -1055,26 +1052,14 @@ class MainObject(QObject):
 
         except IndexError:
             enabl = False
-        try:
-            if(
-                self.server_nod_lst[self.curr_nod_num][
-                    "cmd2show"
-                ][0] == "dials.export"
-            ):
-                self.expr_widg.set_download_stat(
-                    do_enable = enabl, nod_num = self.curr_nod_num
-                )
 
-            elif(
-                self.server_nod_lst[self.curr_nod_num][
-                    "cmd2show"
-                ][0] == "dials.merge"
-            ):
-                self.merg_widg.set_download_stat(
-                    do_enable = enabl, nod_num = self.curr_nod_num
-                )
-        except IndexError:
-            print("Index Err Catch (check_if_exported_or_merged)")
+        try:
+            my_widg.set_download_stat(
+                do_enable = enabl, nod_num = self.curr_nod_num
+            )
+
+        except (AttributeError, UnboundLocalError):
+            print("it seems neither export or merge node")
 
     def display(self):
         self.tree_scene.draw_tree_graph(
