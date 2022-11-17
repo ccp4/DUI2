@@ -3,9 +3,9 @@
 # to be useful) - will get closed on process end.
 
 # comment the next 3 lines if you want to see your log prints
-#import sys, datetime
-#filename = datetime.datetime.now().strftime("DUI2-debug%y%m%d-%H%M%S.txt")
-#sys.stdout = open(filename, "w")
+import sys, datetime
+filename = datetime.datetime.now().strftime("DUI2-debug%y%m%d-%H%M%S.txt")
+sys.stdout = open(filename, "w")
 
 from multiprocessing import Process, Pipe
 from server import run_server
