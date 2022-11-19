@@ -436,28 +436,28 @@ def build_template(str_path_in):
     found_a_digit = False
     for pos, single_char in enumerate(str_path_in):
         if single_char in "0123456789":
-            if found_a_digit:
-                last_digit_pos = pos
-
+            last_digit_pos = pos
             found_a_digit = True
 
-        else:
-            found_a_digit = False
+    print("found_a_digit =", found_a_digit)
+    if found_a_digit:
+        for pos in range(last_digit_pos, 0, -1):
+            if str_path_in[pos:pos + 1] not in "0123456789":
+                begin_digit_pos = pos
+                break
 
-    for pos in range(last_digit_pos, 0, -1):
-        if str_path_in[pos:pos + 1] not in "0123456789":
-            begin_digit_pos = pos
-            break
+        template_str = str_path_in[0:begin_digit_pos + 1] + "#" * (
+            last_digit_pos - begin_digit_pos
+        ) + str_path_in[last_digit_pos + 1:]
 
-    template_str = str_path_in[0:begin_digit_pos + 1] + "#" * (
-        last_digit_pos - begin_digit_pos
-    ) + str_path_in[last_digit_pos + 1:]
+        star_str = str_path_in[
+            0:begin_digit_pos + 1
+        ] + "*" + str_path_in[last_digit_pos + 1:]
 
-    star_str = str_path_in[
-        0:begin_digit_pos + 1
-    ] + "*" + str_path_in[last_digit_pos + 1:]
+        return template_str, star_str
 
-    return template_str, star_str
+    else:
+        return None, 0
 
 def get_lst_par_from_str(str_in):
     lst_com = str_in.split(" ")
@@ -510,6 +510,7 @@ class ImportWidget(QWidget):
         super(ImportWidget, self).__init__(parent)
         self.do_emit = True
         self.dir_selected = None
+        self.nexus_type = False
         sys_font = QFont()
         font_point_size = sys_font.pointSize()
 
@@ -569,7 +570,15 @@ class ImportWidget(QWidget):
             self.imp_txt.setText(str_select)
 
         else:
-            self.imp_txt.setText(build_template(str_select)[0])
+            if str_select[-4:]  == ".nxs" or str_select[-9:] == "master.h5" :
+                self.nexus_type = True
+                file_path_str = str_select
+
+            else:
+                self.nexus_type = False
+                file_path_str = build_template(str_select)[0]
+
+            self.imp_txt.setText(file_path_str)
 
         self.line_changed()
 
@@ -597,21 +606,28 @@ class ImportWidget(QWidget):
         str_value = self.imp_txt.text()
         if self.dir_selected:
             str_path = "input.directory"
+            lst_par = [[str_path, str_value]]
 
         else:
-            str_path = "input.template"
+            if self.nexus_type == True:
+                str_path = "input.experiments"
+                lst_par = [[None, str_value]]
+
+            else:
+                str_path = "input.template"
+                lst_par = [[str_path, str_value]]
 
         self.state_label.setText(str_path)
 
-        lst_par = [[str_path, str_value]]
-
         ext_par = str(self.imp_extra_txt.text())
-        if len(ext_par) > 0:
+        if len(ext_par) > 0 and not self.nexus_type :
             lst_ext_par = get_lst_par_from_str(ext_par)
             if len(lst_ext_par) > 0:
                 print("time to add:", lst_ext_par, "to command lst")
                 for single_ext_par in lst_ext_par:
                     lst_par.append(single_ext_par)
+
+        print("lst_par =", lst_par)
 
         self.all_items_changed.emit([lst_par])
 

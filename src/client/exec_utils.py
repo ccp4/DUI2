@@ -500,7 +500,12 @@ class CommandParamControl:
         for lst_num in range(len(self.m_cmd_lst)):
             str_out = str(self.m_cmd_lst[lst_num])
             for par in self.par_lst[lst_num]:
-                par_str = " " + par["name"] + "=" + par["value"]
+                if par["name"] == "":
+                    par_str = " " + par["value"]
+
+                else:
+                    par_str = " " + par["name"] + "=" + par["value"]
+
                 str_out += par_str
 
             if self.custm_param is not None:
