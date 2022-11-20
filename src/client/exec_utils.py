@@ -472,6 +472,7 @@ class CommandParamControl:
         self.par_lst = []
         for inner_lst in lst_par_in:
             lst_par = []
+
             for pos, str_elem in enumerate(inner_lst):
                 if "=" in str_elem or pos > 0:
                     lst_par.append(str_elem)

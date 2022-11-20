@@ -408,7 +408,8 @@ class AdvancedParameters(QWidget):
             tup_lst_pars, "\n"
         )
         for par_dic in tup_lst_pars[0]:
-            self.update_param(par_dic["name"], par_dic["value"])
+            if par_dic["name"] != "":
+                self.update_param(par_dic["name"], par_dic["value"])
 
     def text_changed(self):
         sender = self.sender()

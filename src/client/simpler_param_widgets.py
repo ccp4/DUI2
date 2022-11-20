@@ -141,7 +141,8 @@ class SimpleParamTab(QWidget):
     def update_all_pars(self, tup_lst_pars):
         print("\n (Simple Widget) \n time to update par to:", tup_lst_pars, "\n")
         for par_dic in tup_lst_pars[0]:
-            self.update_param(par_dic["name"], par_dic["value"])
+            if par_dic["name"] != "":
+                self.update_param(par_dic["name"], par_dic["value"])
 
     def do_emit_signal(self, str_path, str_value):
         if self.do_emit:
@@ -750,8 +751,9 @@ class MaskWidget(QWidget):
         print("update_all_pars:", par_lst_0)
         self.comp_list = []
         for par_dic in par_lst_0[0][0:-1]:
-            single_comp_lst = [str(par_dic["name"]), str(par_dic["value"])]
-            self.comp_list.append(single_comp_lst)
+            if par_dic["name"] != "":
+                single_comp_lst = [str(par_dic["name"]), str(par_dic["value"])]
+                self.comp_list.append(single_comp_lst)
 
         self.update_comp_label()
 
