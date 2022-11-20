@@ -472,16 +472,19 @@ class CommandParamControl:
         self.par_lst = []
         for inner_lst in lst_par_in:
             lst_par = []
-            for str_elem in inner_lst:
-                if "=" in str_elem:
+            for pos, str_elem in enumerate(inner_lst):
+                if "=" in str_elem or pos > 0:
                     lst_par.append(str_elem)
 
             inner_par_lst = []
             for str_elem in lst_par:
-                tmp_lst = str_elem.split("=")
-                inner_par_lst.append(
-                    {"name":str(tmp_lst[0]), "value":str(tmp_lst[1])}
-                )
+                if "=" in str_elem:
+                    tmp_lst = str_elem.split("=")
+                    inner_par_lst.append(
+                        {"name":str(tmp_lst[0]), "value":str(tmp_lst[1])}
+                    )
+                else:
+                    inner_par_lst.append({"name":"", "value":str(str_elem)})
 
             self.par_lst.append(inner_par_lst)
 

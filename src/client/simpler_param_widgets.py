@@ -596,7 +596,9 @@ class ImportWidget(QWidget):
         self.open_widget.file_or_dir_selected.connect(self.set_selection)
 
     def reset_pars(self):
+        self.nexus_type = False
         self.imp_txt.setText("")
+        self.check_rot_axs.setChecked(False)
 
     def set_ed_pars(self):
         print("set_ed_pars(SimpleParamTab)")
@@ -668,13 +670,17 @@ class ImportWidget(QWidget):
             for par_dic in tup_lst_pars[0]:
                 if(
                     par_dic["name"] == "input.directory" or
-                    par_dic["name"] == "input.template"
+                    par_dic["name"] == "input.template" or
+                    par_dic["name"] == ""
                 ):
                     if par_dic["name"] == "input.directory":
                         self.dir_selected = True
 
                     else:
                         self.dir_selected = False
+
+                    if par_dic["name"] == "":
+                        self.nexus_type = True
 
                     self.imp_txt.setText(str(par_dic["value"]))
 
