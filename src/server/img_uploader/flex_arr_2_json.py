@@ -19,9 +19,7 @@ from dxtbx.model.experiment_list import (
 
 def get_template_info(exp_path, img_num):
     try:
-        experiments = ExperimentListFactory.from_json_file(
-            exp_path
-        )
+        experiments = get_experiments(exp_path)
 
         max_img_num = 0
         for single_sweep in experiments.imagesets():
@@ -60,6 +58,10 @@ def get_template_info(exp_path, img_num):
 
     except OverflowError:
         print(" *** Overflow err catch  in template ***")
+        return
+
+    except OSError:
+        print(" *** OS Err catch  in template ***")
         return
 
 
@@ -117,7 +119,8 @@ def list_p_arrange_exp(
 
 def get_refl_lst(expt_path, refl_path, img_num):
     try:
-        experiments = ExperimentListFactory.from_json_file(expt_path[0])
+        experiments = get_experiments(expt_path[0])
+
         all_sweeps = experiments.imagesets()
         num_of_imagesets = len(all_sweeps)
         print("len(experiments.imagesets()) =", num_of_imagesets)
@@ -125,11 +128,11 @@ def get_refl_lst(expt_path, refl_path, img_num):
         table = flex.reflection_table.from_file(refl_path[0])
 
     except IndexError:
-        print("\n sending empty reflection (Index err catch ) \n")
+        print("\n sending empty reflection Lst (Index err catch ) \n")
         return []
 
-    except OSError:
-        print("\n sending empty reflection (OS err catch ) \n")
+    except TypeError:
+        print("\n sending empty reflection Lst (Type err catch ) \n")
         return []
 
     try:
@@ -234,7 +237,8 @@ def single_image_arrange_predic(
 
 def get_refl_pred_lst(expt_path, refl_path, img_num, z_dept):
     try:
-        experiments = ExperimentListFactory.from_json_file(expt_path[0])
+        experiments = get_experiments(expt_path[0])
+
         all_sweeps = experiments.imagesets()
         num_of_imagesets = len(all_sweeps)
         print("len(experiments.imagesets()) =", num_of_imagesets)
@@ -242,15 +246,11 @@ def get_refl_pred_lst(expt_path, refl_path, img_num, z_dept):
         table = flex.reflection_table.from_file(refl_path)
 
     except IndexError:
-        print("\n sending empty reflection (Index err catch ) \n")
-        return []
-
-    except OSError:
-        print("\n sending empty reflection (OS err catch ) \n")
+        print("\n sending empty predict reflection (Index err catch ) \n")
         return []
 
     except TypeError:
-        print("\n sending empty reflection (Type err catch ) \n")
+        print("\n sending empty predict reflection (Type err catch ) \n")
         return []
 
     try:
@@ -315,13 +315,12 @@ def get_correct_img_num_n_sweep_num(experiments, img_num):
     print("geting image #", on_sweep_img_num, "from sweep #", n_sweep)
     return on_sweep_img_num, n_sweep
 
-def get_experiments(experiments_list_path):
-    experiments_path = experiments_list_path[0]
-    print("importing from:", experiments_path)
+def get_experiments(experiment_path):
+    print("importing from:", experiment_path)
     for repeat in range(10):
         try:
             new_experiments = ExperimentListFactory.from_json_file(
-                experiments_path
+                experiment_path
             )
             break
 
@@ -333,7 +332,7 @@ def get_experiments(experiments_list_path):
     return new_experiments
 
 def get_json_w_img_2d(experiments_list_path, img_num):
-    experiments = get_experiments(experiments_list_path)
+    experiments = get_experiments(experiments_list_path[0])
     if experiments is not None:
         pan_num = 0
         on_sweep_img_num, n_sweep = get_correct_img_num_n_sweep_num(
@@ -361,7 +360,7 @@ def get_json_w_img_2d(experiments_list_path, img_num):
 
 
 def get_json_w_mask_img_2d(experiments_list_path, img_num):
-    experiments = get_experiments(experiments_list_path)
+    experiments = get_experiments(experiments_list_path[0])
     if experiments is not None:
         print("experiments_list_path, img_num:", experiments_list_path, img_num)
         pan_num = 0
@@ -387,10 +386,8 @@ def get_json_w_mask_img_2d(experiments_list_path, img_num):
         return None
 
 
-def get_json_w_2d_slise(
-    experiments_list_path, img_num, inv_scale, x1, y1, x2, y2
-):
-    experiments = get_experiments(experiments_list_path)
+def get_json_w_2d_slise(experiments_list_path, img_num, inv_scale, x1, y1, x2, y2):
+    experiments = get_experiments(experiments_list_path[0])
     if experiments is not None:
         print("experiments_list_path, img_num:", experiments_list_path, img_num)
         pan_num = 0
@@ -423,7 +420,7 @@ def get_json_w_2d_slise(
 def get_json_w_2d_mask_slise(
     experiments_list_path, img_num, inv_scale, x1, y1, x2, y2
 ):
-    experiments = get_experiments(experiments_list_path)
+    experiments = get_experiments(experiments_list_path[0])
     if experiments is not None:
         print("experiments_list_path, img_num:", experiments_list_path, img_num)
         pan_num = 0

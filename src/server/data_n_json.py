@@ -310,9 +310,7 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
                 return_list = refl_lst
 
             except (IndexError, AttributeError, ValueError):
-                print(
-                    "\n  err catch , wrong line, not sending reflection list \n"
-                )
+                print("\n  Err Catch , not sending reflection list \n")
                 return_list = []
 
     elif uni_cmd[0] == "get_lambda":
@@ -324,10 +322,8 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
                 )
                 return_list = [experiments.beams()[0].get_wavelength()]
 
-            except (IndexError, AttributeError, ValueError):
-                print(
-                    "\n  err catch , wrong line, not sending lambda \n"
-                )
+            except (IndexError, AttributeError, ValueError, OSError):
+                print("\n  Err Catch , not sending lambda \n")
                 return_list = []
 
     elif uni_cmd[0] == "get_predictions":

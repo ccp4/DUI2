@@ -27,9 +27,6 @@ import json, os, zlib, sys, time
 
 from server.data_n_json import iter_dict, spit_out
 from server.img_uploader import flex_arr_2_json
-
-from dxtbx.model.experiment_list import ExperimentListFactory
-
 from shared_modules import format_utils
 
 class Browser(object):
