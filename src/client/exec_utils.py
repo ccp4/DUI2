@@ -484,7 +484,7 @@ class CommandParamControl:
                     inner_par_lst.append(
                         {"name":str(tmp_lst[0]), "value":str(tmp_lst[1])}
                     )
-                else:
+                elif lst_par_in[0][0] == "dials.import":
                     inner_par_lst.append({"name":"", "value":str(str_elem)})
 
             self.par_lst.append(inner_par_lst)
