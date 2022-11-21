@@ -315,130 +315,151 @@ def get_correct_img_num_n_sweep_num(experiments, img_num):
     print("geting image #", on_sweep_img_num, "from sweep #", n_sweep)
     return on_sweep_img_num, n_sweep
 
-def get_json_w_img_2d(experiments_list_path, img_num):
-    pan_num = 0
-    print("experiments_list_path, img_num:", experiments_list_path, img_num)
+def get_experiments(experiments_list_path):
     experiments_path = experiments_list_path[0]
     print("importing from:", experiments_path)
-    experiments = ExperimentListFactory.from_json_file(experiments_path)
+    for repeat in range(10):
+        try:
+            new_experiments = ExperimentListFactory.from_json_file(
+                experiments_path
+            )
+            break
 
-    on_sweep_img_num, n_sweep = get_correct_img_num_n_sweep_num(
-        experiments, img_num
-    )
+        except OSError:
+            new_experiments = None
+            print("OS Err catch in ExperimentListFactory, trying again")
+            time.sleep(0.333)
 
-    my_sweep = experiments.imagesets()[n_sweep]
-    data_xy_flex = my_sweep.get_raw_data(on_sweep_img_num)[pan_num].as_double()
+    return new_experiments
 
-    start_tm = time.time()
-    np_arr = data_xy_flex.as_numpy_array()
-    d1 = np_arr.shape[0]
-    d2 = np_arr.shape[1]
-    str_tup = str(tuple(np_arr.ravel()))
-    str_data = "{\"d1\":" + str(d1) + ",\"d2\":" + str(d2) \
-             + ",\"str_data\":\"" + str_tup[1:-1] + "\"}"
+def get_json_w_img_2d(experiments_list_path, img_num):
+    experiments = get_experiments(experiments_list_path)
+    if experiments is not None:
+        pan_num = 0
+        on_sweep_img_num, n_sweep = get_correct_img_num_n_sweep_num(
+            experiments, img_num
+        )
 
-    end_tm = time.time()
-    print("str/tuple use and compressing took ", end_tm - start_tm)
+        my_sweep = experiments.imagesets()[n_sweep]
+        data_xy_flex = my_sweep.get_raw_data(on_sweep_img_num)[pan_num].as_double()
 
-    return str_data
+        start_tm = time.time()
+        np_arr = data_xy_flex.as_numpy_array()
+        d1 = np_arr.shape[0]
+        d2 = np_arr.shape[1]
+        str_tup = str(tuple(np_arr.ravel()))
+        str_data = "{\"d1\":" + str(d1) + ",\"d2\":" + str(d2) \
+                 + ",\"str_data\":\"" + str_tup[1:-1] + "\"}"
+
+        end_tm = time.time()
+        print("str/tuple use and compressing took ", end_tm - start_tm)
+
+        return str_data
+
+    else:
+        return None
+
 
 def get_json_w_mask_img_2d(experiments_list_path, img_num):
-    print("experiments_list_path, img_num:", experiments_list_path, img_num)
-    pan_num = 0
-    experiments_path = experiments_list_path[0]
-    print("importing from:", experiments_path)
-    experiments = ExperimentListFactory.from_json_file(experiments_path)
+    experiments = get_experiments(experiments_list_path)
+    if experiments is not None:
+        print("experiments_list_path, img_num:", experiments_list_path, img_num)
+        pan_num = 0
+        on_sweep_img_num, n_sweep = get_correct_img_num_n_sweep_num(
+            experiments, img_num
+        )
 
-    on_sweep_img_num, n_sweep = get_correct_img_num_n_sweep_num(
-        experiments, img_num
-    )
+        try:
+            imageset_tmp = experiments.imagesets()[n_sweep]
+            mask_file = imageset_tmp.external_lookup.mask.filename
+            pick_file = open(mask_file, "rb")
+            mask_tup_obj = pickle.load(pick_file)
+            pick_file.close()
+            mask_flex = mask_tup_obj[0]
+            str_data = img_stream_py.mask_arr_2_str(mask_flex)
 
-    try:
-        imageset_tmp = experiments.imagesets()[n_sweep]
-        mask_file = imageset_tmp.external_lookup.mask.filename
-        pick_file = open(mask_file, "rb")
-        mask_tup_obj = pickle.load(pick_file)
-        pick_file.close()
-        mask_flex = mask_tup_obj[0]
-        str_data = img_stream_py.mask_arr_2_str(mask_flex)
+        except FileNotFoundError:
+            str_data = None
 
-    except FileNotFoundError:
-        str_data = None
+        return str_data
 
-    return str_data
+    else:
+        return None
+
 
 def get_json_w_2d_slise(
     experiments_list_path, img_num, inv_scale, x1, y1, x2, y2
 ):
-    print("experiments_list_path, img_num:", experiments_list_path, img_num)
-    pan_num = 0
-    experiments_path = experiments_list_path[0]
-    print("importing from:", experiments_path)
-    experiments = ExperimentListFactory.from_json_file(experiments_path)
+    experiments = get_experiments(experiments_list_path)
+    if experiments is not None:
+        print("experiments_list_path, img_num:", experiments_list_path, img_num)
+        pan_num = 0
+        on_sweep_img_num, n_sweep = get_correct_img_num_n_sweep_num(
+            experiments, img_num
+        )
 
-    on_sweep_img_num, n_sweep = get_correct_img_num_n_sweep_num(
-        experiments, img_num
-    )
-
-    my_sweep = experiments.imagesets()[n_sweep]
-    data_xy_flex = my_sweep.get_raw_data(on_sweep_img_num)[pan_num].as_double()
-
-    start_tm = time.time()
-    str_data = img_stream_py.slice_arr_2_str(
-        data_xy_flex, inv_scale,
-        int(float(x1)), int(float(y1)),
-        int(float(x2)), int(float(y2))
-    )
-    end_tm = time.time()
-    print("Getting scaled slice of image took: ", end_tm - start_tm)
-
-    if str_data == "Error":
-        print('str_data == "Error"')
-        str_data = None
-
-    return str_data
-
-
-def get_json_w_2d_mask_slise(
-    experiments_list_path, img_num, inv_scale, x1, y1, x2, y2
-):
-    print("experiments_list_path, img_num:", experiments_list_path, img_num)
-    pan_num = 0
-    experiments_path = experiments_list_path[0]
-    print("importing from:", experiments_path)
-    experiments = ExperimentListFactory.from_json_file(experiments_path)
-
-    on_sweep_img_num, n_sweep = get_correct_img_num_n_sweep_num(
-        experiments, img_num
-    )
-
-    imageset_tmp = experiments.imagesets()[n_sweep]
-    mask_file = imageset_tmp.external_lookup.mask.filename
-    try:
-        pick_file = open(mask_file, "rb")
-        mask_tup_obj = pickle.load(pick_file)
-        pick_file.close()
-
-        mask_flex = mask_tup_obj[0]
+        my_sweep = experiments.imagesets()[n_sweep]
+        data_xy_flex = my_sweep.get_raw_data(on_sweep_img_num)[pan_num].as_double()
 
         start_tm = time.time()
-        str_data = img_stream_py.slice_mask_2_str(
-            mask_flex, inv_scale,
+        str_data = img_stream_py.slice_arr_2_str(
+            data_xy_flex, inv_scale,
             int(float(x1)), int(float(y1)),
             int(float(x2)), int(float(y2))
         )
         end_tm = time.time()
-        print("Getting scaled slice of mask took ", end_tm - start_tm)
+        print("Getting scaled slice of image took: ", end_tm - start_tm)
 
         if str_data == "Error":
             print('str_data == "Error"')
             str_data = None
 
-    except FileNotFoundError:
-        str_data = None
+        return str_data
 
-    return str_data
+    else:
+        return None
 
 
+def get_json_w_2d_mask_slise(
+    experiments_list_path, img_num, inv_scale, x1, y1, x2, y2
+):
+    experiments = get_experiments(experiments_list_path)
+    if experiments is not None:
+        print("experiments_list_path, img_num:", experiments_list_path, img_num)
+        pan_num = 0
+
+        on_sweep_img_num, n_sweep = get_correct_img_num_n_sweep_num(
+            experiments, img_num
+        )
+
+        imageset_tmp = experiments.imagesets()[n_sweep]
+        mask_file = imageset_tmp.external_lookup.mask.filename
+        try:
+            pick_file = open(mask_file, "rb")
+            mask_tup_obj = pickle.load(pick_file)
+            pick_file.close()
+
+            mask_flex = mask_tup_obj[0]
+
+            start_tm = time.time()
+            str_data = img_stream_py.slice_mask_2_str(
+                mask_flex, inv_scale,
+                int(float(x1)), int(float(y1)),
+                int(float(x2)), int(float(y2))
+            )
+            end_tm = time.time()
+            print("Getting scaled slice of mask took ", end_tm - start_tm)
+
+            if str_data == "Error":
+                print('str_data == "Error"')
+                str_data = None
+
+        except FileNotFoundError:
+            str_data = None
+
+        return str_data
+
+    else:
+        return None
 
 
