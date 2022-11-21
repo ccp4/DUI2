@@ -36,7 +36,6 @@ from dials.command_line.symmetry import phil_scope as phil_scope_symmetry
 from dials.command_line.combine_experiments import (
     phil_scope as phil_scope_combine_params
 )
-from dxtbx.model.experiment_list import ExperimentListFactory
 from server.img_uploader import flex_arr_2_json
 
 
@@ -317,12 +316,12 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
         for lin2go in cmd_dict["nod_lst"]:
             try:
                 print("generating lambda for line:", lin2go)
-                experiments = ExperimentListFactory.from_json_file(
+                experiments = flex_arr_2_json.get_experiments(
                     step_list[lin2go]._lst_expt_out[0]
                 )
                 return_list = [experiments.beams()[0].get_wavelength()]
 
-            except (IndexError, AttributeError, ValueError, OSError):
+            except (IndexError, AttributeError, ValueError, TypeError):
                 print("\n  Err Catch , not sending lambda \n")
                 return_list = []
 
