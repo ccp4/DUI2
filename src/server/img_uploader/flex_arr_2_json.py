@@ -12,10 +12,25 @@ import pickle
 
 from dxtbx.datablock import DataBlockFactory
 from dxtbx.model import Experiment, ExperimentList
-from dxtbx.model.experiment_list import (
-    ExperimentListFactory,
-    InvalidExperimentListError,
-)
+from dxtbx.model.experiment_list import ExperimentListFactory
+
+
+def get_experiments(experiment_path):
+    print("importing from:", experiment_path)
+    for repeat in range(10):
+        try:
+            new_experiments = ExperimentListFactory.from_json_file(
+                experiment_path
+            )
+            break
+
+        except OSError:
+            new_experiments = None
+            print("OS Err catch in ExperimentListFactory, trying again")
+            time.sleep(0.333)
+
+    return new_experiments
+
 
 def get_template_info(exp_path, img_num):
     try:
@@ -314,22 +329,6 @@ def get_correct_img_num_n_sweep_num(experiments, img_num):
 
     print("geting image #", on_sweep_img_num, "from sweep #", n_sweep)
     return on_sweep_img_num, n_sweep
-
-def get_experiments(experiment_path):
-    print("importing from:", experiment_path)
-    for repeat in range(10):
-        try:
-            new_experiments = ExperimentListFactory.from_json_file(
-                experiment_path
-            )
-            break
-
-        except OSError:
-            new_experiments = None
-            print("OS Err catch in ExperimentListFactory, trying again")
-            time.sleep(0.333)
-
-    return new_experiments
 
 def get_json_w_img_2d(experiments_list_path, img_num):
     experiments = get_experiments(experiments_list_path[0])
