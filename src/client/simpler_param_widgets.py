@@ -587,14 +587,26 @@ class ImportWidget(QWidget):
 
         data_init = ini_data()
         run_local = data_init.get_if_local()
+
         if run_local:
+            tmp_off = '''
             self.open_widget = LocalFileBrowser(self)
+            self.open_widget.resize(self.open_widget.size() * 2)
+            self.open_widget.file_or_dir_selected.connect(self.set_selection)
+            '''
+            file_in_path = QFileDialog.getOpenFileName(
+                parent = self, caption = "Open Image File",
+                dir = "/", filter = "Files (*.*)"
+            )[0]
+            self.set_selection(str_select = str(file_in_path), isdir = False)
+
+            print("Opened:", str(file_in_path))
+
 
         else:
             self.open_widget = FileBrowser(self)
-
-        self.open_widget.resize(self.open_widget.size() * 2)
-        self.open_widget.file_or_dir_selected.connect(self.set_selection)
+            self.open_widget.resize(self.open_widget.size() * 2)
+            self.open_widget.file_or_dir_selected.connect(self.set_selection)
 
     def reset_pars(self):
         self.nexus_type = False
