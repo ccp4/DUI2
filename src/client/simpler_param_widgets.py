@@ -594,6 +594,7 @@ class ImportWidget(QWidget):
             self.open_widget.resize(self.open_widget.size() * 2)
             self.open_widget.file_or_dir_selected.connect(self.set_selection)
             '''
+            # TODO fix custom file browser above
             file_in_path = QFileDialog.getOpenFileName(
                 parent = self, caption = "Open Image File",
                 dir = "/", filter = "Files (*.*)"
