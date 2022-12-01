@@ -150,7 +150,7 @@ class get_request_real_time(QThread):
         if self.my_handler == None:
             try:
                 req_get = requests.get(
-                    self.url, stream = True, params = self.params, timeout = 20
+                    self.url, stream = True, params = self.params, timeout = 65
                 )
                 req_head = req_get.headers.get('content-length', 0)
                 print("req_head =", req_head)
@@ -186,8 +186,7 @@ class get_request_real_time(QThread):
 
             except requests.exceptions.RequestException:
                 print(
-                    "\n requests.exceptions.RequestException" +
-                    " (get_request_real_time) \n"
+                    "\n requests.exceptions.ReqExp (get_request_real_time) \n"
                 )
                 end_data = None
 
