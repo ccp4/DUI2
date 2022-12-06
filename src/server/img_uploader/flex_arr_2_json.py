@@ -6,7 +6,7 @@ except ImportError:
     import img_stream_py
 
 from dials.array_family import flex
-import json
+import json, logging
 import time
 import pickle
 
@@ -16,7 +16,7 @@ from dxtbx.model.experiment_list import ExperimentListFactory
 
 
 def get_experiments(experiment_path):
-    print("importing from:", experiment_path)
+    logging.info("importing from:" + experiment_path)
     for repeat in range(10):
         try:
             new_experiments = ExperimentListFactory.from_json_file(
@@ -26,7 +26,7 @@ def get_experiments(experiment_path):
 
         except OSError:
             new_experiments = None
-            print("OS Err catch in ExperimentListFactory, trying again")
+            logging.info("OS Err catch in ExperimentListFactory, trying again")
             time.sleep(0.333)
 
     return new_experiments
@@ -41,14 +41,11 @@ def get_template_info(exp_path, img_num):
             max_img_num += len(single_sweep.indices())
 
         max_img_num -= 1
-        print("max_img_num =", max_img_num)
         if img_num < 0:
             new_img_num = 0
-            print("time to correct image number to ", new_img_num)
 
         elif img_num > max_img_num:
             new_img_num = max_img_num
-            print("time to reduce image number to ", new_img_num)
 
         else:
             new_img_num = img_num
@@ -59,24 +56,22 @@ def get_template_info(exp_path, img_num):
         my_sweep = experiments.imagesets()[n_sweep]
 
         str_json = my_sweep.get_template()
-        print("getting template for image num:", new_img_num)
         img_path = my_sweep.get_path(on_sweep_img_num)
-        print("\n get_path =", img_path, "\n")
 
         data_xy_flex = my_sweep.get_raw_data(0)[0].as_double()
         img_with, img_height = data_xy_flex.all()[0:2]
         return [str_json, img_with, img_height, img_path, new_img_num]
 
     except IndexError:
-        print(" *** Index err catch  in template ***")
+        logging.info(" *** Index err catch  in template ***")
         return
 
     except OverflowError:
-        print(" *** Overflow err catch  in template ***")
+        logging.info(" *** Overflow err catch  in template ***")
         return
 
     except OSError:
-        print(" *** OS Err catch  in template ***")
+        logging.info(" *** OS Err catch  in template ***")
         return
 
 
@@ -85,7 +80,7 @@ def list_p_arrange_exp(
     num_of_imgs_lst = None, imgs_shift_lst = None, id_col = None,
     num_of_imagesets = 1
 ):
-    print("n_imgs(list_p_arrange_exp) =", n_imgs)
+    logging.info("n_imgs(list_p_arrange_exp) =" + str(n_imgs))
     img_lst = []
     for time in range(n_imgs):
         img_lst.append([])
@@ -138,16 +133,15 @@ def get_refl_lst(expt_path, refl_path, img_num):
 
         all_sweeps = experiments.imagesets()
         num_of_imagesets = len(all_sweeps)
-        print("len(experiments.imagesets()) =", num_of_imagesets)
-        print("refl_path =", refl_path)
+        logging.info("refl_path =" + refl_path)
         table = flex.reflection_table.from_file(refl_path[0])
 
     except IndexError:
-        print("\n sending empty reflection Lst (Index err catch ) \n")
+        logging.info("\n sending empty reflection Lst (Index err catch ) \n")
         return []
 
     except TypeError:
-        print("\n sending empty reflection Lst (Type err catch ) \n")
+        logging.info("\n sending empty reflection Lst (Type err catch ) \n")
         return []
 
     try:
@@ -165,17 +159,13 @@ def get_refl_lst(expt_path, refl_path, img_num):
             num_of_imgs_lst.append(num_of_imgs)
             imgs_shift_lst.append(shift)
 
-        print("n_imgs =", n_imgs)
-        print("num_of_imgs_lst =", num_of_imgs_lst)
-        print("imgs_shift_lst =", imgs_shift_lst)
-
         box_flat_data_lst = []
         if n_imgs > 0:
             try:
                 hkl_col = list(map(str, table["miller_index"]))
 
             except KeyError:
-                print("NOT found << miller_index >> col")
+                logging.info("NOT found << miller_index >> col")
                 hkl_col = None
 
             box_flat_data_lst = list_p_arrange_exp(
@@ -185,16 +175,16 @@ def get_refl_lst(expt_path, refl_path, img_num):
 
         try:
             refl_lst = box_flat_data_lst[img_num]
-            print("len(refl_lst) =", len(refl_lst))
+            logging.info("len(refl_lst) =" + str(len(refl_lst)))
 
         except IndexError:
             refl_lst = []
-            print("refl_lst = []")
+            logging.info("refl_lst = []")
 
         return refl_lst
 
     except KeyError:
-        print("NOT found << bbox_col >> col")
+        logging.info("NOT found << bbox_col >> col")
         return []
 
 
@@ -203,7 +193,6 @@ def single_image_arrange_predic(
     num_of_imgs_lst = None, imgs_shift_lst = None, id_col = None,
     num_of_imagesets = 1, z_dept = 1, img_num = None
 ):
-    print("z_dept(single_image_arrange_predic) =", z_dept)
     img_lst = []
     for i, ref_xyx in enumerate(xyzcal_col):
         x_cord = ref_xyx[0]
@@ -246,7 +235,6 @@ def single_image_arrange_predic(
                 )
 
     refl_lst = img_lst
-    print("len(refl_lst) =", len(refl_lst))
     return refl_lst
 
 
@@ -256,16 +244,15 @@ def get_refl_pred_lst(expt_path, refl_path, img_num, z_dept):
 
         all_sweeps = experiments.imagesets()
         num_of_imagesets = len(all_sweeps)
-        print("len(experiments.imagesets()) =", num_of_imagesets)
-        print("refl_path =", refl_path)
+        logging.info("refl_path =" + refl_path)
         table = flex.reflection_table.from_file(refl_path)
 
     except IndexError:
-        print("\n sending empty predict reflection (Index err catch ) \n")
+        logging.info("sending empty predict reflection (Index err catch )")
         return []
 
     except TypeError:
-        print("\n sending empty predict reflection (Type err catch ) \n")
+        logging.info("sending empty predict reflection (Type err catch )")
         return []
 
     try:
@@ -283,9 +270,6 @@ def get_refl_pred_lst(expt_path, refl_path, img_num, z_dept):
             num_of_imgs_lst.append(num_of_imgs)
             imgs_shift_lst.append(shift)
 
-        print("n_imgs =", n_imgs)
-        print("num_of_imgs_lst =", num_of_imgs_lst)
-        print("imgs_shift_lst =", imgs_shift_lst)
 
         box_flat_data_lst = []
         if n_imgs > 0:
@@ -293,7 +277,7 @@ def get_refl_pred_lst(expt_path, refl_path, img_num, z_dept):
                 hkl_col = list(map(str, table["miller_index"]))
 
             except KeyError:
-                print("NOT found << miller_index >> col")
+                logging.info("NOT found << miller_index >> col")
                 hkl_col = None
 
             box_flat_data_lst = single_image_arrange_predic(
@@ -307,7 +291,7 @@ def get_refl_pred_lst(expt_path, refl_path, img_num, z_dept):
         return box_flat_data_lst
 
     except KeyError:
-        print("NOT found << xyzcal_col >> col")
+        logging.info("NOT found << xyzcal_col >> col")
         return [ [] ]
 
 
@@ -316,7 +300,6 @@ def get_correct_img_num_n_sweep_num(experiments, img_num):
     for single_sweep in experiments.imagesets():
         lst_num_of_imgs.append(len(single_sweep.indices()))
 
-    print("lst_num_of_imgs =", lst_num_of_imgs)
     on_sweep_img_num = img_num
     n_sweep = 0
     for num_of_imgs in lst_num_of_imgs:
@@ -327,7 +310,6 @@ def get_correct_img_num_n_sweep_num(experiments, img_num):
         else:
             break
 
-    print("geting image #", on_sweep_img_num, "from sweep #", n_sweep)
     return on_sweep_img_num, n_sweep
 
 def get_json_w_img_2d(experiments_list_path, img_num):
@@ -350,7 +332,6 @@ def get_json_w_img_2d(experiments_list_path, img_num):
                  + ",\"str_data\":\"" + str_tup[1:-1] + "\"}"
 
         end_tm = time.time()
-        print("str/tuple use and compressing took ", end_tm - start_tm)
 
         return str_data
 
@@ -361,7 +342,6 @@ def get_json_w_img_2d(experiments_list_path, img_num):
 def get_json_w_mask_img_2d(experiments_list_path, img_num):
     experiments = get_experiments(experiments_list_path[0])
     if experiments is not None:
-        print("experiments_list_path, img_num:", experiments_list_path, img_num)
         pan_num = 0
         on_sweep_img_num, n_sweep = get_correct_img_num_n_sweep_num(
             experiments, img_num
@@ -388,7 +368,6 @@ def get_json_w_mask_img_2d(experiments_list_path, img_num):
 def get_json_w_2d_slise(experiments_list_path, img_num, inv_scale, x1, y1, x2, y2):
     experiments = get_experiments(experiments_list_path[0])
     if experiments is not None:
-        print("experiments_list_path, img_num:", experiments_list_path, img_num)
         pan_num = 0
         on_sweep_img_num, n_sweep = get_correct_img_num_n_sweep_num(
             experiments, img_num
@@ -404,10 +383,9 @@ def get_json_w_2d_slise(experiments_list_path, img_num, inv_scale, x1, y1, x2, y
             int(float(x2)), int(float(y2))
         )
         end_tm = time.time()
-        print("Getting scaled slice of image took: ", end_tm - start_tm)
 
         if str_data == "Error":
-            print('str_data == "Error"')
+            logging.info('str_data == "Error"')
             str_data = None
 
         return str_data
@@ -421,9 +399,7 @@ def get_json_w_2d_mask_slise(
 ):
     experiments = get_experiments(experiments_list_path[0])
     if experiments is not None:
-        print("experiments_list_path, img_num:", experiments_list_path, img_num)
         pan_num = 0
-
         on_sweep_img_num, n_sweep = get_correct_img_num_n_sweep_num(
             experiments, img_num
         )
@@ -444,10 +420,9 @@ def get_json_w_2d_mask_slise(
                 int(float(x2)), int(float(y2))
             )
             end_tm = time.time()
-            print("Getting scaled slice of mask took ", end_tm - start_tm)
 
             if str_data == "Error":
-                print('str_data == "Error"')
+                logging.info('str_data == "Error"')
                 str_data = None
 
         except FileNotFoundError:

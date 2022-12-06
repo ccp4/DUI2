@@ -1,5 +1,5 @@
 #from multiprocessing import Process
-from client import run_client
+from client import run_client, logging
 
 if __name__ == '__main__':
     par_def = (
@@ -10,5 +10,5 @@ if __name__ == '__main__':
 
     run_client.main(par_def)
 
-    print("Closing client naturally")
+    logging.info("Closing client naturally")
 

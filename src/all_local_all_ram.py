@@ -1,4 +1,4 @@
-import sys, json, os
+import sys, json, os, logging
 from client.q_object import MainObject
 from client.init_firts import ini_data
 from shared_modules import format_utils, all_local_gui_connector
@@ -19,7 +19,6 @@ if __name__ == '__main__':
     data_init.set_data(par_def = par_def)
 
     tmp_dat_dir = format_utils.create_tmp_dir()
-    print("creating ", tmp_dat_dir, "for temporary files")
 
     data_init.set_tmp_dir(tmp_dat_dir)
 
@@ -27,10 +26,11 @@ if __name__ == '__main__':
     run_local = True
     tree_ini_path = init_param["init_path"]
     if tree_ini_path == None:
-        print(" using the dir from where the commad 'dui_server' was invoqued")
+        logging.info(
+            " using the dir from where the commad 'dui_server' was invoqued"
+        )
         tree_ini_path = os.getcwd()
 
-    print("\n using init path as: <<", tree_ini_path, ">> \n")
     tree_dic_lst = iter_dict(tree_ini_path, 0)
     try:
         with open("run_data") as json_file:

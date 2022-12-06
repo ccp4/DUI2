@@ -21,7 +21,7 @@ copyright (c) CCP4 - DLS
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-import os, sys, requests
+import os, sys, requests, logging
 
 from PySide2.QtCore import *
 from PySide2.QtWidgets import *
@@ -65,7 +65,7 @@ class MainObject(QObject):
         self.runner_handler = multi_runner
         self.ui_dir_path = os.path.dirname(os.path.abspath(__file__))
         ui_path = self.ui_dir_path + os.sep + "dui_client.ui"
-        print("ui_path =", ui_path)
+        logging.info("ui_path =" + ui_path)
 
         self.window = QtUiTools.QUiLoader().load(ui_path)
         self.window.setWindowTitle("CCP4 DUI2")
@@ -133,18 +133,17 @@ class MainObject(QObject):
         for par_line in fd_advanced_parameters.lst_par_line:
             if par_line["full_path"] == "spotfinder.threshold.algorithm":
                 lst_opt = par_line["opt_lst"]
-                print("lst_opt =", lst_opt)
                 if("radial_profile" in lst_opt):
-                    print(
-                        "Time to ADD << spotfinder.threshold.algorithm >>",
+                    logging.info(
+                        "Time to ADD << spotfinder.threshold.algorithm >>" +
                         "to simple Params as a tick box"
                     )
                     rad_pr_add = True
 
                 else:
-                    print(
-                        "NO Need to add",
-                        "<< spotfinder.threshold.algorithm >>",
+                    logging.info(
+                        "NO Need to add" +
+                        "<< spotfinder.threshold.algorithm >>" +
                         "to simple Params as a tick box"
                     )
                     rad_pr_add = False
@@ -441,7 +440,7 @@ class MainObject(QObject):
             self.window.HtmlReport.setHtml(self.do_load_html.not_avail_html)
 
         except AttributeError:
-            print("tmp HtmlReport not used QObject ")
+            logging.info("tmp HtmlReport not used QObject ")
 
         self.log_show = ShowLog(self)
 
@@ -505,7 +504,7 @@ class MainObject(QObject):
         self.r_index_widg.set_colours(self.regular_colours)
 
     def exit_triggered(self):
-        print("exit_triggered(QObject)")
+        logging.info("exit_triggered(QObject)")
         msgBox  = QMessageBox()
         txt_exit =  "If you are closing by accident,"
         txt_exit += " you don\'t need to worry.    \n"
@@ -516,21 +515,19 @@ class MainObject(QObject):
         self.parent_app.exit()
 
     def close_event(self):
-        print("\n aboutToQuit ... 1\n")
+        logging.info("aboutToQuit ... 1")
         self.recip_latt.quit_kill_all()
         cmd = {"nod_lst":"", "cmd_lst":["closed"]}
         lst_req = get_req_json_dat(
             params_in = cmd, main_handler = self.runner_handler
         )
         resp = lst_req.result_out()
-        print("resp =", resp)
-        print("\n aboutToQuit ... 2\n")
+        logging.info("aboutToQuit ... 2")
 
     def import_init(self):
         loop = QEventLoop()
         QTimer.singleShot(200, loop.quit)
         loop.exec_()
-        print("self.server_nod_lst =", self.server_nod_lst)
         if len(self.server_nod_lst) == 1:
             self.nxt_key_clicked("import")
 
@@ -543,15 +540,13 @@ class MainObject(QObject):
             self.on_node_click(big_nod_num)
 
     def launch_reindex(self, sol_rei):
-        print("reindex solution", sol_rei)
         is_same = self.new_node.set_custom_parameter(str(sol_rei))
         if is_same:
-            print("clicked twice same row, launching reindex")
+            logging.info("clicked twice same row, launching reindex")
             self.request_launch()
 
     def img_num_changed(self):
         new_img_num = self.window.ImgNumEdit.text()
-        print("should load IMG num:", new_img_num)
         self.refresh_output()
 
     def shift_img_num(self, sh_num):
@@ -561,18 +556,17 @@ class MainObject(QObject):
         self.img_num_changed()
 
     def prev_img(self):
-        print("prev_img")
+        logging.info("prev_img")
         self.shift_img_num(-1)
 
     def next_img(self):
-        print("next_img")
+        logging.info("next_img")
         self.shift_img_num(1)
 
     def refresh_output(self, tab_index = None):
         if tab_index == None:
             tab_index = self.window.OutputTabWidget.currentIndex()
 
-        print("tab_index =", tab_index)
         fnd_cur_nod = False
         for node in self.server_nod_lst:
             if node["number"] == self.curr_nod_num:
@@ -591,7 +585,7 @@ class MainObject(QObject):
                     lst_tmp_par = new_lst[0][0:-1]
 
             except AttributeError:
-                print("(empty) update_tmp_mask()")
+                logging.info("(empty) update_tmp_mask()")
 
             self.do_image_view.update_tmp_mask(lst_tmp_par)
 
@@ -645,20 +639,14 @@ class MainObject(QObject):
         self.curr_outp_tab = tab_index
 
     def RecipLattOpenClicked(self):
-        print("RecipLattOpenClicked")
+        logging.info("RecipLattOpenClicked")
         self.recip_latt.launch_RL_view(self.curr_nod_num)
 
     def verify_nod_num(self, loaded_nod_num):
-        print(
-            "verify_nod_num \n",
-            " (Main QObject)=", self.curr_nod_num, "(loaded)=", loaded_nod_num
-        )
         if self.curr_nod_num == loaded_nod_num:
-            print("same node as when clicked")
             self.recip_latt.do_launch_RL()
 
         else:
-            print("time to relaunch RL view for node:", self.curr_nod_num)
             self.recip_latt.quit_kill_all()
             self.recip_latt.launch_RL_view(self.curr_nod_num)
 
@@ -676,7 +664,6 @@ class MainObject(QObject):
         self.display()
 
     def clicked_4_navigation(self, node_numb):
-        print("\n clicked_4_navigation\n  node_numb =", node_numb)
         self.curr_nod_num = node_numb
         try:
             cur_nod = self.server_nod_lst[node_numb]
@@ -710,11 +697,11 @@ class MainObject(QObject):
                     self.update_all_param()
 
                 else:
-                    print("command widget not there yet")
+                    logging.info("command widget not there yet")
                     return
 
             except KeyError:
-                print("Key Err Catch (clicked_4_navigation) ")
+                logging.info("Key Err Catch (clicked_4_navigation) ")
                 return
 
         self.refresh_output()
@@ -752,11 +739,10 @@ class MainObject(QObject):
         self.window.Next2RunLayout.addStretch()
         try:
             str_key = self.server_nod_lst[self.curr_nod_num]["cmd2show"][0][6:]
-            print("update_nxt_butt(", str_key, ")")
             self.update_nxt_butt(str_key)
 
         except (IndexError, AttributeError):
-            print("NO need to run << update_nxt_butt >>")
+            logging.info("NO need to run << update_nxt_butt >>")
 
     def update_nxt_butt(self, str_key):
         small_f_size = int(self.font_point_size * 0.75)
@@ -771,7 +757,6 @@ class MainObject(QObject):
                     str_key, self.param_widgets, self.opt_cmd_lst
                 )
                 nxt_cmd_lst = fnd_nxt_cmd.get_nxt_cmd()
-                print("next command lst =", nxt_cmd_lst)
                 for bt_str in nxt_cmd_lst:
                     split_label = bt_str.replace("_", "\n")
                     nxt_butt = QPushButton(split_label)
@@ -783,10 +768,10 @@ class MainObject(QObject):
                     self.window.Next2RunLayout.addWidget(nxt_butt)
 
         except IndexError:
-            print("no need to add next button Index Err Catch")
+            logging.info("no need to add next button Index Err Catch")
 
         except KeyError:
-            print("no need to add next button Key Err Catch")
+            logging.info("no need to add next button Key Err Catch")
 
     def nxt_clicked(self):
         self.nxt_key_clicked(self.sender().cmd_str)
@@ -807,7 +792,7 @@ class MainObject(QObject):
         self.window.ReindexHeaderLabel.setText(label2update)
 
     def nxt_key_clicked(self, str_key):
-        print("nxt_clicked ... str_key: ", str_key)
+        logging.info("nxt_clicked ... str_key: " + str_key)
 
         if str_key == "reindex":
             cmd = {
@@ -846,7 +831,7 @@ class MainObject(QObject):
             self.param_widgets[self.curr_widg_key]["advanced"].reset_pars()
 
         except AttributeError:
-            print("No advanced pars")
+            logging.info("No advanced pars")
 
         self.reseting = False
 
@@ -859,27 +844,29 @@ class MainObject(QObject):
             self.tmp_mask_changed(new_full_list)
 
         except AttributeError:
-            print("this node does not need build_full_list")
+            logging.info("this node does not need build_full_list")
 
     def all_items_param_changed(self, lst_of_lst):
         try:
             if self.new_node.number == self.curr_nod_num:
-                print("\n Updating Params with", lst_of_lst, "\n")
                 self.new_node.reset_all_params()
                 self.new_node.set_all_parameters(lst_of_lst)
 
         except AttributeError:
-            print("Not updating parameters, no (green node or twin widget)\n")
+            logging.info(
+                "Not updating parameters, no (green node or twin widget)\n"
+            )
 
     def new_main_command_changed(self, new_cmd_str):
         try:
             if self.new_node.number == self.curr_nod_num:
-                print("\n Updating Command with", new_cmd_str, "\n")
                 self.new_node.reset_all_params()
                 self.new_node.set_new_main_command(new_cmd_str)
 
         except AttributeError:
-            print("Not updating parameters, no (green node or twin widget)\n")
+            logging.info(
+                "Not updating parameters, no (green node or twin widget)"
+            )
 
     def item_param_changed(
         self, str_path = None, str_value = None, lst_num = 0
@@ -893,10 +880,12 @@ class MainObject(QObject):
                 self.new_node.set_parameter(str_path, str_value, lst_num)
 
         except AttributeError:
-            print("Not updating parameters, no (green node or twin widget)\n")
+            logging.info(
+                "Not updating parameters, no (green node or twin widget)"
+            )
 
     def add_new_node(self):
-        print("add_new_node")
+        logging.info("add_new_node")
         local_main_cmd = self.param_widgets[self.curr_widg_key]["main_cmd"]
         self.new_node = CommandParamControl(
             main_list = local_main_cmd
@@ -922,12 +911,11 @@ class MainObject(QObject):
         json_lamb = lst_req.result_out()
         try:
             lamb = json_lamb[0]
-            print("lamb =", lamb)
             if lamb < 0.05:
                 self.param_widgets[self.curr_widg_key]["simple"].set_ed_pars()
 
         except (TypeError, IndexError, AttributeError):
-            print(" Err Catch Loading Lamda")
+            logging.info(" Err Catch Loading Lamda")
 
     def search_in_parent_nodes_exp(self):
         try:
@@ -937,10 +925,9 @@ class MainObject(QObject):
             fnd_scl = fnd_scl_cmd.founded_scale()
 
         except AttributeError:
-            print("Attribute Err Catch (search_in_parent_nodes_exp)")
+            logging.info("Attribute Err Catch (search_in_parent_nodes_exp)")
             fnd_scl = False
 
-        print("found_scale =", fnd_scl)
         self.expr_widg.is_scale_parent1(fnd_scl)
 
     def search_in_parent_nodes_mer(self):
@@ -951,10 +938,9 @@ class MainObject(QObject):
             fnd_scl = fnd_scl_cmd.founded_scale()
 
         except AttributeError:
-            print("Attribute Err Catch (search_in_parent_nodes_mer)")
+            logging.info("Attribute Err Catch (search_in_parent_nodes_mer)")
             fnd_scl = False
 
-        print("found_scale =", fnd_scl)
         self.merg_widg.is_scale_parent2(fnd_scl)
 
     def update_all_param(self):
@@ -964,16 +950,12 @@ class MainObject(QObject):
             tmp_cmd_par.clone_from_list(
                 self.server_nod_lst[self.curr_nod_num]["lst2run"]
             )
-            print("\n Updating parameters from server_nod_lst")
+            logging.info("\n Updating parameters from server_nod_lst")
 
         except IndexError:
             tmp_cmd_par = self.new_node
-            print("\n Updating parameters from ...new_node")
+            logging.info("\n Updating parameters from ...new_node")
 
-        print(
-            "update_all_param(MainObject)...tmp_cmd_par.get_all_params() = ",
-            tmp_cmd_par.get_all_params()
-        )
         self.param_widgets[self.curr_widg_key]["simple"].update_all_pars(
             tmp_cmd_par.get_all_params()
         )
@@ -982,7 +964,7 @@ class MainObject(QObject):
                 tmp_cmd_par.get_all_params()
             )
         except AttributeError:
-            print("No advanced pars")
+            logging.info("No advanced pars")
 
     def gray_n_ungray(self):
         try:
@@ -997,7 +979,7 @@ class MainObject(QObject):
             self.param_widgets[str_key]["advanced"].setEnabled(False)
 
         except AttributeError:
-            print("no need to gray 'None' widget")
+            logging.info("no need to gray 'None' widget")
 
         self.window.ClearParentButton.setEnabled(False)
         self.window.RetryButton.setEnabled(False)
@@ -1006,7 +988,7 @@ class MainObject(QObject):
         self.window.Reset2DefaultPushButton.setEnabled(False)
 
         if tmp_state == "Ready":
-            print("only run (R)")
+            logging.info("only run (R)")
             self.window.CmdSend2server.setEnabled(True)
             self.param_widgets[str_key]["simple"].setEnabled(True)
             self.window.ClearParentButton.setEnabled(True)
@@ -1014,17 +996,17 @@ class MainObject(QObject):
                 self.param_widgets[str_key]["advanced"].setEnabled(True)
 
             except AttributeError:
-                print("no need to un-gray 'None' widget")
+                logging.info("no need to un-gray 'None' widget")
 
             self.window.Reset2DefaultPushButton.setEnabled(True)
 
         elif tmp_state == "Busy":
-            print("only clone or stop (B)")
+            logging.info("only clone or stop (B)")
             self.window.RetryButton.setEnabled(True)
             self.window.ReqStopButton.setEnabled(True)
 
         else:
-            print("only clone (F or S)")
+            logging.info("only clone (F or S)")
             self.window.RetryButton.setEnabled(True)
 
         self.check_if_exported_or_merged()
@@ -1059,7 +1041,7 @@ class MainObject(QObject):
             )
 
         except (AttributeError, UnboundLocalError):
-            print("it seems neither export or merge node")
+            logging.info("it seems neither export or merge node")
 
     def display(self):
         self.tree_scene.draw_tree_graph(
@@ -1078,7 +1060,7 @@ class MainObject(QObject):
         self.display()
 
     def on_clone(self):
-        print("on_clone")
+        logging.info("on_clone")
         self.new_node = CommandParamControl(
             main_list = self.param_widgets[self.curr_widg_key]["main_cmd"]
         )
@@ -1098,7 +1080,6 @@ class MainObject(QObject):
         cmd_lst = self.new_node.get_full_command_list()
         lst_of_node_str = self.new_node.parent_node_lst
         cmd = {'nod_lst': lst_of_node_str, 'cmd_lst': cmd_lst}
-        print("cmd =", cmd)
         self.window.incoming_text.clear()
         self.window.incoming_text.setTextColor(self.log_show.green_color)
         do_predictions_n_report = bool(
@@ -1117,17 +1098,14 @@ class MainObject(QObject):
 
     def line_n1_in(self, nod_num_in):
         self.request_display()
-        print("line_n1_in(nod_num_in) = ", nod_num_in)
         self.new_node = None
 
     def req_stop(self):
         #TODO: consider if this should be a << POST >> request
-        print("req_stop")
+        logging.info("req_stop")
         nod_lst = [str(self.curr_nod_num)]
-        print("\n nod_lst", nod_lst)
         #cmd = {"nod_lst":nod_lst, "cmd_lst":[["stop"]]}
         cmd = {"nod_lst":nod_lst, "cmd_lst":["stop"]}
-        print("cmd =", cmd)
 
         post_thread = post_req_w_output(
             cmd_in = cmd, main_handler = self.runner_handler
@@ -1137,9 +1115,9 @@ class MainObject(QObject):
         self.thrd_lst.append(post_thread)
 
     def reset_graph_triggered(self):
-        print("reset_graph_triggered(QObject)")
+        logging.info("reset_graph_triggered(QObject)")
         cmd = {"nod_lst":"", "cmd_lst":["reset_graph"]}
-        print("cmd =", cmd)
+        logging.info("cmd =" + str(cmd))
         try:
             self.do_load_html.reset_lst_html()
             post_thread = post_req_w_output(
@@ -1151,18 +1129,17 @@ class MainObject(QObject):
             self.thrd_lst.append(post_thread)
 
         except requests.exceptions.RequestException:
-            print(
+            logging.info(
                 "something went wrong with the << reset_graph >> request"
             )
             #TODO: put inside this [except] some way to kill [post_thread]
 
     def respose_n1_from_reset(self, line):
-        print("respose_from_reset(err code):", line)
+        logging.info("respose_from_reset(err code):" + str(line))
 
     def after_thread_end(self, nod_num_out, do_pred_n_rept):
         if do_pred_n_rept:
             cmd = {"nod_lst":[nod_num_out], "cmd_lst":["run_predict_n_report"]}
-            print("cmd =", cmd)
             self.do_load_html.reset_lst_html()
             new_thrd = post_req_w_output(
                 cmd_in = cmd, main_handler = self.runner_handler

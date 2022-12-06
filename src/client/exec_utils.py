@@ -23,7 +23,7 @@ copyright (c) CCP4 - DLS
 
 
 from PySide2.QtCore import *
-import requests, json, os, sys, zlib, time
+import requests, json, os, sys, zlib, time, logging
 
 from client.gui_utils import AdvancedParameters, widgets_defs
 from client.init_firts import ini_data
@@ -41,14 +41,13 @@ class get_request_shot(QObject):
                 self.to_return = zlib.decompress(compresed)
 
             except zlib.error:
-                print("zlib. err catch (get_request_shot)")
+                logging.info("zlib. err catch (get_request_shot)")
                 self.to_return = None
 
             self.done = True
 
         else:
             self.done = False
-            print("main_handler(get_request_shot) =", main_handler)
             main_handler.get_from_main_dui(params_in, self)
             #self.to_return = None
 
@@ -57,7 +56,7 @@ class get_request_shot(QObject):
         self.done = True
 
     def get_it_bin(self, data_comming):
-        print("type(data_comming) = ", type(data_comming))
+        logging.info("type(data_comming) = " + str(type(data_comming)))
         self.to_return = data_comming
         self.done = True
 
@@ -76,42 +75,38 @@ class get_req_json_dat(QObject):
             data_init = ini_data()
             uni_url = data_init.get_url()
             try:
-                print(
-                    "attempting to request to:", uni_url, ", with:", params_in
-                )
                 req_get = requests.get(
                     uni_url, stream = True, params = params_in, timeout = 3
                 )
-                print("starting request")
+                logging.info("starting request")
                 str_lst = ''
                 line_str = ''
                 json_out = ""
                 times_loop = 10
                 for count_times in range(times_loop):
-                    print("count_times =", count_times)
                     tmp_dat = req_get.raw.readline()
                     line_str = str(tmp_dat.decode('utf-8'))
                     if '/*EOF*/' in line_str:
-                        print('/*EOF*/ received')
+                        logging.info('/*EOF*/ received')
                         break
 
                     else:
                         str_lst = line_str
-                        #print("str_lst =", str_lst)
+                        #logging.info("str_lst =", str_lst)
 
                     if count_times == times_loop - 1:
-                        print('to many "lines" in http response')
+                        logging.info('to many "lines" in http response')
                         json_out = None
 
                 if json_out is not None:
                     json_out = json.loads(str_lst)
 
             except ConnectionError:
-                print(" ... Connection err catch  (get_req_json_dat) ...")
+                logging.info(" ... Connection err catch  (get_req_json_dat) ...")
                 json_out = None
 
             except requests.exceptions.RequestException:
-                print(
+                logging.info(
                     "..requests.exceptions.RequestException (get_req_json_dat)"
                 )
                 json_out = None
@@ -120,15 +115,15 @@ class get_req_json_dat(QObject):
             self.to_return = json_out
 
         else:
-            print("main_handler =", main_handler)
+            logging.info("main_handler =" + str(main_handler))
             main_handler.get_from_main_dui(params_in, self)
 
     def get_it_str(self, data_comming):
-        #print("data_comming =", data_comming)
+        #logging.info("data_comming =", data_comming)
         self.to_return = data_comming
 
     def get_it_bin(self, data_comming):
-        #print("data_comming =", data_comming)
+        #logging.info("data_comming =", data_comming)
         self.to_return = data_comming
 
 
@@ -153,16 +148,15 @@ class get_request_real_time(QThread):
                     self.url, stream = True, params = self.params, timeout = 65
                 )
                 req_head = req_get.headers.get('content-length', 0)
-                print("req_head =", req_head)
                 total_size = int(req_head) + 1
-                print("total_size =", total_size)
+                logging.info("total_size =" + str(total_size))
                 block_size = int(total_size / 6 * 1024)
                 max_size = 16384
                 #max_size = 65536
                 if block_size > max_size:
                     block_size = max_size
 
-                print("block_size =", block_size)
+                logging.info("block_size =" + str(block_size))
 
                 downloaded_size = 0
                 compresed = bytes()
@@ -173,19 +167,18 @@ class get_request_real_time(QThread):
                     self.prog_new_stat.emit(progress)
 
                 end_data = zlib.decompress(compresed)
-                print("get_request_real_time ... downloaded")
-                print("type(end_data) =", type(end_data))
+                logging.info("get_request_real_time ... downloaded")
 
             except zlib.error:
-                print("zlib. err catch(get_request_real_time) <<")
+                logging.info("zlib. err catch(get_request_real_time) <<")
                 end_data = None
 
             except ConnectionError:
-                print("\n Connection err catch (get_request_real_time) \n")
+                logging.info("\n Connection err catch (get_request_real_time) \n")
                 end_data = None
 
             except requests.exceptions.RequestException:
-                print(
+                logging.info(
                     "\n requests.exceptions.ReqExp (get_request_real_time) \n"
                 )
                 end_data = None
@@ -194,7 +187,7 @@ class get_request_real_time(QThread):
 
         else:
             self.prog_new_stat.emit(50)
-            print("self.my_handler =", self.my_handler)
+            logging.info("self.my_handler =" + str(self.my_handler))
             self.my_handler.get_from_main_dui(self.params, self)
 
     def get_it_str(self, data_comming):
@@ -216,16 +209,8 @@ def get_optional_list(cmd_str, handler_in):
 def build_advanced_params_widget(cmd_str, h_box_search, handler_in):
     cmd = {"nod_lst":"", "cmd_lst":[cmd_str]}
 
-    to_remove = '''
-    data_init = ini_data()
-    uni_url = data_init.get_url()
-    print("uni_url(build_advanced_params_widget) =", uni_url)
-    '''
-
     lst_req = get_req_json_dat(params_in = cmd, main_handler = handler_in)
     lst_params = lst_req.result_out()
-
-    #print("lst_params =", lst_params)
 
     lin_lst = format_utils.param_tree_2_lineal(lst_params)
     par_def = lin_lst()
@@ -266,7 +251,7 @@ class Mtz_Data_Request(QThread):
             self.r_time_req.wait()
 
         except AttributeError:
-            print("not found QThread(get_request_real_time)")
+            logging.info("not found QThread(get_request_real_time)")
 
 
 class post_req_w_output(QThread):
@@ -299,7 +284,7 @@ class post_req_w_output(QThread):
                     line_str = str(tmp_dat.decode('utf-8'))
                     if '/*EOF*/' in line_str :
                         #TODO: consider a different Signal to say finished
-                        print('>>  /*EOF*/  <<', str(self.cmd))
+                        logging.info('>>  /*EOF*/  <<' + str(self.cmd))
                         break
 
                     if not_yet_read:
@@ -308,11 +293,11 @@ class post_req_w_output(QThread):
                         try:
                             nod_p_num = int(line_str.split("=")[1])
                             self.number = nod_p_num
-                            print("\n QThread.number =", self.number)
+                            logging.info("\n QThread.number =" + str(self.number))
                             self.first_line.emit(self.number)
 
                         except IndexError:
-                            print(
+                            logging.info(
                                 "\n post_req_w_output ... Index err catch \n"
                             )
                             not_yet_read = True
@@ -325,8 +310,8 @@ class post_req_w_output(QThread):
                 self.about_to_end.emit(self.number, self.do_predict_n_report)
 
             except requests.exceptions.RequestException:
-                print(
-                    "something went wrong with the request of ",
+                logging.info(
+                    "something went wrong with the request of " +
                     str(self.cmd)
                 )
                 #TODO: put inside this [except] some way to kill [self]
@@ -339,7 +324,7 @@ class post_req_w_output(QThread):
             while self.done == False:
                 time.sleep(0.1)
 
-        print("ended post QThread")
+        logging.info("ended post QThread")
 
     def get_it_str(self, line_str):
         if not self.already_read:
@@ -350,7 +335,7 @@ class post_req_w_output(QThread):
                 self.already_read = True
 
             except IndexError:
-                print("\n post_req_w_output ... Index err catch \n")
+                logging.info("\n post_req_w_output ... Index err catch \n")
 
         elif '/*EOF*/' in line_str :
             self.about_to_end.emit(self.number, self.do_predict_n_report)
@@ -373,25 +358,20 @@ class CommandParamControl:
             self.par_lst.append([])
 
         self.custm_param = None
-        print("\n New 'CommandParamControl':")
-        print(
-            "(cmd, par_lst) =",
-            self.m_cmd_lst, self.par_lst, " --------- \n"
-        )
-        print(" par_lst(__init__) =", self.par_lst)
+        logging.info("\n New 'CommandParamControl':")
+        logging.info(" par_lst(__init__) =" + str(self.par_lst))
 
     def reset_all_params(self):
         self.par_lst = [[]]
         self.custm_param = None
 
     def set_new_main_command(self, new_command):
-        print("CommandParamControl ... set_new_main_command:", new_command)
         dials_command = "dials." + new_command
         self.m_cmd_lst = [dials_command]
-        print("\n self.m_cmd_lst  =", self.m_cmd_lst)
+        logging.info("\n self.m_cmd_lst  =" + str(self.m_cmd_lst))
 
     def set_parameter(self, new_name, new_value, lst_num = 0):
-        print(" par_lst(set_parameter) ini =", self.par_lst)
+        logging.info(" par_lst(set_parameter) ini =" + str(self.par_lst))
         already_here = False
         for single_par in self.par_lst[lst_num]:
             if single_par["name"] == new_name:
@@ -401,19 +381,17 @@ class CommandParamControl:
         if not already_here:
             self.par_lst[lst_num].append({"name":new_name, "value":new_value})
 
-        print(" par_lst(set_parameter) end =", self.par_lst)
+        logging.info(" par_lst(set_parameter) end =" + str(self.par_lst))
 
     def set_all_parameters(self, lst_of_lst):
-        print("set_all_parameters")
-        print("lst_of_lst =", lst_of_lst)
+        logging.info("set_all_parameters")
+        logging.info("lst_of_lst =" + str(lst_of_lst))
         self.par_lst = []
         self.custm_param = None
 
         for inner_lst in lst_of_lst:
-            print("inner_lst =", inner_lst)
             build_lst = []
             for inner_par_val in inner_lst:
-                print("inner_par_val =", inner_par_val)
                 try:
                     build_lst.append(
                         {
@@ -422,7 +400,7 @@ class CommandParamControl:
                         }
                     )
                 except IndexError:
-                    print("index err catch, not adding new parameter")
+                    logging.info("index err catch, not adding new parameter")
 
             self.par_lst.append(build_lst)
 
@@ -445,7 +423,7 @@ class CommandParamControl:
         self.parent_node_lst = list(parent_s)
 
     def add_or_remove_parent(self, nod_num):
-        print("New node to add or remove:", nod_num)
+        logging.info("New node to add or remove:" + str(nod_num))
         if nod_num not in self.parent_node_lst:
             self.parent_node_lst.append(nod_num)
 
@@ -453,16 +431,13 @@ class CommandParamControl:
             self.parent_node_lst.remove(nod_num)
 
         else:
-            print("Unable to remove unique parent")
+            logging.info("Unable to remove unique parent")
 
     def clear_parents(self):
-        print("old parent_node_lst =", self.parent_node_lst)
         self.parent_node_lst = [int(max(self.parent_node_lst))]
-        print("new parent_node_lst =", self.parent_node_lst)
 
     def clone_from_list(self, lst_par_in):
-        print(" clone_from_list ------------")
-        print("lst_par_in =", lst_par_in)
+        logging.info(" clone_from_list ------------")
 
         self.m_cmd_lst = []
         for inner_lst in lst_par_in:
@@ -488,16 +463,14 @@ class CommandParamControl:
 
             self.par_lst.append(inner_par_lst)
 
-        print("self.par_lst =", self.par_lst)
+        logging.info("self.par_lst =" + str(self.par_lst))
         #TODO remember to handle "self.custm_param"
 
     def get_all_params(self):
         return self.par_lst[0], self.custm_param
 
     def get_full_command_list(self):
-        print("\n *** get_full_command_list")
-        print("self.par_lst =", self.par_lst)
-        print("self.m_cmd_lst =", self.m_cmd_lst)
+        logging.info("\n *** get_full_command_list")
 
         lst_out = []
         for lst_num in range(len(self.m_cmd_lst)):
@@ -516,7 +489,7 @@ class CommandParamControl:
 
             lst_out.append(str_out)
 
-        print("\n lst_out =", lst_out, "\n")
+        logging.info("\n lst_out =" + str(lst_out) + "\n")
         return lst_out
 
 
@@ -524,23 +497,11 @@ if __name__ == "__main__":
     tst_cmd = CommandParamControl(["my_cmd"])
 
     tst_cmd.set_parameter("new_param", "new_value")
-    print("cmd_lst =", tst_cmd.get_full_command_list())
     tst_cmd.set_parameter("new_param_2", "new_value_2")
-    print("cmd_lst =", tst_cmd.get_full_command_list())
     tst_cmd.set_parameter("random_param_n", "random_value_n")
-    print("cmd_lst =", tst_cmd.get_full_command_list())
 
     tst_cmd.set_parameter("new_param", "value_2")
-    print("cmd_lst =", tst_cmd.get_full_command_list())
     tst_cmd.set_parameter("new_param_2", "value_3")
-    print("cmd_lst =", tst_cmd.get_full_command_list())
     tst_cmd.set_parameter("random_param_n", "value_4")
-    print("cmd_lst =", tst_cmd.get_full_command_list())
     same = tst_cmd.set_custom_parameter("random_custom command _5")
-    print("cmd_lst =", tst_cmd.get_full_command_list())
-    print("same =", same)
-
-    print("\n" * 3)
-
     tst_cmd.set_all_parameters([[["random_param_#", "value_#"]]])
-    print("cmd_lst =", tst_cmd.get_full_command_list())

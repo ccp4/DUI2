@@ -21,7 +21,7 @@ copyright (c) CCP4 - DLS
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-import sys, time
+import sys, time, logging
 
 from PySide2.QtCore import *
 from PySide2.QtWidgets import *
@@ -36,33 +36,32 @@ from shared_modules import format_utils
 def main(par_def = None):
     data_init = ini_data()
     data_init.set_data(par_def)
-    uni_url = data_init.get_url()
+    uni_url = str(data_init.get_url())
 
     tmp_dat_dir = format_utils.create_tmp_dir()
-    print("creating ", tmp_dat_dir, "for temporary files")
+    logging.info("creating " + str(tmp_dat_dir) + "for temporary files")
 
     data_init.set_tmp_dir(tmp_dat_dir)
 
-    print('get_if_local =', data_init.get_if_local(), 'get_url =', uni_url)
+    logging.info(
+        'get_if_local =' + str(data_init.get_if_local()) + 'get_url =' + uni_url
+    )
 
     cmd = {"nod_lst":[""], "cmd_lst":["display"]}
     dummy_nod_lst = None
     n_secs = 3
-    print("here 1")
+    logging.info("here 1")
     while dummy_nod_lst == None:
-        print("here in loop")
+        logging.info("here in loop")
         lst_req = get_req_json_dat(params_in = cmd, main_handler = None)
         dummy_nod_lst = lst_req.result_out()
         if dummy_nod_lst == None:
-            print("dummy_nod_lst =", dummy_nod_lst, ", waiting", n_secs, "secs ...")
             time.sleep(n_secs)
 
         else:
-            print("dummy_nod_lst != None ...\n launching GUI")
+            logging.info("dummy_nod_lst != None ...\n launching GUI")
 
     app = QApplication(sys.argv)
     m_obj = MainObject(parent = app)
-    print("before sys.exit")
     sys.exit(app.exec_())
-    print("after sys.exit")
 

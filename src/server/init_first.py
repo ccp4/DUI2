@@ -1,15 +1,15 @@
 #uni_url = 'None'
 
-import os, sys
+import os, sys, logging
 from shared_modules import format_utils
 
 class ini_data(object):
     def __init__(self):
-        print("ini_data.__init__()")
+        logging.info("ini_data.__init__()")
 
     def set_data(self, par_def = None):
         init_param = format_utils.get_par(par_def, sys.argv[1:])
-        print("init_param =", init_param)
+        logging.info("init_param =" + str(init_param))
         global win_exe
         if init_param["windows_exe"].lower() == "true":
             win_exe = True
@@ -17,7 +17,7 @@ class ini_data(object):
         else:
             win_exe = False
 
-        print("\n win_exe =", win_exe, "\n")
+        logging.info("win_exe = " + str(win_exe))
 
     def get_win_exe(self):
         return win_exe
@@ -25,5 +25,5 @@ class ini_data(object):
 
 if __name__ == "__main__":
     init_firts = ini_data()
-    print("ini_data.uni_url =", init_firts.get_url())
+    logging.info("ini_data.uni_url =" + str(init_firts.get_url()))
 

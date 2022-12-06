@@ -23,7 +23,7 @@ copyright (c) CCP4 - DLS
 
 import http.server, socketserver
 from urllib.parse import urlparse, parse_qs
-import json, os, zlib, sys, time
+import json, os, zlib, sys, time, logging
 
 from server import multi_node
 from server.data_n_json import iter_dict, spit_out
@@ -39,19 +39,19 @@ def main(par_def = None, connection_out = None):
             post_body = self.rfile.read(content_len)
             body_str = str(post_body.decode('utf-8'))
             url_dict = parse_qs(body_str)
-            print("\n url_dict =", url_dict, "\n")
+            logging.info("\n url_dict =" + str(url_dict) + "\n")
             try:
                 tmp_cmd2lst = url_dict["cmd_lst"]
-                print("tmp_cmd2lst =", tmp_cmd2lst)
+                logging.info("tmp_cmd2lst =" + str(tmp_cmd2lst))
 
             except KeyError:
-                print("no command in request (KeyError)")
+                logging.info("no command in request (KeyError)")
                 try:
                     self.send_header('Content-type', 'text/plain')
                     self.end_headers()
 
                 except AttributeError:
-                    print(
+                    logging.info(
                         "Attribute Err catch," +
                         " not supposed send header info"
                     )
@@ -76,52 +76,54 @@ def main(par_def = None, connection_out = None):
                     nod_lst.append(int(inner_str))
 
             except KeyError:
-                print("no node number provided")
+                logging.info("no node number provided")
 
             cmd_dict = {"nod_lst":nod_lst,
                         "cmd_lst":cmd_lst}
 
             found_dials_command = False
-            print("cmd_lst = ", cmd_lst)
             for inner_lst in cmd_lst:
                 for single_str in inner_lst:
                     if "dials" in single_str:
                         found_dials_command = True
 
-                    print("single_str = ", single_str)
 
             if found_dials_command:
                 try:
                     cmd_tree_runner.run_dials_command(cmd_dict, self)
-                    print("sending /*EOF*/ (Dials CMD)")
+                    logging.info("sending /*EOF*/ (Dials CMD)")
                     spit_out(
                         str_out = '/*EOF*/', req_obj = self,
                         out_type = 'utf-8',
                     )
 
                 except BrokenPipeError:
-                    print("\n** BrokenPipe err catch  ** while sending EOF or JSON\n")
+                    logging.info(
+                        "BrokenPipe err catch  ** while sending EOF or JSON"
+                    )
 
                 except ConnectionResetError:
-                    print(
-                        "\n** ConnectionReset err catch  ** while sending EOF or JSON\n"
+                    logging.info(
+                        "ConnectionReset err catch  ** while sending EOF or JSON"
                     )
 
             else:
                 try:
                     cmd_tree_runner.run_dui_command(cmd_dict, self)
-                    print("sending /*EOF*/ (Dui2 CMD)")
+                    logging.info("sending /*EOF*/ (Dui2 CMD)")
                     spit_out(
                         str_out = '/*EOF*/', req_obj = self,
                         out_type = 'utf-8'
                     )
 
                 except BrokenPipeError:
-                    print("\n** BrokenPipe err catch  ** while sending EOF or JSON\n")
+                    logging.info(
+                        "** BrokenPipe err catch  ** while sending EOF or JSON"
+                    )
 
                 except ConnectionResetError:
-                    print(
-                        "\n** ConnectionReset err catch  ** while sending EOF or JSON\n"
+                    logging.info(
+                        "ConnectionReset err catch  ** while sending EOF or JSON"
                     )
 
         def do_GET(self):
@@ -130,23 +132,22 @@ def main(par_def = None, connection_out = None):
                 self.send_response(200)
 
             except AttributeError:
-                print("Attribute Err catch, not supposed send header info #3")
+                logging.info("Attribute Err catch, not supposed send header info #3")
 
             url_path = self.path
             url_dict = parse_qs(urlparse(url_path).query)
-            print("\n url_dict =", url_dict, "\n")
             try:
                 tmp_cmd2lst = url_dict["cmd_lst"]
-                print("tmp_cmd2lst =", tmp_cmd2lst)
+                logging.info("tmp_cmd2lst =" + str(tmp_cmd2lst))
 
             except KeyError:
-                print("no command in request (Key err catch )")
+                logging.info("no command in request (Key err catch )")
                 try:
                     self.send_header('Content-type', 'text/plain')
                     self.end_headers()
 
                 except AttributeError:
-                    print(
+                    logging.info(
                         "Attribute Err catch, not supposed send header info #4"
                     )
 
@@ -169,7 +170,7 @@ def main(par_def = None, connection_out = None):
                     nod_lst.append(int(inner_str))
 
             except KeyError:
-                print("no node number provided")
+                logging.info("no node number provided")
 
             cmd_dict = {"nod_lst":nod_lst,
                         "cmd_lst":cmd_lst}
@@ -183,7 +184,7 @@ def main(par_def = None, connection_out = None):
                         self.end_headers()
 
                     except AttributeError:
-                        print(
+                        logging.info(
                             "Attribute Err catch," +
                             " not supposed send header info"
                         )
@@ -194,56 +195,62 @@ def main(par_def = None, connection_out = None):
                         out_type = 'utf-8'
                     )
                     if lst_out == ['closed received']:
-                        print("Client app closed")
-                        print("run_local =", run_local)
+                        logging.info("Client app closed")
+                        logging.info("run_local =" + str(run_local))
                         sep_lin = "#" * 44 + "\n"
                         if run_local == True:
-                            print(
-                                "\n " + sep_lin,
-                                " closing the server as it is running in ",
-                                "\n  the same computer as the client \n",
-                                sep_lin,
+                            logging.info(
+                                " closing the server as it is running in " +
+                                "\n  the same computer as the client \n"
                             )
                             self.server.shutdown()
 
                         else:
-                            print(
-                                "\n " + sep_lin,
-                                " keeping server running as the client might",
-                                "\n  need to continue processing the same \n",
-                                " images latter \n",
-                                sep_lin,
+                            logging.info(
+                                " keeping server running as the client might" +
+                                "\n  need to continue processing the same \n" +
+                                " images latter \n"
                             )
 
                 elif type(lst_out) is bytes:
                     byt_data = zlib.compress(lst_out)
                     siz_dat = str(len(byt_data))
-                    print("size =", siz_dat)
                     try:
                         self.send_header('Content-type', 'application/zlib')
                         self.send_header('Content-Length', siz_dat)
                         self.end_headers()
 
                     except AttributeError:
-                        print(
+                        logging.info(
                             "Attribute Err catch," +
                             " not supposed send header info"
                         )
 
                     spit_out(str_out = byt_data, req_obj = self)
 
-                print("sending /*EOF*/ (Get)")
+                logging.info("sending /*EOF*/ (Get)")
                 spit_out(
                     str_out = '/*EOF*/', req_obj = self, out_type = 'utf-8'
                 )
 
             except BrokenPipeError:
-                print("\n BrokenPipe err catch  while sending EOF or JSON \n")
+                logging.info("BrokenPipe err catch  while sending EOF or JSON")
 
             except ConnectionResetError:
-                print(
-                    "\n ** ConnectionReset err catch  ** while sending EOF or JSON\n"
+                logging.info(
+                    "ConnectionReset err catch  ** while sending EOF or JSON"
                 )
+
+        def log_message(self, format, *args):
+            if run_local:
+                return
+                log_full_str = self.address_string() + " => " + \
+                               self.log_date_time_string() + "  " + str(args)
+
+                print(log_full_str)
+
+            else:
+                return
 
     ################################################ PROPER MAIN
 
@@ -251,7 +258,7 @@ def main(par_def = None, connection_out = None):
     data_init.set_data(par_def)
 
     init_param = format_utils.get_par(par_def, sys.argv[1:])
-    print("init_param(server) =", init_param)
+    logging.info("init_param(server) =" + str(init_param))
 
     PORT = int(init_param["port"])
     HOST = init_param["host"]
@@ -262,7 +269,7 @@ def main(par_def = None, connection_out = None):
     else:
         run_local = False
 
-    print("\n run_local =", run_local, "\n")
+    logging.info("run_local = " + str(run_local))
 
     if run_local:
         tree_dic_lst = []
@@ -270,11 +277,10 @@ def main(par_def = None, connection_out = None):
     else:
         tree_ini_path = init_param["init_path"]
         if tree_ini_path == None:
-            print("\n NOT GIVEN init_path")
-            print(" using the dir from where the commad 'dui_server' was invoqued")
+            logging.info("\n NOT GIVEN init_path")
+            logging.info(" using the dir from where the commad 'dui_server' was invoqued")
             tree_ini_path = os.getcwd()
 
-        print("\n using init path as: <<", tree_ini_path, ">> \n")
         tree_dic_lst = iter_dict(tree_ini_path, 0)
 
     try:
@@ -299,8 +305,8 @@ def main(par_def = None, connection_out = None):
                 (HOST, PORT), ReqHandler
             ) as http_daemon:
 
-                print(
-                    "\n serving at:\n  { host:", HOST, " port:", PORT, "}\n"
+                logging.info(
+                    "serving at:{host:" + str(HOST) + " port:" + str(PORT) + "}"
                 )
                 launch_success = True
 
@@ -311,11 +317,11 @@ def main(par_def = None, connection_out = None):
                     http_daemon.serve_forever()
 
                 except KeyboardInterrupt:
-                    print("caling server_close()")
+                    logging.info("caling server_close()")
                     http_daemon.server_close()
 
         except OSError:
             PORT += 1
             launch_success = False
-            print("OS err catch , trying again in",  n_secs, "secs")
+            logging.info("OS err catch, trying again in" + str(n_secs) + "secs")
             time.sleep(n_secs)

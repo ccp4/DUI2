@@ -21,7 +21,7 @@ copyright (c) CCP4 - DLS
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-import os, sys, json, requests
+import os, sys, json, requests, logging
 
 default_max_nproc = 4
 
@@ -87,12 +87,12 @@ class SimpleParamTab(QWidget):
                     self.clearLayout(item.layout())
 
     def update_param(self, param_in, value_in):
-        print("\n update_param (Simple)", param_in, value_in)
+        logging.info("\n update_param (Simple)" + str(param_in) + str(value_in))
         try:
             self.special_check_up(param_in, value_in)
 
         except AttributeError:
-            print("no special_check_up function")
+            logging.info("no special_check_up function")
 
         for widget in self.children():
             widget_path = None
@@ -112,7 +112,7 @@ class SimpleParamTab(QWidget):
 
             if widget_path == param_in:
                 if widget_value == value_in:
-                    print("No need to change parameter (same value)")
+                    logging.info("No need to change parameter (same value)")
 
                 else:
                     self.do_emit = False
@@ -127,9 +127,7 @@ class SimpleParamTab(QWidget):
                             widget.setValue(float(value_in))
 
                         except ValueError:
-                            print("\n param_in =", param_in)
-                            print("value_in =", value_in, "\n")
-                            print(
+                            logging.info(
                                 "skipping convertion of string to float \n"
                             )
 
@@ -139,7 +137,9 @@ class SimpleParamTab(QWidget):
                     self.do_emit = True
 
     def update_all_pars(self, tup_lst_pars):
-        print("\n (Simple Widget) \n time to update par to:", tup_lst_pars, "\n")
+        logging.info(
+            "(Simple Widget) \n time to update par to:" + str(tup_lst_pars)
+        )
         for par_dic in tup_lst_pars[0]:
             if par_dic["name"] != "":
                 self.update_param(par_dic["name"], par_dic["value"])
@@ -151,7 +151,7 @@ class SimpleParamTab(QWidget):
         self.do_emit = True #TODO: find out if this line is needed
 
     def spnbox_finished(self):
-        print("spnbox_finished")
+        logging.info("spnbox_finished")
         sender = self.sender()
         value = sender.value()
         str_path = str(sender.local_path)
@@ -159,7 +159,7 @@ class SimpleParamTab(QWidget):
         self.do_emit_signal(str_path, str_value)
 
     def combobox_changed(self, value):
-        print("combobox_changed")
+        logging.info("combobox_changed")
         sender = self.sender()
         str_value = str(sender.item_list[value])
         str_path = str(sender.local_path)
@@ -173,12 +173,12 @@ class SimpleParamTab(QWidget):
         self.do_emit_signal(str_path, str_value)
 
     def set_ed_pars(self):
-        print("set_ed_pars(SimpleParamTab)")
+        logging.info("set_ed_pars(SimpleParamTab)")
 
 
 class ProgBarBox(QProgressDialog):
     def __init__(self, max_val=100, min_val=0, text="Working", parent = None):
-        print("ProgBarBox __init__")
+        logging.info("ProgBarBox __init__")
 
         if max_val <= min_val:
             raise ValueError("max_val must be larger than min_val")
@@ -204,7 +204,7 @@ class ProgBarBox(QProgressDialog):
 
     def ended(self):
         self.setValue(100)
-        print("ProgBarBox ended")
+        logging.info("ProgBarBox ended")
         self.close()
 
 
@@ -311,13 +311,9 @@ class FileBrowser(QDialog):
 
     def set_selection(self):
         if self.last_file_clicked == None:
-            print("select file first")
+            logging.info("select file first")
 
         else:
-            print(
-                "\n set_selection:", self.last_file_clicked,
-                "\n dir_selected:", self.dir_selected
-            )
             self.file_or_dir_selected.emit(
                 self.last_file_clicked, self.dir_selected
             )
@@ -326,11 +322,9 @@ class FileBrowser(QDialog):
     def node_clicked(self, it_index):
         item = self.t_view.itemFromIndex(it_index)
         if item.isdir:
-            print("\n Clicked on DIR \n ")
             self.open_select_butt.setText("Open Dir")
 
         else:
-            print("\n Clicked on FILE \n ")
             self.open_select_butt.setText("Open File")
 
         str_select_path = str(item.file_path)
@@ -339,7 +333,6 @@ class FileBrowser(QDialog):
 
         self.dir_selected = item.isdir
         self.last_file_clicked = str_select_path
-        print("item.file_path =", self.last_file_clicked)
 
     def node_double_clicked(self, it_index):
         self.last_file_clicked = str(item.file_path)
@@ -361,7 +354,6 @@ class LocalFileBrowser(QDialog):
         self.fil_sys_mod = QFileSystemModel()
         self.fil_sys_mod.setRootPath(QDir.homePath())
         self.t_view =  QTreeView()
-        #print("dir(self.t_view) =", dir(self.t_view))
         self.t_view.setModel(self.fil_sys_mod)
         self.t_view.setSortingEnabled(True)
 
@@ -399,11 +391,11 @@ class LocalFileBrowser(QDialog):
         new_info = self.fil_sys_mod.fileInfo(index)
         is_dir = new_info.isDir()
         if is_dir:
-            print("\n Clicked on DIR \n ")
+            logging.info("\n Clicked on DIR \n ")
             self.open_select_butt.setText("Open Dir")
 
         else:
-            print("\n Clicked on FILE \n ")
+            logging.info("\n Clicked on FILE \n ")
             self.open_select_butt.setText("Open File")
 
         str_select_path = str(new_path)
@@ -420,7 +412,7 @@ class LocalFileBrowser(QDialog):
 
     def set_selection(self):
         if self.last_file_clicked == None:
-            print("select file first")
+            logging.info("select file first")
 
         else:
             self.file_or_dir_selected.emit(
@@ -432,7 +424,7 @@ class LocalFileBrowser(QDialog):
         self.close()
 
 def build_template(str_path_in):
-    print("\ntime to build template from:\n", str_path_in)
+    logging.info("time to build template from:" + str(str_path_in))
 
     found_a_digit = False
     for pos, single_char in enumerate(str_path_in):
@@ -440,7 +432,6 @@ def build_template(str_path_in):
             last_digit_pos = pos
             found_a_digit = True
 
-    print("found_a_digit =", found_a_digit)
     if found_a_digit:
         for pos in range(last_digit_pos, 0, -1):
             if str_path_in[pos:pos + 1] not in "0123456789":
@@ -487,17 +478,19 @@ class RootWidg(QWidget):
         self.setLayout(self.main_vbox)
 
     def reset_pars(self):
-        print("reset_pars(root) ... dummy")
+        logging.info("reset_pars(root) ... dummy")
 
     def set_ed_pars(self):
-        print("set_ed_pars(SimpleParamTab)")
+        logging.info("set_ed_pars(SimpleParamTab)")
 
     def update_all_pars(self, tup_lst_pars):
-        print("update_all_pars(root)", tup_lst_pars, "... dummy")
+        logging.info("update_all_pars(root)" + str(tup_lst_pars) + "... dummy")
 
     def update_param(self, str_path, str_value):
-        print("update_param(root)", str_path, str_value, "... dummy")
-
+        logging.info(
+            "update_param(root)" + str(str_path) +
+            ", " + str(str_value) + "... dummy"
+        )
 
 class ImportWidget(QWidget):
     '''
@@ -565,7 +558,6 @@ class ImportWidget(QWidget):
         self.setLayout(self.main_vbox)
 
     def set_selection(self, str_select, isdir):
-        print("str_select =", str_select, "isdir =", isdir)
         self.dir_selected = isdir
         if self.dir_selected:
             self.imp_txt.setText(str_select)
@@ -601,8 +593,6 @@ class ImportWidget(QWidget):
             )[0]
             self.set_selection(str_select = str(file_in_path), isdir = False)
 
-            print("Opened:", str(file_in_path))
-
 
         else:
             self.open_widget = FileBrowser(self)
@@ -615,10 +605,10 @@ class ImportWidget(QWidget):
         self.check_rot_axs.setChecked(False)
 
     def set_ed_pars(self):
-        print("set_ed_pars(SimpleParamTab)")
+        logging.info("set_ed_pars(SimpleParamTab)")
 
     def line_changed(self):
-        print("line_changed")
+        logging.info("line_changed")
         str_value = self.imp_txt.text()
         if self.dir_selected:
             str_path = "input.directory"
@@ -639,16 +629,12 @@ class ImportWidget(QWidget):
         if len(ext_par) > 0 and not self.nexus_type :
             lst_ext_par = get_lst_par_from_str(ext_par)
             if len(lst_ext_par) > 0:
-                print("time to add:", lst_ext_par, "to command lst")
                 for single_ext_par in lst_ext_par:
                     lst_par.append(single_ext_par)
-
-        print("lst_par =", lst_par)
 
         self.all_items_changed.emit([lst_par])
 
     def rot_axs_changed(self, stat):
-        print("rot_axs_changed(ImportWidget)", stat)
         if int(stat) == 2:
             #TODO discus how to fix import for ED
             #TODO before removing the next line entirely
@@ -661,7 +647,6 @@ class ImportWidget(QWidget):
         self.imp_extra_txt.setText(new_par_str)
 
     def dist_changed(self, stat):
-        print("dist_changed(ImportWidget)", stat)
         if int(stat) == 2:
             self.check_rot_axs.setChecked(False)
             new_par_str = "distance=2193"
@@ -672,13 +657,9 @@ class ImportWidget(QWidget):
         self.imp_extra_txt.setText(new_par_str)
 
     def update_all_pars(self, tup_lst_pars):
-        print(
-            "<< update_all_pars(ImportWidget) >>",
-            tup_lst_pars
-        )
 
         for n, par in enumerate(tup_lst_pars):
-            print("n=", n, "par=", par)
+            logging.info("n=" + str(n) + " par=" + str(par))
 
         try:
             for par_dic in tup_lst_pars[0]:
@@ -699,14 +680,14 @@ class ImportWidget(QWidget):
                     self.imp_txt.setText(str(par_dic["value"]))
 
         except IndexError:
-            print(" Not copying parameters from node (Index err catch )")
+            logging.info(" Not copying parameters from node (Index err catch )")
             self.imp_txt.setText("")
             self.state_label.setText("   ...")
 
     def update_param(self, str_path, str_value):
-        print(
-            "update_param(ImportWidget)",
-            str_path, str_value, "... dummy"
+        logging.info(
+            "update_param(ImportWidget)" +
+            str(str_path) + "," + str(str_value) + "... dummy"
         )
 
 
@@ -743,7 +724,7 @@ class MaskWidget(QWidget):
         self.reset_pars()
 
     def toggle_funtion(self):
-        print("toggle_funtion")
+        logging.info("toggle_funtion")
         if self.rad_but_rect_mask.isChecked():
             self.stat = "rect"
 
@@ -754,14 +735,11 @@ class MaskWidget(QWidget):
             self.stat = "poly"
 
         else:
-            print("something is wrong here")
             self.stat = None
 
-        print("self.stat =", self.stat)
         self.component_changed.emit(str(self.stat))
 
     def update_all_pars(self, par_lst_0):
-        print("update_all_pars:", par_lst_0)
         self.comp_list = []
         for par_dic in par_lst_0[0][0:-1]:
             if par_dic["name"] != "":
@@ -771,12 +749,12 @@ class MaskWidget(QWidget):
         self.update_comp_label()
 
     def reset_pars(self):
-        print("\n reset_pars(MaskWidget) \n")
+        logging.info("\n reset_pars(MaskWidget) \n")
         self.comp_list = []
         self.update_comp_label()
 
     def set_ed_pars(self):
-        print("set_ed_pars(SimpleParamTab)")
+        logging.info("set_ed_pars(SimpleParamTab)")
 
     def update_comp_label(self):
         label_str = ""
@@ -787,7 +765,6 @@ class MaskWidget(QWidget):
         self.cmd_label.setText(label_str)
 
     def get_new_comp(self, comp_dict):
-        print("mask new comp_dict =", comp_dict)
         if comp_dict["type"] == "rect":
             inner_lst_pair = [
                 "untrusted.rectangle",
@@ -826,7 +803,6 @@ class MaskWidget(QWidget):
     def build_full_list(self):
         first_list = list(self.comp_list)
         first_list.append(["output.mask", "tmp_mask.pickle"])
-        print("first_list =", first_list, "\n")
 
         full_list = [
             first_list,
@@ -837,7 +813,6 @@ class MaskWidget(QWidget):
         return full_list
 
     def comp_list_update(self):
-        print("\n self.comp_list =", self.comp_list)
         new_full_list = self.build_full_list()
         self.all_items_changed.emit(new_full_list)
         self.update_comp_label()
@@ -936,48 +911,45 @@ class FindspotsSimplerParameterTab(SimpleParamTab):
         self.build_pars()
 
     def set_ed_pars(self):
-        print("set_ed_pars(SimpleParamTab)")
+        logging.info("set_ed_pars(SimpleParamTab)")
         self.set_d_max.setChecked(True)
         self.set_d_min.setChecked(True)
 
     def set_d_max_changed(self, stat):
-        print("set_d_max_changed(Spotfinding)", stat)
         if int(stat) == 2:
-            print("time to add << Set d_max=20 >>")
+            logging.info("time to add << Set d_max=20 >>")
             self.do_emit_signal(
                 "spotfinder.filter.d_max", "20"
             )
 
         else:
-            print("time to remove << Set d_max=20 >>")
+            logging.info("time to remove << Set d_max=20 >>")
             self.do_emit_signal(
                 "spotfinder.filter.d_max", "None"
             )
 
     def set_d_min_changed(self, stat):
-        print("set_d_min_changed(Spotfinding)", stat)
         if int(stat) == 2:
-            print("time to add << Set d_min=2.5 >>")
+            logging.info("time to add << Set d_min=2.5 >>")
             self.do_emit_signal(
                 "spotfinder.filter.d_min", "2.5"
             )
 
         else:
-            print("time to remove << Set d_min=2.5 >>")
+            logging.info("time to remove << Set d_min=2.5 >>")
             self.do_emit_signal(
                 "spotfinder.filter.d_min", "None"
             )
 
     def set_alg_changed(self, stat):
-        print("set_alg_changed(Spotfinding)", stat)
         if int(stat) == 2:
-            print("time to add << Set algorithm=radial_profile >>")
+            logging.info("time to add << Set algorithm=radial_profile >>")
             self.do_emit_signal(
                 "spotfinder.threshold.algorithm", "radial_profile"
             )
 
         else:
-            print("time to remove << Set algorithm=radial_profile >>")
+            logging.info("time to remove << Set algorithm=radial_profile >>")
             self.do_emit_signal(
                 "spotfinder.threshold.algorithm", "dispersion_extended"
             )
@@ -986,10 +958,6 @@ class FindspotsSimplerParameterTab(SimpleParamTab):
         #default = dispersion_extended
 
     def special_check_up(self, param_in, value_in):
-        print(
-            "special_check_up(Spotfinding): param_in, value_in",
-            param_in, value_in
-        )
         if(
             param_in == "spotfinder.filter.d_max"
             and value_in == "20"
@@ -1100,28 +1068,23 @@ class IndexSimplerParamTab(SimpleParamTab):
         self.build_pars()
 
     def set_ed_pars(self):
-        print("set_ed_pars(SimpleParamTab)")
+        logging.info("set_ed_pars(SimpleParamTab)")
         self.detec_fix.setChecked(True)
 
     def detec_fix_changed(self, stat):
-        print("detec_fix_changed(IndexSimplerParamTab)", stat)
         if int(stat) == 2:
-            print("time to add << detector.fix=distance >>")
+            logging.info("time to add << detector.fix=distance >>")
             self.do_emit_signal(
                 "refinement.parameterisation.detector.fix", "distance"
             )
 
         else:
-            print("time to remove << detector.fix=distance >>")
+            logging.info("time to remove << detector.fix=distance >>")
             self.do_emit_signal(
                 "refinement.parameterisation.detector.fix", "None"
             )
 
     def special_check_up(self, param_in, value_in):
-        print(
-            "special_check_up(IndexSimplerParamTab): param_in, value_in",
-            param_in, value_in
-        )
         if(
             param_in == "refinement.parameterisation.detector.fix"
             and value_in == "distance"
@@ -1177,28 +1140,26 @@ class RefineBravaiSimplerParamTab(SimpleParamTab):
         self.build_pars()
 
     def set_ed_pars(self):
-        print("set_ed_pars(SimpleParamTab)")
+        logging.info("set_ed_pars(SimpleParamTab)")
         self.detec_fix.setChecked(True)
 
     def detec_fix_changed(self, stat):
-        print("detec_fix_changed(RefineBravaiSimplerParamTab)", stat)
+        logging.info(
+            "detec_fix_changed(RefineBravaiSimplerParamTab)" + str(stat)
+        )
         if int(stat) == 2:
-            print("time to add << detector.fix=distance >>")
+            logging.info("time to add << detector.fix=distance >>")
             self.do_emit_signal(
                 "refinement.parameterisation.detector.fix", "distance"
             )
 
         else:
-            print("time to remove << detector.fix=distance >>")
+            logging.info("time to remove << detector.fix=distance >>")
             self.do_emit_signal(
                 "refinement.parameterisation.detector.fix", "None"
             )
 
     def special_check_up(self, param_in, value_in):
-        print(
-            "special_check_up(RefineBravaiSimplerParamTab): param_in, value_in",
-            param_in, value_in
-        )
         if(
             param_in == "refinement.parameterisation.detector.fix"
             and value_in == "distance"
@@ -1273,28 +1234,24 @@ class RefineSimplerParamTab(SimpleParamTab):
         self.build_pars()
 
     def set_ed_pars(self):
-        print("set_ed_pars(SimpleParamTab)")
+        logging.info("set_ed_pars(SimpleParamTab)")
         self.detec_fix.setChecked(True)
 
     def detec_fix_changed(self, stat):
-        print("detec_fix_changed(RefineSimplerParamTab)", stat)
+        logging.info("detec_fix_changed(RefineSimplerParamTab)" + str(stat))
         if int(stat) == 2:
-            print("time to add << detector.fix=distance >>")
+            logging.info("time to add << detector.fix=distance >>")
             self.do_emit_signal(
                 "refinement.parameterisation.detector.fix", "distance"
             )
 
         else:
-            print("time to remove << detector.fix=distance >>")
+            logging.info("time to remove << detector.fix=distance >>")
             self.do_emit_signal(
                 "refinement.parameterisation.detector.fix", "None"
             )
 
     def special_check_up(self, param_in, value_in):
-        print(
-            "special_check_up(RefineSimplerParamTab): param_in, value_in",
-            param_in, value_in
-        )
         if(
             param_in == "refinement.parameterisation.detector.fix"
             and value_in == "distance"
@@ -1565,39 +1522,34 @@ class OptionalWidget(SimpleParamTab):
         self.par_imp_txt.textChanged.connect(self.param_line_changed)
 
     def reset_pars(self):
-        print("reset_pars(OptionalWidget)")
+        logging.info("reset_pars(OptionalWidget)")
         self.cmd_menu.setCurrentIndex(0)
         self.com_imp_txt.setText("")
         self.par_imp_txt.setText("")
 
     def update_all_pars(self, tup_lst_pars):
-        print(
-            "update_all_pars(ImportWidget)",
-            tup_lst_pars
+        logging.info(
+            "update_all_pars(ImportWidget)" + str(tup_lst_pars)
         )
 
     def param_line_changed(self):
         str_full_line = self.par_imp_txt.text()
         outer_lst_par = str_full_line.split(" ")
-        print("outer_lst_par =", outer_lst_par)
         lst_par = []
         for inner_par in outer_lst_par:
             lst_par.append(inner_par.split("="))
 
-        print("signaling: ", lst_par)
         self.all_items_changed.emit([lst_par])
 
     def cmd_menu_changed(self, value):
-        print("cmd_menu_changed")
+        logging.info("cmd_menu_changed")
         sender = self.sender()
         str_value = str(sender.item_list[value])
-        print("str_value =", str_value)
         self.com_imp_txt.setText(str_value)
 
     def command_line_changed(self):
-        print("command_line_changed(OptionalWidget)")
+        logging.info("command_line_changed(OptionalWidget)")
         str_new_line = str(self.com_imp_txt.text())
-        print("emminting chage of main command:", str_new_line)
         self.main_command_changed.emit(str_new_line)
 
 
@@ -1639,19 +1591,18 @@ class ExportWidget(QWidget):
         #self.my_handler = None
 
     def line_changed(self):
-        print("\n line_changed")
+        logging.info("line_changed")
         str_value = self.exp_txt.text()
         if str_value[-3:] != "mtz":
             str_value = str_value + ".mtz"
 
         self.all_items_changed.emit([[["mtz.hklout", str_value]]])
-        print("str_value =", str_value)
 
     def reset_pars(self):
         self.find_scaled_before.emit()
 
     def set_ed_pars(self):
-        print("set_ed_pars(SimpleParamTab)")
+        logging.info("set_ed_pars(SimpleParamTab)")
 
     def is_scale_parent1(self, scale_in_parents):
         if scale_in_parents:
@@ -1663,21 +1614,16 @@ class ExportWidget(QWidget):
         self.line_changed()
 
     def update_all_pars(self, tup_lst_pars):
-        print(
-            "update_all_pars(ExportWidget)",
-            tup_lst_pars
-        )
+        logging.info("update_all_pars(ExportWidget)" + str(tup_lst_pars))
         try:
             inp_val = str(tup_lst_pars[0][0]["value"])
-            print("inp_val =", inp_val)
             self.exp_txt.setText(inp_val)
 
         except IndexError:
-            print(" Not copying parameters from node (Index err catch )")
+            logging.info(" Not copying parameters from node (Index err catch )")
             self.exp_txt.setText("")
 
     def set_download_stat(self, do_enable = False, nod_num = None):
-        print("do_enable(set_download_stat) =", do_enable)
         self.setEnabled(True)
         self.exp_txt.setEnabled(not do_enable)
         self.downl_but.setEnabled(do_enable)
@@ -1702,7 +1648,7 @@ class ExportWidget(QWidget):
             self.dowl_thrd.start()
 
         else:
-            print("Canceled Operation")
+            logging.info("Canceled Operation")
 
     def show_new_progress(self, new_prog):
         self.progress_label.setText(
@@ -1710,23 +1656,21 @@ class ExportWidget(QWidget):
         )
 
     def save_mtz_on_disc(self, mtz_info):
-        print("type(mtz_info) = ", type(mtz_info))
         self.progress_label.setText("...")
         file_out = open(self.file_name, "wb")
         #try:
         file_out.write(mtz_info)
         #file_out.write(bytes(mtz_info))
         #except TypeError:
-        #    print("Type Err catch (save_mtz_on_disc)")
+        #    logging.info("Type Err catch (save_mtz_on_disc)")
         #    #file_out.write(bytes(mtz_info))
 
         file_out.close()
-        print(self.file_name, " writen to disk")
 
     def restore_p_label(self):
         self.progress_label.setText("...")
         self.dowl_thrd.exit()
-        print("Done Download")
+        logging.info("Done Download")
 
 
 ######################################################################################################
@@ -1769,18 +1713,17 @@ class MergeWidget(QWidget):
         #self.my_handler = None
 
     def line_changed(self):
-        print("\n line_changed")
+        logging.info("\n line_changed")
         str_value = self.exp_txt.text()
         if str_value[-3:] != "mtz":
             str_value = str_value + ".mtz"
         self.all_items_changed.emit([[["output.mtz", str_value]]])
-        print("str_value =", str_value)
 
     def reset_pars(self):
         self.find_scaled_before.emit()
 
     def set_ed_pars(self):
-        print("set_ed_pars(SimpleParamTab)")
+        logging.info("set_ed_pars(SimpleParamTab)")
 
     def is_scale_parent2(self, scale_in_parents):
         #TODO the logics of next if block should go before
@@ -1797,21 +1740,15 @@ class MergeWidget(QWidget):
         self.line_changed()
 
     def update_all_pars(self, tup_lst_pars):
-        print(
-            "update_all_pars(MergeWidget)",
-            tup_lst_pars
-        )
         try:
             inp_val = str(tup_lst_pars[0][0]["value"])
-            print("inp_val =", inp_val)
             self.exp_txt.setText(inp_val)
 
         except IndexError:
-            print(" Not copying parameters from node (Index err catch )")
+            logging.info(" Not copying parameters from node (Index err catch )")
             self.exp_txt.setText("")
 
     def set_download_stat(self, do_enable = False, nod_num = None):
-        print("do_enable(set_download_stat) =", do_enable)
         self.setEnabled(True)
         self.exp_txt.setEnabled(not do_enable)
         self.downl_but.setEnabled(do_enable)
@@ -1836,7 +1773,7 @@ class MergeWidget(QWidget):
             self.dowl_thrd.start()
 
         else:
-            print("Canceled Operation")
+            logging.info("Canceled Operation")
 
     def show_new_progress(self, new_prog):
         self.progress_label.setText(
@@ -1844,23 +1781,21 @@ class MergeWidget(QWidget):
         )
 
     def save_mtz_on_disc(self, mtz_info):
-        print("type(mtz_info) = ", type(mtz_info))
         self.progress_label.setText("...")
         file_out = open(self.file_name, "wb")
         try:
             file_out.write(mtz_info)
 
         except TypeError:
-            print("Type Err catch (save_mtz_on_disc)")
+            logging.info("Type Err catch (save_mtz_on_disc)")
             #file_out.write(bytes(mtz_info))
 
         file_out.close()
-        print(self.file_name, " writen to disk")
 
     def restore_p_label(self):
         self.progress_label.setText("...")
         self.dowl_thrd.exit()
-        print("Done Download")
+        logging.info("Done Download")
 
 #####################################################################################################
 

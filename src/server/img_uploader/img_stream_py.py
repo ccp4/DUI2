@@ -1,5 +1,5 @@
 import numpy as np
-import time
+import time, logging
 def slice_arr_2_str( data2d, inv_scale, x1, y1, x2, y2):
     data_xy_flex = data2d.as_double()
     big_np_arr = data_xy_flex.as_numpy_array()
@@ -12,11 +12,11 @@ def slice_arr_2_str( data2d, inv_scale, x1, y1, x2, y2):
         y1 >= big_d2 or y2 > big_d2 or y1 < 0 or y2 <= 0 or
         x1 > x2 or y1 > y2
     ):
-        print("\n ***  array bounding error  *** \n")
+        logging.info("\n ***  array bounding error  *** \n")
         return "Error"
 
     else:
-        print(" array bounding OK ")
+        logging.info(" array bounding OK ")
 
     np_arr = scale_np_arr(big_np_arr[x1:x2,y1:y2], inv_scale)
 
@@ -93,15 +93,14 @@ def slice_mask_2_str(data2d, inv_scale, x1, y1, x2, y2):
         y1 >= big_d1 or y2 > big_d1 or y1 < 0 or y2 <= 0 or
         x1 > x2 or y1 > y2
     ):
-        print("\n ***  array bounding error  *** \n")
+        logging.info("\n ***  array bounding error  *** \n")
         return "Error"
 
     else:
-        print(" array bounding OK ")
+        logging.info(" array bounding OK ")
         slice_np_arr = bool_np_arr[x1:x2,y1:y2]
         a_d0 = slice_np_arr.shape[0]
         a_d1 = slice_np_arr.shape[1]
-        print("a_d0, a_d1 = ", a_d0, a_d1)
 
         small_d0 = int(0.995 + a_d0 / inv_scale)
         short_arr = np.zeros((small_d0, a_d1), dtype = bool)
@@ -113,10 +112,7 @@ def slice_mask_2_str(data2d, inv_scale, x1, y1, x2, y2):
                         short_arr[row_num,:], slice_np_arr[big_row, :]
                     )
 
-        #print("short_arr =\n", short_arr)
-
         small_d1 = int(0.995 + a_d1 / inv_scale)
-        print("small_d0, small_d1 = ", small_d0, small_d1)
         small_arr = np.zeros((small_d0, small_d1), dtype = bool)
 
         for col_num in range(small_d1):
@@ -126,8 +122,6 @@ def slice_mask_2_str(data2d, inv_scale, x1, y1, x2, y2):
                     small_arr[:,col_num] = np.bitwise_or(
                         small_arr[:,col_num], short_arr[:,big_col]
                     )
-
-        #print("small_arr =\n", small_arr)
 
         str_buff = mask_np_2_str(small_arr)
 

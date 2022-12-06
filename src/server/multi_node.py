@@ -22,7 +22,7 @@ copyright (c) CCP4 - DLS
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 import subprocess, psutil
-import os, sys, shutil
+import os, sys, shutil, logging
 import glob, json, time
 
 from server.data_n_json import get_data_from_steps, spit_out
@@ -151,7 +151,6 @@ def fix_alias(short_in):
     long_out = short_in
     for pair in pair_list:
         if pair[0] == short_in:
-            print("replacing ", pair[0], " with ", pair[1])
             long_out = pair[1]
 
     return long_out
@@ -170,7 +169,7 @@ def unalias_full_cmd(lst_in):
 
 
 def find_if_in_list(inner_command):
-    print("find_if_in_list(multi_node)=", inner_command)
+    logging.info("find_if_in_list(multi_node)=" + str(inner_command))
     pair_list = get_pair_list()
     found_command = False
     for pair in pair_list:
@@ -183,7 +182,7 @@ def find_if_in_list(inner_command):
 def add_log_line(new_line, nod_req):
     '''
     if new_line[-1:] != "\n" and len(new_line) > 1:
-        print("<<< adding \\n >>> to output line:", new_line)
+        logging.info("<<< adding \\n >>> to output line:", new_line)
         new_line += "\n"
     '''
 
@@ -200,7 +199,7 @@ def add_log_line(new_line, nod_req):
         Error_Broken_Pipes = 1
 
     #else:
-    #    print(new_line[:-1])
+    #    logging.info(new_line[:-1])
 
 
 
@@ -250,7 +249,7 @@ class CmdNode(object):
                     single_parent.lst2run[0][0] ==
                     "dials.refine_bravais_settings"
                 ):
-                    print("after refine_bravais_settings, adding json files")
+                    logging.info("after refine_bravais_settings, adding json files")
                     lst_json = glob.glob(single_parent._run_dir + "/*.json")
                     for json_2_add in lst_json:
                         self._lst_expt_in.append(json_2_add)
@@ -262,10 +261,12 @@ class CmdNode(object):
                     self._lst_refl_in += single_parent._lst_refl_in
 
         except TypeError:
-            print("parent_lst_in =", parent_lst_in, "tmp empty; ", end='')
+            logging.info(
+                "parent_lst_in =" + str(parent_lst_in) + "tmp empty "
+            )
 
     def __call__(self, lst_in, req_obj = None):
-        print("\n lst_in =", lst_in)
+        logging.info("\n lst_in =" + str(lst_in))
         self.full_cmd_lst.append([lst_in[0]])
         self.set_in_fil_n_par(lst_in)
         self.set_base_dir(os.getcwd())
@@ -289,12 +290,11 @@ class CmdNode(object):
     def set_run_dir(self, num = None):
         self._run_dir = self._base_dir + "/run" + str(num)
 
-        print("new_dir: ", self._run_dir, "\n")
         try:
             os.mkdir(self._run_dir)
 
         except FileExistsError:
-            print("assuming the command should run in same dir")
+            logging.info("assuming the command should run in same dir")
 
     def set_in_fil_n_par(self, lst_in):
         self.lst2run = []
@@ -307,8 +307,8 @@ class CmdNode(object):
                     sol_num = int(lst_in[1])
 
                 except(IndexError, ValueError):
-                    print(" ***  err catch  ***")
-                    print(" wrong solution number, defaulting to 1")
+                    logging.info(" ***  err catch  ***")
+                    logging.info(" wrong solution number, defaulting to 1")
                     sol_num = 1
 
                 json_file_tmp = None
@@ -331,7 +331,7 @@ class CmdNode(object):
                     self.lst2run[-1].append(" " + str(sol_num))
 
             except KeyError:
-                print("Key err catch  from attempting to reindex")
+                logging.info("Key err catch  from attempting to reindex")
 
         else:
             for expt_2_add in self._lst_expt_in:
@@ -348,18 +348,16 @@ class CmdNode(object):
     def run_cmd(self, req_obj = None):
         self.nod_req = req_obj
         self.status = "Busy"
-        print("self.full_cmd_lst =", self.full_cmd_lst)
         inner_lst = self.full_cmd_lst[-1]
 
         is_valid_command = find_if_in_list(inner_lst[0])
-        print("is_valid_command =", is_valid_command)
         if is_valid_command:
             try:
-                print("self.win_exe =", self.win_exe)
                 if self.win_exe:
                     inner_lst[0] += ".exe"
 
-                print("\n Running:", inner_lst, "\n")
+                print("\n Running >> ", inner_lst)
+
                 self.my_proc = subprocess.Popen(
                     inner_lst,
                     shell = False,
@@ -370,18 +368,15 @@ class CmdNode(object):
                 )
 
             except FileNotFoundError:
-                print(
-                    "unable to run:", inner_lst[0],
+                logging.info(
                     " <<FileNotFound err catch >> "
                 )
                 self.my_proc = None
                 return
 
         else:
-            print(
-                "\n\n" + "#" * 80 + "\n " + inner_lst[0] +
-                " is NOT a Dials Command, NOT Running it \n" +
-                "#" * 80 + "\n\n"
+            logging.info(
+                " is NOT a Dials Command, NOT Running it "
             )
             self.status = "Failed"
             return
@@ -397,7 +392,7 @@ class CmdNode(object):
                 self.nod_req.end_headers()
 
             except AttributeError:
-                print("Attribute Err catch, not supposed send header info #2")
+                logging.info("Attribute Err catch, not supposed send header info #2")
 
             try:
                 str_nod_num = "node.number=" + str(self.number) + "\n"
@@ -407,7 +402,7 @@ class CmdNode(object):
                 )
 
             except BrokenPipeError:
-                print("\n << BrokenPipe err catch  >> while sending nod_num \n")
+                logging.info("<< BrokenPipe err catch  >> while sending nod_num")
 
         while self.my_proc.poll() is None or new_line != '':
             new_line = self.my_proc.stdout.readline()
@@ -417,15 +412,14 @@ class CmdNode(object):
         for inv_pos in range(1, len(log_line_lst)):
             if log_line_lst[-inv_pos] != '':
                 log_line_lst = log_line_lst[0:-inv_pos]
-                print("inv_pos =", inv_pos)
+                logging.info("inv_pos =" + str(inv_pos))
                 break
 
         self.my_proc.stdout.close()
         if self.my_proc.poll() == 0:
-            print("subprocess poll 0")
+            logging.info("subprocess poll 0")
 
         else:
-            print("\n  ***  err catch  *** \n\n poll =", self.my_proc.poll())
             self.status = "Failed"
 
         if self.status != "Failed":
@@ -449,7 +443,7 @@ class CmdNode(object):
             self._lst_refl_out = list(self._lst_refl_in)
 
         if self.n_Broken_Pipes > 0:
-            print("\n << BrokenPipe err catch >> while sending output \n")
+            logging.info(" << BrokenPipe err catch >> while sending output")
 
     def generate_predict_n_report(self, req_obj = None):
         self.n_Broken_Pipes = 0
@@ -478,7 +472,7 @@ class CmdNode(object):
             for refl_2_add in self._lst_refl_out:
                 rep_lst_dat_in.append(refl_2_add)
 
-            print("\n running:", rep_lst_dat_in, "\n")
+            logging.info("\n running:" + str(rep_lst_dat_in))
 
             new_line = "Generating HTML report"
             self.n_Broken_Pipes += add_log_line(new_line, self.nod_req)
@@ -501,7 +495,7 @@ class CmdNode(object):
 
             rep_proc.stdout.close()
             # in case needed there is the output of the report here:
-            #print("report stdout <<< \n", lst_rep_out, "\n >>>")
+            #logging.info("report stdout <<< \n", lst_rep_out, "\n >>>")
 
         if os.path.exists(tmp_html_path):
             self._html_rep = tmp_html_path
@@ -517,7 +511,7 @@ class CmdNode(object):
         for expt_2_add in self._lst_expt_out:
             pred_lst_dat_in.append(expt_2_add)
 
-        print("\n running:", pred_lst_dat_in, "\n")
+        logging.info("running:" + str(pred_lst_dat_in))
 
         new_line = "Generating Predictions"
         self.n_Broken_Pipes += add_log_line(new_line, self.nod_req)
@@ -540,7 +534,7 @@ class CmdNode(object):
 
         pred_proc.stdout.close()
         # in case needed there is the output of the prediction here:
-        #print("predict stdout <<< \n", lst_pred_out, "\n >>>")
+        #logging.info("predict stdout <<< \n", lst_pred_out, "\n >>>")
 
 
         tmp_predic_path = self._run_dir + "/predicted.refl"
@@ -556,12 +550,15 @@ class CmdNode(object):
         self.n_Broken_Pipes += add_log_line(new_line, self.nod_req)
 
         if self.n_Broken_Pipes > 0:
-            print("\n << BrokenPipe err catch >> while sending output \n")
+            logging.info(
+                "<< BrokenPipe err catch >> while sending output"
+            )
 
     def stop_me(self):
-        print("node", self.number, "status:", self.status)
         if self.status == "Busy":
-            print("attempting to stop the execution of node", self.number)
+            logging.info(
+                "attempting to stop the execution of node" + str(self.number)
+            )
             try:
                 pid_num = self.my_proc.pid
                 main_proc = psutil.Process(pid_num)
@@ -571,17 +568,19 @@ class CmdNode(object):
                 main_proc.kill()
 
             except BrokenPipeError:
-                print("Broken Pipe  err catch ")
+                logging.info("Broken Pipe  err catch ")
 
             except AttributeError:
-                print("No PID for << None >> process")
+                logging.info("No PID for << None >> process")
 
         else:
-            print("node", self.number, "not running, so not stopping it")
+            logging.info(
+                "node" + str(self.number) + "not running, so not stopping it"
+            )
 
     def get_bravais_summ(self):
         brav_summ_path = str(self._run_dir + "/bravais_summary.json")
-        print("brav_summ_path:", brav_summ_path)
+        logging.info("brav_summ_path:" + brav_summ_path)
         with open(brav_summ_path) as summary_file:
             j_obj = json.load(summary_file)
 
@@ -613,7 +612,7 @@ class Runner(object):
 
     def run_dials_command(self, cmd_dict = None, req_obj = None):
         unalias_cmd_lst = unalias_full_cmd(cmd_dict["cmd_lst"])
-        print("\n cmd_lst: ", unalias_cmd_lst)
+        logging.info(" cmd_lst: " + str(unalias_cmd_lst))
 
         tmp_parent_lst_in = []
         for lin2go in cmd_dict["nod_lst"]:
@@ -627,8 +626,7 @@ class Runner(object):
                 node2run(uni_cmd, req_obj)
 
             except UnboundLocalError:
-                print("\n ***  err catch  *** \n wrong line \n not running")
-                print("uni_cmd =", uni_cmd)
+                logging.info("***  err catch   wrong line  not running")
 
         self._save_state()
 
@@ -637,7 +635,6 @@ class Runner(object):
 
         if req_obj is not None:
             try:
-                print("\n  Dui2 CMD( cmd_lst )= ", unalias_cmd_lst, "\n ")
                 if unalias_cmd_lst == [['reset_graph']]:
                     try:
                         req_obj.send_response(201)
@@ -645,7 +642,7 @@ class Runner(object):
                         req_obj.end_headers()
 
                     except AttributeError:
-                        print(
+                        logging.info(
                             "Attribute Err catch," +
                             " not supposed send header info"
                         )
@@ -667,7 +664,7 @@ class Runner(object):
                         req_obj.end_headers()
 
                     except AttributeError:
-                        print(
+                        logging.info(
                             "Attribute Err catch," +
                             " not supposed send header info"
                         )
@@ -693,7 +690,7 @@ class Runner(object):
                             self.step_list[lin2go].stop_me()
 
                         except IndexError:
-                            print("\n  err catch , wrong line not logging \n")
+                            logging.info("err catch , wrong line not logging")
 
                         spit_out(
                             str_out = str(stat2add),
@@ -701,8 +698,8 @@ class Runner(object):
                         )
 
             except BrokenPipeError:
-                print(
-                    "\n << BrokenPipe err catch >> while running Dui command\n"
+                logging.info(
+                    "<< BrokenPipe err catch >> while running Dui command"
                 )
 
         self._save_state()
@@ -710,7 +707,7 @@ class Runner(object):
     def run_get_data(self, cmd_dict):
 
         unalias_cmd_lst = unalias_full_cmd(cmd_dict["cmd_lst"])
-        print("\n cmd_lst: ", unalias_cmd_lst)
+        logging.info("\n cmd_lst: " + str(unalias_cmd_lst))
 
         return_list = []
         for uni_cmd in unalias_cmd_lst:
@@ -726,19 +723,13 @@ class Runner(object):
 
             elif uni_cmd == ["history"]:
                 #return_list = self.lst_cmd_in
-                print("history command is temporarily off")
+                logging.info("history command is temporarily off")
 
             elif uni_cmd == ["closed"]:
                 return_list = ["closed received"]
-                print("received closed command")
+                logging.info("received closed command")
 
             else:
-                not_needed_for_now = '''
-                print(
-                    "running run_get_data(", uni_cmd, ", "
-                    ,cmd_dict, ", ", self.step_list, ")"
-                )
-                '''
                 return_list = get_data_from_steps(uni_cmd, cmd_dict, self.step_list)
 
         return return_list
@@ -750,7 +741,9 @@ class Runner(object):
                     shutil.rmtree(str(uni._run_dir))
 
             except FileNotFoundError:
-                print("FileNotFound err catch for file", uni._run_dir)
+                logging.info(
+                    "FileNotFound err catch for file" + str(uni._run_dir)
+                )
 
         os.remove("run_data")
         self.start_from_zero()
@@ -845,7 +838,7 @@ class Runner(object):
 
 
 def str2dic(cmd_str):
-    print("cmd_str =", cmd_str, "\n")
+    logging.info("cmd_str =" + str(cmd_str))
 
     cmd_dict = {"nod_lst":[],
                 "cmd_lst":[]}
@@ -859,7 +852,7 @@ def str2dic(cmd_str):
             break
 
     if len(cmd_dict["nod_lst"]) > 0:
-        print("nod_lst=", cmd_dict["nod_lst"])
+        logging.info("nod_lst=" + str(cmd_dict["nod_lst"]))
 
         new_par_str = ""
         for single_param in lstpar[len(cmd_dict["nod_lst"]):]:

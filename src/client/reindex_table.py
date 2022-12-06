@@ -23,7 +23,7 @@ copyright (c) CCP4 - DLS
 
 import json
 import sys
-import os
+import os, logging
 
 from PySide2.QtCore import *
 from PySide2.QtWidgets import *
@@ -48,8 +48,6 @@ def ops_list_from_json(json_data = None):
     lst_ops = []
     for key, value in json_data.items():
         recommended_str = "  "
-        #print("outer key:", key)
-        #print("outer dict:", value)
         for inner_key in value:
             if inner_key == "rmsd":
                 rmsd_val = value["rmsd"]
@@ -76,7 +74,7 @@ def ops_list_from_json(json_data = None):
                 except TypeError:
                     max_cc_str = "    - "
 
-                # print "__________________________________________
+                # logging.info "__________________________________________
                 # type(max_cc_val) =", type(max_cc_val)
                 # TODO the format here is not always giving the same with
 
@@ -116,7 +114,9 @@ def ops_list_from_json(json_data = None):
                     recommended_str = " N"
 
             else:
-                #print("Fell off end of key list with inner_key=", inner_key)
+                logging.info(
+                    "Fell off end of key list with inner_key=" + str(inner_key)
+                )
                 pass
 
         single_lin_lst = [
@@ -170,7 +170,7 @@ class ReindexTable(QTableWidget):
             self.bak_col = Qt.black
 
     def opt_clicked(self, row, col):
-        print("Solution clicked = ", row + 1)
+        logging.info("Solution clicked = " + str(row + 1))
         v_sliderValue = self.v_sliderBar.value()
         h_sliderValue = self.h_sliderBar.value()
 
@@ -186,12 +186,7 @@ class ReindexTable(QTableWidget):
         self.opt_pick(self.tmp_sel)
 
     def opt_pick(self, row):
-        '''
-        if self.tmp_sel == row:
-            print("\n selecting opt: ", row + 1, "\n")
-        '''
         self.opt_signal.emit(row + 1)
-
         self.tmp_sel = row
 
     def find_best_solu(self):
@@ -201,7 +196,7 @@ class ReindexTable(QTableWidget):
                 if row > bst_sol:
                     bst_sol = row
 
-        print("bst_sol = ", bst_sol)
+        logging.info("bst_sol = " + str(bst_sol))
 
         return bst_sol
 
@@ -213,9 +208,7 @@ class ReindexTable(QTableWidget):
             self.list_labl = ops_list_from_json(json_data)
 
         n_row = len(self.list_labl)
-        print("n_row =", n_row)
         n_col = len(self.list_labl[0])
-        print("n_col =", n_col)
 
         self.setRowCount(n_row)
         self.setColumnCount(n_col - 1)
@@ -282,13 +275,15 @@ class ReindexTable(QTableWidget):
         self.resizeColumnsToContents()
 
     def update_all_pars(self, tup_lst_pars):
-        print("\n (ReindexTable) \n time to update par to:", tup_lst_pars, "\n")
+        logging.info(
+            "(ReindexTable) time to update par to:" + str(tup_lst_pars) + "\n"
+        )
 
     def reset_pars(self):
-        print("\n reset_pars(ReindexTable) \n")
+        logging.info(" reset_pars(ReindexTable)")
 
     def del_opts_lst(self):
-        print("del_opts_lst")
+        logging.info("del_opts_lst")
         self.clear()
         self.setRowCount(1)
         self.setColumnCount(1)
@@ -303,8 +298,6 @@ def get_label_from_str_list(log_data):
             end_num = num
             break
 
-    print("ini_num =", ini_num)
-    print("end_num =", end_num)
 
     lst_str = log_data[ini_num:end_num]
     full_label_str = ""

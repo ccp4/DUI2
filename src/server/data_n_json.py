@@ -21,7 +21,7 @@ copyright (c) CCP4 - DLS
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-import json, os, glob
+import json, os, glob, logging
 import libtbx.phil
 from dials.command_line.find_spots import phil_scope as phil_scope_find_spots
 from dials.command_line.index import working_phil as phil_scope_index
@@ -40,13 +40,13 @@ from server.img_uploader import flex_arr_2_json
 
 
 def spit_out(str_out = None, req_obj = None, out_type = None):
-    #print("req_obj(spit_out) =", req_obj)
+    #logging.info("req_obj(spit_out) =", req_obj)
     if req_obj is None:
         if out_type == 'utf-8':
-            print(" ... ", str(str_out[:-1]), " ... ")
+            logging.info(" ... " + str(str_out[:-1]), " ... ")
 
         else:
-            print(" ... ", str_out , " ... ")
+            logging.info(" ... " + str(str_out) + " ... ")
 
     elif 'ReqHandler' in str(type(req_obj)):
         if out_type == 'utf-8':
@@ -58,11 +58,10 @@ def spit_out(str_out = None, req_obj = None, out_type = None):
     else:
         if out_type == 'utf-8':
             req_obj.call_back_str(str_out)
-            #print("<< YES utf-8, len=", len(str_out) , ">>")
 
         else:
             req_obj.call_back_bin(str_out)
-            print(">> NOT utf-8,  len=", len(str_out) , "<<")
+            logging.info(">> NOT utf-8,  len=" + str(len(str_out)) + "<<")
 
 
 def get_data_from_steps(uni_cmd, cmd_dict, step_list):
@@ -78,19 +77,15 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
                 return_list.append(lst2add)
 
             except (IndexError, TypeError, FileNotFoundError) as my_er:
-                print(
-                    "\n  err catch ", my_er, " wrong line not logging \n"
+                logging.info(
+                    "err catch " + str(my_er) + " wrong line giving log output"
                 )
 
     elif uni_cmd == ["get_mtz"]:
         for lin2go in cmd_dict["nod_lst"]:
             try:
-                print("compresing mtz generated from node #:", lin2go)
-
                 mtz_dir_path = step_list[lin2go]._run_dir
-                print("mtz_dir_path =", mtz_dir_path)
                 mtz_path = glob.glob(mtz_dir_path + os.sep + "*.mtz")[0]
-                print("mtz_path =", mtz_path)
 
                 with open(mtz_path, 'rb') as fil_h:
                     byt_data = fil_h.read()
@@ -98,19 +93,18 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
                 return_list = byt_data
 
             except IndexError:
-                print(
+                logging.info(
                     "\n Index Err catch , sending empty mtz \n"
                 )
 
             except FileNotFoundError:
-                print(
+                logging.info(
                     "\n FileNotFound Err catch , sending empty mtz \n"
                 )
 
     elif uni_cmd[0] == "get_experiments_file":
         for lin2go in cmd_dict["nod_lst"]:
             try:
-                print("compresing experiments file from node #:", lin2go)
                 exp_path = str(step_list[lin2go]._lst_expt_out[0])
                 with open(exp_path, 'rb') as fil_h1:
                     exp_byt_data = fil_h1.read()
@@ -118,7 +112,7 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
                 return_list = exp_byt_data
 
             except (IndexError, FileNotFoundError):
-                print(
+                logging.info(
                     "\n  err catch , wrong line," +
                     " NOT sending experiments file \n"
                 )
@@ -126,7 +120,6 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
     elif uni_cmd[0] == "get_reflections_file":
         for lin2go in cmd_dict["nod_lst"]:
             try:
-                print("compresing reflection file from node #:", lin2go)
                 ref_path = str(step_list[lin2go]._lst_refl_out[0])
                 with open(ref_path, 'rb') as fil_h2:
                     ref_byt_data = fil_h2.read()
@@ -134,19 +127,15 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
                 return_list = ref_byt_data
 
             except (IndexError, FileNotFoundError):
-                print(
-                    "\n  err catch , wrong line," +
-                    " NOT sending experiments or reflections \n"
+                logging.info(
+                    " err catch , wrong line," +
+                    " NOT sending experiments or reflections "
                 )
 
     elif uni_cmd == ["get_report"]:
         for lin2go in cmd_dict["nod_lst"]:
             try:
                 rep_path = str(step_list[lin2go]._html_rep)
-                print(
-                    "#" * 70 + "\n HTML report in: " +
-                    rep_path + "\n" + "#" * 70
-                )
                 fil = open(rep_path, "r")
                 str_file = fil.read()
                 fil.close()
@@ -155,14 +144,12 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
                 return_list = byt_data
 
             except IndexError:
-                print(
-                    "\n  Index Err catch, sending empty html list\n"
-                )
+                logging.info("Index Err catch, sending empty html list")
                 return_list = []
 
             except FileNotFoundError:
-                print(
-                    "\n  FileNotFound Err catch, sending empty html list \n"
+                logging.info(
+                    "FileNotFound Err catch, sending empty html list"
                 )
                 return_list = []
 
@@ -178,16 +165,12 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
                 )
 
             except IndexError:
-                print(
-                    "\n  err catch , wrong line, not sending template string \n"
+                logging.info(
+                    " err catch , wrong line, not sending template string"
                 )
     elif uni_cmd[0] == "get_image":
         for lin2go in cmd_dict["nod_lst"]:
             try:
-                print(
-                    "generating image JSON data for line:", lin2go,
-                    " image:", int(uni_cmd[1])
-                )
                 #TODO remember to check if the list is empty
                 str_json = flex_arr_2_json.get_json_w_img_2d(
                     step_list[lin2go]._lst_expt_out,
@@ -198,16 +181,11 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
                 return_list = byt_data
 
             except (IndexError, AttributeError, ValueError):
-                print("\n  err catch , wrong line, not sending IMG \n")
+                logging.info("\n  err catch , wrong line, not sending IMG \n")
 
     elif uni_cmd[0] == "get_image_slice":
         for lin2go in cmd_dict["nod_lst"]:
             try:
-                print(
-                    "generating slice of image for line:", lin2go,
-                    " image:", int(uni_cmd[1]), "\n uni_cmd =", uni_cmd,
-                    "\n"
-                )
                 inv_scale = 1
                 for sub_par in uni_cmd[2:]:
                     eq_pos = sub_par.find("=")
@@ -215,12 +193,9 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
                     right_side = sub_par[eq_pos + 1:]
                     if left_side == "inv_scale":
                         inv_scale = int(right_side)
-                        print("inv_scale =", inv_scale)
 
                     elif left_side == "view_rect":
-                        print("view_rect =", right_side)
                         [x1, y1, x2, y2] = right_side.split(",")
-                        print("x1, y1, x2, y2 =", x1, y1, x2, y2)
 
                 #TODO remember to check if the list is empty
                 str_json = flex_arr_2_json.get_json_w_2d_slise(
@@ -232,19 +207,15 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
                     return_list = byt_data
 
             except (IndexError, AttributeError):
-                print("\n  err catch , wrong line, not sending IMG \n")
+                logging.info("\n  err catch , wrong line, not sending IMG \n")
 
             except ValueError:
-                print("\n  err catch , wrong command, not sending IMG \n")
+                logging.info("\n  err catch , wrong command, not sending IMG \n")
 
 
     elif uni_cmd[0] == "get_mask_image":
         for lin2go in cmd_dict["nod_lst"]:
             try:
-                print(
-                    "generating mask image JSON data for line:", lin2go,
-                    " image:", int(uni_cmd[1])
-                )
                 #TODO remember to check if the list is empty
                 str_json = flex_arr_2_json.get_json_w_mask_img_2d(
                     step_list[lin2go]._lst_expt_out,
@@ -255,16 +226,11 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
                 return_list = byt_data
 
             except (IndexError, AttributeError, ValueError):
-                print("\n  err catch , wrong line, not sending IMG \n")
+                logging.info("\n  err catch , wrong line, not sending IMG \n")
 
     elif uni_cmd[0] == "get_mask_image_slice":
         for lin2go in cmd_dict["nod_lst"]:
             try:
-                print(
-                    "generating slice of mask image for line:", lin2go,
-                    " image:", int(uni_cmd[1]), "\n uni_cmd =", uni_cmd,
-                    "\n"
-                )
                 inv_scale = 1
                 for sub_par in uni_cmd[2:]:
                     eq_pos = sub_par.find("=")
@@ -272,12 +238,9 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
                     right_side = sub_par[eq_pos + 1:]
                     if left_side == "inv_scale":
                         inv_scale = int(right_side)
-                        print("inv_scale =", inv_scale)
 
                     elif left_side == "view_rect":
-                        print("view_rect =", right_side)
                         [x1, y1, x2, y2] = right_side.split(",")
-                        print("x1, y1, x2, y2 =", x1, y1, x2, y2)
 
                 #TODO remember to check if the list is empty
                 str_json = flex_arr_2_json.get_json_w_2d_mask_slise(
@@ -289,18 +252,14 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
                     return_list = byt_data
 
             except (IndexError, AttributeError):
-                print("\n  err catch , wrong line, not sending mask IMG \n")
+                logging.info("\n  err catch , wrong line, not sending mask IMG \n")
 
             except ValueError:
-                print("\n  err catch , wrong command, not sending mask IMG \n")
+                logging.info("\n  err catch , wrong command, not sending mask IMG \n")
 
     elif uni_cmd[0] == "get_reflection_list":
         for lin2go in cmd_dict["nod_lst"]:
             try:
-                print(
-                    "generating reflection list for line:", lin2go,
-                    " image:", int(uni_cmd[1])
-                )
                 refl_lst = flex_arr_2_json.get_refl_lst(
                     step_list[lin2go]._lst_expt_out,
                     step_list[lin2go]._lst_refl_out,
@@ -309,30 +268,29 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
                 return_list = refl_lst
 
             except (IndexError, AttributeError, ValueError):
-                print("\n  Err Catch , not sending reflection list \n")
+                logging.info("\n  Err Catch , not sending reflection list \n")
                 return_list = []
 
     elif uni_cmd[0] == "get_lambda":
         for lin2go in cmd_dict["nod_lst"]:
             try:
-                print("generating lambda for line:", lin2go)
                 experiments = flex_arr_2_json.get_experiments(
                     step_list[lin2go]._lst_expt_out[0]
                 )
                 return_list = [experiments.beams()[0].get_wavelength()]
 
             except (IndexError, AttributeError, ValueError, TypeError):
-                print("\n  Err Catch , not sending lambda \n")
+                logging.info("\n  Err Catch , not sending lambda \n")
                 return_list = []
 
     elif uni_cmd[0] == "get_predictions":
-        print("running << get_predictions >> ")
+        logging.info("running << get_predictions >> ")
         for lin2go in cmd_dict["nod_lst"]:
             try:
                 img_num = int(uni_cmd[1])
-                print(
-                    "generating predictions for line:", lin2go,
-                    " image:", img_num
+                logging.info(
+                    "generating predictions for line:" + str(lin2go) +
+                    " image:" + str(img_num)
                 )
                 sub_par = uni_cmd[2]
                 if sub_par[0:7] == "z_dept=":
@@ -349,8 +307,8 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
                 return_list = refl_pre_lst
 
             except (IndexError, AttributeError, ValueError):
-                print(
-                    "\n  err catch , not sending predictions \n"
+                logging.info(
+                    "err catch , not sending predictions"
                 )
                 return_list = []
 
@@ -361,7 +319,7 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
                 return_list.append(lst2add)
 
             except IndexError:
-                print("\n  err catch , wrong line, not sending bravais_sum \n")
+                logging.info("err catch , wrong line, not sending bravais_sum")
 
     elif uni_cmd[0][-7:] == "_params":
         return_list = get_param_list(uni_cmd[0])
@@ -390,7 +348,7 @@ class build_json_data(object):
 
     def deep_in_recurs(self, single_obj):
         if single_obj.name == "output":
-            print(" << output >> should be handled by DUI")
+            logging.info(" << output >> should be handled by DUI")
 
         elif single_obj.is_definition:
             param_info = {
@@ -450,8 +408,8 @@ class build_json_data(object):
             return param_info
 
         else:
-            print("\n", single_obj.name,
-                "\n WARNING neither definition or scope\n")
+            logging.info("\n" + str(single_obj.name) +
+                " WARNING neither definition or scope")
 
         return None
 
@@ -560,13 +518,11 @@ def iter_dict(file_path, depth_ini):
         "file_name": file_name, "file_path": file_path, "list_child": []
     }
     if depth_ini >= 30:
-        #print("reached to deep with: ", file_path)
         local_dict["isdir"] = False
 
     elif os.path.isdir(file_path):
         local_dict["isdir"] = True
         depth_next = depth_ini + 1
-        #print("depth_next =", depth_next)
         for new_file_name in sorted(os.listdir(file_path)):
             try:
                 new_file_path = os.path.join(os.sep, file_path, new_file_name)

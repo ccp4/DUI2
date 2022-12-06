@@ -1,4 +1,4 @@
-import sys, os, time, json
+import sys, os, time, json, logging
 from PySide2.QtCore import *
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
@@ -38,7 +38,7 @@ class connect_post_thread(QThread):
 
     def call_back_str(self, data_out):
         self.my_caller.get_it_str(data_out)
-        #print("data going(connect_post_thread)=", data_out)
+        #logging.info("data going(connect_post_thread)=", data_out)
 
 
 class MultiRunner(QObject):
@@ -66,13 +66,13 @@ class MainGuiObject(QObject):
         super(MainGuiObject, self).__init__(parent)
         self.parent_app = parent
         self.handler = all_local_server.ReqHandler(cmd_tree_runner)
-        print("inside QObject")
+        logging.info("inside QObject")
         self.m_run = MultiRunner()
 
     def get_from_main_dui(self, cmd_in, dui_obj):
-        print("cmd_in(get_from_main_dui) =", cmd_in)
+        logging.info("cmd_in(get_from_main_dui) =" + str(cmd_in))
         self.m_run.get_work(self.handler, cmd_in, dui_obj)
 
     def post_from_main_dui(self, cmd_in, dui_obj):
-        print("cmd_in(post_from_main_dui) =", cmd_in)
+        logging.info("cmd_in(post_from_main_dui) =" + str(cmd_in))
         self.m_run.post_work(self.handler, cmd_in, dui_obj)

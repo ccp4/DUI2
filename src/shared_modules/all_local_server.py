@@ -23,7 +23,7 @@ copyright (c) CCP4 - DLS
 
 #import http.server, socketserver
 #from urllib.parse import urlparse, parse_qs
-import json, os, sys, time
+import json, os, sys, time, logging
 
 from server import multi_node
 from server.data_n_json import iter_dict, spit_out
@@ -35,103 +35,10 @@ class ReqHandler(object):
         self.tree_runner = runner_in
 
     def fake_post(self, url_dict = None, call_obj = None):
-        print("\n url_dict =", url_dict, "\n")
+        logging.info("\n url_dict =" + str(url_dict))
 
-        copyed = '''
-
-
-            content_len = int(self.headers.get('Content-Length'))
-            post_body = self.rfile.read(content_len)
-            body_str = str(post_body.decode('utf-8'))
-            url_dict = parse_qs(body_str)
-            print("\n url_dict =", url_dict, "\n")
-            try:
-                tmp_cmd2lst = url_dict["cmd_lst"]
-                print("tmp_cmd2lst =", tmp_cmd2lst)
-
-            except KeyError:
-                print("no command in request (KeyError)")
-                try:
-                    self.send_header('Content-type', 'text/plain')
-                    self.end_headers()
-
-                except AttributeError:
-                    print(
-                        "Attribute Err catch," +
-                        " not supposed send header info"
-                    )
-
-                spit_out(
-                    str_out = 'no command in request (Key err catch ) ',
-                    req_obj = self, out_type = 'utf-8'
-                )
-                spit_out(
-                    str_out = '/*EOF*/', req_obj = self,
-                    out_type = 'utf-8'
-                )
-                return
-
-            cmd_lst = []
-            for inner_str in tmp_cmd2lst:
-                cmd_lst.append(inner_str.split(" "))
-
-            nod_lst = []
-            try:
-                for inner_str in url_dict["nod_lst"]:
-                    nod_lst.append(int(inner_str))
-
-            except KeyError:
-                print("no node number provided")
-
-            cmd_dict = {"nod_lst":nod_lst,
-                        "cmd_lst":cmd_lst}
-
-            found_dials_command = False
-            print("cmd_lst = ", cmd_lst)
-            for inner_lst in cmd_lst:
-                for single_str in inner_lst:
-                    if "dials" in single_str:
-                        found_dials_command = True
-
-                    print("single_str = ", single_str)
-
-            if found_dials_command:
-                try:
-                    cmd_tree_runner.run_dials_command(cmd_dict, self)
-                    print("sending /*EOF*/ (Dials CMD)")
-                    spit_out(
-                        str_out = '/*EOF*/', req_obj = self,
-                        out_type = 'utf-8',
-                    )
-
-                except BrokenPipeError:
-                    print("\n** BrokenPipe err catch  ** while sending EOF or JSON\n")
-
-                except ConnectionResetError:
-                    print(
-                        "\n** ConnectionReset err catch  ** while sending EOF or JSON\n"
-                    )
-
-            else:
-                try:
-                    cmd_tree_runner.run_dui_command(cmd_dict, self)
-                    print("sending /*EOF*/ (Dui2 CMD)")
-                    spit_out(
-                        str_out = '/*EOF*/', req_obj = self,
-                        out_type = 'utf-8'
-                    )
-
-                except BrokenPipeError:
-                    print("\n** BrokenPipe err catch  ** while sending EOF or JSON\n")
-
-                except ConnectionResetError:
-                    print(
-                        "\n** ConnectionReset err catch  ** while sending EOF or JSON\n"
-                    )
-
-        '''
         tmp_cmd2lst = url_dict["cmd_lst"]
-        print("tmp_cmd2lst =", tmp_cmd2lst)
+        logging.info("tmp_cmd2lst =" + str(tmp_cmd2lst))
 
         cmd_lst = []
         for inner_str in tmp_cmd2lst:
@@ -143,36 +50,36 @@ class ReqHandler(object):
                 nod_lst.append(int(inner_str))
 
         except KeyError:
-            print("no node number provided")
+            logging.info("no node number provided")
 
         cmd_dict = {"nod_lst":nod_lst,
                     "cmd_lst":cmd_lst}
 
         found_dials_command = False
-        print("cmd_lst = ", cmd_lst)
+        logging.info("cmd_lst = " + str(cmd_lst))
         for inner_lst in cmd_lst:
             for single_str in inner_lst:
                 if "dials" in single_str:
                     found_dials_command = True
 
-                print("single_str = ", single_str)
+                logging.info("single_str = " + single_str)
 
         if found_dials_command:
             self.tree_runner.run_dials_command(cmd_dict, call_obj)
-            print("sending /*EOF*/ (Dials CMD)")
+            logging.info("sending /*EOF*/ (Dials CMD)")
             spit_out(
                 str_out = '/*EOF*/', req_obj = call_obj, out_type = 'utf-8'
             )
 
         else:
             self.tree_runner.run_dui_command(cmd_dict, call_obj)
-            print("sending /*EOF*/ (Dui CMD)")
+            logging.info("sending /*EOF*/ (Dui CMD)")
             spit_out(
                 str_out = '/*EOF*/', req_obj = call_obj, out_type = 'utf-8'
             )
 
     def fake_get(self, url_dict = None, call_obj = None):
-        print("\n url_dict =", url_dict, "\n")
+        logging.info("url_dict =" + str(url_dict))
         tmp_cmd2lst = url_dict["cmd_lst"]
 
         cmd_lst = []
@@ -185,7 +92,7 @@ class ReqHandler(object):
                 nod_lst.append(int(inner_str))
 
         except KeyError:
-            print("no node number provided")
+            logging.info("no node number provided")
 
         cmd_dict = {"nod_lst":nod_lst,
                     "cmd_lst":cmd_lst}

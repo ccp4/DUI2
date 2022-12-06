@@ -1,11 +1,11 @@
 #uni_url = 'None'
 
-import os, sys
+import os, sys, logging
 from shared_modules import format_utils
 
 class ini_data(object):
     def __init__(self):
-        print("ini_data.__init__()")
+        logging.info("ini_data.__init__()")
 
     def set_data(self, par_def = None):
         if par_def == None:
@@ -17,7 +17,7 @@ class ini_data(object):
 
         init_param = format_utils.get_par(par_def, sys.argv[1:])
 
-        print("init_param =", init_param)
+        logging.info("init_param =" + str(init_param))
         global uni_url
         try:
             uni_url = init_param["url"]
@@ -36,7 +36,7 @@ class ini_data(object):
         except KeyError:
             run_local = True
 
-        print("\n run_local =", run_local, "\n")
+        logging.info("run_local(client) =" + str(run_local))
 
         global win_exe
         if init_param["windows_exe"].lower() == "true":
@@ -45,7 +45,7 @@ class ini_data(object):
         else:
             win_exe = False
 
-        print("\n win_exe =", win_exe, "\n")
+        logging.info("\n win_exe =" + str(win_exe))
 
     def set_tmp_dir(self, dir_path_in):
         global tmp_dir
@@ -66,5 +66,5 @@ class ini_data(object):
 
 if __name__ == "__main__":
     init_firts = ini_data()
-    print("ini_data.uni_url =", init_firts.get_url())
+    logging.info("ini_data.uni_url =" + str(init_firts.get_url()))
 

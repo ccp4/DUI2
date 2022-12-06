@@ -21,7 +21,7 @@ copyright (c) CCP4 - DLS
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-import sys, os, requests
+import sys, os, requests, logging
 from PySide2.QtCore import *
 from PySide2.QtWidgets import *
 from PySide2 import QtUiTools
@@ -52,10 +52,6 @@ class LoadFiles(QThread):
         self.my_handler = main_handler
 
     def run(self):
-        print(
-            "launching << get_experiments_file >> for node: ",
-            self.cur_nod_num
-        )
         my_cmd = {"nod_lst" : [self.cur_nod_num],
                   "cmd_lst" : ["get_experiments_file"]}
 
@@ -77,12 +73,7 @@ class LoadFiles(QThread):
         tmp_file = open(self.files_path_n_nod_num["tmp_exp_path"], "w")
         tmp_file.write(full_exp_file)
         tmp_file.close()
-        print("request expt, finished for node ", self.cur_nod_num)
 
-        print(
-            "launching << get_reflections_file >> for node: ",
-            self.cur_nod_num
-        )
         my_cmd = {"nod_lst" : [self.cur_nod_num],
                   "cmd_lst" : ["get_reflections_file"]}
 
@@ -102,17 +93,16 @@ class LoadFiles(QThread):
             tmp_file = open(self.files_path_n_nod_num["tmp_ref_path"], "wb")
             tmp_file.write(full_ref_file)
             tmp_file.close()
-            print("request refl, finished for node ", self.cur_nod_num)
 
         except TypeError:
-            print("Type Err catch loading refl file")
+            logging.info("Type Err catch loading refl file")
             self.loading_failed.emit()
             return
 
         self.files_loaded.emit(self.files_path_n_nod_num)
 
     def kill_proc(self):
-        print("\n kill_proc(LoadFiles) \n")
+        logging.info("\n kill_proc(LoadFiles) \n")
         self.say_good_bye()
 
     def say_good_bye(self):
@@ -134,11 +124,9 @@ class LaunchReciprocalLattice(QThread):
             self.exp_path, self.ref_path,
         ]
         try:
-            print("\n\n win_exe =", self.win_exe)
             if self.win_exe:
                 cmd_lst[0] += ".exe"
 
-            print("\n Running:", cmd_lst, "\n")
             self.my_proc = subprocess.Popen(
                 cmd_lst, shell = False,
                 stdout = subprocess.PIPE,
@@ -147,9 +135,8 @@ class LaunchReciprocalLattice(QThread):
             )
 
         except FileNotFoundError:
-            print(
-                "unable to run:", cmd_lst,
-                " <<FileNotFound err catch >> "
+            logging.info(
+                " <<FileNotFound err catch #1>> "
             )
             self.my_proc = None
             return
@@ -158,14 +145,14 @@ class LaunchReciprocalLattice(QThread):
         while self.my_proc.poll() is None or new_line != '':
             new_line = self.my_proc.stdout.readline()
             if len(new_line) > 1:
-                print(new_line)
+                logging.info(str(new_line))
 
         self.my_proc.stdout.close()
         if self.my_proc.poll() == 0:
-            print("subprocess poll 0")
+            logging.info("subprocess poll 0")
 
         else:
-            print("\n  ***  err catch  *** \n poll =", self.my_proc.poll())
+            logging.info("**  err catch  ** poll =" + str(self.my_proc.poll()))
 
     def kill_proc(self):
         if os.path.exists(self.exp_path):
@@ -177,18 +164,18 @@ class LaunchReciprocalLattice(QThread):
         try:
             pid_num = self.my_proc.pid
             main_proc = psutil.Process(pid_num)
-            print("try 2 kill children procs")
+            logging.info("try 2 kill children procs")
             for child in main_proc.children(recursive=True):
                 child.kill()
 
-            print("try 2 kill main proc")
+            logging.info("try 2 kill main proc")
             main_proc.kill()
 
         except psutil.NoSuchProcess:
-            print("Err Catch NoSuchProcess")
+            logging.info("Err Catch NoSuchProcess")
 
         except AttributeError:
-            print("No PID for << None >> process")
+            logging.info("No PID for << None >> process")
 
 
 class HandleReciprocalLatticeView(QObject):
@@ -197,17 +184,16 @@ class HandleReciprocalLatticeView(QObject):
         super(HandleReciprocalLatticeView, self).__init__(parent)
         self.main_obj = parent
         self.my_handler = parent.runner_handler
-        print("HandleReciprocalLatticeView(__init__)")
+        logging.info("HandleReciprocalLatticeView(__init__)")
         data_init = ini_data()
         self.uni_url = data_init.get_url()
         self.tmp_dir = data_init.get_tmp_dir()
-        print("tmp_dir =", self.tmp_dir)
+        logging.info("tmp_dir =" + self.tmp_dir)
         self.quit_kill_all()
         self.main_obj.window.progressBar.setRange(0, 100)
         self.main_obj.window.progressBar.setValue(0)
 
     def launch_RL_view(self, nod_num):
-        print("Launching Reciprocal Lattice View for node: ", nod_num)
         new_load_thread = LoadFiles(
             unit_URL = self.uni_url, cur_nod_num = nod_num,
             tmp_dir = self.tmp_dir, main_handler = self.my_handler
@@ -225,8 +211,7 @@ class HandleReciprocalLatticeView(QObject):
 
     def new_files(self, paths_n_nod_num):
         self.paths_n_nod_num = paths_n_nod_num
-        print("new_files(HandleReciprocalLatticeView)")
-        print("nod_num from node:", self.paths_n_nod_num["cur_nod_num"])
+        logging.info("new_files(HandleReciprocalLatticeView)")
         self.get_nod_num.emit(self.paths_n_nod_num["cur_nod_num"])
 
     def do_launch_RL(self):
@@ -240,7 +225,7 @@ class HandleReciprocalLatticeView(QObject):
         self.main_obj.window.progressBar.setValue(100)
 
     def failed_loading(self):
-        print("\n not running reciprocal_lattice_viewer, wrong node \n")
+        logging.info("\n not running reciprocal_lattice_viewer, wrong node \n")
         self.main_obj.window.progressBar.setValue(0)
 
     def quit_kill_all(self):
@@ -252,10 +237,10 @@ class HandleReciprocalLatticeView(QObject):
                     load_thread.wait()
 
                 except AttributeError:
-                    print("Not loading files yet")
+                    logging.info("Not loading files yet")
 
         except AttributeError:
-            print("Not loading files yet")
+            logging.info("Not loading files yet")
 
         self.load_thread_lst = []
 
@@ -267,20 +252,22 @@ class HandleReciprocalLatticeView(QObject):
                     launch_RL_thread.wait()
 
                 except AttributeError:
-                    print("No RL launched yet")
+                    logging.info("No RL launched yet")
 
         except AttributeError:
-            print("No RL launched yet")
+            logging.info("No RL launched yet")
 
         self.launch_RL_thread_lst = []
         self.main_obj.window.progressBar.setValue(0)
 
     def change_node(self, new_node):
-        print("\n changing node (HandleReciprocalLatticeView) to: ", new_node)
+        logging.info(
+            "changing node (HandleReciprocalLatticeView) to: " + str(new_node)
+        )
         self.launch_RL_view(new_node)
 
     def ended(self):
-        print("RL viewer ended")
+        logging.info("RL viewer ended")
         self.main_obj.window.progressBar.setValue(0)
 
 
@@ -295,16 +282,14 @@ class HandleLoadStatusLabel(QObject):
         )
         self.main_obj.window.OutuputStatLabel.setText('  Loading  ')
         self.main_obj.parent_app.processEvents()
-        print("load_started (HandleLoadStatusLabel)")
+        logging.info("load_started (HandleLoadStatusLabel)")
 
     def load_progress(self, progress):
         if progress > 100:
             str_progress = "100 +"
-            print("progress =", progress)
 
         elif progress < 0:
             str_progress = "0 -"
-            print("progress =", progress)
 
         else:
             str_progress = str(progress)
@@ -323,7 +308,7 @@ class HandleLoadStatusLabel(QObject):
         )
         self.main_obj.window.OutuputStatLabel.setText('  Ready  ')
         self.main_obj.parent_app.processEvents()
-        print("load_finished (HandleLoadStatusLabel)")
+        logging.info("load_finished (HandleLoadStatusLabel)")
 
 
 class DoLoadHTML(QObject):
@@ -348,7 +333,7 @@ class DoLoadHTML(QObject):
             )
 
         except AttributeError:
-            print("not working HtmlView # 1")
+            logging.info("not working HtmlView # 1")
 
         self.main_obj.window.DownloadReportButton.clicked.connect(
             self.download_clicked
@@ -385,7 +370,7 @@ class DoLoadHTML(QObject):
         self.lst_html = []
 
     def download_clicked(self):
-        print("download_clicked(DoLoadHTML)")
+        logging.info("download_clicked(DoLoadHTML)")
         ini_file = os.getcwd() + os.sep + "report.html"
         fileResul = QFileDialog.getSaveFileName(
             self.main_obj.window.HtmlReport, "Download HTML File",
@@ -396,22 +381,24 @@ class DoLoadHTML(QObject):
             shutil.copy(self.new_file_path, entered_file_name)  ###
 
         except AttributeError:
-            print("Attribute Err catch, no path for HTML file (Download)")
+            logging.info("Attribute Err catch, no path for HTML file (Download)")
 
-        print(entered_file_name, " writen to disk")
+        logging.info(entered_file_name + " writen to disk")
 
     def open_browser_clicked(self):
-        print("open_browser_clicked(DoLoadHTML)")
+        logging.info("open_browser_clicked(DoLoadHTML)")
         try:
             webbrowser.open(self.new_file_path)
 
         except AttributeError:
-            print("Attribute Err catch, no path for HTML file (OpenBrowser)")
+            logging.info(
+                "Attribute Err catch, no path for HTML file (OpenBrowser)"
+            )
 
     def __call__(self, do_request = False):
-        print("Do Request =", do_request)
+        logging.info("Do Request =" + str(do_request))
         if do_request:
-            print("Show HTML ... Start")
+            logging.info("Show HTML ... Start")
             nod_p_num = self.main_obj.curr_nod_num
             found_html = False
             for html_info in self.lst_html:
@@ -424,12 +411,12 @@ class DoLoadHTML(QObject):
                     full_file = html_info["html_report"]
 
             if not found_html:
-                print("not found_html #1, Local Mem")
+                logging.info("not found_html #1, Local Mem")
                 try:
                     self.main_obj.window.HtmlReport.setHtml(self.loading_html)
 
                 except AttributeError:
-                    print("not working HtmlView # 2")
+                    logging.info("not working HtmlView # 2")
 
                 self.l_stat.load_started()
                 try:
@@ -437,7 +424,7 @@ class DoLoadHTML(QObject):
                         "nod_lst":[nod_p_num],
                         "cmd_lst":["get_report"]
                     }
-                    print("staring html request ...")
+                    logging.info("staring html request ...")
 
                     req_shot = get_request_shot(
                         params_in = cmd, main_handler = self.my_handler
@@ -450,7 +437,7 @@ class DoLoadHTML(QObject):
                     else:
                         full_file = req_file.decode('utf-8')
 
-                    print("... html request ended")
+                    logging.info("... html request ended")
 
                     found_html = False
                     for html_info in self.lst_html:
@@ -461,7 +448,7 @@ class DoLoadHTML(QObject):
                             html_info["html_report"] = full_file
 
                     if not found_html:
-                        print("not found_html #2, After http request")
+                        logging.info("not found_html #2, After http request")
                         self.lst_html.append(
                             {
                                 "number"       :nod_p_num,
@@ -470,15 +457,15 @@ class DoLoadHTML(QObject):
                         )
 
                 except AttributeError:
-                    print("\n Connection err catch (DoLoadHTML) \n")
+                    logging.info("\n Connection err catch (DoLoadHTML) \n")
                     full_file = ''
 
                 except ConnectionError:
-                    print("\n Connection err catch (DoLoadHTML) \n")
+                    logging.info("\n Connection err catch (DoLoadHTML) \n")
                     full_file = ''
 
                 except requests.exceptions.RequestException:
-                    print(
+                    logging.info(
                         "\nrequests.exceptions.RequestException (DoLoadHTML)\n"
                     )
                     full_file = self.failed_html
@@ -490,7 +477,7 @@ class DoLoadHTML(QObject):
                     )
 
                 except AttributeError:
-                    print("not working HtmlView # 3")
+                    logging.info("not working HtmlView # 3")
 
             else:
                 curr_htmp_file_name = "report_node_" + str(nod_p_num) + ".html"
@@ -515,9 +502,9 @@ class DoLoadHTML(QObject):
                     )
 
                 except AttributeError:
-                    print("not working HtmlView # 4")
+                    logging.info("not working HtmlView # 4")
 
-            print("Show HTML ... End")
+            logging.info("Show HTML ... End")
             self.l_stat.load_finished()
 
         else:
@@ -525,7 +512,7 @@ class DoLoadHTML(QObject):
                 self.main_obj.window.HtmlReport.setHtml(self.not_avail_html)
 
             except AttributeError:
-                print("not working HtmlView # 5")
+                logging.info("not working HtmlView # 5")
 
 
 class ShowLog(QObject):
@@ -559,7 +546,7 @@ class ShowLog(QObject):
             self.blue_color = QColor(155, 155, 255)
 
     def __call__(self, nod_p_num = 0, do_request = False, stat = "Busy"):
-        print("Do Request =", do_request)
+        logging.info("Do Request =" + str(do_request))
         if do_request:
             found_nod_num = False
             for log_node in self.lst_node_log_out:
@@ -638,7 +625,7 @@ class ShowLog(QObject):
             self.main_obj.window.incoming_text.insertPlainText(new_line)
 
     def show_ready_log(self):
-        print('\n no need to reload "ready" log')
+        logging.info('\n no need to reload "ready" log')
         self.main_obj.window.incoming_text.clear()
         self.main_obj.window.incoming_text.setTextColor(self.green_color)
         self.main_obj.window.incoming_text.insertPlainText("Ready to run: ")

@@ -21,7 +21,7 @@ copyright (c) CCP4 - DLS
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-import json, os, shutil
+import json, os, shutil, logging
 
 def create_tmp_dir():
     path2add = os.getcwd() + os.sep + "run_dui_tmp"
@@ -29,7 +29,7 @@ def create_tmp_dir():
         shutil.rmtree(path2add)
 
     except FileNotFoundError:
-        print("No need to remove non existent dir")
+        logging.info("No need to remove non existent dir")
 
     os.mkdir(path2add)
     return path2add
@@ -93,7 +93,7 @@ class TreeShow(object):
     def __call__(self, lst_nod = None):
         self.lst_nod = lst_nod
 
-        #print("self.lst_nod =\n", self.lst_nod)
+        #logging.info("self.lst_nod =\n", self.lst_nod)
 
         self.lst_out = []
         self.lst_out.append("")
@@ -200,7 +200,7 @@ class TreeShow(object):
 
     def _output_connect(self):
         '''
-        inserting/editing what to print in in <stp_prn>
+        inserting/editing what to logging.info in in <stp_prn>
         which is part of each element of <self.dat_lst>
         '''
         for pos, obj2prn in enumerate(self.dat_lst):
@@ -239,7 +239,7 @@ class TreeShow(object):
                         self.dat_lst[raw_pos]["stp_prn"] = left_side + ":" + right_side
 
                 except ValueError:
-                    print("repeated parent")
+                    logging.info("repeated parent")
 
                 for up_lin in lst2connect:
                     loc_lin_str = self.dat_lst[up_lin]["stp_prn"]
@@ -290,7 +290,7 @@ class param_tree_2_lineal(object):
         for single_obj in phl_obj_lst:
             single_obj["indent"] = int(str(single_obj["full_path"]).count("."))
             if single_obj["name"] == "output":
-                print(" << output >> should be handled by DUI")
+                logging.info(" << output >> should be handled by DUI")
 
             elif single_obj["type"] == "scope":
                 self.lst_obj.append(single_obj)
@@ -311,7 +311,7 @@ def get_par(par_def, lst_in):
     Reused function for handling parameters given via C.L.I.
     '''
     if(len(lst_in) == 0):
-        print("default params: \n", par_def)
+        logging.info("default params: " + str(par_def))
         return tup2dict(par_def)
 
     par_out = []
@@ -329,7 +329,7 @@ def get_par(par_def, lst_in):
             break
 
     if(lng_n1 == None):
-        print("err catch 01")
+        logging.info("err catch 01")
         return tup2dict(par_def)
 
     elif(lng_n1 == 1):
@@ -344,7 +344,7 @@ def get_par(par_def, lst_in):
                     par_out[pos][1] = lf_rg_lst[1]
 
     else:
-        print("err catch 02")
+        logging.info("err catch 02")
         return tup2dict(par_def)
 
     #TODO there is no way to check if the only argument is not the first one

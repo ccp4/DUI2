@@ -1,4 +1,4 @@
-import sys, os, time, json
+import sys, os, time, json, logging
 from shared_modules import all_local_server, format_utils
 from server.data_n_json import iter_dict
 from server import multi_node
@@ -8,7 +8,7 @@ from server.init_first import ini_data
 class cli_object(object):
     def __init__(self, cmd_tree_runner = None):
         self.handler = all_local_server.ReqHandler(cmd_tree_runner)
-        print("inside QObject")
+        logging.info("inside QObject")
 
     def run_cmd(self, str_in):
 
@@ -16,7 +16,7 @@ class cli_object(object):
             [nod_num, str_cmd] = str_in.split(",")
 
         except ValueError:
-            print("Value Err Catch")
+            logging.info("Value Err Catch")
 
         cmd_in = {
             "nod_lst":[int(nod_num)], "cmd_lst":[str(str_cmd)]
@@ -31,21 +31,16 @@ def main(par_def = None):
     data_init.set_data(par_def)
 
     init_param = format_utils.get_par(par_def, sys.argv[1:])
-    print("init_param(server) =", init_param)
 
     run_local = True
 
-    print("\n run_local =", run_local, "\n")
 
     tree_ini_path = init_param["init_path"]
     if tree_ini_path == None:
-        print("\n NOT GIVEN init_path")
-        print(" using the dir from where the commad 'dui_server' was invoqued")
+        logging.info("\n NOT GIVEN init_path")
+        logging.info(" using the dir from where the commad 'dui_server' was invoqued")
         tree_ini_path = os.getcwd()
 
-    print(
-        "\n using init path as: <<", tree_ini_path, ">> \n"
-    )
     tree_dic_lst = iter_dict(tree_ini_path, 0)
     try:
         with open("run_data") as json_file:

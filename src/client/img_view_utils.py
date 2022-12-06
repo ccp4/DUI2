@@ -1,5 +1,5 @@
 import numpy as np
-import json, zlib, time, requests
+import json, zlib, time, requests, logging
 
 from client.init_firts import ini_data
 from client.exec_utils import get_request_shot
@@ -23,32 +23,35 @@ def load_img_json_w_str(
 
         arr_dic = json.loads(dic_str)
         end_tm = time.time()
-        print("full IMG request took ", end_tm - start_tm, "sec")
+        logging.info("full IMG request took " + str(end_tm - start_tm) + "sec")
         d1 = arr_dic["d1"]
         d2 = arr_dic["d2"]
         str_data = arr_dic["str_data"]
-        print("d1, d2 =", d1, d2)
         arr_1d = np.fromstring(str_data, dtype = float, sep = ',')
         np_array_out = arr_1d.reshape(d1, d2)
 
     except TypeError:
-        print("\n Type err catch  (load_img_json_w_str) \n")
+        logging.info("\n Type err catch  (load_img_json_w_str) \n")
         return None
 
     except ConnectionError:
-        print("\n Connection err catch  (load_img_json_w_str) \n")
+        logging.info("\n Connection err catch  (load_img_json_w_str) \n")
         return None
 
     except requests.exceptions.RequestException:
-        print("\n requests.exceptions.RequestException (load_img_json_w_str) \n")
+        logging.info(
+            "\n requests.exceptions.RequestException (load_img_json_w_str) \n"
+        )
         return None
 
     except json.decoder.JSONDecodeError:
-        print("\n json.decoder.JSON Decode Err catch (load_img_json_w_str) \n")
+        logging.info(
+            "\n json.decoder.JSON Decode Err catch (load_img_json_w_str) \n"
+        )
         return None
 
     except ZeroDivisionError:
-        print("\n ZeroDivision err catch (load_img_json_w_str) \n")
+        logging.info("\n ZeroDivision err catch (load_img_json_w_str) \n")
         return None
 
     return np_array_out
@@ -72,33 +75,34 @@ def load_mask_img_json_w_str(
         dic_str =  req_shot.result_out()
         arr_dic = json.loads(dic_str)
         end_tm = time.time()
-        print("full Mask IMG request took ", end_tm - start_tm, "sec")
+        logging.info(
+            "full Mask IMG request took " + str(end_tm - start_tm) + "sec"
+        )
         d1 = arr_dic["d1"]
         d2 = arr_dic["d2"]
         str_data = arr_dic["str_data"]
 
-        print("d1, d2 =", d1, d2)
         n_tup = tuple(str_data)
         arr_1d = np.asarray(n_tup, dtype = 'float')
         np_array_out = arr_1d.reshape(d1, d2)
 
     except TypeError:
-        print("\n Type err catch  (load_mask_img_json_w_str) \n")
+        logging.info("\n Type err catch  (load_mask_img_json_w_str) \n")
         return None
 
     except ConnectionError:
-        print("\n Connection err catch  (load_mask_img_json_w_str) \n")
+        logging.info("Connection err catch  (load_mask_img_json_w_str)")
         return None
 
     except requests.exceptions.RequestException:
-        print(
+        logging.info(
             "\n requests.exceptions.RequestException" +
             " (load_mask_img_json_w_str) \n"
         )
         return None
 
     except ZeroDivisionError:
-        print("\n ZeroDivision err catch (load_mask_img_json_w_str) \n")
+        logging.info("\n ZeroDivision err catch (load_mask_img_json_w_str) \n")
         return None
 
     return np_array_out
@@ -108,7 +112,7 @@ def crunch_min_max(data2d, i_min_max):
     data2d_ini = np.copy(data2d)
     if(i_min_max == [None, None]):
         i_min_max = [data2d_ini.min(), data2d_ini.max()]
-        print("no max and min provided, assuming:", i_min_max)
+        logging.info("no max and min provided, assuming:" + str(i_min_max))
 
     elif(i_min_max[0] > data2d_ini.min() or i_min_max[1] < data2d_ini.max()):
         np.clip(data2d_ini, i_min_max[0], i_min_max[1], out = data2d_ini)
@@ -239,7 +243,7 @@ class np2bmp_monocrome(object):
 
 class np2bmp_mask(object):
     def __init__(self):
-        print("Dummy __init__ (np2bmp_mask)")
+        logging.info("Dummy __init__ (np2bmp_mask)")
 
     def img_2d_rgb(self, data2d = None):
         try:

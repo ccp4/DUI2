@@ -23,7 +23,7 @@ copyright (c) CCP4 - DLS
 
 import http.server, socketserver
 from urllib.parse import urlparse, parse_qs
-import json, os, zlib, sys, time
+import json, os, zlib, sys, time, logging
 
 from server.data_n_json import iter_dict, spit_out
 from server.img_uploader import flex_arr_2_json
@@ -35,24 +35,17 @@ class Browser(object):
 
     def run_get_data(self, cmd_dict):
         cmd_lst = cmd_dict["cmd_lst"][0].split(" ")
-        print("\n cmd_lst: ", cmd_lst)
 
         return_list = []
         uni_cmd = cmd_lst[0]
-        print("uni_cmd = <<", uni_cmd, ">>")
         if uni_cmd == "dir_tree":
-            print("\n *** dir_tree *** \n")
+            logging.info("\n *** dir_tree *** \n")
             str_dir_tree = json.dumps(self._dir_tree_dict)
             byt_data = bytes(str_dir_tree.encode('utf-8'))
             return_list = byt_data
 
         elif uni_cmd == "gis":
             img_num = int(cmd_lst[1])
-            print("generating slice of image", img_num)
-            '''
-            cmd_lst = ['gis', '0', 'inv_scale=1', 'view_rect=319,463,693,1089']
-
-            '''
             inv_scale = 1
             for sub_par in cmd_lst[2:]:
                 eq_pos = sub_par.find("=")
@@ -60,12 +53,9 @@ class Browser(object):
                 right_side = sub_par[eq_pos + 1:]
                 if left_side == "inv_scale":
                     inv_scale = int(right_side)
-                    print("inv_scale =", inv_scale)
 
                 elif left_side == "view_rect":
-                    print("view_rect =", right_side)
                     [x1, y1, x2, y2] = right_side.split(",")
-                    print("x1, y1, x2, y2 =", x1, y1, x2, y2)
 
             exp_path = cmd_dict["path"][0]
             str_json = flex_arr_2_json.get_json_w_2d_slise(
@@ -77,8 +67,6 @@ class Browser(object):
 
         elif uni_cmd == "gmis":
             img_num = int(cmd_lst[1])
-            print("generating slice of mask image", img_num)
-
             inv_scale = 1
             for sub_par in cmd_lst[2:]:
                 eq_pos = sub_par.find("=")
@@ -86,12 +74,9 @@ class Browser(object):
                 right_side = sub_par[eq_pos + 1:]
                 if left_side == "inv_scale":
                     inv_scale = int(right_side)
-                    print("inv_scale =", inv_scale)
 
                 elif left_side == "view_rect":
-                    print("view_rect =", right_side)
                     [x1, y1, x2, y2] = right_side.split(",")
-                    print("x1, y1, x2, y2 =", x1, y1, x2, y2)
 
             exp_path = cmd_dict["path"][0]
             str_json = flex_arr_2_json.get_json_w_2d_mask_slise(
@@ -103,7 +88,6 @@ class Browser(object):
 
         elif uni_cmd == "gi":
             img_num = int(cmd_lst[1])
-            print("generating image", img_num)
             exp_path = cmd_dict["path"][0]
             str_json = flex_arr_2_json.get_json_w_img_2d(
                 [exp_path], img_num,
@@ -115,7 +99,6 @@ class Browser(object):
 
         elif uni_cmd == "gmi":
             img_num = int(cmd_lst[1])
-            print("generating slice of mask image", img_num)
             exp_path = cmd_dict["path"][0]
             str_json = flex_arr_2_json.get_json_w_mask_img_2d(
                 [exp_path], img_num,
@@ -132,11 +115,8 @@ class Browser(object):
             )
 
         elif uni_cmd == "get_reflection_list":
-            print("cmd_dict =", cmd_dict)
             exp_path = cmd_dict["path"][0]
-            print("\n exp_path =", exp_path, "\n")
             ref_path = exp_path[:-4] + "refl"
-            print("\n ref_path =", ref_path, "\n")
             refl_lst = flex_arr_2_json.get_refl_lst(
                 [exp_path], [ref_path],
                 int(cmd_lst[1])
@@ -154,11 +134,12 @@ def main(par_def = None, connection_out = None):
                 self.send_response(200)
 
             except AttributeError:
-                print("Attribute Err catch, not supposed send header info #1")
+                logging.info(
+                    "Attribute Err catch, not supposed send header info #1"
+                )
 
             url_path = self.path
             url_dict = parse_qs(urlparse(url_path).query)
-            print("\n url_dict =", url_dict, "\n")
             cmd_dict = url_dict
 
             try:
@@ -171,7 +152,7 @@ def main(par_def = None, connection_out = None):
                         self.end_headers()
 
                     except AttributeError:
-                        print(
+                        logging.info(
                             "Attribute Err catch," +
                             " not supposed send header info"
                         )
@@ -184,30 +165,31 @@ def main(par_def = None, connection_out = None):
                 elif type(lst_out) is bytes:
                     byt_data = zlib.compress(lst_out)
                     siz_dat = str(len(byt_data))
-                    print("size =", siz_dat)
                     try:
                         self.send_header('Content-type', 'application/zlib')
                         self.send_header('Content-Length', siz_dat)
                         self.end_headers()
 
                     except AttributeError:
-                        print(
+                        logging.info(
                             "Attribute Err catch," +
                             " not supposed send header info"
                         )
                     spit_out(str_out = byt_data, req_obj = self)
 
-                print("sending /*EOF*/")
+                logging.info("sending /*EOF*/")
                 spit_out(
                     str_out = '/*EOF*/', req_obj = self, out_type = 'utf-8'
                 )
 
             except BrokenPipeError:
-                print("\n << BrokenPipe err catch >>  while sending EOF or JSON \n")
+                logging.info(
+                    "<< BrokenPipe err catch >>  while sending EOF or JSON"
+                )
 
             except ConnectionResetError:
-                print(
-                    "\n << ConnectionReset err catch >> while sending EOF or JSON\n"
+                logging.info(
+                    "<< ConnectionReset err catch >> while sending EOF or JSON"
                 )
 
     ################################################ PROPER MAIN BROWSER
@@ -221,7 +203,7 @@ def main(par_def = None, connection_out = None):
     )
 
     init_param = format_utils.get_par(par_def, sys.argv[1:])
-    print("init_param =", init_param)
+    logging.info("init_param =" + str(init_param))
 
     PORT = int(init_param["port"])
     HOST = init_param["host"]
@@ -233,17 +215,14 @@ def main(par_def = None, connection_out = None):
     else:
         run_local = False
 
-    print("\n run_local =", run_local, "\n")
+    logging.info("run_local =" + str(run_local))
 
     tree_ini_path = init_param["init_path"]
     if tree_ini_path == None:
-        print("\n NOT GIVEN init path, using << HOME env >>")
+        logging.info("\n NOT GIVEN init path, using << HOME env >>")
         tree_ini_path = os.environ['HOME']
 
-    print(
-        "\n * using init path as: ",
-        tree_ini_path, " * \n"
-    )
+    logging.info("\n * using init path as: " + tree_ini_path)
     tree_dic_lst = iter_dict(tree_ini_path, 0)
 
     #####################################################
@@ -256,7 +235,9 @@ def main(par_def = None, connection_out = None):
             with socketserver.ThreadingTCPServer(
                 (HOST, PORT), ReqHandler
             ) as http_daemon:
-                print("\n serving at: \n  { host:", HOST, " port:", PORT, "} \n")
+                logging.info(
+                    "serving at:{host:" + str(HOST) + " port:" + str(PORT), "}"
+                )
                 launch_success = True
                 try:
                     http_daemon.serve_forever()
@@ -266,7 +247,5 @@ def main(par_def = None, connection_out = None):
 
         except OSError:
             launch_success = False
-
-            print("OS err catch , trying again in",  n_secs, "secs")
             time.sleep(n_secs)
 

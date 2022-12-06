@@ -21,7 +21,7 @@ copyright (c) CCP4 - DLS
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-import sys, os
+import sys, os, logging
 from PySide2.QtCore import *
 from PySide2.QtWidgets import *
 from PySide2 import QtUiTools
@@ -163,7 +163,7 @@ widgets_defs = {
 
 def get_widget_def_dict(in_dic, ui_path):
     out_dic = {}
-    print("Loading Icons")
+    logging.info("Loading Icons")
     for key, value in in_dic.items():
         new_inner_dict = dict(value)
         nxt_ico = QIcon()
@@ -258,9 +258,8 @@ class MyQComboBox(QComboBox):
         self.setFocusPolicy(Qt.ClickFocus)
 
     def wheelEvent(self, event):
-        print(
-            "event: \n", event,
-            "\n not suposed to change with wheel event"
+        logging.info(
+            "event: " + str(event) + " not suposed to change with wheel event"
         )
         return
 
@@ -293,7 +292,7 @@ class AdvancedParameters(QWidget):
         h_box_search.addWidget(self.fnd_nxt)
 
         self.lst_par_line = lst_phil_obj
-        print("Hi from build_pars")
+        logging.info("Hi from build_pars")
         self.norm_labl_font = QFont(
             "Courier", self.font_point_size, QFont.Bold
         )
@@ -363,7 +362,7 @@ class AdvancedParameters(QWidget):
                 data_info["widget"] = new_txt_in
 
             else:
-                print("else: ", data_info)
+                logging.info("else: " + str(data_info))
 
             self.main_vbox.addLayout(new_hbox)
 
@@ -376,7 +375,7 @@ class AdvancedParameters(QWidget):
         self.do_emit = True
 
     def update_param(self, param_in, value_in):
-        print("\n update_param (Advanced)", param_in, value_in)
+        logging.info("\n update_param (Advanced)" + str(param_in) + str(value_in))
 
         for widget in self.children():
             widget_path = None
@@ -390,7 +389,7 @@ class AdvancedParameters(QWidget):
 
             if widget_path == param_in:
                 if widget_value == value_in:
-                    print("No need to change parameter (same value)")
+                    logging.info("No need to change parameter (same value)")
 
                 else:
                     self.do_emit = False
@@ -403,10 +402,7 @@ class AdvancedParameters(QWidget):
                     self.do_emit = True
 
     def update_all_pars(self, tup_lst_pars):
-        print(
-            "\n (Advanced Widget) \n time to update par to:",
-            tup_lst_pars, "\n"
-        )
+        logging.info("(Advanced Widget) updating par to:" + str(tup_lst_pars))
         for par_dic in tup_lst_pars[0]:
             if par_dic["name"] != "":
                 self.update_param(par_dic["name"], par_dic["value"])
@@ -424,7 +420,7 @@ class AdvancedParameters(QWidget):
         self.do_emit_signal(str_path, str_value)
 
     def reset_pars(self):
-        print("Hi from reset_pars")
+        logging.info("Hi from reset_pars")
         for data_info in self.lst_par_line:
             try:
                 default = data_info["default"]
@@ -448,7 +444,7 @@ class AdvancedParameters(QWidget):
                 data_info["widget"].setText(par_str)
 
     def find_next_search_click(self):
-        print("find_next_search_click(AdvancedParameters)")
+        logging.info("find_next_search_click(AdvancedParameters)")
         self.num_fnd_widg += 1
         if self.num_fnd_widg >= len(self.lst_found_widg):
             self.num_fnd_widg = 0
@@ -458,12 +454,12 @@ class AdvancedParameters(QWidget):
             )
 
         except IndexError:
-            print("No match found")
+            logging.info("No match found")
 
     def search_changed(self):
         sender = self.sender()
         str_value = str(sender.text())
-        print("searching for:", str_value)
+        logging.info("searching for:" + str_value)
         self.lst_found_widg = []
         self.num_fnd_widg = 0
         if len(str_value) > 1:
@@ -649,11 +645,11 @@ def add_ready_node(old_lst_nodes, com_par):
         return new_lst
 
     except AttributeError:
-        print(" Attribute Err catch (add_ready_node) ")
+        logging.info(" Attribute Err catch (add_ready_node) ")
         return old_lst_nodes
 
     except IndexError:
-        print(" Index Err catch (add_ready_node) ")
+        logging.info(" Index Err catch (add_ready_node) ")
         return old_lst_nodes
 
 
@@ -690,11 +686,11 @@ class TreeDirScene(QGraphicsScene):
 
     def set_sharp_turns(self, sharp_turns_on):
         self.sharp_turns = sharp_turns_on
-        print("self.sharp_turns =", self.sharp_turns)
+        logging.info("self.sharp_turns =" + str(self.sharp_turns))
 
     def set_arrowhead(self, arrowhead_on):
         self.arrowhead = arrowhead_on
-        print("self.arrowhead =", self.arrowhead)
+        logging.info("self.arrowhead =" + str(self.arrowhead))
 
     def set_colours(self, regular_colours):
         if regular_colours:

@@ -21,7 +21,7 @@ copyright (c) CCP4 - DLS
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-import sys, json
+import sys, json, logging
 import requests
 
 uni_url = 'http://localhost:45678/'
@@ -48,9 +48,9 @@ if __name__ == "__main__":
             line_str = str(tmp_dat.decode('utf-8'))
 
             if '/*EOF*/' in line_str:
-                print('/*EOF*/ received')
+                logging.info('/*EOF*/ received')
                 break
 
             else:
-                print(line_str[:-1])
+                logging.info(str(line_str[:-1]))
 

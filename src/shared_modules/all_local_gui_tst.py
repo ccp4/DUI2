@@ -1,4 +1,4 @@
-import sys, os, time, json
+import sys, os, time, json, logging
 from PySide2.QtCore import *
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
@@ -9,7 +9,7 @@ from server import multi_node
 from server.init_first import ini_data
 
 class connect_thread(QThread):
-    printing = Signal(str)
+    logging.infoing = Signal(str)
     def __init__(self, handler, cmd_in):
         super(connect_thread, self).__init__()
         self.my_handler = handler
@@ -25,12 +25,12 @@ class connect_thread(QThread):
         )
 
     def call_back_str(self, str_out):
-        print("..call_back_str..", str_out)
-        self.printing.emit(str_out)
+        logging.info("..call_back_str.." + str_out)
+        self.logging.infoing.emit(str_out)
 
 
 class MultiRunner(QObject):
-    printing = Signal(str)
+    logging.infoing = Signal(str)
     def __init__(self):
         super(MultiRunner, self).__init__()
         self.thread_lst = []
@@ -38,11 +38,11 @@ class MultiRunner(QObject):
     def run_one_work(self, handler, cmd_in):
         new_thread = connect_thread(handler, cmd_in)
         new_thread.start()
-        new_thread.printing.connect(self.console_out)
+        new_thread.logging.infoing.connect(self.console_out)
         self.thread_lst.append(new_thread)
 
     def console_out(self, str_out):
-        self.printing.emit(str_out)
+        self.logging.infoing.emit(str_out)
 
 
 class MainGuiObject(QObject):
@@ -57,14 +57,14 @@ class MainGuiObject(QObject):
         self.window = QtUiTools.QUiLoader().load(ui_path)
         self.window.setWindowTitle("Test DUI2")
 
-        print("inside QObject")
+        logging.info("inside QObject")
         self.m_run = MultiRunner()
-        self.m_run.printing.connect(self.console_out)
+        self.m_run.logging.infoing.connect(self.console_out)
         self.window.RunPushButton.clicked.connect(self.run_one_clicked)
         self.window.show()
 
     def run_one_clicked(self):
-        print("run_one_clicked(MainGuiObject)")
+        logging.info("run_one_clicked(MainGuiObject)")
         cmd_in = {
             "nod_lst":[int(self.window.NumSpinBox.value())],
             "cmd_lst":[str(self.window.CmdLineEdit.text())]
@@ -82,20 +82,20 @@ def main(par_def = None):
     data_init.set_data(par_def)
 
     init_param = format_utils.get_par(par_def, sys.argv[1:])
-    print("init_param(server) =", init_param)
+    logging.info("init_param(server) =" + str(init_param))
 
     run_local = True
 
-    print("\n run_local =", run_local, "\n")
+    logging.info("\n run_local =" + str(run_local) + "\n")
 
     tree_ini_path = init_param["init_path"]
     if tree_ini_path == None:
-        print("\n NOT GIVEN init_path")
-        print(" using the dir from where the commad 'dui_server' was invoqued")
+        logging.info("\n NOT GIVEN init_path")
+        logging.info(" using the dir from where the commad 'dui_server' was invoqued")
         tree_ini_path = os.getcwd()
 
-    print(
-        "\n using init path as: <<", tree_ini_path, ">> \n"
+    logging.info(
+        "\n using init path as: <<" + tree_ini_path + ">> \n"
     )
     tree_dic_lst = iter_dict(tree_ini_path, 0)
     try:

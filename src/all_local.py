@@ -2,14 +2,14 @@
 # file -> do not swamp the console output (which is not supposed
 # to be useful) - will get closed on process end.
 
-# comment the next 3 lines if you want to see your log prints
-import sys, datetime
-filename = datetime.datetime.now().strftime("DUI2-debug%y%m%d-%H%M%S.txt")
-sys.stdout = open(filename, "w")
 
 from multiprocessing import Process, Pipe
 from server import run_server
 from client import run_client
+import logging
+logging.basicConfig(
+    filename='run_dui2.log', encoding='utf-8', level=logging.DEBUG
+)
 
 server_par_def = (
     ("init_path", None),
@@ -29,7 +29,7 @@ if __name__ == '__main__':
     )
     prcs_serv.start()
     new_port = pipe_server_1.recv()
-    print("# time to launch client app with port =",  new_port, "\n")
+    logging.info("# time to launch client app with port =" + str(new_port))
 
     client_par_def = (
             ("url", 'http://localhost:' + str(new_port) + '/'),
@@ -39,4 +39,4 @@ if __name__ == '__main__':
     run_client.main(client_par_def)
 
     prcs_serv.join()
-    print("Closing server naturally")
+    logging.info("Closing server naturally")
