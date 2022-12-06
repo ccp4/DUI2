@@ -249,7 +249,9 @@ class CmdNode(object):
                     single_parent.lst2run[0][0] ==
                     "dials.refine_bravais_settings"
                 ):
-                    logging.info("after refine_bravais_settings, adding json files")
+                    logging.info(
+                        "after refine_bravais_settings, adding json files"
+                    )
                     lst_json = glob.glob(single_parent._run_dir + "/*.json")
                     for json_2_add in lst_json:
                         self._lst_expt_in.append(json_2_add)

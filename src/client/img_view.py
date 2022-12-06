@@ -697,7 +697,7 @@ class DoImageView(QObject):
     def after_requesting_template(self, tup_data):
         json_data_lst = tup_data
         try:
-            new_templ = json_data_lst[0]
+            new_templ = str(json_data_lst[0])
             self.cur_img_num = int(json_data_lst[4])
             self.main_obj.window.ImgNumEdit.setText(str(self.cur_img_num))
             logging.info("new_templ = " + new_templ)
