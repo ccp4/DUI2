@@ -133,7 +133,7 @@ def get_refl_lst(expt_path, refl_path, img_num):
 
         all_sweeps = experiments.imagesets()
         num_of_imagesets = len(all_sweeps)
-        logging.info("refl_path =" + refl_path)
+        logging.info("refl_path =" + str(refl_path))
         table = flex.reflection_table.from_file(refl_path[0])
 
     except IndexError:
