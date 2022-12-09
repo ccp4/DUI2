@@ -8,7 +8,7 @@ from server import run_server
 from client import run_client
 import logging
 logging.basicConfig(
-    filename='run_dui2.log', encoding='utf-8', level=logging.DEBUG
+    filename='run_dui2_all_local.log', encoding='utf-8', level=logging.DEBUG
 )
 
 server_par_def = (

@@ -1,6 +1,9 @@
 from multiprocessing import Process, Pipe
 from server import run_server
 import logging
+logging.basicConfig(
+    filename='run_dui2_server.log', encoding='utf-8', level=logging.DEBUG
+)
 
 server_par_def = (
     ("init_path", None),

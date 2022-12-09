@@ -1,5 +1,9 @@
 #from multiprocessing import Process
-from client import run_client, logging
+from client import run_client
+import logging
+logging.basicConfig(
+    filename='run_dui2_client.log', encoding='utf-8', level=logging.DEBUG
+)
 
 if __name__ == '__main__':
     par_def = (
