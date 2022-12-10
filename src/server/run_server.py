@@ -244,12 +244,12 @@ def main(par_def = None, connection_out = None):
         def log_message(self, format, *args):
             if run_local:
                 return
+
+            else:
                 log_full_str = self.address_string() + " => " + \
                                self.log_date_time_string() + "  " + str(args)
 
                 print(log_full_str)
-
-            else:
                 return
 
     ################################################ PROPER MAIN
