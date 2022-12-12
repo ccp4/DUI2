@@ -7,9 +7,8 @@ from multiprocessing import Process, Pipe
 from server import run_server
 from client import run_client
 import logging
-logging.basicConfig(
-    filename='run_dui2_all_local.log', encoding='utf-8', level=logging.DEBUG
-)
+
+logging.basicConfig(filename='run_dui2_all_local.log', level=logging.DEBUG)
 
 server_par_def = (
     ("init_path", None),
