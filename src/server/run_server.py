@@ -277,9 +277,16 @@ def main(par_def = None, connection_out = None):
     else:
         tree_ini_path = init_param["init_path"]
         if tree_ini_path == None:
-            logging.info("\n NOT GIVEN init_path")
-            logging.info(" using the dir from where the commad 'dui_server' was invoqued")
+            logging.info(
+                "\n NOT GIVEN init_path \n"
+                " using the dir from where the command 'dui_server' was invoked"
+            )
+            print(
+                "\n NOT GIVEN init_path \n"
+                " using the dir from where the commad 'dui_server' was invoqued"
+            )
             tree_ini_path = os.getcwd()
+            print("local dir tree ready")
 
         tree_dic_lst = iter_dict(tree_ini_path, 0)
 

@@ -223,7 +223,10 @@ def main(par_def = None, connection_out = None):
         tree_ini_path = os.environ['HOME']
 
     logging.info("\n * using init path as: " + tree_ini_path)
+    print("\n * using init path as: " + tree_ini_path)
     tree_dic_lst = iter_dict(tree_ini_path, 0)
+    print("tree_dic_lst =", tree_dic_lst)
+    print("local dir tree ready \n")
 
     #####################################################
 

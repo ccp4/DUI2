@@ -1442,7 +1442,13 @@ class MainImgViewObject(QObject):
     def __init__(self, parent = None):
         super(MainImgViewObject, self).__init__(parent)
         self.parent_app = parent
-        self.my_handler = parent.runner_handler
+        #self.my_handler = parent.runner_handler
+
+        # temp hack, will obviously break if running in all ram mode ...star
+        self.my_handler = None
+        self.runner_handler = None
+        # temp hack, will obviously break if running in all ram mode ...end
+
         self.ui_dir_path = os.path.dirname(os.path.abspath(__file__))
         ui_path = self.ui_dir_path + os.sep + "view_client.ui"
         logging.info("ui_path =", ui_path)
