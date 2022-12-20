@@ -76,7 +76,7 @@ class get_req_json_dat(QObject):
             uni_url = data_init.get_url()
             try:
                 req_get = requests.get(
-                    uni_url, stream = True, params = params_in, timeout = 3
+                    uni_url, stream = True, params = params_in, timeout = 45
                 )
                 logging.info("starting request")
                 str_lst = ''

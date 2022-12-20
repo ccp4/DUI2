@@ -809,6 +809,7 @@ class DoImageView(QObject):
                         "local_hkl" :   str(inner_dict["local_hkl"]),
                     }
                 )
+            logging.info("Reflection list shown ")
 
         except TypeError:
             logging.info("No reflection list to show (Type err catch except)")

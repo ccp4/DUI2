@@ -113,8 +113,7 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
 
             except (IndexError, FileNotFoundError):
                 logging.info(
-                    "\n  err catch , wrong line," +
-                    " NOT sending experiments file \n"
+                    " err catch , wrong line, NOT sending experiments file"
                 )
 
     elif uni_cmd[0] == "get_reflections_file":
@@ -128,8 +127,7 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
 
             except (IndexError, FileNotFoundError):
                 logging.info(
-                    " err catch , wrong line," +
-                    " NOT sending experiments or reflections "
+                    " err catch , wrong line, NOT sending reflections file"
                 )
 
     elif uni_cmd == ["get_report"]:
@@ -266,9 +264,10 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
                     int(uni_cmd[1])
                 )
                 return_list = refl_lst
+                logging.info(" Sending reflection list ")
 
             except (IndexError, AttributeError, ValueError):
-                logging.info("\n  Err Catch , not sending reflection list \n")
+                logging.info(" Err Catch , not sending reflection list")
                 return_list = []
 
     elif uni_cmd[0] == "get_lambda":
@@ -280,7 +279,7 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
                 return_list = [experiments.beams()[0].get_wavelength()]
 
             except (IndexError, AttributeError, ValueError, TypeError):
-                logging.info("\n  Err Catch , not sending lambda \n")
+                logging.info(" Err Catch , not sending lambda ")
                 return_list = []
 
     elif uni_cmd[0] == "get_predictions":
