@@ -540,7 +540,12 @@ class MainObject(QObject):
             self.on_node_click(big_nod_num)
 
     def launch_reindex(self, sol_rei):
-        is_same = self.new_node.set_custom_parameter(str(sol_rei))
+        try:
+            is_same = self.new_node.set_custom_parameter(str(sol_rei))
+
+        except AttributeError:
+            is_same = False
+
         if is_same:
             logging.info("clicked twice same row, launching reindex")
             self.request_launch()

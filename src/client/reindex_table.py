@@ -110,6 +110,7 @@ def ops_list_from_json(json_data = None):
                 recommended_val = value["recommended"]
                 if recommended_val:
                     recommended_str = " Y"
+
                 else:
                     recommended_str = " N"
 
@@ -182,12 +183,12 @@ class ReindexTable(QTableWidget):
 
         self.opt_pick(row)
 
-    def ok_clicked(self):
-        self.opt_pick(self.tmp_sel)
-
     def opt_pick(self, row):
         self.opt_signal.emit(row + 1)
         self.tmp_sel = row
+
+    def ok_clicked(self):
+        self.opt_pick(self.tmp_sel)
 
     def find_best_solu(self):
         bst_sol = -1
@@ -197,6 +198,7 @@ class ReindexTable(QTableWidget):
                     bst_sol = row
 
         logging.info("bst_sol = " + str(bst_sol))
+        print("bst_sol = " + str(bst_sol))
 
         return bst_sol
 
@@ -206,6 +208,12 @@ class ReindexTable(QTableWidget):
 
         if lst_labels is None:
             self.list_labl = ops_list_from_json(json_data)
+
+        self.rec_col = 12
+
+        if selected_pos == None:
+            selected_pos = self.find_best_solu()
+
 
         n_row = len(self.list_labl)
         n_col = len(self.list_labl[0])
@@ -237,7 +245,6 @@ class ReindexTable(QTableWidget):
 
         self.setHorizontalHeaderLabels(header_label_lst)
 
-        self.rec_col = None
 
         for row, row_cont in enumerate(self.list_labl):
             for col, col_cont in enumerate(row_cont[1:]):
@@ -247,7 +254,6 @@ class ReindexTable(QTableWidget):
                     item.setBackground(QColor(Qt.green).lighter())
                     item.setForeground(Qt.black)
 
-                    self.rec_col = col + 1
 
                 elif col_cont == " N":
                     item.setBackground(QColor(Qt.red).lighter())
@@ -267,9 +273,7 @@ class ReindexTable(QTableWidget):
 
                         item.setForeground(self.for_col)
 
-                item.setFont(
-                    QFont("Courier", self.sys_font_point_size)
-                )  # , QFont.Bold))
+                item.setFont(QFont("Courier", self.sys_font_point_size))
                 self.setItem(row, col, item)
 
         self.resizeColumnsToContents()
