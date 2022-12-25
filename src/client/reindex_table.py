@@ -134,6 +134,7 @@ def ops_list_from_json(json_data = None):
             unit_cell_str_bet,
             unit_cell_str_gam,
             recommended_str,
+            "     "
         ]
 
         lst_ops.append(single_lin_lst)
@@ -198,8 +199,6 @@ class ReindexTable(QTableWidget):
                     bst_sol = row
 
         logging.info("bst_sol = " + str(bst_sol))
-        print("bst_sol = " + str(bst_sol))
-
         return bst_sol
 
     def add_opts_lst(
@@ -210,10 +209,7 @@ class ReindexTable(QTableWidget):
             self.list_labl = ops_list_from_json(json_data)
 
         self.rec_col = 12
-
-        if selected_pos == None:
-            selected_pos = self.find_best_solu()
-
+        best_pos = self.find_best_solu()
 
         n_row = len(self.list_labl)
         n_col = len(self.list_labl[0])
@@ -241,11 +237,9 @@ class ReindexTable(QTableWidget):
             beta_str,
             gamma_str,
             "Ok",
+            "    ",
         ]
-
         self.setHorizontalHeaderLabels(header_label_lst)
-
-
         for row, row_cont in enumerate(self.list_labl):
             for col, col_cont in enumerate(row_cont[1:]):
                 item = QTableWidgetItem(col_cont)
@@ -259,7 +253,10 @@ class ReindexTable(QTableWidget):
                     item.setBackground(QColor(Qt.red).lighter())
                     item.setForeground(Qt.black)
 
-                else:
+                elif row == best_pos and col == 12:
+                    item.setText(u"\u2190" + " Click ")
+
+                elif col < 12:
                     if row == selected_pos:
                         item.setBackground(Qt.blue)
                         item.setForeground(Qt.yellow)
