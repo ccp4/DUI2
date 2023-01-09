@@ -239,7 +239,7 @@ class find_next_cmd(object):
     def get_nxt_cmd(self):
         fin_cmd_lst = []
         for cmd in self.default_list:
-            if cmd not in self.par_cmd_lst:
+            if cmd not in self.par_cmd_lst or cmd == "refine":
                 fin_cmd_lst.append(cmd)
 
         if self.remove_combine:
