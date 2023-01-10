@@ -173,6 +173,8 @@ class ReindexTable(QTableWidget):
 
     def opt_clicked(self, row, col):
         logging.info("Solution clicked = " + str(row + 1))
+        print("Solution clicked = " + str(row + 1))
+
         v_sliderValue = self.v_sliderBar.value()
         h_sliderValue = self.h_sliderBar.value()
 
@@ -209,7 +211,8 @@ class ReindexTable(QTableWidget):
             self.list_labl = ops_list_from_json(json_data)
 
         self.rec_col = 12
-        best_pos = self.find_best_solu()
+        self.better_pos = int(self.find_best_solu())
+        print("self.better_pos =", self.better_pos)
 
         n_row = len(self.list_labl)
         n_col = len(self.list_labl[0])
@@ -227,7 +230,7 @@ class ReindexTable(QTableWidget):
         header_label_lst = [
             delta_max_str,
             "rmsd",
-            " min cc",
+            "min cc",
             "max cc",
             "latt",
             "  a ",
@@ -253,7 +256,7 @@ class ReindexTable(QTableWidget):
                     item.setBackground(QColor(Qt.red).lighter())
                     item.setForeground(Qt.black)
 
-                elif row == best_pos and col == 12:
+                elif row == self.better_pos and col == 12:
                     item.setText(u"\u2190" + " Click ")
 
                 elif col < 12:
@@ -274,6 +277,9 @@ class ReindexTable(QTableWidget):
                 self.setItem(row, col, item)
 
         self.resizeColumnsToContents()
+
+    def get_best_opt(self):
+        return self.better_pos
 
     def update_all_pars(self, tup_lst_pars):
         logging.info(

@@ -202,6 +202,7 @@ class MainObject(QObject):
         self.r_index_widg = ReindexTable()
         self.window.ReindexHeaderLabel.setText("...")
         self.window.ReindexTableScrollArea.setWidget(self.r_index_widg)
+        self.best_rd_idx_opt = 0
 
         ref_simpl_widg = RefineSimplerParamTab()
         ref_simpl_widg.item_changed.connect(self.item_param_changed)
@@ -693,6 +694,7 @@ class MainObject(QObject):
                 self.r_index_widg.add_opts_lst(
                     json_data = json_data_lst[0]
                 )
+                self.best_rd_idx_opt = self.r_index_widg.get_best_opt()
                 self.update_reindex_table_header(cur_nod["parent_node_lst"])
 
         except KeyError:
@@ -811,12 +813,18 @@ class MainObject(QObject):
             self.r_index_widg.add_opts_lst(
                 json_data = json_data_lst[0]
             )
+            self.best_rd_idx_opt = self.r_index_widg.get_best_opt()
             self.update_reindex_table_header([self.curr_nod_num])
+
 
         self.change_widget(str_key)
         self.reset_param()
         self.add_new_node()
         self.check_nxt_btn()
+
+        if str_key == "reindex":
+            self.r_index_widg.opt_clicked(self.best_rd_idx_opt, 1)
+            #self.r_index_widg.cellClicked.emit(self.best_rd_idx_opt, 1)
 
     def change_widget(self, str_key):
         self.window.BoxControlWidget.setTitle(str_key)
