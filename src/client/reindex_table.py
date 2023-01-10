@@ -173,7 +173,6 @@ class ReindexTable(QTableWidget):
 
     def opt_clicked(self, row, col):
         logging.info("Solution clicked = " + str(row + 1))
-        print("Solution clicked = " + str(row + 1))
 
         v_sliderValue = self.v_sliderBar.value()
         h_sliderValue = self.h_sliderBar.value()
@@ -212,7 +211,6 @@ class ReindexTable(QTableWidget):
 
         self.rec_col = 12
         self.better_pos = int(self.find_best_solu())
-        print("self.better_pos =", self.better_pos)
 
         n_row = len(self.list_labl)
         n_col = len(self.list_labl[0])

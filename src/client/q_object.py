@@ -822,10 +822,6 @@ class MainObject(QObject):
         self.add_new_node()
         self.check_nxt_btn()
 
-        if str_key == "reindex":
-            self.r_index_widg.opt_clicked(self.best_rd_idx_opt, 1)
-            #self.r_index_widg.cellClicked.emit(self.best_rd_idx_opt, 1)
-
     def change_widget(self, str_key):
         self.window.BoxControlWidget.setTitle(str_key)
         self.window.StackedParamsWidget.setCurrentWidget(
@@ -929,6 +925,9 @@ class MainObject(QObject):
 
         except (TypeError, IndexError, AttributeError):
             logging.info(" Err Catch Loading Lamda")
+
+        if local_main_cmd == ['dials.reindex']:
+            self.r_index_widg.opt_clicked(self.best_rd_idx_opt, 1)
 
     def search_in_parent_nodes_exp(self):
         try:
@@ -1088,6 +1087,13 @@ class MainObject(QObject):
         self.display()
         self.check_nxt_btn()
         self.refresh_output()
+
+        if(
+            self.param_widgets[self.curr_widg_key]["main_cmd"]
+            == ['dials.reindex']
+        ):
+            self.r_index_widg.opt_clicked(self.best_rd_idx_opt, 1)
+
 
     def request_launch(self):
         cmd_lst = self.new_node.get_full_command_list()
