@@ -694,8 +694,14 @@ class MainObject(QObject):
                 self.r_index_widg.add_opts_lst(
                     json_data = json_data_lst[0]
                 )
-                self.best_rd_idx_opt = self.r_index_widg.get_best_opt()
+                try:
+                    self.best_rd_idx_opt = int(cur_nod["cmd2show"][1])
+
+                except IndexError:
+                    self.best_rd_idx_opt = self.r_index_widg.get_best_opt()
+
                 self.update_reindex_table_header(cur_nod["parent_node_lst"])
+                #print("self.best_rd_idx_opt =", self.best_rd_idx_opt)
 
         except KeyError:
             try:
