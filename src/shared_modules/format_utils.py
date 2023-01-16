@@ -90,7 +90,7 @@ class TreeShow(object):
     def __init__(self):
         self.ind_spc = "    "
 
-    def __call__(self, lst_nod = None):
+    def __call__(self, lst_nod = None, lst2exl = []):
         self.lst_nod = lst_nod
 
         #logging.info("self.lst_nod =\n", self.lst_nod)
@@ -106,6 +106,9 @@ class TreeShow(object):
 
         self.max_indent = 0
         self.dat_lst = []
+
+        self.list_2_exclude = lst2exl
+
         self._add_tree(step = self.lst_nod[0], parent_indent = 0, indent=1)
         self._output_connect()
         return self.lst_out
@@ -187,12 +190,13 @@ class TreeShow(object):
                                 if tmp_elem["number"] == node["parent_node_lst"][0]:
                                     new_indent = tmp_elem["indent"] + 1
 
-                        self._add_tree(
-                            step=node,
-                            parent_indent = indent,
-                            indent = new_indent,
-                            low_par_nod_num = step["number"]
-                            )
+                        if node["number"] not in self.list_2_exclude :
+                            self._add_tree(
+                                step=node,
+                                parent_indent = indent,
+                                indent = new_indent,
+                                low_par_nod_num = step["number"]
+                                )
 
         else:
             if new_indent > self.max_indent:

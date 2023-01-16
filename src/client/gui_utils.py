@@ -994,7 +994,7 @@ class TreeDirScene(QGraphicsScene):
     ):
         tmp_local_lst = copy_lst_nodes(nod_lst_in)
         self.nod_lst_2_paint = add_ready_node(tmp_local_lst, new_node)
-        lst_str = self.tree_obj(lst_nod = self.nod_lst_2_paint)
+        lst_str = self.tree_obj(lst_nod = self.nod_lst_2_paint, lst2exl = [])
         lst_2d_dat = self.tree_obj.get_tree_data()
 
         self.nod_lst = lst_2d_dat
