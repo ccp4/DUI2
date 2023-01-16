@@ -673,7 +673,7 @@ class TreeDirScene(QGraphicsScene):
         hide_icon_path = ui_dir_path + os.sep + "resources" \
                          + os.sep + "hide_branch.png"
         hid_px_map = QPixmap(hide_icon_path)
-        siz = QSize(self.f_width * 4.1, self.f_height * 1.6)
+        siz = QSize(self.f_width * 3.5, self.f_height * 1.2)
         self.hide_icon = hid_px_map.scaled(siz)
 
         self.set_colours(True)
@@ -850,7 +850,7 @@ class TreeDirScene(QGraphicsScene):
                 hid_pxm = self.addPixmap(self.hide_icon)
                 hid_pxm.setPos(
                     right_x - self.f_width * 4.6,
-                    my_y - self.f_height * 0.9 + self.f_height * 0.1
+                    my_y - self.f_height * 0.7 + self.f_height * 0.1
                 )
 
             for pos, node in enumerate(self.nod_lst):
