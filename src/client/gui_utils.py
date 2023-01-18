@@ -655,6 +655,7 @@ def add_ready_node(old_lst_nodes, com_par):
 
 class TreeDirScene(QGraphicsScene):
     node_clicked = Signal(int)
+    hide_clicked = Signal(int)
     def __init__(self, parent = None):
         super(TreeDirScene, self).__init__(parent)
         self.setFont(QFont("Courier"))
@@ -804,6 +805,9 @@ class TreeDirScene(QGraphicsScene):
             xright = self.x_left + self.x_width
             if x_ms > self.x_left and x_ms < xright:
                 self.node_clicked.emit(node_numb)
+
+            elif x_ms < self.x_width + self.f_width:
+                self.hide_clicked.emit(node_numb)
 
     def draw_all(self):
         if self.nod_lst is not None:
@@ -1013,11 +1017,15 @@ class TreeDirScene(QGraphicsScene):
             self.update()
 
     def draw_tree_graph(
-            self, nod_lst_in = [], curr_nod_num = 0, new_node = None
+        self, nod_lst_in = [], curr_nod_num = 0,
+        new_node = None, lst2exl_in = []
     ):
+
         tmp_local_lst = copy_lst_nodes(nod_lst_in)
         self.nod_lst_2_paint = add_ready_node(tmp_local_lst, new_node)
-        lst_str = self.tree_obj(lst_nod = self.nod_lst_2_paint, lst2exl = [])
+        lst_str = self.tree_obj(
+            lst_nod = self.nod_lst_2_paint, lst2exl = lst2exl_in
+        )
         lst_2d_dat = self.tree_obj.get_tree_data()
 
         self.nod_lst = lst_2d_dat

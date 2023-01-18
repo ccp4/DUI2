@@ -388,6 +388,7 @@ class MainObject(QObject):
         self.sharp_turns_on = True
 
         self.tree_scene = TreeDirScene(self)
+        self.lst2exl = []
         self.window.treeView.setScene(self.tree_scene)
 
         self.window.Next2RunLayout.addWidget(
@@ -399,6 +400,7 @@ class MainObject(QObject):
         self.font_point_size = QFont().pointSize()
 
         self.tree_scene.node_clicked.connect(self.on_node_click)
+        self.tree_scene.hide_clicked.connect(self.on_hide_click)
         self.window.Reset2DefaultPushButton.clicked.connect(
             self.reset_new_node
         )
@@ -736,6 +738,11 @@ class MainObject(QObject):
         else:
             self.clicked_4_navigation(node_numb)
 
+    def on_hide_click(self, node_numb):
+        print("on_hide_click:", node_numb)
+        self.lst2exl.append(int(node_numb))
+        self.display()
+
     def clearLayout(self, layout):
         if layout is not None:
             while layout.count():
@@ -1065,7 +1072,8 @@ class MainObject(QObject):
         self.tree_scene.draw_tree_graph(
             nod_lst_in = self.server_nod_lst,
             curr_nod_num = self.curr_nod_num,
-            new_node = self.new_node
+            new_node = self.new_node,
+            lst2exl_in = self.lst2exl
         )
         self.gray_n_ungray()
 
