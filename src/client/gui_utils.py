@@ -786,6 +786,7 @@ class TreeDirScene(QGraphicsScene):
         return brush_col
 
     def mouseReleaseEvent(self, event):
+        x_ms = event.scenePos().x()
         y_ms = event.scenePos().y()
         node_numb = None
         min_d = None
@@ -800,7 +801,9 @@ class TreeDirScene(QGraphicsScene):
                 node_numb = nod["number"]
 
         if node_numb is not None:
-            self.node_clicked.emit(node_numb)
+            xright = self.x_left + self.x_width
+            if x_ms > self.x_left and x_ms < xright:
+                self.node_clicked.emit(node_numb)
 
     def draw_all(self):
         if self.nod_lst is not None:
@@ -822,7 +825,6 @@ class TreeDirScene(QGraphicsScene):
 
             #testing size of << hide >> icon
             right_x += self.f_width * 3.8
-
 
             left_x, up_y = self.get_coords(-1, -1)
             dx = right_x - left_x
@@ -866,9 +868,11 @@ class TreeDirScene(QGraphicsScene):
                     dx1 = right_x1 - left_x1
                     dy1 = down_y1 - up_y1
                     rect_border_colour = self.get_pen_colour(node["stp_stat"])
+
+                    self.x_left = left_x1 - self.f_width
+                    self.x_width = dx1 + self.f_width
                     self.addRect(
-                        left_x1 - self.f_width, up_y1,
-                        dx1 + self.f_width, dy1,
+                        self.x_left, up_y1, self.x_width, dy1,
                         rect_border_colour, self.cursor_brush
                     )
 
