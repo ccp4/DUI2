@@ -86,6 +86,19 @@ def get_lst2show(step_list):
 
     return lst_nod
 
+def build_hidden_node(node_in = None):
+    node_out = {
+        'number': int(node_in['number']),
+        'status': str(node_in['status']),
+        'child_node_lst': [],
+        'parent_node_lst': list(node_in['parent_node_lst']),
+        'cmd2show': list(node_in['cmd2show']),
+        'lst2run': list(node_in['lst2run'])
+    }
+
+
+    return node_out
+
 class TreeShow(object):
     def __init__(self):
         self.ind_spc = "    "
@@ -205,6 +218,17 @@ class TreeShow(object):
                                 indent = new_indent,
                                 low_par_nod_num = step["number"]
                             )
+
+                        else:
+                            print("adding << hidden >> :", node)
+                            h_node = build_hidden_node(node_in = node)
+                            self._add_tree(
+                                step=h_node,
+                                parent_indent = indent,
+                                indent = new_indent,
+                                low_par_nod_num = step["number"]
+                            )
+
 
         else:
             if new_indent > self.max_indent:
