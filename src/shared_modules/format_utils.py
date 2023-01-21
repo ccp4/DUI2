@@ -113,7 +113,9 @@ class TreeShow(object):
         self._output_connect()
         return self.lst_out
 
-    def _add_tree(self, step=None, parent_indent = 0, indent = 0, low_par_nod_num = 0):
+    def _add_tree(
+        self, step=None, parent_indent = 0, indent = 0, low_par_nod_num = 0
+    ):
         '''
         building recursively the a list of objects dictionaries
         which contains info about how to draw the tree
@@ -178,7 +180,10 @@ class TreeShow(object):
                             #finding top parent and bottom parent
                             lst_par_pos = []
                             for tmp_pos, tmp_elem in enumerate(self.dat_lst):
-                                if tmp_elem["number"] in node["parent_node_lst"]:
+                                if(
+                                    tmp_elem["number"] in
+                                    node["parent_node_lst"]
+                                ):
                                     lst_par_pos.append(tmp_pos)
 
                             for elem in self.dat_lst[min(lst_par_pos):]:
@@ -187,7 +192,10 @@ class TreeShow(object):
 
                         elif len(node["parent_node_lst"]) == 1:
                             for tmp_elem in self.dat_lst:
-                                if tmp_elem["number"] == node["parent_node_lst"][0]:
+                                if(
+                                    tmp_elem["number"] ==
+                                    node["parent_node_lst"][0]
+                                ):
                                     new_indent = tmp_elem["indent"] + 1
 
                         if node["number"] not in self.list_2_exclude :
@@ -196,7 +204,7 @@ class TreeShow(object):
                                 parent_indent = indent,
                                 indent = new_indent,
                                 low_par_nod_num = step["number"]
-                                )
+                            )
 
         else:
             if new_indent > self.max_indent:
