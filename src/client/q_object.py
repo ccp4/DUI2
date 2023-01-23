@@ -739,7 +739,12 @@ class MainObject(QObject):
             self.clicked_4_navigation(node_numb)
 
     def on_hide_click(self, node_numb):
-        self.lst2exl.append(int(node_numb))
+        if node_numb in self.lst2exl:
+            self.lst2exl.remove(int(node_numb))
+
+        else:
+            self.lst2exl.append(int(node_numb))
+
         self.display()
 
     def clearLayout(self, layout):
