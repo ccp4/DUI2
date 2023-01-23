@@ -220,7 +220,6 @@ class TreeShow(object):
                             )
 
                         else:
-                            print("adding << hidden >> :", node)
                             h_node = build_hidden_node(node_in = node)
                             self._add_tree(
                                 step=h_node,

@@ -739,7 +739,6 @@ class MainObject(QObject):
             self.clicked_4_navigation(node_numb)
 
     def on_hide_click(self, node_numb):
-        print("on_hide_click:", node_numb)
         self.lst2exl.append(int(node_numb))
         self.display()
 

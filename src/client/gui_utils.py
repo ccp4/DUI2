@@ -807,6 +807,7 @@ class TreeDirScene(QGraphicsScene):
                 self.node_clicked.emit(node_numb)
 
             elif x_ms < self.x_width + self.f_width:
+                self.node_clicked.emit(node_numb)
                 self.hide_clicked.emit(node_numb)
 
     def draw_all(self):
