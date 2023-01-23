@@ -665,17 +665,23 @@ class TreeDirScene(QGraphicsScene):
 
         ui_dir_path = os.path.dirname(os.path.abspath(__file__))
         self.px_map = {}
+        stp_siz = QSize(self.f_width * 4.1, self.f_height * 1.6)
         for key_str, def_item in widgets_defs.items():
             icon_path = ui_dir_path + os.sep + def_item["icon"]
             tmp_px_map = QPixmap(icon_path)
-            siz = QSize(self.f_width * 4.1, self.f_height * 1.6)
-            self.px_map[key_str] = tmp_px_map.scaled(siz)
+            self.px_map[key_str] = tmp_px_map.scaled(stp_siz)
+
+        hide_show_siz = QSize(self.f_width * 3.5, self.f_height * 1.2)
 
         hide_icon_path = ui_dir_path + os.sep + "resources" \
                          + os.sep + "hide_branch.png"
         hid_px_map = QPixmap(hide_icon_path)
-        siz = QSize(self.f_width * 3.5, self.f_height * 1.2)
-        self.hide_icon = hid_px_map.scaled(siz)
+        self.hide_icon = hid_px_map.scaled(hide_show_siz)
+
+        show_icon_path = ui_dir_path + os.sep + "resources" \
+                         + os.sep + "show_branch.png"
+        show_px_map = QPixmap(show_icon_path)
+        self.show_icon = show_px_map.scaled(hide_show_siz)
 
         self.set_colours(True)
         self.set_sharp_turns(True)
@@ -704,6 +710,9 @@ class TreeDirScene(QGraphicsScene):
             self.font_blue_brush = QBrush(Qt.blue, Qt.SolidPattern)
             self.font_red_brush = QBrush(Qt.darkRed, Qt.SolidPattern)
             self.font_green_brush = QBrush(Qt.darkGreen, Qt.SolidPattern)
+
+            self.font_gray_brush = QBrush(Qt.gray, Qt.SolidPattern)
+
             self.cursor_brush = QBrush(Qt.cyan, Qt.SolidPattern)
             self.first_gray_brush = QBrush(Qt.lightGray, Qt.SolidPattern)
             self.another_gray_brush = QBrush(Qt.white, Qt.SolidPattern)
@@ -717,6 +726,11 @@ class TreeDirScene(QGraphicsScene):
             self.arrow_blue_pen = QPen(
                 Qt.blue, 1.6, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
             )
+
+            self.arrow_gray_pen = QPen(
+                Qt.gray, 1.6, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
+            )
+
             self.gray_pen = QPen(
                 Qt.gray, 2, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
             )
@@ -728,6 +742,9 @@ class TreeDirScene(QGraphicsScene):
             self.font_blue_brush = QBrush(Qt.cyan, Qt.SolidPattern)
             self.font_red_brush = QBrush(Qt.red, Qt.SolidPattern)
             self.font_green_brush = QBrush(Qt.green, Qt.SolidPattern)
+
+            self.font_gray_brush = QBrush(Qt.darkCyan, Qt.SolidPattern)
+
             self.cursor_brush = QBrush(Qt.blue, Qt.SolidPattern)
             self.first_gray_brush = QBrush(Qt.gray, Qt.SolidPattern)
             self.another_gray_brush = QBrush(Qt.darkGray, Qt.SolidPattern)
@@ -740,6 +757,9 @@ class TreeDirScene(QGraphicsScene):
             )
             self.arrow_blue_pen = QPen(
                 Qt.cyan, 1.6, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
+            )
+            self.arrow_gray_pen = QPen(
+                Qt.darkCyan, 1.6, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
             )
             self.gray_pen = QPen(
                 Qt.gray, 2, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
@@ -769,6 +789,9 @@ class TreeDirScene(QGraphicsScene):
         elif stat == "F":
             pen_col = self.arrow_red_pen
 
+        elif stat == "H":
+            pen_col = self.arrow_gray_pen
+
         else:
             pen_col = self.arrow_green_pen
 
@@ -780,6 +803,9 @@ class TreeDirScene(QGraphicsScene):
 
         elif stat == "F":
             brush_col = self.font_red_brush
+
+        elif stat == "H":
+            brush_col = self.font_gray_brush
 
         else:
             brush_col = self.font_green_brush
@@ -852,10 +878,15 @@ class TreeDirScene(QGraphicsScene):
                     self.rectang_pen, self.another_gray_brush
                 )
 
-            for pos, dummy in enumerate(self.nod_lst):
+            for pos, node in enumerate(self.nod_lst):
                 my_x, my_y = self.get_coords(pos, -1)
-                hid_pxm = self.addPixmap(self.hide_icon)
-                hid_pxm.setPos(
+                if node["stp_stat"] == "H":
+                    new_ico = self.addPixmap(self.show_icon)
+
+                else:
+                    new_ico = self.addPixmap(self.hide_icon)
+
+                new_ico.setPos(
                     right_x - self.f_width * 4.6,
                     my_y - self.f_height * 0.7 + self.f_height * 0.1
                 )

@@ -89,7 +89,7 @@ def get_lst2show(step_list):
 def build_hidden_node(node_in = None):
     node_out = {
         'number': int(node_in['number']),
-        'status': str(node_in['status']),
+        'status': "Hidden",
         'child_node_lst': [],
         'parent_node_lst': list(node_in['parent_node_lst']),
         'cmd2show': list(node_in['cmd2show']),
@@ -110,7 +110,7 @@ class TreeShow(object):
 
         self.lst_out = []
         self.lst_out.append("")
-        self.lst_out.append("status: (R)eady  (B)usy  (F)ailed  (S)ucceeded")
+        self.lst_out.append("status: (R)eady  (B)usy  (F)ailed  (S)ucceeded  (H)idden")
         self.lst_out.append(" | ")
         self.lst_out.append(" |  line number ")
         self.lst_out.append(" |   | ")
@@ -144,6 +144,10 @@ class TreeShow(object):
         elif step["status"] == "Busy":
             stp_prn = " B   "
             stp_stat = "B"
+
+        elif step["status"] == "Hidden":
+            stp_prn = " H   "
+            stp_stat = "H"
 
         else:
             stp_prn = " R   "
