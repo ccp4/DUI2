@@ -74,8 +74,8 @@ widgets_defs = {
         "icon"          : "resources/index.png",
         "main_cmd"      :["dials.index"],
         "nxt_widg_lst"  :[
-            "refine_bravais_settings",
             "refine",
+            "refine_bravais_settings",
             "combine_experiments",
             "optional"
         ]
@@ -110,7 +110,7 @@ widgets_defs = {
         "icon"          : "resources/integrate.png",
         "main_cmd"      :["dials.integrate"],
         "nxt_widg_lst"  :[
-            "symmetry", "scale", "combine_experiments", "export", "optional"
+            "symmetry", "scale", "export", "combine_experiments", "optional"
         ]
     },
     "symmetry" : {
@@ -118,7 +118,7 @@ widgets_defs = {
         "icon"          : "resources/symmetry.png",
         "main_cmd"      :["dials.symmetry"],
         "nxt_widg_lst"  :[
-            "scale", "combine_experiments", "export", "merge", "optional"
+            "scale", "export", "merge", "combine_experiments", "optional"
         ]
     },
     "scale" : {
@@ -126,7 +126,7 @@ widgets_defs = {
         "icon"          : "resources/scale.png",
         "main_cmd"      :["dials.scale"],
         "nxt_widg_lst"  :[
-            "symmetry", "combine_experiments", "export", "merge", "optional"
+            "symmetry", "merge", "export", "combine_experiments", "optional"
         ]
     },
     "export" : {
