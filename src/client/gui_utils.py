@@ -669,19 +669,27 @@ class TreeDirScene(QGraphicsScene):
         for key_str, def_item in widgets_defs.items():
             icon_path = ui_dir_path + os.sep + def_item["icon"]
             tmp_px_map = QPixmap(icon_path)
-            self.px_map[key_str] = tmp_px_map.scaled(stp_siz)
+            self.px_map[key_str] = tmp_px_map.scaled(
+                stp_siz, mode = Qt.SmoothTransformation
+            )
+
+
 
         hide_show_siz = QSize(self.f_width * 3.5, self.f_height * 1.2)
 
         hide_icon_path = ui_dir_path + os.sep + "resources" \
                          + os.sep + "hide_branch.png"
         hid_px_map = QPixmap(hide_icon_path)
-        self.hide_icon = hid_px_map.scaled(hide_show_siz)
+        self.hide_icon = hid_px_map.scaled(
+            hide_show_siz, mode = Qt.SmoothTransformation
+        )
 
         show_icon_path = ui_dir_path + os.sep + "resources" \
                          + os.sep + "show_branch.png"
         show_px_map = QPixmap(show_icon_path)
-        self.show_icon = show_px_map.scaled(hide_show_siz)
+        self.show_icon = show_px_map.scaled(
+            hide_show_siz, mode = Qt.SmoothTransformation
+        )
 
         self.set_colours(True)
         self.set_sharp_turns(True)
