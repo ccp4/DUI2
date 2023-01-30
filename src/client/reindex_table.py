@@ -172,7 +172,7 @@ class ReindexTable(QTableWidget):
             self.bak_col = Qt.black
 
     def opt_clicked(self, row, col):
-        logging.info("Solution clicked = " + str(row + 1))
+        logging.info("Solution clicked = " + str(row))
 
         v_sliderValue = self.v_sliderBar.value()
         h_sliderValue = self.h_sliderBar.value()

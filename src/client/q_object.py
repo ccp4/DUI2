@@ -1110,7 +1110,7 @@ class MainObject(QObject):
             self.param_widgets[self.curr_widg_key]["main_cmd"]
             == ['dials.reindex']
         ):
-            self.r_index_widg.opt_clicked(self.best_rd_idx_opt, 1)
+            self.r_index_widg.opt_clicked(self.best_rd_idx_opt - 1, 1)
 
 
     def request_launch(self):
