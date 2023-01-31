@@ -87,15 +87,20 @@ def get_lst2show(step_list):
     return lst_nod
 
 def build_hidden_node(node_in = None):
+    try:
+        new_lst2run = list(node_in['lst2run'])
+
+    except KeyError:
+        new_lst2run = []
+
     node_out = {
         'number': int(node_in['number']),
         'status': "Hidden",
         'child_node_lst': [],
         'parent_node_lst': list(node_in['parent_node_lst']),
         'cmd2show': list(node_in['cmd2show']),
-        'lst2run': list(node_in['lst2run'])
+        'lst2run': new_lst2run
     }
-
 
     return node_out
 
