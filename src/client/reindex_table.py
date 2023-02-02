@@ -133,8 +133,7 @@ def ops_list_from_json(json_data = None):
             unit_cell_str_apl,
             unit_cell_str_bet,
             unit_cell_str_gam,
-            recommended_str,
-            "     "
+            recommended_str
         ]
 
         lst_ops.append(single_lin_lst)
@@ -161,6 +160,8 @@ class ReindexTable(QTableWidget):
         # self.show()
 
         self.set_colours(True)
+        self.setShowGrid(True)
+
 
     def set_colours(self, regular_colours):
         if regular_colours:
@@ -254,8 +255,10 @@ class ReindexTable(QTableWidget):
                     item.setBackground(QColor(Qt.red).lighter())
                     item.setForeground(Qt.black)
 
+                    to_remove = '''
                 elif row == self.better_pos and col == 12:
                     item.setText(u"\u2190" + " Click ")
+                    #'''
 
                 elif col < 12:
                     if row == selected_pos:
