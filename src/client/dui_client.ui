@@ -1390,21 +1390,21 @@
               <item>
                <widget class="QPushButton" name="ZoomInButton">
                 <property name="text">
-                 <string>Zoom in</string>
+                 <string/>
                 </property>
                </widget>
               </item>
               <item>
                <widget class="QPushButton" name="ScaleOneOneButton">
                 <property name="text">
-                 <string>Scale 1 : 1  </string>
+                 <string/>
                 </property>
                </widget>
               </item>
               <item>
                <widget class="QPushButton" name="ZoomOutButton">
                 <property name="text">
-                 <string>Zoom out</string>
+                 <string/>
                 </property>
                </widget>
               </item>
