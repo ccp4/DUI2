@@ -707,10 +707,22 @@ class TreeDirScene(QGraphicsScene):
 
     def set_sharp_turns(self, sharp_turns_on):
         self.sharp_turns = sharp_turns_on
-        logging.info("self.sharp_turns =" + str(self.sharp_turns))
+        try:
+            self.draw_all()
+
+        except AttributeError:
+            logging.info("not drawing tree/graph (sharp_turns)")
+
+        logging.info(" new sharp_turns =" + str(self.sharp_turns))
 
     def set_arrowhead(self, arrowhead_on):
         self.arrowhead = arrowhead_on
+        try:
+            self.draw_all()
+
+        except AttributeError:
+            logging.info("not drawing tree/graph (arrowhead)")
+
         logging.info("self.arrowhead =" + str(self.arrowhead))
 
     def set_colours(self, regular_colours):
