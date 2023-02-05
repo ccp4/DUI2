@@ -692,18 +692,24 @@ class MainObject(QObject):
                 lst_req = get_req_json_dat(
                     params_in = cmd, main_handler = self.runner_handler
                 )
-                json_data_lst = lst_req.result_out()
-                self.r_index_widg.add_opts_lst(
-                    json_data = json_data_lst[0]
-                )
+
                 try:
-                    self.best_rd_idx_opt = int(cur_nod["cmd2show"][1])
+                    print("self.best_rd_idx_opt = int(cur_nod[... )")
+                    self.best_rd_idx_opt = int(cur_nod["cmd2show"][1]) - 1
 
                 except IndexError:
+                    print("self.best_rd_idx_opt = self.r_index_widg.get_best_opt()")
                     self.best_rd_idx_opt = self.r_index_widg.get_best_opt()
 
+                print("self.best_rd_idx_opt =", self.best_rd_idx_opt)
+
+                json_data_lst = lst_req.result_out()
+                self.r_index_widg.add_opts_lst(
+                    json_data = json_data_lst[0],
+                    selected_pos = self.best_rd_idx_opt
+                )
+
                 self.update_reindex_table_header(cur_nod["parent_node_lst"])
-                #print("self.best_rd_idx_opt =", self.best_rd_idx_opt)
 
         except KeyError:
             try:
@@ -832,7 +838,6 @@ class MainObject(QObject):
             )
             self.best_rd_idx_opt = self.r_index_widg.get_best_opt()
             self.update_reindex_table_header([self.curr_nod_num])
-
 
         self.change_widget(str_key)
         self.reset_param()
@@ -1110,8 +1115,7 @@ class MainObject(QObject):
             self.param_widgets[self.curr_widg_key]["main_cmd"]
             == ['dials.reindex']
         ):
-            self.r_index_widg.opt_clicked(self.best_rd_idx_opt - 1, 1)
-
+            self.r_index_widg.opt_clicked(self.best_rd_idx_opt, 1)
 
     def request_launch(self):
         cmd_lst = self.new_node.get_full_command_list()
