@@ -694,14 +694,10 @@ class MainObject(QObject):
                 )
 
                 try:
-                    print("self.best_rd_idx_opt = int(cur_nod[... )")
                     self.best_rd_idx_opt = int(cur_nod["cmd2show"][1]) - 1
 
                 except IndexError:
-                    print("self.best_rd_idx_opt = self.r_index_widg.get_best_opt()")
                     self.best_rd_idx_opt = self.r_index_widg.get_best_opt()
-
-                print("self.best_rd_idx_opt =", self.best_rd_idx_opt)
 
                 json_data_lst = lst_req.result_out()
                 self.r_index_widg.add_opts_lst(
