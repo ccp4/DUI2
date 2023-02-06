@@ -506,6 +506,9 @@ class MainObject(QObject):
         self.tree_scene.set_colours(self.regular_colours)
         self.r_index_widg.set_colours(self.regular_colours)
 
+        self.refresh_output()
+        self.tree_scene.try_draw_all()
+
     def exit_triggered(self):
         logging.info("exit_triggered(QObject)")
         msgBox  = QMessageBox()
