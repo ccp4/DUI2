@@ -13,5 +13,5 @@ if __name__ == '__main__':
 
     run_client.main(par_def)
 
-    logging.info("Closing client naturally")
+    print("Closing client naturally")
 
