@@ -48,9 +48,9 @@ if __name__ == "__main__":
             line_str = str(tmp_dat.decode('utf-8'))
 
             if '/*EOF*/' in line_str:
-                logging.info('/*EOF*/ received')
+                print('/*EOF*/ received')
                 break
 
             else:
-                logging.info(str(line_str[:-1]))
+                print(str(line_str[:-1]))
 
