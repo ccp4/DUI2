@@ -39,6 +39,7 @@ def get_pair_list():
         ("pr",      "run_predict_n_report"                  ),
         ("gol",     "get_optional_command_list"             ),
         ("gr",      "get_report"                            ),
+        ("gh",      "get_help"                              ),
         ("gmt",     "get_mtz"                               ),
         ("gt",      "get_template"                          ),
         ("gi",      "get_image"                             ),

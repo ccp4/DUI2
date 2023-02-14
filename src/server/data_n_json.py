@@ -66,6 +66,11 @@ def spit_out(str_out = None, req_obj = None, out_type = None):
 
 def get_data_from_steps(uni_cmd, cmd_dict, step_list):
     return_list = []
+
+    print("\n\n uni_cmd =", uni_cmd)
+    print("cmd_dict =", cmd_dict)
+    print("step_list =", step_list, "\n\n")
+
     if uni_cmd == ["display_log"]:
         for lin2go in cmd_dict["nod_lst"]:
             try:
@@ -283,7 +288,6 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
                 return_list = []
 
     elif uni_cmd[0] == "get_predictions":
-        logging.info("running << get_predictions >> ")
         for lin2go in cmd_dict["nod_lst"]:
             try:
                 img_num = int(uni_cmd[1])
@@ -322,6 +326,12 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
 
     elif uni_cmd[0][-7:] == "_params":
         return_list = get_param_list(uni_cmd[0])
+
+    elif uni_cmd[0] == "get_help":
+        print("dials cmd =", uni_cmd[1])
+
+
+        return_list = get_help_list(uni_cmd[0])
 
     elif uni_cmd[0] == "get_optional_command_list":
         return_list = get_cmd_opt_list()
@@ -509,6 +519,11 @@ def get_param_list(cmd_str):
     lst_dict = build_json_data(connect_dict[cmd_str])
     lst_phil_obj = lst_dict()
     return lst_phil_obj
+
+
+def get_help_list(cmd_str):
+    print("get_help_list")
+    return [str(cmd_str)]
 
 
 def iter_dict(file_path, depth_ini):
