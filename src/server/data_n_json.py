@@ -22,6 +22,9 @@ copyright (c) CCP4 - DLS
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 import json, os, glob, logging
+
+import importlib
+
 import libtbx.phil
 from dials.command_line.find_spots import phil_scope as phil_scope_find_spots
 from dials.command_line.index import working_phil as phil_scope_index
@@ -66,11 +69,6 @@ def spit_out(str_out = None, req_obj = None, out_type = None):
 
 def get_data_from_steps(uni_cmd, cmd_dict, step_list):
     return_list = []
-
-    print("\n\n uni_cmd =", uni_cmd)
-    print("cmd_dict =", cmd_dict)
-    print("step_list =", step_list, "\n\n")
-
     if uni_cmd == ["display_log"]:
         for lin2go in cmd_dict["nod_lst"]:
             try:
@@ -328,10 +326,7 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
         return_list = get_param_list(uni_cmd[0])
 
     elif uni_cmd[0] == "get_help":
-        print("dials cmd =", uni_cmd[1])
-
-
-        return_list = get_help_list(uni_cmd[0])
+        return_list = get_help_list(uni_cmd[1])
 
     elif uni_cmd[0] == "get_optional_command_list":
         return_list = get_cmd_opt_list()
@@ -522,8 +517,16 @@ def get_param_list(cmd_str):
 
 
 def get_help_list(cmd_str):
-    print("get_help_list")
-    return [str(cmd_str)]
+    try:
+        my_cmd_mod = importlib.import_module(
+            "dials.command_line." + cmd_str
+        )
+        my_cmd_mod_hlp = str(my_cmd_mod.help_message)
+
+    except ModuleNotFoundError:
+        my_cmd_mod_hlp = "None(ModuleNotFoundError)"
+
+    return [my_cmd_mod_hlp]
 
 
 def iter_dict(file_path, depth_ini):
