@@ -22,10 +22,10 @@ copyright (c) CCP4 - DLS
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 import json, os, glob, logging
-
+import subprocess, psutil
 import importlib
-
 import libtbx.phil
+
 from dials.command_line.find_spots import phil_scope as phil_scope_find_spots
 from dials.command_line.index import working_phil as phil_scope_index
 from dials.command_line.refine_bravais_settings import (
@@ -40,7 +40,7 @@ from dials.command_line.combine_experiments import (
     phil_scope as phil_scope_combine_params
 )
 from server.img_uploader import flex_arr_2_json
-
+from server.init_first import ini_data
 
 def spit_out(str_out = None, req_obj = None, out_type = None):
     #logging.info("req_obj(spit_out) =", req_obj)
@@ -517,16 +517,60 @@ def get_param_list(cmd_str):
 
 
 def get_help_list(cmd_str):
+
+    data_init = ini_data()
+    win_exe = data_init.get_win_exe()
+
+
     try:
         my_cmd_mod = importlib.import_module(
             "dials.command_line." + cmd_str
         )
-        my_cmd_mod_hlp = str(my_cmd_mod.help_message)
+        my_cmd_hlp = [str(my_cmd_mod.help_message)]
 
     except ModuleNotFoundError:
-        my_cmd_mod_hlp = "None(ModuleNotFoundError)"
+        my_cmd_hlp = ["None(ModuleNotFoundError)"]
 
-    return [my_cmd_mod_hlp]
+    except AttributeError:
+        my_cmd_hlp = ["None(AttributeError)"]
+
+        print("trying to capture from std output")
+
+        inner_lst = ["dials." + cmd_str , "-h"]
+        try:
+            if win_exe:
+                inner_lst[0] += ".exe"
+
+            print("\n Running >> ", inner_lst)
+
+            to_reuse = '''
+                cwd = self._run_dir,
+                mtz_dir_path = step_list[lin2go]._run_dir
+            '''
+
+            my_proc = subprocess.Popen(
+                inner_lst,
+                shell = False,
+                stdout = subprocess.PIPE,
+                stderr = subprocess.STDOUT,
+                universal_newlines = True
+            )
+
+        except FileNotFoundError:
+            logging.info(
+                " <<FileNotFound err catch (get_help) >> "
+            )
+            my_proc = None
+            my_cmd_hlp = ["None(FileNotFoundError)"]
+
+        my_cmd_hlp = []
+        while my_proc.poll() is None or new_line != '':
+            new_line = my_proc.stdout.readline()
+            my_cmd_hlp.append(new_line[:-1])
+
+        print("my_cmd_hlp =", my_cmd_hlp)
+
+    return my_cmd_hlp
 
 
 def iter_dict(file_path, depth_ini):
