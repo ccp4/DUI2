@@ -213,6 +213,7 @@ class CmdNode(object):
             data_init = ini_data()
 
         self.win_exe = data_init.get_win_exe()
+        print("self.win_exe =", self.win_exe)
 
         self.parent_node_lst = []
         try:
@@ -355,27 +356,28 @@ class CmdNode(object):
 
         is_valid_command = find_if_in_list(inner_lst[0])
         if is_valid_command:
-            try:
-                if self.win_exe:
-                    inner_lst[0] += ".exe"
+            #try:
+            if self.win_exe:
+                inner_lst[0] += ".exe"
 
-                print("\n Running >> ", inner_lst)
+            print("\n Running >> ", inner_lst)
 
-                self.my_proc = subprocess.Popen(
-                    inner_lst,
-                    shell = False,
-                    cwd = self._run_dir,
-                    stdout = subprocess.PIPE,
-                    stderr = subprocess.STDOUT,
-                    universal_newlines = True
-                )
-
+            self.my_proc = subprocess.Popen(
+                inner_lst,
+                shell = False,
+                cwd = self._run_dir,
+                stdout = subprocess.PIPE,
+                stderr = subprocess.STDOUT,
+                universal_newlines = True
+            )
+            tmp_off = '''
             except FileNotFoundError:
                 logging.info(
                     " <<FileNotFound err catch >> "
                 )
                 self.my_proc = None
                 return
+            '''
 
         else:
             logging.info(

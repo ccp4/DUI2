@@ -6,21 +6,34 @@
 from multiprocessing import Process, Pipe
 from server import run_server
 from client import run_client
-import logging
+import logging, platform
 
 logging.basicConfig(filename='run_dui2_all_local.log', level=logging.DEBUG)
 
-server_par_def = (
-    ("init_path", None),
-    ("port", 45678),
-    ("host", "localhost"),
-    #("host", "serverip"),
-    ("all_local", "true"),
-    ("windows_exe", "false"),
-)
 
 
 if __name__ == '__main__':
+
+    print("\n platform.system()", platform.system())
+
+    if platform.system() == "Windows":
+        win_str = "true"
+
+    else:
+        win_str = "false"
+
+    print("win_str =", win_str, "\n")
+
+    server_par_def = (
+        ("init_path", None),
+        ("port", 45678),
+        ("host", "localhost"),
+        #("host", "serverip"),
+        ("all_local", "true"),
+        ("windows_exe", win_str),
+    )
+
+
     pipe_server_1, pipe_server_2 = Pipe()
     prcs_serv = Process(
         target = run_server.main,
@@ -33,7 +46,7 @@ if __name__ == '__main__':
     client_par_def = (
             ("url", 'http://localhost:' + str(new_port) + '/'),
             ("all_local", "true"),
-            ("windows_exe", "false"),
+            ("windows_exe", win_str),
     )
     run_client.main(client_par_def)
 
