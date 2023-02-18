@@ -213,8 +213,6 @@ class CmdNode(object):
             data_init = ini_data()
 
         self.win_exe = data_init.get_win_exe()
-        print("self.win_exe =", self.win_exe)
-
         self.parent_node_lst = []
         try:
             for single_parent in parent_lst_in:

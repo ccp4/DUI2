@@ -25,7 +25,7 @@ import sys, json, logging
 import requests
 
 uni_url = 'http://localhost:45678/'
-#uni_url = 'http://localhost:45680/'
+#uni_url = 'http://localhost:45679/'
 #uni_url = 'http://supercomputo.cimav.edu.mx:45678/'
 
 

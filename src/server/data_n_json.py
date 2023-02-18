@@ -568,7 +568,7 @@ def get_help_list(cmd_str):
             new_line = my_proc.stdout.readline()
             my_cmd_hlp.append(new_line[:-1])
 
-        print("my_cmd_hlp =", my_cmd_hlp)
+        #print("my_cmd_hlp =", my_cmd_hlp)
 
     return my_cmd_hlp
 
