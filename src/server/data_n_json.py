@@ -526,28 +526,20 @@ def get_help_list(cmd_str):
         my_cmd_mod = importlib.import_module(
             "dials.command_line." + cmd_str
         )
-        my_cmd_hlp = [str(my_cmd_mod.help_message)]
+        single_str = my_cmd_mod.help_message
+        my_cmd_hlp = single_str.split("\n")
 
     except ModuleNotFoundError:
         my_cmd_hlp = ["None(ModuleNotFoundError)"]
 
     except AttributeError:
         my_cmd_hlp = ["None(AttributeError)"]
-
-        print("trying to capture from std output")
-
         inner_lst = ["dials." + cmd_str , "-h"]
         try:
             if win_exe:
                 inner_lst[0] += ".exe"
 
-            print("\n Running >> ", inner_lst)
-
-            to_reuse = '''
-                cwd = self._run_dir,
-                mtz_dir_path = step_list[lin2go]._run_dir
-            '''
-
+            print("trying to capture from std output by running >> ", inner_lst)
             my_proc = subprocess.Popen(
                 inner_lst,
                 shell = False,
@@ -568,7 +560,7 @@ def get_help_list(cmd_str):
             new_line = my_proc.stdout.readline()
             my_cmd_hlp.append(new_line[:-1])
 
-        #print("my_cmd_hlp =", my_cmd_hlp)
+    #print("my_cmd_hlp =\n\n", my_cmd_hlp, "\n\n")
 
     return my_cmd_hlp
 
