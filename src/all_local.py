@@ -10,8 +10,6 @@ import logging, platform
 
 logging.basicConfig(filename='run_dui2_all_local.log', level=logging.DEBUG)
 
-
-
 if __name__ == '__main__':
 
     print("\n platform.system()", platform.system())

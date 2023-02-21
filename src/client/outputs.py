@@ -545,6 +545,10 @@ class ShowLog(QObject):
             self.green_color = QColor(155, 255, 155)
             self.blue_color = QColor(155, 155, 255)
 
+    def clear_4_run(self):
+        self.main_obj.window.incoming_text.clear()
+        self.main_obj.window.incoming_text.setTextColor(self.green_color)
+
     def __call__(self, nod_p_num = 0, do_request = False, stat = "Busy"):
         logging.info("Do Request =" + str(do_request))
         if do_request:
@@ -599,10 +603,10 @@ class ShowLog(QObject):
                     )
 
             except IndexError:
-                self.show_ready_log()
+                self.show_ready_log(show_help = False)
 
         else:
-            self.show_ready_log()
+            self.show_ready_log(show_help = True)
 
     def add_line(self, new_line, nod_p_num):
         found_nod_num = False
@@ -624,9 +628,21 @@ class ShowLog(QObject):
             self.main_obj.window.incoming_text.setTextColor(self.green_color)
             self.main_obj.window.incoming_text.insertPlainText(new_line)
 
-    def show_ready_log(self):
-        logging.info('\n no need to reload "ready" log')
+    def show_ready_log(self, show_help = None):
+        logging.info('from: show_ready_log')
+        if show_help == True:
+            try:
+                txt2show = str(self.main_obj.new_node.m_cmd_lst)
+
+            except AttributeError:
+                txt2show = "not runnable node"
+
+        else:
+            txt2show = "not runnable node"
+
+
         self.main_obj.window.incoming_text.clear()
         self.main_obj.window.incoming_text.setTextColor(self.green_color)
-        self.main_obj.window.incoming_text.insertPlainText("Ready to run: ")
+        self.main_obj.window.incoming_text.insertPlainText(txt2show)
+
 

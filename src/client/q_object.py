@@ -39,7 +39,7 @@ from client.img_view import DoImageView
 from client.reindex_table import ReindexTable, get_label_from_str_list
 from client.exec_utils import (
     get_optional_list, build_advanced_params_widget, get_req_json_dat,
-    post_req_w_output, CommandParamControl
+    get_help_messages, post_req_w_output, CommandParamControl
 )
 
 from client.init_firts import ini_data
@@ -77,6 +77,11 @@ class MainObject(QObject):
         self.window.setWindowIcon(dui2_icon)
 
         self.reseting = False
+
+
+        self.help_msg_dict = get_help_messages(self.runner_handler)
+        print(self.help_msg_dict)
+
 
         root_widg = RootWidg()
         self.window.RootScrollArea.setWidget(root_widg)
@@ -1120,8 +1125,7 @@ class MainObject(QObject):
         cmd_lst = self.new_node.get_full_command_list()
         lst_of_node_str = self.new_node.parent_node_lst
         cmd = {'nod_lst': lst_of_node_str, 'cmd_lst': cmd_lst}
-        self.window.incoming_text.clear()
-        self.window.incoming_text.setTextColor(self.log_show.green_color)
+        self.log_show.clear_4_run()
         do_predictions_n_report = bool(
             self.window.RunPedictAndReportCheckBox.checkState()
         )
@@ -1141,7 +1145,6 @@ class MainObject(QObject):
         self.new_node = None
 
     def req_stop(self):
-        #TODO: consider if this should be a << POST >> request
         logging.info("req_stop")
         nod_lst = [str(self.curr_nod_num)]
         #cmd = {"nod_lst":nod_lst, "cmd_lst":[["stop"]]}

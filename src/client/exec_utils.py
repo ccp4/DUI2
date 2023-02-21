@@ -219,6 +219,33 @@ def build_advanced_params_widget(cmd_str, h_box_search, handler_in):
     return advanced_parameters
 
 
+def get_help_messages(handler_in):
+    lst_cmd = [
+    "gh import",
+    "gh generate_mask",
+    "gh apply_mask",
+    "gh find_spots",
+    "gh find_rotation_axis",
+    "gh index",
+    "gh refine_bravais_settings",
+    "gh reindex",
+    "gh refine",
+    "gh integrate",
+    "gh symmetry",
+    "gh scale",
+    "gh cosym",
+    "gh slice_sequence",
+    "gh merge",
+    "gh combine_experiments",
+    "gh export"
+    ]
+    lst_hlp = []
+    for cmd_str in lst_cmd:
+        cmd = {"nod_lst":"", "cmd_lst":[cmd_str]}
+        lst_req = get_req_json_dat(params_in = cmd, main_handler = handler_in)
+        lst_hlp.append(lst_req.result_out())
+
+    return lst_hlp
 
 
 class Mtz_Data_Request(QThread):
