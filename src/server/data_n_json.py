@@ -326,7 +326,7 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
         return_list = get_param_list(uni_cmd[0])
 
     elif uni_cmd[0] == "get_help":
-        return_list = get_help_list(uni_cmd[1])
+        return_list.append(get_help_list(uni_cmd[1]))
 
     elif uni_cmd[0] == "get_optional_command_list":
         return_list = get_cmd_opt_list()
@@ -560,9 +560,19 @@ def get_help_list(cmd_str):
             new_line = my_proc.stdout.readline()
             my_cmd_hlp.append(new_line[:-1])
 
-    #print("my_cmd_hlp =\n\n", my_cmd_hlp, "\n\n")
+    trimed_cmd_hlp = []
+    for single_line in my_cmd_hlp:
+        if "xample" in single_line:
+            break
 
-    return my_cmd_hlp
+        trimed_cmd_hlp.append(single_line + "\n")
+
+    testing4 = '''
+    for single_line in trimed_cmd_hlp:
+        print(single_line)
+    '''
+
+    return trimed_cmd_hlp
 
 
 def iter_dict(file_path, depth_ini):

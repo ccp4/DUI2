@@ -46,14 +46,15 @@ lst_cmd_tst = [
     "gh slice_sequence",
     "gh merge",
     "gh combine_experiments",
-    "gh export"
+    "gh export",
+    "2,dl"
 ]
 
 if __name__ == "__main__":
     lst_cmd = []
     #for rep in range(999):
     for cmd_in in lst_cmd_tst:
-        print("\n testing (", cmd_in, "command\n")
+        print("\n testing (", cmd_in, " )command\n")
         #cmd_in = input("type: \"Node,command\":")
         try:
             [parent, cmd] = cmd_in.split(",")
