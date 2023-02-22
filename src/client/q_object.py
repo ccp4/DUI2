@@ -78,10 +78,7 @@ class MainObject(QObject):
 
         self.reseting = False
 
-
         self.help_msg_dict = get_help_messages(self.runner_handler)
-        print(self.help_msg_dict)
-
 
         root_widg = RootWidg()
         self.window.RootScrollArea.setWidget(root_widg)

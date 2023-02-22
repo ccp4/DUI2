@@ -221,31 +221,33 @@ def build_advanced_params_widget(cmd_str, h_box_search, handler_in):
 
 def get_help_messages(handler_in):
     lst_cmd = [
-    "gh import",
-    "gh generate_mask",
-    "gh apply_mask",
-    "gh find_spots",
-    "gh find_rotation_axis",
-    "gh index",
-    "gh refine_bravais_settings",
-    "gh reindex",
-    "gh refine",
-    "gh integrate",
-    "gh symmetry",
-    "gh scale",
-    "gh cosym",
-    "gh slice_sequence",
-    "gh merge",
-    "gh combine_experiments",
-    "gh export"
+        "import",
+        "generate_mask",
+        "apply_mask",
+        "find_spots",
+        "find_rotation_axis",
+        "index",
+        "refine_bravais_settings",
+        "reindex",
+        "refine",
+        "integrate",
+        "symmetry",
+        "scale",
+        "cosym",
+        "slice_sequence",
+        "merge",
+        "combine_experiments",
+        "export"
     ]
-    lst_hlp = []
+    help_dict = {}
     for cmd_str in lst_cmd:
-        cmd = {"nod_lst":"", "cmd_lst":[cmd_str]}
+        cmd = {"nod_lst":"", "cmd_lst":["gh " + cmd_str]}
         lst_req = get_req_json_dat(params_in = cmd, main_handler = handler_in)
-        lst_hlp.append(lst_req.result_out())
+        json_hlp = lst_req.result_out()
+        #lst_hlp.append(json_hlp[0])
+        help_dict[cmd_str] = json_hlp[0]
 
-    return lst_hlp
+    return help_dict
 
 
 class Mtz_Data_Request(QThread):

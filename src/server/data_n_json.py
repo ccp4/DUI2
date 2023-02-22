@@ -528,6 +528,7 @@ def get_help_list(cmd_str):
         )
         single_str = my_cmd_mod.help_message
         my_cmd_hlp = single_str.split("\n")
+        print("getting help message from >> dials." + cmd_str)
 
     except ModuleNotFoundError:
         my_cmd_hlp = ["None(ModuleNotFoundError)"]
@@ -539,7 +540,10 @@ def get_help_list(cmd_str):
             if win_exe:
                 inner_lst[0] += ".exe"
 
-            print("trying to capture from std output by running >> ", inner_lst)
+            print(
+                "capturing std output from >> " +
+                inner_lst[0] + " " + inner_lst[1]
+            )
             my_proc = subprocess.Popen(
                 inner_lst,
                 shell = False,
@@ -566,11 +570,6 @@ def get_help_list(cmd_str):
             break
 
         trimed_cmd_hlp.append(single_line + "\n")
-
-    testing4 = '''
-    for single_line in trimed_cmd_hlp:
-        print(single_line)
-    '''
 
     return trimed_cmd_hlp
 

@@ -570,7 +570,7 @@ class ShowLog(QObject):
                         lst_log_lines = json_log[0]
                         self.lst_node_log_out.append(
                             {
-                                "number"       : nod_p_num,
+                                "number"        : nod_p_num,
                                 "log_line_lst"  : lst_log_lines
                             }
                         )
@@ -632,17 +632,19 @@ class ShowLog(QObject):
         logging.info('from: show_ready_log')
         if show_help == True:
             try:
-                txt2show = str(self.main_obj.new_node.m_cmd_lst)
+                str_cmd_key = self.main_obj.new_node.m_cmd_lst[0][6:]
+                txt2show =self.main_obj.help_msg_dict[str_cmd_key]
 
             except AttributeError:
-                txt2show = "not runnable node"
+                txt2show = ["not runnable node"]
 
         else:
-            txt2show = "not runnable node"
+            txt2show = ["not runnable node"]
 
 
         self.main_obj.window.incoming_text.clear()
         self.main_obj.window.incoming_text.setTextColor(self.green_color)
-        self.main_obj.window.incoming_text.insertPlainText(txt2show)
+        for sing_help_line in txt2show:
+            self.main_obj.window.incoming_text.insertPlainText(sing_help_line)
 
 
