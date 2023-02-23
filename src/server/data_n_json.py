@@ -496,7 +496,7 @@ def get_cmd_opt_list():
       "unit_cell_histogram"                    ,
       "version"                                ,
     ]
-    return command_list
+    return sorted(command_list)
 
 
 def get_param_list(cmd_str):
