@@ -638,6 +638,9 @@ class ShowLog(QObject):
             except AttributeError:
                 txt2show = ["not runnable node"]
 
+            except KeyError:
+                txt2show = ["No help available"]
+
         else:
             txt2show = ["not runnable node"]
 

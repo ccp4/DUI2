@@ -530,10 +530,12 @@ def get_help_list(cmd_str):
         my_cmd_hlp = single_str.split("\n")
         print("getting help message from >> dials." + cmd_str)
 
+        _2remove = '''
     except ModuleNotFoundError:
         my_cmd_hlp = ["None(ModuleNotFoundError)"]
+        '''
 
-    except AttributeError:
+    except (AttributeError, ModuleNotFoundError):
         my_cmd_hlp = ["None(AttributeError)"]
         inner_lst = ["dials." + cmd_str , "-h"]
         try:
