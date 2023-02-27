@@ -521,7 +521,6 @@ def get_help_list(cmd_str):
     data_init = ini_data()
     win_exe = data_init.get_win_exe()
 
-
     try:
         my_cmd_mod = importlib.import_module(
             "dials.command_line." + cmd_str
@@ -561,37 +560,42 @@ def get_help_list(cmd_str):
             new_line = my_proc.stdout.readline()
             my_cmd_hlp.append(new_line[:-1])
 
-    print("trimed 0")
-
-    top_trimed_lst = []
-    found_sagepp = False
+    top_trimed_lst_1 = []
+    found_sage_pp = False
     for single_line in my_cmd_hlp:
         if "sage: " + "dials." + cmd_str in single_line:
-            print("removing: ", single_line)
-            found_sagepp = True
+            found_sage_pp = True
 
-        elif found_sagepp:
-            print("single_line <<" + single_line + ">>")
+        elif found_sage_pp:
             if single_line == "":
-                print("found_sagepp")
-                found_sagepp = False
+                found_sage_pp = False
 
         else:
-            top_trimed_lst.append(single_line)
+            top_trimed_lst_1.append(single_line)
 
+    logging.info("trimed top part 1")
+    top_trimed_lst_2 = []
+    found_opt_arg_pp = False
+    for single_line in top_trimed_lst_1:
+        if "ptional arguments:" in single_line:
+            found_opt_arg_pp = True
+
+        elif found_opt_arg_pp:
+            if single_line == "":
+                found_opt_arg_pp = False
+        else:
+            top_trimed_lst_2.append(single_line)
 
     bottom_trimed_lst = []
+    logging.info("trimed top part 2")
 
-    print("trimed 1")
-
-    for single_line in top_trimed_lst:
+    for single_line in top_trimed_lst_2:
         if "xample" in single_line:
             break
 
         bottom_trimed_lst.append(single_line + "\n")
 
-    print("trimed 2")
-
+    logging.info("trimed top part 3")
     return bottom_trimed_lst
 
 
