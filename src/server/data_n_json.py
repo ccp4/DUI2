@@ -530,11 +530,6 @@ def get_help_list(cmd_str):
         my_cmd_hlp = single_str.split("\n")
         print("getting help message from >> dials." + cmd_str)
 
-        _2remove = '''
-    except ModuleNotFoundError:
-        my_cmd_hlp = ["None(ModuleNotFoundError)"]
-        '''
-
     except (AttributeError, ModuleNotFoundError):
         my_cmd_hlp = ["None(AttributeError)"]
         inner_lst = ["dials." + cmd_str , "-h"]
@@ -566,14 +561,38 @@ def get_help_list(cmd_str):
             new_line = my_proc.stdout.readline()
             my_cmd_hlp.append(new_line[:-1])
 
-    trimed_cmd_hlp = []
+    print("trimed 0")
+
+    top_trimed_lst = []
+    found_sagepp = False
     for single_line in my_cmd_hlp:
+        if "sage: " + "dials." + cmd_str in single_line:
+            print("removing: ", single_line)
+            found_sagepp = True
+
+        elif found_sagepp:
+            print("single_line <<" + single_line + ">>")
+            if single_line == "":
+                print("found_sagepp")
+                found_sagepp = False
+
+        else:
+            top_trimed_lst.append(single_line)
+
+
+    bottom_trimed_lst = []
+
+    print("trimed 1")
+
+    for single_line in top_trimed_lst:
         if "xample" in single_line:
             break
 
-        trimed_cmd_hlp.append(single_line + "\n")
+        bottom_trimed_lst.append(single_line + "\n")
 
-    return trimed_cmd_hlp
+    print("trimed 2")
+
+    return bottom_trimed_lst
 
 
 def iter_dict(file_path, depth_ini):
