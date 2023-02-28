@@ -429,6 +429,8 @@ def get_cmd_opt_list():
         "merge"                             ,
         "cosym"                             ,
         "slice_sequence"                    ,
+           "ssx_index"                         ,
+           "ssx_integrate"                     ,
       "align_crystal"                          ,
       "anvil_correction"                       ,
       "assign_experiment_identifiers"          ,

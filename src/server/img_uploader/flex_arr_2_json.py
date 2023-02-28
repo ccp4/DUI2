@@ -74,6 +74,11 @@ def get_template_info(exp_path, img_num):
         logging.info(" *** OS Err catch  in template ***")
         return
 
+    except AttributeError:
+        print(" *** Attribute Err catch  in template ***")
+        logging.info(" *** Attribute Err catch  in template ***")
+        return
+
 
 def list_p_arrange_exp(
     bbox_col = None, pan_col = None, hkl_col = None, n_imgs = None,

@@ -78,6 +78,8 @@ def get_pair_list():
         ("mg",      "dials.merge"                           ),
         ("ce",      "dials.combine_experiments"             ),
         ("ex",      "dials.export"                          ),
+        ("Aaa",        "dials.ssx_index"                         ),
+        ("Aaa",        "dials.ssx_integrate"                     ),
         ("Aaa",    "dials.align_crystal"                      ),
         ("Aaa",    "dials.anvil_correction"                   ),
         ("Aaa",    "dials.assign_experiment_identifiers"      ),
