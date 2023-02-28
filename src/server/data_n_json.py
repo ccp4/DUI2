@@ -422,6 +422,7 @@ def get_cmd_opt_list():
         "find_spots"                        ,
         "find_rotation_axis"                ,
         "index"                             ,
+        "refine_bravais_settings"           ,
         "refine"                            ,
         "integrate"                         ,
         "symmetry"                          ,

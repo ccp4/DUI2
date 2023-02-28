@@ -788,6 +788,9 @@ class MainObject(QObject):
                     str_key, self.param_widgets, self.opt_cmd_lst
                 )
                 nxt_cmd_lst = fnd_nxt_cmd.get_nxt_cmd()
+
+                print("nxt_cmd_lst =", nxt_cmd_lst)
+
                 for bt_str in nxt_cmd_lst:
                     split_label = bt_str.replace("_", "\n")
                     nxt_butt = QPushButton(split_label)
@@ -800,9 +803,11 @@ class MainObject(QObject):
 
         except IndexError:
             logging.info("no need to add next button Index Err Catch")
-
+            print(" >>> here IndexError <<<")
+        tmp_off = '''
         except KeyError:
             logging.info("no need to add next button Key Err Catch")
+        '''
 
     def nxt_clicked(self):
         self.nxt_key_clicked(self.sender().cmd_str)
