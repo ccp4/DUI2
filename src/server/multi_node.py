@@ -355,6 +355,7 @@ class CmdNode(object):
         inner_lst = self.full_cmd_lst[-1]
 
         is_valid_command = find_if_in_list(inner_lst[0])
+        FilNotFonErr = False
         if is_valid_command:
             #try:
             if self.win_exe:
@@ -372,12 +373,8 @@ class CmdNode(object):
                 )
 
             except FileNotFoundError:
-                logging.info(
-                    "<< FileNotFound err catch >>"
-                )
-                add_log_line("<< FileNotFound err catch >>", self.nod_req)
-                self.status = "Failed"
-                return
+                new_err_msg = "Dials command NOT properly installed"
+                FilNotFonErr = True
 
         else:
             logging.info(
@@ -386,10 +383,10 @@ class CmdNode(object):
             self.status = "Failed"
             return
 
-        new_line = None
         log_line_lst = []
-        self.log_file_path = self._run_dir + "/out.log"
         self.n_Broken_Pipes = 0
+        self.log_file_path = self._run_dir + "/out.log"
+        new_line = None
         if self.nod_req is not None:
             try:
                 self.nod_req.send_response(201)
@@ -409,16 +406,26 @@ class CmdNode(object):
             except BrokenPipeError:
                 logging.info("<< BrokenPipe err catch  >> while sending nod_num")
 
-        while self.my_proc.poll() is None or new_line != '':
-            new_line = self.my_proc.stdout.readline()
-            self.n_Broken_Pipes += add_log_line(new_line, self.nod_req)
-            log_line_lst.append(new_line[:-1])
+        print("FilNotFonErr =", FilNotFonErr)
 
-        for inv_pos in range(1, len(log_line_lst)):
-            if log_line_lst[-inv_pos] != '':
-                log_line_lst = log_line_lst[0:-inv_pos]
-                logging.info("inv_pos =" + str(inv_pos))
-                break
+        if FilNotFonErr:
+            new_line = new_err_msg + "\n"
+            self.n_Broken_Pipes += add_log_line(new_line, self.nod_req)
+            log_line_lst = ["\n", new_line, "\n"]
+            self.status = "Failed"
+            return
+
+        else:
+            while self.my_proc.poll() is None or new_line != '':
+                new_line = self.my_proc.stdout.readline()
+                self.n_Broken_Pipes += add_log_line(new_line, self.nod_req)
+                log_line_lst.append(new_line[:-1])
+
+            for inv_pos in range(1, len(log_line_lst)):
+                if log_line_lst[-inv_pos] != '':
+                    log_line_lst = log_line_lst[0:-inv_pos]
+                    logging.info("inv_pos =" + str(inv_pos))
+                    break
 
         self.my_proc.stdout.close()
         if self.my_proc.poll() == 0:
