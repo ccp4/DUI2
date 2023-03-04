@@ -361,23 +361,23 @@ class CmdNode(object):
                 inner_lst[0] += ".exe"
 
             print("\n Running >> ", inner_lst)
+            try:
+                self.my_proc = subprocess.Popen(
+                    inner_lst,
+                    shell = False,
+                    cwd = self._run_dir,
+                    stdout = subprocess.PIPE,
+                    stderr = subprocess.STDOUT,
+                    universal_newlines = True
+                )
 
-            self.my_proc = subprocess.Popen(
-                inner_lst,
-                shell = False,
-                cwd = self._run_dir,
-                stdout = subprocess.PIPE,
-                stderr = subprocess.STDOUT,
-                universal_newlines = True
-            )
-            tmp_off = '''
             except FileNotFoundError:
                 logging.info(
-                    " <<FileNotFound err catch >> "
+                    "<< FileNotFound err catch >>"
                 )
-                self.my_proc = None
+                add_log_line("<< FileNotFound err catch >>", self.nod_req)
+                self.status = "Failed"
                 return
-            '''
 
         else:
             logging.info(
