@@ -217,18 +217,7 @@ class find_next_cmd(object):
             self.default_list = param_widgets[str_key]["nxt_widg_lst"]
 
         except KeyError:
-            if str_key in opt_cmd_lst:
-                parent_num = parent_nod_num_lst[0]
-                try:
-                    str_key = self.nod_lst[parent_num]["cmd2show"][0][6:]
-                    print("str_key =", str_key)
-                    self.default_list = param_widgets[str_key]["nxt_widg_lst"]
-
-                except KeyError:
-                    self.default_list = ["optional"]
-
-            else:
-                self.default_list = []
+            self.default_list = ["optional"]
 
         self.par_cmd_lst = []
         for nod_num in parent_nod_num_lst:

@@ -75,7 +75,6 @@ def get_template_info(exp_path, img_num):
         return
 
     except AttributeError:
-        print(" *** Attribute Err catch  in template ***")
         logging.info(" *** Attribute Err catch  in template ***")
         return
 
