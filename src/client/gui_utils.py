@@ -86,7 +86,7 @@ widgets_defs = {
         "icon"          : "resources/ssx_index.png",
         "main_cmd"      :["dials.ssx_index"],
         "nxt_widg_lst"  :[
-            "integrate",
+            "ssx_integrate",
             "optional"
         ]
     },
@@ -122,6 +122,14 @@ widgets_defs = {
         "main_cmd"      :["dials.integrate"],
         "nxt_widg_lst"  :[
             "symmetry", "scale", "export", "combine_experiments", "optional"
+        ]
+    },
+    "ssx_integrate" : {
+        "tooltip"       : "dials.ssx_integrate ...",
+        "icon"          : "resources/ssx_integrate.png",
+        "main_cmd"      :["dials.ssx_integrate"],
+        "nxt_widg_lst"  :[
+            "symmetry", "scale", "export", "optional"
         ]
     },
     "symmetry" : {

@@ -36,6 +36,8 @@ from dials.command_line.refine_bravais_settings import (
 from dials.command_line.refine import working_phil as phil_scope_refine
 from dials.command_line.integrate import phil_scope as phil_scope_integrate
 
+from dials.command_line.ssx_integrate import phil_scope as ssx_phil_scope_integrate
+
 from dials.command_line.scale import phil_scope as phil_scope_scale
 from dials.command_line.symmetry import phil_scope as phil_scope_symmetry
 from dials.command_line.combine_experiments import (
@@ -508,10 +510,11 @@ def get_param_list(cmd_str):
     connect_dict = {
             "find_spots_params"              :phil_scope_find_spots.objects    ,
             "index_params"                   :phil_scope_index.objects         ,
-          "ssx_index_params"                   :ssx_phil_scope_index.objects         ,
+          "ssx_index_params"                     :ssx_phil_scope_index.objects           ,
             "refine_bravais_settings_params" :phil_scope_r_b_settings.objects  ,
             "refine_params"                  :phil_scope_refine.objects        ,
             "integrate_params"               :phil_scope_integrate.objects     ,
+          "ssx_integrate_params"                 :ssx_phil_scope_integrate.objects       ,
             "symmetry_params"                :phil_scope_symmetry.objects      ,
             "scale_params"                   :phil_scope_scale.objects         ,
             "combine_experiments_params"     :phil_scope_combine_params.objects,

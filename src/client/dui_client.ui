@@ -915,7 +915,7 @@
                   </item>
                  </layout>
                 </widget>
-                <widget class="QWidget" name="SsxIntergratePage">
+                <widget class="QWidget" name="SsxIntegratePage">
                  <layout class="QGridLayout" name="gridLayout_42">
                   <item row="0" column="0">
                    <widget class="QTabWidget" name="tabWidget_10">

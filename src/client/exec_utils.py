@@ -232,6 +232,7 @@ def get_help_messages(handler_in):
         "reindex",
         "refine",
         "integrate",
+        "ssx_integrate",
         "symmetry",
         "scale",
         "cosym",

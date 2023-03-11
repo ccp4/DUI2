@@ -52,7 +52,7 @@ from client.simpler_param_widgets import MergeWidget
 from client.simpler_param_widgets import OptionalWidget
 from client.simpler_param_widgets import (
     FindspotsSimplerParameterTab, IndexSimplerParamTab,
-    SsxIndexSimplerParamTab,
+    SsxIndexSimplerParamTab, SsxIntegrateSimplerParamTab,
     RefineBravaiSimplerParamTab, RefineSimplerParamTab,
     IntegrateSimplerParamTab, SymmetrySimplerParamTab,
     ScaleSimplerParamTab, CombineExperimentSimplerParamTab
@@ -259,6 +259,29 @@ class MainObject(QObject):
         it_advanced_parameters.set_scroll_parent(
             self.window.IntegrateAdvancedScrollArea
         )
+
+        #######################################################################################################
+
+        ssx_integr_simpl_widg = SsxIntegrateSimplerParamTab()
+        ssx_integr_simpl_widg.item_changed.connect(self.item_param_changed)
+        self.window.SsxIntegrateSimplerScrollArea.setWidget(ssx_integr_simpl_widg)
+        ssx_it_advanced_parameters = build_advanced_params_widget(
+            "ssx_integrate_params", self.window.SsxIntegrateSearchLayout,
+            self.runner_handler
+        )
+        ssx_it_advanced_parameters.item_changed.connect(
+            self.item_param_changed
+        )
+        self.window.SsxIntegrateAdvancedScrollArea.setWidget(
+            ssx_it_advanced_parameters
+        )
+        ssx_it_advanced_parameters.set_scroll_parent(
+            self.window.SsxIntegrateAdvancedScrollArea
+        )
+
+        #######################################################################################################
+
+
         sym_simpl_widg = SymmetrySimplerParamTab()
         sym_simpl_widg.item_changed.connect(self.item_param_changed)
         self.window.SymmetrySimplerScrollArea.setWidget(sym_simpl_widg)
@@ -321,6 +344,10 @@ class MainObject(QObject):
         ref_simpl_widg.twin_widg = rf_advanced_parameters
         it_advanced_parameters.twin_widg = integr_simpl_widg
         integr_simpl_widg.twin_widg = it_advanced_parameters
+
+        ssx_it_advanced_parameters.twin_widg = ssx_integr_simpl_widg
+        ssx_integr_simpl_widg.twin_widg = ssx_it_advanced_parameters
+
         sm_advanced_parameters.twin_widg = sym_simpl_widg
         sym_simpl_widg.twin_widg = sm_advanced_parameters
         sc_advanced_parameters.twin_widg = scale_simpl_widg
@@ -384,6 +411,14 @@ class MainObject(QObject):
         self.param_widgets[
             "integrate"
         ]["main_page"] = self.window.IntegratePage
+
+        ########################################################################################################
+        self.param_widgets["ssx_integrate"]["simple"] = ssx_integr_simpl_widg
+        self.param_widgets["ssx_integrate"]["advanced"] = ssx_it_advanced_parameters
+        self.param_widgets[
+            "ssx_integrate"
+        ]["main_page"] = self.window.SsxIntegratePage
+        ########################################################################################################
 
         self.param_widgets["symmetry"]["simple"] = sym_simpl_widg
         self.param_widgets["symmetry"]["advanced"] = sm_advanced_parameters

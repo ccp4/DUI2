@@ -1098,8 +1098,6 @@ class IndexSimplerParamTab(SimpleParamTab):
             self.detec_fix.setChecked(False)
 
 
-################################################################################### New SsxIndexSimplerParamTab
-
 class SsxIndexSimplerParamTab(SimpleParamTab):
     """
     This widget is the tool for tunning the simpler and most common parameters
@@ -1163,9 +1161,6 @@ class SsxIndexSimplerParamTab(SimpleParamTab):
     def reset_pars(self):
         self.clearLayout(self.main_v_layout)
         self.build_pars()
-
-
-################################################################################### New SsxIndexSimplerParamTab
 
 
 class RefineBravaiSimplerParamTab(SimpleParamTab):
@@ -1335,7 +1330,7 @@ class RefineSimplerParamTab(SimpleParamTab):
             self.detec_fix.setChecked(False)
 
 
-class IntegrateSimplerParamTab(SimpleParamTab):
+class  IntegrateSimplerParamTab(SimpleParamTab):
     """
     This widget is the tool for tunning the simpler and most common parameters
     in the integrate algorithm, this widget is the first to appear once the
@@ -1404,6 +1399,82 @@ class IntegrateSimplerParamTab(SimpleParamTab):
     def reset_pars(self):
         self.clearLayout(self.main_v_layout)
         self.build_pars()
+
+########################################################################################################
+
+class  SsxIntegrateSimplerParamTab(SimpleParamTab):
+    """
+    This widget is the tool for tunning the simpler and most common parameters
+    in the integrate algorithm, this widget is the first to appear once the
+    button "Integrate" is clicked
+    """
+    def __init__(self, parent=None):
+        super(SsxIntegrateSimplerParamTab, self).__init__()
+        self.do_emit = True
+        self.main_v_layout = QVBoxLayout()
+        self.build_pars()
+        self.setLayout(self.main_v_layout)
+
+    def build_pars(self):
+
+        hbox_d_min = QHBoxLayout()
+        label_d_min = QLabel("High resolution limit")
+        hbox_d_min.addWidget(label_d_min)
+        d_min_line = QLineEdit()
+        d_min_line.setPlaceholderText("None")
+        d_min_line.local_path = "prediction.d_min"
+        d_min_line.textChanged.connect(self.line_changed)
+        hbox_d_min.addWidget(d_min_line)
+        self.main_v_layout.addLayout(hbox_d_min)
+
+        ##############################################################################
+        hbox_d_max = QHBoxLayout()
+        d_max_label = QLabel("Low resolution limit")
+        hbox_d_max.addWidget(d_max_label)
+        d_max_line = QLineEdit()
+        d_max_line.setPlaceholderText("None")
+        d_max_line.local_path = "prediction.d_max"
+        d_max_line.textChanged.connect(self.line_changed)
+        hbox_d_max.addWidget(d_max_line)
+        self.main_v_layout.addLayout(hbox_d_max)
+        ##############################################################################
+
+        hbox_lay_algorithm_53 = QHBoxLayout()
+        label_algorithm_53 = QLabel("Background algorithm")
+        hbox_lay_algorithm_53.addWidget(label_algorithm_53)
+        box_algorithm_53 = DefaultComboBox("integration.background.algorithm",
+            ["Auto", "glm", "gmodel", "null", "simple"], default_index=0)
+        box_algorithm_53.currentIndexChanged.connect(self.combobox_changed)
+        hbox_lay_algorithm_53.addWidget(box_algorithm_53)
+        self.main_v_layout.addLayout(hbox_lay_algorithm_53)
+
+
+
+
+        consider_2_remove = '''
+        PrFit_lay_out = QHBoxLayout()
+        label_PrFit = QLabel("Use profile fitting")
+        PrFit_lay_out.addWidget(label_PrFit)
+        PrFit_comb_bx = DefaultComboBox("integration.profile.fitting",
+            ["True", "False", "Auto"])
+        PrFit_comb_bx.currentIndexChanged.connect(self.combobox_changed)
+        PrFit_lay_out.addWidget(PrFit_comb_bx)
+        self.main_v_layout.addLayout(PrFit_lay_out)
+        '''
+
+        self.main_v_layout.addStretch()
+        #self.box_nproc.item_list = None
+        self.lst_var_widg = _get_all_direct_layout_widget_children(
+            self.main_v_layout
+        )
+
+    def reset_pars(self):
+        self.clearLayout(self.main_v_layout)
+        self.build_pars()
+
+########################################################################################################
+
+
 
 class SymmetrySimplerParamTab(SimpleParamTab):
     """
