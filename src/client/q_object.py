@@ -52,6 +52,7 @@ from client.simpler_param_widgets import MergeWidget
 from client.simpler_param_widgets import OptionalWidget
 from client.simpler_param_widgets import (
     FindspotsSimplerParameterTab, IndexSimplerParamTab,
+    SsxIndexSimplerParamTab,
     RefineBravaiSimplerParamTab, RefineSimplerParamTab,
     IntegrateSimplerParamTab, SymmetrySimplerParamTab,
     ScaleSimplerParamTab, CombineExperimentSimplerParamTab
@@ -182,6 +183,26 @@ class MainObject(QObject):
         id_advanced_parameters.set_scroll_parent(
             self.window.IndexAdvancedScrollArea
         )
+
+        ######################################################################### New ssx_index_params
+        ssx_index_simpl_widg = SsxIndexSimplerParamTab()
+        ssx_index_simpl_widg.item_changed.connect(self.item_param_changed)
+        self.window.SsxIndexSimplerScrollArea.setWidget(ssx_index_simpl_widg)
+        ssx_id_advanced_parameters = build_advanced_params_widget(
+            "ssx_index_params", self.window.SsxIndexSearchLayout,
+            self.runner_handler
+        )
+        ssx_id_advanced_parameters.item_changed.connect(
+            self.item_param_changed
+        )
+        self.window.SsxIndexAdvancedScrollArea.setWidget(
+            ssx_id_advanced_parameters
+        )
+        ssx_id_advanced_parameters.set_scroll_parent(
+            self.window.SsxIndexAdvancedScrollArea
+        )
+        ######################################################################### New ssx_index_params
+
         refi_brv_simpl_widg = RefineBravaiSimplerParamTab()
         refi_brv_simpl_widg.item_changed.connect(self.item_param_changed)
         self.window.RefineBravaiSimplerScrollArea.setWidget(
@@ -290,6 +311,10 @@ class MainObject(QObject):
         find_simpl_widg.twin_widg = fd_advanced_parameters
         id_advanced_parameters.twin_widg = index_simpl_widg
         index_simpl_widg.twin_widg = id_advanced_parameters
+
+        ssx_id_advanced_parameters.twin_widg = ssx_index_simpl_widg
+        ssx_index_simpl_widg.twin_widg = ssx_id_advanced_parameters
+
         rb_advanced_parameters.twin_widg = refi_brv_simpl_widg
         refi_brv_simpl_widg.twin_widg = rb_advanced_parameters
         rf_advanced_parameters.twin_widg = ref_simpl_widg
@@ -329,6 +354,10 @@ class MainObject(QObject):
         self.param_widgets["index"]["simple"] = index_simpl_widg
         self.param_widgets["index"]["advanced"] = id_advanced_parameters
         self.param_widgets["index"]["main_page"] = self.window.IndexPage
+
+        self.param_widgets["ssx_index"]["simple"] = ssx_index_simpl_widg
+        self.param_widgets["ssx_index"]["advanced"] = id_advanced_parameters
+        self.param_widgets["ssx_index"]["main_page"] = self.window.SsxIndexPage
 
         self.param_widgets[
             "refine_bravais_settings"

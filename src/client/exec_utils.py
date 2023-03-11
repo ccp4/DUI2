@@ -227,6 +227,7 @@ def get_help_messages(handler_in):
         "find_spots",
         "find_rotation_axis",
         "index",
+        "ssx_index",
         "refine_bravais_settings",
         "reindex",
         "refine",

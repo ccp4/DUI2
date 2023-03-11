@@ -67,7 +67,7 @@ widgets_defs = {
         "tooltip"       : "dials.find_spots ...",
         "icon"          : "resources/find_spots.png",
         "main_cmd"      :["dials.find_spots"],
-        "nxt_widg_lst"  :["index", "combine_experiments", "optional"]
+        "nxt_widg_lst"  :["index", "combine_experiments", "ssx_index", "optional"]
     },
     "index" : {
         "tooltip"       : "dials.index ...",
@@ -80,6 +80,17 @@ widgets_defs = {
             "optional"
         ]
     },
+
+    "ssx_index" : {
+        "tooltip"       : "dials.ssx_index ...",
+        "icon"          : "resources/ssx_index.png",
+        "main_cmd"      :["dials.ssx_index"],
+        "nxt_widg_lst"  :[
+            "integrate",
+            "optional"
+        ]
+    },
+
     "refine_bravais_settings" : {
         "tooltip"       : "dials.refine_bravais_settings ...",
         "icon"          : "resources/refine_bv_set.png",

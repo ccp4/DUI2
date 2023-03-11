@@ -28,6 +28,8 @@ import libtbx.phil
 
 from dials.command_line.find_spots import phil_scope as phil_scope_find_spots
 from dials.command_line.index import working_phil as phil_scope_index
+from dials.command_line.ssx_index import phil_scope as ssx_phil_scope_index
+
 from dials.command_line.refine_bravais_settings import (
     phil_scope as phil_scope_r_b_settings,
 )
@@ -506,6 +508,7 @@ def get_param_list(cmd_str):
     connect_dict = {
             "find_spots_params"              :phil_scope_find_spots.objects    ,
             "index_params"                   :phil_scope_index.objects         ,
+          "ssx_index_params"                   :ssx_phil_scope_index.objects         ,
             "refine_bravais_settings_params" :phil_scope_r_b_settings.objects  ,
             "refine_params"                  :phil_scope_refine.objects        ,
             "integrate_params"               :phil_scope_integrate.objects     ,

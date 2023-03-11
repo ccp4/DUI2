@@ -1098,6 +1098,76 @@ class IndexSimplerParamTab(SimpleParamTab):
             self.detec_fix.setChecked(False)
 
 
+################################################################################### New SsxIndexSimplerParamTab
+
+class SsxIndexSimplerParamTab(SimpleParamTab):
+    """
+    This widget is the tool for tunning the simpler and most common parameters
+    in the indexer, this widget is the first to appear once the button
+    "SSX Index" is clicked
+    """
+    def __init__(self, phl_obj=None, parent=None):
+        super(SsxIndexSimplerParamTab, self).__init__()
+        self.do_emit = True
+        self.main_v_layout = QVBoxLayout()
+        self.build_pars()
+        self.setLayout(self.main_v_layout)
+
+    def build_pars(self):
+
+        hbox_method = QHBoxLayout()
+        label_method_62 = QLabel("Indexing method")
+        hbox_method.addWidget(label_method_62)
+        box_method_62 = DefaultComboBox("indexing.method", ["fft3d", "fft1d",
+            "real_space_grid_search", "low_res_spot_match"])
+        box_method_62.currentIndexChanged.connect(self.combobox_changed)
+
+        hbox_method.addWidget(box_method_62)
+
+        max_cell_label = QLabel("Max cell")
+        max_cell_line = QLineEdit()
+        max_cell_line.setPlaceholderText("Auto")
+        max_cell_line.local_path = "indexing.max_cell"
+        max_cell_line.textChanged.connect(self.line_changed)
+
+        space_group_label = QLabel("Space group")
+        space_group_line = QLineEdit()
+        # Simple validator to allow only characters in H-M symbols
+        regex = QRegExp("[ABCPIFR][0-9a-d\-/:nmHR]+")
+        validatorHM = QRegExpValidator(regex)
+        space_group_line.setValidator(validatorHM)
+        space_group_line.local_path = "indexing.known_symmetry.space_group"
+        space_group_line.textChanged.connect(self.line_changed)
+
+        unit_cell_label = QLabel("Unit cell")
+        unit_cell_line = QLineEdit()
+        regex = QRegExp("[0-9\., ]+")
+        validatorUC = QRegExpValidator(regex)
+        unit_cell_line.setValidator(validatorUC)
+        unit_cell_line.local_path = "indexing.known_symmetry.unit_cell"
+        unit_cell_line.textChanged.connect(self.line_changed)
+
+        self.main_v_layout.addLayout(hbox_method)
+        qf = QFormLayout()
+        qf.addRow(max_cell_label, max_cell_line)
+        qf.addRow(space_group_label, space_group_line)
+        qf.addRow(unit_cell_label, unit_cell_line)
+        self.main_v_layout.addLayout(qf)
+
+        self.main_v_layout.addStretch()
+
+        self.lst_var_widg = _get_all_direct_layout_widget_children(
+            self.main_v_layout
+        )
+
+    def reset_pars(self):
+        self.clearLayout(self.main_v_layout)
+        self.build_pars()
+
+
+################################################################################### New SsxIndexSimplerParamTab
+
+
 class RefineBravaiSimplerParamTab(SimpleParamTab):
     def __init__(self, parent=None):
         super(RefineBravaiSimplerParamTab, self).__init__()
