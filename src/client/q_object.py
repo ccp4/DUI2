@@ -201,7 +201,6 @@ class MainObject(QObject):
         ssx_id_advanced_parameters.set_scroll_parent(
             self.window.SsxIndexAdvancedScrollArea
         )
-        ######################################################################### New ssx_index_params
 
         refi_brv_simpl_widg = RefineBravaiSimplerParamTab()
         refi_brv_simpl_widg.item_changed.connect(self.item_param_changed)
@@ -259,8 +258,6 @@ class MainObject(QObject):
         it_advanced_parameters.set_scroll_parent(
             self.window.IntegrateAdvancedScrollArea
         )
-
-        #######################################################################################################
 
         ssx_integr_simpl_widg = SsxIntegrateSimplerParamTab()
         ssx_integr_simpl_widg.item_changed.connect(self.item_param_changed)
@@ -761,14 +758,15 @@ class MainObject(QObject):
                     self.best_rd_idx_opt = int(cur_nod["cmd2show"][1]) - 1
 
                 except IndexError:
-                    self.best_rd_idx_opt = self.r_index_widg.get_best_opt()
+                    row_str = self.new_node.get_full_command_list()[0][14:]
+                    new_node_row = int(row_str)
+                    self.best_rd_idx_opt = new_node_row - 1
 
                 json_data_lst = lst_req.result_out()
                 self.r_index_widg.add_opts_lst(
                     json_data = json_data_lst[0],
                     selected_pos = self.best_rd_idx_opt
                 )
-
                 self.update_reindex_table_header(cur_nod["parent_node_lst"])
 
         except KeyError:
@@ -847,9 +845,6 @@ class MainObject(QObject):
                     str_key, self.param_widgets, self.opt_cmd_lst
                 )
                 nxt_cmd_lst = fnd_nxt_cmd.get_nxt_cmd()
-
-                print("nxt_cmd_lst =", nxt_cmd_lst)
-
                 for bt_str in nxt_cmd_lst:
                     split_label = bt_str.replace("_", "\n")
                     nxt_butt = QPushButton(split_label)

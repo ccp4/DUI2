@@ -206,7 +206,6 @@ class ReindexTable(QTableWidget):
     def add_opts_lst(
         self, lst_labels = None, json_data = None, selected_pos = None
     ):
-
         if lst_labels is None:
             self.list_labl = ops_list_from_json(json_data)
 
