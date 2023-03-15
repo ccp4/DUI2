@@ -519,7 +519,7 @@ class ImportWidget(QWidget):
             QFont("Courier", font_point_size + 1, QFont.Bold)
         )
         self.imp_extra_txt = QLineEdit()
-        self.open_butt = QPushButton("  Open images  ")
+        self.open_butt = QPushButton("\n  Open images  \n")
 
         self.check_rot_axs = QCheckBox("Invert rotation axis")
 
