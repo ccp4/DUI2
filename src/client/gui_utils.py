@@ -265,9 +265,6 @@ class find_next_cmd(object):
             fin_cmd_lst = ["optional"]
         '''
 
-
-        print("<<< here >>>")
-
         return fin_cmd_lst
 
 

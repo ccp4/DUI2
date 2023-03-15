@@ -279,9 +279,6 @@ class MainObject(QObject):
             self.window.SsxIntegrateAdvancedScrollArea
         )
 
-        #######################################################################################################
-
-
         sym_simpl_widg = SymmetrySimplerParamTab()
         sym_simpl_widg.item_changed.connect(self.item_param_changed)
         self.window.SymmetrySimplerScrollArea.setWidget(sym_simpl_widg)
@@ -412,13 +409,11 @@ class MainObject(QObject):
             "integrate"
         ]["main_page"] = self.window.IntegratePage
 
-        ########################################################################################################
         self.param_widgets["ssx_integrate"]["simple"] = ssx_integr_simpl_widg
         self.param_widgets["ssx_integrate"]["advanced"] = ssx_it_advanced_parameters
         self.param_widgets[
             "ssx_integrate"
         ]["main_page"] = self.window.SsxIntegratePage
-        ########################################################################################################
 
         self.param_widgets["symmetry"]["simple"] = sym_simpl_widg
         self.param_widgets["symmetry"]["advanced"] = sm_advanced_parameters
