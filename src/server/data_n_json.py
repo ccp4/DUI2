@@ -528,6 +528,10 @@ def get_param_list(cmd_str):
 def get_help_list(cmd_str):
     data_init = ini_data()
     win_exe = data_init.get_win_exe()
+
+    if cmd_str == "import":
+        cmd_str ="dials_import"
+
     try:
         my_cmd_mod = importlib.import_module(
             "dials.command_line." + cmd_str
