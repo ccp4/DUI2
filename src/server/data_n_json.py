@@ -526,11 +526,17 @@ def get_param_list(cmd_str):
 
 
 def get_help_list(cmd_str):
-
     data_init = ini_data()
     win_exe = data_init.get_win_exe()
-
     try:
+        my_cmd_mod = importlib.import_module(
+            "dials.command_line." + cmd_str
+        )
+        single_str = my_cmd_mod.__doc__
+        my_cmd_hlp = single_str.split("\n")
+        print("  getting  docstring from >> dials." + cmd_str)
+
+    except AttributeError:
         my_cmd_mod = importlib.import_module(
             "dials.command_line." + cmd_str
         )
@@ -538,8 +544,8 @@ def get_help_list(cmd_str):
         my_cmd_hlp = single_str.split("\n")
         print("getting help message from >> dials." + cmd_str)
 
-    except (AttributeError, ModuleNotFoundError):
-        my_cmd_hlp = ["None(AttributeError)"]
+    except ModuleNotFoundError:
+        my_cmd_hlp = ["None(ModuleNotFoundError)"]
         inner_lst = ["dials." + cmd_str , "-h"]
         try:
             if win_exe:
@@ -568,6 +574,10 @@ def get_help_list(cmd_str):
         while my_proc.poll() is None or new_line != '':
             new_line = my_proc.stdout.readline()
             my_cmd_hlp.append(new_line[:-1])
+
+    except TypeError:
+        print("..." + cmd_str + " ...TypeError")
+        my_cmd_hlp = []
 
     top_trimed_lst_1 = []
     found_sage_pp = False
