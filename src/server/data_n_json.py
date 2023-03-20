@@ -35,8 +35,16 @@ from dials.command_line.refine_bravais_settings import (
 )
 from dials.command_line.refine import working_phil as phil_scope_refine
 from dials.command_line.integrate import phil_scope as phil_scope_integrate
+try:
+    from dials.command_line.ssx_integrate import phil_scope as ssx_phil_scope_integrate
 
-from dials.command_line.ssx_integrate import phil_scope as ssx_phil_scope_integrate
+except:
+    class dummy_tmp(object):
+        pass
+
+    print("ssx_integrate NOT installed")
+    ssx_phil_scope_integrate = dummy_tmp()
+    ssx_phil_scope_integrate.objects = []
 
 from dials.command_line.scale import phil_scope as phil_scope_scale
 from dials.command_line.symmetry import phil_scope as phil_scope_symmetry
@@ -575,9 +583,14 @@ def get_help_list(cmd_str):
             my_cmd_hlp = ["None(FileNotFoundError)"]
 
         my_cmd_hlp = []
-        while my_proc.poll() is None or new_line != '':
-            new_line = my_proc.stdout.readline()
-            my_cmd_hlp.append(new_line[:-1])
+        try:
+            while my_proc.poll() is None or new_line != '':
+                new_line = my_proc.stdout.readline()
+                my_cmd_hlp.append(new_line[:-1])
+
+        except AttributeError:
+            my_cmd_hlp = ["Not installed"]
+            logging.info("not loading help for: " + cmd_str)
 
     except TypeError:
         print("..." + cmd_str + " ...TypeError")
