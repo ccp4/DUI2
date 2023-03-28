@@ -20,7 +20,7 @@ class ini_data(object):
         logging.info("win_exe = " + str(win_exe))
 
     def get_win_exe(self):
-        return False
+        return True
         #return win_exe
 
 
