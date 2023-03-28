@@ -5,6 +5,8 @@ from shared_modules import format_utils, all_local_gui_connector
 from server.data_n_json import iter_dict
 from server import multi_node
 
+from server.init_first import ini_data as server_ini_data
+
 from PySide2.QtCore import *
 from PySide2.QtWidgets import *
 
@@ -17,6 +19,11 @@ if __name__ == '__main__':
     )
     data_init = ini_data()
     data_init.set_data(par_def = par_def)
+
+    format_utils.print_logo()
+
+    server_data_init = server_ini_data()
+    server_data_init.set_data(par_def = par_def)
 
     tmp_dat_dir = format_utils.create_tmp_dir()
 
@@ -37,12 +44,12 @@ if __name__ == '__main__':
             runner_data = json.load(json_file)
 
         cmd_runner = multi_node.Runner(
-            recovery_data = runner_data, dat_ini = data_init
+            recovery_data = runner_data, dat_ini = server_data_init
         )
 
     except FileNotFoundError:
         cmd_runner = multi_node.Runner(
-            recovery_data = None, dat_ini = data_init
+            recovery_data = None, dat_ini = server_data_init
         )
 
     cmd_runner.set_dir_tree(tree_dic_lst)
