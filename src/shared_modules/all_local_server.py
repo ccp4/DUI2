@@ -97,6 +97,15 @@ class ReqHandler(object):
         cmd_dict = {"nod_lst":nod_lst,
                     "cmd_lst":cmd_lst}
 
+        copied = '''
+        par_def = (
+            ("init_path", None),
+            ("windows_exe", "false"),
+        )
+        '''
+
+
+
         lst_out = self.tree_runner.run_get_data(cmd_dict)
 
         if type(lst_out) is list or type(lst_out) is dict:

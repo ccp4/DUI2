@@ -1,8 +1,3 @@
-# since this is a main routine, use this to redirect stdout to a
-# file -> do not swamp the console output (which is not supposed
-# to be useful) - will get closed on process end.
-
-
 from multiprocessing import Process, Pipe
 from server import run_server
 from client import run_client

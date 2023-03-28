@@ -20,7 +20,8 @@ class ini_data(object):
         logging.info("win_exe = " + str(win_exe))
 
     def get_win_exe(self):
-        return win_exe
+        return False
+        #return win_exe
 
 
 if __name__ == "__main__":
