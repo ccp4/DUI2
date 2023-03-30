@@ -102,7 +102,7 @@ class get_req_json_dat(QObject):
                     json_out = json.loads(str_lst)
 
             except ConnectionError:
-                logging.info(" ... Connection err catch  (get_req_json_dat) ...")
+                logging.info(" ... Connection err catch (get_req_json_dat) ...")
                 json_out = None
 
             except requests.exceptions.RequestException:
@@ -128,7 +128,7 @@ class get_req_json_dat(QObject):
 
 
     def result_out(self):
-        return self.to_return
+        return self.to_return ##### search here for the all_local_all_ram issue
 
 
 class get_request_real_time(QThread):
