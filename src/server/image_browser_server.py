@@ -196,7 +196,7 @@ def main(par_def = None, connection_out = None):
 
     par_def = (
         ("port", 45678),
-        ("host", "localhost"),
+        ("host", "127.0.0.1"),
         #("host", "serverip"),
         ("init_path", "."),
         ("all_local", "False"),

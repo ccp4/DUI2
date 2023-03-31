@@ -10,10 +10,11 @@ class ini_data(object):
     def set_data(self, par_def = None):
         if par_def == None:
             par_def = (
-                ("url", 'http://localhost:45678/'),
+                ("url", 'http://127.0.0.1:45678/'),
                 ("all_local", "False"),
                 ("windows_exe", "False"),
             )
+
 
         init_param = format_utils.get_par(par_def, sys.argv[1:])
 

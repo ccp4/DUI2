@@ -4,7 +4,7 @@ import logging
 
 if __name__ == '__main__':
     par_def = (
-        ("url", 'http://localhost:45678/'),
+        ("url", 'http://127.0.0.1:45678/'),
         ("all_local", "false"),
         ("windows_exe", "false"),
     )

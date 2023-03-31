@@ -7,7 +7,7 @@ logging.basicConfig(filename='run_dui2_server.log', level=logging.DEBUG)
 server_par_def = (
     ("init_path", None),
     ("port", 45678),
-    ("host", "localhost"),
+    ("host", "127.0.0.1"),
     #("host", "serverip"),
     ("all_local", "false"),
     ("windows_exe", "false"),
@@ -24,7 +24,7 @@ if __name__ == '__main__':
     print("# time to launch client app with port =" +  str(new_port))
 
     par_def = (
-        ("url", 'http://localhost:' + str(new_port) + '/'),
+        ("url", 'http://127.0.0.1:' + str(new_port) + '/'),
         ("all_local", "true"),
     )
 

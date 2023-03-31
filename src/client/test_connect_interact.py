@@ -24,8 +24,8 @@ copyright (c) CCP4 - DLS
 import sys, json, logging
 import requests
 
-uni_url = 'http://localhost:45678/'
-#uni_url = 'http://localhost:45679/'
+uni_url = 'http://127.0.0.1:45678/'
+#uni_url = 'http://127.0.0.1:45679/'
 #uni_url = 'http://supercomputo.cimav.edu.mx:45678/'
 
 
