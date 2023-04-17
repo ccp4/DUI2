@@ -449,9 +449,6 @@ class MainObject(QObject):
         self.lst2exl = []
         self.window.treeView.setScene(self.tree_scene)
 
-        self.window.Next2RunLayout.addWidget(
-            QLabel("                  . . .       ")
-        )
         self.current_next_buttons = 0
         self.parent_nums_lst = []
 
@@ -823,14 +820,25 @@ class MainObject(QObject):
                     self.clearLayout(item.layout())
 
     def check_nxt_btn(self):
-        self.clearLayout(self.window.Next2RunLayout)
-        self.window.Next2RunLayout.addStretch()
+        #self.clearLayout(self.window.HorizNext2RunLayout)
+        self.clearLayout(self.window.VertNext2RunLayout)
+
         try:
             str_key = self.server_nod_lst[self.curr_nod_num]["cmd2show"][0][6:]
             self.update_nxt_butt(str_key)
 
         except (IndexError, AttributeError):
             logging.info("NO need to run << update_nxt_butt >>")
+
+        '''self.window.HorizNext2RunLayout.addWidget(
+            QLabel("                  . . .       ")
+        )'''
+        self.window.VertNext2RunLayout.addWidget(
+            QLabel("..." + " " * 30 + "\n\n" + " " * 30 + "...")
+        )
+
+        #self.window.HorizNext2RunLayout.addStretch()
+        self.window.VertNext2RunLayout.addStretch()
 
     def update_nxt_butt(self, str_key):
         small_f_size = int(self.font_point_size * 0.75)
@@ -853,7 +861,8 @@ class MainObject(QObject):
                     nxt_butt.clicked.connect(self.nxt_clicked)
                     nxt_butt.setIcon(self.param_widgets[bt_str]["icon"])
                     nxt_butt.setIconSize(QSize(38, 42))
-                    self.window.Next2RunLayout.addWidget(nxt_butt)
+                    #self.window.HorizNext2RunLayout.addWidget(nxt_butt)
+                    self.window.VertNext2RunLayout.addWidget(nxt_butt)
 
         except IndexError:
             logging.info("no need to add next button Index Err Catch")
