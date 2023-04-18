@@ -184,7 +184,6 @@ class MainObject(QObject):
             self.window.IndexAdvancedScrollArea
         )
 
-        ######################################################################### New ssx_index_params
         ssx_index_simpl_widg = SsxIndexSimplerParamTab()
         ssx_index_simpl_widg.item_changed.connect(self.item_param_changed)
         self.window.SsxIndexSimplerScrollArea.setWidget(ssx_index_simpl_widg)
@@ -518,6 +517,9 @@ class MainObject(QObject):
         self.server_nod_lst = []
         self.request_display()
 
+        self.nxt_2do_layout = self.window.HorizNext2RunLayout
+        #self.nxt_2do_layout = self.window.VertNext2RunLayout
+
         self.change_widget(self.curr_widg_key)
         self.thrd_lst = []
 
@@ -820,8 +822,7 @@ class MainObject(QObject):
                     self.clearLayout(item.layout())
 
     def check_nxt_btn(self):
-        #self.clearLayout(self.window.HorizNext2RunLayout)
-        self.clearLayout(self.window.VertNext2RunLayout)
+        self.clearLayout(self.nxt_2do_layout)
 
         try:
             str_key = self.server_nod_lst[self.curr_nod_num]["cmd2show"][0][6:]
@@ -829,16 +830,10 @@ class MainObject(QObject):
 
         except (IndexError, AttributeError):
             logging.info("NO need to run << update_nxt_butt >>")
-
-        '''self.window.HorizNext2RunLayout.addWidget(
-            QLabel("                  . . .       ")
-        )'''
-        self.window.VertNext2RunLayout.addWidget(
-            QLabel("..." + " " * 30 + "\n\n" + " " * 30 + "...")
+        self.nxt_2do_layout.addWidget(
+            QLabel(" ." + " " * 30 + "\n" + " " * 30 + ". ")
         )
-
-        #self.window.HorizNext2RunLayout.addStretch()
-        self.window.VertNext2RunLayout.addStretch()
+        self.nxt_2do_layout.addStretch()
 
     def update_nxt_butt(self, str_key):
         small_f_size = int(self.font_point_size * 0.75)
@@ -861,8 +856,7 @@ class MainObject(QObject):
                     nxt_butt.clicked.connect(self.nxt_clicked)
                     nxt_butt.setIcon(self.param_widgets[bt_str]["icon"])
                     nxt_butt.setIconSize(QSize(38, 42))
-                    #self.window.HorizNext2RunLayout.addWidget(nxt_butt)
-                    self.window.VertNext2RunLayout.addWidget(nxt_butt)
+                    self.nxt_2do_layout.addWidget(nxt_butt)
 
         except IndexError:
             logging.info("no need to add next button Index Err Catch")
