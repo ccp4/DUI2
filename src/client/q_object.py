@@ -830,8 +830,11 @@ class MainObject(QObject):
 
         except (IndexError, AttributeError):
             logging.info("NO need to run << update_nxt_butt >>")
-        self.nxt_2do_layout.addWidget(
+        '''self.nxt_2do_layout.addWidget(
             QLabel(" ." + " " * 30 + "\n" + " " * 30 + ". ")
+        )'''
+        self.nxt_2do_layout.addWidget(
+            QLabel(" " + " " * 30 + "\n" + " " * 30 + " ")
         )
         self.nxt_2do_layout.addStretch()
 
