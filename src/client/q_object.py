@@ -517,11 +517,20 @@ class MainObject(QObject):
         self.server_nod_lst = []
         self.request_display()
 
+        '''
+        self.nxt_2do_layout = self.window.VertNext2RunLayout
+        self.do_next_one = self.do_one_thing
+        self.do_next_two = self.do_another_thing
+        '''
         self.nxt_2do_layout = self.window.HorizNext2RunLayout
-        #self.nxt_2do_layout = self.window.VertNext2RunLayout
+        self.do_next_one = self.do_another_thing
+        self.do_next_two = self.do_one_thing
+
+
 
         self.change_widget(self.curr_widg_key)
         self.thrd_lst = []
+
 
         TODO_look_at_this = '''
         self.window.MainHSplitter.setStretchFactor(0, 3)
@@ -824,15 +833,19 @@ class MainObject(QObject):
     def check_nxt_btn(self):
         self.clearLayout(self.nxt_2do_layout)
 
+        self.do_next_one()
+        self.do_next_two()
+
+
+    def do_one_thing(self):
         try:
             str_key = self.server_nod_lst[self.curr_nod_num]["cmd2show"][0][6:]
             self.update_nxt_butt(str_key)
 
         except (IndexError, AttributeError):
             logging.info("NO need to run << update_nxt_butt >>")
-        '''self.nxt_2do_layout.addWidget(
-            QLabel(" ." + " " * 30 + "\n" + " " * 30 + ". ")
-        )'''
+
+    def do_another_thing(self):
         self.nxt_2do_layout.addWidget(
             QLabel(" " + " " * 30 + "\n" + " " * 30 + " ")
         )
