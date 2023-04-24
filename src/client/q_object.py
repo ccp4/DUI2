@@ -517,7 +517,7 @@ class MainObject(QObject):
         self.server_nod_lst = []
         self.request_display()
 
-        opt4lay = 3
+        opt4lay = 2
 
         if opt4lay == 1:
             self.nxt_2do_layout = self.window.SmallVertiNext2RunLayout
@@ -538,11 +538,11 @@ class MainObject(QObject):
         self.change_widget(self.curr_widg_key)
         self.thrd_lst = []
 
-        self.window.MainHSplitter.setStretchFactor(0, 3)
-        self.window.MainHSplitter.setStretchFactor(1, 2)
+        #self.window.MainHSplitter.setStretchFactor(0, 3)
+        #self.window.MainHSplitter.setStretchFactor(1, 2)
 
-        self.window.LeftVSplitter.setStretchFactor(0, 3)
-        self.window.LeftVSplitter.setStretchFactor(1, 2)
+        #self.window.LeftVSplitter.setStretchFactor(0, 3)
+        #self.window.LeftVSplitter.setStretchFactor(1, 2)
 
         self.parent_app.aboutToQuit.connect(self.close_event)
 
