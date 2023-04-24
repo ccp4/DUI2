@@ -517,12 +517,12 @@ class MainObject(QObject):
         self.server_nod_lst = []
         self.request_display()
 
-        opt4lay = None
+        opt4lay = 3
 
         if opt4lay == 1:
-            self.nxt_2do_layout = self.window.VertNext2RunLayout
-            self.do_next_one = self.do_one_thing
-            self.do_next_two = self.do_another_thing
+            self.nxt_2do_layout = self.window.SmallVertiNext2RunLayout
+            self.do_next_one = self.do_another_thing
+            self.do_next_two = self.do_one_thing
 
         elif opt4lay == 2:
             self.nxt_2do_layout = self.window.HorizNext2RunLayout
@@ -530,9 +530,9 @@ class MainObject(QObject):
             self.do_next_two = self.do_one_thing
 
         else:
-            self.nxt_2do_layout = self.window.SmallVertiNext2RunLayout
-            self.do_next_one = self.do_another_thing
-            self.do_next_two = self.do_one_thing
+            self.nxt_2do_layout = self.window.VertNext2RunLayout
+            self.do_next_one = self.do_one_thing
+            self.do_next_two = self.do_another_thing
 
 
         self.change_widget(self.curr_widg_key)
