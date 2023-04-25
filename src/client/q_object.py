@@ -58,7 +58,6 @@ from client.simpler_param_widgets import (
     ScaleSimplerParamTab, CombineExperimentSimplerParamTab
 )
 
-
 class MainObject(QObject):
     def __init__(self, parent = None, multi_runner = None):
         super(MainObject, self).__init__(parent)
@@ -849,7 +848,7 @@ class MainObject(QObject):
 
     def do_another_thing(self):
         self.nxt_2do_layout.addWidget(
-            QLabel(" " + " " * 30 + "\n" + " " * 30 + " ")
+            QLabel(" " + " " * 18 + "\n" + " " * 18 + " ")
         )
         self.nxt_2do_layout.addStretch()
 
@@ -867,13 +866,20 @@ class MainObject(QObject):
                 )
                 nxt_cmd_lst = fnd_nxt_cmd.get_nxt_cmd()
                 for bt_str in nxt_cmd_lst:
-                    split_label = bt_str.replace("_", "\n")
-                    nxt_butt = QPushButton(split_label)
+                    split_label = bt_str.replace("_", "\n") + "\n" + " " * 20
+
+                    nxt_butt = QToolButton()
+                    nxt_butt.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
+
+                    #nxt_butt = QPushButton()
+
+                    nxt_butt.setText(split_label)
                     nxt_butt.cmd_str = bt_str
                     nxt_butt.setFont(small_font)
                     nxt_butt.clicked.connect(self.nxt_clicked)
                     nxt_butt.setIcon(self.param_widgets[bt_str]["icon"])
                     nxt_butt.setIconSize(QSize(38, 42))
+
                     self.nxt_2do_layout.addWidget(nxt_butt)
 
         except IndexError:
