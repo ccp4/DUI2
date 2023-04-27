@@ -516,23 +516,31 @@ class MainObject(QObject):
         self.server_nod_lst = []
         self.request_display()
 
-        opt4lay = 3
+        opt4lay = 1
 
         if opt4lay == 1:
+            # semi Imosflm: vertical at the mid left
             self.nxt_2do_layout = self.window.SmallVertiNext2RunLayout
             self.do_next_one = self.do_another_thing
             self.do_next_two = self.do_one_thing
+            self.width4labl = 35
+            self.nxt_but_stl = Qt.ToolButtonTextBesideIcon
 
         elif opt4lay == 2:
+            # Next steps are placed horizontal at the bottom
             self.nxt_2do_layout = self.window.HorizNext2RunLayout
             self.do_next_one = self.do_another_thing
             self.do_next_two = self.do_one_thing
+            self.width4labl = 5
+            self.nxt_but_stl = Qt.ToolButtonTextBesideIcon
 
         else:
+            # Imosflm style: vertical at the left
             self.nxt_2do_layout = self.window.VertNext2RunLayout
             self.do_next_one = self.do_one_thing
             self.do_next_two = self.do_another_thing
-
+            self.width4labl = 25
+            self.nxt_but_stl = Qt.ToolButtonTextUnderIcon
 
         self.change_widget(self.curr_widg_key)
         self.thrd_lst = []
@@ -848,7 +856,7 @@ class MainObject(QObject):
 
     def do_another_thing(self):
         self.nxt_2do_layout.addWidget(
-            QLabel(" " + " " * 18 + "\n" + " " * 18 + " ")
+            QLabel(" " * self.width4labl + "\n" + " " * self.width4labl)
         )
         self.nxt_2do_layout.addStretch()
 
@@ -866,13 +874,13 @@ class MainObject(QObject):
                 )
                 nxt_cmd_lst = fnd_nxt_cmd.get_nxt_cmd()
                 for bt_str in nxt_cmd_lst:
-                    split_label = bt_str.replace("_", "\n") + "\n" + " " * 20
-
+                    #split_label = " " * 22 + "\u00A0" + "\n"
+                    split_label = bt_str.replace("_", "\n")
+                    split_label += (3 - bt_str.count("_")) * (
+                        "\n" + (" " * 22 + "\u00A0")
+                    )
                     nxt_butt = QToolButton()
-                    nxt_butt.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
-
-                    #nxt_butt = QPushButton()
-
+                    nxt_butt.setToolButtonStyle(self.nxt_but_stl)
                     nxt_butt.setText(split_label)
                     nxt_butt.cmd_str = bt_str
                     nxt_butt.setFont(small_font)
@@ -880,7 +888,7 @@ class MainObject(QObject):
                     nxt_butt.setIcon(self.param_widgets[bt_str]["icon"])
                     nxt_butt.setIconSize(QSize(38, 42))
 
-                    self.nxt_2do_layout.addWidget(nxt_butt)
+                    self.nxt_2do_layout.addWidget(nxt_butt, stretch = 8)
 
         except IndexError:
             logging.info("no need to add next button Index Err Catch")
