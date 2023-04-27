@@ -516,7 +516,7 @@ class MainObject(QObject):
         self.server_nod_lst = []
         self.request_display()
 
-        opt4lay = 1
+        opt4lay = 3
 
         if opt4lay == 1:
             # semi Imosflm: vertical at the mid left
@@ -539,7 +539,7 @@ class MainObject(QObject):
             self.nxt_2do_layout = self.window.VertNext2RunLayout
             self.do_next_one = self.do_one_thing
             self.do_next_two = self.do_another_thing
-            self.width4labl = 25
+            self.width4labl = 20
             self.nxt_but_stl = Qt.ToolButtonTextUnderIcon
 
         self.change_widget(self.curr_widg_key)
@@ -874,11 +874,10 @@ class MainObject(QObject):
                 )
                 nxt_cmd_lst = fnd_nxt_cmd.get_nxt_cmd()
                 for bt_str in nxt_cmd_lst:
-                    #split_label = " " * 22 + "\u00A0" + "\n"
-                    split_label = bt_str.replace("_", "\n")
-                    split_label += (3 - bt_str.count("_")) * (
-                        "\n" + (" " * 22 + "\u00A0")
-                    )
+                    emt_lin = " " * 22 + "\u00A0"
+                    split_label = (2 - bt_str.count("_")) * (emt_lin + "\n")
+                    split_label += bt_str.replace("_", "\n")
+                    split_label += "\n" + emt_lin
                     nxt_butt = QToolButton()
                     nxt_butt.setToolButtonStyle(self.nxt_but_stl)
                     nxt_butt.setText(split_label)
