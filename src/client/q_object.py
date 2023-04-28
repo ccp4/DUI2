@@ -516,14 +516,14 @@ class MainObject(QObject):
         self.server_nod_lst = []
         self.request_display()
 
-        opt4lay = 3
+        opt4lay = 2
 
         if opt4lay == 1:
             # semi Imosflm: vertical at the mid left
             self.nxt_2do_layout = self.window.SmallVertiNext2RunLayout
             self.do_next_one = self.do_another_thing
             self.do_next_two = self.do_one_thing
-            self.width4labl = 44
+            self.width4labl = 38
             self.nxt_but_stl = Qt.ToolButtonTextBesideIcon
 
         elif opt4lay == 2:
@@ -539,7 +539,7 @@ class MainObject(QObject):
             self.nxt_2do_layout = self.window.VertNext2RunLayout
             self.do_next_one = self.do_one_thing
             self.do_next_two = self.do_another_thing
-            self.width4labl = 30
+            self.width4labl = 28
             self.nxt_but_stl = Qt.ToolButtonTextUnderIcon
 
         self.change_widget(self.curr_widg_key)
@@ -876,7 +876,8 @@ class MainObject(QObject):
         #small_font = QFont("OldEnglish", pointSize = small_f_size, italic=True)
 
         small_f_size = int(self.font_point_size * 0.85)
-        small_font = QFont("Courier", pointSize = small_f_size, italic=False)
+        #small_font = QFont("Mono", pointSize = small_f_size, italic=False)
+        small_font = QFont("Mono", pointSize = small_f_size)
         try:
             if(
                 self.server_nod_lst[self.curr_nod_num]["status"] == "Succeeded"

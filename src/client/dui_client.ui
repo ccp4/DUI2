@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1277</width>
-    <height>767</height>
+    <width>1211</width>
+    <height>728</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,7 +18,11 @@
     <item row="0" column="0">
      <layout class="QHBoxLayout" name="horizontalLayout_4">
       <item>
-       <layout class="QVBoxLayout" name="VertNext2RunLayout"/>
+       <layout class="QVBoxLayout" name="VertNext2RunLayout">
+        <property name="spacing">
+         <number>2</number>
+        </property>
+       </layout>
       </item>
       <item>
        <widget class="QSplitter" name="MainHSplitter">
@@ -32,7 +36,11 @@
          <widget class="QWidget" name="horizontalLayoutWidget">
           <layout class="QHBoxLayout" name="nodeControlHorizLayout">
            <item>
-            <layout class="QVBoxLayout" name="SmallVertiNext2RunLayout"/>
+            <layout class="QVBoxLayout" name="SmallVertiNext2RunLayout">
+             <property name="spacing">
+              <number>2</number>
+             </property>
+            </layout>
            </item>
            <item>
             <widget class="QGraphicsView" name="treeView"/>
@@ -196,8 +204,8 @@
                         <rect>
                          <x>0</x>
                          <y>0</y>
-                         <width>497</width>
-                         <height>290</height>
+                         <width>470</width>
+                         <height>268</height>
                         </rect>
                        </property>
                       </widget>
@@ -1840,7 +1848,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1277</width>
+     <width>1211</width>
      <height>22</height>
     </rect>
    </property>
