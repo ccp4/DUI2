@@ -523,7 +523,7 @@ class MainObject(QObject):
             self.nxt_2do_layout = self.window.SmallVertiNext2RunLayout
             self.do_next_one = self.do_another_thing
             self.do_next_two = self.do_one_thing
-            self.width4labl = 35
+            self.width4labl = 44
             self.nxt_but_stl = Qt.ToolButtonTextBesideIcon
 
         elif opt4lay == 2:
@@ -539,7 +539,7 @@ class MainObject(QObject):
             self.nxt_2do_layout = self.window.VertNext2RunLayout
             self.do_next_one = self.do_one_thing
             self.do_next_two = self.do_another_thing
-            self.width4labl = 20
+            self.width4labl = 30
             self.nxt_but_stl = Qt.ToolButtonTextUnderIcon
 
         self.change_widget(self.curr_widg_key)
@@ -860,9 +860,23 @@ class MainObject(QObject):
         )
         self.nxt_2do_layout.addStretch()
 
+    def make_square_srting(self, long_string_in):
+        lst_str = long_string_in.split("_")
+        sqr_str = (3 - len(lst_str)) * " \n"
+        row_len = 11
+        for row_ini in lst_str:
+            row_end = row_ini + (row_len - len(row_ini)) * " " + "\u00A0\n"
+            sqr_str += row_end
+
+        sqr_str = sqr_str[0:-1]
+        return sqr_str
+
     def update_nxt_butt(self, str_key):
-        small_f_size = int(self.font_point_size * 0.75)
-        small_font = QFont("OldEnglish", pointSize = small_f_size, italic=True)
+        #small_f_size = int(self.font_point_size * 0.75)
+        #small_font = QFont("OldEnglish", pointSize = small_f_size, italic=True)
+
+        small_f_size = int(self.font_point_size * 0.85)
+        small_font = QFont("Courier", pointSize = small_f_size, italic=False)
         try:
             if(
                 self.server_nod_lst[self.curr_nod_num]["status"] == "Succeeded"
@@ -874,13 +888,20 @@ class MainObject(QObject):
                 )
                 nxt_cmd_lst = fnd_nxt_cmd.get_nxt_cmd()
                 for bt_str in nxt_cmd_lst:
-                    emt_lin = " " * 22 + "\u00A0"
-                    split_label = (2 - bt_str.count("_")) * (emt_lin + "\n")
-                    split_label += bt_str.replace("_", "\n")
-                    split_label += "\n" + emt_lin
+                    '''
+                    #building button_s label
+                    emtp_line = " " * 22 + "\u00A0"
+                    nxt_2do_label = (2 - bt_str.count("_")) * (emtp_line + "\n")
+                    nxt_2do_label += bt_str.replace("_", "\n")
+                    # nxt_2do_label += "\n" + emtp_line
+
+                    '''
+                    nxt_2do_label = self.make_square_srting(bt_str)
+
+                    # configuring rest of the button
                     nxt_butt = QToolButton()
                     nxt_butt.setToolButtonStyle(self.nxt_but_stl)
-                    nxt_butt.setText(split_label)
+                    nxt_butt.setText(nxt_2do_label)
                     nxt_butt.cmd_str = bt_str
                     nxt_butt.setFont(small_font)
                     nxt_butt.clicked.connect(self.nxt_clicked)
