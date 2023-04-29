@@ -451,6 +451,9 @@ class MainObject(QObject):
         self.parent_nums_lst = []
 
         self.font_point_size = QFont().pointSize()
+        small_f_size = int(self.font_point_size * 0.85)
+        self.small_font = QFont("Courier", pointSize = small_f_size, italic=False)
+
 
         self.tree_scene.node_clicked.connect(self.on_node_click)
         self.tree_scene.hide_clicked.connect(self.on_hide_click)
@@ -516,14 +519,14 @@ class MainObject(QObject):
         self.server_nod_lst = []
         self.request_display()
 
-        opt4lay = 1
+        opt4lay = 3
 
         if opt4lay == 1:
             # semi Imosflm: vertical at the mid left
             self.nxt_2do_layout = self.window.SmallVertiNext2RunLayout
             self.do_next_one = self.do_another_thing
             self.do_next_two = self.do_one_thing
-            self.width4labl = 40
+            self.width4labl = 23
             self.nxt_but_stl = Qt.ToolButtonTextBesideIcon
 
         elif opt4lay == 2:
@@ -531,7 +534,7 @@ class MainObject(QObject):
             self.nxt_2do_layout = self.window.HorizNext2RunLayout
             self.do_next_one = self.do_another_thing
             self.do_next_two = self.do_one_thing
-            self.width4labl = 5
+            self.width4labl = 3
             self.nxt_but_stl = Qt.ToolButtonTextBesideIcon
 
         else:
@@ -539,7 +542,7 @@ class MainObject(QObject):
             self.nxt_2do_layout = self.window.VertNext2RunLayout
             self.do_next_one = self.do_one_thing
             self.do_next_two = self.do_another_thing
-            self.width4labl = 28
+            self.width4labl = 17
             self.nxt_but_stl = Qt.ToolButtonTextUnderIcon
 
         self.change_widget(self.curr_widg_key)
@@ -855,8 +858,12 @@ class MainObject(QObject):
             logging.info("NO need to run << update_nxt_butt >>")
 
     def do_another_thing(self):
+        self.space_label = QLabel(
+            " " * self.width4labl + "\n\n\n\n" + " " * self.width4labl
+        )
+        self.space_label.setFont(self.small_font)
         self.nxt_2do_layout.addWidget(
-            QLabel(" " * self.width4labl + "\n" + " " * self.width4labl)
+            self.space_label
         )
         self.nxt_2do_layout.addStretch()
 
@@ -872,12 +879,6 @@ class MainObject(QObject):
         return sqr_str
 
     def update_nxt_butt(self, str_key):
-        #small_f_size = int(self.font_point_size * 0.75)
-        #small_font = QFont("OldEnglish", pointSize = small_f_size, italic=True)
-
-        small_f_size = int(self.font_point_size * 0.85)
-        #small_font = QFont("Mono", pointSize = small_f_size, italic=False)
-        small_font = QFont("Mono", pointSize = small_f_size)
         try:
             if(
                 self.server_nod_lst[self.curr_nod_num]["status"] == "Succeeded"
@@ -889,22 +890,12 @@ class MainObject(QObject):
                 )
                 nxt_cmd_lst = fnd_nxt_cmd.get_nxt_cmd()
                 for bt_str in nxt_cmd_lst:
-                    '''
-                    #building button_s label
-                    emtp_line = " " * 22 + "\u00A0"
-                    nxt_2do_label = (2 - bt_str.count("_")) * (emtp_line + "\n")
-                    nxt_2do_label += bt_str.replace("_", "\n")
-                    # nxt_2do_label += "\n" + emtp_line
-
-                    '''
                     nxt_2do_label = self.make_square_srting(bt_str)
-
-                    # configuring rest of the button
                     nxt_butt = QToolButton()
                     nxt_butt.setToolButtonStyle(self.nxt_but_stl)
                     nxt_butt.setText(nxt_2do_label)
                     nxt_butt.cmd_str = bt_str
-                    nxt_butt.setFont(small_font)
+                    nxt_butt.setFont(self.small_font)
                     nxt_butt.clicked.connect(self.nxt_clicked)
                     nxt_butt.setIcon(self.param_widgets[bt_str]["icon"])
                     nxt_butt.setIconSize(QSize(38, 42))
