@@ -519,14 +519,14 @@ class MainObject(QObject):
         self.server_nod_lst = []
         self.request_display()
 
-        opt4lay = 3
+        opt4lay = 1
 
         if opt4lay == 1:
             # semi Imosflm: vertical at the mid left
             self.nxt_2do_layout = self.window.SmallVertiNext2RunLayout
             self.do_next_one = self.do_another_thing
             self.do_next_two = self.do_one_thing
-            self.width4labl = 23
+            self.width4labl = 24
             self.nxt_but_stl = Qt.ToolButtonTextBesideIcon
 
         elif opt4lay == 2:
