@@ -519,29 +519,29 @@ class MainObject(QObject):
         self.server_nod_lst = []
         self.request_display()
 
-        opt4lay = 1
+        opt4lay = 2
 
         if opt4lay == 1:
             # semi Imosflm: vertical at the mid left
             self.nxt_2do_layout = self.window.SmallVertiNext2RunLayout
-            self.do_next_one = self.do_another_thing
-            self.do_next_two = self.do_one_thing
+            self.add_layout_p1 = self.add_layout_button
+            self.add_layout_p2 = self.add_next2do_button
             self.width4labl = 24
             self.nxt_but_stl = Qt.ToolButtonTextBesideIcon
 
         elif opt4lay == 2:
             # Next steps are placed horizontal at the bottom
             self.nxt_2do_layout = self.window.HorizNext2RunLayout
-            self.do_next_one = self.do_another_thing
-            self.do_next_two = self.do_one_thing
+            self.add_layout_p1 = self.add_layout_button
+            self.add_layout_p2 = self.add_next2do_button
             self.width4labl = 3
             self.nxt_but_stl = Qt.ToolButtonTextBesideIcon
 
         else:
             # Imosflm style: vertical at the left
             self.nxt_2do_layout = self.window.VertNext2RunLayout
-            self.do_next_one = self.do_one_thing
-            self.do_next_two = self.do_another_thing
+            self.add_layout_p1 = self.add_next2do_button
+            self.add_layout_p2 = self.add_layout_button
             self.width4labl = 17
             self.nxt_but_stl = Qt.ToolButtonTextUnderIcon
 
@@ -845,11 +845,11 @@ class MainObject(QObject):
     def check_nxt_btn(self):
         self.clearLayout(self.nxt_2do_layout)
 
-        self.do_next_one()
-        self.do_next_two()
+        self.add_layout_p1()
+        self.add_layout_p2()
 
 
-    def do_one_thing(self):
+    def add_next2do_button(self):
         try:
             str_key = self.server_nod_lst[self.curr_nod_num]["cmd2show"][0][6:]
             self.update_nxt_butt(str_key)
@@ -857,7 +857,8 @@ class MainObject(QObject):
         except (IndexError, AttributeError):
             logging.info("NO need to run << update_nxt_butt >>")
 
-    def do_another_thing(self):
+    def add_layout_button(self):
+        '''
         self.space_label = QLabel(
             " " * self.width4labl + "\n\n\n\n" + " " * self.width4labl
         )
@@ -865,6 +866,27 @@ class MainObject(QObject):
         self.nxt_2do_layout.addWidget(
             self.space_label
         )
+        '''
+
+        nxt_2do_label = self.make_square_srting("change_layout")
+        nxt_butt = QToolButton()
+        nxt_butt.setToolButtonStyle(self.nxt_but_stl)
+        nxt_butt.setText(nxt_2do_label)
+        nxt_butt.setFont(self.small_font)
+        #nxt_butt.clicked.connect(self.nxt_clicked)
+        #nxt_butt.setIcon(self.param_widgets["index"]["icon"])
+        nxt_butt.setAutoRaise(True)
+        nxt_butt.setIcon(
+            QIcon(
+                self.ui_dir_path + os.sep + "resources" \
+                + os.sep + "new_layout.png", mode = QIcon.Normal
+            )
+        )
+
+        nxt_butt.setIconSize(QSize(38, 42))
+        self.nxt_2do_layout.addWidget(nxt_butt, stretch = 8)
+
+
         self.nxt_2do_layout.addStretch()
 
     def make_square_srting(self, long_string_in):
