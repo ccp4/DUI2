@@ -31,8 +31,8 @@ from PySide2.QtGui import *
 from PySide2.QtWebEngineWidgets import QWebEngineView
 
 from client.gui_utils import (
-    TreeDirScene, widgets_defs, get_widget_def_dict,
-    find_scale_cmd, find_next_cmd, check_if_predict_n_report
+    TreeDirScene, widgets_defs, get_widget_def_dict, make_square_srting,
+    LayoutButton, find_scale_cmd, find_next_cmd, check_if_predict_n_report
 )
 from client.outputs import DoLoadHTML, ShowLog, HandleReciprocalLatticeView
 from client.img_view import DoImageView
@@ -519,8 +519,7 @@ class MainObject(QObject):
         self.server_nod_lst = []
         self.request_display()
 
-        opt4lay = 2
-
+        opt4lay = 3
         if opt4lay == 1:
             # semi Imosflm: vertical at the mid left
             self.nxt_2do_layout = self.window.SmallVertiNext2RunLayout
@@ -528,6 +527,8 @@ class MainObject(QObject):
             self.add_layout_p2 = self.add_next2do_button
             self.width4labl = 24
             self.nxt_but_stl = Qt.ToolButtonTextBesideIcon
+            self.n_stretch_1 = 0
+            self.n_stretch_2 = 1
 
         elif opt4lay == 2:
             # Next steps are placed horizontal at the bottom
@@ -536,6 +537,8 @@ class MainObject(QObject):
             self.add_layout_p2 = self.add_next2do_button
             self.width4labl = 3
             self.nxt_but_stl = Qt.ToolButtonTextBesideIcon
+            self.n_stretch_1 = 0
+            self.n_stretch_2 = 1
 
         else:
             # Imosflm style: vertical at the left
@@ -544,6 +547,8 @@ class MainObject(QObject):
             self.add_layout_p2 = self.add_layout_button
             self.width4labl = 17
             self.nxt_but_stl = Qt.ToolButtonTextUnderIcon
+            self.n_stretch_1 = 1
+            self.n_stretch_2 = 0
 
         self.change_widget(self.curr_widg_key)
         self.thrd_lst = []
@@ -858,47 +863,17 @@ class MainObject(QObject):
             logging.info("NO need to run << update_nxt_butt >>")
 
     def add_layout_button(self):
-        '''
-        self.space_label = QLabel(
-            " " * self.width4labl + "\n\n\n\n" + " " * self.width4labl
-        )
-        self.space_label.setFont(self.small_font)
-        self.nxt_2do_layout.addWidget(
-            self.space_label
-        )
-        '''
 
-        nxt_2do_label = self.make_square_srting("change_layout")
-        nxt_butt = QToolButton()
-        nxt_butt.setToolButtonStyle(self.nxt_but_stl)
-        nxt_butt.setText(nxt_2do_label)
-        nxt_butt.setFont(self.small_font)
-        #nxt_butt.clicked.connect(self.nxt_clicked)
-        #nxt_butt.setIcon(self.param_widgets["index"]["icon"])
-        nxt_butt.setAutoRaise(True)
-        nxt_butt.setIcon(
-            QIcon(
-                self.ui_dir_path + os.sep + "resources" \
-                + os.sep + "new_layout.png", mode = QIcon.Normal
-            )
+        nxt_butt = LayoutButton(
+            ui_path = self.ui_dir_path, bt_font = self.small_font,
+            but_stl = self.nxt_but_stl
         )
+        for n_times in range(self.n_stretch_1):
+            self.nxt_2do_layout.addStretch()
 
-        nxt_butt.setIconSize(QSize(38, 42))
         self.nxt_2do_layout.addWidget(nxt_butt, stretch = 8)
-
-
-        self.nxt_2do_layout.addStretch()
-
-    def make_square_srting(self, long_string_in):
-        lst_str = long_string_in.split("_")
-        sqr_str = (3 - len(lst_str)) * " \n"
-        row_len = 11
-        for row_ini in lst_str:
-            row_end = row_ini + (row_len - len(row_ini)) * " " + "\u00A0\n"
-            sqr_str += row_end
-
-        sqr_str = sqr_str[0:-1]
-        return sqr_str
+        for n_times in range(self.n_stretch_2):
+            self.nxt_2do_layout.addStretch()
 
     def update_nxt_butt(self, str_key):
         try:
@@ -912,7 +887,7 @@ class MainObject(QObject):
                 )
                 nxt_cmd_lst = fnd_nxt_cmd.get_nxt_cmd()
                 for bt_str in nxt_cmd_lst:
-                    nxt_2do_label = self.make_square_srting(bt_str)
+                    nxt_2do_label = make_square_srting(bt_str)
                     nxt_butt = QToolButton()
                     nxt_butt.setToolButtonStyle(self.nxt_but_stl)
                     nxt_butt.setText(nxt_2do_label)
