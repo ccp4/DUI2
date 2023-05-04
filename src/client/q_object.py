@@ -519,36 +519,8 @@ class MainObject(QObject):
         self.server_nod_lst = []
         self.request_display()
 
-        opt4lay = 3
-        if opt4lay == 1:
-            # semi Imosflm: vertical at the mid left
-            self.nxt_2do_layout = self.window.SmallVertiNext2RunLayout
-            self.add_layout_p1 = self.add_layout_button
-            self.add_layout_p2 = self.add_next2do_button
-            self.width4labl = 24
-            self.nxt_but_stl = Qt.ToolButtonTextBesideIcon
-            self.n_stretch_1 = 0
-            self.n_stretch_2 = 1
-
-        elif opt4lay == 2:
-            # Next steps are placed horizontal at the bottom
-            self.nxt_2do_layout = self.window.HorizNext2RunLayout
-            self.add_layout_p1 = self.add_layout_button
-            self.add_layout_p2 = self.add_next2do_button
-            self.width4labl = 3
-            self.nxt_but_stl = Qt.ToolButtonTextBesideIcon
-            self.n_stretch_1 = 0
-            self.n_stretch_2 = 1
-
-        else:
-            # Imosflm style: vertical at the left
-            self.nxt_2do_layout = self.window.VertNext2RunLayout
-            self.add_layout_p1 = self.add_next2do_button
-            self.add_layout_p2 = self.add_layout_button
-            self.width4labl = 17
-            self.nxt_but_stl = Qt.ToolButtonTextUnderIcon
-            self.n_stretch_1 = 1
-            self.n_stretch_2 = 0
+        self.opt4lay = 2
+        self.change_layout()
 
         self.change_widget(self.curr_widg_key)
         self.thrd_lst = []
@@ -847,6 +819,49 @@ class MainObject(QObject):
                 else:
                     self.clearLayout(item.layout())
 
+
+    def change_layout(self):
+        self.opt4lay += 1
+        if self.opt4lay > 3:
+            self.opt4lay = 1
+        try:
+            self.clearLayout(self.nxt_2do_layout)
+
+        except AttributeError:
+            print("not needed to clear layout yet")
+
+        if self.opt4lay == 1:
+            # semi Imosflm: vertical at the mid left
+            self.nxt_2do_layout = self.window.SmallVertiNext2RunLayout
+            self.add_layout_p1 = self.add_layout_button
+            self.add_layout_p2 = self.add_next2do_button
+            self.width4labl = 24
+            self.nxt_but_stl = Qt.ToolButtonTextBesideIcon
+            self.n_stretch_1 = 0
+            self.n_stretch_2 = 1
+
+        elif self.opt4lay == 2:
+            # Next steps are placed horizontal at the bottom
+            self.nxt_2do_layout = self.window.HorizNext2RunLayout
+            self.add_layout_p1 = self.add_layout_button
+            self.add_layout_p2 = self.add_next2do_button
+            self.width4labl = 3
+            self.nxt_but_stl = Qt.ToolButtonTextBesideIcon
+            self.n_stretch_1 = 0
+            self.n_stretch_2 = 1
+
+        else:
+            # Imosflm style: vertical at the left
+            self.nxt_2do_layout = self.window.VertNext2RunLayout
+            self.add_layout_p1 = self.add_next2do_button
+            self.add_layout_p2 = self.add_layout_button
+            self.width4labl = 17
+            self.nxt_but_stl = Qt.ToolButtonTextUnderIcon
+            self.n_stretch_1 = 1
+            self.n_stretch_2 = 0
+
+        self.check_nxt_btn()
+
     def check_nxt_btn(self):
         self.clearLayout(self.nxt_2do_layout)
 
@@ -864,14 +879,15 @@ class MainObject(QObject):
 
     def add_layout_button(self):
 
-        nxt_butt = LayoutButton(
+        self.but4lay = LayoutButton(
             ui_path = self.ui_dir_path, bt_font = self.small_font,
             but_stl = self.nxt_but_stl
         )
+        self.but4lay.usr_click.connect(self.change_layout)
         for n_times in range(self.n_stretch_1):
             self.nxt_2do_layout.addStretch()
 
-        self.nxt_2do_layout.addWidget(nxt_butt, stretch = 8)
+        self.nxt_2do_layout.addWidget(self.but4lay, stretch = 8)
         for n_times in range(self.n_stretch_2):
             self.nxt_2do_layout.addStretch()
 
