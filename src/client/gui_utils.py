@@ -543,7 +543,8 @@ class LayoutButton(QToolButton):
         self.icon_path_n = ui_path + os.sep + "resources" + os.sep + "new_layout.png"
         self.icon_path_cl = ui_path + os.sep + "resources" + os.sep + "new_layout_clear.png"
         self.txt_n = make_square_srting("change_layout")
-        self.txt_cl = make_square_srting(". _ . _  .")
+        #self.txt_cl = make_square_srting(". _ . _  .")
+        self.txt_cl = make_square_srting(" _ ")
         self.setToolButtonStyle(but_stl)
         self.setFont(bt_font)
         self.setText(self.txt_cl)
