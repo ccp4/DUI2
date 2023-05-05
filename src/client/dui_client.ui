@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1211</width>
-    <height>728</height>
+    <width>1139</width>
+    <height>818</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -204,8 +204,8 @@
                         <rect>
                          <x>0</x>
                          <y>0</y>
-                         <width>470</width>
-                         <height>268</height>
+                         <width>440</width>
+                         <height>318</height>
                         </rect>
                        </property>
                       </widget>
@@ -1848,7 +1848,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1211</width>
+     <width>1139</width>
      <height>22</height>
     </rect>
    </property>
@@ -1866,6 +1866,7 @@
     <addaction name="actionBright_on_off"/>
     <addaction name="actionArrowhead"/>
     <addaction name="actionSharpTurns"/>
+    <addaction name="actionLayoutButton"/>
    </widget>
    <addaction name="menu_file"/>
    <addaction name="menu_view"/>
@@ -1898,6 +1899,11 @@
   <action name="actionSharpTurns">
    <property name="text">
     <string>Add / Remove sharp turns</string>
+   </property>
+  </action>
+  <action name="actionLayoutButton">
+   <property name="text">
+    <string>Add / Remove layout button</string>
    </property>
   </action>
  </widget>

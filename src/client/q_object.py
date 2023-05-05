@@ -520,6 +520,7 @@ class MainObject(QObject):
         self.request_display()
 
         self.opt4lay = 2
+        self.show_layout_button = True
         self.change_layout()
 
         self.change_widget(self.curr_widg_key)
@@ -544,6 +545,11 @@ class MainObject(QObject):
         self.window.actionSharpTurns.triggered.connect(
             self.sharp_turns_triggered
         )
+
+        self.window.actionLayoutButton.triggered.connect(
+            self.layout_menu_triggered
+        )
+
         self.window.show()
         self.import_init()
 
@@ -819,7 +825,6 @@ class MainObject(QObject):
                 else:
                     self.clearLayout(item.layout())
 
-
     def change_layout(self):
         self.opt4lay += 1
         if self.opt4lay > 3:
@@ -828,7 +833,7 @@ class MainObject(QObject):
             self.clearLayout(self.nxt_2do_layout)
 
         except AttributeError:
-            print("not needed to clear layout yet")
+            logging.info("not needed to clear layout yet")
 
         if self.opt4lay == 1:
             # semi Imosflm: vertical at the mid left
@@ -864,10 +869,8 @@ class MainObject(QObject):
 
     def check_nxt_btn(self):
         self.clearLayout(self.nxt_2do_layout)
-
         self.add_layout_p1()
         self.add_layout_p2()
-
 
     def add_next2do_button(self):
         try:
@@ -877,17 +880,22 @@ class MainObject(QObject):
         except (IndexError, AttributeError):
             logging.info("NO need to run << update_nxt_butt >>")
 
-    def add_layout_button(self):
+    def layout_menu_triggered(self):
+        self.show_layout_button = not self.show_layout_button
+        self.check_nxt_btn()
 
-        self.but4lay = LayoutButton(
-            ui_path = self.ui_dir_path, bt_font = self.small_font,
-            but_stl = self.nxt_but_stl
-        )
-        self.but4lay.usr_click.connect(self.change_layout)
+    def add_layout_button(self):
         for n_times in range(self.n_stretch_1):
             self.nxt_2do_layout.addStretch()
 
-        self.nxt_2do_layout.addWidget(self.but4lay, stretch = 8)
+        if self.show_layout_button:
+            self.but4lay = LayoutButton(
+                ui_path = self.ui_dir_path, bt_font = self.small_font,
+                but_stl = self.nxt_but_stl
+            )
+            self.but4lay.usr_click.connect(self.change_layout)
+            self.nxt_2do_layout.addWidget(self.but4lay, stretch = 8)
+
         for n_times in range(self.n_stretch_2):
             self.nxt_2do_layout.addStretch()
 
