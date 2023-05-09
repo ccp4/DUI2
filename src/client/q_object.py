@@ -519,7 +519,7 @@ class MainObject(QObject):
         self.server_nod_lst = []
         self.request_display()
 
-        self.opt4lay = 2
+        self.opt4lay = 0
         self.show_layout_button = True
         self.change_layout()
 
@@ -897,11 +897,28 @@ class MainObject(QObject):
             self.but4lay.usr_click.connect(self.change_layout)
             self.nxt_2do_layout.addWidget(self.but4lay, stretch = 8)
             '''
+
+            #####################################################################
+
             self.tmp_lab = QLabel(
                 make_square_srting(long_string_in = "a_b", extra_space = 4)
             )
             self.tmp_lab.setFont(self.small_font)
+            '''
             self.nxt_2do_layout.addWidget(self.tmp_lab)
+            '''
+
+            self.tmp_hlay = QHBoxLayout()
+            self.tmp_hlay.addWidget(self.tmp_lab)
+
+            self.icon_path_cl = self.ui_dir_path + os.sep + "resources" + os.sep + "new_layout_clear.png"
+            self.spc_ico = QPixmap(self.icon_path_cl).scaled(QSize(38, 42))
+
+            self.tmp_lab_ico = QLabel()
+            self.tmp_lab_ico.setPixmap(self.spc_ico)
+            #self.tmp_lab_ico.setIconSize(QSize(38, 42))
+            self.tmp_hlay.addWidget(self.tmp_lab_ico)
+            self.nxt_2do_layout.addLayout(self.tmp_hlay)
 
         for n_times in range(self.n_stretch_2):
             self.nxt_2do_layout.addStretch()
