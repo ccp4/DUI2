@@ -521,10 +521,10 @@ class AdvancedParameters(QWidget):
         nxt_butt.setIconSize(QSize(38, 42))
 '''
 
-def make_square_srting(long_string_in):
+def make_square_srting(long_string_in = None, extra_space = 0):
     lst_str = long_string_in.split("_")
     sqr_str = (3 - len(lst_str)) * " \n"
-    row_len = 11
+    row_len = 11 + extra_space
     for row_ini in lst_str:
         row_end = row_ini + (row_len - len(row_ini)) * " " + "\u00A0\n"
         sqr_str += row_end
@@ -532,6 +532,34 @@ def make_square_srting(long_string_in):
     sqr_str = sqr_str[0:-1]
     return sqr_str
 
+to_remove = '''
+class LayoutButton(QLabel):
+    usr_click = Signal()
+    def __init__(
+        self, parent=None, ui_path = None, bt_font = None, but_stl = None
+    ):
+        super(LayoutButton, self).__init__(parent)
+
+        self.icon_path_n = ui_path + os.sep + "resources" + os.sep + "new_layout.png"
+        self.icon_path_cl = ui_path + os.sep + "resources" + os.sep + "new_layout_clear.png"
+        self.txt_n = make_square_srting(long_string_in = "change_layout")
+        #self.txt_cl = make_square_srting(long_string_in = ". _ . _  .")
+        self.txt_cl = make_square_srting(long_string_in = " _ ")
+        print("but_stl =", but_stl)
+        self.setFont(bt_font)
+        self.setText(self.txt_cl)
+
+        self.setIcon(QIcon(self.icon_path_cl))
+        self.setIconSize(QSize(38, 42))
+
+    def enterEvent(self, event):
+        self.setIcon(QIcon(self.icon_path_n))
+        self.setText(self.txt_n)
+
+    def leaveEvent(self, event):
+        self.setIcon(QIcon(self.icon_path_cl))
+        self.setText(self.txt_cl)
+'''
 
 class LayoutButton(QToolButton):
     usr_click = Signal()
@@ -542,9 +570,9 @@ class LayoutButton(QToolButton):
 
         self.icon_path_n = ui_path + os.sep + "resources" + os.sep + "new_layout.png"
         self.icon_path_cl = ui_path + os.sep + "resources" + os.sep + "new_layout_clear.png"
-        self.txt_n = make_square_srting("change_layout")
-        #self.txt_cl = make_square_srting(". _ . _  .")
-        self.txt_cl = make_square_srting(" _ ")
+        self.txt_n = make_square_srting(long_string_in = "change_layout")
+        #self.txt_cl = make_square_srting(long_string_in = ". _ . _  .")
+        self.txt_cl = make_square_srting(long_string_in = " _ ")
         self.setToolButtonStyle(but_stl)
         self.setFont(bt_font)
         self.setText(self.txt_cl)

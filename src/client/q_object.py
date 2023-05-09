@@ -889,12 +889,19 @@ class MainObject(QObject):
             self.nxt_2do_layout.addStretch()
 
         if self.show_layout_button:
+            '''
             self.but4lay = LayoutButton(
                 ui_path = self.ui_dir_path, bt_font = self.small_font,
                 but_stl = self.nxt_but_stl
             )
             self.but4lay.usr_click.connect(self.change_layout)
             self.nxt_2do_layout.addWidget(self.but4lay, stretch = 8)
+            '''
+            self.tmp_lab = QLabel(
+                make_square_srting(long_string_in = "a_b", extra_space = 4)
+            )
+            self.tmp_lab.setFont(self.small_font)
+            self.nxt_2do_layout.addWidget(self.tmp_lab)
 
         for n_times in range(self.n_stretch_2):
             self.nxt_2do_layout.addStretch()
@@ -911,7 +918,7 @@ class MainObject(QObject):
                 )
                 nxt_cmd_lst = fnd_nxt_cmd.get_nxt_cmd()
                 for bt_str in nxt_cmd_lst:
-                    nxt_2do_label = make_square_srting(bt_str)
+                    nxt_2do_label = make_square_srting(long_string_in = bt_str)
                     nxt_butt = QToolButton()
                     nxt_butt.setToolButtonStyle(self.nxt_but_stl)
                     nxt_butt.setText(nxt_2do_label)
