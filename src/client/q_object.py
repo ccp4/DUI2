@@ -526,7 +526,7 @@ class MainObject(QObject):
         self.change_widget(self.curr_widg_key)
         self.thrd_lst = []
 
-        #self.window.MainHSplitter.setStretchFactor(2, 3)
+        #self.window.MainHSplitter.setStretchFactor(3, 4)
         #self.window.LeftVSplitter.setStretchFactor(1, 2)
 
         self.parent_app.aboutToQuit.connect(self.close_event)
