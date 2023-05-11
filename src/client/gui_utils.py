@@ -502,24 +502,6 @@ class AdvancedParameters(QWidget):
                     widget.setFont(self.norm_labl_font)
                     widget.setStyleSheet(widget.my_style)
 
-'''
-        #old back up
-        nxt_2do_label = self.make_square_srting("change_layout")
-        nxt_butt = QToolButton()
-        nxt_butt.setToolButtonStyle(self.nxt_but_stl)
-        nxt_butt.setText(nxt_2do_label)
-        nxt_butt.setFont(self.small_font)
-        #nxt_butt.clicked.connect(self.nxt_clicked)
-        #nxt_butt.setIcon(self.param_widgets["index"]["icon"])
-        nxt_butt.setAutoRaise(True)
-        nxt_butt.setIcon(
-            QIcon(
-                self.ui_dir_path + os.sep + "resources" \
-                + os.sep + "new_layout.png", mode = QIcon.Normal
-            )
-        )
-        nxt_butt.setIconSize(QSize(38, 42))
-'''
 
 def make_square_srting(long_string_in = None, extra_space = 0):
     lst_str = long_string_in.split("_")
@@ -531,66 +513,6 @@ def make_square_srting(long_string_in = None, extra_space = 0):
 
     sqr_str = sqr_str[0:-1]
     return sqr_str
-
-to_remove = '''
-class LayoutButton(QLabel):
-    usr_click = Signal()
-    def __init__(
-        self, parent=None, ui_path = None, bt_font = None, but_stl = None
-    ):
-        super(LayoutButton, self).__init__(parent)
-
-        self.icon_path_n = ui_path + os.sep + "resources" + os.sep + "new_layout.png"
-        self.icon_path_cl = ui_path + os.sep + "resources" + os.sep + "new_layout_clear.png"
-        self.txt_n = make_square_srting(long_string_in = "change_layout")
-        #self.txt_cl = make_square_srting(long_string_in = ". _ . _  .")
-        self.txt_cl = make_square_srting(long_string_in = " _ ")
-        print("but_stl =", but_stl)
-        self.setFont(bt_font)
-        self.setText(self.txt_cl)
-
-        self.setIcon(QIcon(self.icon_path_cl))
-        self.setIconSize(QSize(38, 42))
-
-    def enterEvent(self, event):
-        self.setIcon(QIcon(self.icon_path_n))
-        self.setText(self.txt_n)
-
-    def leaveEvent(self, event):
-        self.setIcon(QIcon(self.icon_path_cl))
-        self.setText(self.txt_cl)
-'''
-
-class LayoutButton(QToolButton):
-    usr_click = Signal()
-    def __init__(
-        self, parent=None, ui_path = None, bt_font = None, but_stl = None
-    ):
-        super(LayoutButton, self).__init__(parent)
-
-        self.icon_path_n = ui_path + os.sep + "resources" + os.sep + "new_layout.png"
-        self.icon_path_cl = ui_path + os.sep + "resources" + os.sep + "new_layout_clear.png"
-        self.txt_n = make_square_srting(long_string_in = "change_layout")
-        #self.txt_cl = make_square_srting(long_string_in = ". _ . _  .")
-        self.txt_cl = make_square_srting(long_string_in = " _ ")
-        self.setToolButtonStyle(but_stl)
-        self.setFont(bt_font)
-        self.setText(self.txt_cl)
-        self.setAutoRaise(True)
-        self.setIcon(QIcon(self.icon_path_cl))
-        self.setIconSize(QSize(38, 42))
-        self.clicked.connect(self.emmit_click)
-
-    def enterEvent(self, event):
-        self.setIcon(QIcon(self.icon_path_n))
-        self.setText(self.txt_n)
-
-    def leaveEvent(self, event):
-        self.setIcon(QIcon(self.icon_path_cl))
-        self.setText(self.txt_cl)
-
-    def emmit_click(self):
-        self.usr_click.emit()
 
 
 def draw_quadratic_bezier_3_points(
