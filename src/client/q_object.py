@@ -547,7 +547,6 @@ class MainObject(QObject):
         )
 
         self.window.actionLayoutButton.triggered.connect(
-            #self.layout_menu_triggered
             self.change_layout
         )
 
@@ -839,7 +838,7 @@ class MainObject(QObject):
         if self.opt4lay == 1:
             # semi Imosflm: vertical at the mid left
             self.nxt_2do_layout = self.window.SmallVertiNext2RunLayout
-            self.add_layout_p1 = self.add_layout_button
+            self.add_layout_p1 = self.add_empty_label
             self.add_layout_p2 = self.add_next2do_button
             self.nxt_but_stl = Qt.ToolButtonTextBesideIcon
             self.n_stretch_1 = 0
@@ -848,7 +847,7 @@ class MainObject(QObject):
         elif self.opt4lay == 2:
             # Next steps are placed horizontal at the bottom
             self.nxt_2do_layout = self.window.HorizNext2RunLayout
-            self.add_layout_p1 = self.add_layout_button
+            self.add_layout_p1 = self.add_empty_label
             self.add_layout_p2 = self.add_next2do_button
             self.nxt_but_stl = Qt.ToolButtonTextBesideIcon
             self.n_stretch_1 = 0
@@ -858,7 +857,7 @@ class MainObject(QObject):
             # Imosflm style: vertical at the left
             self.nxt_2do_layout = self.window.VertNext2RunLayout
             self.add_layout_p1 = self.add_next2do_button
-            self.add_layout_p2 = self.add_layout_button
+            self.add_layout_p2 = self.add_empty_label
             self.nxt_but_stl = Qt.ToolButtonTextUnderIcon
             self.n_stretch_1 = 1
             self.n_stretch_2 = 0
@@ -878,38 +877,31 @@ class MainObject(QObject):
         except (IndexError, AttributeError):
             logging.info("NO need to run << update_nxt_butt >>")
 
-    def layout_menu_triggered(self):
-        self.show_layout_button = not self.show_layout_button
-        self.check_nxt_btn()
-
-    def add_layout_button(self):
+    def add_empty_label(self):
         for n_times in range(self.n_stretch_1):
             self.nxt_2do_layout.addStretch()
 
-        if self.show_layout_button:
+        self.tmp_lab = QLabel(
+            make_square_srting(long_string_in = " _ _ _ _ ", extra_space = 4)
+        )
+        self.tmp_lab.setFont(self.small_font)
 
-            self.tmp_lab = QLabel(
-                make_square_srting(long_string_in = " _ _ _ _ ", extra_space = 4)
-            )
-            self.tmp_lab.setFont(self.small_font)
+        self.tmp_hlay = QHBoxLayout()
+        self.tmp_hlay.addWidget(self.tmp_lab)
 
-            self.tmp_hlay = QHBoxLayout()
-            self.tmp_hlay.addWidget(self.tmp_lab)
+        if self.opt4lay == 1:
+            self.icon_path_cl = self.ui_dir_path + os.sep + \
+                "resources" + os.sep + "new_layout_clear.png"
+            self.spc_ico = QPixmap(self.icon_path_cl).scaled(QSize(38, 42))
 
-            if self.opt4lay == 1:
-                self.icon_path_cl = self.ui_dir_path + os.sep + \
-                    "resources" + os.sep + "new_layout_clear.png"
-                self.spc_ico = QPixmap(self.icon_path_cl).scaled(QSize(38, 42))
+            self.tmp_lab_ico = QLabel()
+            self.tmp_lab_ico.setPixmap(self.spc_ico)
 
-                self.tmp_lab_ico = QLabel()
-                self.tmp_lab_ico.setPixmap(self.spc_ico)
+            self.tmp_hlay.addWidget(self.tmp_lab_ico)
+            self.nxt_2do_layout.addLayout(self.tmp_hlay)
 
-                self.tmp_hlay.addWidget(self.tmp_lab_ico)
-                self.nxt_2do_layout.addLayout(self.tmp_hlay)
-
-            else:
-                self.nxt_2do_layout.addWidget(self.tmp_lab)
-
+        else:
+            self.nxt_2do_layout.addWidget(self.tmp_lab)
 
         for n_times in range(self.n_stretch_2):
             self.nxt_2do_layout.addStretch()
