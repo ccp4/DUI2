@@ -519,7 +519,6 @@ class ShowLog(QObject):
     def __init__(self, parent = None):
         super(ShowLog, self).__init__(parent)
         self.main_obj = parent
-        self.lst_node_log_out = []
 
         data_init = ini_data()
         self.uni_url = data_init.get_url()
@@ -532,7 +531,11 @@ class ShowLog(QObject):
         self.main_obj.window.incoming_text.setFont(my_font)
         self.main_obj.window.incoming_text.setCurrentFont(my_font)
 
+        self.reset_mem()
         self.set_colours(True)
+
+    def reset_mem(self):
+        self.lst_node_log_out = []
 
     def set_colours(self, regular_colours):
         if regular_colours:

@@ -1294,6 +1294,8 @@ class MainObject(QObject):
         logging.info("cmd =" + str(cmd))
         try:
             self.do_load_html.reset_lst_html()
+            self.log_show.reset_mem()
+
             post_thread = post_req_w_output(
                 cmd_in = cmd, main_handler = self.runner_handler
             )
