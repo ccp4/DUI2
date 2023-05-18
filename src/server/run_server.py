@@ -330,5 +330,5 @@ def main(par_def = None, connection_out = None):
         except OSError:
             PORT += 1
             launch_success = False
-            logging.info("OS err catch, trying again in" + str(n_secs) + "secs")
+            print("OS err catch(server side), trying again in" + str(n_secs) + "secs")
             time.sleep(n_secs)
