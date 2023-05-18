@@ -312,7 +312,7 @@ def main(par_def = None, connection_out = None):
                 (HOST, PORT), ReqHandler
             ) as http_daemon:
 
-                logging.info(
+                print(
                     "serving at:{host:" + str(HOST) + " port:" + str(PORT) + "}"
                 )
                 launch_success = True

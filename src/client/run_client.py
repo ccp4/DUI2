@@ -50,7 +50,6 @@ def main(par_def = None):
     cmd = {"nod_lst":[""], "cmd_lst":["display"]}
     dummy_nod_lst = None
     n_secs = 3
-    logging.info("here 1")
     while dummy_nod_lst == None:
         logging.info("here in loop")
         lst_req = get_req_json_dat(params_in = cmd, main_handler = None)

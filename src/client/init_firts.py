@@ -26,6 +26,8 @@ class ini_data(object):
         except KeyError:
             uni_url = None
 
+        print("URL(client side) = ", uni_url)
+
         global run_local
         try:
             if init_param["all_local"].lower() == "true":

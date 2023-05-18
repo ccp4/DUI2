@@ -23,11 +23,6 @@ if __name__ == '__main__':
     new_port = pipe_server_1.recv()
     print("# time to launch client app with port =" +  str(new_port))
 
-    par_def = (
-        ("url", 'http://127.0.0.1:' + str(new_port) + '/'),
-        ("all_local", "true"),
-    )
-
     prcs_serv.join()
     print("Closing server naturally")
 
