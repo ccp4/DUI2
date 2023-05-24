@@ -28,7 +28,7 @@ uni_url = 'http://127.0.0.1:45678/'
 #uni_url = 'http://127.0.0.1:45679/'
 #uni_url = 'http://supercomputo.cimav.edu.mx:45678/'
 
-
+'''
 lst_cmd_tst = [
     "gh import",
     "gh generate_mask",
@@ -49,13 +49,13 @@ lst_cmd_tst = [
     "gh export",
     "2,dl"
 ]
+'''
 
 if __name__ == "__main__":
-    lst_cmd = []
-    #for rep in range(999):
-    for cmd_in in lst_cmd_tst:
-        print("\n testing (", cmd_in, " )command\n")
+    #for cmd_in in lst_cmd_tst:
         #cmd_in = input("type: \"Node,command\":")
+        cmd_in = "get_dir_ls /home/lui/"
+        print("\n testing (", cmd_in, " )command\n")
         try:
             [parent, cmd] = cmd_in.split(",")
 

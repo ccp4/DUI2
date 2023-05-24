@@ -32,6 +32,7 @@ def get_pair_list():
     return [
         ("d",       "display"                               ),
         ("h",       "history"                               ),
+        ("ls",      "get_dir_ls"                            ),
         ("dt",      "dir_tree"                              ),
         ("dl",      "display_log"                           ),
         ("rg",      "reset_graph"                           ),

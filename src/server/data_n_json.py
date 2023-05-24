@@ -340,6 +340,15 @@ def get_data_from_steps(uni_cmd, cmd_dict, step_list):
     elif uni_cmd[0] == "get_help":
         return_list.append(get_help_list(uni_cmd[1]))
 
+    elif uni_cmd[0] == "get_dir_ls":
+        try:
+            return_list = os.listdir(uni_cmd[1])
+
+        except FileNotFoundError:
+            logging.info(
+                "file not found err catch , wrong path, not sending file list"
+            )
+
     elif uni_cmd[0] == "get_optional_command_list":
         return_list = get_cmd_opt_list()
 
