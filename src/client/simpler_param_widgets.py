@@ -32,6 +32,7 @@ from PySide2.QtGui import *
 
 from client.init_firts import ini_data
 from client.exec_utils import Mtz_Data_Request, get_request_shot
+from client.file_nav_utils import PathBar, MyDirView_list
 
 
 def _get_all_direct_layout_widget_children(parent):
@@ -244,7 +245,7 @@ class MyTree(QTreeWidget):
         self.clear()
         iter_tree(lst_dic, self, show_hidden, icon_dict)
 
-
+'''
 class FileBrowser(QDialog):
     file_or_dir_selected = Signal(str, bool)
     def __init__(self, parent=None):
@@ -340,6 +341,102 @@ class FileBrowser(QDialog):
 
     def cancel_opn(self):
         self.close()
+
+'''
+
+class FileBrowser(QDialog):
+    file_or_dir_selected = Signal(str, bool)
+    def __init__(self, parent=None):
+        super(FileBrowser, self).__init__(parent)
+        self.setWindowTitle("Open IMGs")
+        mainLayout = QVBoxLayout()
+        self.show_hidden_check = QCheckBox("Show Hidden Files")
+        self.show_hidden_check.setChecked(False)
+        self.show_hidden_check.stateChanged.connect(self.refresh_content)
+        hi_h_layout = QHBoxLayout()
+        hi_h_layout.addStretch()
+        hi_h_layout.addWidget(self.show_hidden_check)
+        mainLayout.addLayout(hi_h_layout)
+
+        self.path_bar = PathBar(self)
+        self.path_bar.clicked_up_dir.connect(self.build_content)
+        mainLayout.addWidget(self.path_bar)
+
+        self.lst_vw =  MyDirView_list()
+        #self.ini_path = "/home/"
+        self.ini_path = "/Users/luiso/"
+        self.build_content(self.ini_path)
+        self.lst_vw.file_clickled.connect(self.fill_clik)
+        mainLayout.addWidget(self.lst_vw)
+
+        low_h_layout = QHBoxLayout()
+        low_h_layout.addStretch()
+
+        OpenButton = QPushButton(" Open ")
+        OpenButton.clicked.connect(self.open_file)
+        low_h_layout.addWidget(OpenButton)
+
+        CancelButton = QPushButton(" Cancel ")
+        CancelButton.clicked.connect(self.cancel_opp)
+        low_h_layout.addWidget(CancelButton)
+
+        mainLayout.addLayout(low_h_layout)
+        self.setLayout(mainLayout)
+        self.show()
+
+    def build_content(self, path_in):
+        self.curr_path = path_in
+        self.refresh_content()
+
+    def build_paren_list(self):
+        print("self.curr_path", self.curr_path)
+        parents_list = [self.ini_path[:-1]]
+        rest_of_path = self.curr_path[len(self.ini_path):]
+        print("rest_of_path = ", rest_of_path, "\n")
+        for single_dir in rest_of_path.split(os.sep)[:-1]:
+            parents_list.append(single_dir)
+
+        self.path_bar.update_list(parents_list)
+
+    def refresh_content(self):
+        show_hidden = self.show_hidden_check.isChecked()
+        self.current_file = None
+        self.build_paren_list()
+
+        os_listdir = os.listdir(self.curr_path)
+        lst_dir = []
+        for nm, f_name in enumerate(os_listdir):
+            if f_name[0] != "." or show_hidden:
+                f_path = self.curr_path + f_name
+                f_isdir = os.path.isdir(f_path)
+                lst_dir.append(
+                    {
+                        "name": f_name, "isdir":  f_isdir, "path": f_path
+                    }
+                )
+
+        self.lst_vw.enter_list(lst_dir)
+
+    def fill_clik(self, fl_dic):
+        print("path = ", fl_dic["path"])
+        if fl_dic == self.current_file:
+            self.open_file()
+
+        self.current_file = fl_dic
+
+    def open_file(self):
+        try:
+            if self.current_file["isdir"]:
+                self.build_content(self.current_file["path"] + os.sep)
+
+            else:
+                print("Opened: ", self.current_file["path"])
+
+        except TypeError:
+            print("no file selected yet")
+
+    def cancel_opp(self):
+        print("Cancel clicked")
 
 
 class LocalFileBrowser(QDialog):
