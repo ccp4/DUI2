@@ -212,43 +212,6 @@ class ProgBarBox(QProgressDialog):
         self.close()
 
 
-def iter_tree(my_dict, currentItem, show_hidden, icon_dict):
-    for child_dict in my_dict["list_child"]:
-        new_item_text = str(child_dict["file_name"])
-        if new_item_text[0] != "." or show_hidden:
-            new_item = QTreeWidgetItem(currentItem)
-            new_item.file_path = child_dict["file_path"]
-            if child_dict["isdir"]:
-                new_item.isdir = True
-                my_icon = icon_dict["Dir"]
-
-            else:
-                new_item.isdir = False
-                my_icon = icon_dict["File"]
-
-
-            new_item.setText(0, new_item_text)
-            new_item.setIcon(0, my_icon)
-
-            if my_dict["isdir"]:
-                iter_tree(child_dict, new_item, show_hidden, icon_dict)
-
-
-class MyTree(QTreeWidget):
-    def __init__(self, parent=None):
-        super(MyTree, self).__init__(parent=parent)
-
-    def fillTree(self, lst_dic, show_hidden):
-        DirPixMapi = getattr(QStyle, 'SP_DirIcon')
-        FilePixMapi = getattr(QStyle, 'SP_FileIcon')
-        icon_dict = {
-            "Dir":self.style().standardIcon(DirPixMapi),
-            "File":self.style().standardIcon(FilePixMapi)
-        }
-        self.clear()
-        iter_tree(lst_dic, self, show_hidden, icon_dict)
-
-
 class FileBrowser(QDialog):
     file_or_dir_selected = Signal(str, bool)
     def __init__(self, parent=None):
@@ -351,6 +314,7 @@ class FileBrowser(QDialog):
 
     def cancel_opp(self):
         print("Cancel clicked")
+        self.close()
 
 
 class LocalFileBrowser(QDialog):
