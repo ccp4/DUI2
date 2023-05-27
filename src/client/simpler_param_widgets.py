@@ -431,6 +431,8 @@ class FileBrowser(QDialog):
 
             else:
                 print("Opened: ", self.current_file["path"])
+                self.file_or_dir_selected.emit(self.current_file["path"], False)
+                self.close()
 
         except TypeError:
             print("no file selected yet")
