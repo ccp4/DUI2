@@ -25,7 +25,7 @@ import subprocess, psutil
 import os, sys, shutil, logging
 import glob, json, time
 
-from server.data_n_json import get_data_from_steps, spit_out
+from server.data_n_json import get_info_data, spit_out
 from shared_modules import format_utils
 
 def get_pair_list():
@@ -743,7 +743,7 @@ class Runner(object):
                 logging.info("received closed command")
 
             else:
-                return_list = get_data_from_steps(uni_cmd, cmd_dict, self.step_list)
+                return_list = get_info_data(uni_cmd, cmd_dict, self.step_list)
 
         return return_list
 

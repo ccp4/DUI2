@@ -79,7 +79,7 @@ def spit_out(str_out = None, req_obj = None, out_type = None):
             logging.info(">> NOT utf-8,  len=" + str(len(str_out)) + "<<")
 
 
-def get_data_from_steps(uni_cmd, cmd_dict, step_list):
+def get_info_data(uni_cmd, cmd_dict, step_list):
     return_list = []
     if uni_cmd == ["display_log"]:
         for lin2go in cmd_dict["nod_lst"]:
