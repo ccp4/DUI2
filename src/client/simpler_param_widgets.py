@@ -31,7 +31,10 @@ from PySide2 import QtUiTools
 from PySide2.QtGui import *
 
 from client.init_firts import ini_data
-from client.exec_utils import Mtz_Data_Request, get_request_shot
+from client.exec_utils import (
+    Mtz_Data_Request, get_request_shot, get_req_json_dat
+)
+
 from client.file_nav_utils import PathBar, MyDirView_list
 
 
@@ -245,104 +248,6 @@ class MyTree(QTreeWidget):
         self.clear()
         iter_tree(lst_dic, self, show_hidden, icon_dict)
 
-'''
-class FileBrowser(QDialog):
-    file_or_dir_selected = Signal(str, bool)
-    def __init__(self, parent=None):
-        super(FileBrowser, self).__init__(parent)
-
-        self.setWindowTitle("Open IMGs")
-
-        self.my_bar = ProgBarBox(
-            min_val = 0, max_val = 10, text = "loading dir tree"
-        )
-        self.my_bar(1)
-
-        self.t_view = MyTree()
-        self.open_select_butt = QPushButton("Open ...")
-        self.cancel_butt = QPushButton("Cancel")
-        self.show_hidden_check = QCheckBox("Show Hidden Files")
-        self.show_hidden_check.setChecked(False)
-
-        mainLayout = QVBoxLayout()
-
-        top_hbox = QHBoxLayout()
-        top_hbox.addStretch()
-        top_hbox.addWidget(self.show_hidden_check)
-        mainLayout.addLayout(top_hbox)
-
-        mainLayout.addWidget(self.t_view)
-
-        bot_hbox = QHBoxLayout()
-        bot_hbox.addStretch()
-        bot_hbox.addWidget(self.open_select_butt)
-        bot_hbox.addWidget(self.cancel_butt)
-        mainLayout.addLayout(bot_hbox)
-
-        self.show_hidden_check.stateChanged.connect(self.redraw_dir)
-        self.t_view.doubleClicked[QModelIndex].connect(self.node_clicked)
-        self.t_view.clicked[QModelIndex].connect(self.node_clicked)
-        self.open_select_butt.clicked.connect(self.set_selection)
-        self.cancel_butt.clicked.connect(self.cancel_opn)
-
-        self.setLayout(mainLayout)
-        cmd = {"nod_lst":[""], "cmd_lst":["dir_tree"]}
-        self.my_bar(3)
-
-        data_init = ini_data()
-        uni_url = data_init.get_url()
-
-        req_shot = get_request_shot(params_in = cmd, main_handler = None)
-        dic_str = req_shot.result_out()
-
-        self.dir_tree_dict = json.loads(dic_str)
-
-        self.my_bar(7)
-        self.redraw_dir()
-        self.my_bar(9)
-        self.my_bar.ended()
-        self.show()
-
-    def redraw_dir(self, dummy = None):
-        self.last_file_clicked = None
-        self.dir_selected = None
-        show_hidden = self.show_hidden_check.isChecked()
-        self.open_select_butt.setText("Open ...")
-        self.t_view.fillTree(self.dir_tree_dict, show_hidden)
-
-    def set_selection(self):
-        if self.last_file_clicked == None:
-            logging.info("select file first")
-
-        else:
-            self.file_or_dir_selected.emit(
-                self.last_file_clicked, self.dir_selected
-            )
-            self.close()
-
-    def node_clicked(self, it_index):
-        item = self.t_view.itemFromIndex(it_index)
-        if item.isdir:
-            self.open_select_butt.setText("Open Dir")
-
-        else:
-            self.open_select_butt.setText("Open File")
-
-        str_select_path = str(item.file_path)
-        if str_select_path == self.last_file_clicked:
-            self.set_selection()
-
-        self.dir_selected = item.isdir
-        self.last_file_clicked = str_select_path
-
-    def node_double_clicked(self, it_index):
-        self.last_file_clicked = str(item.file_path)
-        self.node_clicked(it_index)
-
-    def cancel_opn(self):
-        self.close()
-
-'''
 
 class FileBrowser(QDialog):
     file_or_dir_selected = Signal(str, bool)
@@ -364,7 +269,9 @@ class FileBrowser(QDialog):
 
         self.lst_vw =  MyDirView_list()
         #self.ini_path = "/home/"
-        self.ini_path = "/Users/luiso/"
+        self.ini_path = "/"
+        #self.ini_path = "/Users/luiso/"
+
         self.build_content(self.ini_path)
         self.lst_vw.file_clickled.connect(self.fill_clik)
         mainLayout.addWidget(self.lst_vw)
@@ -403,7 +310,12 @@ class FileBrowser(QDialog):
         self.current_file = None
         self.build_paren_list()
 
-        os_listdir = os.listdir(self.curr_path)
+        cmd = "get_dir_ls " + self.curr_path
+        cmd = {"nod_lst":"", "cmd_lst":["get_dir_ls " + self.curr_path]}
+        lst_req = get_req_json_dat(
+            params_in = cmd, main_handler = None
+        )
+        os_listdir = lst_req.result_out()
         lst_dir = []
         for nm, f_name in enumerate(os_listdir):
             if f_name[0] != "." or show_hidden:
