@@ -31,11 +31,8 @@ from PySide2 import QtUiTools
 from PySide2.QtGui import *
 
 from client.init_firts import ini_data
-from client.exec_utils import (
-    Mtz_Data_Request, get_request_shot, get_req_json_dat
-)
-
-from client.file_nav_utils import PathBar, MyDirView_list
+from client.exec_utils import Mtz_Data_Request, get_request_shot
+from client.file_nav_utils import FileBrowser
 
 
 def _get_all_direct_layout_widget_children(parent):
@@ -209,111 +206,6 @@ class ProgBarBox(QProgressDialog):
     def ended(self):
         self.setValue(100)
         logging.info("ProgBarBox ended")
-        self.close()
-
-
-class FileBrowser(QDialog):
-    file_or_dir_selected = Signal(str, bool)
-    def __init__(self, parent=None):
-        super(FileBrowser, self).__init__(parent)
-        self.setWindowTitle("Open IMGs")
-        mainLayout = QVBoxLayout()
-        self.show_hidden_check = QCheckBox("Show Hidden Files")
-        self.show_hidden_check.setChecked(False)
-        self.show_hidden_check.stateChanged.connect(self.refresh_content)
-        hi_h_layout = QHBoxLayout()
-        hi_h_layout.addStretch()
-        hi_h_layout.addWidget(self.show_hidden_check)
-        mainLayout.addLayout(hi_h_layout)
-
-        self.path_bar = PathBar(self)
-        self.path_bar.clicked_up_dir.connect(self.build_content)
-        mainLayout.addWidget(self.path_bar)
-
-        self.lst_vw =  MyDirView_list()
-        #self.ini_path = "/home/"
-        self.ini_path = "/"
-        #self.ini_path = "/Users/luiso/"
-
-        self.build_content(self.ini_path)
-        self.lst_vw.file_clickled.connect(self.fill_clik)
-        mainLayout.addWidget(self.lst_vw)
-
-        low_h_layout = QHBoxLayout()
-        low_h_layout.addStretch()
-
-        OpenButton = QPushButton(" Open ")
-        OpenButton.clicked.connect(self.open_file)
-        low_h_layout.addWidget(OpenButton)
-
-        CancelButton = QPushButton(" Cancel ")
-        CancelButton.clicked.connect(self.cancel_opp)
-        low_h_layout.addWidget(CancelButton)
-
-        mainLayout.addLayout(low_h_layout)
-        self.setLayout(mainLayout)
-        self.show()
-
-    def build_content(self, path_in):
-        self.curr_path = path_in
-        self.refresh_content()
-
-    def build_paren_list(self):
-        print("self.curr_path", self.curr_path)
-        parents_list = [self.ini_path[:-1]]
-        rest_of_path = self.curr_path[len(self.ini_path):]
-        print("rest_of_path = ", rest_of_path, "\n")
-        for single_dir in rest_of_path.split(os.sep)[:-1]:
-            parents_list.append(single_dir)
-
-        self.path_bar.update_list(parents_list)
-
-    def refresh_content(self):
-        show_hidden = self.show_hidden_check.isChecked()
-        self.current_file = None
-        self.build_paren_list()
-
-        cmd = "get_dir_ls " + self.curr_path
-        cmd = {"nod_lst":"", "cmd_lst":["get_dir_ls " + self.curr_path]}
-        lst_req = get_req_json_dat(
-            params_in = cmd, main_handler = None
-        )
-        os_listdir = lst_req.result_out()
-        lst_dir = []
-        for nm, f_name in enumerate(os_listdir):
-            if f_name[0] != "." or show_hidden:
-                f_path = self.curr_path + f_name
-                f_isdir = os.path.isdir(f_path)
-                lst_dir.append(
-                    {
-                        "name": f_name, "isdir":  f_isdir, "path": f_path
-                    }
-                )
-
-        self.lst_vw.enter_list(lst_dir)
-
-    def fill_clik(self, fl_dic):
-        print("path = ", fl_dic["path"])
-        if fl_dic == self.current_file:
-            self.open_file()
-
-        self.current_file = fl_dic
-
-    def open_file(self):
-        try:
-            if self.current_file["isdir"]:
-                self.build_content(self.current_file["path"] + os.sep)
-
-            else:
-                print("Opened: ", self.current_file["path"])
-                self.file_or_dir_selected.emit(self.current_file["path"], False)
-                self.close()
-
-        except TypeError:
-            print("no file selected yet")
-
-    def cancel_opp(self):
-        print("Cancel clicked")
         self.close()
 
 
@@ -1672,7 +1564,7 @@ class OptionalWidget(SimpleParamTab):
 class ExportWidget(QWidget):
     '''
         This widget is a simplified version of ImportWidget since
-        there is no need interact with a remote << FileBrowser >>
+        there is no need to interact with a remote << FileBrowser >>
     '''
     all_items_changed = Signal(list)
     find_scaled_before = Signal()
@@ -1793,8 +1685,8 @@ class ExportWidget(QWidget):
 
 class MergeWidget(QWidget):
     '''
-        This widget is a simplified version of ImportWidget since
-        there is no need interact with a remote << FileBrowser >>
+        This widget is another simplified version of ImportWidget since
+        there is no need neither to interact with a remote << FileBrowser >>
     '''
     all_items_changed = Signal(list)
     find_scaled_before = Signal()

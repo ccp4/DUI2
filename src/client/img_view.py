@@ -41,8 +41,8 @@ from client.img_view_utils import (
     crunch_min_max, np2bmp_monocrome, np2bmp_heat, np2bmp_mask,
     load_img_json_w_str, load_mask_img_json_w_str
 )
-from client.simpler_param_widgets import FileBrowser
 
+from client.file_nav_utils import FileBrowser
 
 class LoadFullMaskImage(QThread):
     image_loaded = Signal(tuple)
