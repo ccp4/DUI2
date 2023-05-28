@@ -342,7 +342,16 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
 
     elif uni_cmd[0] == "get_dir_ls":
         try:
-            return_list = os.listdir(uni_cmd[1])
+            curr_path = uni_cmd[1]
+            f_name_list =  os.listdir(curr_path)
+            dict_list = []
+            for f_name in f_name_list:
+                f_path = curr_path + f_name
+                f_isdir = os.path.isdir(f_path)
+                file_dict = {"fname": f_name, "isdir":f_isdir}
+                dict_list.append(file_dict)
+
+            return_list = dict_list
 
         except FileNotFoundError:
             logging.info(

@@ -187,10 +187,11 @@ class FileBrowser(QDialog):
         )
         os_listdir = lst_req.result_out()
         lst_dir = []
-        for nm, f_name in enumerate(os_listdir):
+        for file_dict in os_listdir:
+            f_name = file_dict["fname"]
+            f_isdir = file_dict["isdir"]
             if f_name[0] != "." or show_hidden:
                 f_path = self.curr_path + f_name
-                f_isdir = os.path.isdir(f_path)
                 lst_dir.append(
                     {
                         "name": f_name, "isdir":  f_isdir, "path": f_path
