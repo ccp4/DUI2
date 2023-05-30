@@ -41,7 +41,7 @@ def main(par_def = None):
         logging.info(" using the dir from where the commad 'dui_server' was invoqued")
         tree_ini_path = os.getcwd()
 
-    tree_dic_lst = iter_dict(tree_ini_path, 0)
+    #tree_dic_lst = iter_dict(tree_ini_path, 0)
     try:
         with open("run_data") as json_file:
             runner_data = json.load(json_file)
@@ -51,8 +51,7 @@ def main(par_def = None):
     except FileNotFoundError:
         cmd_runner = multi_node.Runner(None)
 
-    cmd_runner.set_dir_tree(tree_dic_lst)
-
+    #cmd_runner.set_dir_tree(tree_dic_lst)
 
     m_obj = cli_object(cmd_tree_runner = cmd_runner)
 

@@ -38,7 +38,7 @@ if __name__ == '__main__':
         )
         tree_ini_path = os.getcwd()
 
-    tree_dic_lst = iter_dict(tree_ini_path, 0)
+    #tree_dic_lst = iter_dict(tree_ini_path, 0)
     try:
         with open("run_data") as json_file:
             runner_data = json.load(json_file)
@@ -52,7 +52,7 @@ if __name__ == '__main__':
             recovery_data = None, dat_ini = server_data_init
         )
 
-    cmd_runner.set_dir_tree(tree_dic_lst)
+    #cmd_runner.set_dir_tree(tree_dic_lst)
     app = QApplication(sys.argv)
 
     m_gui_obj = all_local_gui_connector.MainGuiObject(

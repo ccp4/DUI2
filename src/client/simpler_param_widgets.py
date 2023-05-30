@@ -460,9 +460,13 @@ class ImportWidget(QWidget):
             )[0]
             self.set_selection(str_select = str(file_in_path), isdir = False)
 
-
         else:
-            self.open_widget = FileBrowser(self)
+            #init_path = "/home/"
+            #init_path = "/"
+            #init_path = "/Users/luiso/"
+            init_path = "/scratch/"
+
+            self.open_widget = FileBrowser(parent = self, path_in = init_path)
             self.open_widget.resize(self.open_widget.size() * 2)
             self.open_widget.file_or_dir_selected.connect(self.set_selection)
 

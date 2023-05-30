@@ -26,7 +26,8 @@ from urllib.parse import urlparse, parse_qs
 import json, os, zlib, sys, time, logging
 
 from server import multi_node
-from server.data_n_json import iter_dict, spit_out
+#from server.data_n_json import iter_dict
+from server.data_n_json import spit_out
 from server.init_first import ini_data
 from shared_modules import format_utils
 
@@ -288,7 +289,7 @@ def main(par_def = None, connection_out = None):
             tree_ini_path = os.getcwd()
             print("local dir tree ready")
 
-        tree_dic_lst = iter_dict(tree_ini_path, 0)
+        #tree_dic_lst = iter_dict(tree_ini_path, 0)
 
     try:
         with open("run_data") as json_file:
@@ -299,7 +300,7 @@ def main(par_def = None, connection_out = None):
     except FileNotFoundError:
         cmd_tree_runner = multi_node.Runner(None)
 
-    cmd_tree_runner.set_dir_tree(tree_dic_lst)
+    #cmd_tree_runner.set_dir_tree(tree_dic_lst)
 
     cmd_dict = multi_node.str2dic("display")
     cmd_tree_runner.run_get_data(cmd_dict)

@@ -652,7 +652,7 @@ def get_help_list(cmd_str):
     logging.info("trimed top part 3")
     return bottom_trimed_lst
 
-
+to_remove = '''
 def iter_dict(file_path, depth_ini):
     file_name = file_path.split("/")[-1]
     local_dict = {
@@ -679,4 +679,4 @@ def iter_dict(file_path, depth_ini):
         local_dict["isdir"] = False
 
     return local_dict
-
+'''

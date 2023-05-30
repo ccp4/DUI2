@@ -121,7 +121,7 @@ class PathBar(QWidget):
 
 class FileBrowser(QDialog):
     file_or_dir_selected = Signal(str, bool)
-    def __init__(self, parent=None):
+    def __init__(self, parent = None, path_in = "/"):
         super(FileBrowser, self).__init__(parent)
         self.setWindowTitle("Open IMGs")
         mainLayout = QVBoxLayout()
@@ -138,10 +138,7 @@ class FileBrowser(QDialog):
         mainLayout.addWidget(self.path_bar)
 
         self.lst_vw =  MyDirView_list()
-        #self.ini_path = "/home/"
-        #self.ini_path = "/"
-        #self.ini_path = "/Users/luiso/"
-        self.ini_path = "/scratch/"
+        self.ini_path = path_in
         self.build_content(self.ini_path)
         self.lst_vw.file_clickled.connect(self.fill_clik)
         mainLayout.addWidget(self.lst_vw)

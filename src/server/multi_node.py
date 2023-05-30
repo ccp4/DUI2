@@ -845,8 +845,10 @@ class Runner(object):
             new_node.parent_node_lst = uni_dic["parent_node_lst"]
             self.step_list.append(new_node)
 
+        to_remove = '''
     def set_dir_tree(self, tree_dic_lst):
         self._dir_tree_dict = tree_dic_lst
+        '''
 
 
 
