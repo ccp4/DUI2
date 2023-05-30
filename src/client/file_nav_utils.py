@@ -77,7 +77,7 @@ class PathButtons(QWidget):
         path_str = ""
         for dir_name in new_list:
             new_butt = QPushButton(dir_name)
-            path_str += dir_name + os.sep
+            path_str += dir_name + "/"
             new_butt.own_path = path_str
             new_butt.clicked.connect(self.dir_clicked)
             self.lst_butt.append(new_butt)
@@ -139,9 +139,9 @@ class FileBrowser(QDialog):
 
         self.lst_vw =  MyDirView_list()
         #self.ini_path = "/home/"
-        self.ini_path = "/"
+        #self.ini_path = "/"
         #self.ini_path = "/Users/luiso/"
-
+        self.ini_path = "/scratch/"
         self.build_content(self.ini_path)
         self.lst_vw.file_clickled.connect(self.fill_clik)
         mainLayout.addWidget(self.lst_vw)
@@ -170,7 +170,7 @@ class FileBrowser(QDialog):
         parents_list = [self.ini_path[:-1]]
         rest_of_path = self.curr_path[len(self.ini_path):]
         print("rest_of_path = ", rest_of_path, "\n")
-        for single_dir in rest_of_path.split(os.sep)[:-1]:
+        for single_dir in rest_of_path.split("/")[:-1]:
             parents_list.append(single_dir)
 
         self.path_bar.update_list(parents_list)
@@ -210,7 +210,7 @@ class FileBrowser(QDialog):
     def open_file(self):
         try:
             if self.current_file["isdir"]:
-                self.build_content(self.current_file["path"] + os.sep)
+                self.build_content(self.current_file["path"] + "/")
 
             else:
                 print("Opened: ", self.current_file["path"])
