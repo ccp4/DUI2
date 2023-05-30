@@ -342,7 +342,7 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
 
     elif uni_cmd[0] == "get_dir_ls":
         try:
-            curr_path = uni_cmd[1]
+            curr_path = uni_cmd[1].replace("/", os.sep)
             f_name_list =  os.listdir(curr_path)
             dict_list = []
             for f_name in f_name_list:
