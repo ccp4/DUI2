@@ -33,7 +33,7 @@ def get_pair_list():
         ("d",       "display"                               ),
         ("h",       "history"                               ),
         ("ls",      "get_dir_ls"                            ),
-        ("dt",      "dir_tree"                              ),
+        ("dp",      "dir_path"                              ),
         ("dl",      "display_log"                           ),
         ("rg",      "reset_graph"                           ),
         ("cl",      "closed"                                ),
@@ -729,10 +729,8 @@ class Runner(object):
                 self.tree_output(return_list)
                 self.tree_output.print_output()
 
-            elif uni_cmd == ["dir_tree"]:
-                str_dir_tree = json.dumps(self._dir_tree_dict)
-                byt_data = bytes(str_dir_tree.encode('utf-8'))
-                return_list = byt_data
+            elif uni_cmd == ["dir_path"]:
+                return_list = [self._dir_path]
 
             elif uni_cmd == ["history"]:
                 #return_list = self.lst_cmd_in
@@ -845,11 +843,10 @@ class Runner(object):
             new_node.parent_node_lst = uni_dic["parent_node_lst"]
             self.step_list.append(new_node)
 
-        to_remove = '''
-    def set_dir_tree(self, tree_dic_lst):
-        self._dir_tree_dict = tree_dic_lst
-        '''
-
+    def set_dir_path(self, dir_path_in):
+        if dir_path_in[-1] != os.sep:
+            dir_path_in += os.sep
+        self._dir_path = dir_path_in
 
 
 def str2dic(cmd_str):

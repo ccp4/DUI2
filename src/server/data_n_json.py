@@ -341,6 +341,8 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
         return_list.append(get_help_list(uni_cmd[1]))
 
     elif uni_cmd[0] == "get_dir_ls":
+        #TODO rethink if << get_dir_ls >> should be called just << dir_ls >>
+        #and consequently go elsewhere
         try:
             curr_path = uni_cmd[1].replace("/", os.sep)
             f_name_list =  os.listdir(curr_path)

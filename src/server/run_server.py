@@ -274,6 +274,7 @@ def main(par_def = None, connection_out = None):
 
     if run_local:
         tree_dic_lst = []
+        tree_ini_path = "/"
 
     else:
         tree_ini_path = init_param["init_path"]
@@ -300,7 +301,7 @@ def main(par_def = None, connection_out = None):
     except FileNotFoundError:
         cmd_tree_runner = multi_node.Runner(None)
 
-    #cmd_tree_runner.set_dir_tree(tree_dic_lst)
+    cmd_tree_runner.set_dir_path(tree_ini_path)
 
     cmd_dict = multi_node.str2dic("display")
     cmd_tree_runner.run_get_data(cmd_dict)

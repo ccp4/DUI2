@@ -26,7 +26,8 @@ copyright (c) CCP4 - DLS
 import json, os, sys, time, logging
 
 from server import multi_node
-from server.data_n_json import iter_dict, spit_out
+#from server.data_n_json import iter_dict, spit_out
+from server.data_n_json import spit_out
 from shared_modules import format_utils
 #from server.init_first import ini_data
 

@@ -108,6 +108,7 @@ def main(par_def = None):
         cmd_runner = multi_node.Runner(None)
 
     #cmd_runner.set_dir_tree(tree_dic_lst)
+    cmd_tree_runner.set_dir_path(tree_ini_path)
     app = QApplication(sys.argv)
     m_obj = MainGuiObject(parent = app, cmd_tree_runner = cmd_runner)
     sys.exit(app.exec_())

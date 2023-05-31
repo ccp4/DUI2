@@ -31,7 +31,7 @@ from PySide2 import QtUiTools
 from PySide2.QtGui import *
 
 from client.init_firts import ini_data
-from client.exec_utils import Mtz_Data_Request, get_request_shot
+from client.exec_utils import Mtz_Data_Request, get_req_json_dat
 from client.file_nav_utils import FileBrowser
 
 
@@ -465,6 +465,19 @@ class ImportWidget(QWidget):
             #init_path = "/"
             #init_path = "/Users/luiso/"
             init_path = "/scratch/"
+
+
+            cmd = "dir_path"
+
+            cmd = {"nod_lst":"", "cmd_lst":["dir_path"]}
+            lst_req = get_req_json_dat(
+                params_in = cmd, main_handler = None
+            )
+            dic_str = lst_req.result_out()
+            print("dic_str =", dic_str)
+            init_path = dic_str[0]
+            print("init_path =", init_path)
+
 
             self.open_widget = FileBrowser(parent = self, path_in = init_path)
             self.open_widget.resize(self.open_widget.size() * 2)

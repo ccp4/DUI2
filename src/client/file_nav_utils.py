@@ -163,10 +163,10 @@ class FileBrowser(QDialog):
         self.refresh_content()
 
     def build_paren_list(self):
-        print("self.curr_path", self.curr_path)
+        #print("self.curr_path", self.curr_path)
         parents_list = [self.ini_path[:-1]]
         rest_of_path = self.curr_path[len(self.ini_path):]
-        print("rest_of_path = ", rest_of_path, "\n")
+        #print("rest_of_path = ", rest_of_path, "\n")
         for single_dir in rest_of_path.split("/")[:-1]:
             parents_list.append(single_dir)
 
@@ -177,7 +177,7 @@ class FileBrowser(QDialog):
         self.current_file = None
         self.build_paren_list()
 
-        cmd = "get_dir_ls " + self.curr_path
+        #cmd = "get_dir_ls " + self.curr_path
         cmd = {"nod_lst":"", "cmd_lst":["get_dir_ls " + self.curr_path]}
         lst_req = get_req_json_dat(
             params_in = cmd, main_handler = None
@@ -198,7 +198,7 @@ class FileBrowser(QDialog):
         self.lst_vw.enter_list(lst_dir)
 
     def fill_clik(self, fl_dic):
-        print("path = ", fl_dic["path"])
+        #print("path = ", fl_dic["path"])
         if fl_dic == self.current_file:
             self.open_file()
 
@@ -218,143 +218,8 @@ class FileBrowser(QDialog):
             print("no file selected yet")
 
     def cancel_opp(self):
-        print("Cancel clicked")
+        #print("Cancel clicked")
         self.close()
 
 
-old_file_browser_ref = '''
 
-def iter_tree(my_dict, currentItem, show_hidden, icon_dict):
-    for child_dict in my_dict["list_child"]:
-        new_item_text = str(child_dict["file_name"])
-        if new_item_text[0] != "." or show_hidden:
-            new_item = QTreeWidgetItem(currentItem)
-            new_item.file_path = child_dict["file_path"]
-            if child_dict["isdir"]:
-                new_item.isdir = True
-                my_icon = icon_dict["Dir"]
-
-            else:
-                new_item.isdir = False
-                my_icon = icon_dict["File"]
-
-
-            new_item.setText(0, new_item_text)
-            new_item.setIcon(0, my_icon)
-
-            if my_dict["isdir"]:
-                iter_tree(child_dict, new_item, show_hidden, icon_dict)
-
-
-class MyTree(QTreeWidget):
-    def __init__(self, parent=None):
-        super(MyTree, self).__init__(parent=parent)
-
-    def fillTree(self, lst_dic, show_hidden):
-        DirPixMapi = getattr(QStyle, 'SP_DirIcon')
-        FilePixMapi = getattr(QStyle, 'SP_FileIcon')
-        icon_dict = {
-            "Dir":self.style().standardIcon(DirPixMapi),
-            "File":self.style().standardIcon(FilePixMapi)
-        }
-        self.clear()
-        iter_tree(lst_dic, self, show_hidden, icon_dict)
-
-
-class FileBrowser(QDialog):
-    file_or_dir_selected = Signal(str, bool)
-    def __init__(self, parent=None):
-        super(FileBrowser, self).__init__(parent)
-
-        self.setWindowTitle("Open IMGs")
-
-        self.my_bar = ProgBarBox(
-            min_val = 0, max_val = 10, text = "loading dir tree"
-        )
-        self.my_bar(1)
-
-        self.t_view = MyTree()
-        self.open_select_butt = QPushButton("Open ...")
-        self.cancel_butt = QPushButton("Cancel")
-        self.show_hidden_check = QCheckBox("Show Hidden Files")
-        self.show_hidden_check.setChecked(False)
-
-        mainLayout = QVBoxLayout()
-
-        top_hbox = QHBoxLayout()
-        top_hbox.addStretch()
-        top_hbox.addWidget(self.show_hidden_check)
-        mainLayout.addLayout(top_hbox)
-
-        mainLayout.addWidget(self.t_view)
-
-        bot_hbox = QHBoxLayout()
-        bot_hbox.addStretch()
-        bot_hbox.addWidget(self.open_select_butt)
-        bot_hbox.addWidget(self.cancel_butt)
-        mainLayout.addLayout(bot_hbox)
-
-        self.show_hidden_check.stateChanged.connect(self.redraw_dir)
-        self.t_view.doubleClicked[QModelIndex].connect(self.node_clicked)
-        self.t_view.clicked[QModelIndex].connect(self.node_clicked)
-        self.open_select_butt.clicked.connect(self.set_selection)
-        self.cancel_butt.clicked.connect(self.cancel_opn)
-
-        self.setLayout(mainLayout)
-        cmd = {"nod_lst":[""], "cmd_lst":["dir_tree"]}
-        self.my_bar(3)
-
-        data_init = ini_data()
-        uni_url = data_init.get_url()
-
-        req_shot = get_request_shot(params_in = cmd, main_handler = None)
-        dic_str = req_shot.result_out()
-
-        self.dir_tree_dict = json.loads(dic_str)
-
-        self.my_bar(7)
-        self.redraw_dir()
-        self.my_bar(9)
-        self.my_bar.ended()
-        self.show()
-
-    def redraw_dir(self, dummy = None):
-        self.last_file_clicked = None
-        self.dir_selected = None
-        show_hidden = self.show_hidden_check.isChecked()
-        self.open_select_butt.setText("Open ...")
-        self.t_view.fillTree(self.dir_tree_dict, show_hidden)
-
-    def set_selection(self):
-        if self.last_file_clicked == None:
-            logging.info("select file first")
-
-        else:
-            self.file_or_dir_selected.emit(
-                self.last_file_clicked, self.dir_selected
-            )
-            self.close()
-
-    def node_clicked(self, it_index):
-        item = self.t_view.itemFromIndex(it_index)
-        if item.isdir:
-            self.open_select_butt.setText("Open Dir")
-
-        else:
-            self.open_select_butt.setText("Open File")
-
-        str_select_path = str(item.file_path)
-        if str_select_path == self.last_file_clicked:
-            self.set_selection()
-
-        self.dir_selected = item.isdir
-        self.last_file_clicked = str_select_path
-
-    def node_double_clicked(self, it_index):
-        self.last_file_clicked = str(item.file_path)
-        self.node_clicked(it_index)
-
-    def cancel_opn(self):
-        self.close()
-
-'''
