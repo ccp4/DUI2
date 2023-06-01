@@ -97,7 +97,7 @@ class PathBar(QWidget):
     clicked_up_dir = Signal(str)
     def __init__(self, parent = None):
         super(PathBar, self).__init__(parent)
-        mainLayout = QVBoxLayout()
+        main_h_layout = QHBoxLayout()
         self.path_buttons = PathButtons(self)
         self.path_buttons.up_dir_clickled.connect(self.up_dir)
         self.scroll_path = QScrollArea()
@@ -105,8 +105,17 @@ class PathBar(QWidget):
         self.scroll_path.setWidget(self.path_buttons)
         self.hscrollbar = self.scroll_path.horizontalScrollBar()
         self.hscrollbar.rangeChanged.connect(self.scroll_2_right)
-        mainLayout.addWidget(self.scroll_path)
-        self.setLayout(mainLayout)
+        main_h_layout.addWidget(self.scroll_path)
+
+        #main_h_layout.addWidget(QPushButton("\n .. \u2191 \u1F4C1 \n"))
+        up_dir_butt = QPushButton("\n .. \u2191 ")
+        up_dir_butt.setIcon(
+            up_dir_butt.style().standardIcon(getattr(QStyle, 'SP_ArrowUp'))
+        )
+        main_h_layout.addWidget(up_dir_butt)
+        #FilePixMapi = getattr(QStyle, 'SP_ArrowUp')
+
+        self.setLayout(main_h_layout)
         self.setFixedHeight(self.height() * 2.6)
 
     def scroll_2_right(self, minimum, maximum):
@@ -124,24 +133,24 @@ class FileBrowser(QDialog):
     def __init__(self, parent = None, path_in = "/"):
         super(FileBrowser, self).__init__(parent)
         self.setWindowTitle("Open IMGs")
-        mainLayout = QVBoxLayout()
+        main_v_layout = QVBoxLayout()
         self.show_hidden_check = QCheckBox("Show Hidden Files")
         self.show_hidden_check.setChecked(False)
         self.show_hidden_check.stateChanged.connect(self.refresh_content)
         hi_h_layout = QHBoxLayout()
         hi_h_layout.addStretch()
         hi_h_layout.addWidget(self.show_hidden_check)
-        mainLayout.addLayout(hi_h_layout)
+        main_v_layout.addLayout(hi_h_layout)
 
         self.path_bar = PathBar(self)
         self.path_bar.clicked_up_dir.connect(self.build_content)
-        mainLayout.addWidget(self.path_bar)
+        main_v_layout.addWidget(self.path_bar)
 
         self.lst_vw =  MyDirView_list()
         self.ini_path = path_in
         self.build_content(self.ini_path)
         self.lst_vw.file_clickled.connect(self.fill_clik)
-        mainLayout.addWidget(self.lst_vw)
+        main_v_layout.addWidget(self.lst_vw)
 
         low_h_layout = QHBoxLayout()
         low_h_layout.addStretch()
@@ -154,8 +163,8 @@ class FileBrowser(QDialog):
         CancelButton.clicked.connect(self.cancel_opp)
         low_h_layout.addWidget(CancelButton)
 
-        mainLayout.addLayout(low_h_layout)
-        self.setLayout(mainLayout)
+        main_v_layout.addLayout(low_h_layout)
+        self.setLayout(main_v_layout)
         self.show()
 
     def build_content(self, path_in):
