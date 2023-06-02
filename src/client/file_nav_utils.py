@@ -28,7 +28,7 @@ class MyDirView_list(QListWidget):
     def __init__(self, parent = None):
         super(MyDirView_list, self).__init__(parent)
         self.itemClicked.connect(self.someting_click)
-        self.itemDoubleClicked.connect(self.someting_2_clicks)
+        self.itemDoubleClicked.connect(self.clicked_twise)
         self.setWrapping(True)
         self.setResizeMode(QListView.Adjust)
         DirPixMapi = getattr(QStyle, 'SP_DirIcon')
@@ -55,7 +55,7 @@ class MyDirView_list(QListWidget):
     def someting_click(self, item):
         self.file_clickled.emit({"isdir":item.f_isdir, "path":item.f_path})
 
-    def someting_2_clicks(self, item):
+    def clicked_twise(self, item):
         self.someting_click(item)
 
 
