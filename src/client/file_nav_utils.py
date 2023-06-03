@@ -75,10 +75,12 @@ class PathButtons(QWidget):
 
         self.lst_butt = []
         path_str = ""
-        for dir_name in new_list:
+        parent_dir_path = None
+        for dir_name in new_list[:-1]:
             new_butt = QPushButton(dir_name)
             path_str += dir_name + "/"
             new_butt.own_path = path_str
+            parent_dir_path = str(path_str)
             new_butt.clicked.connect(self.dir_clicked)
             self.lst_butt.append(new_butt)
             self.main_h_lay.addWidget(new_butt)
@@ -87,6 +89,11 @@ class PathButtons(QWidget):
             self.lst_butt.append(new_lab)
             self.main_h_lay.addWidget(new_lab)
 
+        new_lab = QLabel(new_list[-1])
+        self.lst_butt.append(new_lab)
+        self.main_h_lay.addWidget(new_lab)
+
+        return parent_dir_path
 
     def dir_clicked(self):
         next_path = str(self.sender().own_path)
@@ -106,26 +113,27 @@ class PathBar(QWidget):
         self.hscrollbar = self.scroll_path.horizontalScrollBar()
         self.hscrollbar.rangeChanged.connect(self.scroll_2_right)
         main_h_layout.addWidget(self.scroll_path)
-
-        #main_h_layout.addWidget(QPushButton("\n .. \u2191 \u1F4C1 \n"))
-        up_dir_butt = QPushButton("\n .. \u2191 ")
-        up_dir_butt.setIcon(
-            up_dir_butt.style().standardIcon(getattr(QStyle, 'SP_ArrowUp'))
-        )
-        main_h_layout.addWidget(up_dir_butt)
-        #FilePixMapi = getattr(QStyle, 'SP_ArrowUp')
+        self.back_dir_butt = QPushButton("Go Back\n\n . . \u2B8C")
+        self.back_dir_butt.clicked.connect(self.back_one_dir)
+        main_h_layout.addWidget(self.back_dir_butt)
+        self.par_dir = None
 
         self.setLayout(main_h_layout)
         self.setFixedHeight(self.height() * 2.6)
+
+    def back_one_dir(self):
+        print("back_one_dir")
+        self.up_dir(self.par_dir)
 
     def scroll_2_right(self, minimum, maximum):
         self.hscrollbar.setValue(maximum)
 
     def update_list(self, new_list):
-        self.path_buttons.update_list(new_list)
+        self.par_dir = self.path_buttons.update_list(new_list)
 
     def up_dir(self, next_path):
-        self.clicked_up_dir.emit(next_path)
+        if self.par_dir is not None:
+            self.clicked_up_dir.emit(next_path)
 
 
 class FileBrowser(QDialog):
