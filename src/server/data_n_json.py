@@ -356,9 +356,18 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
             return_list = dict_list
 
         except FileNotFoundError:
-            logging.info(
-                "file not found err catch , wrong path, not sending file list"
-            )
+            err_msg = "file not found err catch, "+ \
+            "wrong path, not sending file list"
+            logging.info(err_msg)
+            print(err_msg)
+            return_list = []
+
+        except PermissionError:
+            err_msg = "permission denied err catch, " + \
+            "attempt to open not allowed path, not sending file list"
+            logging.info(err_msg)
+            print(err_msg)
+            return_list = []
 
     elif uni_cmd[0] == "get_optional_command_list":
         return_list = get_cmd_opt_list()
