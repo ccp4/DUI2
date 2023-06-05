@@ -278,16 +278,16 @@ def main(par_def = None, connection_out = None):
     else:
         tree_ini_path = init_param["init_path"]
         if tree_ini_path == None:
-            logging.info(
-                "\n NOT GIVEN init_path \n"
-                " using the dir from where the command 'dui_server' was invoked"
-            )
-            print(
-                "\n NOT GIVEN init_path \n"
-                " using the dir from where the commad 'dui_server' was invoqued"
-            )
-            tree_ini_path = os.getcwd()
-            print("local dir tree ready")
+            print("init_param[windows_exe] =", init_param["windows_exe"])
+            if init_param["windows_exe"].lower() == "true":
+                tree_ini_path = "c:\\"
+
+            else:
+                tree_ini_path = "/"
+
+            msg_txt = "\n NOT GIVEN init_path \n using " + tree_ini_path
+            logging.info(msg_txt)
+            print(msg_txt)
 
     try:
         with open("run_data") as json_file:
