@@ -184,28 +184,14 @@ def find_if_in_list(inner_command):
 
 
 def add_log_line(new_line, nod_req):
-    '''
-    if new_line[-1:] != "\n" and len(new_line) > 1:
-        logging.info("<<< adding \\n >>> to output line:", new_line)
-        new_line += "\n"
-    '''
-
     Error_Broken_Pipes = 0
-
-    #if nod_req is not None:
     try:
-        #nod_req.wfile.write(bytes(new_line , 'utf-8'))
         spit_out(
             str_out = new_line, req_obj = nod_req, out_type = 'utf-8'
         )
 
     except BrokenPipeError:
         Error_Broken_Pipes = 1
-
-    #else:
-    #    logging.info(new_line[:-1])
-
-
 
     return Error_Broken_Pipes
 

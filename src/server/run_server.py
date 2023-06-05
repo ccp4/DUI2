@@ -273,7 +273,6 @@ def main(par_def = None, connection_out = None):
     logging.info("run_local = " + str(run_local))
 
     if run_local:
-        tree_dic_lst = []
         tree_ini_path = "/"
 
     else:
@@ -289,8 +288,6 @@ def main(par_def = None, connection_out = None):
             )
             tree_ini_path = os.getcwd()
             print("local dir tree ready")
-
-        #tree_dic_lst = iter_dict(tree_ini_path, 0)
 
     try:
         with open("run_data") as json_file:

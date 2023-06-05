@@ -55,7 +55,6 @@ from server.img_uploader import flex_arr_2_json
 from server.init_first import ini_data
 
 def spit_out(str_out = None, req_obj = None, out_type = None):
-    #logging.info("req_obj(spit_out) =", req_obj)
     if req_obj is None:
         if out_type == 'utf-8':
             logging.info(" ... " + str(str_out[:-1]), " ... ")
@@ -547,11 +546,11 @@ def get_param_list(cmd_str):
     connect_dict = {
             "find_spots_params"              :phil_scope_find_spots.objects    ,
             "index_params"                   :phil_scope_index.objects         ,
-          "ssx_index_params"                     :ssx_phil_scope_index.objects           ,
+            "ssx_index_params"               :ssx_phil_scope_index.objects     ,
             "refine_bravais_settings_params" :phil_scope_r_b_settings.objects  ,
             "refine_params"                  :phil_scope_refine.objects        ,
             "integrate_params"               :phil_scope_integrate.objects     ,
-          "ssx_integrate_params"                 :ssx_phil_scope_integrate.objects       ,
+            "ssx_integrate_params"           :ssx_phil_scope_integrate.objects ,
             "symmetry_params"                :phil_scope_symmetry.objects      ,
             "scale_params"                   :phil_scope_scale.objects         ,
             "combine_experiments_params"     :phil_scope_combine_params.objects,
@@ -662,32 +661,3 @@ def get_help_list(cmd_str):
 
     logging.info("trimed top part 3")
     return bottom_trimed_lst
-
-to_remove = '''
-def iter_dict(file_path, depth_ini):
-    file_name = file_path.split("/")[-1]
-    local_dict = {
-        "file_name": file_name, "file_path": file_path, "list_child": []
-    }
-    if depth_ini >= 30:
-        local_dict["isdir"] = False
-
-    elif os.path.isdir(file_path):
-        local_dict["isdir"] = True
-        depth_next = depth_ini + 1
-        for new_file_name in sorted(os.listdir(file_path)):
-            try:
-                new_file_path = os.path.join(os.sep, file_path, new_file_name)
-                local_dict["list_child"].append(iter_dict(new_file_path, depth_next))
-
-            except PermissionError:
-                local_dict["list_child"] = []
-                local_dict["isdir"] = False
-                break
-                return local_dict
-
-    else:
-        local_dict["isdir"] = False
-
-    return local_dict
-'''
