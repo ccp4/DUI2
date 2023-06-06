@@ -381,7 +381,9 @@ class CmdNode(object):
                 self.nod_req.end_headers()
 
             except AttributeError:
-                logging.info("Attribute Err catch, not supposed send header info #2")
+                logging.info(
+                    "Attribute Err catch, not supposed send header info #2"
+                )
 
             try:
                 str_nod_num = "node.number=" + str(self.number) + "\n"
@@ -391,7 +393,9 @@ class CmdNode(object):
                 )
 
             except BrokenPipeError:
-                logging.info("<< BrokenPipe err catch  >> while sending nod_num")
+                logging.info(
+                    "<< BrokenPipe err catch  >> while sending nod_num"
+                )
 
         print("FilNotFonErr =", FilNotFonErr)
 
