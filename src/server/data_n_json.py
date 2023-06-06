@@ -344,6 +344,7 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
         #and consequently go elsewhere
         try:
             curr_path = uni_cmd[1].replace("/", os.sep)
+            print("curr_path =", curr_path)
             f_name_list =  os.listdir(curr_path)
             dict_list = []
             for f_name in f_name_list:

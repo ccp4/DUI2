@@ -425,6 +425,7 @@ class ImportWidget(QWidget):
         self.setLayout(self.main_vbox)
 
     def set_selection(self, str_select, isdir):
+        print("str_select =", str_select)
         self.dir_selected = isdir
         if self.dir_selected:
             self.imp_txt.setText(str_select)

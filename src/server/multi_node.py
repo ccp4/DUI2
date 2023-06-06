@@ -832,6 +832,7 @@ class Runner(object):
     def set_dir_path(self, dir_path_in):
         if dir_path_in[-1] != os.sep:
             dir_path_in += os.sep
+
         self._dir_path = dir_path_in
 
 
