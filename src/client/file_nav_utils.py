@@ -194,6 +194,7 @@ class FileBrowser(QDialog):
         self.current_file = None
         self.build_paren_list()
         cmd = {"nod_lst":"", "cmd_lst":["get_dir_ls " + self.curr_path]}
+        print("cmd =", cmd)
         lst_req = get_req_json_dat(
             params_in = cmd, main_handler = None
         )
