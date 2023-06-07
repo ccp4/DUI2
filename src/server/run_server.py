@@ -278,7 +278,6 @@ def main(par_def = None, connection_out = None):
     else:
         tree_ini_path = init_param["init_path"]
         if tree_ini_path == None:
-            print("init_param[windows_exe] =", init_param["windows_exe"])
             if init_param["windows_exe"].lower() == "true":
                 tree_ini_path = "c:\\"
 

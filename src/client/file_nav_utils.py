@@ -122,7 +122,7 @@ class PathBar(QWidget):
         self.setFixedHeight(self.height() * 2.6)
 
     def back_one_dir(self):
-        print("back_one_dir")
+        #print("back_one_dir")
         self.up_dir(self.par_dir)
 
     def scroll_2_right(self, minimum, maximum):
@@ -194,7 +194,7 @@ class FileBrowser(QDialog):
         self.current_file = None
         self.build_paren_list()
         cmd = {"nod_lst":"", "cmd_lst":["get_dir_ls " + self.curr_path]}
-        print("cmd =", cmd)
+        #print("cmd =", cmd)
         lst_req = get_req_json_dat(
             params_in = cmd, main_handler = None
         )
@@ -226,7 +226,7 @@ class FileBrowser(QDialog):
                 self.build_content(self.current_file["path"] + "/")
 
             else:
-                print("Opened: ", self.current_file["path"])
+                print("Opening: ", self.current_file["path"])
                 self.file_or_dir_selected.emit(self.current_file["path"], False)
                 self.close()
 

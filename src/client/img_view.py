@@ -1508,7 +1508,7 @@ class MainImgViewObject(QObject):
         self.dir_selected = isdir
         self.window.IntroPathEdit.setText(self.nod_or_path)
 
-        print("self.nod_or_path = ", self.nod_or_path)
+        #print("self.nod_or_path = ", self.nod_or_path)
 
         my_cmd_lst = ["get_template 0"]
         my_cmd = {"path"    : self.nod_or_path,

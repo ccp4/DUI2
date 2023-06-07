@@ -425,7 +425,6 @@ class ImportWidget(QWidget):
         self.setLayout(self.main_vbox)
 
     def set_selection(self, str_select, isdir):
-        print("str_select =", str_select)
         self.dir_selected = isdir
         if self.dir_selected:
             self.imp_txt.setText(str_select)
@@ -475,10 +474,7 @@ class ImportWidget(QWidget):
                 params_in = cmd, main_handler = None
             )
             dic_str = lst_req.result_out()
-            print("dic_str =", dic_str)
             init_path = dic_str[0]
-            print("init_path =", init_path)
-
 
             self.open_widget = FileBrowser(parent = self, path_in = init_path)
             self.open_widget.resize(self.open_widget.size() * 2)
