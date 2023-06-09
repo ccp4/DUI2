@@ -35,13 +35,13 @@ if __name__ == '__main__':
     prcs_serv.start()
     new_port = pipe_server_1.recv()
     logging.info("# time to launch client app with port =" + str(new_port))
+    if new_port is not None:
+        client_par_def = (
+                ("url", 'http://127.0.0.1:' + str(new_port) + '/'),
+                ("all_local", "true"),
+                ("windows_exe", win_str),
+        )
+        run_client.main(client_par_def)
 
-    client_par_def = (
-            ("url", 'http://127.0.0.1:' + str(new_port) + '/'),
-            ("all_local", "true"),
-            ("windows_exe", win_str),
-    )
-    run_client.main(client_par_def)
-
-    prcs_serv.join()
-    logging.info("Closing server naturally")
+        prcs_serv.join()
+        logging.info("Closing server naturally")

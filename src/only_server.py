@@ -20,9 +20,13 @@ if __name__ == '__main__':
         args = (server_par_def, pipe_server_2)
     )
     prcs_serv.start()
-    new_port = pipe_server_1.recv()
-    print("# time to launch client app with port =" +  str(new_port))
+    try:
+        new_port = pipe_server_1.recv()
+        print("# time to launch client app with port =" +  str(new_port))
+        prcs_serv.join()
+        print("Closing server naturally")
 
-    prcs_serv.join()
-    print("Closing server naturally")
+    except KeyboardInterrupt:
+        print("Interrupted with Keyboard, parent event")
+
 

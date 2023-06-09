@@ -302,9 +302,10 @@ def main(par_def = None, connection_out = None):
     cmd_dict = multi_node.str2dic("display")
     cmd_tree_runner.run_get_data(cmd_dict)
 
-    launch_success = False
-    n_secs = 2
-    while launch_success == False:
+    #launch_success = False
+    n_secs = 3
+    #while launch_success == False:
+    for test_timess in range(3):
         try:
             with socketserver.ThreadingTCPServer(
                 (HOST, PORT), ReqHandler
@@ -313,7 +314,7 @@ def main(par_def = None, connection_out = None):
                 print(
                     "serving at:{host:" + str(HOST) + " port:" + str(PORT) + "}"
                 )
-                launch_success = True
+                #launch_success = True
 
                 connection_out.send(PORT)
                 connection_out.close()
@@ -322,11 +323,20 @@ def main(par_def = None, connection_out = None):
                     http_daemon.serve_forever()
 
                 except KeyboardInterrupt:
+                    print("interrupted with keyboard, shild event")
                     logging.info("caling server_close()")
                     http_daemon.server_close()
+                    break
+
+            break
 
         except OSError:
-            PORT += 1
-            launch_success = False
-            print("OS err catch(server side), trying again in" + str(n_secs) + "secs")
+            #PORT += 1
+            #launch_success = False
+            print("OS err catch(server side), trying again in " + str(n_secs) + " secs")
             time.sleep(n_secs)
+
+    else:
+        print("Port #", PORT, "seems to be busy, try later or change port #")
+        connection_out.send(None)
+        connection_out.close()
