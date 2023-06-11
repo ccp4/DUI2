@@ -30,10 +30,12 @@ from server import multi_node
 from server.data_n_json import spit_out
 from server.init_first import ini_data
 from shared_modules import format_utils
+from shared_modules._version import __version__
 
 
 def main(par_def = None, connection_out = None):
     format_utils.print_logo()
+    print("DUI2 Version = ", __version__)
     class ReqHandler(http.server.BaseHTTPRequestHandler):
         def do_POST(self):
             content_len = int(self.headers.get('Content-Length'))

@@ -57,6 +57,7 @@ from client.simpler_param_widgets import (
     IntegrateSimplerParamTab, SymmetrySimplerParamTab,
     ScaleSimplerParamTab, CombineExperimentSimplerParamTab
 )
+from shared_modules._version import __version__
 
 class MainObject(QObject):
     def __init__(self, parent = None, multi_runner = None):
@@ -68,7 +69,7 @@ class MainObject(QObject):
         logging.info("ui_path =" + ui_path)
 
         self.window = QtUiTools.QUiLoader().load(ui_path)
-        self.window.setWindowTitle("CCP4 DUI2")
+        self.window.setWindowTitle("CCP4 DUI2 v:" + __version__)
 
         dui2_icon = QIcon()
         st_icon_path = self.ui_dir_path + os.sep + "resources" \
