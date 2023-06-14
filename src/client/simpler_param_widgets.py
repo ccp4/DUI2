@@ -466,9 +466,6 @@ class ImportWidget(QWidget):
             #init_path = "/Users/luiso/"
             init_path = "/scratch/"
 
-
-            cmd = "dir_path"
-
             cmd = {"nod_lst":"", "cmd_lst":["dir_path"]}
             lst_req = get_req_json_dat(
                 params_in = cmd, main_handler = None

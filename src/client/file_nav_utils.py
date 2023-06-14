@@ -3,11 +3,6 @@ from PySide2.QtCore import *
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 
-import random
-'''from client.exec_utils import (
-    Mtz_Data_Request, get_request_shot, get_req_json_dat
-)'''
-
 from client.exec_utils import get_req_json_dat
 
 def sort_dict_list(lst_in):

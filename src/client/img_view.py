@@ -1524,8 +1524,14 @@ class MainImgViewObject(QObject):
         self.refresh_output(nod_or_path = self.nod_or_path)
 
     def open_dir_widget(self):
-        #TODO make sure self.window is that goes as argument
-        self.open_widget = FileBrowser(self.window)
+        cmd = {"nod_lst":"", "cmd_lst":["dir_path"]}
+        lst_req = get_req_json_dat(
+            params_in = cmd, main_handler = self.my_handler
+        )
+        dic_str = lst_req.result_out()
+        init_path = dic_str[0]
+
+        self.open_widget = FileBrowser(self.window, path_in = init_path)
         self.open_widget.resize(self.open_widget.size() * 2)
         self.open_widget.file_or_dir_selected.connect(self.set_selection)
 

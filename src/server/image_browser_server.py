@@ -131,11 +131,8 @@ class Browser(object):
             print("cmd_lst =", cmd_lst)
 
             try:
-
                 curr_path = cmd_lst[1].replace("/", os.sep)
-
                 print("curr_path =", curr_path)
-
                 f_name_list =  os.listdir(curr_path)
                 dict_list = []
                 for f_name in f_name_list:
@@ -159,11 +156,10 @@ class Browser(object):
                 print(err_msg)
                 return_list = []
 
-
-
+        elif uni_cmd == "dir_path":
+            return_list = [self._init_path]
 
         return return_list
-
 
 
 def main(par_def = None, connection_out = None):
@@ -265,14 +261,6 @@ def main(par_def = None, connection_out = None):
 
     logging.info("\n * using init path as: " + tree_ini_path)
     print("\n * using init path as: " + tree_ini_path)
-    '''
-    tree_dic_lst = iter_dict(tree_ini_path, 0)
-    print("tree_dic_lst =", tree_dic_lst)
-    print("local dir tree ready \n")
-    '''
-
-    #####################################################
-
     browser_runner = Browser(tree_ini_path)
     launch_success = False
     n_secs = 5
