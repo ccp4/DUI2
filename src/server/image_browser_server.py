@@ -25,13 +25,15 @@ import http.server, socketserver
 from urllib.parse import urlparse, parse_qs
 import json, os, zlib, sys, time, logging
 
-from server.data_n_json import iter_dict, spit_out
+#from server.data_n_json import iter_dict, spit_out
+from server.data_n_json import spit_out
+
 from server.img_uploader import flex_arr_2_json
 from shared_modules import format_utils
 
 class Browser(object):
-    def __init__(self, tree_dic_lst):
-        self._dir_tree_dict = tree_dic_lst
+    def __init__(self, path_str):
+        self._init_path = path_str
 
     def run_get_data(self, cmd_dict):
         cmd_lst = cmd_dict["cmd_lst"][0].split(" ")
@@ -40,7 +42,7 @@ class Browser(object):
         uni_cmd = cmd_lst[0]
         if uni_cmd == "dir_tree":
             logging.info("\n *** dir_tree *** \n")
-            str_dir_tree = json.dumps(self._dir_tree_dict)
+            str_dir_tree = json.dumps(self._init_path)
             byt_data = bytes(str_dir_tree.encode('utf-8'))
             return_list = byt_data
 
@@ -123,6 +125,43 @@ class Browser(object):
             )
             return_list = refl_lst
 
+        elif uni_cmd == "get_dir_ls":
+
+            print("Hi there")
+            print("cmd_lst =", cmd_lst)
+
+            try:
+
+                curr_path = cmd_lst[1].replace("/", os.sep)
+
+                print("curr_path =", curr_path)
+
+                f_name_list =  os.listdir(curr_path)
+                dict_list = []
+                for f_name in f_name_list:
+                    f_path = curr_path + f_name
+                    f_isdir = os.path.isdir(f_path)
+                    file_dict = {"fname": f_name, "isdir":f_isdir}
+                    dict_list.append(file_dict)
+
+                return_list = dict_list
+
+            except FileNotFoundError:
+                err_msg = "file not found err catch, not sending file list"
+                logging.info(err_msg)
+                print(err_msg)
+                return_list = []
+
+            except PermissionError:
+                err_msg = "permission denied err catch, " + \
+                "attempt to open not allowed path, not sending file list"
+                logging.info(err_msg)
+                print(err_msg)
+                return_list = []
+
+
+
+
         return return_list
 
 
@@ -141,6 +180,8 @@ def main(par_def = None, connection_out = None):
             url_path = self.path
             url_dict = parse_qs(urlparse(url_path).query)
             cmd_dict = url_dict
+
+            print("cmd_dict = ", cmd_dict)
 
             try:
                 #lst_out = []
@@ -224,13 +265,15 @@ def main(par_def = None, connection_out = None):
 
     logging.info("\n * using init path as: " + tree_ini_path)
     print("\n * using init path as: " + tree_ini_path)
+    '''
     tree_dic_lst = iter_dict(tree_ini_path, 0)
     print("tree_dic_lst =", tree_dic_lst)
     print("local dir tree ready \n")
+    '''
 
     #####################################################
 
-    browser_runner = Browser(tree_dic_lst)
+    browser_runner = Browser(tree_ini_path)
     launch_success = False
     n_secs = 5
     while launch_success == False:
@@ -239,6 +282,9 @@ def main(par_def = None, connection_out = None):
                 (HOST, PORT), ReqHandler
             ) as http_daemon:
                 logging.info(
+                    "serving at:{host:" + str(HOST) + " port:" + str(PORT), "}"
+                )
+                print(
                     "serving at:{host:" + str(HOST) + " port:" + str(PORT), "}"
                 )
                 launch_success = True
@@ -250,5 +296,6 @@ def main(par_def = None, connection_out = None):
 
         except OSError:
             launch_success = False
+            print("OS Err catch, waiting ", n_secs)
             time.sleep(n_secs)
 
