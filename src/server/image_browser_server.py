@@ -40,13 +40,8 @@ class Browser(object):
 
         return_list = []
         uni_cmd = cmd_lst[0]
-        if uni_cmd == "dir_tree":
-            logging.info("\n *** dir_tree *** \n")
-            str_dir_tree = json.dumps(self._init_path)
-            byt_data = bytes(str_dir_tree.encode('utf-8'))
-            return_list = byt_data
 
-        elif uni_cmd == "gis":
+        if uni_cmd == "gis":
             img_num = int(cmd_lst[1])
             inv_scale = 1
             for sub_par in cmd_lst[2:]:
