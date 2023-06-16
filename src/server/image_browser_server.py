@@ -226,16 +226,8 @@ def main(par_def = None, connection_out = None):
 
     ################################################ PROPER MAIN BROWSER
 
-    par_def = (
-        ("port", 45678),
-        ("host", "127.0.0.1"),
-        #("host", "serverip"),
-        ("init_path", "."),
-        ("all_local", "False"),
-    )
 
     init_param = format_utils.get_par(par_def, sys.argv[1:])
-    logging.info("init_param =" + str(init_param))
 
     PORT = int(init_param["port"])
     HOST = init_param["host"]
@@ -251,11 +243,14 @@ def main(par_def = None, connection_out = None):
 
     tree_ini_path = init_param["init_path"]
     if tree_ini_path == None:
-        logging.info("\n NOT GIVEN init path, using << HOME env >>")
-        tree_ini_path = os.environ['HOME']
+        print("\n NOT GIVEN init path, using ", os.getcwd())
+        tree_ini_path = os.getcwd()
 
-    logging.info("\n * using init path as: " + tree_ini_path)
-    print("\n * using init path as: " + tree_ini_path)
+    if tree_ini_path[-1] != os.sep:
+        tree_ini_path += os.sep
+
+    logging.info("\n << using init path as: " + tree_ini_path + ">>")
+    print("\n << using init path as: " + tree_ini_path + ">>")
     browser_runner = Browser(tree_ini_path)
     launch_success = False
     n_secs = 5
