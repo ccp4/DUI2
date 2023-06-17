@@ -1477,18 +1477,17 @@ class MainImgViewObject(QObject):
 
         self.window.show()
 
-        self.window.ImgNumEdit.textChanged.connect(self.img_num_changed)
+        self.window.ImgNumEdit.editingFinished.connect(self.img_num_changed)
         self.window.PrevImgButton.clicked.connect(self.prev_img)
         self.window.NextImgButton.clicked.connect(self.next_img)
         self.window.OpenFileButton.clicked.connect(self.open_dir_widget)
 
+    def img_num_changed(self):
+        self.refresh_output(nod_or_path = self.nod_or_path)
+
     def refresh_output(self, nod_or_path = True):
         img_num = int(self.window.ImgNumEdit.text())
         self.do_image_view(in_img_num = img_num, nod_or_path = nod_or_path)
-
-    def img_num_changed(self, new_img_num):
-        logging.info("should load IMG num:" + str(new_img_num))
-        self.refresh_output(nod_or_path = self.nod_or_path)
 
     def shift_img_num(self, sh_num):
         img_num = int(self.window.ImgNumEdit.text())
@@ -1498,18 +1497,17 @@ class MainImgViewObject(QObject):
     def prev_img(self):
         logging.info("prev_img")
         self.shift_img_num(-1)
+        self.img_num_changed()
 
     def next_img(self):
         logging.info("next_img")
         self.shift_img_num(1)
+        self.img_num_changed()
 
     def set_selection(self, str_select, isdir):
         self.nod_or_path = str_select
         self.dir_selected = isdir
         self.window.IntroPathEdit.setText(self.nod_or_path)
-
-        #print("self.nod_or_path = ", self.nod_or_path)
-
         my_cmd_lst = ["get_template 0"]
         my_cmd = {"path"    : self.nod_or_path,
                   "cmd_lst" : my_cmd_lst}
