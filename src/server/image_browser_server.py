@@ -36,7 +36,7 @@ class Browser(object):
         self._init_path = path_str
 
     def run_get_data(self, cmd_dict):
-        cmd_lst = cmd_dict["cmd_lst"][0].split(" ")
+        cmd_lst = cmd_dict["cmd_str"][0].split(" ")
 
         return_list = []
         uni_cmd = cmd_lst[0]

@@ -188,7 +188,7 @@ class FileBrowser(QDialog):
         show_hidden = self.show_hidden_check.isChecked()
         self.current_file = None
         self.build_paren_list()
-        cmd = {"nod_lst":"", "cmd_lst":["get_dir_ls " + self.curr_path]}
+        cmd = {"nod_lst":"", "cmd_str":["get_dir_ls " + self.curr_path]}
         #print("cmd =", cmd)
         lst_req = get_req_json_dat(
             params_in = cmd, main_handler = None

@@ -79,9 +79,10 @@ class get_req_json_dat(QObject):
                     uni_url, stream = True, params = params_in, timeout = 45
                 )
                 logging.info("starting request")
+                print("params_in =", params_in)
                 str_lst = ''
                 line_str = ''
-                json_out = ""
+                json_out = ''
                 times_loop = 10
                 for count_times in range(times_loop):
                     tmp_dat = req_get.raw.readline()
@@ -98,9 +99,6 @@ class get_req_json_dat(QObject):
                         logging.info('to many "lines" in http response')
                         json_out = None
 
-                if json_out is not None:
-                    json_out = json.loads(str_lst)
-
             except ConnectionError:
                 logging.info(" ... Connection err catch (get_req_json_dat) ...")
                 json_out = None
@@ -111,7 +109,9 @@ class get_req_json_dat(QObject):
                 )
                 json_out = None
 
-            #return json_out
+            if json_out is not None:
+                json_out = json.loads(str_lst)
+
             self.to_return = json_out
 
         else:
@@ -200,14 +200,14 @@ class get_request_real_time(QThread):
 
 
 def get_optional_list(cmd_str, handler_in):
-    cmd = {"nod_lst":"", "cmd_lst":[cmd_str]}
+    cmd = {"nod_lst":"", "cmd_str":[cmd_str]}
     lst_req = get_req_json_dat(params_in = cmd, main_handler = handler_in)
     lst_opt = lst_req.result_out()
     return lst_opt
 
 
 def build_advanced_params_widget(cmd_str, h_box_search, handler_in):
-    cmd = {"nod_lst":"", "cmd_lst":[cmd_str]}
+    cmd = {"nod_lst":"", "cmd_str":[cmd_str]}
 
     lst_req = get_req_json_dat(params_in = cmd, main_handler = handler_in)
     lst_params = lst_req.result_out()
@@ -243,7 +243,7 @@ def get_help_messages(handler_in):
     ]
     help_dict = {}
     for cmd_str in lst_cmd:
-        cmd = {"nod_lst":"", "cmd_lst":["gh " + cmd_str]}
+        cmd = {"nod_lst":"", "cmd_str":["gh " + cmd_str]}
         lst_req = get_req_json_dat(params_in = cmd, main_handler = handler_in)
         json_hlp = lst_req.result_out()
         #lst_hlp.append(json_hlp[0])

@@ -65,7 +65,7 @@ if __name__ == "__main__":
             [parent, cmd] = ["", cmd_in]
         '''
 
-        full_cmd = {"nod_lst":"", "cmd_lst":["dir_path"]}
+        full_cmd = {"nod_lst":"", "cmd_str":["dir_path"]}
 
         #full_cmd = {"nod_lst":[parent], "cmd_lst":[cmd]}
 

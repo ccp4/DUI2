@@ -585,7 +585,7 @@ class MainObject(QObject):
     def close_event(self):
         logging.info("aboutToQuit ... 1")
         self.recip_latt.quit_kill_all()
-        cmd = {"nod_lst":"", "cmd_lst":["closed"]}
+        cmd = {"nod_lst":"", "cmd_str":["closed"]}
         lst_req = get_req_json_dat(
             params_in = cmd, main_handler = self.runner_handler
         )
@@ -752,7 +752,7 @@ class MainObject(QObject):
             if key2find == "reindex":
                 cmd = {
                     "nod_lst":cur_nod["parent_node_lst"],
-                    "cmd_lst":["get_bravais_sum"]
+                    "cmd_str":["get_bravais_sum"]
                 }
                 lst_req = get_req_json_dat(
                     params_in = cmd, main_handler = self.runner_handler
@@ -943,7 +943,7 @@ class MainObject(QObject):
         self.nxt_key_clicked(self.sender().cmd_str)
 
     def update_reindex_table_header(self, nod_lst):
-        cmd = {"nod_lst":nod_lst, "cmd_lst":["display_log"]}
+        cmd = {"nod_lst":nod_lst, "cmd_str":["display_log"]}
         lst_req = get_req_json_dat(
             params_in = cmd, main_handler = self.runner_handler
         )
@@ -963,7 +963,7 @@ class MainObject(QObject):
         if str_key == "reindex":
             cmd = {
                 "nod_lst":[self.curr_nod_num],
-                "cmd_lst":["get_bravais_sum"]
+                "cmd_str":["get_bravais_sum"]
             }
             lst_req = get_req_json_dat(
                 params_in = cmd, main_handler = self.runner_handler
@@ -1070,7 +1070,7 @@ class MainObject(QObject):
             self.param_widgets[self.curr_widg_key]["simple"].reset_pars()
 
         cmd = {
-            "nod_lst":self.new_node.parent_node_lst, "cmd_lst":["get_lambda"]
+            "nod_lst":self.new_node.parent_node_lst, "cmd_str":["get_lambda"]
         }
         lst_req = get_req_json_dat(
             params_in = cmd, main_handler = self.runner_handler
@@ -1223,7 +1223,7 @@ class MainObject(QObject):
         self.gray_n_ungray()
 
     def request_display(self):
-        cmd = {"nod_lst":"", "cmd_lst":["display"]}
+        cmd = {"nod_lst":"", "cmd_str":["display"]}
         lst_req = get_req_json_dat(
             params_in = cmd, main_handler = self.runner_handler
         )

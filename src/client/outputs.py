@@ -53,7 +53,7 @@ class LoadFiles(QThread):
 
     def run(self):
         my_cmd = {"nod_lst" : [self.cur_nod_num],
-                  "cmd_lst" : ["get_experiments_file"]}
+                  "cmd_str" : ["get_experiments_file"]}
 
         req_shot = get_request_shot(
             params_in = my_cmd, main_handler = self.my_handler
@@ -75,7 +75,7 @@ class LoadFiles(QThread):
         tmp_file.close()
 
         my_cmd = {"nod_lst" : [self.cur_nod_num],
-                  "cmd_lst" : ["get_reflections_file"]}
+                  "cmd_str" : ["get_reflections_file"]}
 
         self.req_r_time = get_request_real_time(
             params_in = my_cmd, main_handler = self.my_handler
@@ -422,7 +422,7 @@ class DoLoadHTML(QObject):
                 try:
                     cmd = {
                         "nod_lst":[nod_p_num],
-                        "cmd_lst":["get_report"]
+                        "cmd_str":["get_report"]
                     }
                     logging.info("staring html request ...")
 
@@ -563,7 +563,7 @@ class ShowLog(QObject):
 
             try:
                 if not found_nod_num:
-                    cmd = {"nod_lst":[nod_p_num], "cmd_lst":["display_log"]}
+                    cmd = {"nod_lst":[nod_p_num], "cmd_str":["display_log"]}
                     lst_req = get_req_json_dat(
                         params_in = cmd,
                         main_handler = self.main_obj.runner_handler

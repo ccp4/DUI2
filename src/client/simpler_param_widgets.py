@@ -466,7 +466,7 @@ class ImportWidget(QWidget):
             #init_path = "/Users/luiso/"
             init_path = "/scratch/"
 
-            cmd = {"nod_lst":"", "cmd_lst":["dir_path"]}
+            cmd = {"nod_lst":"", "cmd_str":["dir_path"]}
             lst_req = get_req_json_dat(
                 params_in = cmd, main_handler = None
             )
@@ -1659,7 +1659,7 @@ class ExportWidget(QWidget):
 
             data_init = ini_data()
             uni_url = data_init.get_url()
-            cmd = {"nod_lst":[self.cur_nod_num], "cmd_lst":["get_mtz"]}
+            cmd = {"nod_lst":[self.cur_nod_num], "cmd_str":["get_mtz"]}
             self.dowl_thrd = Mtz_Data_Request(cmd, self.my_handler)
             self.dowl_thrd.update_progress.connect(self.show_new_progress)
             self.dowl_thrd.done_download.connect(self.save_mtz_on_disc)
@@ -1784,7 +1784,7 @@ class MergeWidget(QWidget):
 
             data_init = ini_data()
             uni_url = data_init.get_url()
-            cmd = {"nod_lst":[self.cur_nod_num], "cmd_lst":["get_mtz"]}
+            cmd = {"nod_lst":[self.cur_nod_num], "cmd_str":["get_mtz"]}
             self.dowl_thrd = Mtz_Data_Request(cmd, self.my_handler)
             self.dowl_thrd.update_progress.connect(self.show_new_progress)
             self.dowl_thrd.done_download.connect(self.save_mtz_on_disc)

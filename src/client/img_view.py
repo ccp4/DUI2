@@ -102,7 +102,7 @@ class LoadSliceMaskImage(QThread):
         ]
         my_cmd = {"nod_lst" : self.nod_num_lst,
                   "path"    : self.exp_path,
-                  "cmd_lst" : my_cmd_lst}
+                  "cmd_str" : my_cmd_lst}
 
         self.r_time_req = get_request_real_time(
             params_in = my_cmd, main_handler = self.my_handler
@@ -207,7 +207,7 @@ class LoadSliceImage(QThread):
         ]
         my_cmd = {"nod_lst" : self.nod_num_lst,
                   "path"    : self.exp_path,
-                  "cmd_lst" : my_cmd_lst}
+                  "cmd_str" : my_cmd_lst}
 
         self.r_time_req = get_request_real_time(
             params_in = my_cmd, main_handler = self.my_handler
@@ -687,7 +687,7 @@ class DoImageView(QObject):
         my_cmd_lst = ["get_template " + str(in_img_num)]
         my_cmd = {"nod_lst" : [self.cur_nod_num],
                   "path"    : self.nod_or_path,
-                  "cmd_lst" : my_cmd_lst}
+                  "cmd_str" : my_cmd_lst}
 
         try:
             self.ld_tpl_thread.quit()
@@ -756,7 +756,7 @@ class DoImageView(QObject):
         if self.nod_or_path is True:
             if self.pop_display_menu.rad_but_obs.isChecked():
                 my_cmd = {
-                    'nod_lst': [self.cur_nod_num], 'cmd_lst': [
+                    'nod_lst': [self.cur_nod_num], 'cmd_str': [
                         "grl " + str(self.cur_img_num)
                     ]
                 }
@@ -765,7 +765,7 @@ class DoImageView(QObject):
                 z_dept_str = str(self.pop_display_menu.z_dept_combo.value())
                 my_cmd = {
                     'nod_lst': [self.cur_nod_num],
-                    'cmd_lst': [
+                    'cmd_str': [
                         "grp " + str(self.cur_img_num) +
                         " z_dept=" + z_dept_str
                     ]
@@ -774,7 +774,7 @@ class DoImageView(QObject):
         elif type(self.nod_or_path) is str:
             my_cmd = {
                 'path': self.nod_or_path,
-                'cmd_lst': "get_reflection_list " + str(self.cur_img_num)
+                'cmd_str': "get_reflection_list " + str(self.cur_img_num)
             }
 
         elif self.nod_or_path is False:
@@ -1510,7 +1510,7 @@ class MainImgViewObject(QObject):
         self.window.IntroPathEdit.setText(self.nod_or_path)
         my_cmd_lst = ["get_template 0"]
         my_cmd = {"path"    : self.nod_or_path,
-                  "cmd_lst" : my_cmd_lst}
+                  "cmd_str" : my_cmd_lst}
 
         lst_req = get_req_json_dat(
             params_in = my_cmd, main_handler = self.my_handler
@@ -1526,7 +1526,7 @@ class MainImgViewObject(QObject):
             print("Type Err catch while opening imgs")
 
     def open_dir_widget(self):
-        cmd = {"nod_lst":"", "cmd_lst":["dir_path"]}
+        cmd = {"nod_lst":"", "cmd_str":["dir_path"]}
         lst_req = get_req_json_dat(
             params_in = cmd, main_handler = self.my_handler
         )

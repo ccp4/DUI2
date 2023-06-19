@@ -140,7 +140,7 @@ def main(par_def = None, connection_out = None):
             url_path = self.path
             url_dict = parse_qs(urlparse(url_path).query)
             try:
-                tmp_cmd2lst = url_dict["cmd_lst"]
+                tmp_cmd2lst = url_dict["cmd_str"]
                 logging.info("tmp_cmd2lst =" + str(tmp_cmd2lst))
 
             except KeyError:

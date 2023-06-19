@@ -47,7 +47,7 @@ def main(par_def = None):
         'get_if_local =' + str(data_init.get_if_local()) + 'get_url =' + uni_url
     )
 
-    cmd = {"nod_lst":[""], "cmd_lst":["display"]}
+    cmd = {"nod_lst":[""], "cmd_str":["display"]}
     dummy_nod_lst = None
     n_secs = 3
     while dummy_nod_lst == None:

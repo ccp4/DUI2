@@ -11,7 +11,7 @@ def load_img_json_w_str(
     my_cmd_lst = ["gi " + str(img_num)]
     my_cmd = {"nod_lst" : nod_num_lst,
               "path"    : exp_path,
-              "cmd_lst" : my_cmd_lst}
+              "cmd_str" : my_cmd_lst}
 
     try:
         start_tm = time.time()
@@ -64,7 +64,7 @@ def load_mask_img_json_w_str(
     my_cmd_lst = ["gmi " + str(img_num)]
     my_cmd = {"nod_lst" : nod_num_lst,
               "path"    : exp_path,
-              "cmd_lst" : my_cmd_lst}
+              "cmd_str" : my_cmd_lst}
 
     try:
         start_tm = time.time()
