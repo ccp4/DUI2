@@ -8,7 +8,7 @@ def load_img_json_w_str(
     uni_url = None, nod_num_lst = [1], img_num = 0,
     exp_path = None, main_handler = None
 ):
-    my_cmd_lst = ["gi " + str(img_num)]
+    my_cmd_lst = ["gi", str(img_num)]
     my_cmd = {"nod_lst" : nod_num_lst,
               "path"    : exp_path,
               "cmd_str" : my_cmd_lst}
@@ -61,7 +61,7 @@ def load_mask_img_json_w_str(
     uni_url = None, nod_num_lst = [1], img_num = 0,
     exp_path = None, main_handler = None
 ):
-    my_cmd_lst = ["gmi " + str(img_num)]
+    my_cmd_lst = ["gmi", str(img_num)]
     my_cmd = {"nod_lst" : nod_num_lst,
               "path"    : exp_path,
               "cmd_str" : my_cmd_lst}

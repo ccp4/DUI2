@@ -241,9 +241,10 @@ def get_help_messages(handler_in):
         "combine_experiments",
         "export"
     ]
+    #TODO change the name of one of the cmd_str variables
     help_dict = {}
     for cmd_str in lst_cmd:
-        cmd = {"nod_lst":"", "cmd_str":["gh " + cmd_str]}
+        cmd = {"nod_lst":"", "cmd_str":["gh", cmd_str]}
         lst_req = get_req_json_dat(params_in = cmd, main_handler = handler_in)
         json_hlp = lst_req.result_out()
         #lst_hlp.append(json_hlp[0])

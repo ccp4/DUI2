@@ -708,30 +708,35 @@ class Runner(object):
         self._save_state()
 
     def run_get_data(self, cmd_dict):
-
-        unalias_cmd_lst = unalias_full_cmd(cmd_dict["cmd_lst"])
-        logging.info("\n cmd_lst: " + str(unalias_cmd_lst))
+        print("\n cmd_dict =" + str(cmd_dict))
+        unalias_cmd_ini = fix_alias(cmd_dict["lst_wt_cmd"][0])
+        unalias_cmd_lst = cmd_dict["lst_wt_cmd"]
+        unalias_cmd_lst[0] = unalias_cmd_ini
+        print("\n unalias_cmd_lst: " + str(unalias_cmd_lst))
 
         return_list = []
-        for uni_cmd in unalias_cmd_lst:
-            if uni_cmd == ["display"]:
-                return_list = format_utils.get_lst2show(self.step_list)
-                self.tree_output(return_list)
-                self.tree_output.print_output()
+        if unalias_cmd_lst == ["display"]:
+            return_list = format_utils.get_lst2show(self.step_list)
+            self.tree_output(return_list)
+            self.tree_output.print_output()
 
-            elif uni_cmd == ["dir_path"]:
-                return_list = [self._dir_path]
+        elif unalias_cmd_lst == ["dir_path"]:
+            return_list = [self._dir_path]
 
-            elif uni_cmd == ["history"]:
-                #return_list = self.lst_cmd_in
-                logging.info("history command is temporarily off")
+        elif unalias_cmd_lst == ["history"]:
+            #return_list = self.lst_cmd_in
+            logging.info("history command is temporarily off")
 
-            elif uni_cmd == ["closed"]:
-                return_list = ["closed received"]
-                logging.info("received closed command")
+        elif unalias_cmd_lst == ["closed"]:
+            return_list = ["closed received"]
+            logging.info("received closed command")
 
-            else:
-                return_list = get_info_data(uni_cmd, cmd_dict, self.step_list)
+        else:
+            print(
+                "unalias_cmd_lst, cmd_dict, self.step_list = " +
+                str(unalias_cmd_lst) + " , " + str(cmd_dict)
+            )
+            return_list = get_info_data(unalias_cmd_lst, cmd_dict, self.step_list)
 
         return return_list
 

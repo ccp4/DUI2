@@ -141,7 +141,6 @@ def main(par_def = None, connection_out = None):
             url_dict = parse_qs(urlparse(url_path).query)
             try:
                 tmp_cmd2lst = url_dict["cmd_str"]
-                logging.info("tmp_cmd2lst =" + str(tmp_cmd2lst))
 
             except KeyError:
                 logging.info("no command in request (Key err catch )")
@@ -162,10 +161,12 @@ def main(par_def = None, connection_out = None):
                     str_out = '/*EOF*/', req_obj = self, out_type = 'utf-8'
                 )
                 return
-
-            cmd_lst = []
+            to_remove = '''
+            lst_wt_cmd = []
             for inner_str in tmp_cmd2lst:
-                cmd_lst.append(inner_str.split(" "))
+                lst_wt_cmd.append(inner_str.split(" "))
+            '''
+            lst_wt_cmd = tmp_cmd2lst
 
             nod_lst = []
             try:
@@ -176,9 +177,8 @@ def main(par_def = None, connection_out = None):
                 logging.info("no node number provided")
 
             cmd_dict = {"nod_lst":nod_lst,
-                        "cmd_lst":cmd_lst}
+                        "lst_wt_cmd":lst_wt_cmd}
             try:
-                #lst_out = []
                 lst_out = cmd_tree_runner.run_get_data(cmd_dict)
 
                 if type(lst_out) is list or type(lst_out) is dict:
@@ -301,11 +301,11 @@ def main(par_def = None, connection_out = None):
 
     cmd_tree_runner.set_dir_path(tree_ini_path)
     cmd_tree_runner.run_get_data(
-        {"nod_lst":[""], "cmd_lst":["display"]}
+        {"nod_lst":[""], "lst_wt_cmd":["display"]}
     )
 
-    n_secs = 3
-    for test_timess in range(3):
+    n_secs = 5
+    for test_timess in range(5):
         try:
             with socketserver.ThreadingTCPServer(
                 (HOST, PORT), ReqHandler

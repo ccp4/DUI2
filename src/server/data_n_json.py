@@ -79,6 +79,7 @@ def spit_out(str_out = None, req_obj = None, out_type = None):
 
 
 def get_info_data(uni_cmd, cmd_dict, step_list):
+    print("uni_cmd(get_info_data) =", uni_cmd)
     return_list = []
     if uni_cmd == ["display_log"]:
         for lin2go in cmd_dict["nod_lst"]:

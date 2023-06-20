@@ -95,9 +95,9 @@ class LoadSliceMaskImage(QThread):
     def run(self):
         logging.info("loading mask slice of image ")
         my_cmd_lst = [
-            "gmis " + str(self.img_num) +
-            " inv_scale=" + str(self.inv_scale) +
-            " view_rect=" + str(self.x1) + "," + str(self.y1) +
+            "gmis", str(self.img_num),
+            "inv_scale=" + str(self.inv_scale),
+            "view_rect=" + str(self.x1) + "," + str(self.y1) +
                       "," + str(self.x2) + "," + str(self.y2)
         ]
         my_cmd = {"nod_lst" : self.nod_num_lst,
@@ -200,9 +200,9 @@ class LoadSliceImage(QThread):
         logging.info("loading slice of image ")
 
         my_cmd_lst = [
-            "gis " + str(self.img_num) +
-            " inv_scale=" + str(self.inv_scale) +
-            " view_rect=" + str(self.x1) + "," + str(self.y1) +
+            "gis", str(self.img_num),
+            "inv_scale=" + str(self.inv_scale),
+            "view_rect=" + str(self.x1) + "," + str(self.y1) +
                       "," + str(self.x2) + "," + str(self.y2)
         ]
         my_cmd = {"nod_lst" : self.nod_num_lst,
@@ -684,7 +684,7 @@ class DoImageView(QObject):
             self.cur_nod_num = self.nod_or_path
             self.exp_path = str(self.cur_nod_num)
 
-        my_cmd_lst = ["get_template " + str(in_img_num)]
+        my_cmd_lst = ["get_template", str(in_img_num)]
         my_cmd = {"nod_lst" : [self.cur_nod_num],
                   "path"    : self.nod_or_path,
                   "cmd_str" : my_cmd_lst}
@@ -756,9 +756,8 @@ class DoImageView(QObject):
         if self.nod_or_path is True:
             if self.pop_display_menu.rad_but_obs.isChecked():
                 my_cmd = {
-                    'nod_lst': [self.cur_nod_num], 'cmd_str': [
-                        "grl " + str(self.cur_img_num)
-                    ]
+                    'nod_lst': [self.cur_nod_num],
+                    'cmd_str': ["grl", str(self.cur_img_num)]
                 }
 
             else:
@@ -766,15 +765,15 @@ class DoImageView(QObject):
                 my_cmd = {
                     'nod_lst': [self.cur_nod_num],
                     'cmd_str': [
-                        "grp " + str(self.cur_img_num) +
-                        " z_dept=" + z_dept_str
+                        "grp", str(self.cur_img_num),
+                        "z_dept=" + z_dept_str
                     ]
                 }
 
         elif type(self.nod_or_path) is str:
             my_cmd = {
                 'path': self.nod_or_path,
-                'cmd_str': "get_reflection_list " + str(self.cur_img_num)
+                'cmd_str': ["get_reflection_list", str(self.cur_img_num)]
             }
 
         elif self.nod_or_path is False:
@@ -1508,7 +1507,7 @@ class MainImgViewObject(QObject):
         self.nod_or_path = str_select
         self.dir_selected = isdir
         self.window.IntroPathEdit.setText(self.nod_or_path)
-        my_cmd_lst = ["get_template 0"]
+        my_cmd_lst = ["get_template", "0"]
         my_cmd = {"path"    : self.nod_or_path,
                   "cmd_str" : my_cmd_lst}
 
