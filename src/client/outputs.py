@@ -27,9 +27,10 @@ from PySide2.QtWidgets import *
 from PySide2 import QtUiTools
 from PySide2.QtGui import *
 
-from client.exec_utils import get_req_json_dat
+from client.exec_utils import (
+    get_req_json_dat, get_request_shot, get_request_real_time
+)
 from client.init_firts import ini_data
-from client.exec_utils import get_request_shot, get_request_real_time
 
 import subprocess, psutil, shutil, webbrowser
 
@@ -381,7 +382,14 @@ class DoLoadHTML(QObject):
             shutil.copy(self.new_file_path, entered_file_name)  ###
 
         except AttributeError:
-            logging.info("Attribute Err catch, no path for HTML file (Download)")
+            logging.info(
+                "Attribute Err catch, no path for HTML file (Download)"
+            )
+
+        except FileNotFoundError:
+            logging.info(
+                "File Not Found Err catch, no path for HTML file (Download)"
+            )
 
         logging.info(entered_file_name + " writen to disk")
 

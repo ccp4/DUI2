@@ -300,13 +300,11 @@ def main(par_def = None, connection_out = None):
         cmd_tree_runner = multi_node.Runner(None)
 
     cmd_tree_runner.set_dir_path(tree_ini_path)
+    cmd_tree_runner.run_get_data(
+        {"nod_lst":[""], "cmd_lst":["display"]}
+    )
 
-    cmd_dict = multi_node.str2dic("display")
-    cmd_tree_runner.run_get_data(cmd_dict)
-
-    #launch_success = False
     n_secs = 3
-    #while launch_success == False:
     for test_timess in range(3):
         try:
             with socketserver.ThreadingTCPServer(
@@ -316,7 +314,6 @@ def main(par_def = None, connection_out = None):
                 print(
                     "serving at:{host:" + str(HOST) + " port:" + str(PORT) + "}"
                 )
-                #launch_success = True
 
                 connection_out.send(PORT)
                 connection_out.close()
@@ -333,8 +330,6 @@ def main(par_def = None, connection_out = None):
             break
 
         except OSError:
-            #PORT += 1
-            #launch_success = False
             print("OS err catch(server side), trying again in " + str(n_secs) + " secs")
             time.sleep(n_secs)
 

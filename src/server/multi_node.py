@@ -839,39 +839,3 @@ class Runner(object):
 
         self._dir_path = dir_path_in
 
-
-def str2dic(cmd_str):
-    logging.info("cmd_str =" + str(cmd_str))
-
-    cmd_dict = {"nod_lst":[],
-                "cmd_lst":[]}
-
-    lstpar = cmd_str.split(" ")
-    for single_param in lstpar:
-        try:
-            cmd_dict["nod_lst"].append(int(single_param))
-
-        except ValueError:
-            break
-
-    if len(cmd_dict["nod_lst"]) > 0:
-        logging.info("nod_lst=" + str(cmd_dict["nod_lst"]))
-
-        new_par_str = ""
-        for single_param in lstpar[len(cmd_dict["nod_lst"]):]:
-            new_par_str += single_param + " "
-
-        tmp_cmd_lst = new_par_str[0:-1].split(";")
-        par_n_cmd_lst = []
-        for single_command in tmp_cmd_lst:
-            inner_lst = single_command.split(" ")
-            par_n_cmd_lst.append(inner_lst)
-
-    else:
-        par_n_cmd_lst = [[cmd_str]]
-
-    cmd_dict["cmd_lst"] = par_n_cmd_lst
-
-    return cmd_dict
-
-
