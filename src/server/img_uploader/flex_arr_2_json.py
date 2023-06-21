@@ -148,6 +148,17 @@ def get_refl_lst(expt_path, refl_path, img_num):
         logging.info("\n sending empty reflection Lst (Type err catch ) \n")
         return []
 
+    except FileNotFoundError:
+        logging.info(
+            "\n sending empty reflection Lst (File Not Found err catch) \n"
+        )
+        return []
+
+    except OSError:
+        logging.info("\n sending empty reflection Lst (OS err catch) \n")
+        return []
+
+
     try:
         pan_col = list(map(int, table["panel"]))
         bbox_col = list(map(list, table["bbox"]))

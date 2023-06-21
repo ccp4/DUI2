@@ -933,11 +933,9 @@ class MainObject(QObject):
 
         except IndexError:
             logging.info("no need to add next button Index Err Catch")
-            #print(" >>> here IndexError <<<")
-        tmp_off = '''
+
         except KeyError:
             logging.info("no need to add next button Key Err Catch")
-        '''
 
     def nxt_clicked(self):
         self.nxt_key_clicked(self.sender().cmd_str)

@@ -36,7 +36,6 @@ class Browser(object):
         self._init_path = path_str
 
     def run_get_data(self, cmd_dict):
-        #cmd_lst = cmd_dict["cmd_str"][0].split(" ")
         cmd_lst = cmd_dict["cmd_str"]
 
         return_list = []
@@ -121,14 +120,10 @@ class Browser(object):
             )
             return_list = refl_lst
 
+
         elif uni_cmd == "get_dir_ls":
-
-            print("Hi there")
-            print("cmd_lst =", cmd_lst)
-
             try:
                 curr_path = cmd_lst[1].replace("/", os.sep)
-                print("curr_path =", curr_path)
                 f_name_list =  os.listdir(curr_path)
                 dict_list = []
                 for f_name in f_name_list:
@@ -142,14 +137,12 @@ class Browser(object):
             except FileNotFoundError:
                 err_msg = "file not found err catch, not sending file list"
                 logging.info(err_msg)
-                print(err_msg)
                 return_list = []
 
             except PermissionError:
                 err_msg = "permission denied err catch, " + \
                 "attempt to open not allowed path, not sending file list"
                 logging.info(err_msg)
-                print(err_msg)
                 return_list = []
 
         elif uni_cmd == "dir_path":
@@ -172,11 +165,7 @@ def main(par_def = None, connection_out = None):
             url_path = self.path
             url_dict = parse_qs(urlparse(url_path).query)
             cmd_dict = url_dict
-
-            print("cmd_dict = ", cmd_dict)
-
             try:
-                #lst_out = []
                 lst_out = browser_runner.run_get_data(cmd_dict)
 
                 if type(lst_out) is list or type(lst_out) is dict:

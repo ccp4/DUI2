@@ -1522,7 +1522,6 @@ class MainImgViewObject(QObject):
 
         except TypeError:
             logging.info("Type Err catch while opening imgs")
-            print("Type Err catch while opening imgs")
 
     def open_dir_widget(self):
         cmd = {"nod_lst":"", "cmd_str":["dir_path"]}

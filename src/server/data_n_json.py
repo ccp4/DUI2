@@ -79,7 +79,6 @@ def spit_out(str_out = None, req_obj = None, out_type = None):
 
 
 def get_info_data(uni_cmd, cmd_dict, step_list):
-    print("uni_cmd(get_info_data) =", uni_cmd)
     return_list = []
     if uni_cmd == ["display_log"]:
         for lin2go in cmd_dict["nod_lst"]:
@@ -344,20 +343,11 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
         #TODO rethink if << get_dir_ls >> should be called just << dir_ls >>
         #and consequently go elsewhere
         try:
-            tmp_off = '''
-            print("\n" + "=" * 55 + "\n")
-            print("uni_cmd =", uni_cmd)
-            '''
             curr_path = uni_cmd[1].replace("/", os.sep)
             f_name_list =  os.listdir(curr_path)
             dict_list = []
             for f_name in f_name_list:
                 f_path = curr_path + f_name
-                tmp_off = '''
-                print("\n f_name =", f_name)
-                print("curr_path =", curr_path)
-                print("f_path =", f_path, "\n")
-                '''
                 f_isdir = os.path.isdir(f_path)
                 file_dict = {"fname": f_name, "isdir":f_isdir}
                 dict_list.append(file_dict)
@@ -367,14 +357,12 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
         except FileNotFoundError:
             err_msg = "file not found err catch, not sending file list"
             logging.info(err_msg)
-            print(err_msg)
             return_list = []
 
         except PermissionError:
             err_msg = "permission denied err catch, " + \
             "attempt to open not allowed path, not sending file list"
             logging.info(err_msg)
-            print(err_msg)
             return_list = []
 
     elif uni_cmd[0] == "get_optional_command_list":

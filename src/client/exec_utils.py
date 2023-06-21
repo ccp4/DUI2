@@ -79,7 +79,6 @@ class get_req_json_dat(QObject):
                     uni_url, stream = True, params = params_in, timeout = 45
                 )
                 logging.info("starting request")
-                print("params_in =", params_in)
                 str_lst = ''
                 line_str = ''
                 json_out = ''
