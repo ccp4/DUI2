@@ -397,7 +397,7 @@ class CmdNode(object):
                     "<< BrokenPipe err catch  >> while sending nod_num"
                 )
 
-        print("FilNotFonErr =", FilNotFonErr)
+        logging.info("FilNotFonErr =" + str(FilNotFonErr))
 
         if FilNotFonErr:
             new_line = new_err_msg + "\n"
@@ -708,11 +708,9 @@ class Runner(object):
         self._save_state()
 
     def run_get_data(self, cmd_dict):
-        print("\n cmd_dict =" + str(cmd_dict))
         unalias_cmd_ini = fix_alias(cmd_dict["lst_wt_cmd"][0])
         unalias_cmd_lst = cmd_dict["lst_wt_cmd"]
         unalias_cmd_lst[0] = unalias_cmd_ini
-        print("\n unalias_cmd_lst: " + str(unalias_cmd_lst))
 
         return_list = []
         if unalias_cmd_lst == ["display"]:
@@ -732,8 +730,8 @@ class Runner(object):
             logging.info("received closed command")
 
         else:
-            print(
-                "unalias_cmd_lst, cmd_dict, self.step_list = " +
+            logging.info(
+                "unalias_cmd_lst, cmd_dict = " +
                 str(unalias_cmd_lst) + " , " + str(cmd_dict)
             )
             return_list = get_info_data(unalias_cmd_lst, cmd_dict, self.step_list)
