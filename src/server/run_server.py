@@ -32,6 +32,28 @@ from server.init_first import ini_data
 from shared_modules import format_utils
 from shared_modules._version import __version__
 
+def split_w_quotes(str_in):
+    lst_par_cmd = []
+    pos_spc = []
+    quote_ini = False
+    spc_last_pos = 0
+    for posi, char in enumerate(str_in):
+        if char == " " and not quote_ini:
+            lst_par_cmd.append(str_in[spc_last_pos:posi])
+            spc_last_pos = posi
+
+        elif char == "\"" or  char == "\'":
+            if not quote_ini:
+                quote_ini = posi
+
+            else:
+                quote_ini = False
+
+    lst_par_cmd.append(str_in[spc_last_pos:])
+
+    print("lst_par_cmd =", lst_par_cmd)
+
+    return lst_par_cmd
 
 def main(par_def = None, connection_out = None):
     format_utils.print_logo()
@@ -42,10 +64,10 @@ def main(par_def = None, connection_out = None):
             post_body = self.rfile.read(content_len)
             body_str = str(post_body.decode('utf-8'))
             url_dict = parse_qs(body_str)
-            logging.info("\n url_dict =" + str(url_dict) + "\n")
+            print("\n url_dict =" + str(url_dict) + "\n")
             try:
                 tmp_cmd2lst = url_dict["cmd_lst"]
-                logging.info("tmp_cmd2lst =" + str(tmp_cmd2lst))
+                print("tmp_cmd2lst =" + str(tmp_cmd2lst))
 
             except KeyError:
                 logging.info("no command in request (KeyError)")
@@ -69,9 +91,15 @@ def main(par_def = None, connection_out = None):
                 )
                 return
 
+            print("\n")
             cmd_lst = []
             for inner_str in tmp_cmd2lst:
-                cmd_lst.append(inner_str.split(" "))
+                print("inner_str =", inner_str)
+                cmd_lst.append(split_w_quotes(inner_str))
+                #cmd_lst.append(inner_str.split(" "))
+
+            print("\n cmd_lst =", cmd_lst)
+
 
             nod_lst = []
             try:

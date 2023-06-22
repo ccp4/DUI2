@@ -499,7 +499,9 @@ class ImportWidget(QWidget):
 
             else:
                 str_path = "input.template"
-                lst_par = [[str_path, str_value]]
+                lst_par = [
+                    [str_path, "\"" + str_value + "\""]
+                ]
 
         self.state_label.setText(str_path)
 
