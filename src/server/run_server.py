@@ -34,24 +34,29 @@ from shared_modules._version import __version__
 
 def split_w_quotes(str_in):
     lst_par_cmd = []
-    pos_spc = []
     quote_ini = False
-    spc_last_pos = 0
+    spc_last_pos = -1
     for posi, char in enumerate(str_in):
         if char == " " and not quote_ini:
-            lst_par_cmd.append(str_in[spc_last_pos:posi])
+            str2add = str(str_in[spc_last_pos + 1:posi])
+            print("posi, str2add = ", posi, str2add)
+            lst_par_cmd.append(str2add)
             spc_last_pos = posi
 
         elif char == "\"" or  char == "\'":
             if not quote_ini:
-                quote_ini = posi
+                quote_ini = True
 
             else:
                 quote_ini = False
 
-    lst_par_cmd.append(str_in[spc_last_pos:])
+    str2add = str(str_in[spc_last_pos + 1:])
+    print("posi, str2add = ", posi, str2add)
+    lst_par_cmd.append(str2add)
 
-    print("lst_par_cmd =", lst_par_cmd)
+    print("\n lst_par_cmd =", lst_par_cmd)
+    print("str_in.split(" ") =", str_in.split(" "))
+
 
     return lst_par_cmd
 
