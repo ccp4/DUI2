@@ -16,7 +16,7 @@ conda install -c conda-forge pyside2 -y
 echo " "
 echo " cloning DUI2 code "
 echo " "
-git clone -b v0.999.4  https://github.com/ccp4/DUI2.git
+git clone -b v0.999.5  https://github.com/ccp4/DUI2.git
 L_DIR="$(pwd "$0")"
 echo " "
 echo "run: \"python $L_DIR/DUI2/src/all_local.py\" to launch DUI2 locally"
