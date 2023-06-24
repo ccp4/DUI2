@@ -557,7 +557,11 @@ class ImportWidget(QWidget):
                     if par_dic["name"] == "":
                         self.nexus_type = True
 
-                    self.imp_txt.setText(str(par_dic["value"]))
+                    first_par_str = str(par_dic["value"])
+                    if first_par_str[0] == "\"" and first_par_str[-1] == "\"":
+                        first_par_str = first_par_str[1:-1]
+
+                    self.imp_txt.setText(first_par_str)
 
         except IndexError:
             logging.info(" Not copying parameters from node (Index err catch )")
