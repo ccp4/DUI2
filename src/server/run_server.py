@@ -39,7 +39,6 @@ def split_w_quotes(str_in):
     for posi, char in enumerate(str_in):
         if char == " " and not quote_ini:
             str2add = str(str_in[spc_last_pos + 1:posi])
-            print("posi, str2add = ", posi, str2add)
             lst_par_cmd.append(str2add)
             spc_last_pos = posi
 
@@ -51,13 +50,7 @@ def split_w_quotes(str_in):
                 quote_ini = False
 
     str2add = str(str_in[spc_last_pos + 1:])
-    print("posi, str2add = ", posi, str2add)
     lst_par_cmd.append(str2add)
-
-    print("\n lst_par_cmd =", lst_par_cmd)
-    print("str_in.split(" ") =", str_in.split(" "))
-
-
     return lst_par_cmd
 
 def main(par_def = None, connection_out = None):
@@ -69,10 +62,8 @@ def main(par_def = None, connection_out = None):
             post_body = self.rfile.read(content_len)
             body_str = str(post_body.decode('utf-8'))
             url_dict = parse_qs(body_str)
-            print("\n url_dict =" + str(url_dict) + "\n")
             try:
                 tmp_cmd2lst = url_dict["cmd_lst"]
-                print("tmp_cmd2lst =" + str(tmp_cmd2lst))
 
             except KeyError:
                 logging.info("no command in request (KeyError)")
@@ -96,15 +87,9 @@ def main(par_def = None, connection_out = None):
                 )
                 return
 
-            print("\n")
             cmd_lst = []
             for inner_str in tmp_cmd2lst:
-                print("inner_str =", inner_str)
                 cmd_lst.append(split_w_quotes(inner_str))
-                #cmd_lst.append(inner_str.split(" "))
-
-            print("\n cmd_lst =", cmd_lst)
-
 
             nod_lst = []
             try:

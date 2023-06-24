@@ -618,7 +618,9 @@ def get_help_list(cmd_str):
             logging.info("not loading help for: " + cmd_str)
 
     except TypeError:
-        print("..." + cmd_str + " ...TypeError")
+        err_msg = "..." + cmd_str + " ...TypeError"
+        print(err_msg)
+        logging.info(err_msg)
         my_cmd_hlp = []
 
     top_trimed_lst_1 = []
