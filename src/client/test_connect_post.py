@@ -28,52 +28,13 @@ uni_url = 'http://127.0.0.1:45678/'
 #uni_url = 'http://127.0.0.1:45679/'
 #uni_url = 'http://supercomputo.cimav.edu.mx:45678/'
 
-'''
-lst_cmd_tst = [
-    "gh import",
-    "gh generate_mask",
-    "gh apply_mask",
-    "gh find_spots",
-    "gh find_rotation_axis",
-    "gh index",
-    "gh refine_bravais_settings",
-    "gh reindex",
-    "gh refine",
-    "gh integrate",
-    "gh symmetry",
-    "gh scale",
-    "gh cosym",
-    "gh slice_sequence",
-    "gh merge",
-    "gh combine_experiments",
-    "gh export",
-    "2,dl"
-]
-'''
 
 if __name__ == "__main__":
-    #for cmd_in in lst_cmd_tst:
-        #cmd_in = input("type: \"Node,command\":")
-        #cmd_in = "get_dir_ls /home/lui/"
 
-        '''
-        print("\n testing (", cmd_in, " )command\n")
-        try:
-            [parent, cmd] = cmd_in.split(",")
-
-        except ValueError:
-            [parent, cmd] = ["", cmd_in]
-        '''
-
-        full_cmd = {"nod_lst":"", "cmd_str":["dir_path"]}
-
-        #full_cmd = {"nod_lst":[parent], "cmd_lst":[cmd]}
-
-        req_get = requests.get(uni_url, stream = True, params = full_cmd)
-        #req_post = requests.post(uni_url, stream = True, data = full_cmd)
-
+        full_cmd = {'nod_lst': [10], 'cmd_lst': ['dials.split_experiments']}
+        req_post = requests.post(uni_url, stream = True, data = full_cmd)
         while True:
-            tmp_dat = req_get.raw.readline()
+            tmp_dat = req_post.raw.readline()
             print("tmp_dat =", tmp_dat)
             #tmp_dat = req_post.raw.readline()
             line_str = str(tmp_dat.decode('utf-8'))
