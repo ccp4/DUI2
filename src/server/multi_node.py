@@ -38,6 +38,7 @@ def get_pair_list():
         ("rg",      "reset_graph"                           ),
         ("cl",      "closed"                                ),
         ("pr",      "run_predict_n_report"                  ),
+        ("dn",      "duplicate_node"                        ),
         ("gol",     "get_optional_command_list"             ),
         ("gr",      "get_report"                            ),
         ("gh",      "get_help"                              ),
@@ -686,6 +687,33 @@ class Runner(object):
                         req_obj = req_obj, out_type = 'utf-8'
                     )
 
+                elif unalias_cmd_lst == [['duplicate_node']]:
+                    try:
+                        req_obj.send_response(201)
+                        req_obj.send_header('Content-type', 'text/plain')
+                        req_obj.end_headers()
+
+                    except AttributeError:
+                        logging.info(
+                            "Attribute Err catch," +
+                            " not supposed send header info"
+                        )
+
+                    spit_out(
+                        str_out = "err.code=0",
+                        req_obj = req_obj, out_type = 'utf-8'
+                    )
+                    for lin2go in cmd_dict["nod_lst"]:
+                        for node in self.step_list:
+                            if node.number == lin2go:
+                                self.duplicate_node(node, req_obj)
+
+                    spit_out(
+                        str_out = "duplicate_node ... Done",
+                        req_obj = req_obj, out_type = 'utf-8'
+                    )
+
+
                 elif unalias_cmd_lst == [["stop"]]:
                     for lin2go in cmd_dict["nod_lst"]:
                         try:
@@ -763,16 +791,58 @@ class Runner(object):
             out_type = 'utf-8'
         )
 
-    def _create_step(self, prev_step_lst):
-        new_step = CmdNode(
-            parent_lst_in = prev_step_lst, data_init = self.data_init
+    def duplicate_node(self, node, req_obj):
+        str_out = " running duplicate node:" + str(node.number)
+        print("\n" + str_out + "\n")
+        spit_out(
+            str_out = str_out, req_obj = req_obj, out_type = 'utf-8'
         )
+        self.find_next_number()
+        new_node = CmdNode(
+            parent_lst_in = None, data_init = self.data_init
+        )
+        new_node._base_dir       = str(node._base_dir)
+        new_node.full_cmd_lst    = list(node.full_cmd_lst)
+        new_node.lst2run         = list(node.lst2run)
+        new_node._lst_expt_in    = list(node._lst_expt_in)
+        new_node._lst_refl_in    = list(node._lst_refl_in)
+        new_node._lst_expt_out   = list(node._lst_expt_out)
+        new_node._lst_refl_out   = list(node._lst_refl_out)
+        new_node._run_dir        = str(node._run_dir)
+        new_node._html_rep       = str(node._html_rep)
+        new_node._predic_refl    = str(node._predic_refl)
+        new_node.log_file_path   = str(node.log_file_path)
+        new_node.number          = int(self.bigger_lin)
+        new_node.status          = str(node.status)
+        new_node.child_node_lst  = list(node.child_node_lst)
+        new_node.parent_node_lst = list(node.parent_node_lst)
+        self.step_list.append(new_node)
+
+
+        for prev_step_numb in node.parent_node_lst:
+            self.step_list[prev_step_numb].child_node_lst.append(new_node.number)
+
+
+        spit_out(
+            str_out = " ... Done ", req_obj = req_obj,
+            out_type = 'utf-8'
+        )
+        str_out = " Done duplicating node:" + str(node.number)
+        print("\n" + str_out + "\n")
+
+    def find_next_number(self):
         tmp_big = 0
         for node in self.step_list:
             if node.number > tmp_big:
                 tmp_big = node.number
 
         self.bigger_lin = tmp_big + 1
+
+    def _create_step(self, prev_step_lst):
+        new_step = CmdNode(
+            parent_lst_in = prev_step_lst, data_init = self.data_init
+        )
+        self.find_next_number()
         new_step.number = self.bigger_lin
         for prev_step in prev_step_lst:
             prev_step.child_node_lst.append(new_step.number)

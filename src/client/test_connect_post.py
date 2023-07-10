@@ -31,7 +31,9 @@ uni_url = 'http://127.0.0.1:45678/'
 
 if __name__ == "__main__":
 
-        full_cmd = {'nod_lst': [10], 'cmd_lst': ['dials.split_experiments']}
+        #full_cmd = {'nod_lst': [10], 'cmd_lst': ['dials.split_experiments']}
+        full_cmd = {'nod_lst': [3], 'cmd_lst': ['duplicate_node']}
+
         req_post = requests.post(uni_url, stream = True, data = full_cmd)
         while True:
             tmp_dat = req_post.raw.readline()
