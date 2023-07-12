@@ -337,6 +337,17 @@ class CmdNode(object):
                 self.full_cmd_lst[-1].append(par)
                 self.lst2run[-1].append(par)
 
+    def set_exe_files_out(self):
+        self._lst_expt_out = glob.glob(self._run_dir + "/*.expt")
+        #TODO reconsider if the next if is needed for failed steps
+        if self._lst_expt_out == []:
+            self._lst_expt_out = list(self._lst_expt_in)
+
+        self._lst_refl_out = glob.glob(self._run_dir + "/*.refl")
+        #TODO reconsider if the next if is needed for failed steps
+        if self._lst_refl_out == []:
+            self._lst_refl_out = list(self._lst_refl_in)
+
     def run_cmd(self, req_obj = None):
         self.nod_req = req_obj
         self.status = "Busy"
@@ -436,15 +447,7 @@ class CmdNode(object):
 
         lof_file.close()
 
-        self._lst_expt_out = glob.glob(self._run_dir + "/*.expt")
-        #TODO reconsider if the next if is needed for failed steps
-        if self._lst_expt_out == []:
-            self._lst_expt_out = list(self._lst_expt_in)
-
-        self._lst_refl_out = glob.glob(self._run_dir + "/*.refl")
-        #TODO reconsider if the next if is needed for failed steps
-        if self._lst_refl_out == []:
-            self._lst_refl_out = list(self._lst_refl_in)
+        self.set_exe_files_out()
 
         if self.n_Broken_Pipes > 0:
             logging.info(" << BrokenPipe err catch >> while sending output")
@@ -808,7 +811,7 @@ class Runner(object):
         new_node._lst_refl_in    = list(node._lst_refl_in)
         new_node._lst_expt_out   = list(node._lst_expt_out)
         new_node._lst_refl_out   = list(node._lst_refl_out)
-        new_node._run_dir        = str(node._run_dir)
+        #new_node._run_dir        = str(node._run_dir)
         new_node._html_rep       = str(node._html_rep)
         new_node._predic_refl    = str(node._predic_refl)
         new_node.log_file_path   = str(node.log_file_path)
@@ -816,9 +819,17 @@ class Runner(object):
         new_node.status          = str(node.status)
         new_node.child_node_lst  = list(node.child_node_lst)
         new_node.parent_node_lst = list(node.parent_node_lst)
+
+        new_node.set_run_dir(num = new_node.number)
+        lst_cont = glob.glob(node._run_dir + "/*")
+        print("lst_cont =", lst_cont)
+        for file_n in lst_cont:
+            shutil.copy(file_n, new_node._run_dir)
+
+        new_node.set_exe_files_out()
+
+
         self.step_list.append(new_node)
-
-
         for prev_step_numb in node.parent_node_lst:
             self.step_list[prev_step_numb].child_node_lst.append(new_node.number)
 
