@@ -63,6 +63,13 @@ class PathButtons(QWidget):
         self.main_h_lay.addStretch()
         self.setLayout(self.main_h_lay)
 
+        dir_path = os.path.dirname(os.path.abspath(__file__))
+        self._root_icon = QIcon()
+        root_icon_path = dir_path + os.sep + "resources" \
+        + os.sep + "root.png"
+        self._root_icon.addFile(root_icon_path, mode = QIcon.Normal)
+
+
     def update_list(self, new_list):
         for single_widget in self.lst_butt:
             single_widget.deleteLater()
@@ -73,6 +80,10 @@ class PathButtons(QWidget):
         parent_dir_path = None
         for dir_name in new_list[:-1]:
             new_butt = QPushButton(dir_name)
+            if dir_name == "":
+                print("empty dir_name")
+                new_butt.setIcon(self._root_icon)
+
             path_str += dir_name + "/"
             new_butt.own_path = path_str
             parent_dir_path = str(path_str)
