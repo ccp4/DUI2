@@ -794,7 +794,7 @@ class Runner(object):
             out_type = 'utf-8'
         )
 
-    def duplicate_node(self, node, req_obj):
+    def duplicate_node(self, node, req_obj, num_spl = 1):
         str_out = " running duplicate node:" + str(node.number)
         print("\n" + str_out + "\n")
         spit_out(
@@ -809,9 +809,8 @@ class Runner(object):
         new_node.lst2run         = list(node.lst2run)
         new_node._lst_expt_in    = list(node._lst_expt_in)
         new_node._lst_refl_in    = list(node._lst_refl_in)
-        new_node._lst_expt_out   = list(node._lst_expt_out)
-        new_node._lst_refl_out   = list(node._lst_refl_out)
-        #new_node._run_dir        = str(node._run_dir)
+        #new_node._lst_expt_out   = list(node._lst_expt_out)
+        #new_node._lst_refl_out   = list(node._lst_refl_out)
         new_node._html_rep       = str(node._html_rep)
         new_node._predic_refl    = str(node._predic_refl)
         new_node.log_file_path   = str(node.log_file_path)
@@ -821,9 +820,24 @@ class Runner(object):
         new_node.parent_node_lst = list(node.parent_node_lst)
 
         new_node.set_run_dir(num = new_node.number)
-        lst_cont = glob.glob(node._run_dir + "/*")
-        print("lst_cont =", lst_cont)
-        for file_n in lst_cont:
+
+
+        lst_cont_log = glob.glob(node._run_dir + "/*.log")
+        print("lst_cont_log =", lst_cont_log)
+
+        lst_cont_expt = glob.glob(node._run_dir + "/*.expt")
+        print("lst_cont_expt =", lst_cont_expt)
+
+        lst_cont_refl = glob.glob(node._run_dir + "/*.refl")
+        print("lst_cont_refl =", lst_cont_refl)
+
+        for file_n in lst_cont_log:
+            shutil.copy(file_n, new_node._run_dir)
+
+        for file_n in lst_cont_expt:
+            shutil.copy(file_n, new_node._run_dir)
+
+        for file_n in lst_cont_refl:
             shutil.copy(file_n, new_node._run_dir)
 
         new_node.set_exe_files_out()
