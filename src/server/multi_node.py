@@ -820,13 +820,17 @@ class Runner(object):
 
             new_node.set_run_dir(num = new_node.number)
 
-            new_node.log_file_path = new_node._run_dir + "/out.log"
-            shutil.copy(node.log_file_path, new_node._run_dir)
+            try:
+                new_node.log_file_path = new_node._run_dir + "/out.log"
+                shutil.copy(node.log_file_path, new_node._run_dir)
 
-            lof_file_2_apend = open(new_node.log_file_path, "a")
-            wrstring = "\n\n keeping exp number " + str(junior_number) + "\n\n"
-            lof_file_2_apend.write(wrstring)
-            lof_file_2_apend.close()
+                lof_file_2_apend = open(new_node.log_file_path, "a")
+                wrstring = "\n\n keeping exp number " + str(junior_number) + "\n\n"
+                lof_file_2_apend.write(wrstring)
+                lof_file_2_apend.close()
+
+            except FileNotFoundError:
+                print("No log file in:" + node.log_file_path)
 
             lst_cont_expt = glob.glob(
                 node._run_dir + "/*" + str(junior_number) + ".expt"
