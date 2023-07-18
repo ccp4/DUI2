@@ -800,53 +800,55 @@ class Runner(object):
         spit_out(
             str_out = str_out, req_obj = req_obj, out_type = 'utf-8'
         )
-        self.find_next_number()
-        new_node = CmdNode(
-            parent_lst_in = None, data_init = self.data_init
-        )
-        new_node._base_dir       = str(node._base_dir)
-        new_node.full_cmd_lst    = list(node.full_cmd_lst)
-        new_node.lst2run         = list(node.lst2run)
-        new_node._lst_expt_in    = list(node._lst_expt_in)
-        new_node._lst_refl_in    = list(node._lst_refl_in)
-        #new_node._lst_expt_out   = list(node._lst_expt_out)
-        #new_node._lst_refl_out   = list(node._lst_refl_out)
-        new_node._html_rep       = str(node._html_rep)
-        new_node._predic_refl    = str(node._predic_refl)
-        new_node.log_file_path   = str(node.log_file_path)
-        new_node.number          = int(self.bigger_lin)
-        new_node.status          = str(node.status)
-        new_node.child_node_lst  = list(node.child_node_lst)
-        new_node.parent_node_lst = list(node.parent_node_lst)
+        for junior_number in range(3):
+            self.find_next_number()
+            new_node = CmdNode(
+                parent_lst_in = None, data_init = self.data_init
+            )
+            new_node._base_dir       = str(node._base_dir)
+            new_node.full_cmd_lst    = list(node.full_cmd_lst)
+            new_node.lst2run         = list(node.lst2run)
+            new_node._lst_expt_in    = list(node._lst_expt_in)
+            new_node._lst_refl_in    = list(node._lst_refl_in)
+            new_node._html_rep       = str(node._html_rep)
+            new_node._predic_refl    = str(node._predic_refl)
+            #new_node.log_file_path   = str(node.log_file_path)
+            new_node.number          = int(self.bigger_lin)
+            new_node.status          = str(node.status)
+            new_node.child_node_lst  = list(node.child_node_lst)
+            new_node.parent_node_lst = list(node.parent_node_lst)
 
-        new_node.set_run_dir(num = new_node.number)
+            new_node.set_run_dir(num = new_node.number)
 
+            new_node.log_file_path = new_node._run_dir + "/out.log"
+            shutil.copy(node.log_file_path, new_node._run_dir)
 
-        lst_cont_log = glob.glob(node._run_dir + "/*.log")
-        print("lst_cont_log =", lst_cont_log)
+            lof_file_2_apend = open(new_node.log_file_path, "a")
+            wrstring = "\n\n keeping exp number " + str(junior_number) + "\n\n"
+            lof_file_2_apend.write(wrstring)
+            lof_file_2_apend.close()
 
-        lst_cont_expt = glob.glob(node._run_dir + "/*.expt")
-        print("lst_cont_expt =", lst_cont_expt)
+            lst_cont_expt = glob.glob(
+                node._run_dir + "/*" + str(junior_number) + ".expt"
+            )
+            print("lst_cont_expt =", lst_cont_expt)
+            for file_n in lst_cont_expt:
+                shutil.move(file_n, new_node._run_dir)
 
-        lst_cont_refl = glob.glob(node._run_dir + "/*.refl")
-        print("lst_cont_refl =", lst_cont_refl)
+            lst_cont_refl = glob.glob(
+                node._run_dir + "/*" + str(junior_number) + ".refl"
+            )
+            print("lst_cont_refl =", lst_cont_refl)
+            for file_n in lst_cont_refl:
+                shutil.move(file_n, new_node._run_dir)
 
-        for file_n in lst_cont_log:
-            shutil.copy(file_n, new_node._run_dir)
+            new_node.set_exe_files_out()
 
-        for file_n in lst_cont_expt:
-            shutil.copy(file_n, new_node._run_dir)
-
-        for file_n in lst_cont_refl:
-            shutil.copy(file_n, new_node._run_dir)
-
-        new_node.set_exe_files_out()
-
-
-        self.step_list.append(new_node)
-        for prev_step_numb in node.parent_node_lst:
-            self.step_list[prev_step_numb].child_node_lst.append(new_node.number)
-
+            self.step_list.append(new_node)
+            for prev_step_numb in node.parent_node_lst:
+                self.step_list[prev_step_numb].child_node_lst.append(
+                    new_node.number
+                )
 
         spit_out(
             str_out = " ... Done ", req_obj = req_obj,
