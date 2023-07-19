@@ -356,7 +356,6 @@ class CmdNode(object):
         is_valid_command = find_if_in_list(inner_lst[0])
         FilNotFonErr = False
         if is_valid_command:
-            #try:
             if self.win_exe:
                 inner_lst[0] += ".exe"
 
@@ -421,14 +420,21 @@ class CmdNode(object):
         else:
             while self.my_proc.poll() is None or new_line != '':
                 new_line = self.my_proc.stdout.readline()
+                #print("new_line = ", new_line)
                 self.n_Broken_Pipes += add_log_line(new_line, self.nod_req)
                 log_line_lst.append(new_line[:-1])
 
-            for inv_pos in range(1, len(log_line_lst)):
-                if log_line_lst[-inv_pos] != '':
-                    log_line_lst = log_line_lst[0:-inv_pos]
-                    logging.info("inv_pos =" + str(inv_pos))
+            log_line_lst_2_write = []
+            for lin_num, lin_str in enumerate(log_line_lst):
+                found_non_empty = False
+                for inner_lin in log_line_lst[lin_num:]:
+                    if inner_lin != '':
+                        found_non_empty = True
+
+                if not found_non_empty:
                     break
+
+                log_line_lst_2_write.append(lin_str)
 
         self.my_proc.stdout.close()
         if self.my_proc.poll() == 0:
@@ -441,7 +447,7 @@ class CmdNode(object):
             self.status = "Succeeded"
 
         lof_file = open(self.log_file_path, "w")
-        for log_line in log_line_lst:
+        for log_line in log_line_lst_2_write:
             wrstring = log_line + "\n"
             lof_file.write(wrstring)
 
