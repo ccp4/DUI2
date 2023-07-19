@@ -806,7 +806,35 @@ class Runner(object):
         spit_out(
             str_out = str_out, req_obj = req_obj, out_type = 'utf-8'
         )
-        for junior_number in range(3):
+
+        with open(node.log_file_path) as myfile:
+            log_line_lst = myfile.readlines()
+
+        myfile.close()
+        max_num_split = 0
+        for single_line_str in log_line_lst:
+            str_end = single_line_str[-6:]
+            print("str_end =", str_end)
+            if(
+                str_end == '.refl\n' or
+                str_end == '.expt\n'
+            ):
+                try:
+                    str_ini = single_line_str[:-6]
+                    pos4under = str_ini.rfind(" split_")
+                    num_split = int(str_ini[pos4under + 7:])
+                    print("num_split:", num_split)
+                    if num_split > max_num_split:
+                        max_num_split = num_split
+
+                except ValueError:
+                    print("skipping " + single_line_str + "string")
+
+
+        print("num_split =", num_split)
+
+
+        for junior_number in range(num_split + 1):
             self.find_next_number()
             new_node = CmdNode(
                 parent_lst_in = None, data_init = self.data_init
@@ -818,7 +846,6 @@ class Runner(object):
             new_node._lst_refl_in    = list(node._lst_refl_in)
             new_node._html_rep       = str(node._html_rep)
             new_node._predic_refl    = str(node._predic_refl)
-            #new_node.log_file_path   = str(node.log_file_path)
             new_node.number          = int(self.bigger_lin)
             new_node.status          = str(node.status)
             new_node.child_node_lst  = list(node.child_node_lst)
