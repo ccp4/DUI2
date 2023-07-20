@@ -277,11 +277,10 @@ class CmdNode(object):
         self.status = "Succeeded"
 
     def set_base_dir(self, dir_in = None):
-            self._base_dir = dir_in
+        self._base_dir = dir_in
 
     def set_run_dir(self, num = None):
         self._run_dir = self._base_dir + "/run" + str(num)
-
         try:
             os.mkdir(self._run_dir)
 
@@ -840,11 +839,8 @@ class Runner(object):
             new_node.lst2run         = list(node.lst2run)
             new_node._lst_expt_in    = list(node._lst_expt_in)
             new_node._lst_refl_in    = list(node._lst_refl_in)
-            new_node._html_rep       = str(node._html_rep)
-            new_node._predic_refl    = str(node._predic_refl)
             new_node.number          = int(self.bigger_lin)
             new_node.status          = str(node.status)
-            new_node.child_node_lst  = list(node.child_node_lst)
             new_node.parent_node_lst = list(node.parent_node_lst)
 
             new_node.set_run_dir(num = new_node.number)
@@ -882,6 +878,11 @@ class Runner(object):
                 self.step_list[prev_step_numb].child_node_lst.append(
                     new_node.number
                 )
+
+        lof_file_2_apend = open(node.log_file_path, "a")
+        wrstring = "\n\n This Node Should be DESTROYED \n\n"
+        lof_file_2_apend.write(wrstring)
+        lof_file_2_apend.close()
 
         spit_out(
             str_out = " ... Done ", req_obj = req_obj,
