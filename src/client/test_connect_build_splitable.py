@@ -45,7 +45,7 @@ def requests_post(cmd_in):
 
 
 if __name__ == "__main__":
-    tree_size = 13
+    tree_size = 3
     for n in range(tree_size):
         import_cmd = 'dials.import '
         imgs_path = 'input.template="/home/luiso/dif_dat/C2sum_5/C2sum_5_'
@@ -78,7 +78,7 @@ if __name__ == "__main__":
     full_cmd = {'nod_lst': lst_par_nod, 'cmd_lst': ['dials.combine_experiments']}
     requests_post(full_cmd)
 
-    print("nxt_nod =", nxt_nod)
-
+    full_cmd = {'nod_lst': [nxt_nod], 'cmd_lst': ['dials.split_experiments']}
+    requests_post(full_cmd)
 
 
