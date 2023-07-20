@@ -45,12 +45,37 @@ def requests_post(cmd_in):
 
 
 if __name__ == "__main__":
-    for n in range(10):
+    for n in range(20):
         import_cmd = 'dials.import '
         imgs_path = 'input.template="/home/luiso/dif_dat/C2sum_5/C2sum_5_'
-        imgs_path += '00' + str(n) + '#.cbf.gz"'
+        #imgs_path += '00' + str(n) + '#.cbf.gz"'
+
+        str_num = "{:3}".format(n) + "#"
+        str_num = str_num.replace(" ", "0")
+
+        imgs_path += str_num + '.cbf.gz"'
         import_cmd += imgs_path
-        print("import_cmd =", import_cmd)
         full_cmd = {'nod_lst': [0], 'cmd_lst': [import_cmd]}
         requests_post(full_cmd)
+
+    for n in range(20):
+        n1 = n+1
+        full_cmd = {'nod_lst': [n1], 'cmd_lst': ['dials.find_spots']}
+        requests_post(full_cmd)
+
+
+    for n in range(20):
+        n1 = n+21
+        full_cmd = {'nod_lst': [n1], 'cmd_lst': ['dials.index']}
+        requests_post(full_cmd)
+
+    lst_par_nod = []
+    for n in range(20):
+        n1 = n+41
+        lst_par_nod.append(n1)
+
+    full_cmd = {'nod_lst': lst_par_nod, 'cmd_lst': ['dials.combine_experiments']}
+    requests_post(full_cmd)
+
+
 
