@@ -880,9 +880,10 @@ class Runner(object):
                 )
 
         lof_file_2_apend = open(node.log_file_path, "a")
-        wrstring = "\n\n This Node Should be DESTROYED \n\n"
+        wrstring = "\n\n Failing this node deliberately, use siblings \n\n"
         lof_file_2_apend.write(wrstring)
         lof_file_2_apend.close()
+        node.status = "Failed"
 
         spit_out(
             str_out = " ... Done ", req_obj = req_obj,
