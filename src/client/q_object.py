@@ -1259,6 +1259,10 @@ class MainObject(QObject):
         do_predictions_n_report = bool(
             self.window.RunPedictAndReportCheckBox.checkState()
         )
+
+        print("cmd =", cmd)
+
+
         post_thread = post_req_w_output(
             cmd_in = cmd, do_pred_n_rept = do_predictions_n_report,
             main_handler = self.runner_handler

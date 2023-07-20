@@ -28,30 +28,29 @@ uni_url = 'http://127.0.0.1:45678/'
 #uni_url = 'http://127.0.0.1:45679/'
 #uni_url = 'http://supercomputo.cimav.edu.mx:45678/'
 
+def requests_post(cmd_in):
+    req_post = requests.post(uni_url, stream = True, data = cmd_in)
+    while True:
+        tmp_dat = req_post.raw.readline()
+        print("tmp_dat =", tmp_dat)
+        #tmp_dat = req_post.raw.readline()
+        line_str = str(tmp_dat.decode('utf-8'))
+
+        if '/*EOF*/' in line_str:
+            print('/*EOF*/ received')
+            break
+
+        else:
+            print(str(line_str[:-1]))
+
 
 if __name__ == "__main__":
-
-        full_cmd = {'nod_lst': [8], 'cmd_lst': ['duplicate_node']}
-        new_tst = '''
-        full_cmd = {
-            'nod_lst': [0],
-            'cmd_lst': [
-                'dials.import input.template="/home/luiso/dif_dat/C2sum_5/C2sum_5_####.cbf.gz"'
-            ]
-        }
-        '''
-
-        req_post = requests.post(uni_url, stream = True, data = full_cmd)
-        while True:
-            tmp_dat = req_post.raw.readline()
-            print("tmp_dat =", tmp_dat)
-            #tmp_dat = req_post.raw.readline()
-            line_str = str(tmp_dat.decode('utf-8'))
-
-            if '/*EOF*/' in line_str:
-                print('/*EOF*/ received')
-                break
-
-            else:
-                print(str(line_str[:-1]))
+    for n in range(10):
+        import_cmd = 'dials.import '
+        imgs_path = 'input.template="/home/luiso/dif_dat/C2sum_5/C2sum_5_'
+        imgs_path += '00' + str(n) + '#.cbf.gz"'
+        import_cmd += imgs_path
+        print("import_cmd =", import_cmd)
+        full_cmd = {'nod_lst': [0], 'cmd_lst': [import_cmd]}
+        requests_post(full_cmd)
 
