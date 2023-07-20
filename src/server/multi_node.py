@@ -38,7 +38,7 @@ def get_pair_list():
         ("rg",      "reset_graph"                           ),
         ("cl",      "closed"                                ),
         ("pr",      "run_predict_n_report"                  ),
-        ("dn",      "duplicate_node"                        ),
+        ("sn",      "split_node"                        ),
         ("gol",     "get_optional_command_list"             ),
         ("gr",      "get_report"                            ),
         ("gh",      "get_help"                              ),
@@ -695,7 +695,7 @@ class Runner(object):
                         req_obj = req_obj, out_type = 'utf-8'
                     )
 
-                elif unalias_cmd_lst == [['duplicate_node']]:
+                elif unalias_cmd_lst == [['split_node']]:
                     try:
                         req_obj.send_response(201)
                         req_obj.send_header('Content-type', 'text/plain')
@@ -714,10 +714,10 @@ class Runner(object):
                     for lin2go in cmd_dict["nod_lst"]:
                         for node in self.step_list:
                             if node.number == lin2go:
-                                self.duplicate_node(node, req_obj)
+                                self.split_node(node, req_obj)
 
                     spit_out(
-                        str_out = "duplicate_node ... Done",
+                        str_out = "split_node ... Done",
                         req_obj = req_obj, out_type = 'utf-8'
                     )
 
@@ -799,7 +799,7 @@ class Runner(object):
             out_type = 'utf-8'
         )
 
-    def duplicate_node(self, node, req_obj, num_spl = 1):
+    def split_node(self, node, req_obj, num_spl = 1):
         str_out = " running duplicate node:" + str(node.number)
         print("\n" + str_out + "\n")
         spit_out(
