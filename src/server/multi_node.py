@@ -828,11 +828,7 @@ class Runner(object):
                         max_num_split = num_split
 
                 except ValueError:
-                    print("skipping " + single_line_str + "string")
-
-
-        print("num_split =", num_split)
-
+                    print("skipping the string:\n" + single_line_str + "\n")
 
         for junior_number in range(num_split + 1):
             self.find_next_number()
@@ -891,7 +887,8 @@ class Runner(object):
             str_out = " ... Done ", req_obj = req_obj,
             out_type = 'utf-8'
         )
-        str_out = " Done duplicating node:" + str(node.number)
+        str_out = " Done duplicating node #" + str(node.number)
+        str_out += ", into " + str(num_split + 1) + " new nodes"
         print("\n" + str_out + "\n")
 
     def find_next_number(self):

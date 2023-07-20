@@ -45,10 +45,11 @@ def requests_post(cmd_in):
 
 
 if __name__ == "__main__":
-    tree_size = 3
+    tree_size = 2
     for n in range(tree_size):
         import_cmd = 'dials.import '
-        imgs_path = 'input.template="/home/luiso/dif_dat/C2sum_5/C2sum_5_'
+        #imgs_path = 'input.template="/home/luiso/dif_dat/C2sum_5/C2sum_5_'
+        imgs_path = 'input.template="/home/lui/diff_data/C2sum_1/C2sum_1_'
 
         str_num = "{:3}".format(n) + "#"
         str_num = str_num.replace(" ", "0")
