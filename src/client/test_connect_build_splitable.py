@@ -45,10 +45,10 @@ def requests_post(cmd_in):
 
 
 if __name__ == "__main__":
-    for n in range(20):
+    tree_size = 13
+    for n in range(tree_size):
         import_cmd = 'dials.import '
         imgs_path = 'input.template="/home/luiso/dif_dat/C2sum_5/C2sum_5_'
-        #imgs_path += '00' + str(n) + '#.cbf.gz"'
 
         str_num = "{:3}".format(n) + "#"
         str_num = str_num.replace(" ", "0")
@@ -58,24 +58,27 @@ if __name__ == "__main__":
         full_cmd = {'nod_lst': [0], 'cmd_lst': [import_cmd]}
         requests_post(full_cmd)
 
-    for n in range(20):
+    for n in range(tree_size):
         n1 = n+1
         full_cmd = {'nod_lst': [n1], 'cmd_lst': ['dials.find_spots']}
         requests_post(full_cmd)
 
 
-    for n in range(20):
-        n1 = n+21
+    for n in range(tree_size):
+        n1 = n + tree_size + 1
         full_cmd = {'nod_lst': [n1], 'cmd_lst': ['dials.index']}
         requests_post(full_cmd)
 
     lst_par_nod = []
-    for n in range(20):
-        n1 = n+41
+    for n in range(tree_size):
+        n1 = n + tree_size * 2 + 1
         lst_par_nod.append(n1)
+        nxt_nod = n1 + 1
 
     full_cmd = {'nod_lst': lst_par_nod, 'cmd_lst': ['dials.combine_experiments']}
     requests_post(full_cmd)
+
+    print("nxt_nod =", nxt_nod)
 
 
 
