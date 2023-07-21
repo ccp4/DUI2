@@ -24,9 +24,8 @@ copyright (c) CCP4 - DLS
 import sys, json, logging
 import requests
 
-uni_url = 'http://127.0.0.1:45678/'
-#uni_url = 'http://127.0.0.1:45679/'
-#uni_url = 'http://supercomputo.cimav.edu.mx:45678/'
+#uni_url = 'http://127.0.0.1:45678/'
+uni_url = 'http://supercomputo.cimav.edu.mx:45678/'
 
 def requests_post(cmd_in):
     req_post = requests.post(uni_url, stream = True, data = cmd_in)
@@ -50,7 +49,10 @@ if __name__ == "__main__":
         import_cmd = 'dials.import '
         #imgs_path = 'input.template="/home/luiso/dif_dat/C2sum_5/C2sum_5_'
         #imgs_path = 'input.template="/home/lui/diff_data/C2sum_1/C2sum_1_'
-        imgs_path = 'input.template="/home/lui/dif_dat/x4_wide/X4_wide_M1S4_2_'
+        #imgs_path = 'input.template="/home/lui/dif_dat/x4_wide/X4_wide_M1S4_2_'
+
+        imgs_path = 'input.template="/home/luisor/diff_2d_data/X4_wide/X4_wide_M1S4_2_'
+
         str_num = "{:3}".format(n) + "#"
         str_num = str_num.replace(" ", "0")
 
