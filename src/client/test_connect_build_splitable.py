@@ -49,12 +49,13 @@ if __name__ == "__main__":
     for n in range(tree_size):
         import_cmd = 'dials.import '
         #imgs_path = 'input.template="/home/luiso/dif_dat/C2sum_5/C2sum_5_'
-        imgs_path = 'input.template="/home/lui/diff_data/C2sum_1/C2sum_1_'
-
+        #imgs_path = 'input.template="/home/lui/diff_data/C2sum_1/C2sum_1_'
+        imgs_path = 'input.template="/home/lui/dif_dat/x4_wide/X4_wide_M1S4_2_'
         str_num = "{:3}".format(n) + "#"
         str_num = str_num.replace(" ", "0")
 
-        imgs_path += str_num + '.cbf.gz"'
+        #imgs_path += str_num + '.cbf.gz"'
+        imgs_path += str_num + '.cbf"'
         import_cmd += imgs_path
         full_cmd = {'nod_lst': [0], 'cmd_lst': [import_cmd]}
         requests_post(full_cmd)
