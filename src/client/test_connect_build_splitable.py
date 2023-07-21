@@ -78,8 +78,9 @@ if __name__ == "__main__":
 
     full_cmd = {'nod_lst': lst_par_nod, 'cmd_lst': ['dials.combine_experiments']}
     requests_post(full_cmd)
-
+    '''
     full_cmd = {'nod_lst': [nxt_nod], 'cmd_lst': ['dials.split_experiments']}
     requests_post(full_cmd)
+    '''
 
 

@@ -31,7 +31,7 @@ uni_url = 'http://127.0.0.1:45678/'
 
 if __name__ == "__main__":
 
-        full_cmd = {'nod_lst': [17], 'cmd_lst': ['split_node']}
+        full_cmd = {'nod_lst': [48], 'cmd_lst': ['split_node']}
         new_tst = '''
         full_cmd = {
             'nod_lst': [0],

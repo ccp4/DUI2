@@ -800,6 +800,9 @@ class Runner(object):
         )
 
     def split_node(self, node, req_obj, num_spl = 1):
+
+        #TODO: don't run this if this node is not a split_experiments command
+
         str_out = " running duplicate node:" + str(node.number)
         print("\n" + str_out + "\n")
         spit_out(
@@ -811,6 +814,7 @@ class Runner(object):
 
         myfile.close()
         max_num_split = 0
+        num_split = -1
         for single_line_str in log_line_lst:
             str_end = single_line_str[-6:]
             print("str_end =", str_end)

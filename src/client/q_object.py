@@ -1317,6 +1317,22 @@ class MainObject(QObject):
         logging.info("respose_from_reset(err code):" + str(line))
 
     def after_thread_end(self, nod_num_out, do_pred_n_rept):
+
+        print("after_thread_end()")
+
+        print("nod_num_out")
+        if(
+            self.server_nod_lst[nod_num_out]['cmd2show'] ==
+            ['dials.split_experiments']
+        ):
+            cmd = {"nod_lst": [nod_num_out], "cmd_lst": ["split_node"]}
+            new_thrd = post_req_w_output(
+                cmd_in = cmd, main_handler = self.runner_handler
+            )
+            new_thrd.finished.connect(self.post_ended)
+            new_thrd.start()
+            self.thrd_lst.append(new_thrd)
+
         if do_pred_n_rept:
             cmd = {"nod_lst":[nod_num_out], "cmd_lst":["run_predict_n_report"]}
             self.do_load_html.reset_lst_html()
@@ -1329,6 +1345,8 @@ class MainObject(QObject):
 
         else:
             self.refresh_output()
+
+
 
     def post_ended(self):
         self.request_display()
