@@ -1284,7 +1284,6 @@ class  IntegrateSimplerParamTab(SimpleParamTab):
         self.clearLayout(self.main_v_layout)
         self.build_pars()
 
-########################################################################################################
 
 class  SsxIntegrateSimplerParamTab(SimpleParamTab):
     """
@@ -1356,9 +1355,6 @@ class  SsxIntegrateSimplerParamTab(SimpleParamTab):
         self.clearLayout(self.main_v_layout)
         self.build_pars()
 
-########################################################################################################
-
-
 
 class SymmetrySimplerParamTab(SimpleParamTab):
     """
@@ -1394,6 +1390,37 @@ class SymmetrySimplerParamTab(SimpleParamTab):
     def reset_pars(self):
         self.clearLayout(self.main_v_layout)
         self.build_pars()
+
+
+class SplitWidget(QWidget):
+    """
+    This widget is the tool for separating nodes with the
+    dials.split_experiments command
+    """
+    def __init__(self, parent=None):
+        super(SplitWidget, self).__init__()
+        self.do_emit = True
+        self.main_v_layout = QVBoxLayout()
+        self.build_pars()
+        self.setLayout(self.main_v_layout)
+
+    def build_pars(self):
+        label_d_min = QLabel("split_experiments")
+        tmp_dummy_label = QHBoxLayout()
+        tmp_dummy_label.addWidget(label_d_min)
+
+        self.main_v_layout.addLayout(tmp_dummy_label)
+        self.main_v_layout.addStretch()
+
+    def reset_pars(self):
+        #self.clearLayout(self.main_v_layout)
+        #self.build_pars()
+        logging.info("tmp_off ... reset_pars(SplitWidget)")
+
+    def update_all_pars(self, tup_lst_pars):
+        logging.info(
+            "update_all_pars(SplitWidget)" + str(tup_lst_pars)
+        )
 
 
 class ScaleSimplerParamTab(SimpleParamTab):
@@ -1554,7 +1581,7 @@ class OptionalWidget(SimpleParamTab):
 
     def update_all_pars(self, tup_lst_pars):
         logging.info(
-            "update_all_pars(ImportWidget)" + str(tup_lst_pars)
+            "update_all_pars(OptionalWidget)" + str(tup_lst_pars)
         )
 
     def param_line_changed(self):
@@ -1697,8 +1724,6 @@ class ExportWidget(QWidget):
         self.dowl_thrd.exit()
         logging.info("Done Download")
 
-
-######################################################################################################
 
 class MergeWidget(QWidget):
     '''

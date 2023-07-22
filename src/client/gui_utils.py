@@ -77,6 +77,7 @@ widgets_defs = {
             "refine",
             "refine_bravais_settings",
             "combine_experiments",
+            "split_experiments",
             "optional"
         ]
     },
@@ -113,6 +114,7 @@ widgets_defs = {
             "integrate",
             "refine_bravais_settings",
             "combine_experiments",
+            "split_experiments",
             "optional"
         ]
     },
@@ -121,7 +123,9 @@ widgets_defs = {
         "icon"          : "resources/integrate.png",
         "main_cmd"      :["dials.integrate"],
         "nxt_widg_lst"  :[
-            "symmetry", "scale", "export", "combine_experiments", "optional"
+            "symmetry", "scale",
+            "export", "combine_experiments",
+            "split_experiments", "optional"
         ]
     },
     "ssx_integrate" : {
@@ -165,16 +169,30 @@ widgets_defs = {
         "icon"              : "resources/combine.png",
         "main_cmd"          :["dials.combine_experiments"],
         "nxt_widg_lst"      :[
-            "index", "refine", "integrate", "export", "merge", "optional"
+            "index", "refine", "integrate", "export",
+            "merge", "split_experiments", "optional"
         ]
     },
+
+
+    "split_experiments"   : {
+        "tooltip"           : "dials.split_experiments ...",
+        "icon"              : "resources/split.png",
+        "main_cmd"          :["dials.split_experiments"],
+        "nxt_widg_lst"      :[
+            "refine", "integrate", "export",
+            "merge", "combine_experiments","optional"
+        ]
+    },
+
 
     "optional" : {
         "tooltip"       : "choose from a list",
         "icon"          : "resources/optional.png",
         "main_cmd"      :["dials.optional"],
         "nxt_widg_lst"  :[
-            "find_spots", "index", "refine", "integrate", "export", "merge",
+            "find_spots", "index", "refine",
+            "integrate", "export", "merge",
         ]
     }
 }

@@ -24,8 +24,8 @@ copyright (c) CCP4 - DLS
 import sys, json, logging
 import requests
 
-#uni_url = 'http://127.0.0.1:45678/'
-uni_url = 'http://supercomputo.cimav.edu.mx:45678/'
+uni_url = 'http://127.0.0.1:45678/'
+#uni_url = 'http://supercomputo.cimav.edu.mx:45678/'
 
 def requests_post(cmd_in):
     req_post = requests.post(uni_url, stream = True, data = cmd_in)
@@ -44,20 +44,19 @@ def requests_post(cmd_in):
 
 
 if __name__ == "__main__":
-    tree_size = 5
+    tree_size = 3
     for n in range(tree_size):
         import_cmd = 'dials.import '
-        #imgs_path = 'input.template="/home/luiso/dif_dat/C2sum_5/C2sum_5_'
+        imgs_path = 'input.template="/home/luiso/dif_dat/C2sum_5/C2sum_5_'
         #imgs_path = 'input.template="/home/lui/diff_data/C2sum_1/C2sum_1_'
         #imgs_path = 'input.template="/home/lui/dif_dat/x4_wide/X4_wide_M1S4_2_'
-
-        imgs_path = 'input.template="/home/luisor/diff_2d_data/X4_wide/X4_wide_M1S4_2_'
+        #imgs_path = 'input.template="/home/luisor/diff_2d_data/X4_wide/X4_wide_M1S4_2_'
 
         str_num = "{:3}".format(n) + "#"
         str_num = str_num.replace(" ", "0")
 
-        #imgs_path += str_num + '.cbf.gz"'
-        imgs_path += str_num + '.cbf"'
+        imgs_path += str_num + '.cbf.gz"'
+        #imgs_path += str_num + '.cbf"'
         import_cmd += imgs_path
         full_cmd = {'nod_lst': [0], 'cmd_lst': [import_cmd]}
         requests_post(full_cmd)

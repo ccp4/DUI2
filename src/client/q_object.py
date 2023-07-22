@@ -50,12 +50,18 @@ from client.simpler_param_widgets import MaskWidget
 from client.simpler_param_widgets import ExportWidget
 from client.simpler_param_widgets import MergeWidget
 from client.simpler_param_widgets import OptionalWidget
+
+
+
+
+
 from client.simpler_param_widgets import (
     FindspotsSimplerParameterTab, IndexSimplerParamTab,
     SsxIndexSimplerParamTab, SsxIntegrateSimplerParamTab,
     RefineBravaiSimplerParamTab, RefineSimplerParamTab,
     IntegrateSimplerParamTab, SymmetrySimplerParamTab,
-    ScaleSimplerParamTab, CombineExperimentSimplerParamTab
+    ScaleSimplerParamTab, CombineExperimentSimplerParamTab,
+    SplitWidget,
 )
 from shared_modules._version import __version__
 
@@ -307,6 +313,8 @@ class MainObject(QObject):
         sc_advanced_parameters.set_scroll_parent(
             self.window.ScaleAdvancedScrollArea
         )
+
+
         comb_simpl_widg = CombineExperimentSimplerParamTab()
         comb_simpl_widg.item_changed.connect(self.item_param_changed)
         self.window.CombineSimplerScrollArea.setWidget(comb_simpl_widg)
@@ -323,6 +331,35 @@ class MainObject(QObject):
         ce_advanced_parameters.set_scroll_parent(
             self.window.CombineAdvancedScrollArea
         )
+
+
+        split_simpl_widg = SplitWidget()
+        #split_simpl_widg.item_changed.connect(self.item_param_changed)
+        self.window.SplitScrollArea.setWidget(split_simpl_widg)
+
+        '''
+        imp_widg = ImportWidget()
+        imp_widg.all_items_changed.connect(self.all_items_param_changed)
+        self.window.ImportScrollArea.setWidget(imp_widg)
+        '''
+
+        '''
+        ce_advanced_parameters = build_advanced_params_widget(
+            "combine_experiments_params", self.window.CombineSearchLayout,
+            self.runner_handler
+        )
+        ce_advanced_parameters.item_changed.connect(
+            self.item_param_changed
+        )
+        self.window.CombineAdvancedScrollArea.setWidget(
+            ce_advanced_parameters
+        )
+        ce_advanced_parameters.set_scroll_parent(
+            self.window.CombineAdvancedScrollArea
+        )'''
+
+
+
         fd_advanced_parameters.twin_widg = find_simpl_widg
         find_simpl_widg.twin_widg = fd_advanced_parameters
         id_advanced_parameters.twin_widg = index_simpl_widg
@@ -427,6 +464,11 @@ class MainObject(QObject):
         self.param_widgets[
             "combine_experiments"
         ]["main_page"] = self.window.CombinePage
+
+
+        self.param_widgets["split_experiments"]["simple"] = split_simpl_widg
+        self.param_widgets["split_experiments"]["advanced"] = None
+        self.param_widgets["split_experiments"]["main_page"] = self.window.SplitPage
 
         self.param_widgets["export"]["simple"] = self.expr_widg
         self.param_widgets["export"]["advanced"] = None
