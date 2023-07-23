@@ -246,8 +246,12 @@ def get_help_messages(handler_in):
         cmd = {"nod_lst":"", "cmd_str":["gh", cmd_str]}
         lst_req = get_req_json_dat(params_in = cmd, main_handler = handler_in)
         json_hlp = lst_req.result_out()
-        #lst_hlp.append(json_hlp[0])
-        help_dict[cmd_str] = json_hlp[0]
+
+        try:
+            help_dict[cmd_str] = json_hlp[0]
+
+        except TypeError:
+            help_dict[cmd_str] = ['']
 
     return help_dict
 
