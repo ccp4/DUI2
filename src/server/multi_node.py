@@ -418,8 +418,12 @@ class CmdNode(object):
 
         else:
             while self.my_proc.poll() is None or new_line != '':
-                new_line = self.my_proc.stdout.readline()
-                #print("new_line = ", new_line)
+                try:
+                    new_line = self.my_proc.stdout.readline()
+
+                except UnicodeDecodeError:
+                    new_line = " <*< Unicode Decode Error >*> \n"
+
                 self.n_Broken_Pipes += add_log_line(new_line, self.nod_req)
                 log_line_lst.append(new_line[:-1])
 
