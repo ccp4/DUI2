@@ -1405,11 +1405,13 @@ class SplitWidget(QWidget):
         self.setLayout(self.main_v_layout)
 
     def build_pars(self):
-        label_d_min = QLabel("split_experiments")
-        tmp_dummy_label = QHBoxLayout()
-        tmp_dummy_label.addWidget(label_d_min)
+        label_d_min1 = QLabel("split_experiments 1")
+        label_d_min2 = QLabel("split_experiments 2")
+        main_box = QVBoxLayout()
+        main_box.addWidget(label_d_min1)
+        main_box.addWidget(label_d_min2)
 
-        self.main_v_layout.addLayout(tmp_dummy_label)
+        self.main_v_layout.addLayout(main_box)
         self.main_v_layout.addStretch()
 
     def reset_pars(self):
