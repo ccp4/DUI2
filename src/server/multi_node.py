@@ -837,7 +837,7 @@ class Runner(object):
                 except ValueError:
                     print("skipping the string:\n" + single_line_str + "\n")
 
-        for junior_number in range(num_split + 1):
+        for junior_number in range(1, num_split + 1):
             self.find_next_number()
             new_node = CmdNode(
                 parent_lst_in = None, data_init = self.data_init
@@ -858,7 +858,7 @@ class Runner(object):
                 shutil.copy(node.log_file_path, new_node._run_dir)
 
                 lof_file_2_apend = open(new_node.log_file_path, "a")
-                wrstring = "\n\n keeping exp number " + str(junior_number) + "\n\n"
+                wrstring = "\n\n copied exp number " + str(junior_number) + "\n\n"
                 lof_file_2_apend.write(wrstring)
                 lof_file_2_apend.close()
 
@@ -887,11 +887,7 @@ class Runner(object):
                     new_node.number
                 )
 
-        lof_file_2_apend = open(node.log_file_path, "a")
-        wrstring = "\n\n Failing this node deliberately, use siblings \n\n"
-        lof_file_2_apend.write(wrstring)
-        lof_file_2_apend.close()
-        node.status = "Failed"
+        node.set_exe_files_out()
 
         spit_out(
             str_out = " ... Done ", req_obj = req_obj,

@@ -44,7 +44,7 @@ def requests_post(cmd_in):
 
 
 if __name__ == "__main__":
-    tree_size = 3
+    tree_size = 7
     for n in range(tree_size):
         import_cmd = 'dials.import '
         #imgs_path = 'input.template="/home/luiso/dif_dat/C2sum_5/C2sum_5_'
@@ -52,6 +52,7 @@ if __name__ == "__main__":
         imgs_path = 'input.template="/home/lui/dif_dat/x4_wide/X4_wide_M1S4_2_'
         #imgs_path = 'input.template="/home/luisor/diff_2d_data/X4_wide/X4_wide_M1S4_2_'
 
+        #/home/lui/dif_dat/x4_wide/X4_wide_M1S4_2_####.cbf
         str_num = "{:3}".format(n) + "#"
         str_num = str_num.replace(" ", "0")
 
