@@ -1397,6 +1397,9 @@ class SplitWidget(QWidget):
     This widget is the tool for separating nodes with the
     dials.split_experiments command
     """
+
+    all_items_changed = Signal(list)
+
     def __init__(self, parent=None):
         super(SplitWidget, self).__init__()
         self.do_emit = True
@@ -1411,6 +1414,22 @@ class SplitWidget(QWidget):
         main_box.addWidget(label_d_min1)
         main_box.addWidget(label_d_min2)
 
+        '''
+        by_detector = False
+        by_wavelength = False
+        '''
+        hbox_lay_by_detector = QHBoxLayout()
+        label_by_detector = QLabel("Scan varying refinement")
+        hbox_lay_by_detector.addWidget(label_by_detector)
+
+        box_by_detector = DefaultComboBox(
+            "by_detector",
+            ["True", "False"], default_index = 1
+        )
+        box_by_detector.currentIndexChanged.connect(self.update_all_2_pars)
+        hbox_lay_by_detector.addWidget(box_by_detector)
+        main_box.addLayout(hbox_lay_by_detector)
+
         self.main_v_layout.addLayout(main_box)
         self.main_v_layout.addStretch()
 
@@ -1424,6 +1443,12 @@ class SplitWidget(QWidget):
             "update_all_pars(SplitWidget)" + str(tup_lst_pars)
         )
 
+    def update_all_2_pars(self, value):
+        logging.info("by_detector")
+        sender = self.sender()
+        str_value = str(sender.item_list[value])
+
+        self.all_items_changed.emit([[["by_detector", str_value]]])
 
 class ScaleSimplerParamTab(SimpleParamTab):
     """

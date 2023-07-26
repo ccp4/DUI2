@@ -50,6 +50,7 @@ from client.simpler_param_widgets import MaskWidget
 from client.simpler_param_widgets import ExportWidget
 from client.simpler_param_widgets import MergeWidget
 from client.simpler_param_widgets import OptionalWidget
+from client.simpler_param_widgets import SplitWidget
 
 
 
@@ -61,7 +62,7 @@ from client.simpler_param_widgets import (
     RefineBravaiSimplerParamTab, RefineSimplerParamTab,
     IntegrateSimplerParamTab, SymmetrySimplerParamTab,
     ScaleSimplerParamTab, CombineExperimentSimplerParamTab,
-    SplitWidget,
+
 )
 from shared_modules._version import __version__
 
@@ -93,6 +94,12 @@ class MainObject(QObject):
         imp_widg = ImportWidget()
         imp_widg.all_items_changed.connect(self.all_items_param_changed)
         self.window.ImportScrollArea.setWidget(imp_widg)
+
+
+        split_simpl_widg = SplitWidget()
+        split_simpl_widg.all_items_changed.connect(self.all_items_param_changed)
+        self.window.SplitScrollArea.setWidget(split_simpl_widg)
+
 
         self.expr_widg = ExportWidget()
         self.expr_widg.set_parent(self)
@@ -314,7 +321,6 @@ class MainObject(QObject):
             self.window.ScaleAdvancedScrollArea
         )
 
-
         comb_simpl_widg = CombineExperimentSimplerParamTab()
         comb_simpl_widg.item_changed.connect(self.item_param_changed)
         self.window.CombineSimplerScrollArea.setWidget(comb_simpl_widg)
@@ -331,33 +337,6 @@ class MainObject(QObject):
         ce_advanced_parameters.set_scroll_parent(
             self.window.CombineAdvancedScrollArea
         )
-
-
-        split_simpl_widg = SplitWidget()
-        #split_simpl_widg.item_changed.connect(self.item_param_changed)
-        self.window.SplitScrollArea.setWidget(split_simpl_widg)
-
-        '''
-        imp_widg = ImportWidget()
-        imp_widg.all_items_changed.connect(self.all_items_param_changed)
-        self.window.ImportScrollArea.setWidget(imp_widg)
-        '''
-
-        '''
-        ce_advanced_parameters = build_advanced_params_widget(
-            "combine_experiments_params", self.window.CombineSearchLayout,
-            self.runner_handler
-        )
-        ce_advanced_parameters.item_changed.connect(
-            self.item_param_changed
-        )
-        self.window.CombineAdvancedScrollArea.setWidget(
-            ce_advanced_parameters
-        )
-        ce_advanced_parameters.set_scroll_parent(
-            self.window.CombineAdvancedScrollArea
-        )'''
-
 
 
         fd_advanced_parameters.twin_widg = find_simpl_widg
@@ -1059,10 +1038,13 @@ class MainObject(QObject):
                 self.new_node.reset_all_params()
                 self.new_node.set_all_parameters(lst_of_lst)
 
+            print("new_node:", self.new_node.par_lst)
+
         except AttributeError:
             logging.info(
                 "Not updating parameters, no (green node or twin widget)\n"
             )
+
 
     def new_main_command_changed(self, new_cmd_str):
         try:
@@ -1364,8 +1346,8 @@ class MainObject(QObject):
 
         print("nod_num_out")
         if(
-            self.server_nod_lst[nod_num_out]['cmd2show'] ==
-            ['dials.split_experiments']
+            self.server_nod_lst[nod_num_out]['cmd2show'][0] ==
+            'dials.split_experiments'
         ):
             cmd = {"nod_lst": [nod_num_out], "cmd_lst": ["split_node"]}
             new_thrd = post_req_w_output(
