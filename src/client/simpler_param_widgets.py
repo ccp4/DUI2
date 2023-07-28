@@ -1443,18 +1443,23 @@ class SplitWidget(QWidget):
         self.box_by_wavelength.setCurrentIndex(
             self.box_by_wavelength.default_index
         )
-        self.pars_def = {
-            "by_detector": "False", "by_wavelength": "False"
-        }
+        self.pars_def = {"by_detector": "False", "by_wavelength": "False"}
         print("Reset_pars(SplitWidget)")
 
     def update_all_pars(self, tup_lst_pars):
-        logging.info(
-            "update_all_pars(SplitWidget)" + str(tup_lst_pars)
-        )
         print(
             "update_all_pars(SplitWidget)" + str(tup_lst_pars)
         )
+
+        self.pars_def = {"by_detector": "False", "by_wavelength": "False"}
+        for tup_par in tup_lst_pars[0]:
+            if tup_par["name"] == "by_detector":
+                self.pars_def["by_detector"] = tup_par["value"]
+                self.box_by_detector.setCurrentText(tup_par["value"])
+
+            if tup_par["name"] == "by_wavelength":
+                self.pars_def["by_wavelength"] = tup_par["value"]
+                self.box_by_wavelength.setCurrentText(tup_par["value"])
 
     def update_par_dect(self, value):
         logging.info("by_detector")
