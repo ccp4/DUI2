@@ -95,11 +95,9 @@ class MainObject(QObject):
         imp_widg.all_items_changed.connect(self.all_items_param_changed)
         self.window.ImportScrollArea.setWidget(imp_widg)
 
-
-        split_simpl_widg = SplitWidget()
-        split_simpl_widg.all_items_changed.connect(self.all_items_param_changed)
-        self.window.SplitScrollArea.setWidget(split_simpl_widg)
-
+        split_widg = SplitWidget()
+        split_widg.all_items_changed.connect(self.all_items_param_changed)
+        self.window.SplitScrollArea.setWidget(split_widg)
 
         self.expr_widg = ExportWidget()
         self.expr_widg.set_parent(self)
@@ -377,6 +375,10 @@ class MainObject(QObject):
         self.param_widgets["import"]["advanced"] = None
         self.param_widgets["import"]["main_page"] = self.window.ImportPage
 
+        self.param_widgets["split_experiments"]["simple"] = split_widg
+        self.param_widgets["split_experiments"]["advanced"] = None
+        self.param_widgets["split_experiments"]["main_page"] = self.window.SplitPage
+
         self.param_widgets["find_spots"]["simple"] = find_simpl_widg
         self.param_widgets["find_spots"]["advanced"] = fd_advanced_parameters
         self.param_widgets[
@@ -443,11 +445,6 @@ class MainObject(QObject):
         self.param_widgets[
             "combine_experiments"
         ]["main_page"] = self.window.CombinePage
-
-
-        self.param_widgets["split_experiments"]["simple"] = split_simpl_widg
-        self.param_widgets["split_experiments"]["advanced"] = None
-        self.param_widgets["split_experiments"]["main_page"] = self.window.SplitPage
 
         self.param_widgets["export"]["simple"] = self.expr_widg
         self.param_widgets["export"]["advanced"] = None
@@ -1067,6 +1064,7 @@ class MainObject(QObject):
                 and not self.reseting
             ):
                 self.new_node.set_parameter(str_path, str_value, lst_num)
+                print("item_param_changed", str_path , str_value , lst_num)
 
         except AttributeError:
             logging.info(

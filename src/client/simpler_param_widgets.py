@@ -1434,9 +1434,6 @@ class SplitWidget(QWidget):
         self.main_v_layout.addStretch()
 
     def reset_pars(self):
-        #self.clearLayout(self.main_v_layout)
-        #self.build_pars()
-
         self.box_by_detector.setCurrentIndex(
             self.box_by_detector.default_index
         )
