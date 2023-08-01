@@ -1030,6 +1030,9 @@ class MainObject(QObject):
             logging.info("this node does not need build_full_list")
 
     def all_items_param_changed(self, lst_of_lst):
+
+        print("\n <<< all_items_param_changed:", lst_of_lst, ">>> \n")
+
         try:
             if self.new_node.number == self.curr_nod_num:
                 self.new_node.reset_all_params()

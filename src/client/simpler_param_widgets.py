@@ -620,6 +620,7 @@ class SplitWidget(QWidget):
         self.main_v_layout.addStretch()
 
     def reset_pars(self):
+        self.do_emit = False
         self.box_by_detector.setCurrentIndex(
             self.box_by_detector.default_index
         )
@@ -628,13 +629,14 @@ class SplitWidget(QWidget):
         )
         self.pars_def = {"by_detector": "False", "by_wavelength": "False"}
         print("Reset_pars(SplitWidget)")
+        self.do_emit = True
 
     def update_all_pars(self, tup_lst_pars):
         print(
             "update_all_pars(SplitWidget)" + str(tup_lst_pars)
         )
 
-        self.pars_def = {"by_detector": "False", "by_wavelength": "False"}
+        #self.pars_def = {"by_detector": "False", "by_wavelength": "False"}
         for tup_par in tup_lst_pars[0]:
             if tup_par["name"] == "by_detector":
                 self.pars_def["by_detector"] = tup_par["value"]
@@ -659,12 +661,15 @@ class SplitWidget(QWidget):
         self.update_all_2_pars()
 
     def update_all_2_pars(self):
-        self.all_items_changed.emit([
-            [
-                ["by_detector", self.pars_def["by_detector"]],
-                ["by_wavelength", self.pars_def["by_wavelength"]]
+        if self.do_emit:
+            lst_2_emit = [
+                [
+                    ["by_detector", self.pars_def["by_detector"]],
+                    ["by_wavelength", self.pars_def["by_wavelength"]]
+                ]
             ]
-        ])
+            print("\nlst_2_emit:", lst_2_emit, "\n")
+            self.all_items_changed.emit(lst_2_emit)
 
 
 class MaskWidget(QWidget):
