@@ -318,6 +318,7 @@ def build_template(str_path_in):
     else:
         return None, 0
 
+
 def get_lst_par_from_str(str_in):
     lst_com = str_in.split(" ")
     lst_pair = []
@@ -327,6 +328,7 @@ def get_lst_par_from_str(str_in):
             lst_pair.append(pair)
 
     return lst_pair
+
 
 class RootWidg(QWidget):
     def __init__(self, parent = None):
@@ -358,6 +360,7 @@ class RootWidg(QWidget):
             "update_param(root)" + str(str_path) +
             ", " + str(str_value) + "... dummy"
         )
+
 
 class ImportWidget(QWidget):
     '''
@@ -573,6 +576,95 @@ class ImportWidget(QWidget):
             "update_param(ImportWidget)" +
             str(str_path) + "," + str(str_value) + "... dummy"
         )
+
+
+class SplitWidget(QWidget):
+    """
+    This widget is the tool for separating nodes with the
+    dials.split_experiments command
+    """
+
+    all_items_changed = Signal(list)
+
+    def __init__(self, parent=None):
+        super(SplitWidget, self).__init__()
+        self.do_emit = True
+        self.main_v_layout = QVBoxLayout()
+        self.build_pars()
+        self.setLayout(self.main_v_layout)
+
+    def build_pars(self):
+        main_box = QVBoxLayout()
+
+        hbox_lay_by_detector = QHBoxLayout()
+        label_by_detector = QLabel("By detector")
+        hbox_lay_by_detector.addWidget(label_by_detector)
+        self.box_by_detector = DefaultComboBox(
+            "by_detector", ["True", "False"], default_index = 1
+        )
+        self.box_by_detector.currentIndexChanged.connect(self.update_par_dect)
+        hbox_lay_by_detector.addWidget(self.box_by_detector)
+        main_box.addLayout(hbox_lay_by_detector)
+
+        hbox_lay_by_wavelength = QHBoxLayout()
+        label_by_wavelength = QLabel("By wavelength")
+        hbox_lay_by_wavelength.addWidget(label_by_wavelength)
+        self.box_by_wavelength = DefaultComboBox(
+            "by_wavelength", ["True", "False"], default_index = 1
+        )
+        self.box_by_wavelength.currentIndexChanged.connect(self.update_par_wavl)
+        hbox_lay_by_wavelength.addWidget(self.box_by_wavelength)
+        main_box.addLayout(hbox_lay_by_wavelength)
+
+        self.main_v_layout.addLayout(main_box)
+        self.main_v_layout.addStretch()
+
+    def reset_pars(self):
+        self.box_by_detector.setCurrentIndex(
+            self.box_by_detector.default_index
+        )
+        self.box_by_wavelength.setCurrentIndex(
+            self.box_by_wavelength.default_index
+        )
+        self.pars_def = {"by_detector": "False", "by_wavelength": "False"}
+        print("Reset_pars(SplitWidget)")
+
+    def update_all_pars(self, tup_lst_pars):
+        print(
+            "update_all_pars(SplitWidget)" + str(tup_lst_pars)
+        )
+
+        self.pars_def = {"by_detector": "False", "by_wavelength": "False"}
+        for tup_par in tup_lst_pars[0]:
+            if tup_par["name"] == "by_detector":
+                self.pars_def["by_detector"] = tup_par["value"]
+                self.box_by_detector.setCurrentText(tup_par["value"])
+
+            if tup_par["name"] == "by_wavelength":
+                self.pars_def["by_wavelength"] = tup_par["value"]
+                self.box_by_wavelength.setCurrentText(tup_par["value"])
+
+    def update_par_dect(self, value):
+        logging.info("by_detector")
+        sender = self.sender()
+        str_value = str(sender.item_list[value])
+        self.pars_def["by_detector"] = str_value
+        self.update_all_2_pars()
+
+    def update_par_wavl(self, value):
+        logging.info("by_wavelength")
+        sender = self.sender()
+        str_value = str(sender.item_list[value])
+        self.pars_def["by_wavelength"] = str_value
+        self.update_all_2_pars()
+
+    def update_all_2_pars(self):
+        self.all_items_changed.emit([
+            [
+                ["by_detector", self.pars_def["by_detector"]],
+                ["by_wavelength", self.pars_def["by_wavelength"]]
+            ]
+        ])
 
 
 class MaskWidget(QWidget):
@@ -1390,95 +1482,6 @@ class SymmetrySimplerParamTab(SimpleParamTab):
     def reset_pars(self):
         self.clearLayout(self.main_v_layout)
         self.build_pars()
-
-
-class SplitWidget(QWidget):
-    """
-    This widget is the tool for separating nodes with the
-    dials.split_experiments command
-    """
-
-    all_items_changed = Signal(list)
-
-    def __init__(self, parent=None):
-        super(SplitWidget, self).__init__()
-        self.do_emit = True
-        self.main_v_layout = QVBoxLayout()
-        self.build_pars()
-        self.setLayout(self.main_v_layout)
-
-    def build_pars(self):
-        main_box = QVBoxLayout()
-
-        hbox_lay_by_detector = QHBoxLayout()
-        label_by_detector = QLabel("By detector")
-        hbox_lay_by_detector.addWidget(label_by_detector)
-        self.box_by_detector = DefaultComboBox(
-            "by_detector", ["True", "False"], default_index = 1
-        )
-        self.box_by_detector.currentIndexChanged.connect(self.update_par_dect)
-        hbox_lay_by_detector.addWidget(self.box_by_detector)
-        main_box.addLayout(hbox_lay_by_detector)
-
-        hbox_lay_by_wavelength = QHBoxLayout()
-        label_by_wavelength = QLabel("By wavelength")
-        hbox_lay_by_wavelength.addWidget(label_by_wavelength)
-        self.box_by_wavelength = DefaultComboBox(
-            "by_wavelength", ["True", "False"], default_index = 1
-        )
-        self.box_by_wavelength.currentIndexChanged.connect(self.update_par_wavl)
-        hbox_lay_by_wavelength.addWidget(self.box_by_wavelength)
-        main_box.addLayout(hbox_lay_by_wavelength)
-
-        self.main_v_layout.addLayout(main_box)
-        self.main_v_layout.addStretch()
-
-    def reset_pars(self):
-        self.box_by_detector.setCurrentIndex(
-            self.box_by_detector.default_index
-        )
-        self.box_by_wavelength.setCurrentIndex(
-            self.box_by_wavelength.default_index
-        )
-        self.pars_def = {"by_detector": "False", "by_wavelength": "False"}
-        print("Reset_pars(SplitWidget)")
-
-    def update_all_pars(self, tup_lst_pars):
-        print(
-            "update_all_pars(SplitWidget)" + str(tup_lst_pars)
-        )
-
-        self.pars_def = {"by_detector": "False", "by_wavelength": "False"}
-        for tup_par in tup_lst_pars[0]:
-            if tup_par["name"] == "by_detector":
-                self.pars_def["by_detector"] = tup_par["value"]
-                self.box_by_detector.setCurrentText(tup_par["value"])
-
-            if tup_par["name"] == "by_wavelength":
-                self.pars_def["by_wavelength"] = tup_par["value"]
-                self.box_by_wavelength.setCurrentText(tup_par["value"])
-
-    def update_par_dect(self, value):
-        logging.info("by_detector")
-        sender = self.sender()
-        str_value = str(sender.item_list[value])
-        self.pars_def["by_detector"] = str_value
-        self.update_all_2_pars()
-
-    def update_par_wavl(self, value):
-        logging.info("by_wavelength")
-        sender = self.sender()
-        str_value = str(sender.item_list[value])
-        self.pars_def["by_wavelength"] = str_value
-        self.update_all_2_pars()
-
-    def update_all_2_pars(self):
-        self.all_items_changed.emit([
-            [
-                ["by_detector", self.pars_def["by_detector"]],
-                ["by_wavelength", self.pars_def["by_wavelength"]]
-            ]
-        ])
 
 
 class ScaleSimplerParamTab(SimpleParamTab):

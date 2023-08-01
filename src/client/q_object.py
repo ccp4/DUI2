@@ -1035,7 +1035,10 @@ class MainObject(QObject):
                 self.new_node.reset_all_params()
                 self.new_node.set_all_parameters(lst_of_lst)
 
-            print("new_node:", self.new_node.par_lst)
+            print(
+                "\n new_node(all_items_param_changed):\n",
+                self.new_node.par_lst, "\n"
+            )
 
         except AttributeError:
             logging.info(
@@ -1149,6 +1152,9 @@ class MainObject(QObject):
         self.param_widgets[self.curr_widg_key]["simple"].update_all_pars(
             tmp_cmd_par.get_all_params()
         )
+
+        print("\n tmp_cmd_par.get_all_params()", tmp_cmd_par.get_all_params())
+
         try:
             self.param_widgets[self.curr_widg_key]["advanced"].update_all_pars(
                 tmp_cmd_par.get_all_params()
