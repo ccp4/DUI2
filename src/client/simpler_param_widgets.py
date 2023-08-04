@@ -628,13 +628,11 @@ class SplitWidget(QWidget):
             self.box_by_wavelength.default_index
         )
         self.pars_def = {"by_detector": "False", "by_wavelength": "False"}
-        print("Reset_pars(SplitWidget)")
+        logging.info("Reset_pars(SplitWidget)")
         self.do_emit = True
 
     def update_all_pars(self, tup_lst_pars):
-        print(
-            "update_all_pars(SplitWidget)" + str(tup_lst_pars)
-        )
+        logging.info("update_all_pars(SplitWidget)" + str(tup_lst_pars))
 
         #self.pars_def = {"by_detector": "False", "by_wavelength": "False"}
         for tup_par in tup_lst_pars[0]:
@@ -668,7 +666,7 @@ class SplitWidget(QWidget):
                     ["by_wavelength", self.pars_def["by_wavelength"]]
                 ]
             ]
-            print("\nlst_2_emit:", lst_2_emit, "\n")
+            logging.info("lst_2_emit:" + str(lst_2_emit))
             self.all_items_changed.emit(lst_2_emit)
 
 

@@ -808,10 +808,8 @@ class Runner(object):
         #TODO: don't run this if this node is not a split_experiments command
 
         str_out = " running duplicate node:" + str(node.number)
-        print("\n" + str_out + "\n")
-        spit_out(
-            str_out = str_out, req_obj = req_obj, out_type = 'utf-8'
-        )
+        logging.info("\n" + str_out + "\n")
+        spit_out(str_out = str_out, req_obj = req_obj, out_type = 'utf-8')
 
         with open(node.log_file_path) as myfile:
             log_line_lst = myfile.readlines()
@@ -821,7 +819,7 @@ class Runner(object):
         num_split = -1
         for single_line_str in log_line_lst:
             str_end = single_line_str[-6:]
-            print("str_end =", str_end)
+            logging.info("str_end =" + str(str_end))
             if(
                 str_end == '.refl\n' or
                 str_end == '.expt\n'
@@ -830,12 +828,12 @@ class Runner(object):
                     str_ini = single_line_str[:-6]
                     pos4under = str_ini.rfind(" split_")
                     num_split = int(str_ini[pos4under + 7:])
-                    print("num_split:", num_split)
+                    logging.info("num_split:" + str(num_split))
                     if num_split > max_num_split:
                         max_num_split = num_split
 
                 except ValueError:
-                    print("skipping the string:\n" + single_line_str + "\n")
+                    logging.info("skipping the string:\n" + single_line_str + "\n")
 
         for junior_number in range(1, num_split + 1):
             self.find_next_number()
@@ -863,19 +861,19 @@ class Runner(object):
                 lof_file_2_apend.close()
 
             except FileNotFoundError:
-                print("No log file in:" + node.log_file_path)
+                logging.info("No log file in:" + node.log_file_path)
 
             lst_cont_expt = glob.glob(
                 node._run_dir + "/*" + str(junior_number) + ".expt"
             )
-            print("lst_cont_expt =", lst_cont_expt)
+            logging.info("lst_cont_expt =" + str(lst_cont_expt))
             for file_n in lst_cont_expt:
                 shutil.move(file_n, new_node._run_dir)
 
             lst_cont_refl = glob.glob(
                 node._run_dir + "/*" + str(junior_number) + ".refl"
             )
-            print("lst_cont_refl =", lst_cont_refl)
+            logging.info("lst_cont_refl =" + str(lst_cont_refl))
             for file_n in lst_cont_refl:
                 shutil.move(file_n, new_node._run_dir)
 
@@ -895,7 +893,7 @@ class Runner(object):
         )
         str_out = " Done duplicating node #" + str(node.number)
         str_out += ", into " + str(num_split + 1) + " new nodes"
-        print("\n" + str_out + "\n")
+        logging.info("\n" + str_out + "\n")
 
     def find_next_number(self):
         tmp_big = 0

@@ -1031,16 +1031,16 @@ class MainObject(QObject):
 
     def all_items_param_changed(self, lst_of_lst):
 
-        print("\n <<< all_items_param_changed:", lst_of_lst, ">>> \n")
+        logging.info("<<< all_items_param_changed:" + str(lst_of_lst) + ">>> ")
 
         try:
             if self.new_node.number == self.curr_nod_num:
                 self.new_node.reset_all_params()
                 self.new_node.set_all_parameters(lst_of_lst)
 
-            print(
-                "\n new_node(all_items_param_changed):\n",
-                self.new_node.par_lst, "\n"
+            logging.info(
+                " new_node(all_items_param_changed):\n" +
+                str(self.new_node.par_lst) + "\n"
             )
 
         except AttributeError:
@@ -1070,7 +1070,10 @@ class MainObject(QObject):
                 and not self.reseting
             ):
                 self.new_node.set_parameter(str_path, str_value, lst_num)
-                print("item_param_changed", str_path , str_value , lst_num)
+                logging.info(
+                    "item_param_changed" + str(str_path)
+                     + str(str_value) + str(lst_num)
+                 )
 
         except AttributeError:
             logging.info(
@@ -1155,8 +1158,6 @@ class MainObject(QObject):
         self.param_widgets[self.curr_widg_key]["simple"].update_all_pars(
             tmp_cmd_par.get_all_params()
         )
-
-        print("\n tmp_cmd_par.get_all_params()", tmp_cmd_par.get_all_params())
 
         try:
             self.param_widgets[self.curr_widg_key]["advanced"].update_all_pars(
@@ -1290,10 +1291,7 @@ class MainObject(QObject):
         do_predictions_n_report = bool(
             self.window.RunPedictAndReportCheckBox.checkState()
         )
-
-        print("cmd =", cmd)
-
-
+        logging.info("cmd(request_launch) =" + str(cmd))
         post_thread = post_req_w_output(
             cmd_in = cmd, do_pred_n_rept = do_predictions_n_report,
             main_handler = self.runner_handler
@@ -1348,10 +1346,7 @@ class MainObject(QObject):
         logging.info("respose_from_reset(err code):" + str(line))
 
     def after_thread_end(self, nod_num_out, do_pred_n_rept):
-
-        print("after_thread_end()")
-
-        print("nod_num_out")
+        logging.info("nod_num_out(after_thread_end)=" + str(nod_num_out) )
         if(
             self.server_nod_lst[nod_num_out]['cmd2show'][0] ==
             'dials.split_experiments'
