@@ -120,12 +120,12 @@ def main(par_def = None, connection_out = None):
 
                 except BrokenPipeError:
                     logging.info(
-                        "BrokenPipe err catch  ** while sending EOF or JSON"
+                        "BrokenPipe err catch ** while sending EOF or JSON"
                     )
 
                 except ConnectionResetError:
                     logging.info(
-                        "ConnectionReset err catch  ** while sending EOF or JSON"
+                        "ConnectionReset err catch ** while sending EOF or JSON"
                     )
 
             else:
@@ -139,12 +139,12 @@ def main(par_def = None, connection_out = None):
 
                 except BrokenPipeError:
                     logging.info(
-                        "** BrokenPipe err catch  ** while sending EOF or JSON"
+                        "** BrokenPipe err catch ** while sending EOF or JSON"
                     )
 
                 except ConnectionResetError:
                     logging.info(
-                        "ConnectionReset err catch  ** while sending EOF or JSON"
+                        "ConnectionReset err catch ** while sending EOF or JSON"
                     )
 
         def do_GET(self):
@@ -153,7 +153,9 @@ def main(par_def = None, connection_out = None):
                 self.send_response(200)
 
             except AttributeError:
-                logging.info("Attribute Err catch, not supposed send header info #3")
+                logging.info(
+                    "Attribute Err catch, not supposed send header info #3"
+                )
 
             url_path = self.path
             url_dict = parse_qs(urlparse(url_path).query)
@@ -348,7 +350,10 @@ def main(par_def = None, connection_out = None):
             break
 
         except OSError:
-            print("OS err catch(server side), trying again in " + str(n_secs) + " secs")
+            print(
+                "OS err catch(server side), trying again in " +
+                str(n_secs) + " secs"
+            )
             time.sleep(n_secs)
 
     else:

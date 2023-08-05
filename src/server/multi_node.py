@@ -774,7 +774,9 @@ class Runner(object):
                 "unalias_cmd_lst, cmd_dict = " +
                 str(unalias_cmd_lst) + " , " + str(cmd_dict)
             )
-            return_list = get_info_data(unalias_cmd_lst, cmd_dict, self.step_list)
+            return_list = get_info_data(
+                unalias_cmd_lst, cmd_dict, self.step_list
+            )
 
         return return_list
 
@@ -833,7 +835,9 @@ class Runner(object):
                         max_num_split = num_split
 
                 except ValueError:
-                    logging.info("skipping the string:\n" + single_line_str + "\n")
+                    logging.info(
+                        "skipping the string:\n" + single_line_str + "\n"
+                    )
 
         for junior_number in range(1, num_split + 1):
             self.find_next_number()
@@ -856,7 +860,8 @@ class Runner(object):
                 shutil.copy(node.log_file_path, new_node._run_dir)
 
                 lof_file_2_apend = open(new_node.log_file_path, "a")
-                wrstring = "\n\n copied exp number " + str(junior_number) + "\n\n"
+                wrstring = "\n\n copied exp number "
+                wrstring += str(junior_number) + "\n\n"
                 lof_file_2_apend.write(wrstring)
                 lof_file_2_apend.close()
 
