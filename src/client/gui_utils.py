@@ -141,7 +141,8 @@ widgets_defs = {
         "icon"          : "resources/symmetry.png",
         "main_cmd"      :["dials.symmetry"],
         "nxt_widg_lst"  :[
-            "scale", "export", "merge", "combine_experiments", "optional"
+            "scale", "export", "merge", "combine_experiments",
+            "split_experiments", "optional"
         ]
     },
     "scale" : {
@@ -149,7 +150,8 @@ widgets_defs = {
         "icon"          : "resources/scale.png",
         "main_cmd"      :["dials.scale"],
         "nxt_widg_lst"  :[
-            "symmetry", "merge", "export", "combine_experiments", "optional"
+            "symmetry", "merge", "export", "combine_experiments",
+            "split_experiments", "optional"
         ]
     },
     "export" : {
