@@ -35,29 +35,47 @@ There are three available command line tools after installation:
 
        dui_client url=http://...[URL of the server]
 
-## Option 2, Installation with git and conda
+## Option 2, Installation everything with conda and git
 
-This assumes you have already installed DIALS and have a BASH shell active with the DIALS environment sourced, for example: `. dials_env.sh`.
+This assumes you have already installed an Anaconda package manger like `miniconda` and have a BASH shell active with the `conda` command enabled. If you have already installed some package, like for example `git` you may skip the step where you install it.
 
-First install `pyside2`:
+First update `conda`:
 
-      libtbx.conda install -c conda-forge pyside2
+       conda update conda
 
-Next clone the DUI2 repository (pre-release branch):
+Next install `dials`:
+
+       conda install -c conda-forge dials -y
+
+Then install `PySide V2`:
+
+       conda install -c conda-forge pyside2 -y
+
+Next install an `HTML` viewer compatible with in `PySide V2`:
+
+       conda install -c conda-forge pyqtwebengine -y
+
+Next install `git`:
+
+       conda install -c conda-forge git -y
+
+Finally clone the DUI2 repository (pre-release branch):
 
        git clone -b v0.999.6  https://github.com/ccp4/DUI2.git
 
-The same tools as if installed with `curl` and `CCP4` are available, just different ways to invoke them:
+
+
+The same tools as if installed with `curl` and `CCP4` are available, just different ways to invoke them. Remember that if you are running Dui2 from another directory, to put the full path of the `.py` file:
 
 1. Fully local App (running both, server and client locally):
 
-       dials.python DUI2/src/all_local.py
+       python DUI2/src/all_local.py
 
 2. Server App (Which actually runs Dials commands)
 
-       dials.python DUI2/src/only_server.py host=MY_HOST port=MY_PORT init_path=/PATH/TO/USER/DATA
+       python DUI2/src/only_server.py host=MY_HOST port=MY_PORT init_path=/PATH/TO/USER/DATA
 
 3. Client App (GUI front end that talks to the server app)
 
-       dials.python DUI2/src/only_client.py url=http://...[URL of the server]
+       python DUI2/src/only_client.py url=http://...[URL of the server]
 
