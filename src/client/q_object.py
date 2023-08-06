@@ -1304,6 +1304,9 @@ class MainObject(QObject):
         self.thrd_lst.append(post_thread)
 
     def line_n1_in(self, nod_num_in):
+
+        print("nod_num_in(line_n1_in) =", nod_num_in)
+
         self.request_display()
         self.new_node = None
 
@@ -1343,7 +1346,7 @@ class MainObject(QObject):
             #TODO: put inside this [except] some way to kill [post_thread]
 
     def respose_n1_from_reset(self, line):
-        logging.info("respose_from_reset(err code):" + str(line))
+        print("respose_from_reset(err code):" + str(line))
 
     def after_thread_end(self, nod_num_out, do_pred_n_rept):
         logging.info("nod_num_out(after_thread_end)=" + str(nod_num_out) )
@@ -1355,6 +1358,7 @@ class MainObject(QObject):
             new_thrd = post_req_w_output(
                 cmd_in = cmd, main_handler = self.runner_handler
             )
+            new_thrd.lst_out.connect(self.respose_n1_from_split)
             new_thrd.finished.connect(self.post_ended)
             new_thrd.start()
             self.thrd_lst.append(new_thrd)
@@ -1372,7 +1376,8 @@ class MainObject(QObject):
         else:
             self.refresh_output()
 
-
+    def respose_n1_from_split(self, line):
+        print("respose_split =" + str(line))
 
     def post_ended(self):
         self.request_display()

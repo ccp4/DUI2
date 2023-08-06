@@ -291,6 +291,7 @@ class Mtz_Data_Request(QThread):
 
 class post_req_w_output(QThread):
     first_line = Signal(int)
+    lst_out = Signal(list)
     new_line_out = Signal(str, int, str)
     about_to_end = Signal(int, bool)
     def __init__(
@@ -324,6 +325,7 @@ class post_req_w_output(QThread):
 
                     if not_yet_read:
                         not_yet_read = False
+                        print("line_str=[", line_str, "]")
 
                         try:
                             nod_p_num = int(line_str.split("=")[1])
@@ -336,6 +338,10 @@ class post_req_w_output(QThread):
                                 "\n post_req_w_output ... Index err catch \n"
                             )
                             not_yet_read = True
+
+                        except ValueError:
+                            print("returning line without << = >> char")
+                            self.lst_out.emit([3,4,5])
 
                     else:
                         self.new_line_out.emit(line_str, self.number, "Busy")

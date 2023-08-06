@@ -391,7 +391,7 @@ class CmdNode(object):
                 self.nod_req.end_headers()
 
             except AttributeError:
-                logging.info(
+                print(
                     "Attribute Err catch, not supposed send header info #2"
                 )
 
@@ -658,9 +658,9 @@ class Runner(object):
                         req_obj.end_headers()
 
                     except AttributeError:
-                        logging.info(
+                        print(
                             "Attribute Err catch," +
-                            " not supposed send header info"
+                            " not supposed send header info #3"
                         )
 
                     spit_out(
@@ -680,9 +680,9 @@ class Runner(object):
                         req_obj.end_headers()
 
                     except AttributeError:
-                        logging.info(
+                        print(
                             "Attribute Err catch," +
-                            " not supposed send header info"
+                            " not supposed send header info #4"
                         )
 
                     spit_out(
@@ -706,24 +706,40 @@ class Runner(object):
                         req_obj.end_headers()
 
                     except AttributeError:
-                        logging.info(
+                        print(
                             "Attribute Err catch," +
-                            " not supposed send header info"
+                            " not supposed send header info #5"
                         )
-
-                    spit_out(
+                    '''spit_out(
                         str_out = "err.code=0",
                         req_obj = req_obj, out_type = 'utf-8'
-                    )
+                    )'''
+                    lst_nod_out = []
                     for lin2go in cmd_dict["nod_lst"]:
                         for node in self.step_list:
                             if node.number == lin2go:
-                                self.split_node(node, req_obj)
+                                lst_nod_out = self.split_node(node, req_obj)
 
-                    spit_out(
+                    '''spit_out(
                         str_out = "split_node ... Done",
                         req_obj = req_obj, out_type = 'utf-8'
-                    )
+                    )'''
+
+
+                    ############################################################
+                    try:
+                        spit_out(
+                            str_out = str(lst_nod_out) + "\n", req_obj = req_obj,
+                            out_type = 'utf-8'
+                        )
+
+                    except BrokenPipeError:
+                        print(
+                            "<< BrokenPipe err catch  >> while sending nod lst"
+                        )
+
+                    ############################################################
+
 
 
                 elif unalias_cmd_lst == [["stop"]]:
@@ -810,6 +826,8 @@ class Runner(object):
         #TODO: don't run this if this node is not a split_experiments command
 
         str_out = " running duplicate node:" + str(node.number)
+        lst_nod_out = [int(node.number)]
+
         logging.info("\n" + str_out + "\n")
         spit_out(str_out = str_out, req_obj = req_obj, out_type = 'utf-8')
 
@@ -855,6 +873,8 @@ class Runner(object):
 
             new_node.set_run_dir(num = new_node.number)
 
+            lst_nod_out.append(int(new_node.number))
+
             try:
                 new_node.log_file_path = new_node._run_dir + "/out.log"
                 shutil.copy(node.log_file_path, new_node._run_dir)
@@ -899,6 +919,8 @@ class Runner(object):
         str_out = " Done duplicating node #" + str(node.number)
         str_out += ", into " + str(num_split + 1) + " new nodes"
         logging.info("\n" + str_out + "\n")
+
+        return lst_nod_out
 
     def find_next_number(self):
         tmp_big = 0
