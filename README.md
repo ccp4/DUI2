@@ -41,13 +41,13 @@ This assumes you have already installed an Anaconda package manger like `minicon
 
 First update `conda`:
 
-       conda update conda
+       conda update conda -y
 
-Next install `dials`:
+Next install `dials`, this may take several minutes:
 
        conda install -c conda-forge dials -y
 
-Then install `PySide V2`:
+Then install `PySide V2`, again several minutes, be very patient:
 
        conda install -c conda-forge pyside2 -y
 
