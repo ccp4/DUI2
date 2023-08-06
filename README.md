@@ -35,9 +35,9 @@ There are three available command line tools after installation:
 
        dui_client url=http://...[URL of the server]
 
-## Option 2, Installation everything with conda and git
+## Option 2, Installation of everything (including Dials) with conda and git
 
-This assumes you have already installed an Anaconda package manger like `miniconda` and have a BASH shell active with the `conda` command enabled. If you have already installed some package, like for example `git` you may skip the step where you install it.
+This assumes you have already installed an Anaconda package manger like `miniconda` and have a BASH shell active with the `conda` command enabled. If you have already installed one of the packages, like for example `git` you may skip the step where you install it.
 
 First update `conda`:
 
