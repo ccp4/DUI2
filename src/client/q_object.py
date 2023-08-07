@@ -1376,8 +1376,39 @@ class MainObject(QObject):
         else:
             self.refresh_output()
 
-    def respose_n1_from_split(self, line):
-        print("respose_split =" + str(line))
+    def respose_n1_from_split(self, lst_new_nods):
+        print("respose_split =" + str(lst_new_nods))
+
+        do_pred_n_rept = bool(
+            self.window.RunPedictAndReportCheckBox.checkState()
+        )
+
+        if do_pred_n_rept:
+            plan_b = '''
+            for node in lst_new_nods:
+                cmd = {"nod_lst":[node], "cmd_lst":["run_predict_n_report"]}
+                self.do_load_html.reset_lst_html()
+                new_thrd = post_req_w_output(
+                    cmd_in = cmd, main_handler = self.runner_handler
+                )
+                new_thrd.finished.connect(self.refresh_output)
+                new_thrd.start()
+                self.thrd_lst.append(new_thrd)
+            '''
+            cmd = {
+                "nod_lst":[lst_new_nods], "cmd_lst":["run_predict_n_report"]
+            }
+            self.do_load_html.reset_lst_html()
+            new_thrd = post_req_w_output(
+                cmd_in = cmd, main_handler = self.runner_handler
+            )
+            new_thrd.finished.connect(self.refresh_output)
+            new_thrd.start()
+            self.thrd_lst.append(new_thrd)
+
+        else:
+            self.refresh_output()
+
 
     def post_ended(self):
         self.request_display()

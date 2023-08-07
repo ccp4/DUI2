@@ -341,10 +341,19 @@ class post_req_w_output(QThread):
 
                         except ValueError:
                             print("returning line without << = >> char")
-                            self.lst_out.emit([3,4,5])
 
                     else:
                         self.new_line_out.emit(line_str, self.number, "Busy")
+
+                    if line_str[0:12] == "lst_nod_out:":
+                            print("found << lst_nod_out: >>")
+
+                            righ_side = line_str[12:-1]
+                            print("righ_side = <<" + righ_side + ">>" )
+
+                            lst_nod_out = json.loads(righ_side)
+
+                            self.lst_out.emit(lst_nod_out)
 
                     self.usleep(1)
 

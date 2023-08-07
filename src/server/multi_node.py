@@ -720,25 +720,11 @@ class Runner(object):
                             if node.number == lin2go:
                                 lst_nod_out = self.split_node(node, req_obj)
 
-                    '''spit_out(
-                        str_out = "split_node ... Done",
+                    spit_out(
+                        str_out = "lst_nod_out:" + str(lst_nod_out) + "\n",
                         req_obj = req_obj, out_type = 'utf-8'
-                    )'''
+                    )
 
-
-                    ############################################################
-                    try:
-                        spit_out(
-                            str_out = str(lst_nod_out) + "\n", req_obj = req_obj,
-                            out_type = 'utf-8'
-                        )
-
-                    except BrokenPipeError:
-                        print(
-                            "<< BrokenPipe err catch  >> while sending nod lst"
-                        )
-
-                    ############################################################
 
 
 
@@ -825,11 +811,11 @@ class Runner(object):
 
         #TODO: don't run this if this node is not a split_experiments command
 
-        str_out = " running duplicate node:" + str(node.number)
         lst_nod_out = [int(node.number)]
 
+        '''str_out = " running duplicate node:" + str(node.number)
         logging.info("\n" + str_out + "\n")
-        spit_out(str_out = str_out, req_obj = req_obj, out_type = 'utf-8')
+        spit_out(str_out = str_out, req_obj = req_obj, out_type = 'utf-8')'''
 
         with open(node.log_file_path) as myfile:
             log_line_lst = myfile.readlines()
@@ -912,10 +898,10 @@ class Runner(object):
 
         node.set_exe_files_out()
 
-        spit_out(
+        '''spit_out(
             str_out = " ... Done ", req_obj = req_obj,
             out_type = 'utf-8'
-        )
+        )'''
         str_out = " Done duplicating node #" + str(node.number)
         str_out += ", into " + str(num_split + 1) + " new nodes"
         logging.info("\n" + str_out + "\n")
