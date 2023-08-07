@@ -619,7 +619,6 @@ def get_help_list(cmd_str):
 
     except TypeError:
         err_msg = "..." + cmd_str + " ...TypeError"
-        print(err_msg)
         logging.info(err_msg)
         my_cmd_hlp = []
 

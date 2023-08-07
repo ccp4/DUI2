@@ -325,8 +325,6 @@ class post_req_w_output(QThread):
 
                     if not_yet_read:
                         not_yet_read = False
-                        print("line_str=[", line_str, "]")
-
                         try:
                             nod_p_num = int(line_str.split("=")[1])
                             self.number = nod_p_num
@@ -340,19 +338,16 @@ class post_req_w_output(QThread):
                             not_yet_read = True
 
                         except ValueError:
-                            print("returning line without << = >> char")
+                            logging.info("returning line without << = >> char")
 
                     else:
                         self.new_line_out.emit(line_str, self.number, "Busy")
 
                     if line_str[0:12] == "lst_nod_out:":
-                            print("found << lst_nod_out: >>")
-
+                            logging.info("found << lst_nod_out: >>")
                             righ_side = line_str[12:-1]
-                            print("righ_side = <<" + righ_side + ">>" )
-
+                            logging.info("righ_side = <<" + righ_side + ">>" )
                             lst_nod_out = json.loads(righ_side)
-
                             self.lst_out.emit(lst_nod_out)
 
                     self.usleep(1)
