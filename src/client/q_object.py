@@ -1298,7 +1298,7 @@ class MainObject(QObject):
         )
         post_thread.new_line_out.connect(self.log_show.add_line)
         post_thread.first_line.connect(self.line_n1_in)
-        post_thread.about_to_end.connect(self.after_thread_end)
+        post_thread.about_to_end.connect(self.what_2_do_after_dials_cmd)
         post_thread.finished.connect(self.post_ended)
         post_thread.start()
         self.thrd_lst.append(post_thread)
@@ -1346,8 +1346,8 @@ class MainObject(QObject):
     def respose_n1_from_reset(self, line):
         logging.info("respose_from_reset(err code):" + str(line))
 
-    def after_thread_end(self, nod_num_out, do_pred_n_rept):
-        logging.info("nod_num_out(after_thread_end)=" + str(nod_num_out) )
+    def what_2_do_after_dials_cmd(self, nod_num_out, do_pred_n_rept):
+        logging.info("nod_num_out(what_2_do_after_dials_cmd)=" + str(nod_num_out) )
         if(
             self.server_nod_lst[nod_num_out]['cmd2show'][0] ==
             'dials.split_experiments'
@@ -1356,7 +1356,7 @@ class MainObject(QObject):
             new_thrd = post_req_w_output(
                 cmd_in = cmd, main_handler = self.runner_handler
             )
-            new_thrd.lst_out.connect(self.respose_n1_from_split)
+            new_thrd.lst_out.connect(self.update_after_split)
             new_thrd.finished.connect(self.post_ended)
             new_thrd.start()
             self.thrd_lst.append(new_thrd)
@@ -1374,7 +1374,7 @@ class MainObject(QObject):
         else:
             self.refresh_output()
 
-    def respose_n1_from_split(self, lst_new_nods):
+    def update_after_split(self, lst_new_nods):
         logging.info("respose_split =" + str(lst_new_nods))
 
         do_pred_n_rept = bool(
