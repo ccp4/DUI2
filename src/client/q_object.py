@@ -1361,7 +1361,7 @@ class MainObject(QObject):
             new_thrd.start()
             self.thrd_lst.append(new_thrd)
 
-        if do_pred_n_rept:
+        elif do_pred_n_rept:
             cmd = {"nod_lst":[nod_num_out], "cmd_lst":["run_predict_n_report"]}
             self.do_load_html.reset_lst_html()
             new_thrd = post_req_w_output(
