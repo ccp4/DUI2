@@ -510,7 +510,7 @@ class AdvancedParameters(QWidget):
                                 self.font_point_size + 10, QFont.Bold
                             )
                         )
-                        widget.setStyleSheet("color: rgba(155, 255, 155, 255)")
+                        widget.setStyleSheet("color: rgba(65, 175, 175, 255)")
 
                     else:
                         widget.setFont(self.norm_labl_font)

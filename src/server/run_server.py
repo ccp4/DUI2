@@ -325,7 +325,7 @@ def main(par_def = None, connection_out = None):
     )
 
     n_secs = 5
-    for test_timess in range(5):
+    for test_timess in range(20):
         try:
             with socketserver.ThreadingTCPServer(
                 (HOST, PORT), ReqHandler
