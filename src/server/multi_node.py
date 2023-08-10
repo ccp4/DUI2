@@ -689,7 +689,7 @@ class Runner(object):
                         str_out = "err.code=0",
                         req_obj = req_obj, out_type = 'utf-8'
                     )
-                    print("starting <<run_predict_n_report >> ...")
+                    logging.info("starting << run_predict_n_report >> ...")
                     for lin2go in cmd_dict["nod_lst"]:
                         for node in self.step_list:
                             if node.number == lin2go:
@@ -699,7 +699,8 @@ class Runner(object):
                         str_out = "run_predict_n_report ... Done",
                         req_obj = req_obj, out_type = 'utf-8'
                     )
-                    print("... <<run_predict_n_report >> ended")
+                    logging.info("... << run_predict_n_report >> ended")
+                    print(" << run_predict_n_report >> done")
 
                 elif unalias_cmd_lst == [['split_node']]:
                     try:
