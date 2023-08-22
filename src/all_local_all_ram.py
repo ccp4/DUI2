@@ -2,7 +2,7 @@ import sys, json, os, logging
 from client.q_object import MainObject
 from client.init_firts import ini_data
 from shared_modules import format_utils, all_local_gui_connector
-from server.data_n_json import iter_dict
+#from server.data_n_json import iter_dict
 from server import multi_node
 
 from server.init_first import ini_data as server_ini_data
@@ -52,7 +52,7 @@ if __name__ == '__main__':
             recovery_data = None, dat_ini = server_data_init
         )
 
-    cmd_tree_runner.set_dir_path(tree_ini_path)
+    #cmd_tree_runner.set_dir_path(tree_ini_path)
     app = QApplication(sys.argv)
 
     m_gui_obj = all_local_gui_connector.MainGuiObject(
