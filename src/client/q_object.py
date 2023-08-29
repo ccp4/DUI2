@@ -1322,26 +1322,41 @@ class MainObject(QObject):
         self.thrd_lst.append(post_thread)
 
     def reset_graph_triggered(self):
-        logging.info("reset_graph_triggered(QObject)")
-        cmd = {"nod_lst":"", "cmd_lst":["reset_graph"]}
-        logging.info("cmd =" + str(cmd))
-        try:
-            self.do_load_html.reset_lst_html()
-            self.log_show.reset_mem()
+        reset_Y_N_dialg = QMessageBox()
+        reset_Y_N_dialg.setWindowTitle("Confirm reset")
 
-            post_thread = post_req_w_output(
-                cmd_in = cmd, main_handler = self.runner_handler
-            )
-            post_thread.first_line.connect(self.respose_n1_from_reset)
-            post_thread.finished.connect(self.post_ended)
-            post_thread.start()
-            self.thrd_lst.append(post_thread)
+        txt_str = "\n Are you sure you want to reset \n this is not reversible"
 
-        except requests.exceptions.RequestException:
-            logging.info(
-                "something went wrong with the << reset_graph >> request"
-            )
-            #TODO: put inside this [except] some way to kill [post_thread]
+        reset_Y_N_dialg.setText(txt_str)
+        reset_Y_N_dialg.setStandardButtons(QMessageBox.Yes | QMessageBox.Cancel)
+        reset_Y_N_dialg.setIcon(QMessageBox.Question)
+        button = reset_Y_N_dialg.exec()
+
+        if button == QMessageBox.Yes:
+            logging.info("reset_graph_triggered(QObject)")
+            cmd = {"nod_lst":"", "cmd_lst":["reset_graph"]}
+            logging.info("cmd =" + str(cmd))
+            try:
+                self.do_load_html.reset_lst_html()
+                self.log_show.reset_mem()
+
+                post_thread = post_req_w_output(
+                    cmd_in = cmd, main_handler = self.runner_handler
+                )
+                post_thread.first_line.connect(self.respose_n1_from_reset)
+                post_thread.finished.connect(self.post_ended)
+                post_thread.start()
+                self.thrd_lst.append(post_thread)
+
+            except requests.exceptions.RequestException:
+                logging.info(
+                    "something went wrong with the << reset_graph >> request"
+                )
+                #TODO: put inside this [except] some way to kill [post_thread]
+
+        else:
+            print("Cancel clicked to reset")
+
 
     def respose_n1_from_reset(self, line):
         logging.info("respose_from_reset(err code):" + str(line))
