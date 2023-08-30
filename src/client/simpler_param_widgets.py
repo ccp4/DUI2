@@ -428,22 +428,26 @@ class ImportWidget(QWidget):
         self.setLayout(self.main_vbox)
 
     def set_selection(self, str_select, isdir):
-        self.dir_selected = isdir
-        if self.dir_selected:
-            self.imp_txt.setText(str_select)
-
-        else:
-            if str_select[-4:]  == ".nxs" or str_select[-9:] == "master.h5" :
-                self.nexus_type = True
-                file_path_str = str_select
+        if str_select != "":
+            self.dir_selected = isdir
+            if self.dir_selected:
+                self.imp_txt.setText(str_select)
 
             else:
-                self.nexus_type = False
-                file_path_str = build_template(str_select)[0]
+                if str_select[-4:]  == ".nxs" or str_select[-9:] == "master.h5" :
+                    self.nexus_type = True
+                    file_path_str = str_select
 
-            self.imp_txt.setText(file_path_str)
+                else:
+                    self.nexus_type = False
+                    file_path_str = build_template(str_select)[0]
 
-        self.line_changed()
+                self.imp_txt.setText(file_path_str)
+
+            self.line_changed()
+
+        else:
+            print("no selection ( canceled? )")
 
     def open_dir_widget(self):
 
