@@ -10,16 +10,14 @@ logging.basicConfig(filename='run_dui2_all_local.log', level=logging.DEBUG)
 
 def get_other_procs():
     pid_me = int(os.getpid())
-    print("\n pid(me) =", pid_me)
+    logging.info("\n pid(me) =" + str(pid_me))
     list_2_remove = []
     for singl_proc in psutil.process_iter():
         lst4cmd = singl_proc.cmdline()
 
         try:
             if lst4cmd[-1][-12:] == "all_local.py":
-                #print("\nlst4cmd =", lst4cmd)
                 pid_num = int(singl_proc.pid)
-                #print("pid =", pid_num, "\n")
                 if pid_num != pid_me:
                     found_me = False
                     lst_child = []
@@ -27,16 +25,11 @@ def get_other_procs():
                     for child in main_proc.children(recursive=True):
                         child_pid = child.pid
                         lst_child.append(child_pid)
-                        #print("child.pid =", child_pid)
                         if child_pid == pid_me:
                             found_me = True
 
                     if not found_me:
                         lst_child.append(pid_num)
-                        '''
-                        for to_remove in lst_child:
-                            print("remove:", to_remove)
-                        '''
                         for to_remove in lst_child:
                             print("removing:", to_remove)
                             proc_2_remove = psutil.Process(to_remove)

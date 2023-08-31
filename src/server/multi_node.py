@@ -701,6 +701,7 @@ class Runner(object):
                     )
                     logging.info("... << run_predict_n_report >> ended")
                     print(" << run_predict_n_report >> done")
+                    logging.info(" << run_predict_n_report >> done")
 
                 elif unalias_cmd_lst == [['split_node']]:
                     try:

@@ -448,6 +448,7 @@ class ImportWidget(QWidget):
 
         else:
             print("no selection ( canceled? )")
+            logging.info("no selection ( canceled? )")
 
     def open_dir_widget(self):
 

@@ -81,6 +81,7 @@ class ReqHandler(object):
 
     def fake_get(self, url_dict = None, call_obj = None):
         print("url_dict =" + str(url_dict))
+        logging.info("url_dict =" + str(url_dict))
         #tmp_cmd2lst = url_dict["cmd_lst"]
         tmp_cmd2lst = url_dict["cmd_str"]
 

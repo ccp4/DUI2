@@ -335,7 +335,9 @@ def main(par_def = None, connection_out = None):
                 print(
                     "serving at:{host:" + str(HOST) + " port:" + str(PORT) + "}"
                 )
-
+                logging.info(
+                    "serving at:{host:" + str(HOST) + " port:" + str(PORT) + "}"
+                )
                 connection_out.send(PORT)
                 connection_out.close()
 
@@ -359,5 +361,6 @@ def main(par_def = None, connection_out = None):
 
     else:
         print("Port #", PORT, "seems to be busy, try later or change port #")
+        logging.info("Port #", PORT, "seems to be busy, try later or change port #")
         connection_out.send(None)
         connection_out.close()

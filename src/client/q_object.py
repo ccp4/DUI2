@@ -1356,7 +1356,7 @@ class MainObject(QObject):
 
         else:
             print("Cancel clicked to reset")
-
+            logging.info("Cancel clicked to reset")
 
     def respose_n1_from_reset(self, line):
         logging.info("respose_from_reset(err code):" + str(line))

@@ -81,7 +81,7 @@ class PathButtons(QWidget):
         for dir_name in new_list[:-1]:
             new_butt = QPushButton(dir_name)
             if dir_name == "":
-                print("empty dir_name")
+                logging.info("empty dir_name")
                 new_butt.setIcon(self._root_icon)
 
             path_str += dir_name + "/"
