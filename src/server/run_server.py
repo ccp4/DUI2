@@ -361,6 +361,6 @@ def main(par_def = None, connection_out = None):
 
     else:
         print("Port #", PORT, "seems to be busy, try later or change port #")
-        logging.info("Port #", PORT, "seems to be busy, try later or change port #")
+        logging.info("Port #" + str(PORT) + " seems to be busy")
         connection_out.send(None)
         connection_out.close()
