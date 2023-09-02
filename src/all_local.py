@@ -41,13 +41,14 @@ def get_other_procs():
         except psutil.AccessDenied:
             logging.info("psutil.AccessDenied Catch")
 
+        except psutil.NoSuchProcess:
+            print("psutil.NoSuchProcess Catch")
+
         except ProcessLookupError:
             logging.info("ProcessLookup Err Catch")
 
-            to_remove = '''
         except OSError:
             print("OS Err Catch")
-            '''
 
 
 if __name__ == '__main__':
