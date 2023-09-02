@@ -1,4 +1,5 @@
-import sys, os
+import sys, os, logging
+
 from PySide2.QtCore import *
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
