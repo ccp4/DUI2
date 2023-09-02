@@ -13,30 +13,41 @@ def get_other_procs():
     logging.info("\n pid(me) =" + str(pid_me))
     list_2_remove = []
     for singl_proc in psutil.process_iter():
-        lst4cmd = singl_proc.cmdline()
-
         try:
-            if lst4cmd[-1][-12:] == "all_local.py":
-                pid_num = int(singl_proc.pid)
-                if pid_num != pid_me:
-                    found_me = False
-                    lst_child = []
-                    main_proc = psutil.Process(pid_num)
-                    for child in main_proc.children(recursive=True):
-                        child_pid = child.pid
-                        lst_child.append(child_pid)
-                        if child_pid == pid_me:
-                            found_me = True
+            lst4cmd = singl_proc.cmdline()
+            try:
+                if lst4cmd[-1][-12:] == "all_local.py":
+                    pid_num = int(singl_proc.pid)
+                    if pid_num != pid_me:
+                        found_me = False
+                        lst_child = []
+                        main_proc = psutil.Process(pid_num)
+                        for child in main_proc.children(recursive=True):
+                            child_pid = child.pid
+                            lst_child.append(child_pid)
+                            if child_pid == pid_me:
+                                found_me = True
 
-                    if not found_me:
-                        lst_child.append(pid_num)
-                        for to_remove in lst_child:
-                            print("removing:", to_remove)
-                            proc_2_remove = psutil.Process(to_remove)
-                            proc_2_remove.kill()
+                        if not found_me:
+                            lst_child.append(pid_num)
+                            for to_remove in lst_child:
+                                print("removing:", to_remove)
+                                proc_2_remove = psutil.Process(to_remove)
+                                proc_2_remove.kill()
 
-        except IndexError:
-            pass
+            except IndexError:
+                pass
+
+        except psutil.AccessDenied:
+            logging.info("psutil.AccessDenied Catch")
+
+        except ProcessLookupError:
+            logging.info("ProcessLookup Err Catch")
+
+            to_remove = '''
+        except OSError:
+            print("OS Err Catch")
+            '''
 
 
 if __name__ == '__main__':
