@@ -628,7 +628,7 @@ class Runner(object):
 
     def run_dials_command(self, cmd_dict = None, req_obj = None):
         unalias_cmd_lst = unalias_full_cmd(cmd_dict["cmd_lst"])
-        logging.info(" cmd_lst: " + str(unalias_cmd_lst))
+        print(" cmd_lst: " + str(unalias_cmd_lst))
 
         tmp_parent_lst_in = []
         for lin2go in cmd_dict["nod_lst"]:

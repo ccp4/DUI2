@@ -62,6 +62,25 @@ def main(par_def = None, connection_out = None):
             post_body = self.rfile.read(content_len)
             body_str = str(post_body.decode('utf-8'))
             url_dict = parse_qs(body_str)
+
+            found_duplicated = False
+            for single_post in list_of_posts:
+                if single_post == url_dict:
+                    print("\n same POST request shall not duplicate")
+                    print("cmd_tree_runner.step_list =", cmd_tree_runner.step_list, "\n")
+                    for node in cmd_tree_runner.step_list:
+                        print("node.status =", node.status)
+
+                    found_duplicated = True
+
+            if found_duplicated:
+                return
+
+            else:
+                list_of_posts.append(url_dict)
+
+            print("list_of_posts =", list_of_posts)
+
             try:
                 tmp_cmd2lst = url_dict["cmd_lst"]
 
@@ -279,6 +298,8 @@ def main(par_def = None, connection_out = None):
 
     data_init = ini_data()
     data_init.set_data(par_def)
+
+    list_of_posts = []
 
     init_param = format_utils.get_par(par_def, sys.argv[1:])
     logging.info("init_param(server) =" + str(init_param))
