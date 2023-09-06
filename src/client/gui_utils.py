@@ -629,40 +629,44 @@ def draw_quadratic_bezier_3_points(
 
 def copy_lst_nodes(old_lst_nodes):
     new_lst = []
-    for old_node in old_lst_nodes:
-        cp_new_node = {
-            "number": int(old_node["number"]),
-            "status": str(old_node["status"]),
-        }
-        new_child_node_lst = []
-        for child_node in old_node["child_node_lst"]:
-            new_child_node_lst.append(int(child_node))
+    try:
+        for old_node in old_lst_nodes:
+            cp_new_node = {
+                "number": int(old_node["number"]),
+                "status": str(old_node["status"]),
+            }
+            new_child_node_lst = []
+            for child_node in old_node["child_node_lst"]:
+                new_child_node_lst.append(int(child_node))
 
-        cp_new_node["child_node_lst"] = new_child_node_lst
+            cp_new_node["child_node_lst"] = new_child_node_lst
 
-        new_parent_node_lst = []
-        for parent_node in old_node["parent_node_lst"]:
-            new_parent_node_lst.append(int(parent_node))
+            new_parent_node_lst = []
+            for parent_node in old_node["parent_node_lst"]:
+                new_parent_node_lst.append(int(parent_node))
 
-        cp_new_node["parent_node_lst"] = new_parent_node_lst
+            cp_new_node["parent_node_lst"] = new_parent_node_lst
 
-        new_cmd2show = []
-        for cmd in old_node["cmd2show"]:
-            new_cmd2show.append(str(cmd))
+            new_cmd2show = []
+            for cmd in old_node["cmd2show"]:
+                new_cmd2show.append(str(cmd))
 
-        cp_new_node["cmd2show"] = new_cmd2show
+            cp_new_node["cmd2show"] = new_cmd2show
 
-        new_lst2run = []
-        for cmd_lst in old_node["lst2run"]:
-            inner_lst = []
-            for inner_cmd in cmd_lst:
-                inner_lst.append(str(inner_cmd))
+            new_lst2run = []
+            for cmd_lst in old_node["lst2run"]:
+                inner_lst = []
+                for inner_cmd in cmd_lst:
+                    inner_lst.append(str(inner_cmd))
 
-            new_lst2run.append(inner_lst)
+                new_lst2run.append(inner_lst)
 
-        cp_new_node["lst2run"] = new_lst2run
+            cp_new_node["lst2run"] = new_lst2run
 
-        new_lst.append(cp_new_node)
+            new_lst.append(cp_new_node)
+
+    except TypeError:
+        print("ERR catch on copy_lst_nodes")
 
     return new_lst
 

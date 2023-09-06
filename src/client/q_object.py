@@ -1257,7 +1257,10 @@ class MainObject(QObject):
         lst_req = get_req_json_dat(
             params_in = cmd, main_handler = self.runner_handler
         )
-        self.server_nod_lst = lst_req.result_out()
+        req_lst = lst_req.result_out()
+        if req_lst is not None:
+            self.server_nod_lst = req_lst
+
         self.display()
 
     def on_clone(self):
