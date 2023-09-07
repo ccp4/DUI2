@@ -179,7 +179,7 @@ def main(par_def = None, connection_out = None):
             url_path = self.path
             url_dict = parse_qs(urlparse(url_path).query)
             try:
-                tmp_cmd2lst = url_dict["cmd_str"]
+                lst_wt_cmd =  url_dict["cmd_str"]
 
             except KeyError:
                 logging.info("no command in request (Key err catch )")
@@ -200,12 +200,6 @@ def main(par_def = None, connection_out = None):
                     str_out = '/*EOF*/', req_obj = self, out_type = 'utf-8'
                 )
                 return
-            to_remove = '''
-            lst_wt_cmd = []
-            for inner_str in tmp_cmd2lst:
-                lst_wt_cmd.append(inner_str.split(" "))
-            '''
-            lst_wt_cmd = tmp_cmd2lst
 
             nod_lst = []
             try:
