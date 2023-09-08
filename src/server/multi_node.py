@@ -602,9 +602,9 @@ class CmdNode(object):
 
         return j_obj
 
-
 class Runner(object):
     def __init__(self, recovery_data = None, dat_ini = None):
+        #self.list_of_posts = []
         self.tree_output = format_utils.TreeShow()
         if dat_ini == None:
             from server.init_first import ini_data
@@ -628,6 +628,19 @@ class Runner(object):
 
     def run_dials_command(self, cmd_dict = None, req_obj = None):
         unalias_cmd_lst = unalias_full_cmd(cmd_dict["cmd_lst"])
+
+        found_duplicated = False
+        for single_post in self.step_list:
+            #print("single_post.status =", single_post.status)
+
+            if single_post.full_cmd_lst[0][0] == unalias_cmd_lst[0][0]:
+                print("\n same POST request shall not duplicate \n")
+                found_duplicated = True
+
+        if found_duplicated:
+            return
+
+
         print(" cmd_lst: " + str(unalias_cmd_lst))
 
         tmp_parent_lst_in = []
