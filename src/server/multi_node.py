@@ -217,6 +217,7 @@ class CmdNode(object):
         self._predic_refl = None
         self._lst_expt_out = []
         self._lst_refl_out = []
+        self.cmd_dict_ini = None
         self.lst2run = []
         self.full_cmd_lst = []
         self._run_dir = ""
@@ -627,22 +628,19 @@ class Runner(object):
         #self.lst_cmd_in = []
 
     def run_dials_command(self, cmd_dict = None, req_obj = None):
-        unalias_cmd_lst = unalias_full_cmd(cmd_dict["cmd_lst"])
 
         found_duplicated = False
-        for single_post in self.step_list:
-            #print("single_post.status =", single_post.status)
+        for single_step in self.step_list:
+            #print("single_step.status =", single_step.status)
 
-            if single_post.full_cmd_lst[0][0] == unalias_cmd_lst[0][0]:
+            if single_step.cmd_dict_ini == cmd_dict:
                 print("\n same POST request shall not duplicate \n")
                 found_duplicated = True
 
         if found_duplicated:
             return
 
-
-        print(" cmd_lst: " + str(unalias_cmd_lst))
-
+        unalias_cmd_lst = unalias_full_cmd(cmd_dict["cmd_lst"])
         tmp_parent_lst_in = []
         for lin2go in cmd_dict["nod_lst"]:
             for node in self.step_list:
@@ -650,6 +648,7 @@ class Runner(object):
                     tmp_parent_lst_in.append(node)
 
         node2run = self._create_step(tmp_parent_lst_in)
+        node2run.cmd_dict_ini = cmd_dict
         for uni_cmd in unalias_cmd_lst:
             try:
                 node2run(uni_cmd, req_obj)
@@ -855,6 +854,7 @@ class Runner(object):
                 parent_lst_in = None, data_init = self.data_init
             )
             new_node._base_dir       = str(node._base_dir)
+            new_node.cmd_dict_ini    = node.cmd_dict_ini
             new_node.full_cmd_lst    = list(node.full_cmd_lst)
             new_node.lst2run         = list(node.lst2run)
             new_node._lst_expt_in    = list(node._lst_expt_in)
@@ -933,6 +933,7 @@ class Runner(object):
         for uni in self.step_list:
             node = {
                         "_base_dir"             :uni._base_dir,
+                        "cmd_dict_ini"          :uni.cmd_dict_ini,
                         "full_cmd_lst"          :uni.full_cmd_lst,
                         "lst2run"               :uni.lst2run,
                         "_lst_expt_in"          :uni._lst_expt_in,
@@ -968,6 +969,7 @@ class Runner(object):
                 parent_lst_in = None, data_init = self.data_init
             )
             new_node._base_dir       = uni_dic["_base_dir"]
+            new_node.cmd_dict_ini    = uni_dic["cmd_dict_ini"]
             new_node.full_cmd_lst    = uni_dic["full_cmd_lst"]
             new_node.lst2run         = uni_dic["lst2run"]
             new_node._lst_expt_in    = uni_dic["_lst_expt_in"]
