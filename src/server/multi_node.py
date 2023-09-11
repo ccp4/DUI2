@@ -946,9 +946,9 @@ class Runner(object):
                         "_predic_refl"          :uni._predic_refl,
                         "log_file_path"         :uni.log_file_path,
                         "number"                :uni.number,
-                        "status"                :uni.status,
                         "parent_node_lst"       :uni.parent_node_lst,
-                        "child_node_lst"        :uni.child_node_lst
+                        "child_node_lst"        :uni.child_node_lst,
+                        "status"                :uni.status
             }
             lst_nod.append(node)
 
@@ -982,9 +982,13 @@ class Runner(object):
             new_node._predic_refl    = uni_dic["_predic_refl"]
             new_node.log_file_path   = uni_dic["log_file_path"]
             new_node.number          = uni_dic["number"]
-            new_node.status          = uni_dic["status"]
             new_node.child_node_lst  = uni_dic["child_node_lst"]
             new_node.parent_node_lst = uni_dic["parent_node_lst"]
+            new_node.status          = uni_dic["status"]
+
+            if new_node.status == "Busy":
+                new_node.status = "Failed"
+
             self.step_list.append(new_node)
 
     def set_dir_path(self, dir_path_in):
