@@ -631,9 +631,10 @@ class Runner(object):
 
         found_duplicated = False
         for single_step in self.step_list:
-            #print("single_step.status =", single_step.status)
-
-            if single_step.cmd_dict_ini == cmd_dict:
+            if(
+                single_step.cmd_dict_ini == cmd_dict and
+                single_step.status == "Busy"
+            ):
                 print("\n same POST request shall not duplicate \n")
                 found_duplicated = True
 
