@@ -281,7 +281,7 @@ class CmdNode(object):
         self._base_dir = dir_in
 
     def set_run_dir(self, num = None):
-        self._run_dir = self._base_dir + "/run" + str(num)
+        self._run_dir = self._base_dir + os.sep + "run" + str(num)
         try:
             os.mkdir(self._run_dir)
 
