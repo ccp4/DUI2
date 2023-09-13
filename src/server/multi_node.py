@@ -243,7 +243,7 @@ class CmdNode(object):
                     logging.info(
                         "after refine_bravais_settings, adding json files"
                     )
-                    lst_json = glob.glob(single_parent._run_dir + "/*.json")
+                    lst_json = glob.glob(single_parent._run_dir + os.sep + "*.json")
                     for json_2_add in lst_json:
                         self._lst_expt_in.append(json_2_add)
 
@@ -338,12 +338,12 @@ class CmdNode(object):
                 self.lst2run[-1].append(par)
 
     def set_exe_files_out(self):
-        self._lst_expt_out = glob.glob(self._run_dir + "/*.expt")
+        self._lst_expt_out = glob.glob(self._run_dir + os.sep + "*.expt")
         #TODO reconsider if the next if is needed for failed steps
         if self._lst_expt_out == []:
             self._lst_expt_out = list(self._lst_expt_in)
 
-        self._lst_refl_out = glob.glob(self._run_dir + "/*.refl")
+        self._lst_refl_out = glob.glob(self._run_dir + os.sep + "*.refl")
         #TODO reconsider if the next if is needed for failed steps
         if self._lst_refl_out == []:
             self._lst_refl_out = list(self._lst_refl_in)
@@ -383,7 +383,7 @@ class CmdNode(object):
 
         log_line_lst = []
         self.n_Broken_Pipes = 0
-        self.log_file_path = self._run_dir + "/out.log"
+        self.log_file_path = self._run_dir + os.sep + "out.log"
         new_line = None
         if self.nod_req is not None:
             try:
@@ -469,11 +469,11 @@ class CmdNode(object):
         new_line = "HTML Report + Reflection Prediction ... START"
         self.n_Broken_Pipes += add_log_line(new_line, self.nod_req)
 
-        tmp_html_path = self._run_dir + "/dials.report.html"
+        tmp_html_path = self._run_dir + os.sep + "dials.report.html"
 
         # if dials.(scale/merge) already generated an html file better use it
-        tmp_scale_html_path = self._run_dir + "/dials.scale.html"
-        tmp_merge_html_path = self._run_dir + "/dials.merge.html"
+        tmp_scale_html_path = self._run_dir + os.sep + "dials.scale.html"
+        tmp_merge_html_path = self._run_dir + os.sep + "dials.merge.html"
         if os.path.exists(tmp_scale_html_path):
             shutil.copy(tmp_scale_html_path, tmp_html_path)
 
@@ -554,7 +554,7 @@ class CmdNode(object):
         #logging.info("predict stdout <<< \n", lst_pred_out, "\n >>>")
 
 
-        tmp_predic_path = self._run_dir + "/predicted.refl"
+        tmp_predic_path = self._run_dir + os.sep + "predicted.refl"
         if os.path.exists(tmp_predic_path):
             self._predic_refl = tmp_predic_path
             new_line = "Reflection Prediction ready"
@@ -596,7 +596,7 @@ class CmdNode(object):
             )
 
     def get_bravais_summ(self):
-        brav_summ_path = str(self._run_dir + "/bravais_summary.json")
+        brav_summ_path = str(self._run_dir + os.sep + "bravais_summary.json")
         logging.info("brav_summ_path:" + brav_summ_path)
         with open(brav_summ_path) as summary_file:
             j_obj = json.load(summary_file)
@@ -868,7 +868,7 @@ class Runner(object):
             lst_nod_out.append(int(new_node.number))
 
             try:
-                new_node.log_file_path = new_node._run_dir + "/out.log"
+                new_node.log_file_path = new_node._run_dir + os.sep + "out.log"
                 shutil.copy(node.log_file_path, new_node._run_dir)
 
                 lof_file_2_apend = open(new_node.log_file_path, "a")
@@ -881,14 +881,14 @@ class Runner(object):
                 logging.info("No log file in:" + node.log_file_path)
 
             lst_cont_expt = glob.glob(
-                node._run_dir + "/*" + str(junior_number) + ".expt"
+                node._run_dir + os.sep + "*" + str(junior_number) + ".expt"
             )
             logging.info("lst_cont_expt =" + str(lst_cont_expt))
             for file_n in lst_cont_expt:
                 shutil.move(file_n, new_node._run_dir)
 
             lst_cont_refl = glob.glob(
-                node._run_dir + "/*" + str(junior_number) + ".refl"
+                node._run_dir + os.sep + "*" + str(junior_number) + ".refl"
             )
             logging.info("lst_cont_refl =" + str(lst_cont_refl))
             for file_n in lst_cont_refl:

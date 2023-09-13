@@ -469,11 +469,6 @@ class ImportWidget(QWidget):
             self.set_selection(str_select = str(file_in_path), isdir = False)
 
         else:
-            #init_path = "/home/"
-            #init_path = "/"
-            #init_path = "/Users/luiso/"
-            init_path = "/scratch/"
-
             cmd = {"nod_lst":"", "cmd_str":["dir_path"]}
             lst_req = get_req_json_dat(
                 params_in = cmd, main_handler = None
