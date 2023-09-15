@@ -305,6 +305,29 @@ def main(par_def = None, connection_out = None):
             logging.info(msg_txt)
             print(msg_txt)
 
+    guide_code = '''
+        self._run_dir = self._base_dir + os.sep + "run" + str(num)
+        try:
+            os.mkdir(self._run_dir)
+
+        except FileExistsError:
+            logging.info("assuming the command should run in same dir")
+
+        ####################################################################
+
+         os.chdir(path)
+            Change the current working directory to path.
+
+    '''
+    nodes_dir = "run_dui2_nodes"
+    try:
+        os.mkdir(nodes_dir)
+
+    except FileExistsError:
+        print("assuming Dui2 already ran here")
+
+    os.chdir(nodes_dir)
+
     try:
         with open("run_data") as json_file:
             runner_data = json.load(json_file)
