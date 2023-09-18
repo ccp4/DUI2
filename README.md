@@ -25,15 +25,15 @@ There are three available command line tools after installation:
 
 1. Fully local App (running both, server and client locally)
 
-       dui_all_local
+       dui2
 
 2. Server App (Which actually runs Dials commands)
 
-       dui_server host=MY_HOST port=MY_PORT init_path=/PATH/TO/USER/DATA
+       dui2_server_side host=MY_HOST port=MY_PORT init_path=/PATH/TO/USER/DATA
 
 3. Client App (GUI front end that talks to the server app)
 
-       dui_client url=http://...[URL of the server]
+       dui2_client_app url=http://...[URL of the server]
 
 ## Option 2, Installation of everything (including Dials) with conda and git
 

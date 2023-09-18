@@ -38,7 +38,7 @@ def main(par_def = None):
     tree_ini_path = init_param["init_path"]
     if tree_ini_path == None:
         logging.info("\n NOT GIVEN init_path")
-        logging.info(" using the dir from where the commad 'dui_server' was invoqued")
+        logging.info(" using the dir from where the commad 'dui2_server_side' was invoqued")
         tree_ini_path = os.getcwd()
 
     try:
