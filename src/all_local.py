@@ -51,8 +51,8 @@ def get_other_procs():
             logging.info("OS Err Catch")
 
 
-if __name__ == '__main__':
 
+def main():
     print("\n platform.system()", platform.system())
 
     get_other_procs()
@@ -93,3 +93,6 @@ if __name__ == '__main__':
 
         prcs_serv.join()
         logging.info("Closing server naturally")
+
+if __name__ == '__main__':
+    main()
