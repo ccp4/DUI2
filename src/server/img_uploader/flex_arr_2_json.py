@@ -330,13 +330,17 @@ def get_correct_img_num_n_sweep_num(experiments, img_num):
 def get_json_w_img_2d(experiments_list_path, img_num):
     experiments = get_experiments(experiments_list_path[0])
     if experiments is not None:
-        pan_num = 0
         on_sweep_img_num, n_sweep = get_correct_img_num_n_sweep_num(
             experiments, img_num
         )
 
         my_sweep = experiments.imagesets()[n_sweep]
+        pan_num = 0
         data_xy_flex = my_sweep.get_raw_data(on_sweep_img_num)[pan_num].as_double()
+        print(
+            "len(my_sweep.get_raw_data(on_sweep_img_num))",
+             len(my_sweep.get_raw_data(on_sweep_img_num))
+        )
 
         start_tm = time.time()
         np_arr = data_xy_flex.as_numpy_array()
@@ -352,6 +356,41 @@ def get_json_w_img_2d(experiments_list_path, img_num):
 
     else:
         return None
+
+
+copy_pasted_from_Dui1 = '''
+
+    if type(pan_num) is int:
+        return my_sweep.get_raw_data(img_pos)[pan_num].as_double()
+
+    elif type(pan_num) is tuple:
+        top_pan = my_sweep.get_raw_data(img_pos)[pan_num[0]].as_numpy_array()
+
+        p_siz0 = np.size(top_pan[:, 0:1])
+        p_siz1 = np.size(top_pan[0:1, :])
+
+        p_siz_bg = p_siz0 + 18
+        im_siz0 = p_siz_bg * len(pan_num)
+        im_siz1 = p_siz1
+
+        np_img = np.zeros((im_siz0, im_siz1), dtype=np.double)
+        np_img[:, :] = -1
+        np_img[0:p_siz0, 0:p_siz1] = top_pan[:, :]
+
+        for s_num in pan_num[1:]:
+            pan_dat = my_sweep.get_raw_data(img_pos)[pan_num[s_num]].as_numpy_array()
+            np_img[s_num * p_siz_bg : s_num * p_siz_bg + p_siz0, 0:p_siz1] = pan_dat[
+                :, :
+            ]
+
+        img_flex = flex.double(np_img)
+        return img_flex
+
+    else:
+        logger.info("\n something went wrong here (panel_data_as_double) \n")
+
+
+'''
 
 
 def get_json_w_mask_img_2d(experiments_list_path, img_num):
