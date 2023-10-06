@@ -10,8 +10,6 @@ import json, logging
 import time
 import pickle
 
-from dxtbx.datablock import DataBlockFactory
-from dxtbx.model import Experiment, ExperimentList
 from dxtbx.model.experiment_list import ExperimentListFactory
 
 
