@@ -6,11 +6,12 @@ except ImportError:
     import img_stream_py
 
 from dials.array_family import flex
+from dxtbx.model.experiment_list import ExperimentListFactory
+
 import json, logging
 import time
 import pickle
-
-from dxtbx.model.experiment_list import ExperimentListFactory
+import numpy as np
 
 
 def get_experiments(experiment_path):
@@ -328,28 +329,51 @@ def get_correct_img_num_n_sweep_num(experiments, img_num):
 def get_json_w_img_2d(experiments_list_path, img_num):
     experiments = get_experiments(experiments_list_path[0])
     if experiments is not None:
+        start_tm = time.time()
+
         on_sweep_img_num, n_sweep = get_correct_img_num_n_sweep_num(
             experiments, img_num
         )
 
         my_sweep = experiments.imagesets()[n_sweep]
-        pan_num = 0
-        data_xy_flex = my_sweep.get_raw_data(on_sweep_img_num)[pan_num].as_double()
-        print(
-            "len(my_sweep.get_raw_data(on_sweep_img_num))",
-             len(my_sweep.get_raw_data(on_sweep_img_num))
-        )
+        raw_dat = my_sweep.get_raw_data(on_sweep_img_num)
 
-        start_tm = time.time()
-        np_arr = data_xy_flex.as_numpy_array()
+        pan_tup = tuple(range(24))
+        if len(raw_dat) == 24:
+            print("24 panels, assuming i23 data")
+
+            top_pan = raw_dat[pan_tup[0]].as_numpy_array()
+
+            p_siz0 = np.size(top_pan[:, 0:1])
+            p_siz1 = np.size(top_pan[0:1, :])
+
+            p_siz_bg = p_siz0 + 18
+            im_siz0 = p_siz_bg * len(pan_tup)
+            im_siz1 = p_siz1
+
+            np_arr = np.zeros((im_siz0, im_siz1), dtype=np.double)
+            np_arr[:, :] = -1
+            np_arr[0:p_siz0, 0:p_siz1] = top_pan[:, :]
+
+            for s_num in pan_tup[1:]:
+                pan_dat = raw_dat[pan_tup[s_num]].as_numpy_array()
+                np_arr[
+                    s_num * p_siz_bg : s_num * p_siz_bg + p_siz0, 0:p_siz1
+                ] = pan_dat[:, :]
+
+        else:
+            print("Using the first panel only")
+            data_xy_flex = raw_dat[0].as_double()
+            np_arr = data_xy_flex.as_numpy_array()
+
         d1 = np_arr.shape[0]
         d2 = np_arr.shape[1]
         str_tup = str(tuple(np_arr.ravel()))
         str_data = "{\"d1\":" + str(d1) + ",\"d2\":" + str(d2) \
                  + ",\"str_data\":\"" + str_tup[1:-1] + "\"}"
 
-        end_tm = time.time()
 
+        end_tm = time.time()
         return str_data
 
     else:
