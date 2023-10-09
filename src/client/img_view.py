@@ -1224,10 +1224,12 @@ class DoImageView(QObject):
                     relative_new_scale > 1.0 and  dx > 10 and dy > 10
                 ) or (
                     relative_new_scale < 1.0 and (
-                        dx <= self.img_d1_d2[0] or dy <= self.img_d1_d2[1]
+                        dx <= self.img_d1_d2[0]
+                        or dy <= self.img_d1_d2[1]
                     )
                 )
             ):
+
                 self.main_obj.window.imageView.scale(
                     relative_new_scale, relative_new_scale
                 )
