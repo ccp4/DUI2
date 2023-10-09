@@ -1,5 +1,4 @@
 try:
-    #from img_uploader import img_stream_py
     from server.img_uploader import img_stream_py
 
 except ImportError:
@@ -326,53 +325,23 @@ def get_correct_img_num_n_sweep_num(experiments, img_num):
 
     return on_sweep_img_num, n_sweep
 
+
 def get_json_w_img_2d(experiments_list_path, img_num):
     experiments = get_experiments(experiments_list_path[0])
     if experiments is not None:
-        start_tm = time.time()
 
         on_sweep_img_num, n_sweep = get_correct_img_num_n_sweep_num(
             experiments, img_num
         )
-
         my_sweep = experiments.imagesets()[n_sweep]
         raw_dat = my_sweep.get_raw_data(on_sweep_img_num)
-
-        if len(raw_dat) == 24:
-            print("24 panels, assuming i23 data")
-            pan_tup = tuple(range(24))
-            top_pan = raw_dat[pan_tup[0]].as_numpy_array()
-
-            p_siz0 = np.size(top_pan[:, 0:1])
-            p_siz1 = np.size(top_pan[0:1, :])
-
-            p_siz_bg = p_siz0 + 18
-            im_siz0 = p_siz_bg * len(pan_tup)
-            im_siz1 = p_siz1
-
-            np_arr = np.zeros((im_siz0, im_siz1), dtype=np.double)
-            np_arr[:, :] = -1
-            np_arr[0:p_siz0, 0:p_siz1] = top_pan[:, :]
-
-            for s_num in pan_tup[1:]:
-                pan_dat = raw_dat[pan_tup[s_num]].as_numpy_array()
-                np_arr[
-                    s_num * p_siz_bg : s_num * p_siz_bg + p_siz0, 0:p_siz1
-                ] = pan_dat[:, :]
-
-        else:
-            print("Using the first panel only")
-            data_xy_flex = raw_dat[0].as_double()
-            np_arr = data_xy_flex.as_numpy_array()
-
+        np_arr = img_stream_py.get_np_full_img(raw_dat)
         d1 = np_arr.shape[0]
         d2 = np_arr.shape[1]
         str_tup = str(tuple(np_arr.ravel()))
         str_data = "{\"d1\":" + str(d1) + ",\"d2\":" + str(d2) \
                  + ",\"str_data\":\"" + str_tup[1:-1] + "\"}"
 
-
-        end_tm = time.time()
         return str_data
 
     else:
@@ -414,15 +383,13 @@ def get_json_w_2d_slise(experiments_list_path, img_num, inv_scale, x1, y1, x2, y
         )
 
         my_sweep = experiments.imagesets()[n_sweep]
-        data_xy_flex = my_sweep.get_raw_data(on_sweep_img_num)[pan_num].as_double()
+        data_xy_flex = my_sweep.get_raw_data(on_sweep_img_num)
 
-        start_tm = time.time()
         str_data = img_stream_py.slice_arr_2_str(
             data_xy_flex, inv_scale,
             int(float(x1)), int(float(y1)),
             int(float(x2)), int(float(y2))
         )
-        end_tm = time.time()
 
         if str_data == "Error":
             logging.info('str_data == "Error"')
@@ -439,7 +406,6 @@ def get_json_w_2d_mask_slise(
 ):
     experiments = get_experiments(experiments_list_path[0])
     if experiments is not None:
-        pan_num = 0
         on_sweep_img_num, n_sweep = get_correct_img_num_n_sweep_num(
             experiments, img_num
         )

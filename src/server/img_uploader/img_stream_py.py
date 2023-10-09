@@ -1,8 +1,40 @@
 import numpy as np
 import time, logging
+
+def get_np_full_img(raw_dat):
+    if len(raw_dat) == 24:
+        print("24 panels, assuming i23 data")
+        pan_tup = tuple(range(24))
+        top_pan = raw_dat[pan_tup[0]].as_numpy_array()
+
+        p_siz0 = np.size(top_pan[:, 0:1])
+        p_siz1 = np.size(top_pan[0:1, :])
+
+        p_siz_bg = p_siz0 + 18
+        im_siz0 = p_siz_bg * len(pan_tup)
+        im_siz1 = p_siz1
+
+        np_arr = np.zeros((im_siz0, im_siz1), dtype=np.double)
+        np_arr[:, :] = -1
+        np_arr[0:p_siz0, 0:p_siz1] = top_pan[:, :]
+
+        for s_num in pan_tup[1:]:
+            pan_dat = raw_dat[pan_tup[s_num]].as_numpy_array()
+            np_arr[
+                s_num * p_siz_bg : s_num * p_siz_bg + p_siz0, 0:p_siz1
+            ] = pan_dat[:, :]
+
+    else:
+        print("Using the first panel only")
+        data_xy_flex = raw_dat[0].as_double()
+        np_arr = data_xy_flex.as_numpy_array()
+
+    return np_arr
+
+
+
 def slice_arr_2_str( data2d, inv_scale, x1, y1, x2, y2):
-    data_xy_flex = data2d.as_double()
-    big_np_arr = data_xy_flex.as_numpy_array()
+    big_np_arr = get_np_full_img(data2d)
 
     big_d1 = big_np_arr.shape[0]
     big_d2 = big_np_arr.shape[1]
@@ -13,10 +45,12 @@ def slice_arr_2_str( data2d, inv_scale, x1, y1, x2, y2):
         x1 > x2 or y1 > y2
     ):
         logging.info("\n ***  array bounding error  *** \n")
+        print("\n ***  array bounding error  *** \n")
         return "Error"
 
     else:
         logging.info(" array bounding OK ")
+        print(" array bounding OK ")
 
     np_arr = scale_np_arr(big_np_arr[x1:x2,y1:y2], inv_scale)
 
