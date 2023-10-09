@@ -56,8 +56,10 @@ def get_template_info(exp_path, img_num):
         str_json = my_sweep.get_template()
         img_path = my_sweep.get_path(on_sweep_img_num)
 
-        data_xy_flex = my_sweep.get_raw_data(0)[0].as_double()
-        img_with, img_height = data_xy_flex.all()[0:2]
+        raw_dat = my_sweep.get_raw_data(on_sweep_img_num)
+        np_arr = img_stream_py.get_np_full_img(raw_dat)
+        img_with, img_height = np_arr.shape[0], np_arr.shape[1]
+
         return [str_json, img_with, img_height, img_path, new_img_num]
 
     except IndexError:
