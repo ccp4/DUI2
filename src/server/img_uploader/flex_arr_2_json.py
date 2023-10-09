@@ -348,32 +348,6 @@ def get_json_w_img_2d(experiments_list_path, img_num):
         return None
 
 
-def get_json_w_mask_img_2d(experiments_list_path, img_num):
-    experiments = get_experiments(experiments_list_path[0])
-    if experiments is not None:
-        pan_num = 0
-        on_sweep_img_num, n_sweep = get_correct_img_num_n_sweep_num(
-            experiments, img_num
-        )
-
-        try:
-            imageset_tmp = experiments.imagesets()[n_sweep]
-            mask_file = imageset_tmp.external_lookup.mask.filename
-            pick_file = open(mask_file, "rb")
-            mask_tup_obj = pickle.load(pick_file)
-            pick_file.close()
-            mask_flex = mask_tup_obj[0]
-            str_data = img_stream_py.mask_arr_2_str(mask_flex)
-
-        except FileNotFoundError:
-            str_data = None
-
-        return str_data
-
-    else:
-        return None
-
-
 def get_json_w_2d_slise(experiments_list_path, img_num, inv_scale, x1, y1, x2, y2):
     experiments = get_experiments(experiments_list_path[0])
     if experiments is not None:
@@ -393,6 +367,32 @@ def get_json_w_2d_slise(experiments_list_path, img_num, inv_scale, x1, y1, x2, y
 
         if str_data == "Error":
             logging.info('str_data == "Error"')
+            str_data = None
+
+        return str_data
+
+    else:
+        return None
+
+
+def get_json_w_mask_img_2d(experiments_list_path, img_num):
+    experiments = get_experiments(experiments_list_path[0])
+    if experiments is not None:
+        pan_num = 0
+        on_sweep_img_num, n_sweep = get_correct_img_num_n_sweep_num(
+            experiments, img_num
+        )
+
+        try:
+            imageset_tmp = experiments.imagesets()[n_sweep]
+            mask_file = imageset_tmp.external_lookup.mask.filename
+            pick_file = open(mask_file, "rb")
+            mask_tup_obj = pickle.load(pick_file)
+            pick_file.close()
+            mask_flex = mask_tup_obj[0]
+            str_data = img_stream_py.mask_arr_2_str(mask_flex)
+
+        except FileNotFoundError:
             str_data = None
 
         return str_data
