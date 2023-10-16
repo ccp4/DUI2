@@ -715,6 +715,10 @@ class DoImageView(QObject):
                 json_data_lst[1], json_data_lst[2]
             )
             new_img_path = str(json_data_lst[3])
+
+            self.i23_multipanel = bool(json_data_lst[5])
+            print("\n Is I23 multidetector:", self.i23_multipanel, "\n")
+
             if self.img_path != new_img_path:
                 x_ax = np.arange(
                     start = -self.img_d1_d2[1] / 2,
@@ -1385,11 +1389,12 @@ class DoImageView(QObject):
 
                     self.new_mask_comp.emit(
                         {
-                            "type"  : "rect" ,
-                            "x_ini" : x_ini ,
-                            "x_end" : x_end ,
-                            "y_ini" : y_ini ,
-                            "y_end" : y_end ,
+                            "type"              : "rect" ,
+                            "x_ini"             : x_ini ,
+                            "x_end"             : x_end ,
+                            "y_ini"             : y_ini ,
+                            "y_end"             : y_end ,
+                            "i23_multipanel"    : self.i23_multipanel,
                         }
                     )
 
@@ -1399,10 +1404,11 @@ class DoImageView(QObject):
                     r = int(np.sqrt(dx * dx + dy * dy))
                     self.new_mask_comp.emit(
                         {
-                            "type"  : "circ" ,
-                            "x_c"   : int(self.mask_x_ini) ,
-                            "y_c"   : int(self.mask_y_ini) ,
-                            "r"     : r ,
+                            "type"              : "circ" ,
+                            "x_c"               : int(self.mask_x_ini) ,
+                            "y_c"               : int(self.mask_y_ini) ,
+                            "r"                 : r ,
+                            "i23_multipanel"    : self.i23_multipanel,
                         }
                     )
 
@@ -1438,11 +1444,12 @@ class DoImageView(QObject):
 
                     self.new_mask_comp.emit(
                         {
-                            "type"  : "poly" ,
-                            "x_ini" : x_ini ,
-                            "x_end" : x_end ,
-                            "y_ini" : y_ini ,
-                            "y_end" : y_end ,
+                            "type"              : "poly" ,
+                            "x_ini"             : x_ini ,
+                            "x_end"             : x_end ,
+                            "y_ini"             : y_ini ,
+                            "y_end"             : y_end ,
+                            "i23_multipanel"    : self.i23_multipanel,
                         }
                     )
 

@@ -744,6 +744,13 @@ class MaskWidget(QWidget):
         self.cmd_label.setText(label_str)
 
     def get_new_comp(self, comp_dict):
+
+        print("\n\n Editing Mask in memory ")
+        print(
+            "comp_dict.i23_multipanel =", comp_dict["i23_multipanel"], "\n\n"
+        )
+
+
         if comp_dict["type"] == "rect":
             inner_lst_pair = [
                 "untrusted.rectangle",

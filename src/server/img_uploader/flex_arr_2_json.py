@@ -57,10 +57,10 @@ def get_template_info(exp_path, img_num):
         img_path = my_sweep.get_path(on_sweep_img_num)
 
         raw_dat = my_sweep.get_raw_data(on_sweep_img_num)
-        np_arr = img_stream_py.get_np_full_img(raw_dat)
+        np_arr, i23_multipanel = img_stream_py.get_np_full_img(raw_dat)
         img_with, img_height = np_arr.shape[0], np_arr.shape[1]
 
-        return [str_json, img_with, img_height, img_path, new_img_num]
+        return [str_json, img_with, img_height, img_path, new_img_num, i23_multipanel]
 
     except IndexError:
         logging.info(" *** Index err catch  in template ***")
@@ -337,7 +337,7 @@ def get_json_w_img_2d(experiments_list_path, img_num):
         )
         my_sweep = experiments.imagesets()[n_sweep]
         raw_dat = my_sweep.get_raw_data(on_sweep_img_num)
-        np_arr = img_stream_py.get_np_full_img(raw_dat)
+        np_arr, i23_multipanel = img_stream_py.get_np_full_img(raw_dat)
         d1 = np_arr.shape[0]
         d2 = np_arr.shape[1]
         str_tup = str(tuple(np_arr.ravel()))

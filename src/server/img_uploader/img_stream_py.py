@@ -2,7 +2,9 @@ import numpy as np
 import time, logging
 
 def get_np_full_img(raw_dat):
+    i23_multipanel = False
     if len(raw_dat) == 24:
+        i23_multipanel = True
         logging.info("24 panels, assuming i23 data")
         pan_tup = tuple(range(24))
         top_pan = raw_dat[pan_tup[0]].as_numpy_array()
@@ -29,12 +31,12 @@ def get_np_full_img(raw_dat):
         data_xy_flex = raw_dat[0].as_double()
         np_arr = data_xy_flex.as_numpy_array()
 
-    return np_arr
+    return np_arr, i23_multipanel
 
 
 
 def slice_arr_2_str( data2d, inv_scale, x1, y1, x2, y2):
-    big_np_arr = get_np_full_img(data2d)
+    big_np_arr, i23_multipanel = get_np_full_img(data2d)
 
     big_d1 = big_np_arr.shape[0]
     big_d2 = big_np_arr.shape[1]
