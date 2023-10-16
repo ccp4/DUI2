@@ -750,21 +750,35 @@ class MaskWidget(QWidget):
             "comp_dict.i23_multipanel =", comp_dict["i23_multipanel"], "\n\n"
         )
 
+        if comp_dict["i23_multipanel"]:
+            extra_str_param = ",5"
+
+        else:
+            extra_str_param = ""
 
         if comp_dict["type"] == "rect":
-            inner_lst_pair = [
-                "untrusted.rectangle",
-                str(comp_dict["x_ini"]) + "," + str(comp_dict["x_end"]) + "," +
-                str(comp_dict["y_ini"]) + "," + str(comp_dict["y_end"]) + ","
-            ]
+            str_cmd_nam = "untrusted.rectangle"
+            str_cmd_param =        str(comp_dict["x_ini"])
+            str_cmd_param += "," + str(comp_dict["x_end"])
+            str_cmd_param += "," + str(comp_dict["y_ini"])
+            str_cmd_param += "," + str(comp_dict["y_end"])
+            str_cmd_param += extra_str_param
+            inner_lst_pair = [str_cmd_nam, str_cmd_param]
+
+            print("inner_lst_pair =", inner_lst_pair)
+
             self.comp_list.append(inner_lst_pair)
 
         elif comp_dict["type"] == "circ":
-            inner_lst_pair = [
-                "untrusted.circle",
-                str(comp_dict["x_c"]) + "," + str(comp_dict["y_c"]) + "," +
-                str(comp_dict["r"]) + "," ,
-            ]
+            str_cmd_nam = "untrusted.circle"
+            str_cmd_param =        str(comp_dict["x_c"])
+            str_cmd_param += "," + str(comp_dict["y_c"])
+            str_cmd_param += "," + str(comp_dict["r"])
+            str_cmd_param += extra_str_param
+            inner_lst_pair = [str_cmd_nam, str_cmd_param]
+
+            print("inner_lst_pair =", inner_lst_pair)
+
             self.comp_list.append(inner_lst_pair)
 
         elif comp_dict["type"] == "poly":
