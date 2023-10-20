@@ -391,8 +391,8 @@ def get_json_w_mask_img_2d(experiments_list_path, img_num):
             pick_file = open(mask_file, "rb")
             mask_tup_obj = pickle.load(pick_file)
             pick_file.close()
-            mask_flex = mask_tup_obj[0]
-            str_data = img_stream_py.mask_arr_2_str(mask_flex)
+
+            str_data, i23_multipanel = img_stream_py.get_np_full_mask(mask_tup_obj)
 
         except FileNotFoundError:
             str_data = None

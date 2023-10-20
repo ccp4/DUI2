@@ -319,15 +319,33 @@ class ImgGraphicsScene(QGraphicsScene):
                 if pict[0] == 'untrusted.rectangle':
                     tmp_width = lst_num[1] - lst_num[0]
                     tmp_height = lst_num[3] - lst_num[2]
+
+                    x_rect_1 = lst_num[0]
+                    y_rect_1 = lst_num[2]
+                    try:
+                        y_rect_1 += 213 * lst_num[4]
+
+                    except IndexError:
+                        print("no pannel number provided, not adding to Y ")
+
                     rectangle = QRectF(
-                        lst_num[0], lst_num[2], tmp_width, tmp_height
+                        x_rect_1, y_rect_1, tmp_width, tmp_height
                     )
                     self.addRect(rectangle, self.overlay_pen)
 
                 elif pict[0] == 'untrusted.circle':
+
+                    x_rect_1 = lst_num[0] - lst_num[2]
+                    y_rect_1 = lst_num[1] - lst_num[2]
+                    side = 2 * lst_num[2]
+                    try:
+                        y_rect_1 += 213 * lst_num[3]
+
+                    except IndexError:
+                        print("no pannel number provided, not adding to Y ")
+
                     rectangle = QRectF(
-                        lst_num[0] - lst_num[2], lst_num[1] - lst_num[2],
-                        2 * lst_num[2], 2 * lst_num[2]
+                        x_rect_1, y_rect_1, side, side
                     )
                     self.addEllipse(rectangle, self.overlay_pen)
 

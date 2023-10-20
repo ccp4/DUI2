@@ -751,17 +751,37 @@ class MaskWidget(QWidget):
         )
 
         if comp_dict["i23_multipanel"]:
-            extra_str_param = ",5"
+            panel_hight = 213
 
         else:
-            extra_str_param = ""
+            panel_hight = -1
 
         if comp_dict["type"] == "rect":
+
+            tmp_yc = (
+                float(comp_dict["y_ini"]) +
+                float(comp_dict["y_end"])
+            ) / 2.0
+
+
+            if panel_hight > 0:
+                panel_number = int(tmp_yc / panel_hight)
+                print("panel_number =", panel_number)
+                y_orig = int(panel_number * panel_hight)
+                extra_str_param = "," + str(panel_number)
+
+            else:
+                extra_str_param = ""
+                y_orig = 0
+
+            new_y_ini = int(comp_dict["y_ini"]) - y_orig
+            new_y_end = int(comp_dict["y_end"]) - y_orig
+
             str_cmd_nam = "untrusted.rectangle"
             str_cmd_param =        str(comp_dict["x_ini"])
             str_cmd_param += "," + str(comp_dict["x_end"])
-            str_cmd_param += "," + str(comp_dict["y_ini"])
-            str_cmd_param += "," + str(comp_dict["y_end"])
+            str_cmd_param += "," + str(new_y_ini)
+            str_cmd_param += "," + str(new_y_end)
             str_cmd_param += extra_str_param
             inner_lst_pair = [str_cmd_nam, str_cmd_param]
 
@@ -770,11 +790,28 @@ class MaskWidget(QWidget):
             self.comp_list.append(inner_lst_pair)
 
         elif comp_dict["type"] == "circ":
+
+            tmp_yc = float(comp_dict["y_c"])
+
+
+            if panel_hight > 0:
+                panel_number = int(tmp_yc / panel_hight)
+                print("panel_number =", panel_number)
+                new_yc = int(tmp_yc - panel_number * panel_hight)
+                extra_str_param = "," + str(panel_number)
+
+            else:
+                new_yc = int(tmp_yc)
+                extra_str_param = ""
+
+
             str_cmd_nam = "untrusted.circle"
             str_cmd_param =        str(comp_dict["x_c"])
-            str_cmd_param += "," + str(comp_dict["y_c"])
+            str_cmd_param += "," + str(new_yc)
             str_cmd_param += "," + str(comp_dict["r"])
+
             str_cmd_param += extra_str_param
+            str_cmd_param = str(str_cmd_param)
             inner_lst_pair = [str_cmd_nam, str_cmd_param]
 
             print("inner_lst_pair =", inner_lst_pair)
