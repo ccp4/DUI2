@@ -419,15 +419,18 @@ def get_json_w_2d_mask_slise(
             mask_tup_obj = pickle.load(pick_file)
             pick_file.close()
 
-            mask_flex = mask_tup_obj[0]
-
-            start_tm = time.time()
-            str_data = img_stream_py.slice_mask_2_str(
+            '''mask_flex = mask_tup_obj[0]
+            str_data, i23_multipanel = img_stream_py.slice_mask_2_str(
                 mask_flex, inv_scale,
                 int(float(x1)), int(float(y1)),
                 int(float(x2)), int(float(y2))
+            )'''
+
+            str_data, i23_multipanel = img_stream_py.slice_mask_2_str(
+                mask_tup_obj, inv_scale,
+                int(float(x1)), int(float(y1)),
+                int(float(x2)), int(float(y2))
             )
-            end_tm = time.time()
 
             if str_data == "Error":
                 logging.info('str_data == "Error"')

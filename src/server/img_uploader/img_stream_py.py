@@ -100,51 +100,6 @@ def scale_np_arr(big_np_arr, inv_scale):
     rd_arr = np.round(small_arr, 1)
     return rd_arr
 
-'''
-def mask_arr_2_np(data2d_tupl):
-    print("len(data2d_tupl) =", len(data2d_tupl))
-    mask_flex = data2d_tupl[0]
-    return mask_np_2_str(mask_flex.as_numpy_array())
-'''
-
-
-def get_str_full_mask(raw_dat):
-    i23_multipanel = False
-    if len(raw_dat) == 24:
-        i23_multipanel = True
-        logging.info("24 panels, assuming i23 data(masking)")
-
-        pan_tup = tuple(range(24))
-        top_pan = raw_dat[pan_tup[0]].as_numpy_array()
-        p_siz0 = np.size(top_pan[:, 0:1])
-        p_siz1 = np.size(top_pan[0:1, :])
-        p_siz_bg = p_siz0 + 18
-
-        im_siz0 = p_siz_bg * len(pan_tup)
-        im_siz1 = p_siz1
-
-        np_arr_tmp = np.zeros((im_siz0, im_siz1), dtype=bool)
-        np_arr_tmp[:, :] = 1
-        np_arr_tmp[0:p_siz0, 0:p_siz1] = top_pan[:, :]
-
-        for s_num in pan_tup[1:]:
-            pan_dat = raw_dat[pan_tup[s_num]].as_numpy_array()
-            np_arr_tmp[
-                s_num * p_siz_bg : s_num * p_siz_bg + p_siz0, 0:p_siz1
-            ] = pan_dat[:, :]
-
-        np_arr = mask_np_2_str(np_arr_tmp)
-
-    else:
-        logging.info("Using the first panel only")
-        data_xy_flex = raw_dat[0]
-        np_arr = mask_np_2_str(data_xy_flex.as_numpy_array())
-
-    return np_arr, i23_multipanel
-
-
-
-
 
 def mask_np_2_str(bool_np_arr):
     d1 = bool_np_arr.shape[0]
@@ -160,9 +115,49 @@ def mask_np_2_str(bool_np_arr):
     return str_data
 
 
-def slice_mask_2_str(data2d, inv_scale, x1, y1, x2, y2):
+def get_np_full_mask(raw_dat):
+    i23_multipanel = False
+    if len(raw_dat) == 24:
+        i23_multipanel = True
+        logging.info("24 panels, assuming i23 data(masking)")
 
-    bool_np_arr = data2d.as_numpy_array()
+        pan_tup = tuple(range(24))
+        top_pan = raw_dat[pan_tup[0]].as_numpy_array()
+        p_siz0 = np.size(top_pan[:, 0:1])
+        p_siz1 = np.size(top_pan[0:1, :])
+        p_siz_bg = p_siz0 + 18
+
+        im_siz0 = p_siz_bg * len(pan_tup)
+        im_siz1 = p_siz1
+
+        np_arr = np.zeros((im_siz0, im_siz1), dtype=bool)
+        np_arr[:, :] = 1
+        np_arr[0:p_siz0, 0:p_siz1] = top_pan[:, :]
+
+        for s_num in pan_tup[1:]:
+            pan_dat = raw_dat[pan_tup[s_num]].as_numpy_array()
+            np_arr[
+                s_num * p_siz_bg : s_num * p_siz_bg + p_siz0, 0:p_siz1
+            ] = pan_dat[:, :]
+
+    else:
+        logging.info("Using the first panel only")
+        data_xy_flex = raw_dat[0]
+        np_arr = data_xy_flex.as_numpy_array()
+
+    return np_arr, i23_multipanel
+
+
+
+def get_str_full_mask(raw_dat):
+    np_arr_mask, i23_multipanel = get_np_full_mask(raw_dat)
+    str_arr_mask = mask_np_2_str(np_arr_mask)
+    return str_arr_mask, i23_multipanel
+
+
+def slice_mask_2_str(raw_dat, inv_scale, x1, y1, x2, y2):
+
+    bool_np_arr, i23_multipanel = get_np_full_mask(raw_dat)
     big_d0 = bool_np_arr.shape[0]
     big_d1 = bool_np_arr.shape[1]
 
@@ -203,5 +198,5 @@ def slice_mask_2_str(data2d, inv_scale, x1, y1, x2, y2):
 
         str_buff = mask_np_2_str(small_arr)
 
-        return str_buff
+        return str_buff, i23_multipanel
 
