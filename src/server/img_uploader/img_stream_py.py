@@ -108,7 +108,7 @@ def mask_arr_2_np(data2d_tupl):
 '''
 
 
-def get_np_full_mask(raw_dat):
+def get_str_full_mask(raw_dat):
     i23_multipanel = False
     if len(raw_dat) == 24:
         i23_multipanel = True
