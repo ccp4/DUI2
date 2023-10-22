@@ -114,41 +114,11 @@ def get_np_full_mask(raw_dat):
         i23_multipanel = True
         logging.info("24 panels, assuming i23 data(masking)")
 
-        #data_xy_flex = raw_dat[0]
-        #np_arr = mask_np_2_str(data_xy_flex.as_numpy_array())
-
-
-        #flex_big_arr = flex.bool(flex.grid(reversed(single_panel.get_image_size())), True)
-
-        #flex_big_arr = flex.bool(flex.grid((195 + 18) * 24, 2463), True)
-
-        #np_arr = flex_big_arr.as_numpy_array()
-        #np_arr[:] = True
-
-        '''
-        for single_panel in raw_dat:
-            print("dimentions =", single_panel.all())
-        '''
-
         pan_tup = tuple(range(24))
-
-
-
-
-        print("type(pan_tup[0]) =", type(pan_tup[0]))
-
         top_pan = raw_dat[pan_tup[0]].as_numpy_array()
-
-        print("top_pan[0:2,0:2] =", top_pan[0:2,0:2])
-
-        print("type(top_pan) =", type(top_pan))
-
         p_siz0 = np.size(top_pan[:, 0:1])
         p_siz1 = np.size(top_pan[0:1, :])
-
         p_siz_bg = p_siz0 + 18
-
-        print("p_siz_bg =", p_siz_bg)
 
         im_siz0 = p_siz_bg * len(pan_tup)
         im_siz1 = p_siz1
