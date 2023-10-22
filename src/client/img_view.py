@@ -326,7 +326,9 @@ class ImgGraphicsScene(QGraphicsScene):
                         y_rect_1 += 213 * lst_num[4]
 
                     except IndexError:
+                        uncomment_only_when_needed = '''
                         print("no pannel number provided, not adding to Y ")
+                        '''
 
                     rectangle = QRectF(
                         x_rect_1, y_rect_1, tmp_width, tmp_height
@@ -342,7 +344,9 @@ class ImgGraphicsScene(QGraphicsScene):
                         y_rect_1 += 213 * lst_num[3]
 
                     except IndexError:
+                        uncomment_only_when_needed = '''
                         print("no pannel number provided, not adding to Y ")
+                        '''
 
                     rectangle = QRectF(
                         x_rect_1, y_rect_1, side, side
@@ -1399,11 +1403,11 @@ class DoImageView(QObject):
                     if y_ini < 0:
                         y_ini = 0
 
-                    if x_end > self.img_d1_d2[0] - 2:
-                        x_end = self.img_d1_d2[0] - 2
+                    if x_end > self.img_d1_d2[1] - 2:
+                        x_end = self.img_d1_d2[1] - 2
 
-                    if y_end > self.img_d1_d2[1] - 2:
-                        y_end = self.img_d1_d2[1] - 2
+                    if y_end > self.img_d1_d2[0] - 2:
+                        y_end = self.img_d1_d2[0] - 2
 
                     self.new_mask_comp.emit(
                         {
