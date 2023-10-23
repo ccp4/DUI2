@@ -15,8 +15,6 @@ def get_np_full_img(raw_dat):
 
         p_siz_bg = p_siz0 + 18
 
-        print("p_siz_bg =", p_siz_bg)
-
         im_siz0 = p_siz_bg * len(pan_tup)
         im_siz1 = p_siz1
 

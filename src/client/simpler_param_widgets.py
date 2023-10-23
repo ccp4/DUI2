@@ -744,60 +744,91 @@ class MaskWidget(QWidget):
         self.cmd_label.setText(label_str)
 
     def get_new_comp(self, comp_dict):
-
-        print("\n\n Editing Mask in memory ")
-        print(
-            "comp_dict.i23_multipanel =", comp_dict["i23_multipanel"], "\n\n"
-        )
-
         if comp_dict["i23_multipanel"]:
-            panel_hight = 213
+            panel_height = 213
+            panel_height_m_border = 195
 
         else:
-            panel_hight = -1
+            panel_height = -1
 
         if comp_dict["type"] == "rect":
 
-            tmp_yc = (
-                float(comp_dict["y_ini"]) +
-                float(comp_dict["y_end"])
-            ) / 2.0
+            print(
+                "comp_dict[\"y_ini\"], comp_dict[\"y_end\"]",
+                comp_dict["y_ini"], comp_dict["y_end"]
+            )
 
 
-            if panel_hight > 0:
-                panel_number = int(tmp_yc / panel_hight)
-                print("panel_number =", panel_number)
-                y_orig = int(panel_number * panel_hight)
-                extra_str_param = "," + str(panel_number)
+            if panel_height > 0:
+                pan_ini = -1
+                pan_end = -1
+                for p_num in range(24):
+                    pan_y_ini = p_num * panel_height
+                    if(
+                        comp_dict["y_ini"] > pan_y_ini
+                    ):
+                        pan_ini = p_num
+
+                    pan_y_end = pan_y_ini + panel_height_m_border
+
+                    if(
+                        comp_dict["y_end"] > pan_y_ini and
+                        comp_dict["y_end"] < pan_y_end
+                    ):
+                        pan_end = p_num
+
+                print("starting with panel num:", pan_ini)
+                print("ending with panel num:", pan_end)
+
+                for p_num in range(pan_ini, pan_end + 1):
+                    y_orig = panel_height * p_num
+                    new_y_ini = 0
+                    new_y_end = panel_height_m_border
+                    if p_num == pan_ini:
+                        new_y_ini = int(comp_dict["y_ini"]) - y_orig
+
+                    if p_num == pan_end:
+                        new_y_end = int(comp_dict["y_end"]) - y_orig
+
+                    str_cmd_nam = "untrusted.rectangle"
+                    str_cmd_param =        str(comp_dict["x_ini"])
+                    str_cmd_param += "," + str(comp_dict["x_end"])
+                    str_cmd_param += "," + str(new_y_ini)
+                    str_cmd_param += "," + str(new_y_end)
+                    str_cmd_param += "," + str(p_num)
+                    inner_lst_pair = [str_cmd_nam, str_cmd_param]
+
+                    print("inner_lst_pair =", inner_lst_pair)
+                    self.comp_list.append(inner_lst_pair)
 
             else:
                 extra_str_param = ""
                 y_orig = 0
 
-            new_y_ini = int(comp_dict["y_ini"]) - y_orig
-            new_y_end = int(comp_dict["y_end"]) - y_orig
+                new_y_ini = int(comp_dict["y_ini"]) - y_orig
+                new_y_end = int(comp_dict["y_end"]) - y_orig
 
-            str_cmd_nam = "untrusted.rectangle"
-            str_cmd_param =        str(comp_dict["x_ini"])
-            str_cmd_param += "," + str(comp_dict["x_end"])
-            str_cmd_param += "," + str(new_y_ini)
-            str_cmd_param += "," + str(new_y_end)
-            str_cmd_param += extra_str_param
-            inner_lst_pair = [str_cmd_nam, str_cmd_param]
+                str_cmd_nam = "untrusted.rectangle"
+                str_cmd_param =        str(comp_dict["x_ini"])
+                str_cmd_param += "," + str(comp_dict["x_end"])
+                str_cmd_param += "," + str(new_y_ini)
+                str_cmd_param += "," + str(new_y_end)
+                str_cmd_param += extra_str_param
+                inner_lst_pair = [str_cmd_nam, str_cmd_param]
 
-            print("inner_lst_pair =", inner_lst_pair)
+                print("inner_lst_pair =", inner_lst_pair)
 
-            self.comp_list.append(inner_lst_pair)
+                self.comp_list.append(inner_lst_pair)
 
         elif comp_dict["type"] == "circ":
 
             tmp_yc = float(comp_dict["y_c"])
 
 
-            if panel_hight > 0:
-                panel_number = int(tmp_yc / panel_hight)
+            if panel_height > 0:
+                panel_number = int(tmp_yc / panel_height)
                 print("panel_number =", panel_number)
-                new_yc = int(tmp_yc - panel_number * panel_hight)
+                new_yc = int(tmp_yc - panel_number * panel_height)
                 extra_str_param = "," + str(panel_number)
 
             else:
