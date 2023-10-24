@@ -777,6 +777,12 @@ class MaskWidget(QWidget):
                     ):
                         pan_end = p_num
 
+                if pan_ini == -1:
+                    pan_ini = 0
+
+                if pan_end == -1:
+                    pan_end = 23
+
                 print("starting with panel num:", pan_ini)
                 print("ending with panel num:", pan_end)
 
@@ -789,6 +795,8 @@ class MaskWidget(QWidget):
 
                     if p_num == pan_end:
                         new_y_end = int(comp_dict["y_end"]) - y_orig
+                        if new_y_end > panel_height_m_border:
+                            new_y_end = panel_height_m_border
 
                     str_cmd_nam = "untrusted.rectangle"
                     str_cmd_param =        str(comp_dict["x_ini"])
