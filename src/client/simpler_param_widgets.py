@@ -746,7 +746,8 @@ class MaskWidget(QWidget):
     def get_new_comp(self, comp_dict):
         if comp_dict["i23_multipanel"]:
             panel_height = 213
-            panel_height_m_border = 195
+            panel_border = 18
+            panel_height_m_border = panel_height - panel_border
 
         else:
             panel_height = -1
@@ -760,30 +761,20 @@ class MaskWidget(QWidget):
 
 
             if panel_height > 0:
-                pan_ini = -1
-                pan_end = -1
                 for p_num in range(24):
-                    pan_y_ini = p_num * panel_height
-                    if(
-                        comp_dict["y_ini"] > pan_y_ini
-                    ):
+                    pan_y_ini = (p_num + 1) * panel_height - panel_border
+                    if comp_dict["y_ini"] < pan_y_ini:
                         pan_ini = p_num
-
-                    pan_y_end = pan_y_ini + panel_height_m_border
-
-                    if(
-                        comp_dict["y_end"] > pan_y_ini and
-                        comp_dict["y_end"] < pan_y_end
-                    ):
-                        pan_end = p_num
-
-                if pan_ini == -1:
-                    pan_ini = 0
-
-                if pan_end == -1:
-                    pan_end = 23
+                        break
 
                 print("starting with panel num:", pan_ini)
+                pan_end = pan_ini
+                for p_num in range(24, pan_ini, -1):
+                    pan_y_end = (p_num) * panel_height + panel_border
+                    if comp_dict["y_end"] > pan_y_end:
+                        pan_end = p_num
+                        break
+
                 print("ending with panel num:", pan_end)
 
                 for p_num in range(pan_ini, pan_end + 1):
@@ -792,6 +783,8 @@ class MaskWidget(QWidget):
                     new_y_end = panel_height_m_border
                     if p_num == pan_ini:
                         new_y_ini = int(comp_dict["y_ini"]) - y_orig
+                        if new_y_ini < 0:
+                            new_y_ini = 0
 
                     if p_num == pan_end:
                         new_y_end = int(comp_dict["y_end"]) - y_orig
