@@ -748,34 +748,28 @@ class MaskWidget(QWidget):
             panel_height = 213
             panel_border = 18
             panel_height_m_border = panel_height - panel_border
+            x_max = 2462
+            y_max = 5111
 
         else:
             panel_height = -1
 
+        print("\n comp_dict =", comp_dict, "\n")
+
         if comp_dict["type"] == "rect":
-
-            print(
-                "comp_dict[\"y_ini\"], comp_dict[\"y_end\"]",
-                comp_dict["y_ini"], comp_dict["y_end"]
-            )
-
-
-            if panel_height > 0:
+            if comp_dict["i23_multipanel"]:
                 for p_num in range(24):
                     pan_y_ini = (p_num + 1) * panel_height - panel_border
                     if comp_dict["y_ini"] < pan_y_ini:
                         pan_ini = p_num
                         break
 
-                print("starting with panel num:", pan_ini)
                 pan_end = pan_ini
                 for p_num in range(24, pan_ini, -1):
                     pan_y_end = (p_num) * panel_height + panel_border
                     if comp_dict["y_end"] > pan_y_end:
                         pan_end = p_num
                         break
-
-                print("ending with panel num:", pan_end)
 
                 for p_num in range(pan_ini, pan_end + 1):
                     y_orig = panel_height * p_num
@@ -799,7 +793,6 @@ class MaskWidget(QWidget):
                     str_cmd_param += "," + str(p_num)
                     inner_lst_pair = [str_cmd_nam, str_cmd_param]
 
-                    print("inner_lst_pair =", inner_lst_pair)
                     self.comp_list.append(inner_lst_pair)
 
             else:
@@ -816,39 +809,99 @@ class MaskWidget(QWidget):
                 str_cmd_param += "," + str(new_y_end)
                 str_cmd_param += extra_str_param
                 inner_lst_pair = [str_cmd_nam, str_cmd_param]
-
-                print("inner_lst_pair =", inner_lst_pair)
-
                 self.comp_list.append(inner_lst_pair)
 
         elif comp_dict["type"] == "circ":
 
             tmp_yc = float(comp_dict["y_c"])
+            if comp_dict["i23_multipanel"]:
 
+                if comp_dict["x_c"] > 0 and comp_dict["x_c"] < x_max:
+                    print("Centre INside panel(regarding X)")
 
-            if panel_height > 0:
+                    y_min = tmp_yc - float(comp_dict["r"])
+                    y_max = tmp_yc + float(comp_dict["r"])
+
+                    print(
+                        "y_min, y_max, panel_height = ",
+                        y_min, y_max, panel_height
+                    )
+                    pan_ini = int(y_min / panel_height)
+                    pan_end = int(y_max / panel_height) + 1
+
+                    if pan_ini < 0:
+                        pan_ini = 0
+
+                    if pan_end < 0:
+                        pan_end = 0
+
+                    if pan_ini > 23:
+                        pan_ini = 23
+
+                    if pan_end > 23:
+                        pan_end = 23
+
+                    print("pan_ini, pan_end=", pan_ini, pan_end)
+
+                    for panel_number in range(pan_ini, pan_end):
+                        print("panel_number =", panel_number)
+                        new_yc = int(tmp_yc - panel_number * panel_height)
+                        extra_str_param = "," + str(panel_number)
+
+                        str_cmd_nam = "untrusted.circle"
+                        str_cmd_param =        str(comp_dict["x_c"])
+                        str_cmd_param += "," + str(new_yc)
+                        str_cmd_param += "," + str(comp_dict["r"])
+
+                        str_cmd_param += extra_str_param
+                        str_cmd_param = str(str_cmd_param)
+                        inner_lst_pair = [str_cmd_nam, str_cmd_param]
+
+                        print("inner_lst_pair =", inner_lst_pair)
+
+                        self.comp_list.append(inner_lst_pair)
+
+                else:
+                    print("Centre OUTside panel(regarding X)")
+
+                to_re_do = '''
                 panel_number = int(tmp_yc / panel_height)
                 print("panel_number =", panel_number)
                 new_yc = int(tmp_yc - panel_number * panel_height)
                 extra_str_param = "," + str(panel_number)
 
+                str_cmd_nam = "untrusted.circle"
+                str_cmd_param =        str(comp_dict["x_c"])
+                str_cmd_param += "," + str(new_yc)
+                str_cmd_param += "," + str(comp_dict["r"])
+
+                str_cmd_param += extra_str_param
+                str_cmd_param = str(str_cmd_param)
+                inner_lst_pair = [str_cmd_nam, str_cmd_param]
+
+                print("inner_lst_pair =", inner_lst_pair)
+
+                self.comp_list.append(inner_lst_pair)
+                '''
+
+
+
             else:
                 new_yc = int(tmp_yc)
                 extra_str_param = ""
 
+                str_cmd_nam = "untrusted.circle"
+                str_cmd_param =        str(comp_dict["x_c"])
+                str_cmd_param += "," + str(new_yc)
+                str_cmd_param += "," + str(comp_dict["r"])
 
-            str_cmd_nam = "untrusted.circle"
-            str_cmd_param =        str(comp_dict["x_c"])
-            str_cmd_param += "," + str(new_yc)
-            str_cmd_param += "," + str(comp_dict["r"])
+                str_cmd_param += extra_str_param
+                str_cmd_param = str(str_cmd_param)
+                inner_lst_pair = [str_cmd_nam, str_cmd_param]
 
-            str_cmd_param += extra_str_param
-            str_cmd_param = str(str_cmd_param)
-            inner_lst_pair = [str_cmd_nam, str_cmd_param]
+                print("inner_lst_pair =", inner_lst_pair)
 
-            print("inner_lst_pair =", inner_lst_pair)
-
-            self.comp_list.append(inner_lst_pair)
+                self.comp_list.append(inner_lst_pair)
 
         elif comp_dict["type"] == "poly":
             if(
