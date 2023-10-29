@@ -738,6 +738,28 @@ class Runner(object):
                         req_obj = req_obj, out_type = 'utf-8'
                     )
 
+                elif unalias_cmd_lst == [['mask_app']]:
+                    try:
+                        req_obj.send_response(201)
+                        req_obj.send_header('Content-type', 'text/plain')
+                        req_obj.end_headers()
+
+                    except AttributeError:
+                        logging.info(
+                            "Attribute Err catch," +
+                            " not supposed send header info #5"
+                        )
+                    lst_nod_out = []
+                    for lin2go in cmd_dict["nod_lst"]:
+                        for node in self.step_list:
+                            if node.number == lin2go:
+                                lst_nod_out = self.mask_app(node)
+
+                    spit_out(
+                        str_out = "lst_nod_out:" + str(lst_nod_out) + "\n",
+                        req_obj = req_obj, out_type = 'utf-8'
+                    )
+
                 elif unalias_cmd_lst == [["stop"]]:
                     for lin2go in cmd_dict["nod_lst"]:
                         try:
@@ -908,6 +930,33 @@ class Runner(object):
         logging.info("\n" + str_out + "\n")
 
         return lst_nod_out
+
+    def mask_app(self, node):
+        print("\n ********** mask_app, node =", node, "********** \n")
+
+        to_use_properly = '''
+        lst_str = []
+
+        lst_str.append("untrusted {")
+        lst_str.append("  panel = 1")
+        lst_str.append("  rectangle = 676 1188 48 136")
+        lst_str.append("}")
+        lst_str.append("untrusted {")
+        lst_str.append("  panel = 2")
+        lst_str.append("  circle = 1644 88 189")
+        lst_str.append("}")
+        lst_str.append("untrusted {")
+        lst_str.append("  panel = 4")
+        lst_str.append("  rectangle = 724 1276 40 148")
+        lst_str.append("}")
+
+        f = open('tst.phil', 'w', encoding="utf-8")
+
+        for str_2_write in lst_str:
+            f.write(str_2_write + "\n")
+
+        f.close()
+        '''
 
     def find_next_number(self):
         tmp_big = 0

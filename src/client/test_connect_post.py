@@ -31,8 +31,8 @@ uni_url = 'http://127.0.0.1:45678/'
 
 if __name__ == "__main__":
 
-        full_cmd = {'nod_lst': [48], 'cmd_lst': ['split_node']}
         new_tst = '''
+        full_cmd = {'nod_lst': [48], 'cmd_lst': ['split_node']}
         full_cmd = {
             'nod_lst': [0],
             'cmd_lst': [
@@ -40,6 +40,7 @@ if __name__ == "__main__":
             ]
         }
         '''
+        full_cmd = {'nod_lst': [1], 'cmd_lst': ['mask_app']}
 
         req_post = requests.post(uni_url, stream = True, data = full_cmd)
         while True:
