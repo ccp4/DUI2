@@ -629,6 +629,8 @@ class Runner(object):
 
     def run_dials_command(self, cmd_dict = None, req_obj = None):
 
+        print("cmd_dict =", cmd_dict)
+
         found_duplicated = False
         for single_step in self.step_list:
             if(
@@ -659,7 +661,7 @@ class Runner(object):
 
         self._save_state()
 
-    def run_dui_command(self, cmd_dict, req_obj = None):
+    def run_dui_command(self, cmd_dict = None, req_obj = None):
         unalias_cmd_lst = unalias_full_cmd(cmd_dict["cmd_lst"])
 
         if req_obj is not None:
@@ -739,25 +741,20 @@ class Runner(object):
                     )
 
                 elif unalias_cmd_lst == [['mask_app']]:
-                    try:
-                        req_obj.send_response(201)
-                        req_obj.send_header('Content-type', 'text/plain')
-                        req_obj.end_headers()
-
-                    except AttributeError:
-                        logging.info(
-                            "Attribute Err catch," +
-                            " not supposed send header info #5"
-                        )
-                    lst_nod_out = []
-                    for lin2go in cmd_dict["nod_lst"]:
-                        for node in self.step_list:
-                            if node.number == lin2go:
-                                lst_nod_out = self.mask_app(node)
-
-                    spit_out(
-                        str_out = "lst_nod_out:" + str(lst_nod_out) + "\n",
-                        req_obj = req_obj, out_type = 'utf-8'
+                    self.mask_app_build()
+                    self.run_dials_command(
+                        cmd_dict = {
+                            'nod_lst': cmd_dict["nod_lst"], 'cmd_lst': [
+                                [
+                                    'dials.generate_mask',
+                                    '/tmp/tst4server/run_dui2_nodes/mask.phil'
+                                ],
+                                [
+                                    'dials.apply_mask',
+                                    'input.mask=tmp_mask.pickle'
+                                ]
+                            ]
+                        }, req_obj = req_obj
                     )
 
                 elif unalias_cmd_lst == [["stop"]]:
@@ -838,6 +835,36 @@ class Runner(object):
             str_out = " ... Done ", req_obj = req_obj,
             out_type = 'utf-8'
         )
+
+    def mask_app_build(self):
+        print("\n ********** mask_app ********** \n")
+
+        lst_str = []
+
+        lst_str.append("untrusted {")
+        lst_str.append("  panel = 1")
+        lst_str.append("  rectangle = 676 1188 48 136")
+        lst_str.append("}")
+        lst_str.append("untrusted {")
+        lst_str.append("  panel = 2")
+        lst_str.append("  circle = 1644 88 189")
+        lst_str.append("}")
+        lst_str.append("untrusted {")
+        lst_str.append("  panel = 4")
+        lst_str.append("  rectangle = 724 1276 40 148")
+        lst_str.append("}")
+
+        lst_str.append("output {")
+        lst_str.append("  mask = tmp_mask.pickle")
+        lst_str.append("}")
+
+        f = open('mask.phil', 'w', encoding="utf-8")
+
+        for str_2_write in lst_str:
+            f.write(str_2_write + "\n")
+
+        f.close()
+
 
     def split_node(self, node):
 
@@ -930,33 +957,6 @@ class Runner(object):
         logging.info("\n" + str_out + "\n")
 
         return lst_nod_out
-
-    def mask_app(self, node):
-        print("\n ********** mask_app, node =", node, "********** \n")
-
-        to_use_properly = '''
-        lst_str = []
-
-        lst_str.append("untrusted {")
-        lst_str.append("  panel = 1")
-        lst_str.append("  rectangle = 676 1188 48 136")
-        lst_str.append("}")
-        lst_str.append("untrusted {")
-        lst_str.append("  panel = 2")
-        lst_str.append("  circle = 1644 88 189")
-        lst_str.append("}")
-        lst_str.append("untrusted {")
-        lst_str.append("  panel = 4")
-        lst_str.append("  rectangle = 724 1276 40 148")
-        lst_str.append("}")
-
-        f = open('tst.phil', 'w', encoding="utf-8")
-
-        for str_2_write in lst_str:
-            f.write(str_2_write + "\n")
-
-        f.close()
-        '''
 
     def find_next_number(self):
         tmp_big = 0
