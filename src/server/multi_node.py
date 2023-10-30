@@ -620,6 +620,8 @@ class Runner(object):
         else:
             self._recover_state(recovery_data)
 
+        self.num_phil_file = 0
+
     def start_from_zero(self):
         root_node = CmdNode(parent_lst_in = None, data_init = self.data_init)
         root_node.set_root()
@@ -741,13 +743,13 @@ class Runner(object):
                     )
 
                 elif unalias_cmd_lst == [['mask_app']]:
-                    self.mask_app_build()
+                    phil_file_name = self.mask_app_build()
                     self.run_dials_command(
                         cmd_dict = {
                             'nod_lst': cmd_dict["nod_lst"], 'cmd_lst': [
                                 [
                                     'dials.generate_mask',
-                                    '/tmp/tst4server/run_dui2_nodes/mask.phil'
+                                    '..'+ os.sep + phil_file_name
                                 ],
                                 [
                                     'dials.apply_mask',
@@ -853,17 +855,27 @@ class Runner(object):
         lst_str.append("  panel = 4")
         lst_str.append("  rectangle = 724 1276 40 148")
         lst_str.append("}")
+        lst_str.append("untrusted {")
+        lst_str.append("  panel = 6")
+        lst_str.append("  circle = 1644 88 189")
+        lst_str.append("}")
 
         lst_str.append("output {")
         lst_str.append("  mask = tmp_mask.pickle")
         lst_str.append("}")
 
-        f = open('mask.phil', 'w', encoding="utf-8")
+        self.num_phil_file += 1
+        phil_file_name = 'mask_n_' + str(self.num_phil_file) + '.phil'
+        print("phil_file_name =", phil_file_name)
+
+        f = open(phil_file_name, 'w', encoding="utf-8")
 
         for str_2_write in lst_str:
             f.write(str_2_write + "\n")
 
         f.close()
+
+        return phil_file_name
 
 
     def split_node(self, node):
