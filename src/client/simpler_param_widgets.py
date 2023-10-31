@@ -819,7 +819,7 @@ class MaskWidget(QWidget):
                 if comp_dict["x_c"] > 0 and comp_dict["x_c"] < x_max:
                     print("Centre INside panel(regarding X)")
 
-                    y_min = tmp_yc - float(comp_dict["r"])
+                    y_min = tmp_yc - float(comp_dict["r"]) + panel_border
                     y_max = tmp_yc + float(comp_dict["r"])
 
                     print(
@@ -838,8 +838,8 @@ class MaskWidget(QWidget):
                     if pan_ini > 23:
                         pan_ini = 23
 
-                    if pan_end > 23:
-                        pan_end = 23
+                    if pan_end > 24:
+                        pan_end = 24
 
                     print("pan_ini, pan_end=", pan_ini, pan_end)
 
@@ -864,25 +864,25 @@ class MaskWidget(QWidget):
                 else:
                     print("Centre OUTside panel(regarding X)")
 
-                to_re_do = '''
-                panel_number = int(tmp_yc / panel_height)
-                print("panel_number =", panel_number)
-                new_yc = int(tmp_yc - panel_number * panel_height)
-                extra_str_param = "," + str(panel_number)
+                    to_re_do = '''
+                    panel_number = int(tmp_yc / panel_height)
+                    print("panel_number =", panel_number)
+                    new_yc = int(tmp_yc - panel_number * panel_height)
+                    extra_str_param = "," + str(panel_number)
 
-                str_cmd_nam = "untrusted.circle"
-                str_cmd_param =        str(comp_dict["x_c"])
-                str_cmd_param += "," + str(new_yc)
-                str_cmd_param += "," + str(comp_dict["r"])
+                    str_cmd_nam = "untrusted.circle"
+                    str_cmd_param =        str(comp_dict["x_c"])
+                    str_cmd_param += "," + str(new_yc)
+                    str_cmd_param += "," + str(comp_dict["r"])
 
-                str_cmd_param += extra_str_param
-                str_cmd_param = str(str_cmd_param)
-                inner_lst_pair = [str_cmd_nam, str_cmd_param]
+                    str_cmd_param += extra_str_param
+                    str_cmd_param = str(str_cmd_param)
+                    inner_lst_pair = [str_cmd_nam, str_cmd_param]
 
-                print("inner_lst_pair =", inner_lst_pair)
+                    print("inner_lst_pair =", inner_lst_pair)
 
-                self.comp_list.append(inner_lst_pair)
-                '''
+                    self.comp_list.append(inner_lst_pair)
+                    '''
 
 
 
