@@ -515,7 +515,7 @@ class CommandParamControl:
         return self.par_lst[0], self.custm_param
 
     def get_full_command_list(self):
-        logging.info("\n *** get_full_command_list")
+        print("\n *** get_full_command_list")
 
         lst_out = []
         for lst_num in range(len(self.m_cmd_lst)):
@@ -534,7 +534,17 @@ class CommandParamControl:
 
             lst_out.append(str_out)
 
-        logging.info("\n lst_out =" + str(lst_out) + "\n")
+        if(
+            lst_out[0][0:19] == "dials.generate_mask" and
+            lst_out[1][0:16] == "dials.apply_mask"
+        ):
+            print("time to convert to Dui2 cmd mask_app")
+            str_pars = str(lst_out[0][20:-28])
+            print("str_pars =", str_pars)
+            lst_out = ["mask_app " + str_pars]
+
+
+        print("\n lst_out =" + str(lst_out) + "\n")
         return lst_out
 
 

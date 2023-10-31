@@ -664,7 +664,11 @@ class Runner(object):
         self._save_state()
 
     def run_dui_command(self, cmd_dict = None, req_obj = None):
+        print("cmd_dict(run_dui_command) =", cmd_dict)
         unalias_cmd_lst = unalias_full_cmd(cmd_dict["cmd_lst"])
+        print("unalias_cmd_lst =", unalias_cmd_lst)
+
+        print("unalias_cmd_lst[0][0] =", unalias_cmd_lst[0][0])
 
         if req_obj is not None:
             try:
@@ -742,8 +746,9 @@ class Runner(object):
                         req_obj = req_obj, out_type = 'utf-8'
                     )
 
-                elif unalias_cmd_lst == [['mask_app']]:
-                    phil_file_name = self.mask_app_build()
+                elif unalias_cmd_lst[0][0] == 'mask_app':
+                    untrusted_list = unalias_cmd_lst[0][1:]
+                    phil_file_name = self.mask_app_build(untrusted_list)
                     self.run_dials_command(
                         cmd_dict = {
                             'nod_lst': cmd_dict["nod_lst"], 'cmd_lst': [
@@ -838,27 +843,35 @@ class Runner(object):
             out_type = 'utf-8'
         )
 
-    def mask_app_build(self):
+    def mask_app_build(self, untrusted_list):
         print("\n ********** mask_app ********** \n")
+        print("untrusted_list =", untrusted_list)
 
         lst_str = []
+        for single_region in untrusted_list:
+            print("single_region =", single_region)
 
-        lst_str.append("untrusted {")
-        lst_str.append("  panel = 1")
-        lst_str.append("  rectangle = 676 1188 48 136")
-        lst_str.append("}")
-        lst_str.append("untrusted {")
-        lst_str.append("  panel = 2")
-        lst_str.append("  circle = 1644 88 189")
-        lst_str.append("}")
-        lst_str.append("untrusted {")
-        lst_str.append("  panel = 4")
-        lst_str.append("  rectangle = 724 1276 40 148")
-        lst_str.append("}")
-        lst_str.append("untrusted {")
-        lst_str.append("  panel = 6")
-        lst_str.append("  circle = 1644 88 189")
-        lst_str.append("}")
+            if single_region[0:16] == 'untrusted.circle':
+                lst_nums = single_region[17:].split(",")
+                lst_str.append("untrusted {")
+                lst_str.append("  panel = " + str(lst_nums[3]))
+                lst_str.append(
+                    "  circle =" + " " + str(lst_nums[0]) +
+                    " " + str(lst_nums[1]) + " " + str(lst_nums[2])
+                )
+                lst_str.append("}")
+
+            elif single_region[0:19] == 'untrusted.rectangle':
+                lst_nums = single_region[20:].split(",")
+                lst_str.append("untrusted {")
+                lst_str.append("  panel = " + str(lst_nums[4]))
+                lst_str.append(
+                    "  rectangle =" + " " + str(lst_nums[0]) + " " +
+                    str(lst_nums[1]) + " " + str(lst_nums[2]) + " " +
+                    str(lst_nums[3])
+                )
+                lst_str.append("}")
+
 
         lst_str.append("output {")
         lst_str.append("  mask = tmp_mask.pickle")
