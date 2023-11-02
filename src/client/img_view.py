@@ -1349,12 +1349,14 @@ class DoImageView(QObject):
                     self.my_scene.addRect(rectangle, self.my_scene.overlay_pen)
 
                 elif self.mask_comp == "circ":
+
                     dx = float(x_pos - self.mask_x_ini)
                     dy = float(y_pos - self.mask_y_ini)
                     r = int(np.sqrt(dx * dx + dy * dy))
                     rectangle = QRectF(
-                        self.mask_x_ini - r, self.mask_y_ini - r, 2 * r, 2 * r
+                        x_pos - r, y_pos - r, 2 * r, 2 * r
                     )
+
                     self.my_scene.addEllipse(
                         rectangle, self.my_scene.overlay_pen
                     )
@@ -1424,15 +1426,17 @@ class DoImageView(QObject):
                     dx = float(self.mask_x_ini - x_pos)
                     dy = float(self.mask_y_ini - y_pos)
                     r = int(np.sqrt(dx * dx + dy * dy))
+
                     self.new_mask_comp.emit(
                         {
                             "type"              : "circ" ,
-                            "x_c"               : int(self.mask_x_ini) ,
-                            "y_c"               : int(self.mask_y_ini) ,
+                            "x_c"               : int(x_pos) ,
+                            "y_c"               : int(y_pos) ,
                             "r"                 : r ,
                             "i23_multipanel"    : self.i23_multipanel,
                         }
                     )
+
 
                 elif self.mask_comp == "poly":
                     x_ini = int(self.mask_x_ini)

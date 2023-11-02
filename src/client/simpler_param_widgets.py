@@ -905,10 +905,6 @@ class MaskWidget(QWidget):
                             self.comp_list.append(inner_lst_pair)
 
 
-
-
-
-
             else:
                 new_yc = int(tmp_yc)
                 extra_str_param = ""
