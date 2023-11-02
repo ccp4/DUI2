@@ -30,6 +30,8 @@ from PySide2.QtWidgets import *
 from PySide2 import QtUiTools
 from PySide2.QtGui import *
 
+import numpy as np
+
 from client.init_firts import ini_data
 from client.exec_utils import Mtz_Data_Request, get_req_json_dat
 from client.file_nav_utils import FileBrowser
@@ -814,13 +816,15 @@ class MaskWidget(QWidget):
         elif comp_dict["type"] == "circ":
 
             tmp_yc = float(comp_dict["y_c"])
+            tmp_xc = float(comp_dict["x_c"])
+            tmp_r =  float(comp_dict["r"])
             if comp_dict["i23_multipanel"]:
 
                 if comp_dict["x_c"] > 0 and comp_dict["x_c"] < x_max:
                     print("Centre INside panel(regarding X)")
 
-                    y_min = tmp_yc - float(comp_dict["r"]) + panel_border
-                    y_max = tmp_yc + float(comp_dict["r"])
+                    y_min = tmp_yc - tmp_r + panel_border
+                    y_max = tmp_yc + tmp_r
 
                     print(
                         "y_min, y_max, panel_height = ",
@@ -851,7 +855,7 @@ class MaskWidget(QWidget):
                         str_cmd_nam = "untrusted.circle"
                         str_cmd_param =        str(comp_dict["x_c"])
                         str_cmd_param += "," + str(new_yc)
-                        str_cmd_param += "," + str(comp_dict["r"])
+                        str_cmd_param += "," + str(int(tmp_r))
 
                         str_cmd_param += extra_str_param
                         str_cmd_param = str(str_cmd_param)
@@ -863,26 +867,45 @@ class MaskWidget(QWidget):
 
                 else:
                     print("Centre OUTside panel(regarding X)")
+                    dx1 = tmp_xc
+                    dx2 = tmp_xc - x_max
+                    for panel_number in range(24):
+                        y_up_panel = panel_number * panel_height
+                        y_dw_panel = (panel_number + 1)* panel_height + panel_border
 
-                    to_re_do = '''
-                    panel_number = int(tmp_yc / panel_height)
-                    print("panel_number =", panel_number)
-                    new_yc = int(tmp_yc - panel_number * panel_height)
-                    extra_str_param = "," + str(panel_number)
+                        dy1 = tmp_yc - y_up_panel
+                        dy2 = tmp_yc - y_dw_panel
 
-                    str_cmd_nam = "untrusted.circle"
-                    str_cmd_param =        str(comp_dict["x_c"])
-                    str_cmd_param += "," + str(new_yc)
-                    str_cmd_param += "," + str(comp_dict["r"])
+                        d_sqr_lst = []
+                        d_sqr_lst.append(float(dx1 * dx1 + dy1 * dy1))
+                        d_sqr_lst.append(float(dx1 * dx1 + dy2 * dy2))
+                        d_sqr_lst.append(float(dx2 * dx2 + dy1 * dy1))
+                        d_sqr_lst.append(float(dx2 * dx2 + dy2 * dy2))
 
-                    str_cmd_param += extra_str_param
-                    str_cmd_param = str(str_cmd_param)
-                    inner_lst_pair = [str_cmd_nam, str_cmd_param]
+                        min_dist_sqr = d_sqr_lst[0]
+                        for d_sqr in d_sqr_lst[1:]:
+                            if d_sqr < min_dist_sqr:
+                                min_dist_sqr = d_sqr
 
-                    print("inner_lst_pair =", inner_lst_pair)
+                        if min_dist_sqr <  tmp_r * tmp_r:
+                            new_yc = int(tmp_yc - panel_number * panel_height)
+                            extra_str_param = "," + str(panel_number)
 
-                    self.comp_list.append(inner_lst_pair)
-                    '''
+                            str_cmd_nam = "untrusted.circle"
+                            str_cmd_param =        str(comp_dict["x_c"])
+                            str_cmd_param += "," + str(new_yc)
+                            str_cmd_param += "," + str(int(tmp_r))
+
+                            str_cmd_param += extra_str_param
+                            str_cmd_param = str(str_cmd_param)
+                            inner_lst_pair = [str_cmd_nam, str_cmd_param]
+
+                            print("inner_lst_pair =", inner_lst_pair)
+
+                            self.comp_list.append(inner_lst_pair)
+
+
+
 
 
 
