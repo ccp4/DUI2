@@ -871,7 +871,7 @@ class MaskWidget(QWidget):
                     dx2 = tmp_xc - x_max
                     for panel_number in range(24):
                         y_up_panel = panel_number * panel_height
-                        y_dw_panel = (panel_number + 1)* panel_height + panel_border
+                        y_dw_panel = (panel_number + 1) * panel_height - panel_border
 
                         dy1 = tmp_yc - y_up_panel
                         dy2 = tmp_yc - y_dw_panel
