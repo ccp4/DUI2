@@ -397,7 +397,7 @@ class ImportWidget(QWidget):
 
         #TODO discus how to fix import for ED
         #TODO before removing the next line entirely
-        #self.check_dist = QCheckBox("Set distance = 2193")
+        self.check_dist = QCheckBox("Set distance = 2193")
 
         self.imp_txt.textChanged.connect(self.line_changed)
         self.imp_extra_txt.textChanged.connect(self.line_changed)
@@ -406,7 +406,11 @@ class ImportWidget(QWidget):
 
         #TODO discus how to fix import for ED
         #TODO before removing the next line entirely
-        #self.check_dist.stateChanged.connect(self.dist_changed)
+        self.check_dist.stateChanged.connect(self.dist_changed)
+
+
+        self.check_shadow = QCheckBox("Set dynamic shadowing")
+        self.check_shadow.stateChanged.connect(self.shadow_changed)
 
         self.main_vbox = QVBoxLayout()
         self.main_vbox.addWidget(self.state_label)
@@ -420,7 +424,9 @@ class ImportWidget(QWidget):
 
         #TODO discus how to fix import for ED
         #TODO before removing the next line entirely
-        #self.small_hbox.addWidget(self.check_dist)
+        self.small_hbox.addWidget(self.check_dist)
+
+        self.small_hbox.addWidget(self.check_shadow)
 
         self.main_vbox.addLayout(self.small_hbox)
 
@@ -523,7 +529,7 @@ class ImportWidget(QWidget):
         if int(stat) == 2:
             #TODO discus how to fix import for ED
             #TODO before removing the next line entirely
-            #self.check_dist.setChecked(False)
+            self.check_rot_axs.setChecked(False)
             new_par_str = "invert_rotation_axis=True"
 
         else:
@@ -533,7 +539,7 @@ class ImportWidget(QWidget):
 
     def dist_changed(self, stat):
         if int(stat) == 2:
-            self.check_rot_axs.setChecked(False)
+            self.check_dist.setChecked(False)
             new_par_str = "distance=2193"
 
         else:
@@ -541,12 +547,26 @@ class ImportWidget(QWidget):
 
         self.imp_extra_txt.setText(new_par_str)
 
+    def shadow_changed(self, stat):
+        if int(stat) == 2:
+            self.check_shadow.setChecked(False)
+            new_par_str = "dynamic_shadowing=True"
+
+        else:
+            new_par_str = ""
+
+        self.imp_extra_txt.setText(new_par_str)
+
+
     def update_all_pars(self, tup_lst_pars):
 
         for n, par in enumerate(tup_lst_pars):
             logging.info("n=" + str(n) + " par=" + str(par))
+            print("\n n=" + str(n) + " par=" + str(par))
 
         try:
+            self.imp_extra_txt.setText("")
+            self.imp_txt.setText("")
             for par_dic in tup_lst_pars[0]:
                 if(
                     par_dic["name"] == "input.directory" or
@@ -568,9 +588,29 @@ class ImportWidget(QWidget):
 
                     self.imp_txt.setText(first_par_str)
 
+                elif(
+                    par_dic["name"] == "invert_rotation_axis" and
+                    par_dic["value"] == "True"
+                ):
+                    self.imp_extra_txt.setText("invert_rotation_axis=True")
+
+                elif(
+                    par_dic["name"] == "dynamic_shadowing" and
+                    par_dic["value"] == "True"
+                ):
+                    self.imp_extra_txt.setText("dynamic_shadowing=True")
+
+                elif(
+                    par_dic["name"] == "distance" and
+                    par_dic["value"] == "2193"
+                ):
+                    self.imp_extra_txt.setText("distance=2193")
+
+
         except IndexError:
             logging.info(" Not copying parameters from node (Index err catch )")
             self.imp_txt.setText("")
+            self.imp_extra_txt.setText("")
             self.state_label.setText("   ...")
 
     def update_param(self, str_path, str_value):
