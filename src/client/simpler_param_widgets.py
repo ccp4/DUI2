@@ -529,33 +529,53 @@ class ImportWidget(QWidget):
     def rot_axs_changed(self, stat):
         print("rot_axs_changed, stat:", stat)
         if int(stat) == 2:
-            new_par_str = "invert_rotation_axis=True"
+            self.add_extra_param("invert_rotation_axis=True")
 
         else:
-            new_par_str = ""
-
-        self.imp_extra_txt.setText(new_par_str)
+            self.remove_one_param("invert_rotation_axis")
+            #self.imp_extra_txt.setText("")
 
     def dist_changed(self, stat):
         print("dist_changed, stat:", stat)
         if int(stat) == 2:
-            new_par_str = "distance=2193"
+            self.add_extra_param("distance=2193")
 
         else:
-            new_par_str = ""
-
-        self.imp_extra_txt.setText(new_par_str)
+            self.remove_one_param("distance")
+            #self.imp_extra_txt.setText("")
 
     def shadow_changed(self, stat):
         print("shadow_changed, stat:", stat)
         if int(stat) == 2:
-            new_par_str = "dynamic_shadowing=True"
+            self.add_extra_param("dynamic_shadowing=True")
 
         else:
-            new_par_str = ""
+            self.remove_one_param("dynamic_shadowing")
+            #self.imp_extra_txt.setText("")
 
-        self.imp_extra_txt.setText(new_par_str)
+    def add_extra_param(self, par_str):
+        ini_txt = str(self.imp_extra_txt.text())
+        mid_txt = ini_txt + " " + par_str
+        if mid_txt[0] == " ":
+            end_txt = mid_txt[1:]
 
+        else:
+            end_txt = mid_txt
+
+        self.imp_extra_txt.setText(end_txt)
+
+    def remove_one_param(self, par_str):
+        ini_txt = str(self.imp_extra_txt.text())
+        lst_pars_ini = ini_txt.split(" ")
+
+        lst_par_end = []
+        for par in lst_pars_ini:
+            if par[0:len(par_str)] != par_str:
+                lst_par_end.append(par)
+
+        end_txt = " ".join(lst_par_end)
+
+        self.imp_extra_txt.setText(end_txt)
 
     def update_all_pars(self, tup_lst_pars):
 
