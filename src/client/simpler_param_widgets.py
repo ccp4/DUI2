@@ -422,8 +422,6 @@ class ImportWidget(QWidget):
         self.small_hbox = QHBoxLayout()
         self.small_hbox.addWidget(self.check_rot_axs)
 
-        #TODO discus how to fix import for ED
-        #TODO before removing the next line entirely
         self.small_hbox.addWidget(self.check_dist)
 
         self.small_hbox.addWidget(self.check_shadow)
@@ -492,6 +490,9 @@ class ImportWidget(QWidget):
         self.nexus_type = False
         self.imp_txt.setText("")
         self.check_rot_axs.setChecked(False)
+        self.check_dist.setChecked(False)
+        self.check_shadow.setChecked(False)
+
 
     def set_ed_pars(self):
         logging.info("set_ed_pars(SimpleParamTab)")
@@ -526,10 +527,8 @@ class ImportWidget(QWidget):
         self.all_items_changed.emit([lst_par])
 
     def rot_axs_changed(self, stat):
+        print("rot_axs_changed, stat:", stat)
         if int(stat) == 2:
-            #TODO discus how to fix import for ED
-            #TODO before removing the next line entirely
-            self.check_rot_axs.setChecked(False)
             new_par_str = "invert_rotation_axis=True"
 
         else:
@@ -538,8 +537,8 @@ class ImportWidget(QWidget):
         self.imp_extra_txt.setText(new_par_str)
 
     def dist_changed(self, stat):
+        print("dist_changed, stat:", stat)
         if int(stat) == 2:
-            self.check_dist.setChecked(False)
             new_par_str = "distance=2193"
 
         else:
@@ -548,8 +547,8 @@ class ImportWidget(QWidget):
         self.imp_extra_txt.setText(new_par_str)
 
     def shadow_changed(self, stat):
+        print("shadow_changed, stat:", stat)
         if int(stat) == 2:
-            self.check_shadow.setChecked(False)
             new_par_str = "dynamic_shadowing=True"
 
         else:
@@ -559,6 +558,12 @@ class ImportWidget(QWidget):
 
 
     def update_all_pars(self, tup_lst_pars):
+
+
+        self.check_rot_axs.setChecked(False)
+        self.check_dist.setChecked(False)
+        self.check_shadow.setChecked(False)
+
 
         for n, par in enumerate(tup_lst_pars):
             logging.info("n=" + str(n) + " par=" + str(par))
@@ -592,19 +597,22 @@ class ImportWidget(QWidget):
                     par_dic["name"] == "invert_rotation_axis" and
                     par_dic["value"] == "True"
                 ):
-                    self.imp_extra_txt.setText("invert_rotation_axis=True")
+                    self.check_rot_axs.setChecked(True)
+                    #self.imp_extra_txt.setText("invert_rotation_axis=True")
 
                 elif(
                     par_dic["name"] == "dynamic_shadowing" and
                     par_dic["value"] == "True"
                 ):
-                    self.imp_extra_txt.setText("dynamic_shadowing=True")
+                    self.check_shadow.setChecked(True)
+                    #self.imp_extra_txt.setText("dynamic_shadowing=True")
 
                 elif(
                     par_dic["name"] == "distance" and
                     par_dic["value"] == "2193"
                 ):
-                    self.imp_extra_txt.setText("distance=2193")
+                    self.check_dist.setChecked(True)
+                    #self.imp_extra_txt.setText("distance=2193")
 
 
         except IndexError:
