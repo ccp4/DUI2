@@ -535,14 +535,12 @@ class CommandParamControl:
             lst_out.append(str_out)
 
         if(
-            lst_out[0][0:19] == "dials.generate_mask" and
-            lst_out[1][0:16] == "dials.apply_mask"
+            "multipanel" in lst_out[0]
         ):
             print("time to convert to Dui2 cmd mask_app")
             str_pars = str(lst_out[0][20:-28])
             print("str_pars =", str_pars)
             lst_out = ["mask_app " + str_pars]
-
 
         print("\n lst_out =" + str(lst_out) + "\n")
         return lst_out

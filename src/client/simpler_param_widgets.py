@@ -855,7 +855,7 @@ class MaskWidget(QWidget):
                         if new_y_end > panel_height_m_border:
                             new_y_end = panel_height_m_border
 
-                    str_cmd_nam = "untrusted.rectangle"
+                    str_cmd_nam = "multipanel.rectangle"
                     str_cmd_param =        str(comp_dict["x_ini"])
                     str_cmd_param += "," + str(comp_dict["x_end"])
                     str_cmd_param += "," + str(new_y_ini)
@@ -920,7 +920,7 @@ class MaskWidget(QWidget):
                         new_yc = int(tmp_yc - panel_number * panel_height)
                         extra_str_param = "," + str(panel_number)
 
-                        str_cmd_nam = "untrusted.circle"
+                        str_cmd_nam = "multipanel.circle"
                         str_cmd_param =        str(comp_dict["x_c"])
                         str_cmd_param += "," + str(new_yc)
                         str_cmd_param += "," + str(int(tmp_r))
@@ -959,7 +959,7 @@ class MaskWidget(QWidget):
                             new_yc = int(tmp_yc - panel_number * panel_height)
                             extra_str_param = "," + str(panel_number)
 
-                            str_cmd_nam = "untrusted.circle"
+                            str_cmd_nam = "multipanel.circle"
                             str_cmd_param =        str(comp_dict["x_c"])
                             str_cmd_param += "," + str(new_yc)
                             str_cmd_param += "," + str(int(tmp_r))
@@ -971,7 +971,6 @@ class MaskWidget(QWidget):
                             print("inner_lst_pair =", inner_lst_pair)
 
                             self.comp_list.append(inner_lst_pair)
-
 
             else:
                 new_yc = int(tmp_yc)

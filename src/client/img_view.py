@@ -322,14 +322,6 @@ class ImgGraphicsScene(QGraphicsScene):
 
                     x_rect_1 = lst_num[0]
                     y_rect_1 = lst_num[2]
-                    try:
-                        y_rect_1 += 213 * lst_num[4]
-
-                    except IndexError:
-                        uncomment_only_when_needed = '''
-                        print("no pannel number provided, not adding to Y ")
-                        '''
-
                     rectangle = QRectF(
                         x_rect_1, y_rect_1, tmp_width, tmp_height
                     )
@@ -340,13 +332,6 @@ class ImgGraphicsScene(QGraphicsScene):
                     x_rect_1 = lst_num[0] - lst_num[2]
                     y_rect_1 = lst_num[1] - lst_num[2]
                     side = 2 * lst_num[2]
-                    try:
-                        y_rect_1 += 213 * lst_num[3]
-
-                    except IndexError:
-                        uncomment_only_when_needed = '''
-                        print("no pannel number provided, not adding to Y ")
-                        '''
 
                     rectangle = QRectF(
                         x_rect_1, y_rect_1, side, side
@@ -362,6 +347,31 @@ class ImgGraphicsScene(QGraphicsScene):
                                 lst_num[i * 2 + 2], lst_num[i * 2 + 3],
                                 self.overlay_pen
                             )
+
+                elif pict[0] == 'multipanel.rectangle':
+                    tmp_width = lst_num[1] - lst_num[0]
+                    tmp_height = lst_num[3] - lst_num[2]
+
+                    x_rect_1 = lst_num[0]
+                    y_rect_1 = lst_num[2]
+                    y_rect_1 += 213 * lst_num[4]
+
+                    rectangle = QRectF(
+                        x_rect_1, y_rect_1, tmp_width, tmp_height
+                    )
+                    self.addRect(rectangle, self.overlay_pen)
+
+                elif pict[0] == 'multipanel.circle':
+
+                    x_rect_1 = lst_num[0] - lst_num[2]
+                    y_rect_1 = lst_num[1] - lst_num[2]
+                    side = 2 * lst_num[2]
+                    y_rect_1 += 213 * lst_num[3]
+
+                    rectangle = QRectF(
+                        x_rect_1, y_rect_1, side, side
+                    )
+                    self.addEllipse(rectangle, self.overlay_pen)
 
         except TypeError:
             pass

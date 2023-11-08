@@ -851,8 +851,8 @@ class Runner(object):
         for single_region in untrusted_list:
             print("single_region =", single_region)
 
-            if single_region[0:16] == 'untrusted.circle':
-                lst_nums = single_region[17:].split(",")
+            if single_region[0:17] == 'multipanel.circle':
+                lst_nums = single_region[18:].split(",")
                 lst_str.append("untrusted {")
                 lst_str.append("  panel = " + str(lst_nums[3]))
                 lst_str.append(
@@ -861,8 +861,8 @@ class Runner(object):
                 )
                 lst_str.append("}")
 
-            elif single_region[0:19] == 'untrusted.rectangle':
-                lst_nums = single_region[20:].split(",")
+            elif single_region[0:20] == 'multipanel.rectangle':
+                lst_nums = single_region[21:].split(",")
                 lst_str.append("untrusted {")
                 lst_str.append("  panel = " + str(lst_nums[4]))
                 lst_str.append(
