@@ -1291,7 +1291,7 @@ class MainObject(QObject):
         lst_of_node_str = self.new_node.parent_node_lst
         cmd = {'nod_lst': lst_of_node_str, 'cmd_lst': cmd_lst}
 
-        print("cmd =", cmd)
+        logging.info("cmd(request_launch) =" + str(cmd))
 
         self.log_show.clear_4_run()
         do_predictions_n_report = bool(
@@ -1361,7 +1361,6 @@ class MainObject(QObject):
                 #TODO: put inside this [except] some way to kill [post_thread]
 
         else:
-            print("Cancel clicked to reset")
             logging.info("Cancel clicked to reset")
 
     def respose_n1_from_reset(self, line):

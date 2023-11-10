@@ -630,9 +630,6 @@ class Runner(object):
         #self.lst_cmd_in = []
 
     def run_dials_command(self, cmd_dict = None, req_obj = None):
-
-        print("cmd_dict =", cmd_dict)
-
         found_duplicated = False
         for single_step in self.step_list:
             if(
@@ -664,12 +661,9 @@ class Runner(object):
         self._save_state()
 
     def run_dui_command(self, cmd_dict = None, req_obj = None):
-        print("cmd_dict(run_dui_command) =", cmd_dict)
+        logging.info("cmd_dict(run_dui_command) = " + str(cmd_dict))
         unalias_cmd_lst = unalias_full_cmd(cmd_dict["cmd_lst"])
-        print("unalias_cmd_lst =", unalias_cmd_lst)
-
-        print("unalias_cmd_lst[0][0] =", unalias_cmd_lst[0][0])
-
+        logging.info("unalias_cmd_lst =" + str(unalias_cmd_lst))
         if req_obj is not None:
             try:
                 if unalias_cmd_lst == [['reset_graph']]:
@@ -844,12 +838,10 @@ class Runner(object):
         )
 
     def mask_app_build(self, untrusted_list):
-        print("\n ********** mask_app ********** \n")
-        print("untrusted_list =", untrusted_list)
-
+        logging.info("untrusted_list(mask_app) =" + str(untrusted_list))
         lst_str = []
         for single_region in untrusted_list:
-            print("single_region =", single_region)
+            logging.info("single_region =" + str(single_region))
 
             if single_region[0:17] == 'multipanel.circle':
                 lst_nums = single_region[18:].split(",")
@@ -879,7 +871,7 @@ class Runner(object):
 
         self.num_phil_file += 1
         phil_file_name = 'mask_n_' + str(self.num_phil_file) + '.phil'
-        print("phil_file_name =", phil_file_name)
+        logging.info("phil_file_name =" + str(phil_file_name))
 
         f = open(phil_file_name, 'w', encoding="utf-8")
 

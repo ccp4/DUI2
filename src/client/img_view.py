@@ -749,7 +749,7 @@ class DoImageView(QObject):
             new_img_path = str(json_data_lst[3])
 
             self.i23_multipanel = bool(json_data_lst[5])
-            print("\n Is I23 multidetector:", self.i23_multipanel, "\n")
+            logging.info("Is I23 multidetector:" + str(self.i23_multipanel))
 
             if self.img_path != new_img_path:
                 x_ax = np.arange(

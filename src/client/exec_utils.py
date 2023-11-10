@@ -515,8 +515,6 @@ class CommandParamControl:
         return self.par_lst[0], self.custm_param
 
     def get_full_command_list(self):
-        print("\n *** get_full_command_list")
-
         lst_out = []
         for lst_num in range(len(self.m_cmd_lst)):
             str_out = str(self.m_cmd_lst[lst_num])
@@ -537,12 +535,10 @@ class CommandParamControl:
         if(
             "multipanel" in lst_out[0]
         ):
-            print("time to convert to Dui2 cmd mask_app")
             str_pars = str(lst_out[0][20:-28])
-            print("str_pars =", str_pars)
             lst_out = ["mask_app " + str_pars]
 
-        print("\n lst_out =" + str(lst_out) + "\n")
+        logging.info("lst_out(get_full_command_list) =" + str(lst_out))
         return lst_out
 
 

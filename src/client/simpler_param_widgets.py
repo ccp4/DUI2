@@ -527,7 +527,7 @@ class ImportWidget(QWidget):
         self.all_items_changed.emit([lst_par])
 
     def rot_axs_changed(self, stat):
-        print("rot_axs_changed, stat:", stat)
+        logging.info("rot_axs_changed, stat:" + str(stat))
         if int(stat) == 2:
             self.add_extra_param("invert_rotation_axis=True")
 
@@ -536,7 +536,7 @@ class ImportWidget(QWidget):
             #self.imp_extra_txt.setText("")
 
     def dist_changed(self, stat):
-        print("dist_changed, stat:", stat)
+        logging.info("dist_changed, stat:" + str(stat))
         if int(stat) == 2:
             self.add_extra_param("distance=2193")
 
@@ -545,7 +545,7 @@ class ImportWidget(QWidget):
             #self.imp_extra_txt.setText("")
 
     def shadow_changed(self, stat):
-        print("shadow_changed, stat:", stat)
+        logging.info("shadow_changed, stat:" + str(stat))
         if int(stat) == 2:
             self.add_extra_param("dynamic_shadowing=True")
 
@@ -587,7 +587,6 @@ class ImportWidget(QWidget):
 
         for n, par in enumerate(tup_lst_pars):
             logging.info("n=" + str(n) + " par=" + str(par))
-            print("\n n=" + str(n) + " par=" + str(par))
 
         try:
             self.imp_extra_txt.setText("")
@@ -824,7 +823,7 @@ class MaskWidget(QWidget):
         else:
             panel_height = -1
 
-        print("\n comp_dict =", comp_dict, "\n")
+        logging.info(" comp_dict =" + str(comp_dict))
 
         if comp_dict["type"] == "rect":
             if comp_dict["i23_multipanel"]:
@@ -889,15 +888,11 @@ class MaskWidget(QWidget):
             if comp_dict["i23_multipanel"]:
 
                 if comp_dict["x_c"] > 0 and comp_dict["x_c"] < x_max:
-                    print("Centre INside panel(regarding X)")
+                    logging.info("Centre INside panel(regarding X)")
 
                     y_min = tmp_yc - tmp_r + panel_border
                     y_max = tmp_yc + tmp_r
 
-                    print(
-                        "y_min, y_max, panel_height = ",
-                        y_min, y_max, panel_height
-                    )
                     pan_ini = int(y_min / panel_height)
                     pan_end = int(y_max / panel_height) + 1
 
@@ -913,10 +908,12 @@ class MaskWidget(QWidget):
                     if pan_end > 24:
                         pan_end = 24
 
-                    print("pan_ini, pan_end=", pan_ini, pan_end)
+                    logging.info(
+                        "pan_ini, pan_end=" + str(pan_ini) + " " + str(pan_end)
+                    )
 
                     for panel_number in range(pan_ini, pan_end):
-                        print("panel_number =", panel_number)
+                        logging.info("panel_number =" + str(panel_number))
                         new_yc = int(tmp_yc - panel_number * panel_height)
                         extra_str_param = "," + str(panel_number)
 
@@ -929,12 +926,12 @@ class MaskWidget(QWidget):
                         str_cmd_param = str(str_cmd_param)
                         inner_lst_pair = [str_cmd_nam, str_cmd_param]
 
-                        print("inner_lst_pair =", inner_lst_pair)
+                        logging.info("inner_lst_pair =" + str(inner_lst_pair))
 
                         self.comp_list.append(inner_lst_pair)
 
                 else:
-                    print("Centre OUTside panel(regarding X)")
+                    logging.info("Centre OUTside panel(regarding X)")
                     dx1 = tmp_xc
                     dx2 = tmp_xc - x_max
                     for panel_number in range(24):
@@ -968,7 +965,7 @@ class MaskWidget(QWidget):
                             str_cmd_param = str(str_cmd_param)
                             inner_lst_pair = [str_cmd_nam, str_cmd_param]
 
-                            print("inner_lst_pair =", inner_lst_pair)
+                            logging.info("inner_lst_pair =" + str(inner_lst_pair))
 
                             self.comp_list.append(inner_lst_pair)
 
@@ -985,7 +982,7 @@ class MaskWidget(QWidget):
                 str_cmd_param = str(str_cmd_param)
                 inner_lst_pair = [str_cmd_nam, str_cmd_param]
 
-                print("inner_lst_pair =", inner_lst_pair)
+                logging.info("inner_lst_pair =" + str(inner_lst_pair))
 
                 self.comp_list.append(inner_lst_pair)
 
