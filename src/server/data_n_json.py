@@ -604,6 +604,12 @@ def get_help_list(cmd_str):
             logging.info(
                 " <<FileNotFound err catch (get_help) >> "
             )
+
+            print(
+                " <<FileNotFound err catch (get_help) >> "
+            )
+
+
             my_proc = None
             my_cmd_hlp = ["None(FileNotFoundError)"]
 
@@ -616,10 +622,12 @@ def get_help_list(cmd_str):
         except AttributeError:
             my_cmd_hlp = ["Not installed"]
             logging.info("not loading help for: " + cmd_str)
+            print("not loading help for: " + cmd_str)
 
     except TypeError:
         err_msg = "..." + cmd_str + " ...TypeError"
         logging.info(err_msg)
+        print(err_msg)
         my_cmd_hlp = []
 
     top_trimed_lst_1 = []
@@ -652,7 +660,7 @@ def get_help_list(cmd_str):
     logging.info("trimed top part 2")
 
     for single_line in top_trimed_lst_2:
-        if "xample" in single_line:
+        if "Example" in single_line:
             break
 
         bottom_trimed_lst.append(single_line + "\n")

@@ -235,7 +235,7 @@ def get_help_messages(handler_in):
         "symmetry",
         "scale",
         "cosym",
-        "slice_sequence",
+        "split_experiments",
         "merge",
         "combine_experiments",
         "export"
