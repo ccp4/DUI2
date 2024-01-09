@@ -313,6 +313,7 @@ class HandleLoadStatusLabel(QObject):
 
 
 class DoLoadHTML(QObject):
+    req_aga = Signal(int)
     def __init__(self, parent = None):
         super(DoLoadHTML, self).__init__(parent)
         self.main_obj = parent
@@ -320,6 +321,8 @@ class DoLoadHTML(QObject):
         data_init = ini_data()
         self.uni_url = data_init.get_url()
         self.tmp_dir = data_init.get_tmp_dir()
+
+        self.req_aga.connect(self.trigger)
 
         self.l_stat = HandleLoadStatusLabel(self.main_obj)
         try:
@@ -442,6 +445,7 @@ class DoLoadHTML(QObject):
                     if req_file == None:
                         full_file = self.not_avail_html
                         print("HTML request req_file => None")
+                        self.req_aga.emit(2)
 
                     else:
                         full_file = req_file.decode('utf-8')
@@ -523,6 +527,10 @@ class DoLoadHTML(QObject):
 
             except AttributeError:
                 logging.info("not working HtmlView # 5")
+
+    def trigger(self, num_of_seg):
+        print("\n retry to load in ", num_of_seg, "\n")
+
 
 
 class ShowLog(QObject):
