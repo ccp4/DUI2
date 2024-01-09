@@ -441,9 +441,11 @@ class DoLoadHTML(QObject):
                     req_file = req_shot.result_out()
                     if req_file == None:
                         full_file = self.not_avail_html
+                        print("HTML request req_file => None")
 
                     else:
                         full_file = req_file.decode('utf-8')
+                        print("HTML request req_file Not None")
 
                     logging.info("... html request ended")
 
