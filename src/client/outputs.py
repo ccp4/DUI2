@@ -530,7 +530,26 @@ class DoLoadHTML(QObject):
 
     def trigger(self, num_of_seg):
         print("\n retry to load in ", num_of_seg, "\n")
+        tmp_2_wt = num_of_seg * 2000
+        self.reload_timer = QTimer(self)
+        self.reload_timer.timeout.connect(self.my_timeout)
+        self.reload_timer.start(tmp_2_wt)
 
+    def my_timeout(self):
+        print("\n time passed \n")
+
+        to_remove = None
+        for html_info in self.lst_html:
+            if(
+                html_info["number"] == self.main_obj.curr_nod_num
+            ):
+                to_remove = html_info
+
+        if to_remove is not None:
+            self.lst_html.remove(to_remove)
+
+        self.reload_timer.stop()
+        self.__call__(do_request = True)
 
 
 class ShowLog(QObject):
