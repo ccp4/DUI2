@@ -313,7 +313,7 @@ class HandleLoadStatusLabel(QObject):
 
 
 class DoLoadHTML(QObject):
-    req_aga = Signal(int)
+    #req_aga = Signal(int)
     def __init__(self, parent = None):
         super(DoLoadHTML, self).__init__(parent)
         self.main_obj = parent
@@ -322,7 +322,7 @@ class DoLoadHTML(QObject):
         self.uni_url = data_init.get_url()
         self.tmp_dir = data_init.get_tmp_dir()
 
-        self.req_aga.connect(self.trigger)
+        #self.req_aga.connect(self.trigger)
 
         self.l_stat = HandleLoadStatusLabel(self.main_obj)
         try:
@@ -445,7 +445,8 @@ class DoLoadHTML(QObject):
                     if req_file == None:
                         full_file = self.not_avail_html
                         print("HTML request req_file => None")
-                        self.req_aga.emit(2)
+                        #self.req_aga.emit(2)
+                        self.trigger(2)
 
                     else:
                         full_file = req_file.decode('utf-8')
@@ -545,11 +546,10 @@ class DoLoadHTML(QObject):
             ):
                 to_remove = html_info
 
+        self.reload_timer.stop()
         if to_remove is not None:
             self.lst_html.remove(to_remove)
-
-        self.reload_timer.stop()
-        self.__call__(do_request = True)
+            self.__call__(do_request = True)
 
 
 class ShowLog(QObject):
