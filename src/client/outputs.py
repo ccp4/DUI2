@@ -535,11 +535,12 @@ class DoLoadHTML(QObject):
             self.l_stat.load_finished()
 
         else:
-            try:
-                self.main_obj.window.HtmlReport.setHtml(self.not_avail_html)
-
-            except AttributeError:
-                logging.info("not working HtmlView # 5")
+            html_show(
+                tmp_html_path = self.tmp_dir + os.sep + "not_avail.html",
+                qt_html_obj = self.main_obj.window.HtmlReport,
+                fil_obj = self.not_avail_html
+            )
+            print("\n showing <<  not_avail_html  >> \n")
 
     def trigger(self, num_of_seg):
         print("\n retry to load in ", num_of_seg, "\n")

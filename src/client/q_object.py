@@ -514,17 +514,6 @@ class MainObject(QObject):
         )
 
         self.do_load_html = DoLoadHTML(self)
-
-
-        tst_2_remove = '''
-
-        try:
-            self.window.HtmlReport.setHtml(self.do_load_html.not_avail_html)
-
-        except AttributeError:
-            logging.info("tmp HtmlReport not used QObject ")
-        '''
-
         self.log_show = ShowLog(self)
 
         self.do_image_view = DoImageView(self)
