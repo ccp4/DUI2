@@ -311,6 +311,32 @@ class HandleLoadStatusLabel(QObject):
         self.main_obj.parent_app.processEvents()
         logging.info("load_finished (HandleLoadStatusLabel)")
 
+def html_show(tmp_html_path, qt_html_obj, fil_obj):
+
+    new_file_path = str(tmp_html_path)
+    tmp_file = open(tmp_html_path, "w")
+    #
+    # if Windows fails to run the next code line, type:
+    #
+    # set PYTHONUTF8=1
+    #
+    # before evoking the following:
+    #
+    # python .. DUI2\src\only_client.py \
+    # url=http://supercomputo.cimav.edu.mx:45678 windows_exe=true
+    #
+    tmp_file.write(fil_obj)
+    tmp_file.close()
+    try:
+        qt_html_obj.load(
+            QUrl.fromLocalFile(tmp_html_path)
+        )
+        print("Loaded from NEW funk, new vars")
+
+    except AttributeError:
+        logging.info("not working HtmlView # 4")
+
+
 
 class DoLoadHTML(QObject):
     def __init__(self, parent = None):
@@ -422,11 +448,12 @@ class DoLoadHTML(QObject):
 
             if not found_html:
                 logging.info("not found_html #1, Local Mem")
-                try:
-                    self.main_obj.window.HtmlReport.setHtml(self.loading_html)
+                html_show(
+                    tmp_html_path = self.tmp_dir + os.sep + "loading.html",
+                    qt_html_obj = self.main_obj.window.HtmlReport,
+                    fil_obj = self.loading_html
+                )
 
-                except AttributeError:
-                    logging.info("not working HtmlView # 2")
 
                 self.l_stat.load_started()
                 try:
@@ -486,38 +513,23 @@ class DoLoadHTML(QObject):
                     full_file = self.failed_html
 
             if len(full_file) < 5:
-                try:
-                    self.main_obj.window.HtmlReport.setHtml(
-                        self.not_avail_html
-                    )
+                html_show(
+                    tmp_html_path = self.tmp_dir + os.sep + "not_avail.html",
+                    qt_html_obj = self.main_obj.window.HtmlReport,
+                    fil_obj = self.not_avail_html
+                )
+                print("\n showing <<  not_avail_html  >> \n")
 
-                except AttributeError:
-                    logging.info("not working HtmlView # 3")
 
             else:
                 curr_htmp_file_name = "report_node_" + str(nod_p_num) + ".html"
-                tmp_html_path = self.tmp_dir + os.sep + curr_htmp_file_name
-                self.new_file_path = str(tmp_html_path)
-                tmp_file = open(tmp_html_path, "w")
-                #
-                # if Windows fails to run the next code line, type:
-                #
-                # set PYTHONUTF8=1
-                #
-                # before evoking the following:
-                #
-                # python .. DUI2\src\only_client.py \
-                # url=http://supercomputo.cimav.edu.mx:45678 windows_exe=true
-                #
-                tmp_file.write(full_file)
-                tmp_file.close()
-                try:
-                    self.main_obj.window.HtmlReport.load(
-                        QUrl.fromLocalFile(tmp_html_path)
-                    )
+                html_path = self.tmp_dir + os.sep + curr_htmp_file_name
 
-                except AttributeError:
-                    logging.info("not working HtmlView # 4")
+                html_show(
+                    tmp_html_path = html_path,
+                    qt_html_obj = self.main_obj.window.HtmlReport,
+                    fil_obj = full_file
+                )
 
             logging.info("Show HTML ... End")
             self.l_stat.load_finished()
@@ -533,12 +545,6 @@ class DoLoadHTML(QObject):
         print("\n retry to load in ", num_of_seg, "\n")
         tmp_2_wt = num_of_seg * 2000
         QTimer.singleShot(tmp_2_wt, self.my_timeout)
-
-        '''
-        self.reload_timer = QTimer(self)
-        self.reload_timer.timeout.connect(self.my_timeout)
-        self.reload_timer.start(tmp_2_wt)
-        '''
 
     def my_timeout(self):
         print("\n time passed \n")
