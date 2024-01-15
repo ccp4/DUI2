@@ -122,8 +122,8 @@
                         <rect>
                          <x>0</x>
                          <y>0</y>
-                         <width>638</width>
-                         <height>319</height>
+                         <width>613</width>
+                         <height>344</height>
                         </rect>
                        </property>
                       </widget>
@@ -158,8 +158,8 @@
                         <rect>
                          <x>0</x>
                          <y>0</y>
-                         <width>638</width>
-                         <height>319</height>
+                         <width>98</width>
+                         <height>28</height>
                         </rect>
                        </property>
                       </widget>
@@ -1378,8 +1378,8 @@
                         <rect>
                          <x>0</x>
                          <y>0</y>
-                         <width>624</width>
-                         <height>305</height>
+                         <width>98</width>
+                         <height>28</height>
                         </rect>
                        </property>
                       </widget>
@@ -1752,7 +1752,7 @@
                <number>2</number>
               </property>
               <item row="0" column="0">
-               <layout class="QVBoxLayout" name="verticalLayout_4">
+               <layout class="QVBoxLayout" name="verticalLayout_html_view">
                 <property name="spacing">
                  <number>2</number>
                 </property>
@@ -1776,9 +1776,6 @@
                    </widget>
                   </item>
                  </layout>
-                </item>
-                <item>
-                 <widget class="QWidget" name="HtmlWidget" native="true"/>
                 </item>
                </layout>
               </item>
@@ -1896,7 +1893,7 @@
      <x>0</x>
      <y>0</y>
      <width>1613</width>
-     <height>22</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_file">

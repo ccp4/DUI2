@@ -563,14 +563,8 @@ class MainObject(QObject):
             self.change_layout
         )
 
-
         self.html_view = QWebEngineView()
-        self.html_v_box = QVBoxLayout()
-        self.html_v_box.addWidget(self.html_view)
-        self.window.HtmlWidget.setLayout(self.html_v_box)
-        #self.html_view.show()
-
-
+        self.window.verticalLayout_html_view.addWidget(self.html_view)
 
         self.window.show()
         self.import_init()
