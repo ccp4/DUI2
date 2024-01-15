@@ -325,6 +325,19 @@ def html_show(tmp_html_path, qt_html_obj, fil_obj):
     # python .. DUI2\src\only_client.py \
     # url=http://supercomputo.cimav.edu.mx:45678 windows_exe=true
     #
+
+
+    '''
+    self.window.html_view
+
+
+        self.window.html_view.load(
+            QUrl.fromLocalFile(
+                "/tmp/run_dui2_nodes/run4/dials.report.html"
+            )
+        )
+    '''
+
     tmp_file.write(fil_obj)
     tmp_file.close()
     try:
@@ -351,13 +364,13 @@ class DoLoadHTML(QObject):
 
         self.l_stat = HandleLoadStatusLabel(self.main_obj)
         try:
-            self.main_obj.window.HtmlReport.loadStarted.connect(
+            self.main_obj.html_view.loadStarted.connect(
                 self.l_stat.load_started
             )
-            self.main_obj.window.HtmlReport.loadProgress.connect(
+            self.main_obj.html_view.loadProgress.connect(
                 self.l_stat.load_progress
             )
-            self.main_obj.window.HtmlReport.loadFinished.connect(
+            self.main_obj.html_view.loadFinished.connect(
                 self.l_stat.load_finished
             )
 
@@ -402,7 +415,7 @@ class DoLoadHTML(QObject):
         logging.info("download_clicked(DoLoadHTML)")
         ini_file = os.getcwd() + os.sep + "report.html"
         fileResul = QFileDialog.getSaveFileName(
-            self.main_obj.window.HtmlReport, "Download HTML File",
+            self.main_obj.html_view, "Download HTML File",
             ini_file, "Html Report (*.html)"
         )
         entered_file_name = fileResul[0]
@@ -427,7 +440,7 @@ class DoLoadHTML(QObject):
             webbrowser.open(self.new_file_path)
 
         except AttributeError:
-            logging.info(
+            print(
                 "Attribute Err catch, no path for HTML file (OpenBrowser)"
             )
 
@@ -450,7 +463,9 @@ class DoLoadHTML(QObject):
                 logging.info("not found_html #1, Local Mem")
                 html_show(
                     tmp_html_path = self.tmp_dir + os.sep + "loading.html",
-                    qt_html_obj = self.main_obj.window.HtmlReport,
+
+
+                    qt_html_obj = self.main_obj.html_view,
                     fil_obj = self.loading_html
                 )
 
@@ -515,7 +530,7 @@ class DoLoadHTML(QObject):
             if len(full_file) < 5:
                 html_show(
                     tmp_html_path = self.tmp_dir + os.sep + "not_avail.html",
-                    qt_html_obj = self.main_obj.window.HtmlReport,
+                    qt_html_obj = self.main_obj.html_view,
                     fil_obj = self.not_avail_html
                 )
                 print("\n showing <<  not_avail_html  >> \n")
@@ -527,7 +542,7 @@ class DoLoadHTML(QObject):
 
                 html_show(
                     tmp_html_path = html_path,
-                    qt_html_obj = self.main_obj.window.HtmlReport,
+                    qt_html_obj = self.main_obj.html_view,
                     fil_obj = full_file
                 )
 
@@ -537,7 +552,7 @@ class DoLoadHTML(QObject):
         else:
             html_show(
                 tmp_html_path = self.tmp_dir + os.sep + "not_avail.html",
-                qt_html_obj = self.main_obj.window.HtmlReport,
+                qt_html_obj = self.main_obj.html_view,
                 fil_obj = self.not_avail_html
             )
             print("\n showing <<  not_avail_html  >> \n")
