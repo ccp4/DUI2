@@ -326,18 +326,6 @@ def html_show(tmp_html_path, qt_html_obj, fil_obj):
     # url=http://supercomputo.cimav.edu.mx:45678 windows_exe=true
     #
 
-
-    '''
-    self.window.html_view
-
-
-        self.window.html_view.load(
-            QUrl.fromLocalFile(
-                "/tmp/run_dui2_nodes/run4/dials.report.html"
-            )
-        )
-    '''
-
     tmp_file.write(fil_obj)
     tmp_file.close()
     try:
@@ -348,7 +336,6 @@ def html_show(tmp_html_path, qt_html_obj, fil_obj):
 
     except AttributeError:
         logging.info("not working HtmlView # 4")
-
 
 
 class DoLoadHTML(QObject):
@@ -408,6 +395,8 @@ class DoLoadHTML(QObject):
         + "  Failed Connection" \
         + second_half
 
+        self.new_file_path = None
+
     def reset_lst_html(self):
         self.lst_html = []
 
@@ -463,8 +452,6 @@ class DoLoadHTML(QObject):
                 logging.info("not found_html #1, Local Mem")
                 html_show(
                     tmp_html_path = self.tmp_dir + os.sep + "loading.html",
-
-
                     qt_html_obj = self.main_obj.html_view,
                     fil_obj = self.loading_html
                 )
@@ -538,10 +525,9 @@ class DoLoadHTML(QObject):
 
             else:
                 curr_htmp_file_name = "report_node_" + str(nod_p_num) + ".html"
-                html_path = self.tmp_dir + os.sep + curr_htmp_file_name
-
+                self.new_file_path = self.tmp_dir + os.sep + curr_htmp_file_name
                 html_show(
-                    tmp_html_path = html_path,
+                    tmp_html_path = self.new_file_path,
                     qt_html_obj = self.main_obj.html_view,
                     fil_obj = full_file
                 )
