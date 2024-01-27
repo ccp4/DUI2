@@ -57,15 +57,20 @@ def slice_arr_2_str( data2d, inv_scale, x1, y1, x2, y2):
 
     d1 = np_arr.shape[0]
     d2 = np_arr.shape[1]
-
+    code_2_replace = '''
     rvl_arr = np_arr.ravel()
     str_tup = str(tuple(rvl_arr))
 
     clean_str = str_tup.replace(" ", "")
     str_data = "{\"str_data\":\"" + clean_str[1:-1]+ \
                 "\",\"d1\":" + str(d1) + ",\"d2\":" + str(d2) + "}"
-
-    return str_data
+    '''
+    img_arr = np.zeros(d1 * d2 + 2, dtype = float)
+    img_arr[0] = float(d1)
+    img_arr[1] = float(d2)
+    img_arr[2:] = np_arr.ravel()
+    byte_info = img_arr.tobytes(order='C')
+    return byte_info
 
 
 def scale_np_arr(big_np_arr, inv_scale):
@@ -84,7 +89,7 @@ def scale_np_arr(big_np_arr, inv_scale):
         short_arr[row_num,:] /= float(row_cou)
 
     small_d1 = int(0.995 + a_d1 / inv_scale)
-    small_arr = np.zeros((small_d0, small_d1))
+    small_arr = np.zeros((small_d0, small_d1), dtype = float)
     for col_num in range(small_d1):
         col_cou = 0
         for sub_col_num in range(inv_scale):
@@ -103,6 +108,7 @@ def mask_np_2_str(bool_np_arr):
     d1 = bool_np_arr.shape[0]
     d2 = bool_np_arr.shape[1]
 
+    code_2_replace = '''
     str_tup = str(bool_np_arr.ravel().tobytes())
     replace_x = str_tup.replace("\\x0", "")
     str_stream = replace_x[2:-1]
@@ -111,6 +117,13 @@ def mask_np_2_str(bool_np_arr):
                 "\",\"d1\":" + str(d1) + ",\"d2\":" + str(d2) + "}"
 
     return str_data
+    '''
+    img_arr = np.zeros(d1 * d2 + 2, dtype = float)
+    img_arr[0] = float(d1)
+    img_arr[1] = float(d2)
+    img_arr[2:] = bool_np_arr.ravel()
+    byte_info = img_arr.tobytes(order='C')
+    return byte_info
 
 
 def get_np_full_mask(raw_dat):

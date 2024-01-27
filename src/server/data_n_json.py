@@ -189,8 +189,9 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
                     int(uni_cmd[1])
                 )
 
-                byt_data = bytes(str_json.encode('utf-8'))
-                return_list = byt_data
+                #byt_data = bytes(str_json.encode('utf-8'))
+                #return_list = byt_data
+                return_list = str_json
 
             except (IndexError, AttributeError, ValueError):
                 logging.info("\n  err catch , wrong line, not sending IMG \n")
@@ -215,8 +216,9 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
                     int(uni_cmd[1]), inv_scale, x1, y1, x2, y2
                 )
                 if str_json is not None:
-                    byt_data = bytes(str_json.encode('utf-8'))
-                    return_list = byt_data
+                    #byt_data = bytes(str_json.encode('utf-8'))
+                    #return_list = byt_data
+                    return_list = str_json
 
             except (IndexError, AttributeError):
                 logging.info("\n  err catch , wrong line, not sending IMG \n")
@@ -233,9 +235,9 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
                     step_list[lin2go]._lst_expt_out,
                     int(uni_cmd[1])
                 )
-
-                byt_data = bytes(str_json.encode('utf-8'))
-                return_list = byt_data
+                #byt_data = bytes(str_json.encode('utf-8'))
+                #return_list = byt_data
+                return_list = str_json
 
             except (IndexError, AttributeError, ValueError):
                 logging.info("\n  err catch , wrong line, not sending IMG \n")
@@ -260,8 +262,9 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
                     int(uni_cmd[1]), inv_scale, x1, y1, x2, y2
                 )
                 if str_json is not None:
-                    byt_data = bytes(str_json.encode('utf-8'))
-                    return_list = byt_data
+                    #byt_data = bytes(str_json.encode('utf-8'))
+                    #return_list = byt_data
+                    return_list = str_json
 
             except (IndexError, AttributeError):
                 logging.info("\n  err catch , wrong line, not sending mask IMG \n")

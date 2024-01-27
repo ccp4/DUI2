@@ -338,13 +338,22 @@ def get_json_w_img_2d(experiments_list_path, img_num):
         my_sweep = experiments.imagesets()[n_sweep]
         raw_dat = my_sweep.get_raw_data(on_sweep_img_num)
         np_arr, i23_multipanel = img_stream_py.get_np_full_img(raw_dat)
+
         d1 = np_arr.shape[0]
         d2 = np_arr.shape[1]
+        code_2_replace = '''
         str_tup = str(tuple(np_arr.ravel()))
         str_data = "{\"d1\":" + str(d1) + ",\"d2\":" + str(d2) \
                  + ",\"str_data\":\"" + str_tup[1:-1] + "\"}"
 
         return str_data
+        '''
+        img_arr = np.zeros(d1 * d2 + 2, dtype = float)
+        img_arr[0] = float(d1)
+        img_arr[1] = float(d2)
+        img_arr[2:] = np_arr.ravel()
+        byte_info = img_arr.tobytes(order='C')
+        return byte_info
 
     else:
         return None
@@ -361,17 +370,17 @@ def get_json_w_2d_slise(experiments_list_path, img_num, inv_scale, x1, y1, x2, y
         my_sweep = experiments.imagesets()[n_sweep]
         data_xy_flex = my_sweep.get_raw_data(on_sweep_img_num)
 
-        str_data = img_stream_py.slice_arr_2_str(
+        byte_data = img_stream_py.slice_arr_2_str(
             data_xy_flex, inv_scale,
             int(float(x1)), int(float(y1)),
             int(float(x2)), int(float(y2))
         )
 
-        if str_data == "Error":
-            logging.info('str_data == "Error"')
-            str_data = None
+        if byte_data == "Error":
+            logging.info('byte_data == "Error"')
+            byte_data = None
 
-        return str_data
+        return byte_data
 
     else:
         return None
@@ -419,27 +428,25 @@ def get_json_w_2d_mask_slise(
             mask_tup_obj = pickle.load(pick_file)
             pick_file.close()
 
-            '''mask_flex = mask_tup_obj[0]
-            str_data, i23_multipanel = img_stream_py.slice_mask_2_str(
-                mask_flex, inv_scale,
-                int(float(x1)), int(float(y1)),
-                int(float(x2)), int(float(y2))
-            )'''
-
-            str_data, i23_multipanel = img_stream_py.slice_mask_2_str(
+            byte_data, i23_multipanel = img_stream_py.slice_mask_2_str(
                 mask_tup_obj, inv_scale,
                 int(float(x1)), int(float(y1)),
                 int(float(x2)), int(float(y2))
             )
 
+            code_2_replace = '''
             if str_data == "Error":
                 logging.info('str_data == "Error"')
                 str_data = None
+            '''
+            if byte_data == "Error":
+                logging.info('byte_data == "Error"')
+                byte_data = None
 
         except FileNotFoundError:
-            str_data = None
+            byte_data = None
 
-        return str_data
+        return byte_data
 
     else:
         return None

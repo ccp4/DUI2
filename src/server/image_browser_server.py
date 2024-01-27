@@ -42,6 +42,7 @@ class Browser(object):
         uni_cmd = cmd_lst[0]
 
         if uni_cmd == "gis":
+            print("\n cmd_lst =", cmd_lst, "\n")
             img_num = int(cmd_lst[1])
             inv_scale = 1
             for sub_par in cmd_lst[2:]:
@@ -55,12 +56,15 @@ class Browser(object):
                     [x1, y1, x2, y2] = right_side.split(",")
 
             exp_path = cmd_dict["path"][0]
-            str_json = flex_arr_2_json.get_json_w_2d_slise(
+            byte_data = flex_arr_2_json.get_json_w_2d_slise(
                 [exp_path], img_num, inv_scale, x1, y1, x2, y2
             )
-            if str_json is not None:
-                byt_data = bytes(str_json.encode('utf-8'))
-                return_list = byt_data
+
+            if byte_data is not None:
+                return_list = byte_data
+
+            else:
+                return None
 
         elif uni_cmd == "gmis":
             img_num = int(cmd_lst[1])
@@ -76,12 +80,12 @@ class Browser(object):
                     [x1, y1, x2, y2] = right_side.split(",")
 
             exp_path = cmd_dict["path"][0]
-            str_json = flex_arr_2_json.get_json_w_2d_mask_slise(
+            byte_data = flex_arr_2_json.get_json_w_2d_mask_slise(
                 [exp_path], img_num, inv_scale, x1, y1, x2, y2
             )
-            if str_json is not None:
-                byt_data = bytes(str_json.encode('utf-8'))
-                return_list = byt_data
+            if byte_data is not None:
+                #byt_data = bytes(byte_data.encode('utf-8'))
+                return_list = byte_data
 
         elif uni_cmd == "gi":
             img_num = int(cmd_lst[1])
@@ -91,8 +95,9 @@ class Browser(object):
             )
 
             if str_json is not None:
-                byt_data = bytes(str_json.encode('utf-8'))
-                return_list = byt_data
+                #byt_data = bytes(str_json.encode('utf-8'))
+                #return_list = byt_data
+                return str_json
 
         elif uni_cmd == "gmi":
             img_num = int(cmd_lst[1])
@@ -101,8 +106,9 @@ class Browser(object):
                 [exp_path], img_num,
             )
             if str_json is not None:
-                byt_data = bytes(str_json.encode('utf-8'))
-                return_list = byt_data
+                #byt_data = bytes(str_json.encode('utf-8'))
+                #return_list = byt_data
+                return_list = str_json
 
         elif uni_cmd == "get_template":
             exp_path = cmd_dict["path"][0]

@@ -332,7 +332,6 @@ def html_show(tmp_html_path, qt_html_obj, fil_obj):
         qt_html_obj.load(
             QUrl.fromLocalFile(tmp_html_path)
         )
-        print("Loaded from NEW funk, new vars")
 
     except AttributeError:
         logging.info("not working HtmlView # 4")
@@ -472,13 +471,11 @@ class DoLoadHTML(QObject):
                     req_file = req_shot.result_out()
                     if req_file == None:
                         full_file = self.not_avail_html
-                        print("HTML request req_file => None")
                         self.trigger(self.retry_time)
                         self.retry_time += 1
 
                     else:
                         full_file = req_file.decode('utf-8')
-                        print("HTML request req_file Not None")
                         self.retry_time = 1
 
                     logging.info("... html request ended")
@@ -520,8 +517,6 @@ class DoLoadHTML(QObject):
                     qt_html_obj = self.main_obj.html_view,
                     fil_obj = self.not_avail_html
                 )
-                print("\n showing <<  not_avail_html  >> \n")
-
 
             else:
                 curr_htmp_file_name = "report_node_" + str(nod_p_num) + ".html"
@@ -541,17 +536,12 @@ class DoLoadHTML(QObject):
                 qt_html_obj = self.main_obj.html_view,
                 fil_obj = self.not_avail_html
             )
-            print("\n showing <<  not_avail_html  >> \n")
 
     def trigger(self, num_of_seg):
-        print("\n retry to load in ", num_of_seg, "\n")
         tmp_2_wt = num_of_seg * 2000
         QTimer.singleShot(tmp_2_wt, self.my_timeout)
 
     def my_timeout(self):
-        print("\n time passed \n")
-        #self.reload_timer.stop()
-
         to_remove = None
         for html_info in self.lst_html:
             if(
@@ -566,8 +556,6 @@ class DoLoadHTML(QObject):
 
         except TypeError:
             self.retry_time = 1
-            print("NoneType html_report")
-
 
 class ShowLog(QObject):
     def __init__(self, parent = None):
