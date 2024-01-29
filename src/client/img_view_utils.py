@@ -22,8 +22,6 @@ def load_img_json_w_str(
         code_2_replace = '''
         dic_str = req_shot.result_out()
         arr_dic = json.loads(dic_str)
-        end_tm = time.time()
-        logging.info("full IMG request took " + str(end_tm - start_tm) + "sec")
         d1 = arr_dic["d1"]
         d2 = arr_dic["d2"]
         str_data = arr_dic["str_data"]
@@ -35,6 +33,9 @@ def load_img_json_w_str(
         d1 = int(d1d2_n_arr1d[0])
         d2 = int(d1d2_n_arr1d[1])
         np_array_out = d1d2_n_arr1d[2:].reshape(d1, d2)
+
+        end_tm = time.time()
+        logging.info("full IMG request BIN " + str(end_tm - start_tm) + "sec")
 
     except TypeError:
         logging.info("\n Type err catch  (load_img_json_w_str) \n")
@@ -75,17 +76,14 @@ def load_mask_img_json_w_str(
               "cmd_str" : my_cmd_lst}
 
     try:
+        start_tm = time.time()
+
         req_shot = get_request_shot(
             params_in = my_cmd, main_handler = main_handler
         )
         code_2_replace = '''
         dic_str =  req_shot.result_out()
         arr_dic = json.loads(dic_str)
-        end_tm = time.time()
-        logging.info(
-            "full Mask IMG request took " + str(end_tm - start_tm) + "sec"
-        )
-
         d1 = arr_dic["d1"]
         d2 = arr_dic["d2"]
         str_data = arr_dic["str_data"]
@@ -100,6 +98,11 @@ def load_mask_img_json_w_str(
         d1 = int(d1d2_n_arr1d[0])
         d2 = int(d1d2_n_arr1d[1])
         np_array_out = d1d2_n_arr1d[2:].reshape(d1, d2)
+        end_tm = time.time()
+        logging.info(
+            "full Mask IMG request BIN time " +
+            str(end_tm - start_tm) + "sec"
+        )
 
     except TypeError:
         logging.info("\n Type err catch  (load_mask_img_json_w_str) \n")
