@@ -366,7 +366,7 @@ class RootWidg(QWidget):
 
 class ImportWidget(QWidget):
     '''
-        This widget behaves differently from mos of the other  << simple >>
+        This widget behaves differently from most of the other  << simple >>
         parameter widgets, every time the user changes a parameter DUI should
         refresh all parameter since there are some parameter that exclude
         others
@@ -379,7 +379,6 @@ class ImportWidget(QWidget):
         self.nexus_type = False
         sys_font = QFont()
         font_point_size = sys_font.pointSize()
-
 
         self.state_label = QLabel("   ...")
         self.state_label.setFont(
@@ -489,6 +488,7 @@ class ImportWidget(QWidget):
     def reset_pars(self):
         self.nexus_type = False
         self.imp_txt.setText("")
+        self.imp_extra_txt.setText("")
         self.check_rot_axs.setChecked(False)
         self.check_dist.setChecked(False)
         self.check_shadow.setChecked(False)
@@ -740,6 +740,11 @@ class SplitWidget(QWidget):
 
 
 class MaskWidget(QWidget):
+    '''
+    On this widget the user can choose what shape element to add to the mask
+    The elements should be drawn in the image viewer, consequently that part
+    of the code is in the << img_view >> module
+    '''
     all_items_changed = Signal(list)
     component_changed = Signal(str)
     def __init__(self, parent = None):
@@ -1026,7 +1031,7 @@ class MaskWidget(QWidget):
 
 class FindspotsSimplerParameterTab(SimpleParamTab):
     """
-    This widget is the tool for tunning the simpler and most common parameters
+    This widget is the tool for tuning the simpler and most common parameters
     in the spot-finder, this widget is the first to appear once the button
     "Find Sots" is clicked
     """
@@ -1202,7 +1207,7 @@ class FindspotsSimplerParameterTab(SimpleParamTab):
 
 class IndexSimplerParamTab(SimpleParamTab):
     """
-    This widget is the tool for tunning the simpler and most common parameters
+    This widget is the tool for tuning the simpler and most common parameters
     in the indexer, this widget is the first to appear once the button
     "Index" is clicked
     """
@@ -1305,7 +1310,7 @@ class IndexSimplerParamTab(SimpleParamTab):
 
 class SsxIndexSimplerParamTab(SimpleParamTab):
     """
-    This widget is the tool for tunning the simpler and most common parameters
+    This widget is the tool for tuning the simpler and most common parameters
     in the indexer, this widget is the first to appear once the button
     "SSX Index" is clicked
     """
@@ -1445,7 +1450,7 @@ class RefineBravaiSimplerParamTab(SimpleParamTab):
 
 class RefineSimplerParamTab(SimpleParamTab):
     """
-    This widget is the tool for tunning the simpler and most common parameters
+    This widget is the tool for tuning the simpler and most common parameters
     in the refiner, this widget is the first to appear once the button
     "Refine" is clicked
     """
@@ -1537,7 +1542,7 @@ class RefineSimplerParamTab(SimpleParamTab):
 
 class  IntegrateSimplerParamTab(SimpleParamTab):
     """
-    This widget is the tool for tunning the simpler and most common parameters
+    This widget is the tool for tuning the simpler and most common parameters
     in the integrate algorithm, this widget is the first to appear once the
     button "Integrate" is clicked
     """
@@ -1581,22 +1586,7 @@ class  IntegrateSimplerParamTab(SimpleParamTab):
         hbox_lay_algorithm_53.addWidget(box_algorithm_53)
         self.main_v_layout.addLayout(hbox_lay_algorithm_53)
 
-
-
-
-        consider_2_remove = '''
-        PrFit_lay_out = QHBoxLayout()
-        label_PrFit = QLabel("Use profile fitting")
-        PrFit_lay_out.addWidget(label_PrFit)
-        PrFit_comb_bx = DefaultComboBox("integration.profile.fitting",
-            ["True", "False", "Auto"])
-        PrFit_comb_bx.currentIndexChanged.connect(self.combobox_changed)
-        PrFit_lay_out.addWidget(PrFit_comb_bx)
-        self.main_v_layout.addLayout(PrFit_lay_out)
-        '''
-
         self.main_v_layout.addStretch()
-        #self.box_nproc.item_list = None
         self.lst_var_widg = _get_all_direct_layout_widget_children(
             self.main_v_layout
         )
@@ -1608,7 +1598,7 @@ class  IntegrateSimplerParamTab(SimpleParamTab):
 
 class  SsxIntegrateSimplerParamTab(SimpleParamTab):
     """
-    This widget is the tool for tunning the simpler and most common parameters
+    This widget is the tool for tuning the simpler and most common parameters
     in the integrate algorithm, this widget is the first to appear once the
     button "Integrate" is clicked
     """
@@ -1652,22 +1642,7 @@ class  SsxIntegrateSimplerParamTab(SimpleParamTab):
         hbox_lay_algorithm_53.addWidget(box_algorithm_53)
         self.main_v_layout.addLayout(hbox_lay_algorithm_53)
 
-
-
-
-        consider_2_remove = '''
-        PrFit_lay_out = QHBoxLayout()
-        label_PrFit = QLabel("Use profile fitting")
-        PrFit_lay_out.addWidget(label_PrFit)
-        PrFit_comb_bx = DefaultComboBox("integration.profile.fitting",
-            ["True", "False", "Auto"])
-        PrFit_comb_bx.currentIndexChanged.connect(self.combobox_changed)
-        PrFit_lay_out.addWidget(PrFit_comb_bx)
-        self.main_v_layout.addLayout(PrFit_lay_out)
-        '''
-
         self.main_v_layout.addStretch()
-        #self.box_nproc.item_list = None
         self.lst_var_widg = _get_all_direct_layout_widget_children(
             self.main_v_layout
         )
@@ -1679,7 +1654,7 @@ class  SsxIntegrateSimplerParamTab(SimpleParamTab):
 
 class SymmetrySimplerParamTab(SimpleParamTab):
     """
-    This widget is the tool for tunning the simpler and most common parameters
+    This widget is the tool for tuning the simpler and most common parameters
     in the symmetry command, this widget is the first to appear once the button
     "Symmetry" is clicked
     """
@@ -1715,7 +1690,7 @@ class SymmetrySimplerParamTab(SimpleParamTab):
 
 class ScaleSimplerParamTab(SimpleParamTab):
     """
-    This widget is the tool for tunning the simpler and most common parameters
+    This widget is the tool for tuning the simpler and most common parameters
     in the scale command, this widget is the first to appear once the button
     "Scale" is clicked
     """
