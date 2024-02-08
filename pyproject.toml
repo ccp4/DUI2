@@ -5,7 +5,7 @@ description = "New multi-tasking version of Dui"
 requires-python = ">=3.7"
 dependencies = [
   'requests > 2',
-  'PySide2 < 5.11.1'
+  'PySide2 > 5.15.1'
 ]
 
 [project.gui-scripts]
