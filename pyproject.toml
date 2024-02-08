@@ -3,10 +3,6 @@ name = "dui2"
 version = "1.0.0"
 description = "New multi-tasking version of Dui"
 requires-python = ">=3.7"
-dependencies = [
-  'requests > 2',
-  'PySide2 > 5.15.1'
-]
 
 [project.gui-scripts]
 dui2 = "all_local:main"
