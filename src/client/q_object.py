@@ -1223,6 +1223,11 @@ class MainObject(QObject):
                 self.server_nod_lst[self.curr_nod_num][
                     "status"
                 ]  == "Succeeded"
+                or
+                self.server_nod_lst[self.curr_nod_num][
+                    "status"
+                ]  == "Failed"
+
             ):
                 enabl = True
 

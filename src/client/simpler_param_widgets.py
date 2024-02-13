@@ -1801,21 +1801,32 @@ class ExportWidget(QWidget):
         sys_font = QFont()
         font_point_size = sys_font.pointSize()
 
-        state_label = QLabel("(exported) mtz output name:")
+        state_label = QLabel("(exported) hklout output name:")
         state_label.setFont(
             QFont("Courier", font_point_size + 1, QFont.Bold)
         )
-
         self.exp_txt = QLineEdit()
         self.exp_txt.textChanged.connect(self.line_changed)
-        self.downl_but = QPushButton("Download/save .mtz file")
-        self.downl_but.clicked.connect(self.download_mtz)
+
+        extra_label = QLabel("extra parameter:")
+        extra_label.setFont(
+            QFont("Courier", font_point_size + 1, QFont.Bold)
+        )
+        self.imp_extra_txt = QLineEdit()
+        self.imp_extra_txt.textChanged.connect(self.line_changed)
+
+
+        self.downl_but = QPushButton("Download/save hklout file")
+        self.downl_but.clicked.connect(self.download_hklout)
         self.progress_label = QLabel("...")
 
         self.main_vbox = QVBoxLayout()
         self.main_vbox.addStretch()
         self.main_vbox.addWidget(state_label)
         self.main_vbox.addWidget(self.exp_txt)
+        self.main_vbox.addStretch()
+        self.main_vbox.addWidget(extra_label)
+        self.main_vbox.addWidget(self.imp_extra_txt)
         self.main_vbox.addStretch()
         self.main_vbox.addWidget(self.downl_but)
         self.main_vbox.addWidget(self.progress_label)
@@ -1832,7 +1843,16 @@ class ExportWidget(QWidget):
         if str_value[-3:] != "mtz":
             str_value = str_value + ".mtz"
 
-        self.all_items_changed.emit([[["mtz.hklout", str_value]]])
+        lst_par = [["mtz.hklout", str_value]]
+
+        ext_par = str(self.imp_extra_txt.text())
+        if len(ext_par) > 0:
+            lst_ext_par = get_lst_par_from_str(ext_par)
+            if len(lst_ext_par) > 0:
+                for single_ext_par in lst_ext_par:
+                    lst_par.append(single_ext_par)
+
+        self.all_items_changed.emit([lst_par])
 
     def reset_pars(self):
         self.find_scaled_before.emit()
@@ -1847,25 +1867,38 @@ class ExportWidget(QWidget):
         else:
             self.exp_txt.setText("integrated.mtz")
 
+        self.imp_extra_txt.setText("")
         self.line_changed()
 
     def update_all_pars(self, tup_lst_pars):
-        logging.info("update_all_pars(ExportWidget)" + str(tup_lst_pars))
-        try:
-            inp_val = str(tup_lst_pars[0][0]["value"])
-            self.exp_txt.setText(inp_val)
+        print("update_all_pars(ExportWidget) =  " + str(tup_lst_pars))
 
-        except IndexError:
-            logging.info(" Not copying parameters from node (Index err catch )")
-            self.exp_txt.setText("")
+        for tupl_param in tup_lst_pars[0]:
+            try:
+                if tupl_param["name"] == 'mtz.hklout':
+                    inp_val1 = str(tupl_param["value"])
+                    self.exp_txt.setText(inp_val1)
+
+                else:
+                    inp_par_extra = str(tupl_param["name"])
+                    inp_val_extra = str(tupl_param["value"])
+                    ext_par = inp_par_extra + "=" + inp_val_extra
+                    self.imp_extra_txt.setText(ext_par)
+
+            except IndexError:
+                logging.info(" Not copying parameters from node (Index err catch )")
+                self.exp_txt.setText("")
+                self.imp_extra_txt.setText("")
+
 
     def set_download_stat(self, do_enable = False, nod_num = None):
         self.setEnabled(True)
         self.exp_txt.setEnabled(not do_enable)
+        self.imp_extra_txt.setEnabled(not do_enable)
         self.downl_but.setEnabled(do_enable)
         self.cur_nod_num = nod_num
 
-    def download_mtz(self):
+    def download_hklout(self):
         ini_file = os.getcwd() + os.sep + self.exp_txt.text()
         fileResul = QFileDialog.getSaveFileName(
             self, "Download MTZ File", ini_file, "Intensity  (*.mtz)"
@@ -1929,7 +1962,7 @@ class MergeWidget(QWidget):
         self.exp_txt = QLineEdit()
         self.exp_txt.textChanged.connect(self.line_changed)
         self.downl_but = QPushButton("Download/save .mtz file")
-        self.downl_but.clicked.connect(self.download_mtz)
+        self.downl_but.clicked.connect(self.download_hklout)
         self.progress_label = QLabel("...")
 
         self.main_vbox = QVBoxLayout()
@@ -1988,7 +2021,7 @@ class MergeWidget(QWidget):
         self.downl_but.setEnabled(do_enable)
         self.cur_nod_num = nod_num
 
-    def download_mtz(self):
+    def download_hklout(self):
         ini_file = os.getcwd() + os.sep + self.exp_txt.text()
         fileResul = QFileDialog.getSaveFileName(
             self, "Download MTZ File", ini_file, "Intensity  (*.mtz)"
