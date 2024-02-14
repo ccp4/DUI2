@@ -1838,19 +1838,37 @@ class ExportWidget(QWidget):
         #self.my_handler = None
 
     def line_changed(self):
-        logging.info("line_changed")
-        str_value = self.exp_txt.text()
-        if str_value[-3:] != "mtz":
-            str_value = str_value + ".mtz"
-
-        lst_par = [["mtz.hklout", str_value]]
-
+        print("line_changed")
         ext_par = str(self.imp_extra_txt.text())
+        print("ext_par =", ext_par)
         if len(ext_par) > 0:
             lst_ext_par = get_lst_par_from_str(ext_par)
+
+            print("lst_ext_par =", lst_ext_par)
+
+            data_format ="mtz"
             if len(lst_ext_par) > 0:
+                lst_par = []
                 for single_ext_par in lst_ext_par:
                     lst_par.append(single_ext_par)
+                    if single_ext_par[0] == "format":
+                        data_format = single_ext_par[1]
+
+        str_value = self.exp_txt.text()
+        #format = *mtz sadabs nxs mmcif mosflm xds xds_ascii json shelx pets
+        if data_format == "mtz":
+            if str_value[-3:] != "mtz":
+                str_value = str_value + ".mtz"
+
+            lst_par.append(["mtz.hklout", str_value])
+
+        elif data_format == "shelx":
+            if str_value[-3:] != "hkl":
+                str_value = str_value + ".hkl"
+
+            lst_par.append(["shelx.hklout", str_value])
+
+        print("lst_par = ", lst_par)
 
         self.all_items_changed.emit([lst_par])
 
@@ -1861,21 +1879,26 @@ class ExportWidget(QWidget):
         logging.info("set_ed_pars(SimpleParamTab)")
 
     def is_scale_parent1(self, scale_in_parents):
+        # This function should be called from main QObject after reset_pars
+
+        self.imp_extra_txt.setText("format=mtz")
         if scale_in_parents:
             self.exp_txt.setText("scaled.mtz")
+            #self.exp_txt.setText("scaled")
 
         else:
             self.exp_txt.setText("integrated.mtz")
+            #self.exp_txt.setText("integrated")
 
-        self.imp_extra_txt.setText("")
         self.line_changed()
 
     def update_all_pars(self, tup_lst_pars):
         print("update_all_pars(ExportWidget) =  " + str(tup_lst_pars))
 
+        ext_par_full_text = ""
         for tupl_param in tup_lst_pars[0]:
             try:
-                if tupl_param["name"] == 'mtz.hklout':
+                if tupl_param["name"][-6:] == 'hklout':
                     inp_val1 = str(tupl_param["value"])
                     self.exp_txt.setText(inp_val1)
 
@@ -1883,12 +1906,15 @@ class ExportWidget(QWidget):
                     inp_par_extra = str(tupl_param["name"])
                     inp_val_extra = str(tupl_param["value"])
                     ext_par = inp_par_extra + "=" + inp_val_extra
-                    self.imp_extra_txt.setText(ext_par)
+
+                    ext_par_full_text += " " + ext_par
 
             except IndexError:
-                logging.info(" Not copying parameters from node (Index err catch )")
+                print(" Not copying parameters from node (Index err catch )")
                 self.exp_txt.setText("")
                 self.imp_extra_txt.setText("")
+
+            self.imp_extra_txt.setText(ext_par_full_text)
 
 
     def set_download_stat(self, do_enable = False, nod_num = None):
