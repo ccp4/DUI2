@@ -1862,11 +1862,49 @@ class ExportWidget(QWidget):
 
             lst_par.append(["mtz.hklout", str_value])
 
+        elif data_format == "sadabs":
+            if str_value[-3:] != "sad":
+                str_value = str_value + ".sad"
+
+            lst_par.append(["sadabs.hklout", str_value])
+
+        elif data_format == "nxs":
+            if str_value[-3:] != "nxs":
+                str_value = str_value + ".nxs"
+
+            lst_par.append(["nxs.hklout", str_value])
+
+        elif data_format == "mmcif":
+            if str_value[-3:] != "cif":
+                str_value = str_value + ".cif"
+
+            lst_par.append(["mmcif.hklout", str_value])
+
+
+        elif data_format == "mosflm":
+            lst_par.append(["mosflm.directory", str_value])
+
+        elif data_format == "xds":
+            lst_par.append(["xds.directory", str_value])
+
+        elif data_format == "xds_ascii":
+            if str_value[-3:] != "HKL":
+                str_value = str_value + ".HKL"
+
+            lst_par.append(["xds_ascii.hklout", str_value])
+
         elif data_format == "shelx":
             if str_value[-3:] != "hkl":
                 str_value = str_value + ".hkl"
 
             lst_par.append(["shelx.hklout", str_value])
+
+        elif data_format == "json":
+            if str_value[-4:] != "json":
+                str_value = str_value + ".json"
+
+            lst_par.append(["json.filename", str_value])
+
 
         print("lst_par = ", lst_par)
 
@@ -1883,12 +1921,12 @@ class ExportWidget(QWidget):
 
         self.imp_extra_txt.setText("format=mtz")
         if scale_in_parents:
-            self.exp_txt.setText("scaled.mtz")
-            #self.exp_txt.setText("scaled")
+            #self.exp_txt.setText("scaled.mtz")
+            self.exp_txt.setText("scaled")
 
         else:
-            self.exp_txt.setText("integrated.mtz")
-            #self.exp_txt.setText("integrated")
+            #self.exp_txt.setText("integrated.mtz")
+            self.exp_txt.setText("integrated")
 
         self.line_changed()
 
