@@ -31,7 +31,8 @@ SERVER_EXE_CMD="dials.python $INI_DIR_PATH/DUI2-$TAG_VER/src/dui2/only_server.py
 echo $SERVER_EXE_CMD > dui2_server_side
 chmod +x dui2_server_side
 
-ALL_LOCAL_CMD="dials.python $INI_DIR_PATH/DUI2-$TAG_VER/src/dui2/all_local.py \$@"
+ALL_LOCAL_CMD="dials.python $INI_DIR_PATH/DUI2-$TAG_VER/src/run_dui2.py \$@"
+
 echo $EXPORT_CMD$'\n'$ALL_LOCAL_CMD > dui2
 chmod +x dui2
 
