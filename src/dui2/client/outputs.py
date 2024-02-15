@@ -322,7 +322,7 @@ def html_show(tmp_html_path, qt_html_obj, fil_obj):
     #
     # before evoking the following:
     #
-    # python .. DUI2\src\only_client.py \
+    # python .. DUI2\src\dui2\only_client.py \
     # url=http://supercomputo.cimav.edu.mx:45678 windows_exe=true
     #
 

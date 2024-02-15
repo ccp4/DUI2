@@ -19,5 +19,5 @@ echo " "
 git clone -b v2024.02.05  https://github.com/ccp4/DUI2.git
 L_DIR="$(pwd "$0")"
 echo " "
-echo "run: \"python $L_DIR/DUI2/src/all_local.py\" to launch DUI2 locally"
+echo "run: \"python $L_DIR/DUI2/src/dui2/all_local.py\" to launch DUI2 locally"
 echo " "
