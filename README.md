@@ -69,7 +69,7 @@ The same tools as if installed with `curl` and `CCP4` are available, just differ
 
 1. Fully local App (running both, server and client locally):
 
-       python DUI2/src/dui2/all_local.py
+       python DUI2/src/run_dui2.py
 
 2. Server App (Which actually runs Dials commands)
 
