@@ -9,7 +9,7 @@ dependencies = [
 ]
 
 [project.gui-scripts]
-dui2 = "dui2:all_local:main"
+dui2 = "dui2.all_local:main"
 
 [tool.setuptools.package-data]
 "dui2.client" = ["dui_client.ui"]
