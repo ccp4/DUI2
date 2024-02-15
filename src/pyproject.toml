@@ -9,8 +9,8 @@ dependencies = [
 ]
 
 [project.gui-scripts]
-dui2 = "all_local:main"
+dui2 = "dui2:all_local:main"
 
 [tool.setuptools.package-data]
-"client" = ["dui_client.ui"]
-"client.resources" = ["*.png"]
+"dui2.client" = ["dui_client.ui"]
+"dui2.client.resources" = ["*.png"]
