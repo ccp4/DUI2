@@ -31,18 +31,18 @@ from PySide2 import QtUiTools
 import numpy as np
 import json, time, requests
 
-from client.init_firts import ini_data
-from client.exec_utils import (
+from dui2.client.init_firts import ini_data
+from dui2.client.exec_utils import (
     get_req_json_dat, get_request_real_time
 )
-from client.outputs import HandleLoadStatusLabel
+from dui2.client.outputs import HandleLoadStatusLabel
 
-from client.img_view_utils import (
+from dui2.client.img_view_utils import (
     crunch_min_max, np2bmp_monocrome, np2bmp_heat, np2bmp_mask,
     load_img_json_w_str, load_mask_img_json_w_str
 )
 
-from client.file_nav_utils import FileBrowser
+from dui2.client.file_nav_utils import FileBrowser
 
 class LoadFullMaskImage(QThread):
     image_loaded = Signal(tuple)

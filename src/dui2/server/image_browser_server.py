@@ -25,11 +25,11 @@ import http.server, socketserver
 from urllib.parse import urlparse, parse_qs
 import json, os, zlib, sys, time, logging
 
-#from server.data_n_json import iter_dict, spit_out
-from server.data_n_json import spit_out
+#from dui2.server.data_n_json import iter_dict, spit_out
+from dui2.server.data_n_json import spit_out
 
-from server.img_uploader import flex_arr_2_json
-from shared_modules import format_utils
+from dui2.server.img_uploader import flex_arr_2_json
+from dui2.shared_modules import format_utils
 
 class Browser(object):
     def __init__(self, path_str):

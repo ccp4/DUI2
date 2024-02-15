@@ -30,33 +30,33 @@ from PySide2.QtGui import *
 
 from PySide2.QtWebEngineWidgets import QWebEngineView
 
-from client.gui_utils import (
+from dui2.client.gui_utils import (
     TreeDirScene, widgets_defs, get_widget_def_dict, make_square_srting,
     find_scale_cmd, find_next_cmd, check_if_predict_n_report
 )
-from client.outputs import DoLoadHTML, ShowLog, HandleReciprocalLatticeView
-from client.img_view import DoImageView
-from client.reindex_table import ReindexTable, get_label_from_str_list
-from client.exec_utils import (
+from dui2.client.outputs import DoLoadHTML, ShowLog, HandleReciprocalLatticeView
+from dui2.client.img_view import DoImageView
+from dui2.client.reindex_table import ReindexTable, get_label_from_str_list
+from dui2.client.exec_utils import (
     get_optional_list, build_advanced_params_widget, get_req_json_dat,
     get_help_messages, post_req_w_output, CommandParamControl
 )
 
-from client.init_firts import ini_data
+from dui2.client.init_firts import ini_data
 
-from client.simpler_param_widgets import RootWidg
-from client.simpler_param_widgets import ImportWidget
-from client.simpler_param_widgets import MaskWidget
-from client.simpler_param_widgets import ExportWidget
-from client.simpler_param_widgets import MergeWidget
-from client.simpler_param_widgets import OptionalWidget
-from client.simpler_param_widgets import SplitWidget
-
-
+from dui2.client.simpler_param_widgets import RootWidg
+from dui2.client.simpler_param_widgets import ImportWidget
+from dui2.client.simpler_param_widgets import MaskWidget
+from dui2.client.simpler_param_widgets import ExportWidget
+from dui2.client.simpler_param_widgets import MergeWidget
+from dui2.client.simpler_param_widgets import OptionalWidget
+from dui2.client.simpler_param_widgets import SplitWidget
 
 
 
-from client.simpler_param_widgets import (
+
+
+from dui2.client.simpler_param_widgets import (
     FindspotsSimplerParameterTab, IndexSimplerParamTab,
     SsxIndexSimplerParamTab, SsxIntegrateSimplerParamTab,
     RefineBravaiSimplerParamTab, RefineSimplerParamTab,
@@ -64,7 +64,7 @@ from client.simpler_param_widgets import (
     ScaleSimplerParamTab, CombineExperimentSimplerParamTab,
 
 )
-from shared_modules._version import __version__
+from dui2.shared_modules._version import __version__
 
 class MainObject(QObject):
     def __init__(self, parent = None, multi_runner = None):

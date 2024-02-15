@@ -1,5 +1,5 @@
 from multiprocessing import Process, Pipe
-from server import run_server
+from dui2.server import run_server
 import logging
 
 logging.basicConfig(filename='run_dui2_server.log', level=logging.DEBUG)

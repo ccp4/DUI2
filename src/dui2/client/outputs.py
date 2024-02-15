@@ -27,10 +27,10 @@ from PySide2.QtWidgets import *
 from PySide2 import QtUiTools
 from PySide2.QtGui import *
 
-from client.exec_utils import (
+from dui2.client.exec_utils import (
     get_req_json_dat, get_request_shot, get_request_real_time
 )
-from client.init_firts import ini_data
+from dui2.client.init_firts import ini_data
 
 import subprocess, psutil, shutil, webbrowser
 

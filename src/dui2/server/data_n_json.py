@@ -51,8 +51,8 @@ from dials.command_line.symmetry import phil_scope as phil_scope_symmetry
 from dials.command_line.combine_experiments import (
     phil_scope as phil_scope_combine_params
 )
-from server.img_uploader import flex_arr_2_json
-from server.init_first import ini_data
+from dui2.server.img_uploader import flex_arr_2_json
+from dui2.server.init_first import ini_data
 
 def spit_out(str_out = None, req_obj = None, out_type = None):
     if req_obj is None:

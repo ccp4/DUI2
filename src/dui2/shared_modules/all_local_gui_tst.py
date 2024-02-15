@@ -3,10 +3,10 @@ from PySide2.QtCore import *
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 from PySide2 import QtUiTools
-from shared_modules import all_local_server, format_utils
-from server.data_n_json import iter_dict
-from server import multi_node
-from server.init_first import ini_data
+from dui2.shared_modules import all_local_server, format_utils
+from dui2.server.data_n_json import iter_dict
+from dui2.server import multi_node
+from dui2.server.init_first import ini_data
 
 class connect_thread(QThread):
     logging.infoing = Signal(str)

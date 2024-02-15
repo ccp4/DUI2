@@ -25,9 +25,9 @@ copyright (c) CCP4 - DLS
 from PySide2.QtCore import *
 import requests, json, os, sys, zlib, time, logging
 
-from client.gui_utils import AdvancedParameters, widgets_defs
-from client.init_firts import ini_data
-from shared_modules import format_utils
+from dui2.client.gui_utils import AdvancedParameters, widgets_defs
+from dui2.client.init_firts import ini_data
+from dui2.shared_modules import format_utils
 
 class get_request_shot(QObject):
     def __init__(self, parent = None, params_in = None, main_handler = None):

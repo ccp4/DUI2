@@ -1,5 +1,5 @@
 #from multiprocessing import Process
-from client import img_view
+from dui2.client import img_view
 import logging
 
 if __name__ == '__main__':

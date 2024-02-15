@@ -1,7 +1,7 @@
 #uni_url = 'None'
 
 import os, sys, logging
-from shared_modules import format_utils
+from dui2.shared_modules import format_utils
 
 class ini_data(object):
     def __init__(self):

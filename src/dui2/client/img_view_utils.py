@@ -1,8 +1,8 @@
 import numpy as np
 import json, zlib, time, requests, logging
 
-from client.init_firts import ini_data
-from client.exec_utils import get_request_shot
+from dui2.client.init_firts import ini_data
+from dui2.client.exec_utils import get_request_shot
 
 def load_img_json_w_str(
     uni_url = None, nod_num_lst = [1], img_num = 0,

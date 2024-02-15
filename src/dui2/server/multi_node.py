@@ -25,8 +25,8 @@ import subprocess, psutil
 import os, sys, shutil, logging
 import glob, json, time
 
-from server.data_n_json import get_info_data, spit_out
-from shared_modules import format_utils
+from dui2.server.data_n_json import get_info_data, spit_out
+from dui2.shared_modules import format_utils
 
 def get_pair_list():
     return [
@@ -608,7 +608,7 @@ class Runner(object):
         #self.list_of_posts = []
         self.tree_output = format_utils.TreeShow()
         if dat_ini == None:
-            from server.init_first import ini_data
+            from dui2.server.init_first import ini_data
             self.data_init = ini_data()
 
         else:

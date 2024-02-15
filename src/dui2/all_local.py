@@ -1,6 +1,6 @@
 from multiprocessing import Process, Pipe
-from server import run_server
-from client import run_client
+from dui2.server import run_server
+from dui2.client import run_client
 import logging, platform
 
 import psutil

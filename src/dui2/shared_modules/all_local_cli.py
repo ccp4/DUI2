@@ -1,8 +1,8 @@
 import sys, os, time, json, logging
-from shared_modules import all_local_server, format_utils
-from server.data_n_json import iter_dict
-from server import multi_node
-from server.init_first import ini_data
+from dui2.shared_modules import all_local_server, format_utils
+from dui2.server.data_n_json import iter_dict
+from dui2.server import multi_node
+from dui2.server.init_first import ini_data
 
 
 class cli_object(object):

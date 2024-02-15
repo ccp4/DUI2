@@ -1,5 +1,5 @@
 try:
-    from server.img_uploader import img_stream_py
+    from dui2.server.img_uploader import img_stream_py
 
 except ImportError:
     import img_stream_py

@@ -1,5 +1,5 @@
 from multiprocessing import Process, Pipe
-from server import image_browser_server
+from dui2.server import image_browser_server
 import logging
 server_par_def = (
     ("init_path", None),

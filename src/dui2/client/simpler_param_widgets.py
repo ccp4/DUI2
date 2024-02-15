@@ -32,9 +32,9 @@ from PySide2.QtGui import *
 
 import numpy as np
 
-from client.init_firts import ini_data
-from client.exec_utils import Mtz_Data_Request, get_req_json_dat
-from client.file_nav_utils import FileBrowser
+from dui2.client.init_firts import ini_data
+from dui2.client.exec_utils import Mtz_Data_Request, get_req_json_dat
+from dui2.client.file_nav_utils import FileBrowser
 
 
 def _get_all_direct_layout_widget_children(parent):

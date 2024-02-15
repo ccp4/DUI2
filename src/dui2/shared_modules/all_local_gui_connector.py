@@ -3,7 +3,7 @@ from PySide2.QtCore import *
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 from PySide2 import QtUiTools
-from shared_modules import all_local_server, format_utils
+from dui2.shared_modules import all_local_server, format_utils
 
 class connect_get_thread(QThread):
     def __init__(self, handler, cmd_in, obj_out):

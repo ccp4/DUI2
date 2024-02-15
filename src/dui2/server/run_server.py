@@ -25,12 +25,12 @@ import http.server, socketserver
 from urllib.parse import urlparse, parse_qs
 import json, os, zlib, sys, time, logging
 
-from server import multi_node
-#from server.data_n_json import iter_dict
-from server.data_n_json import spit_out
-from server.init_first import ini_data
-from shared_modules import format_utils
-from shared_modules._version import __version__
+from dui2.server import multi_node
+#from dui2.server.data_n_json import iter_dict
+from dui2.server.data_n_json import spit_out
+from dui2.server.init_first import ini_data
+from dui2.shared_modules import format_utils
+from dui2.shared_modules._version import __version__
 
 def split_w_quotes(str_in):
     lst_par_cmd = []

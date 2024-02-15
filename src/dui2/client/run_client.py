@@ -26,12 +26,12 @@ import sys, time, logging
 from PySide2.QtCore import *
 from PySide2.QtWidgets import *
 
-from client.q_object import MainObject
+from dui2.client.q_object import MainObject
 
-from client.init_firts import ini_data
-from client.exec_utils import get_req_json_dat
+from dui2.client.init_firts import ini_data
+from dui2.client.exec_utils import get_req_json_dat
 
-from shared_modules import format_utils
+from dui2.shared_modules import format_utils
 
 def main(par_def = None):
     data_init = ini_data()

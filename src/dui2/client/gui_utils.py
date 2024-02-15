@@ -28,7 +28,7 @@ from PySide2 import QtUiTools
 from PySide2.QtGui import *
 import numpy as np
 
-from shared_modules import format_utils
+from dui2.shared_modules import format_utils
 
 def check_if_predict_n_report(str_key):
     should_skip = True

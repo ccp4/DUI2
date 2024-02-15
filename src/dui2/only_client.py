@@ -1,5 +1,5 @@
 #from multiprocessing import Process
-from client import run_client
+from dui2.client import run_client
 import logging
 
 logging.basicConfig(filename='run_dui2_client.log', level=logging.DEBUG)
