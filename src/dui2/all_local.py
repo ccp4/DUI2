@@ -93,6 +93,3 @@ def main():
 
         prcs_serv.join()
         logging.info("Closing server naturally")
-
-if __name__ == '__main__':
-    main()
