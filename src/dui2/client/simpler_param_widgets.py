@@ -1900,8 +1900,7 @@ class ExportWidget(QWidget):
 
             lst_par.append(["json.filename", str_value])
 
-
-        logging.info("lst_par(ExportWidget) = ", lst_par)
+        logging.info("lst_par(ExportWidget) = " + str(lst_par))
         self.all_items_changed.emit([lst_par])
 
     def reset_pars(self):
