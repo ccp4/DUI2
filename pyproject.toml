@@ -13,6 +13,8 @@ dui2_server = "dui2.only_server:main"
 
 [project.gui-scripts]
 dui2 = "dui2.all_local:main"
+dui2_client = "dui2.only_client:main"
+
 
 [tool.setuptools.package-data]
 "dui2.client" = ["dui_client.ui"]
