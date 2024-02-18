@@ -1838,14 +1838,9 @@ class ExportWidget(QWidget):
         #self.my_handler = None
 
     def line_changed(self):
-        print("line_changed")
         ext_par = str(self.imp_extra_txt.text())
-        print("ext_par =", ext_par)
         if len(ext_par) > 0:
             lst_ext_par = get_lst_par_from_str(ext_par)
-
-            print("lst_ext_par =", lst_ext_par)
-
             data_format ="mtz"
             if len(lst_ext_par) > 0:
                 lst_par = []
@@ -1906,8 +1901,7 @@ class ExportWidget(QWidget):
             lst_par.append(["json.filename", str_value])
 
 
-        print("lst_par = ", lst_par)
-
+        logging.info("lst_par(ExportWidget) = ", lst_par)
         self.all_items_changed.emit([lst_par])
 
     def reset_pars(self):
@@ -1931,8 +1925,7 @@ class ExportWidget(QWidget):
         self.line_changed()
 
     def update_all_pars(self, tup_lst_pars):
-        print("update_all_pars(ExportWidget) =  " + str(tup_lst_pars))
-
+        logging.info("update_all_pars(ExportWidget) =  " + str(tup_lst_pars))
         ext_par_full_text = ""
         for tupl_param in tup_lst_pars[0]:
             try:
@@ -1949,6 +1942,7 @@ class ExportWidget(QWidget):
 
             except IndexError:
                 print(" Not copying parameters from node (Index err catch )")
+                logging.info(" Not copying parameters from node (Index err catch )")
                 self.exp_txt.setText("")
                 self.imp_extra_txt.setText("")
 

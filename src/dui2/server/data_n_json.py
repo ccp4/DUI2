@@ -612,7 +612,6 @@ def get_help_list(cmd_str):
                 " <<FileNotFound err catch (get_help) >> "
             )
 
-
             my_proc = None
             my_cmd_hlp = ["None(FileNotFoundError)"]
 

@@ -305,20 +305,6 @@ def main(par_def = None, connection_out = None):
             logging.info(msg_txt)
             print(msg_txt)
 
-    guide_code = '''
-        self._run_dir = self._base_dir + os.sep + "run" + str(num)
-        try:
-            os.mkdir(self._run_dir)
-
-        except FileExistsError:
-            logging.info("assuming the command should run in same dir")
-
-        ####################################################################
-
-         os.chdir(path)
-            Change the current working directory to path.
-
-    '''
     nodes_dir = "run_dui2_nodes"
     try:
         os.mkdir(nodes_dir)

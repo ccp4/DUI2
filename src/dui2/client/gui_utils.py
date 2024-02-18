@@ -667,6 +667,7 @@ def copy_lst_nodes(old_lst_nodes):
 
     except TypeError:
         print("ERR catch on copy_lst_nodes")
+        logging.info("ERR catch on copy_lst_nodes")
 
     return new_lst
 

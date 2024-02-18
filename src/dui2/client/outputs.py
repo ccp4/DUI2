@@ -431,6 +431,9 @@ class DoLoadHTML(QObject):
             print(
                 "Attribute Err catch, no path for HTML file (OpenBrowser)"
             )
+            logging.info(
+                "Attribute Err catch, no path for HTML file (OpenBrowser)"
+            )
 
     def __call__(self, do_request = False):
         logging.info("Do Request =" + str(do_request))

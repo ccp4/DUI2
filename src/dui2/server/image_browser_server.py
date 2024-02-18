@@ -42,7 +42,7 @@ class Browser(object):
         uni_cmd = cmd_lst[0]
 
         if uni_cmd == "gis":
-            print("\n cmd_lst =", cmd_lst, "\n")
+            logging.info("\n cmd_lst(Browser) =" + str(cmd_lst) + "\n")
             img_num = int(cmd_lst[1])
             inv_scale = 1
             for sub_par in cmd_lst[2:]:
