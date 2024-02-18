@@ -8,6 +8,10 @@ dependencies = [
   'PySide2 > 5.15.1'
 ]
 
+[project.scripts]
+dui2_server = "dui2.only_server:main"
+
+
 [project.gui-scripts]
 dui2 = "dui2.all_local:main"
 
