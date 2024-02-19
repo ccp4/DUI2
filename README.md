@@ -73,9 +73,10 @@ The same tools as if installed with `curl` and `CCP4` are available, just differ
 
 2. Server App (Which actually runs Dials commands)
 
-       python DUI2/src/dui2/only_server.py host=MY_HOST port=MY_PORT init_path=/PATH/TO/USER/DATA
+       python DUI2/src/run_dui2_server.py host=MY_HOST port=MY_PORT init_path=/PATH/TO/USER/DATA
 
 3. Client App (GUI front end that talks to the server app)
 
-       python DUI2/src/dui2/only_client.py url=http://...[URL of the server]
+       python DUI2/src/run_dui2_client.py url=http://...[URL of the server]
+
 
