@@ -920,6 +920,11 @@ class DoImageView(QObject):
                 "No reflection << predict >> to show (Index err catch except)"
             )
 
+        except KeyError:
+            logging.info(
+                "No reflection << predict >> to show (Key err catch except)"
+            )
+
         self.refresh_img_n_refl()
 
     def refresh_img_n_refl(self):
