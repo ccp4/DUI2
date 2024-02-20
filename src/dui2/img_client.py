@@ -2,7 +2,7 @@
 from dui2.client import img_view
 import logging
 
-if __name__ == '__main__':
+def main():
     par_def = (
         ("url", 'http://127.0.0.1:45678/'),
         ("all_local", "false"),

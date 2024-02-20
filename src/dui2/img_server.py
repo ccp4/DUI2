@@ -10,7 +10,7 @@ server_par_def = (
     ("windows_exe", "false"),
 )
 
-if __name__ == '__main__':
+def main():
     pipe_server_1, pipe_server_2 = Pipe()
     prcs_serv = Process(
         target = image_browser_server.main,
