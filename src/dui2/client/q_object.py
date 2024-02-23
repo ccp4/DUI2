@@ -1369,6 +1369,12 @@ class MainObject(QObject):
         logging.info("respose_from_reset(err code):" + str(line))
 
     def what_2_do_after_dials_cmd(self, nod_num_out, do_pred_n_rept):
+        if(
+            self.server_nod_lst[nod_num_out]['cmd2show'][0] ==
+            'dials.import'
+        ):
+            self.do_image_view.set_just_imported()
+
         logging.info("nod_num_out(what_2_do_after_dials_cmd)=" + str(nod_num_out) )
         if(
             self.server_nod_lst[nod_num_out]['cmd2show'][0] ==

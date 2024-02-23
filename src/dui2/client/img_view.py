@@ -694,6 +694,7 @@ class DoImageView(QObject):
 
         self.i_min_max = [-2, 50]
         self.palette = "grayscale"
+        self.just_imported = False
 
         self.pop_display_menu = PopDisplayMenu(self)
         self.main_obj.window.DisplayButton.setMenu(self.pop_display_menu)
@@ -736,6 +737,32 @@ class DoImageView(QObject):
         self.exp_path = None
         self.nod_or_path = nod_or_path
         self.build_background_n_get_nod_num(in_img_num)
+
+    def set_just_imported(self):
+        self.just_imported = True
+
+    def tune_palette_ini(
+        self,x_ini = None, x_end = None, y_ini = None, y_end = None
+    ):
+        print("\n  Tune_palette_ini  \n")
+        print("self.just_imported = " + str(self.just_imported))
+
+        if self.just_imported == True:
+            try:
+                medi_i = np.median(self.np_full_img[x_ini: x_end, y_ini: y_end])
+                print(
+                    "np.median(self.np_full_img[" +
+                    str(x_ini) + ":" + str( x_end) + ","
+                    + str(y_ini) + ":" + str(y_end) +"] ="
+                    , medi_i
+                )
+
+                self.pop_display_menu.i_max_line.setText(str(int((medi_i + 1) * 10)))
+
+            except TypeError:
+                print("Type Err catch(tune_palette_ini)")
+
+        self.just_imported = False
 
     def build_background_n_get_nod_num(self, in_img_num):
         if self.nod_or_path is True:
@@ -1021,6 +1048,7 @@ class DoImageView(QObject):
     def new_full_img(self, tup_data):
         self.full_image_loaded = True
         self.np_full_img = tup_data[2]
+        self.tune_palette_ini()
         self.refresh_pixel_map()
 
     def new_full_mask_img(self, tup_data):
@@ -1151,20 +1179,27 @@ class DoImageView(QObject):
             rep_len_x = np.size(rep_slice_img[:,0:1])
             rep_len_y = np.size(rep_slice_img[0:1,:])
 
-            if dict_slice["x1"] + rep_len_x > np.size(self.np_full_img[:,0:1]):
-                rep_len_x = np.size(self.np_full_img[:,0:1]) - dict_slice["x1"]
+            x_ini = dict_slice["x1"]
+            y_ini = dict_slice["y1"]
+            x_end = x_ini + rep_len_x
+            y_end = y_ini + rep_len_y
+
+            if x_end > np.size(self.np_full_img[:,0:1]):
+                rep_len_x = np.size(self.np_full_img[:,0:1]) - x_ini
                 logging.info("limiting dx")
 
-            if dict_slice["y1"] + rep_len_y > np.size(self.np_full_img[0:1,:]):
-                rep_len_y = np.size(self.np_full_img[0:1,:]) - dict_slice["y1"]
+            if y_end > np.size(self.np_full_img[0:1,:]):
+                rep_len_y = np.size(self.np_full_img[0:1,:]) - y_ini
                 logging.info("limiting dy")
 
             if self.full_image_loaded == False:
                 self.np_full_img[
-                    dict_slice["x1"]:dict_slice["x1"] + rep_len_x,
-                    dict_slice["y1"]:dict_slice["y1"] + rep_len_y
+                    x_ini:x_end,
+                    y_ini:y_end
                 ] = rep_slice_img[0:rep_len_x, 0:rep_len_y]
                 self.refresh_pixel_map()
+
+            self.tune_palette_ini(x_ini, x_end, y_ini, y_end)
 
         except TypeError:
             logging.info("loading image slice in next loop")
