@@ -744,20 +744,12 @@ class DoImageView(QObject):
     def tune_palette_ini(
         self,x_ini = None, x_end = None, y_ini = None, y_end = None
     ):
-        print("\n  Tune_palette_ini  \n")
-        print("self.just_imported = " + str(self.just_imported))
-
         if self.just_imported == True:
             try:
                 medi_i = np.median(self.np_full_img[x_ini: x_end, y_ini: y_end])
-                print(
-                    "np.median(self.np_full_img[" +
-                    str(x_ini) + ":" + str( x_end) + ","
-                    + str(y_ini) + ":" + str(y_end) +"] ="
-                    , medi_i
-                )
-
-                self.pop_display_menu.i_max_line.setText(str(int((medi_i + 1) * 10)))
+                i_max_to_edit = str(int((medi_i + 1) * 10))
+                print("moving max palette to: " + i_max_to_edit)
+                self.pop_display_menu.i_max_line.setText(i_max_to_edit)
 
             except TypeError:
                 print("Type Err catch(tune_palette_ini)")
