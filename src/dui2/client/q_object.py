@@ -613,13 +613,10 @@ class MainObject(QObject):
         loop.exec_()
         if len(self.server_nod_lst) == 1:
             self.nxt_key_clicked("import")
-
-            ######################################### test import from C.L.I.
             data_init = ini_data()
             import_init = data_init.get_import_init()
-            print("\n import_init =", import_init, "\n")
-            self.imp_widg.set_selection(str(import_init), isdir = True)
-            ###############################################################
+            if import_init != "None":
+                self.imp_widg.set_selection(str(import_init), isdir = True)
 
         else:
             big_nod_num = 0

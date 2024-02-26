@@ -352,7 +352,6 @@ class ImportWidget(QWidget):
         self.setLayout(self.main_vbox)
 
     def set_selection(self, str_select, isdir):
-        print("set_selection(str_select):", str_select)
         if str_select != "":
             self.dir_selected = isdir
             if self.dir_selected:
@@ -372,7 +371,6 @@ class ImportWidget(QWidget):
             self.line_changed()
 
         else:
-            print("no selection ( canceled? )")
             logging.info("no selection ( canceled? )")
 
     def open_dir_widget(self):
@@ -1934,7 +1932,6 @@ class ExportWidget(QWidget):
                     ext_par_full_text += " " + ext_par
 
             except IndexError:
-                print(" Not copying parameters from node (Index err catch )")
                 logging.info(" Not copying parameters from node (Index err catch )")
                 self.exp_txt.setText("")
                 self.imp_extra_txt.setText("")

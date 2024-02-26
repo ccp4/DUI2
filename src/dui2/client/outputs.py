@@ -428,9 +428,6 @@ class DoLoadHTML(QObject):
             webbrowser.open(self.new_file_path)
 
         except AttributeError:
-            print(
-                "Attribute Err catch, no path for HTML file (OpenBrowser)"
-            )
             logging.info(
                 "Attribute Err catch, no path for HTML file (OpenBrowser)"
             )

@@ -748,11 +748,11 @@ class DoImageView(QObject):
             try:
                 medi_i = np.median(self.np_full_img[x_ini: x_end, y_ini: y_end])
                 i_max_to_edit = str(int((medi_i + 1) * 10))
-                print("moving max palette to: " + i_max_to_edit)
+                logging.info("moving max palette to: " + i_max_to_edit)
                 self.pop_display_menu.i_max_line.setText(i_max_to_edit)
 
             except TypeError:
-                print("Type Err catch(tune_palette_ini)")
+                logging.info("Type Err catch(tune_palette_ini)")
 
         self.just_imported = False
 
