@@ -41,6 +41,20 @@ class ini_data(object):
 
         logging.info("run_local(client) =" + str(run_local))
 
+        ############################################################
+        global imp_ini_templ
+        print(
+            "\n init_param[\"import_init\"] =", init_param["import_init"], "\n"
+        )
+        try:
+            imp_ini_templ = init_param["import_init"]
+
+        except KeyError:
+            imp_ini_templ = None
+
+        logging.info("imp_ini_templ(client) =" + str(imp_ini_templ))
+        ############################################################
+
         global win_exe
         if init_param["windows_exe"].lower() == "true":
             win_exe = True
@@ -56,6 +70,9 @@ class ini_data(object):
 
     def get_if_local(self):
         return run_local
+
+    def get_import_init(self):
+        return imp_ini_templ
 
     def get_url(self):
         return uni_url

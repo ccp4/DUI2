@@ -91,9 +91,9 @@ class MainObject(QObject):
         root_widg = RootWidg()
         self.window.RootScrollArea.setWidget(root_widg)
 
-        imp_widg = ImportWidget()
-        imp_widg.all_items_changed.connect(self.all_items_param_changed)
-        self.window.ImportScrollArea.setWidget(imp_widg)
+        self.imp_widg = ImportWidget()
+        self.imp_widg.all_items_changed.connect(self.all_items_param_changed)
+        self.window.ImportScrollArea.setWidget(self.imp_widg)
 
         split_widg = SplitWidget()
         split_widg.all_items_changed.connect(self.all_items_param_changed)
@@ -367,11 +367,11 @@ class MainObject(QObject):
             widgets_defs, self.ui_dir_path
         )
 
-        self.param_widgets["root"]["simple"] = imp_widg
+        self.param_widgets["root"]["simple"] = self.imp_widg
         self.param_widgets["root"]["advanced"] = None
         self.param_widgets["root"]["main_page"] = self.window.RootPage
 
-        self.param_widgets["import"]["simple"] = imp_widg
+        self.param_widgets["import"]["simple"] = self.imp_widg
         self.param_widgets["import"]["advanced"] = None
         self.param_widgets["import"]["main_page"] = self.window.ImportPage
 
@@ -613,6 +613,13 @@ class MainObject(QObject):
         loop.exec_()
         if len(self.server_nod_lst) == 1:
             self.nxt_key_clicked("import")
+
+            ######################################### test import from C.L.I.
+            data_init = ini_data()
+            import_init = data_init.get_import_init()
+            print("\n import_init =", import_init, "\n")
+            self.imp_widg.set_selection(str(import_init), isdir = True)
+            ###############################################################
 
         else:
             big_nod_num = 0

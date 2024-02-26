@@ -67,6 +67,7 @@ def main():
 
     server_par_def = (
         ("init_path", None),
+        ("import_init", None),
         ("port", 45678),
         ("host", "127.0.0.1"),
         #("host", "serverip"),
@@ -88,6 +89,7 @@ def main():
                 ("url", 'http://127.0.0.1:' + str(new_port) + '/'),
                 ("all_local", "true"),
                 ("windows_exe", win_str),
+                ("import_init", "None"),
         )
         run_client.main(client_par_def)
 

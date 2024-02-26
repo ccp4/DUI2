@@ -352,6 +352,7 @@ class ImportWidget(QWidget):
         self.setLayout(self.main_vbox)
 
     def set_selection(self, str_select, isdir):
+        print("set_selection(str_select):", str_select)
         if str_select != "":
             self.dir_selected = isdir
             if self.dir_selected:
@@ -380,12 +381,6 @@ class ImportWidget(QWidget):
         run_local = data_init.get_if_local()
 
         if run_local:
-            tmp_off = '''
-            self.open_widget = LocalFileBrowser(self)
-            self.open_widget.resize(self.open_widget.size() * 2)
-            self.open_widget.file_or_dir_selected.connect(self.set_selection)
-            '''
-            # TODO fix custom file browser above
             file_in_path = QFileDialog.getOpenFileName(
                 parent = self, caption = "Open Image File",
                 dir = "/", filter = "Files (*.*)"
@@ -411,7 +406,6 @@ class ImportWidget(QWidget):
         self.check_rot_axs.setChecked(False)
         self.check_dist.setChecked(False)
         self.check_shadow.setChecked(False)
-
 
     def set_ed_pars(self):
         logging.info("set_ed_pars(SimpleParamTab)")
