@@ -75,7 +75,6 @@ def main():
         ("windows_exe", win_str),
     )
 
-
     pipe_server_1, pipe_server_2 = Pipe()
     prcs_serv = Process(
         target = run_server.main,
@@ -89,7 +88,6 @@ def main():
                 ("url", 'http://127.0.0.1:' + str(new_port) + '/'),
                 ("all_local", "true"),
                 ("windows_exe", win_str),
-                ("import_init", "None"),
         )
         run_client.main(client_par_def)
 

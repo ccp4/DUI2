@@ -317,6 +317,26 @@ class ImportWidget(QWidget):
         #TODO before removing the next line entirely
         self.check_dist = QCheckBox("Set distance = 2193")
 
+        ###############################################################################
+
+        self.open_rad_butt_hbox = QHBoxLayout()
+
+        self.rad_but_template = QRadioButton("template")
+        self.open_rad_butt_hbox.addWidget(self.rad_but_template)
+        self.rad_but_directory = QRadioButton("directory")
+        self.open_rad_butt_hbox.addWidget(self.rad_but_directory)
+        self.rad_but_experiment = QRadioButton("experiment")
+        self.open_rad_butt_hbox.addWidget(self.rad_but_experiment)
+
+
+        self.rad_but_template.toggled.connect(self.toggle_funtion)
+        self.rad_but_directory.toggled.connect(self.toggle_funtion)
+        self.rad_but_experiment.toggled.connect(self.toggle_funtion)
+
+        self.toggle_funtion()
+
+        ###############################################################################
+
         self.imp_txt.textChanged.connect(self.line_changed)
         self.imp_extra_txt.textChanged.connect(self.line_changed)
         self.open_butt.clicked.connect(self.open_dir_widget)
@@ -331,6 +351,9 @@ class ImportWidget(QWidget):
         self.check_shadow.stateChanged.connect(self.shadow_changed)
 
         self.main_vbox = QVBoxLayout()
+
+        self.main_vbox.addLayout(self.open_rad_butt_hbox)
+
         self.main_vbox.addWidget(self.state_label)
         self.main_vbox.addWidget(self.imp_txt)
         self.main_vbox.addWidget(self.open_butt)
@@ -350,6 +373,23 @@ class ImportWidget(QWidget):
 
         self.main_vbox.addStretch()
         self.setLayout(self.main_vbox)
+
+    def toggle_funtion(self):
+        print("toggle_funtion(import)")
+        if self.rad_but_template.isChecked():
+            self.stat = "template"
+
+        elif self.rad_but_directory.isChecked():
+            self.stat = "directory"
+
+        elif self.rad_but_experiment.isChecked():
+            self.stat = "experiment"
+
+        else:
+            self.stat = None
+
+        print("self.stat =", self.stat)
+
 
     def set_selection(self, str_select, isdir):
         if str_select != "":
@@ -379,11 +419,21 @@ class ImportWidget(QWidget):
         run_local = data_init.get_if_local()
 
         if run_local:
-            file_in_path = QFileDialog.getOpenFileName(
-                parent = self, caption = "Open Image File",
-                dir = "/", filter = "Files (*.*)"
-            )[0]
-            self.set_selection(str_select = str(file_in_path), isdir = False)
+            if self.stat == "template" or self.stat == "experiment":
+                file_in_path = QFileDialog.getOpenFileName(
+                    parent = self, caption = "Open Image File",
+                    dir = "/", filter = "Files (*.*)"
+                )[0]
+                self.set_selection(str_select = str(file_in_path), isdir = False)
+
+            elif self.stat == "directory":
+
+                dir_path = QFileDialog.getExistingDirectory(
+                    parent = self, caption = "Open Directory", dir = "/"
+                )
+
+                self.set_selection(str_select = str(dir_path), isdir = True)
+
 
         else:
             cmd = {"nod_lst":"", "cmd_str":["dir_path"]}
@@ -688,7 +738,7 @@ class MaskWidget(QWidget):
         self.reset_pars()
 
     def toggle_funtion(self):
-        logging.info("toggle_funtion")
+        logging.info("toggle_funtion(mask)")
         if self.rad_but_rect_mask.isChecked():
             self.stat = "rect"
 
