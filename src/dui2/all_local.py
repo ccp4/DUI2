@@ -16,7 +16,7 @@ def get_other_procs():
         try:
             lst4cmd = singl_proc.cmdline()
             try:
-                if lst4cmd[-1][-12:] == "all_local.py":
+                if lst4cmd[-1][-11:] == "run_dui2.py":
                     pid_num = int(singl_proc.pid)
                     if pid_num != pid_me:
                         found_me = False

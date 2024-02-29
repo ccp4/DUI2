@@ -22,7 +22,7 @@ copyright (c) CCP4 - DLS
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 import json, os, glob, logging
-import subprocess, psutil
+import subprocess
 import importlib
 import libtbx.phil
 
