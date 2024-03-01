@@ -320,17 +320,17 @@ class ImportWidget(QWidget):
 
         self.open_rad_butt_hbox = QHBoxLayout()
 
+        self.rad_but_img_file = QRadioButton("image files")
+        self.open_rad_butt_hbox.addWidget(self.rad_but_img_file)
         self.rad_but_template = QRadioButton("template")
         self.open_rad_butt_hbox.addWidget(self.rad_but_template)
         self.rad_but_directory = QRadioButton("directory")
         self.open_rad_butt_hbox.addWidget(self.rad_but_directory)
-        self.rad_but_experiment = QRadioButton("experiment")
-        self.open_rad_butt_hbox.addWidget(self.rad_but_experiment)
 
 
         self.rad_but_template.toggled.connect(self.toggle_funtion)
         self.rad_but_directory.toggled.connect(self.toggle_funtion)
-        self.rad_but_experiment.toggled.connect(self.toggle_funtion)
+        self.rad_but_img_file.toggled.connect(self.toggle_funtion)
 
         self.toggle_funtion()
 
@@ -362,13 +362,9 @@ class ImportWidget(QWidget):
 
         self.small_hbox = QHBoxLayout()
         self.small_hbox.addWidget(self.check_rot_axs)
-
         self.small_hbox.addWidget(self.check_dist)
-
         self.small_hbox.addWidget(self.check_shadow)
-
         self.main_vbox.addLayout(self.small_hbox)
-
         self.main_vbox.addWidget(self.imp_extra_txt)
 
         self.main_vbox.addStretch()
@@ -382,11 +378,8 @@ class ImportWidget(QWidget):
         elif self.rad_but_directory.isChecked():
             self.stat = "directory"
 
-        elif self.rad_but_experiment.isChecked():
-            self.stat = "experiment"
-
         else:
-            self.stat = None
+            self.stat = "image_files"
 
         print("self.stat =", self.stat)
 
@@ -404,7 +397,11 @@ class ImportWidget(QWidget):
 
                 else:
                     self.nexus_type = False
-                    file_path_str = build_template(str_select)[0]
+                    if self.stat == "template":
+                        file_path_str = build_template(str_select)[0]
+
+                    elif self.stat == "image_files":
+                        file_path_str = build_template(str_select)[1]
 
                 self.imp_txt.setText(file_path_str)
 
@@ -419,7 +416,7 @@ class ImportWidget(QWidget):
         run_local = data_init.get_if_local()
 
         if run_local:
-            if self.stat == "template" or self.stat == "experiment":
+            if self.stat == "template" or self.stat == "image_files":
                 file_in_path = QFileDialog.getOpenFileName(
                     parent = self, caption = "Open Image File",
                     dir = "/", filter = "Files (*.*)"
@@ -469,7 +466,11 @@ class ImportWidget(QWidget):
 
         else:
             if self.nexus_type == True:
-                str_path = "input.experiments"
+                str_path = "None"
+                lst_par = [[None, str_value]]
+
+            elif self.stat == "image_files":
+                str_path = "None"
                 lst_par = [[None, str_value]]
 
             else:
