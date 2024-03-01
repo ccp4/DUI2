@@ -298,11 +298,10 @@ class ImportWidget(QWidget):
         self.nexus_type = False
         sys_font = QFont()
         font_point_size = sys_font.pointSize()
-
-        self.state_label = QLabel("   ...")
+        tmp_off = '''self.state_label = QLabel("   ...")
         self.state_label.setFont(
             QFont("Courier", font_point_size + 1, QFont.Bold)
-        )
+        )'''
         self.imp_txt = QLineEdit()
         self.extra_label = QLabel("   ...")
         self.extra_label.setFont(
@@ -353,8 +352,9 @@ class ImportWidget(QWidget):
         self.main_vbox = QVBoxLayout()
 
         self.main_vbox.addLayout(self.open_rad_butt_hbox)
-
+        tmp_off = '''
         self.main_vbox.addWidget(self.state_label)
+        '''
         self.main_vbox.addWidget(self.imp_txt)
         self.main_vbox.addWidget(self.open_butt)
 
@@ -475,8 +475,9 @@ class ImportWidget(QWidget):
                 lst_par = [
                     [str_path, "\"" + str_value + "\""]
                 ]
-
+        tmp_off = '''
         self.state_label.setText(str_path)
+        '''
 
         ext_par = str(self.imp_extra_txt.text())
         if len(ext_par) > 0 and not self.nexus_type :
@@ -599,7 +600,9 @@ class ImportWidget(QWidget):
             logging.info(" Not copying parameters from node (Index err catch )")
             self.imp_txt.setText("")
             self.imp_extra_txt.setText("")
+            tmp_off = '''
             self.state_label.setText("   ...")
+            '''
 
     def update_param(self, str_path, str_value):
         logging.info(
