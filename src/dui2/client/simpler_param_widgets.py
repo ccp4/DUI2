@@ -463,7 +463,9 @@ class ImportWidget(QWidget):
         str_value = self.imp_txt.text()
         if self.dir_selected:
             str_path = "input.directory"
-            lst_par = [[str_path, str_value]]
+            lst_par = [
+                [str_path, "\"" + str_value + "\""]
+            ]
 
         else:
             if self.nexus_type == True:
