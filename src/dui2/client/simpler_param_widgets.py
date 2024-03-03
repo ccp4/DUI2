@@ -298,10 +298,6 @@ class ImportWidget(QWidget):
         self.nexus_type = False
         sys_font = QFont()
         font_point_size = sys_font.pointSize()
-        tmp_off = '''self.state_label = QLabel("   ...")
-        self.state_label.setFont(
-            QFont("Courier", font_point_size + 1, QFont.Bold)
-        )'''
         self.imp_txt = QLineEdit()
         self.extra_label = QLabel("   ...")
         self.extra_label.setFont(
@@ -316,25 +312,32 @@ class ImportWidget(QWidget):
         #TODO before removing the next line entirely
         self.check_dist = QCheckBox("Set distance = 2193")
 
-        ###############################################################################
-
         self.open_rad_butt_hbox = QHBoxLayout()
+        group1 = QButtonGroup(self)
 
-        self.rad_but_img_file = QRadioButton("image files")
-        self.open_rad_butt_hbox.addWidget(self.rad_but_img_file)
         self.rad_but_template = QRadioButton("template")
-        self.open_rad_butt_hbox.addWidget(self.rad_but_template)
         self.rad_but_directory = QRadioButton("directory")
+        self.rad_but_img_file = QRadioButton("image files")
+        group1.addButton(self.rad_but_template)
+        group1.addButton(self.rad_but_directory)
+        group1.addButton(self.rad_but_img_file)
+        self.open_rad_butt_hbox.addWidget(self.rad_but_template)
         self.open_rad_butt_hbox.addWidget(self.rad_but_directory)
-
-
+        self.open_rad_butt_hbox.addWidget(self.rad_but_img_file)
         self.rad_but_template.toggled.connect(self.toggle_funtion)
         self.rad_but_directory.toggled.connect(self.toggle_funtion)
         self.rad_but_img_file.toggled.connect(self.toggle_funtion)
 
-        self.toggle_funtion()
+        self.rad_but_template.setChecked(True)
 
-        ###############################################################################
+        self.diag_rad_butt_vbox = QVBoxLayout()
+        group2 = QButtonGroup(self)
+        self.rad_but_sys_diag = QRadioButton("System Dialog")
+        self.rad_but_dui_diag = QRadioButton("DUI2 Dialog")
+        group2.addButton(self.rad_but_sys_diag)
+        group2.addButton(self.rad_but_dui_diag)
+        self.diag_rad_butt_vbox.addWidget(self.rad_but_sys_diag)
+        self.diag_rad_butt_vbox.addWidget(self.rad_but_dui_diag)
 
         self.imp_txt.textChanged.connect(self.line_changed)
         self.imp_extra_txt.textChanged.connect(self.line_changed)
@@ -350,13 +353,13 @@ class ImportWidget(QWidget):
         self.check_shadow.stateChanged.connect(self.shadow_changed)
 
         self.main_vbox = QVBoxLayout()
-
         self.main_vbox.addLayout(self.open_rad_butt_hbox)
-        tmp_off = '''
-        self.main_vbox.addWidget(self.state_label)
-        '''
         self.main_vbox.addWidget(self.imp_txt)
-        self.main_vbox.addWidget(self.open_butt)
+
+        self.open_diag_hbox = QHBoxLayout()
+        self.open_diag_hbox.addWidget(self.open_butt)
+        self.open_diag_hbox.addLayout(self.diag_rad_butt_vbox)
+        self.main_vbox.addLayout(self.open_diag_hbox)
 
         self.main_vbox.addStretch()
 
@@ -411,11 +414,7 @@ class ImportWidget(QWidget):
             logging.info("no selection ( canceled? )")
 
     def open_dir_widget(self):
-
-        data_init = ini_data()
-        run_local = data_init.get_if_local()
-
-        if run_local:
+        if self.rad_but_sys_diag.isChecked():
             if self.stat == "template" or self.stat == "image_files":
                 file_in_path = QFileDialog.getOpenFileName(
                     parent = self, caption = "Open Image File",
@@ -424,13 +423,10 @@ class ImportWidget(QWidget):
                 self.set_selection(str_select = str(file_in_path), isdir = False)
 
             elif self.stat == "directory":
-
                 dir_path = QFileDialog.getExistingDirectory(
                     parent = self, caption = "Open Directory", dir = "/"
                 )
-
                 self.set_selection(str_select = str(dir_path), isdir = True)
-
 
         else:
             cmd = {"nod_lst":"", "cmd_str":["dir_path"]}
@@ -451,6 +447,9 @@ class ImportWidget(QWidget):
         self.check_rot_axs.setChecked(False)
         self.check_dist.setChecked(False)
         self.check_shadow.setChecked(False)
+
+        self.rad_but_sys_diag.setChecked(True)
+
 
     def set_ed_pars(self):
         logging.info("set_ed_pars(SimpleParamTab)")
@@ -478,9 +477,6 @@ class ImportWidget(QWidget):
                 lst_par = [
                     [str_path, "\"" + str_value + "\""]
                 ]
-        tmp_off = '''
-        self.state_label.setText(str_path)
-        '''
 
         ext_par = str(self.imp_extra_txt.text())
         if len(ext_par) > 0 and not self.nexus_type :
@@ -603,9 +599,6 @@ class ImportWidget(QWidget):
             logging.info(" Not copying parameters from node (Index err catch )")
             self.imp_txt.setText("")
             self.imp_extra_txt.setText("")
-            tmp_off = '''
-            self.state_label.setText("   ...")
-            '''
 
     def update_param(self, str_path, str_value):
         logging.info(
