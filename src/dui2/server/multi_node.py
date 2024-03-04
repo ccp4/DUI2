@@ -265,7 +265,38 @@ class CmdNode(object):
         self.set_base_dir(os.getcwd())
         self.set_run_dir(self.number)
         self.nod_req = req_obj
+
+        self.review_import_step()
+
         self.run_cmd(self.nod_req)
+
+    def review_import_step(self):
+        if str(self.full_cmd_lst[0][0]) == "dials.import":
+            print(
+                "\n command (full_cmd_lst) =",
+                self.full_cmd_lst, "\n"
+            )
+
+            new_lst_0 = []
+            for part in self.full_cmd_lst[0]:
+                print("part =", part)
+
+                if part[0:12] == "image_files=":
+                    new_part = part[13:-1]
+
+                else:
+                    new_part = str(part)
+
+                print("adding: ", new_part)
+                new_lst_0.append(new_part)
+
+            self.full_cmd_lst[0] = new_lst_0
+
+            print(
+                "\n command (full_cmd_lst) =",
+                self.full_cmd_lst, "\n"
+            )
+
 
     def set_root(self):
         base_dir = os.getcwd()

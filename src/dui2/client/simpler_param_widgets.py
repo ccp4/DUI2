@@ -457,26 +457,18 @@ class ImportWidget(QWidget):
     def line_changed(self):
         logging.info("line_changed")
         str_value = self.imp_txt.text()
-        if self.dir_selected:
+        if self.stat == "image_files":
+            str_path = "image_files"
+
+        elif self.stat == "template":
+            str_path = "input.template"
+
+        elif self.stat == "directory":
             str_path = "input.directory"
-            lst_par = [
-                [str_path, "\"" + str_value + "\""]
-            ]
 
-        else:
-            if self.nexus_type == True:
-                str_path = "None"
-                lst_par = [[None, str_value]]
-
-            elif self.stat == "image_files":
-                str_path = "None"
-                lst_par = [[None, str_value]]
-
-            else:
-                str_path = "input.template"
-                lst_par = [
-                    [str_path, "\"" + str_value + "\""]
-                ]
+        lst_par = [
+            [str_path, "\"" + str_value + "\""]
+        ]
 
         ext_par = str(self.imp_extra_txt.text())
         if len(ext_par) > 0 and not self.nexus_type :
@@ -555,7 +547,7 @@ class ImportWidget(QWidget):
                 if(
                     par_dic["name"] == "input.directory" or
                     par_dic["name"] == "input.template" or
-                    par_dic["name"] == ""
+                    par_dic["name"] == "image_files"
                 ):
                     if par_dic["name"] == "input.directory":
                         self.dir_selected = True
@@ -563,7 +555,7 @@ class ImportWidget(QWidget):
                     else:
                         self.dir_selected = False
 
-                    if par_dic["name"] == "":
+                    if par_dic["name"] == "image_files":
                         self.nexus_type = True
 
                     first_par_str = str(par_dic["value"])
