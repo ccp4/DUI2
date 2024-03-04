@@ -315,18 +315,18 @@ class ImportWidget(QWidget):
         self.open_rad_butt_hbox = QHBoxLayout()
         group1 = QButtonGroup(self)
 
+        self.rad_but_img_file = QRadioButton("image files")
         self.rad_but_template = QRadioButton("template")
         self.rad_but_directory = QRadioButton("directory")
-        self.rad_but_img_file = QRadioButton("image files")
+        group1.addButton(self.rad_but_img_file)
         group1.addButton(self.rad_but_template)
         group1.addButton(self.rad_but_directory)
-        group1.addButton(self.rad_but_img_file)
+        self.open_rad_butt_hbox.addWidget(self.rad_but_img_file)
         self.open_rad_butt_hbox.addWidget(self.rad_but_template)
         self.open_rad_butt_hbox.addWidget(self.rad_but_directory)
-        self.open_rad_butt_hbox.addWidget(self.rad_but_img_file)
+        self.rad_but_img_file.toggled.connect(self.toggle_funtion)
         self.rad_but_template.toggled.connect(self.toggle_funtion)
         self.rad_but_directory.toggled.connect(self.toggle_funtion)
-        self.rad_but_img_file.toggled.connect(self.toggle_funtion)
 
         self.rad_but_template.setChecked(True)
 
@@ -449,7 +449,7 @@ class ImportWidget(QWidget):
         self.check_shadow.setChecked(False)
 
         self.rad_but_sys_diag.setChecked(True)
-
+        self.rad_but_img_file.setChecked(True)
 
     def set_ed_pars(self):
         logging.info("set_ed_pars(SimpleParamTab)")
@@ -539,8 +539,7 @@ class ImportWidget(QWidget):
         self.imp_extra_txt.setText(end_txt)
 
     def update_all_pars(self, tup_lst_pars):
-
-
+        print("tup_lst_pars(import, update_all_pars)= " + str(tup_lst_pars))
         self.check_rot_axs.setChecked(False)
         self.check_dist.setChecked(False)
         self.check_shadow.setChecked(False)
