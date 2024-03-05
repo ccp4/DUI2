@@ -272,31 +272,20 @@ class CmdNode(object):
 
     def review_import_step(self):
         if str(self.full_cmd_lst[0][0]) == "dials.import":
-            print(
-                "\n command (full_cmd_lst) =",
-                self.full_cmd_lst, "\n"
-            )
-
+            logging.info("editing (import) list cmd: " + str(self.full_cmd_lst[0]))
             new_lst_0 = []
             for part in self.full_cmd_lst[0]:
-                print("part =", part)
-
+                logging.info("      editing part: " + str(part))
                 if part[0:12] == "image_files=":
                     new_part = part[13:-1]
 
                 else:
                     new_part = str(part)
 
-                print("adding: ", new_part)
+                logging.info("adding(after edit): " + str(new_part))
                 new_lst_0.append(new_part)
 
             self.full_cmd_lst[0] = new_lst_0
-
-            print(
-                "\n command (full_cmd_lst) =",
-                self.full_cmd_lst, "\n"
-            )
-
 
     def set_root(self):
         base_dir = os.getcwd()
