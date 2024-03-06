@@ -295,7 +295,6 @@ class ImportWidget(QWidget):
         super(ImportWidget, self).__init__(parent)
         self.do_emit = True
         self.dir_selected = None
-        #self.nexus_type = False
         sys_font = QFont()
         font_point_size = sys_font.pointSize()
         self.imp_txt = QLineEdit()
@@ -305,7 +304,6 @@ class ImportWidget(QWidget):
         )
         self.imp_extra_txt = QLineEdit()
         self.open_butt = QPushButton("\n  Open images  \n")
-
 
         self.open_rad_butt_hbox = QHBoxLayout()
         group1 = QButtonGroup(self)
@@ -369,17 +367,19 @@ class ImportWidget(QWidget):
 
     def toggle_funtion(self):
         print("toggle_funtion(import)")
+        '''
         if self.rad_but_template.isChecked():
             self.stat = "template"
 
         elif self.rad_but_directory.isChecked():
             self.stat = "directory"
 
-        else:
+        elif self.rad_but_img_file.isChecked():
             self.stat = "image_files"
 
         print("self.stat =", self.stat)
-
+        '''
+        self.line_changed()
 
     def set_selection(self, str_select, isdir):
         if str_select != "":
@@ -388,16 +388,17 @@ class ImportWidget(QWidget):
                 self.imp_txt.setText(str_select)
 
             else:
-                if str_select[-4:]  == ".nxs" or str_select[-9:] == "master.h5" :
-                    #self.nexus_type = True
+                if(
+                    str_select[-4:]  == ".nxs" or
+                    str_select[-9:] == "master.h5"
+                ):
                     file_path_str = str_select
 
                 else:
-                    #self.nexus_type = False
-                    if self.stat == "template":
+                    if self.rad_but_template.isChecked():
                         file_path_str = build_template(str_select)[0]
 
-                    elif self.stat == "image_files":
+                    elif self.rad_but_img_file.isChecked():
                         file_path_str = build_template(str_select)[1]
 
                 self.imp_txt.setText(file_path_str)
@@ -409,14 +410,17 @@ class ImportWidget(QWidget):
 
     def open_dir_widget(self):
         if self.rad_but_sys_diag.isChecked():
-            if self.stat == "template" or self.stat == "image_files":
+            if(
+                self.rad_but_template.isChecked() or
+                self.rad_but_img_file.isChecked()
+            ):
                 file_in_path = QFileDialog.getOpenFileName(
                     parent = self, caption = "Open Image File",
                     dir = "/", filter = "Files (*.*)"
                 )[0]
                 self.set_selection(str_select = str(file_in_path), isdir = False)
 
-            elif self.stat == "directory":
+            elif self.rad_but_directory.isChecked():
                 dir_path = QFileDialog.getExistingDirectory(
                     parent = self, caption = "Open Directory", dir = "/"
                 )
@@ -435,7 +439,6 @@ class ImportWidget(QWidget):
             self.open_widget.file_or_dir_selected.connect(self.set_selection)
 
     def reset_pars(self):
-        #self.nexus_type = False
         self.imp_txt.setText("")
         self.imp_extra_txt.setText("")
         self.check_rot_axs.setChecked(False)
@@ -449,15 +452,14 @@ class ImportWidget(QWidget):
         logging.info("set_ed_pars(SimpleParamTab)")
 
     def line_changed(self):
-        print("line_changed")
         str_value = self.imp_txt.text()
-        if self.stat == "image_files":
+        if self.rad_but_img_file.isChecked():
             str_path = "image_files"
 
-        elif self.stat == "template":
+        elif self.rad_but_template.isChecked():
             str_path = "input.template"
 
-        elif self.stat == "directory":
+        elif self.rad_but_directory.isChecked():
             str_path = "input.directory"
 
         lst_par = [
@@ -465,12 +467,13 @@ class ImportWidget(QWidget):
         ]
 
         ext_par = str(self.imp_extra_txt.text())
-        #if len(ext_par) > 0 and not self.nexus_type :
         if len(ext_par) > 0:
             lst_ext_par = get_lst_par_from_str(ext_par)
             if len(lst_ext_par) > 0:
                 for single_ext_par in lst_ext_par:
                     lst_par.append(single_ext_par)
+
+        print("emiting >>" + str([lst_par]))
 
         self.all_items_changed.emit([lst_par])
 
@@ -481,7 +484,6 @@ class ImportWidget(QWidget):
 
         else:
             self.remove_one_param("invert_rotation_axis")
-            #self.imp_extra_txt.setText("")
 
     def dist_changed(self, stat):
         logging.info("dist_changed, stat:" + str(stat))
@@ -490,7 +492,6 @@ class ImportWidget(QWidget):
 
         else:
             self.remove_one_param("distance")
-            #self.imp_extra_txt.setText("")
 
     def shadow_changed(self, stat):
         logging.info("shadow_changed, stat:" + str(stat))
@@ -499,7 +500,6 @@ class ImportWidget(QWidget):
 
         else:
             self.remove_one_param("dynamic_shadowing")
-            #self.imp_extra_txt.setText("")
 
     def add_extra_param(self, par_str):
         ini_txt = str(self.imp_extra_txt.text())
@@ -522,7 +522,6 @@ class ImportWidget(QWidget):
                 lst_par_end.append(par)
 
         end_txt = " ".join(lst_par_end)
-
         self.imp_extra_txt.setText(end_txt)
 
     def update_all_pars(self, tup_lst_pars):
@@ -530,7 +529,6 @@ class ImportWidget(QWidget):
         self.check_rot_axs.setChecked(False)
         self.check_dist.setChecked(False)
         self.check_shadow.setChecked(False)
-
 
         for n, par in enumerate(tup_lst_pars):
             logging.info("n=" + str(n) + " par=" + str(par))
@@ -550,9 +548,6 @@ class ImportWidget(QWidget):
                     else:
                         self.dir_selected = False
 
-                    '''if par_dic["name"] == "image_files":
-                        self.nexus_type = True'''
-
                     first_par_str = str(par_dic["value"])
                     if first_par_str[0] == "\"" and first_par_str[-1] == "\"":
                         first_par_str = first_par_str[1:-1]
@@ -564,22 +559,18 @@ class ImportWidget(QWidget):
                     par_dic["value"] == "True"
                 ):
                     self.check_rot_axs.setChecked(True)
-                    #self.imp_extra_txt.setText("invert_rotation_axis=True")
 
                 elif(
                     par_dic["name"] == "dynamic_shadowing" and
                     par_dic["value"] == "True"
                 ):
                     self.check_shadow.setChecked(True)
-                    #self.imp_extra_txt.setText("dynamic_shadowing=True")
 
                 elif(
                     par_dic["name"] == "distance" and
                     par_dic["value"] == "2193"
                 ):
                     self.check_dist.setChecked(True)
-                    #self.imp_extra_txt.setText("distance=2193")
-
 
         except IndexError:
             logging.info(" Not copying parameters from node (Index err catch )")
