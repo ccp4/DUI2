@@ -295,7 +295,7 @@ class ImportWidget(QWidget):
         super(ImportWidget, self).__init__(parent)
         self.do_emit = True
         self.dir_selected = None
-        self.nexus_type = False
+        #self.nexus_type = False
         sys_font = QFont()
         font_point_size = sys_font.pointSize()
         self.imp_txt = QLineEdit()
@@ -389,11 +389,11 @@ class ImportWidget(QWidget):
 
             else:
                 if str_select[-4:]  == ".nxs" or str_select[-9:] == "master.h5" :
-                    self.nexus_type = True
+                    #self.nexus_type = True
                     file_path_str = str_select
 
                 else:
-                    self.nexus_type = False
+                    #self.nexus_type = False
                     if self.stat == "template":
                         file_path_str = build_template(str_select)[0]
 
@@ -435,7 +435,7 @@ class ImportWidget(QWidget):
             self.open_widget.file_or_dir_selected.connect(self.set_selection)
 
     def reset_pars(self):
-        self.nexus_type = False
+        #self.nexus_type = False
         self.imp_txt.setText("")
         self.imp_extra_txt.setText("")
         self.check_rot_axs.setChecked(False)
@@ -449,7 +449,7 @@ class ImportWidget(QWidget):
         logging.info("set_ed_pars(SimpleParamTab)")
 
     def line_changed(self):
-        logging.info("line_changed")
+        print("line_changed")
         str_value = self.imp_txt.text()
         if self.stat == "image_files":
             str_path = "image_files"
@@ -465,7 +465,8 @@ class ImportWidget(QWidget):
         ]
 
         ext_par = str(self.imp_extra_txt.text())
-        if len(ext_par) > 0 and not self.nexus_type :
+        #if len(ext_par) > 0 and not self.nexus_type :
+        if len(ext_par) > 0:
             lst_ext_par = get_lst_par_from_str(ext_par)
             if len(lst_ext_par) > 0:
                 for single_ext_par in lst_ext_par:
@@ -549,8 +550,8 @@ class ImportWidget(QWidget):
                     else:
                         self.dir_selected = False
 
-                    if par_dic["name"] == "image_files":
-                        self.nexus_type = True
+                    '''if par_dic["name"] == "image_files":
+                        self.nexus_type = True'''
 
                     first_par_str = str(par_dic["value"])
                     if first_par_str[0] == "\"" and first_par_str[-1] == "\"":
