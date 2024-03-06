@@ -306,11 +306,6 @@ class ImportWidget(QWidget):
         self.imp_extra_txt = QLineEdit()
         self.open_butt = QPushButton("\n  Open images  \n")
 
-        self.check_rot_axs = QCheckBox("Invert rotation axis")
-
-        #TODO discus how to fix import for ED
-        #TODO before removing the next line entirely
-        self.check_dist = QCheckBox("Set distance = 2193")
 
         self.open_rad_butt_hbox = QHBoxLayout()
         group1 = QButtonGroup(self)
@@ -342,14 +337,13 @@ class ImportWidget(QWidget):
         self.imp_txt.textChanged.connect(self.line_changed)
         self.imp_extra_txt.textChanged.connect(self.line_changed)
         self.open_butt.clicked.connect(self.open_dir_widget)
-        self.check_rot_axs.stateChanged.connect(self.rot_axs_changed)
 
-        #TODO discus how to fix import for ED
-        #TODO before removing the next line entirely
-        self.check_dist.stateChanged.connect(self.dist_changed)
-
-
+        self.check_rot_axs = QCheckBox("Invert rotation axis")
+        self.check_dist = QCheckBox("Set distance = 2193")
         self.check_shadow = QCheckBox("Set dynamic shadowing")
+
+        self.check_rot_axs.stateChanged.connect(self.rot_axs_changed)
+        self.check_dist.stateChanged.connect(self.dist_changed)
         self.check_shadow.stateChanged.connect(self.shadow_changed)
 
         self.main_vbox = QVBoxLayout()
