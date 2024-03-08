@@ -366,19 +366,7 @@ class ImportWidget(QWidget):
         self.setLayout(self.main_vbox)
 
     def toggle_funtion(self):
-        print("toggle_funtion(import)")
-        '''
-        if self.rad_but_template.isChecked():
-            self.stat = "template"
-
-        elif self.rad_but_directory.isChecked():
-            self.stat = "directory"
-
-        elif self.rad_but_img_file.isChecked():
-            self.stat = "image_files"
-
-        print("self.stat =", self.stat)
-        '''
+        logging.info("toggle_funtion(import)")
         self.line_changed()
 
     def set_selection(self, str_select, isdir):
