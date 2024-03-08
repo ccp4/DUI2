@@ -341,7 +341,14 @@ class ImportWidget(QWidget):
         self.open_butt.clicked.connect(self.open_dir_widget)
 
         self.check_rot_axs = QCheckBox("Invert rotation axis")
-        self.check_dist = QCheckBox("Set distance = 2193")
+        self.check_dist = QCheckBox("Set distance =")
+
+        self.dist_text_in = QLineEdit()
+        fnt_met = self.dist_text_in.fontMetrics()
+        calc_width = 4 * fnt_met.width('W')
+        self.dist_text_in.setFixedWidth(calc_width)
+        self.dist_text_in.setText("2193")
+
         self.check_shadow = QCheckBox("Set dynamic shadowing")
 
         self.check_rot_axs.stateChanged.connect(self.rot_axs_changed)
@@ -361,7 +368,10 @@ class ImportWidget(QWidget):
 
         self.small_hbox = QHBoxLayout()
         self.small_hbox.addWidget(self.check_rot_axs)
+        self.small_hbox.addStretch()
         self.small_hbox.addWidget(self.check_dist)
+        self.small_hbox.addWidget(self.dist_text_in)
+        self.small_hbox.addStretch()
         self.small_hbox.addWidget(self.check_shadow)
         self.main_vbox.addLayout(self.small_hbox)
         self.main_vbox.addWidget(self.imp_extra_txt)
