@@ -295,6 +295,10 @@ class ImportWidget(QWidget):
         super(ImportWidget, self).__init__(parent)
         self.do_emit = True
         self.dir_selected = None
+
+        data_init = ini_data()
+        self.run_local = data_init.get_if_local()
+
         sys_font = QFont()
         font_point_size = sys_font.pointSize()
         self.imp_txt = QLineEdit()
@@ -435,6 +439,10 @@ class ImportWidget(QWidget):
 
         self.rad_but_sys_diag.setChecked(True)
         self.rad_but_img_file.setChecked(True)
+
+        if not self.run_local:
+            self.rad_but_sys_diag.setEnabled(False)
+            self.rad_but_dui_diag.setChecked(True)
 
     def set_ed_pars(self):
         logging.info("set_ed_pars(SimpleParamTab)")
