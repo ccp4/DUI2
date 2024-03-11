@@ -341,18 +341,15 @@ class ImportWidget(QWidget):
         self.open_butt.clicked.connect(self.open_dir_widget)
 
         self.check_rot_axs = QCheckBox("Invert rotation axis")
-        self.check_dist = QCheckBox("Set distance =")
-
         self.dist_text_in = QLineEdit()
         fnt_met = self.dist_text_in.fontMetrics()
         calc_width = 4 * fnt_met.width('W')
         self.dist_text_in.setFixedWidth(calc_width)
-        self.dist_text_in.setText("2193")
-
+        #self.dist_text_in.setText("2193")
         self.check_shadow = QCheckBox("Set dynamic shadowing")
 
         self.check_rot_axs.stateChanged.connect(self.rot_axs_changed)
-        self.check_dist.stateChanged.connect(self.dist_changed)
+        self.dist_text_in.textChanged.connect(self.dist_changed)
         self.check_shadow.stateChanged.connect(self.shadow_changed)
 
         self.main_vbox = QVBoxLayout()
@@ -369,7 +366,7 @@ class ImportWidget(QWidget):
         self.small_hbox = QHBoxLayout()
         self.small_hbox.addWidget(self.check_rot_axs)
         self.small_hbox.addStretch()
-        self.small_hbox.addWidget(self.check_dist)
+        self.small_hbox.addWidget(QLabel("Distance ="))
         self.small_hbox.addWidget(self.dist_text_in)
         self.small_hbox.addStretch()
         self.small_hbox.addWidget(self.check_shadow)
@@ -384,6 +381,9 @@ class ImportWidget(QWidget):
         self.line_changed()
 
     def set_selection(self, str_select, isdir):
+
+        print("isdir(set_selection) =" + str(isdir))
+
         if str_select != "":
             self.dir_selected = isdir
             if self.dir_selected:
@@ -429,14 +429,25 @@ class ImportWidget(QWidget):
                 self.set_selection(str_select = str(dir_path), isdir = True)
 
         else:
+
             cmd = {"nod_lst":"", "cmd_str":["dir_path"]}
             lst_req = get_req_json_dat(
                 params_in = cmd, main_handler = None
             )
             dic_str = lst_req.result_out()
             init_path = dic_str[0]
+            if(
+                self.rad_but_template.isChecked() or
+                self.rad_but_img_file.isChecked()
+            ):
+                only_dir_bool = False
 
-            self.open_widget = FileBrowser(parent = self, path_in = init_path)
+            elif self.rad_but_directory.isChecked():
+                only_dir_bool = True
+
+            self.open_widget = FileBrowser(
+                parent = self, path_in = init_path, only_dir = only_dir_bool
+            )
             self.open_widget.resize(self.open_widget.size() * 2)
             self.open_widget.file_or_dir_selected.connect(self.set_selection)
 
@@ -444,7 +455,7 @@ class ImportWidget(QWidget):
         self.imp_txt.setText("")
         self.imp_extra_txt.setText("")
         self.check_rot_axs.setChecked(False)
-        self.check_dist.setChecked(False)
+        self.dist_text_in.setText("Auto")
         self.check_shadow.setChecked(False)
 
         self.rad_but_sys_diag.setChecked(True)
@@ -479,7 +490,7 @@ class ImportWidget(QWidget):
                 for single_ext_par in lst_ext_par:
                     lst_par.append(single_ext_par)
 
-        print("emiting >>" + str([lst_par]))
+        logging.info("emiting >>" + str([lst_par]))
 
         self.all_items_changed.emit([lst_par])
 
@@ -492,9 +503,15 @@ class ImportWidget(QWidget):
             self.remove_one_param("invert_rotation_axis")
 
     def dist_changed(self, stat):
-        logging.info("dist_changed, stat:" + str(stat))
-        if int(stat) == 2:
-            self.add_extra_param("distance=2193")
+        try:
+            dst_in_val = int(self.dist_text_in.text())
+
+        except ValueError:
+            dst_in_val = 0
+
+        if int(dst_in_val) > 0:
+            self.remove_one_param("distance")
+            self.add_extra_param("distance=" + str(dst_in_val))
 
         else:
             self.remove_one_param("distance")
@@ -531,9 +548,11 @@ class ImportWidget(QWidget):
         self.imp_extra_txt.setText(end_txt)
 
     def update_all_pars(self, tup_lst_pars):
-        print("tup_lst_pars(import, update_all_pars)= " + str(tup_lst_pars))
+        logging.info(
+            "tup_lst_pars(import, update_all_pars)= " + str(tup_lst_pars)
+        )
         self.check_rot_axs.setChecked(False)
-        self.check_dist.setChecked(False)
+        self.dist_text_in.setText("")
         self.check_shadow.setChecked(False)
 
         for n, par in enumerate(tup_lst_pars):
@@ -572,11 +591,8 @@ class ImportWidget(QWidget):
                 ):
                     self.check_shadow.setChecked(True)
 
-                elif(
-                    par_dic["name"] == "distance" and
-                    par_dic["value"] == "2193"
-                ):
-                    self.check_dist.setChecked(True)
+                elif par_dic["name"] == "distance":
+                    self.dist_text_in.setText(str(par_dic["value"]))
 
         except IndexError:
             logging.info(" Not copying parameters from node (Index err catch )")

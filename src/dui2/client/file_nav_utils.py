@@ -144,7 +144,7 @@ class PathBar(QWidget):
 
 class FileBrowser(QDialog):
     file_or_dir_selected = Signal(str, bool)
-    def __init__(self, parent = None, path_in = "/"):
+    def __init__(self, parent = None, path_in = "/", only_dir = False):
         super(FileBrowser, self).__init__(parent)
         self.setWindowTitle("Open IMGs")
         main_v_layout = QVBoxLayout()
@@ -155,6 +155,8 @@ class FileBrowser(QDialog):
         hi_h_layout.addStretch()
         hi_h_layout.addWidget(self.show_hidden_check)
         main_v_layout.addLayout(hi_h_layout)
+
+        self.only_dir = only_dir
 
         self.path_bar = PathBar(self)
         self.path_bar.clicked_up_dir.connect(self.build_content)
@@ -228,7 +230,9 @@ class FileBrowser(QDialog):
                 self.build_content(self.current_file["path"] + "/")
 
             else:
-                self.file_or_dir_selected.emit(self.current_file["path"], False)
+                self.file_or_dir_selected.emit(
+                    self.current_file["path"], self.only_dir
+                )
                 self.close()
 
         except TypeError:

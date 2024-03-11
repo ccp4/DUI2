@@ -1640,7 +1640,9 @@ class MainImgViewObject(QObject):
         dic_str = lst_req.result_out()
         init_path = dic_str[0]
 
-        self.open_widget = FileBrowser(self.window, path_in = init_path)
+        self.open_widget = FileBrowser(
+            self.window, path_in = init_path, only_dir = True
+        )
         self.open_widget.resize(self.open_widget.size() * 2)
         self.open_widget.file_or_dir_selected.connect(self.set_selection)
 
