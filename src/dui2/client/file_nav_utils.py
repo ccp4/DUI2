@@ -236,7 +236,14 @@ class FileBrowser(QDialog):
                 self.close()
 
         except TypeError:
-            print("no file selected yet")
+            if self.only_dir:
+                self.file_or_dir_selected.emit(
+                    self.curr_path, True
+                )
+                self.close()
+
+            else:
+                print("no file selected yet")
 
     def cancel_opp(self):
         self.close()
