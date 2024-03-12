@@ -21,6 +21,7 @@ def sort_dict_list(lst_in):
 
 class MyDirView_list(QListWidget):
     file_clickled = Signal(dict)
+    prog_update = Signal(str)
     def __init__(self, parent = None):
         super(MyDirView_list, self).__init__(parent)
         self.itemClicked.connect(self.someting_click)
@@ -37,8 +38,11 @@ class MyDirView_list(QListWidget):
     def enter_list(self, lst_in):
         print("building QListWidgetItem ... start")
         lst_in = sort_dict_list(lst_in)
+        self.prog_update.emit("Refreshing")
+        print("building QListWidgetItem ... sorted")
         self.items_list = []
-        for single_file in lst_in:
+        for n_widg, single_file in enumerate(lst_in):
+            self.prog_update.emit(str(n_widg))
             tst_item = QListWidgetItem(single_file["name"])
             tst_item.f_isdir = single_file["isdir"]
             tst_item.f_path = str(single_file["path"])
@@ -49,7 +53,7 @@ class MyDirView_list(QListWidget):
         for tst_item in self.items_list:
             self.addItem(tst_item)
 
-        print("building QListWidgetItem ... end")
+        print("building QListWidgetItem ... ended")
 
     def someting_click(self, item):
         self.file_clickled.emit({"isdir":item.f_isdir, "path":item.f_path})
@@ -201,6 +205,7 @@ class FileBrowser(QDialog):
         self.ini_path = path_in
         self.build_content(self.ini_path)
         self.lst_vw.file_clickled.connect(self.fill_clik)
+        self.lst_vw.prog_update.connect(self.update_prog)
         main_v_layout.addWidget(self.lst_vw)
 
         low_h_layout = QHBoxLayout()
@@ -250,6 +255,9 @@ class FileBrowser(QDialog):
         #self.status_label.setText("  Refreshing  ")
         self.lst_vw.enter_list(lst_dir)
         self.status_label.setText(" ")
+
+    def update_prog(self, str_in):
+        self.status_label.setText(str_in)
 
     def fill_clik(self, fl_dic):
         if fl_dic == self.current_file:
