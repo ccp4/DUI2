@@ -35,6 +35,7 @@ class MyDirView_list(QListWidget):
         }
 
     def enter_list(self, lst_in):
+        print("building QListWidgetItem ... start")
         lst_in = sort_dict_list(lst_in)
         self.items_list = []
         for single_file in lst_in:
@@ -47,6 +48,8 @@ class MyDirView_list(QListWidget):
         self.clear()
         for tst_item in self.items_list:
             self.addItem(tst_item)
+
+        print("building QListWidgetItem ... end")
 
     def someting_click(self, item):
         self.file_clickled.emit({"isdir":item.f_isdir, "path":item.f_path})
@@ -142,6 +145,36 @@ class PathBar(QWidget):
             self.clicked_up_dir.emit(next_path)
 
 
+
+
+class req_dir_ls(QThread):
+    ended = Signal(list)
+    def __init__(self, show_hidden = False, curr_path = None):
+        super(req_dir_ls, self).__init__()
+        self.show_hidden = show_hidden
+        self.curr_path = curr_path
+
+    def run(self):
+        cmd = {"nod_lst":"", "cmd_str":["get_dir_ls", self.curr_path]}
+        lst_req = get_req_json_dat(
+            params_in = cmd, main_handler = None
+        )
+        os_listdir = lst_req.result_out()
+        lst_dir = []
+        for file_dict in os_listdir:
+            f_name = file_dict["fname"]
+            f_isdir = file_dict["isdir"]
+            if f_name[0] != "." or self.show_hidden:
+                f_path = self.curr_path + f_name
+                lst_dir.append(
+                    {
+                        "name": f_name, "isdir":  f_isdir, "path": f_path
+                    }
+                )
+
+        self.ended.emit(lst_dir)
+
+
 class FileBrowser(QDialog):
     file_or_dir_selected = Signal(str, bool)
     def __init__(self, parent = None, path_in = "/", only_dir = False):
@@ -158,6 +191,8 @@ class FileBrowser(QDialog):
 
         self.only_dir = only_dir
 
+        self.status_label = QLabel(" ")
+
         self.path_bar = PathBar(self)
         self.path_bar.clicked_up_dir.connect(self.build_content)
         main_v_layout.addWidget(self.path_bar)
@@ -171,6 +206,8 @@ class FileBrowser(QDialog):
         low_h_layout = QHBoxLayout()
         low_h_layout.addStretch()
 
+
+        low_h_layout.addWidget(self.status_label)
         OpenButton = QPushButton(" Open ")
         OpenButton.clicked.connect(self.open_file)
         low_h_layout.addWidget(OpenButton)
@@ -196,27 +233,23 @@ class FileBrowser(QDialog):
         self.path_bar.update_list(parents_list)
 
     def refresh_content(self):
-        show_hidden = self.show_hidden_check.isChecked()
+
         self.current_file = None
         self.build_paren_list()
-        cmd = {"nod_lst":"", "cmd_str":["get_dir_ls", self.curr_path]}
-        lst_req = get_req_json_dat(
-            params_in = cmd, main_handler = None
-        )
-        os_listdir = lst_req.result_out()
-        lst_dir = []
-        for file_dict in os_listdir:
-            f_name = file_dict["fname"]
-            f_isdir = file_dict["isdir"]
-            if f_name[0] != "." or show_hidden:
-                f_path = self.curr_path + f_name
-                lst_dir.append(
-                    {
-                        "name": f_name, "isdir":  f_isdir, "path": f_path
-                    }
-                )
+        show_hidden = self.show_hidden_check.isChecked()
 
+        self.refresh_qthread = req_dir_ls(
+            show_hidden = show_hidden, curr_path = self.curr_path
+        )
+        self.refresh_qthread.ended.connect(self.done_requesting)
+        self.status_label.setText("  Opening  ")
+        self.refresh_qthread.start()
+
+    def done_requesting(self, lst_dir):
+        print("done_requesting")
+        #self.status_label.setText("  Refreshing  ")
         self.lst_vw.enter_list(lst_dir)
+        self.status_label.setText(" ")
 
     def fill_clik(self, fl_dic):
         if fl_dic == self.current_file:
