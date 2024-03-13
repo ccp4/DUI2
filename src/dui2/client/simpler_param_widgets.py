@@ -312,9 +312,9 @@ class ImportWidget(QWidget):
         self.open_rad_butt_hbox = QHBoxLayout()
         group1 = QButtonGroup(self)
 
-        self.rad_but_img_file = QRadioButton("image files")
-        self.rad_but_template = QRadioButton("template")
-        self.rad_but_directory = QRadioButton("directory")
+        self.rad_but_img_file = QRadioButton("Image files")
+        self.rad_but_template = QRadioButton("Template")
+        self.rad_but_directory = QRadioButton("Directory")
         group1.addButton(self.rad_but_img_file)
         group1.addButton(self.rad_but_template)
         group1.addButton(self.rad_but_directory)
@@ -329,8 +329,8 @@ class ImportWidget(QWidget):
 
         self.diag_rad_butt_vbox = QVBoxLayout()
         group2 = QButtonGroup(self)
-        self.rad_but_sys_diag = QRadioButton("System Dialog")
-        self.rad_but_dui_diag = QRadioButton("DUI2 Dialog")
+        self.rad_but_sys_diag = QRadioButton("System dialog")
+        self.rad_but_dui_diag = QRadioButton("Dui2 dialog")
         group2.addButton(self.rad_but_sys_diag)
         group2.addButton(self.rad_but_dui_diag)
         self.diag_rad_butt_vbox.addWidget(self.rad_but_sys_diag)
@@ -381,9 +381,7 @@ class ImportWidget(QWidget):
         self.line_changed()
 
     def set_selection(self, str_select, isdir):
-
-        print("isdir(set_selection) =" + str(isdir))
-
+        logging.info("isdir(set_selection) =" + str(isdir))
         if str_select != "":
             self.dir_selected = isdir
             if self.dir_selected:

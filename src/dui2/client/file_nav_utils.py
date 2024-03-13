@@ -36,10 +36,10 @@ class MyDirView_list(QListWidget):
         }
 
     def enter_list(self, lst_in):
-        print("building QListWidgetItem ... start")
+        logging.info("building QListWidgetItem ... start")
         lst_in = sort_dict_list(lst_in)
         self.prog_update.emit("Refreshing")
-        print("building QListWidgetItem ... sorted")
+        logging.info("building QListWidgetItem ... sorted")
         self.items_list = []
         for n_widg, single_file in enumerate(lst_in):
             self.prog_update.emit(str(n_widg))
@@ -53,7 +53,7 @@ class MyDirView_list(QListWidget):
         for tst_item in self.items_list:
             self.addItem(tst_item)
 
-        print("building QListWidgetItem ... ended")
+        logging.info("building QListWidgetItem ... ended")
 
     def someting_click(self, item):
         self.file_clickled.emit({"isdir":item.f_isdir, "path":item.f_path})
@@ -251,7 +251,7 @@ class FileBrowser(QDialog):
         self.refresh_qthread.start()
 
     def done_requesting(self, lst_dir):
-        print("done_requesting")
+        logging.info("done_requesting")
         #self.status_label.setText("  Refreshing  ")
         self.lst_vw.enter_list(lst_dir)
         self.status_label.setText(" ")
