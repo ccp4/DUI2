@@ -7,9 +7,8 @@ from PySide2.QtGui import *
 from dui2.client.exec_utils import get_req_json_dat
 
 def sort_dict_list(lst_in):
-
-    newlist = sorted(lst_in, key=lambda d: d['name'])
-    return newlist
+    lst_out = sorted(lst_in, key=lambda d: d['name'])
+    return lst_out
 
     to_replace = '''
     list_size = len(lst_in)
