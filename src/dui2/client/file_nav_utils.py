@@ -21,7 +21,7 @@ def sort_dict_list(lst_in):
 
 class MyDirView_list(QListWidget):
     file_clickled = Signal(dict)
-    prog_update = Signal(str)
+    #prog_update = Signal(str)
     def __init__(self, parent = None):
         super(MyDirView_list, self).__init__(parent)
         self.itemClicked.connect(self.someting_click)
@@ -36,13 +36,18 @@ class MyDirView_list(QListWidget):
         }
 
     def enter_list(self, lst_in):
-        logging.info("building QListWidgetItem ... start")
-        lst_in = sort_dict_list(lst_in)
-        self.prog_update.emit("Refreshing")
-        logging.info("building QListWidgetItem ... sorted")
+        print("building QListWidgetItem ... start")
+        self.dict_list = lst_in
+        self.refresh_list()
+
+    def refresh_list(self, sorting = False):
+        #self.prog_update.emit("Refreshing")
+        if sorting:
+            self.dict_list = sort_dict_list(self.dict_list)
+
         self.items_list = []
-        for n_widg, single_file in enumerate(lst_in):
-            self.prog_update.emit(str(n_widg))
+        for n_widg, single_file in enumerate(self.dict_list):
+            #self.prog_update.emit(str(n_widg))
             tst_item = QListWidgetItem(single_file["name"])
             tst_item.f_isdir = single_file["isdir"]
             tst_item.f_path = str(single_file["path"])
@@ -53,7 +58,7 @@ class MyDirView_list(QListWidget):
         for tst_item in self.items_list:
             self.addItem(tst_item)
 
-        logging.info("building QListWidgetItem ... ended")
+        print("building QListWidgetItem ... ended")
 
     def someting_click(self, item):
         self.file_clickled.emit({"isdir":item.f_isdir, "path":item.f_path})
@@ -189,6 +194,11 @@ class FileBrowser(QDialog):
         self.show_hidden_check.setChecked(False)
         self.show_hidden_check.stateChanged.connect(self.refresh_content)
         hi_h_layout = QHBoxLayout()
+
+        SortButton = QPushButton(" Sort ")
+        hi_h_layout.addWidget(SortButton)
+        SortButton.clicked.connect(self.refresh_sorted)
+
         hi_h_layout.addStretch()
         hi_h_layout.addWidget(self.show_hidden_check)
         main_v_layout.addLayout(hi_h_layout)
@@ -205,7 +215,7 @@ class FileBrowser(QDialog):
         self.ini_path = path_in
         self.build_content(self.ini_path)
         self.lst_vw.file_clickled.connect(self.fill_clik)
-        self.lst_vw.prog_update.connect(self.update_prog)
+        #self.lst_vw.prog_update.connect(self.update_prog)
         main_v_layout.addWidget(self.lst_vw)
 
         low_h_layout = QHBoxLayout()
@@ -251,13 +261,19 @@ class FileBrowser(QDialog):
         self.refresh_qthread.start()
 
     def done_requesting(self, lst_dir):
-        logging.info("done_requesting")
+        print("done_requesting")
         #self.status_label.setText("  Refreshing  ")
         self.lst_vw.enter_list(lst_dir)
         self.status_label.setText(" ")
 
+
+    def refresh_sorted(self):
+        self.lst_vw.refresh_list(sorting = True)
+
+        to_remove = '''
     def update_prog(self, str_in):
         self.status_label.setText(str_in)
+        '''
 
     def fill_clik(self, fl_dic):
         if fl_dic == self.current_file:
