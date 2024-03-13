@@ -7,6 +7,11 @@ from PySide2.QtGui import *
 from dui2.client.exec_utils import get_req_json_dat
 
 def sort_dict_list(lst_in):
+
+    newlist = sorted(lst_in, key=lambda d: d['name'])
+    return newlist
+
+    to_replace = '''
     list_size = len(lst_in)
     for i in range(list_size):
         min_index = i
@@ -17,11 +22,11 @@ def sort_dict_list(lst_in):
         lst_in[i], lst_in[min_index] = lst_in[min_index], lst_in[i]
 
     return lst_in
+    '''
 
 
 class MyDirView_list(QListWidget):
     file_clickled = Signal(dict)
-    #prog_update = Signal(str)
     def __init__(self, parent = None):
         super(MyDirView_list, self).__init__(parent)
         self.itemClicked.connect(self.someting_click)
@@ -35,19 +40,20 @@ class MyDirView_list(QListWidget):
             "False":self.style().standardIcon(FilePixMapi)
         }
 
-    def enter_list(self, lst_in):
+    def enter_list(self, lst_in, do_sorting):
         print("building QListWidgetItem ... start")
-        self.dict_list = lst_in
-        self.refresh_list()
+        self.ini_dict_list = list(lst_in)
+        self.refresh_list(do_sorting)
 
     def refresh_list(self, sorting = False):
-        #self.prog_update.emit("Refreshing")
         if sorting:
-            self.dict_list = sort_dict_list(self.dict_list)
+            self.dict_list = list(sort_dict_list(self.ini_dict_list))
+
+        else:
+            self.dict_list = list(self.ini_dict_list)
 
         self.items_list = []
         for n_widg, single_file in enumerate(self.dict_list):
-            #self.prog_update.emit(str(n_widg))
             tst_item = QListWidgetItem(single_file["name"])
             tst_item.f_isdir = single_file["isdir"]
             tst_item.f_path = str(single_file["path"])
@@ -195,9 +201,14 @@ class FileBrowser(QDialog):
         self.show_hidden_check.stateChanged.connect(self.refresh_content)
         hi_h_layout = QHBoxLayout()
 
-        SortButton = QPushButton(" Sort ")
-        hi_h_layout.addWidget(SortButton)
-        SortButton.clicked.connect(self.refresh_sorted)
+        self.rad_but_sorted = QRadioButton("Sorted")
+        self.rad_but_faster = QRadioButton("Faster")
+        #group1.addButton(self.rad_but_sorted)
+        #group1.addButton(self.rad_but_faster)
+        hi_h_layout.addWidget(self.rad_but_sorted)
+        hi_h_layout.addWidget(self.rad_but_faster)
+        self.rad_but_sorted.toggled.connect(self.refresh_sorted1)
+        self.rad_but_faster.toggled.connect(self.refresh_sorted1)
 
         hi_h_layout.addStretch()
         hi_h_layout.addWidget(self.show_hidden_check)
@@ -215,7 +226,6 @@ class FileBrowser(QDialog):
         self.ini_path = path_in
         self.build_content(self.ini_path)
         self.lst_vw.file_clickled.connect(self.fill_clik)
-        #self.lst_vw.prog_update.connect(self.update_prog)
         main_v_layout.addWidget(self.lst_vw)
 
         low_h_layout = QHBoxLayout()
@@ -263,17 +273,15 @@ class FileBrowser(QDialog):
     def done_requesting(self, lst_dir):
         print("done_requesting")
         #self.status_label.setText("  Refreshing  ")
-        self.lst_vw.enter_list(lst_dir)
+        self.lst_vw.enter_list(lst_in = lst_dir, do_sorting = False)
         self.status_label.setText(" ")
 
+    def refresh_sorted1(self):
+        if self.rad_but_sorted.isChecked():
+            self.lst_vw.refresh_list(sorting = True)
 
-    def refresh_sorted(self):
-        self.lst_vw.refresh_list(sorting = True)
-
-        to_remove = '''
-    def update_prog(self, str_in):
-        self.status_label.setText(str_in)
-        '''
+        else:
+            self.lst_vw.refresh_list(sorting = False)
 
     def fill_clik(self, fl_dic):
         if fl_dic == self.current_file:
