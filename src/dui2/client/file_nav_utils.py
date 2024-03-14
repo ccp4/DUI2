@@ -6,22 +6,12 @@ from PySide2.QtGui import *
 
 from dui2.client.exec_utils import get_req_json_dat
 
+def f_key(dic_in):
+    return dic_in['name']
+
 def sort_dict_list(lst_in):
-    lst_out = sorted(lst_in, key=lambda d: d['name'])
+    lst_out = sorted(lst_in, key=f_key)
     return lst_out
-
-    to_replace = '''
-    list_size = len(lst_in)
-    for i in range(list_size):
-        min_index = i
-        for j in range(i + 1, list_size):
-            if lst_in[min_index]["name"] > lst_in[j]["name"]:
-                min_index = j
-
-        lst_in[i], lst_in[min_index] = lst_in[min_index], lst_in[i]
-
-    return lst_in
-    '''
 
 
 class MyDirView_list(QListWidget):
