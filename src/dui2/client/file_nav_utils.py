@@ -7,7 +7,8 @@ from PySide2.QtGui import *
 from dui2.client.exec_utils import get_req_json_dat
 
 def f_key(dic_in):
-    return dic_in['name']
+    #return dic_in['name']
+    return dic_in['isdir']
 
 def sort_dict_list(lst_in):
     lst_out = sorted(lst_in, key=f_key)
@@ -29,10 +30,8 @@ class MyDirView_list(QListWidget):
             "False":self.style().standardIcon(FilePixMapi)
         }
 
-    def enter_list(self, lst_in, do_sorting):
-        print("building QListWidgetItem ... start")
+    def enter_list(self, lst_in):
         self.ini_dict_list = list(lst_in)
-        self.refresh_list(do_sorting)
 
     def refresh_list(self, sorting = False):
         if sorting:
@@ -52,8 +51,6 @@ class MyDirView_list(QListWidget):
         self.clear()
         for tst_item in self.items_list:
             self.addItem(tst_item)
-
-        print("building QListWidgetItem ... ended")
 
     def someting_click(self, item):
         self.file_clickled.emit({"isdir":item.f_isdir, "path":item.f_path})
@@ -190,14 +187,14 @@ class FileBrowser(QDialog):
         self.show_hidden_check.stateChanged.connect(self.refresh_content)
         hi_h_layout = QHBoxLayout()
 
-        self.rad_but_sorted = QRadioButton("Sorted")
-        self.rad_but_faster = QRadioButton("Faster")
-        #group1.addButton(self.rad_but_sorted)
-        #group1.addButton(self.rad_but_faster)
-        hi_h_layout.addWidget(self.rad_but_sorted)
-        hi_h_layout.addWidget(self.rad_but_faster)
-        self.rad_but_sorted.toggled.connect(self.refresh_sorted1)
-        self.rad_but_faster.toggled.connect(self.refresh_sorted1)
+        self.rad_but_file_dir = QRadioButton("File/Dir")
+        self.rad_but_name = QRadioButton("Name")
+        hi_h_layout.addWidget(self.rad_but_file_dir)
+        hi_h_layout.addWidget(self.rad_but_name)
+        self.rad_but_name.setChecked(True)
+
+        self.rad_but_file_dir.toggled.connect(self.refresh_sorted1)
+        self.rad_but_name.toggled.connect(self.refresh_sorted1)
 
         hi_h_layout.addStretch()
         hi_h_layout.addWidget(self.show_hidden_check)
@@ -261,12 +258,13 @@ class FileBrowser(QDialog):
 
     def done_requesting(self, lst_dir):
         print("done_requesting")
-        #self.status_label.setText("  Refreshing  ")
-        self.lst_vw.enter_list(lst_in = lst_dir, do_sorting = False)
+        self.lst_vw.enter_list(lst_in = lst_dir)
         self.status_label.setText(" ")
 
+        self.refresh_sorted1()
+
     def refresh_sorted1(self):
-        if self.rad_but_sorted.isChecked():
+        if self.rad_but_file_dir.isChecked():
             self.lst_vw.refresh_list(sorting = True)
 
         else:
