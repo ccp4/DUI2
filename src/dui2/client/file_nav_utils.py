@@ -201,6 +201,7 @@ class FileBrowser(QDialog):
         main_v_layout.addLayout(hi_h_layout)
 
         self.only_dir = only_dir
+        print("FileBrowser.only_dir =" + str(self.only_dir))
 
         self.status_label = QLabel(" ")
 
@@ -280,6 +281,12 @@ class FileBrowser(QDialog):
         try:
             if self.current_file["isdir"]:
                 self.build_content(self.current_file["path"] + "/")
+
+            elif self.only_dir:
+                self.file_or_dir_selected.emit(
+                    self.curr_path, True
+                )
+                self.close()
 
             else:
                 self.file_or_dir_selected.emit(
