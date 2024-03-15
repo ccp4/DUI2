@@ -283,6 +283,16 @@ class RootWidg(QWidget):
         )
 
 
+def remove_border_quotes(str_in):
+    if(
+        (str_in[0] == "\"" or str_in[0] == "\'")
+        and
+        (str_in[-1] == "\"" or str_in[-1] == "\'" )
+    ):
+        str_out = str_in[1:-1]
+
+    return str_out
+
 class ImportWidget(QWidget):
     '''
         This widget behaves differently from most of the other  << simple >>
@@ -321,9 +331,9 @@ class ImportWidget(QWidget):
         self.open_rad_butt_hbox.addWidget(self.rad_but_img_file)
         self.open_rad_butt_hbox.addWidget(self.rad_but_template)
         self.open_rad_butt_hbox.addWidget(self.rad_but_directory)
-        self.rad_but_img_file.toggled.connect(self.toggle_funtion)
-        self.rad_but_template.toggled.connect(self.toggle_funtion)
-        self.rad_but_directory.toggled.connect(self.toggle_funtion)
+        self.rad_but_img_file.toggled.connect(self.line_changed)
+        self.rad_but_template.toggled.connect(self.line_changed)
+        self.rad_but_directory.toggled.connect(self.line_changed)
 
         self.rad_but_template.setChecked(True)
 
@@ -375,10 +385,6 @@ class ImportWidget(QWidget):
 
         self.main_vbox.addStretch()
         self.setLayout(self.main_vbox)
-
-    def toggle_funtion(self):
-        logging.info("toggle_funtion(import)")
-        self.line_changed()
 
     def set_selection(self, str_select, isdir):
         logging.info("isdir(set_selection) =" + str(isdir))
@@ -467,7 +473,7 @@ class ImportWidget(QWidget):
         logging.info("set_ed_pars(SimpleParamTab)")
 
     def line_changed(self):
-        str_value = self.imp_txt.text()
+        str_value = str(self.imp_txt.text())
         if self.rad_but_img_file.isChecked():
             str_path = "image_files"
 
@@ -546,13 +552,10 @@ class ImportWidget(QWidget):
         self.imp_extra_txt.setText(end_txt)
 
     def update_all_pars(self, tup_lst_pars):
-        logging.info(
+        print(
             "tup_lst_pars(import, update_all_pars)= " + str(tup_lst_pars)
         )
-        self.check_rot_axs.setChecked(False)
-        self.dist_text_in.setText("")
-        self.check_shadow.setChecked(False)
-
+        self.reset_pars()
         for n, par in enumerate(tup_lst_pars):
             logging.info("n=" + str(n) + " par=" + str(par))
 
@@ -560,22 +563,23 @@ class ImportWidget(QWidget):
             self.imp_extra_txt.setText("")
             self.imp_txt.setText("")
             for par_dic in tup_lst_pars[0]:
-                if(
-                    par_dic["name"] == "input.directory" or
-                    par_dic["name"] == "input.template" or
-                    par_dic["name"] == "image_files"
-                ):
-                    if par_dic["name"] == "input.directory":
-                        self.dir_selected = True
+                if par_dic["name"] == "input.directory":
+                    self.dir_selected = True
+                    dat_str = remove_border_quotes(str(par_dic["value"]))
+                    self.imp_txt.setText(dat_str)
+                    self.rad_but_directory.setChecked(True)
 
-                    else:
-                        self.dir_selected = False
+                elif par_dic["name"] == "input.template":
+                    self.dir_selected = False
+                    dat_str = remove_border_quotes(str(par_dic["value"]))
+                    self.imp_txt.setText(dat_str)
+                    self.rad_but_template.setChecked(True)
 
-                    first_par_str = str(par_dic["value"])
-                    if first_par_str[0] == "\"" and first_par_str[-1] == "\"":
-                        first_par_str = first_par_str[1:-1]
-
-                    self.imp_txt.setText(first_par_str)
+                elif par_dic["name"] == "image_files":
+                    self.dir_selected = False
+                    dat_str = remove_border_quotes(str(par_dic["value"]))
+                    self.imp_txt.setText(dat_str)
+                    self.rad_but_img_file.setChecked(True)
 
                 elif(
                     par_dic["name"] == "invert_rotation_axis" and
@@ -593,12 +597,12 @@ class ImportWidget(QWidget):
                     self.dist_text_in.setText(str(par_dic["value"]))
 
         except IndexError:
-            logging.info(" Not copying parameters from node (Index err catch )")
+            print(" Not copying parameters from node (Index err catch )")
             self.imp_txt.setText("")
             self.imp_extra_txt.setText("")
 
     def update_param(self, str_path, str_value):
-        logging.info(
+        print(
             "update_param(ImportWidget)" +
             str(str_path) + "," + str(str_value) + "... dummy"
         )
