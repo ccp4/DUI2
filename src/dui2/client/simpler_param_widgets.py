@@ -457,6 +457,7 @@ class ImportWidget(QWidget):
             self.open_widget.file_or_dir_selected.connect(self.set_selection)
 
     def reset_pars(self):
+        self.do_emit = False
         self.imp_txt.setText("")
         self.imp_extra_txt.setText("")
         self.check_rot_axs.setChecked(False)
@@ -469,6 +470,8 @@ class ImportWidget(QWidget):
         if not self.run_local:
             self.rad_but_sys_diag.setEnabled(False)
             self.rad_but_dui_diag.setChecked(True)
+
+        self.do_emit = True
 
     def set_ed_pars(self):
         logging.info("set_ed_pars(SimpleParamTab)")
@@ -496,8 +499,8 @@ class ImportWidget(QWidget):
                     lst_par.append(single_ext_par)
 
         logging.info("emiting >>" + str([lst_par]))
-
-        self.all_items_changed.emit([lst_par])
+        if self.do_emit:
+            self.all_items_changed.emit([lst_par])
 
     def rot_axs_changed(self, stat):
         logging.info("rot_axs_changed, stat:" + str(stat))
@@ -553,7 +556,7 @@ class ImportWidget(QWidget):
         self.imp_extra_txt.setText(end_txt)
 
     def update_all_pars(self, tup_lst_pars):
-        print(
+        logging.info(
             "tup_lst_pars(import, update_all_pars)= " + str(tup_lst_pars)
         )
         self.reset_pars()
@@ -603,7 +606,7 @@ class ImportWidget(QWidget):
             self.imp_extra_txt.setText("")
 
     def update_param(self, str_path, str_value):
-        print(
+        logging.info(
             "update_param(ImportWidget)" +
             str(str_path) + "," + str(str_value) + "... dummy"
         )
