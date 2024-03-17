@@ -146,8 +146,6 @@ class PathBar(QWidget):
             self.clicked_up_dir.emit(next_path)
 
 
-
-
 class req_dir_ls(QThread):
     ended = Signal(list)
     def __init__(self, show_hidden = False, curr_path = None):

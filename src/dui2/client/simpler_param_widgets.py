@@ -293,6 +293,7 @@ def remove_border_quotes(str_in):
 
     return str_out
 
+
 class ImportWidget(QWidget):
     '''
         This widget behaves differently from most of the other  << simple >>
@@ -613,7 +614,6 @@ class SplitWidget(QWidget):
     This widget is the tool for separating nodes with the
     dials.split_experiments command
     """
-
     all_items_changed = Signal(list)
 
     def __init__(self, parent=None):
@@ -1526,7 +1526,7 @@ class  IntegrateSimplerParamTab(SimpleParamTab):
         hbox_d_min.addWidget(d_min_line)
         self.main_v_layout.addLayout(hbox_d_min)
 
-        ##############################################################################
+        ########################################################################
         hbox_d_max = QHBoxLayout()
         d_max_label = QLabel("Low resolution limit")
         hbox_d_max.addWidget(d_max_label)
@@ -1536,7 +1536,7 @@ class  IntegrateSimplerParamTab(SimpleParamTab):
         d_max_line.textChanged.connect(self.line_changed)
         hbox_d_max.addWidget(d_max_line)
         self.main_v_layout.addLayout(hbox_d_max)
-        ##############################################################################
+        ########################################################################
 
         hbox_lay_algorithm_53 = QHBoxLayout()
         label_algorithm_53 = QLabel("Background algorithm")
@@ -1582,7 +1582,7 @@ class  SsxIntegrateSimplerParamTab(SimpleParamTab):
         hbox_d_min.addWidget(d_min_line)
         self.main_v_layout.addLayout(hbox_d_min)
 
-        ##############################################################################
+        ########################################################################
         hbox_d_max = QHBoxLayout()
         d_max_label = QLabel("Low resolution limit")
         hbox_d_max.addWidget(d_max_label)
@@ -1592,7 +1592,7 @@ class  SsxIntegrateSimplerParamTab(SimpleParamTab):
         d_max_line.textChanged.connect(self.line_changed)
         hbox_d_max.addWidget(d_max_line)
         self.main_v_layout.addLayout(hbox_d_max)
-        ##############################################################################
+        ########################################################################
 
         hbox_lay_algorithm_53 = QHBoxLayout()
         label_algorithm_53 = QLabel("Background algorithm")
@@ -1676,7 +1676,7 @@ class ScaleSimplerParamTab(SimpleParamTab):
         hbox_d_min.addWidget(d_min_line)
         self.main_v_layout.addLayout(hbox_d_min)
 
-        ##############################################################################
+        ########################################################################
         hbox_d_max = QHBoxLayout()
         d_max_label = QLabel("Low resolution limit")
         hbox_d_max.addWidget(d_max_label)
@@ -1686,7 +1686,7 @@ class ScaleSimplerParamTab(SimpleParamTab):
         d_max_line.textChanged.connect(self.line_changed)
         hbox_d_max.addWidget(d_max_line)
         self.main_v_layout.addLayout(hbox_d_max)
-        ##############################################################################
+        ########################################################################
 
         hbox_lay_mod = QHBoxLayout()
         label_mod = QLabel("Model")
@@ -1705,7 +1705,6 @@ class ScaleSimplerParamTab(SimpleParamTab):
         box_wgh_opt_err.currentIndexChanged.connect(self.combobox_changed)
         hbox_lay_wgh_opt_err.addWidget(box_wgh_opt_err)
         self.main_v_layout.addLayout(hbox_lay_wgh_opt_err)
-
 
         self.main_v_layout.addStretch()
 
@@ -1988,7 +1987,6 @@ class ExportWidget(QWidget):
 
             self.imp_extra_txt.setText(ext_par_full_text)
 
-
     def set_download_stat(self, do_enable = False, nod_num = None):
         self.setEnabled(True)
         self.exp_txt.setEnabled(not do_enable)
@@ -2162,7 +2160,7 @@ class MergeWidget(QWidget):
         self.dowl_thrd.exit()
         logging.info("Done Download")
 
-#####################################################################################################
+################################################################################
 
 class TmpTstWidget(QWidget):
     def __init__(self, parent=None):
@@ -2184,9 +2182,3 @@ class TmpTstWidget(QWidget):
         my_box.addWidget(my_widget)
         self.setLayout(my_box)
 
-
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    ex = TmpTstWidget()
-    ex.show()
-    sys.exit(app.exec_())
