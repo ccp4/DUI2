@@ -406,6 +406,7 @@ class AdvancedParameters(QWidget):
 
     def do_emit_signal(self, str_path, str_value):
         if self.do_emit:
+            str_value = str_value.replace(", ", ",")
             self.item_changed.emit(str_path, str_value)
 
         self.do_emit = True

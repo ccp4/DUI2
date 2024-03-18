@@ -1296,9 +1296,7 @@ class MainObject(QObject):
         cmd_lst = self.new_node.get_full_command_list()
         lst_of_node_str = self.new_node.parent_node_lst
         cmd = {'nod_lst': lst_of_node_str, 'cmd_lst': cmd_lst}
-
         logging.info("cmd(request_launch) =" + str(cmd))
-
         self.log_show.clear_4_run()
         do_predictions_n_report = bool(
             self.window.RunPedictAndReportCheckBox.checkState()

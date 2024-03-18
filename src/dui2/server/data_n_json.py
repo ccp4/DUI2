@@ -431,7 +431,14 @@ class build_json_data(object):
 
             else:
                 param_info["type"] = "other(s)"
-                param_info["default"] = str(single_obj.extract())
+                tmp_str_default = str(single_obj.extract())
+                try:
+                    tmp_str_default = tmp_str_default.replace(", ", ",")
+
+                except NameError:
+                    pass
+
+                param_info["default"] = tmp_str_default
 
             return param_info
 

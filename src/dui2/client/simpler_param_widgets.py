@@ -963,13 +963,14 @@ class MaskWidget(QWidget):
                 inner_lst_pair = [
                     "untrusted.polygon",
                     str(comp_dict["x_end"]) + ","
-                    + str(comp_dict["y_end"]) + ","
+                    + str(comp_dict["y_end"])
                 ]
                 self.comp_list.append(inner_lst_pair)
 
             elif self.comp_list[-1][0] == "untrusted.polygon":
-                str_tail = str(comp_dict["x_end"]) + "," \
-                         + str(comp_dict["y_end"]) + ","
+                str_tail = "," + str(comp_dict["x_end"]) \
+                         + "," + str(comp_dict["y_end"])
+
                 self.comp_list[-1][1] += str_tail
 
         self.comp_list_update()
