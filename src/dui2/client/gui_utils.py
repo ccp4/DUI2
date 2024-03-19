@@ -708,7 +708,8 @@ def add_ready_node(old_lst_nodes, com_par):
 
 
 class TreeDirScene(QGraphicsScene):
-    node_clicked = Signal(int)
+    node_clicked_w_left = Signal(int)
+    node_clicked_w_right = Signal(int)
     hide_clicked = Signal(int)
     def __init__(self, parent = None):
         super(TreeDirScene, self).__init__(parent)
@@ -886,6 +887,8 @@ class TreeDirScene(QGraphicsScene):
     def mouseReleaseEvent(self, event):
         x_ms = event.scenePos().x()
         y_ms = event.scenePos().y()
+        ms_b = event.button()
+
         node_numb = None
         min_d = None
         for num, nod in enumerate(self.lst_nod_pos):
@@ -900,12 +903,25 @@ class TreeDirScene(QGraphicsScene):
 
         if node_numb is not None:
             xright = self.x_left + self.x_width
-            if x_ms > self.x_left and x_ms < xright:
-                self.node_clicked.emit(node_numb)
+            if(
+                x_ms > self.x_left and x_ms < xright
+                and ms_b == Qt.MouseButton.LeftButton
+            ):
+                self.node_clicked_w_left.emit(node_numb)
 
-            elif x_ms < self.x_width + self.f_width:
-                self.node_clicked.emit(node_numb)
+            elif(
+                x_ms < self.x_width + self.f_width
+                and x_ms > xright
+                and ms_b == Qt.MouseButton.LeftButton
+            ):
+                self.node_clicked_w_left.emit(node_numb)
                 self.hide_clicked.emit(node_numb)
+            elif(
+                x_ms > self.x_left and
+                x_ms < self.x_width + self.f_width
+                and ms_b == Qt.MouseButton.RightButton
+            ):
+                self.node_clicked_w_right.emit(node_numb)
 
     def draw_all(self):
         if self.nod_lst is not None:

@@ -471,10 +471,14 @@ class MainObject(QObject):
 
         self.font_point_size = QFont().pointSize()
         small_f_size = int(self.font_point_size * 0.85)
-        self.small_font = QFont("Courier", pointSize = small_f_size, italic=False)
+        self.small_font = QFont(
+            "Courier", pointSize = small_f_size, italic=False
+        )
 
-
-        self.tree_scene.node_clicked.connect(self.on_node_click)
+        self.tree_scene.node_clicked_w_left.connect(self.on_node_click_w_left)
+        self.tree_scene.node_clicked_w_right.connect(
+            self.on_node_click_w_right
+        )
         self.tree_scene.hide_clicked.connect(self.on_hide_click)
         self.window.Reset2DefaultPushButton.clicked.connect(
             self.reset_new_node
@@ -624,7 +628,7 @@ class MainObject(QObject):
                 if node["number"] > big_nod_num:
                     big_nod_num = node["number"]
 
-            self.on_node_click(big_nod_num)
+            self.on_node_click_w_left(big_nod_num)
 
     def launch_reindex(self, sol_rei):
         try:
@@ -809,7 +813,7 @@ class MainObject(QObject):
         self.refresh_output()
         self.display()
 
-    def on_node_click(self, node_numb):
+    def on_node_click_w_left(self, node_numb):
         if (
             self.new_node is not None and
 
@@ -824,6 +828,9 @@ class MainObject(QObject):
 
         else:
             self.clicked_4_navigation(node_numb)
+
+    def on_node_click_w_right(self, node_numb):
+        print("on_node_click_w_right", node_numb)
 
     def on_hide_click(self, node_numb):
         if node_numb in self.lst2exl:
