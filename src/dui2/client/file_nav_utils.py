@@ -199,7 +199,7 @@ class FileBrowser(QDialog):
         main_v_layout.addLayout(hi_h_layout)
 
         self.only_dir = only_dir
-        print("FileBrowser.only_dir =" + str(self.only_dir))
+        logging.info("FileBrowser.only_dir =" + str(self.only_dir))
 
         self.status_label = QLabel(" ")
 
@@ -216,11 +216,16 @@ class FileBrowser(QDialog):
         low_h_layout = QHBoxLayout()
         low_h_layout.addStretch()
 
+        self.label_pos = -1
+        timer = QTimer(self)
+        timer.timeout.connect(self.refresh_label)
+        timer.start(500)
 
         low_h_layout.addWidget(self.status_label)
-        OpenButton = QPushButton(" Open ")
-        OpenButton.clicked.connect(self.open_file)
-        low_h_layout.addWidget(OpenButton)
+        self.OpenButton = QPushButton(" Open ")
+        self.OpenButton.clicked.connect(self.open_file)
+        low_h_layout.addWidget(self.OpenButton)
+        self.OpenButton.setEnabled(True)
 
         CancelButton = QPushButton(" Cancel ")
         CancelButton.clicked.connect(self.cancel_opp)
@@ -243,24 +248,43 @@ class FileBrowser(QDialog):
         self.path_bar.update_list(parents_list)
 
     def refresh_content(self):
+        try:
+            self.OpenButton.setEnabled(False)
+
+        except AttributeError:
+            logging.info("OpenButton not ready yet")
 
         self.current_file = None
         self.build_paren_list()
         show_hidden = self.show_hidden_check.isChecked()
-
+        self.try_2_kill_thread()
         self.refresh_qthread = req_dir_ls(
             show_hidden = show_hidden, curr_path = self.curr_path
         )
         self.refresh_qthread.ended.connect(self.done_requesting)
-        self.status_label.setText("  Opening  ")
+        self.label_pos = 1
         self.refresh_qthread.start()
 
+    def refresh_label(self):
+        double_str = "    Opening" * 2
+        if self.label_pos > 0:
+            self.label_pos += 1
+            if self.label_pos > 10:
+                self.label_pos = 1
+
+            str_4_label = double_str[self.label_pos:self.label_pos + 9]
+
+            self.status_label.setText(str_4_label)
+
+        else:
+            self.OpenButton.setEnabled(True)
+
     def done_requesting(self, lst_dir):
-        print("done_requesting")
         self.lst_vw.enter_list(lst_in = lst_dir)
         self.status_label.setText(" ")
-
+        self.label_pos = -1
         self.refresh_sorted1()
+        self.try_2_kill_thread()
 
     def refresh_sorted1(self):
         if self.rad_but_file_dir.isChecked():
@@ -268,6 +292,8 @@ class FileBrowser(QDialog):
 
         else:
             self.lst_vw.refresh_list(sorting = False)
+
+        self.OpenButton.setEnabled(True)
 
     def fill_clik(self, fl_dic):
         if fl_dic == self.current_file:
@@ -284,12 +310,14 @@ class FileBrowser(QDialog):
                 self.file_or_dir_selected.emit(
                     self.curr_path, True
                 )
+                self.OpenButton.setEnabled(True)
                 self.close()
 
             else:
                 self.file_or_dir_selected.emit(
                     self.current_file["path"], self.only_dir
                 )
+                self.OpenButton.setEnabled(True)
                 self.close()
 
         except TypeError:
@@ -302,8 +330,20 @@ class FileBrowser(QDialog):
             else:
                 print("no file selected yet")
 
+            self.OpenButton.setEnabled(True)
+
+    def try_2_kill_thread(self):
+        try:
+            self.refresh_qthread.quit()
+            self.refresh_qthread.wait()
+            logging.info("killed thread (FileBrowser)")
+
+        except AttributeError:
+            logging.info("No need to kill thread (FileBrowser)")
+
     def cancel_opp(self):
+        self.label_pos = -1
+        self.OpenButton.setEnabled(True)
         self.close()
-
-
+        self.try_2_kill_thread()
 
