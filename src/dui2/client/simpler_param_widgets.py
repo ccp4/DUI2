@@ -354,7 +354,7 @@ class ImportWidget(QWidget):
         self.check_rot_axs = QCheckBox("Invert rotation axis")
         self.dist_text_in = QLineEdit()
         fnt_met = self.dist_text_in.fontMetrics()
-        calc_width = 4 * fnt_met.width('W')
+        calc_width = fnt_met.horizontalAdvance('WWWW')
         self.dist_text_in.setFixedWidth(calc_width)
         #self.dist_text_in.setText("2193")
         self.check_shadow = QCheckBox("Set dynamic shadowing")

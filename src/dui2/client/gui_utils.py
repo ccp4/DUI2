@@ -714,9 +714,9 @@ class TreeDirScene(QGraphicsScene):
     def __init__(self, parent = None):
         super(TreeDirScene, self).__init__(parent)
         self.setFont(QFont("Courier"))
-        fm = QFontMetrics(self.font())
-        self.f_width = fm.width("0")
-        self.f_height = fm.height()
+        fm_rect = QFontMetrics(self.font()).boundingRect("W")
+        self.f_width = fm_rect.width()
+        self.f_height = fm_rect.height()
 
         ui_dir_path = os.path.dirname(os.path.abspath(__file__))
         self.px_map = {}
