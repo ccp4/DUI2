@@ -469,6 +469,8 @@ class MainObject(QObject):
         self.current_next_buttons = 0
         self.parent_nums_lst = []
 
+        self.local_clipboard = []
+
         self.font_point_size = QFont().pointSize()
         small_f_size = int(self.font_point_size * 0.85)
         self.small_font = QFont(
@@ -832,6 +834,22 @@ class MainObject(QObject):
     def on_node_click_w_right(self, node_numb):
         self.clicked_4_navigation(node_numb)
         print("on_node_click_w_right", self.curr_nod_num)
+
+        try:
+            if self.server_nod_lst[self.curr_nod_num]["status"] == "Succeeded":
+                self.local_clipboard = list(
+                    self.server_nod_lst[self.curr_nod_num]["lst2run"]
+                )
+            else:
+                print(
+                    "status(", self.curr_nod_num, ") = ",
+                    self.server_nod_lst[self.curr_nod_num]["status"]
+                )
+
+        except IndexError:
+            self.local_clipboard = []
+
+        print("self.local_clipboard = ", self.local_clipboard)
 
     def on_hide_click(self, node_numb):
         if node_numb in self.lst2exl:
