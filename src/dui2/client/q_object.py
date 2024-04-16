@@ -830,7 +830,8 @@ class MainObject(QObject):
             self.clicked_4_navigation(node_numb)
 
     def on_node_click_w_right(self, node_numb):
-        print("on_node_click_w_right", node_numb)
+        self.clicked_4_navigation(node_numb)
+        print("on_node_click_w_right", self.curr_nod_num)
 
     def on_hide_click(self, node_numb):
         if node_numb in self.lst2exl:
