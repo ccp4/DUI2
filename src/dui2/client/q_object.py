@@ -818,7 +818,6 @@ class MainObject(QObject):
     def on_node_click_w_left(self, node_numb):
         if (
             self.new_node is not None and
-
             node_numb != self.curr_nod_num and
             node_numb != self.new_node.number and
             self.window.NodeSelecCheck.checkState() and
@@ -847,7 +846,8 @@ class MainObject(QObject):
                 )
 
         except IndexError:
-            self.local_clipboard = []
+            self.new_node.clone_from_list(self.local_clipboard)
+            self.update_all_param()
 
         print("self.local_clipboard = ", self.local_clipboard)
 
