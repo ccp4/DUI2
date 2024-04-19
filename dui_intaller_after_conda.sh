@@ -2,6 +2,10 @@ echo " ################################################# "
 echo " #   simplified DUI2 installer for developers    # "
 echo " ################################################# "
 echo " "
+echo " downgrading Python to version 3.11 "
+echo " "
+conda install python=3.11
+echo " "
 echo " installing git "
 echo " "
 conda install -c conda-forge git -y
@@ -13,6 +17,10 @@ echo " "
 echo " installing DUI2 dependency PySide2  "
 echo " "
 conda install -c conda-forge pyside2 -y
+echo " "
+echo " installing DUI2 a qt web engine compatible with PySide2  "
+echo " "
+conda install -c conda-forge pyqtwebengine -y
 echo " "
 echo " cloning DUI2 code "
 echo " "

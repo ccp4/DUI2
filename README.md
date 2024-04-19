@@ -43,6 +43,10 @@ First update `conda`:
 
        conda update conda -y
 
+We will need to downgrade the version of `Python` to make possible the installation of `dials`, consider doing the entire installation on a different virtual environment:
+
+       conda install python=3.11
+
 Next install `dials`, this may take several minutes:
 
        conda install -c conda-forge dials -y
