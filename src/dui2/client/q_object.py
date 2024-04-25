@@ -832,24 +832,30 @@ class MainObject(QObject):
 
     def on_node_click_w_right(self, node_numb):
         self.clicked_4_navigation(node_numb)
-        print("on_node_click_w_right", self.curr_nod_num)
+        logging.info("on_node_click_w_right" + str(self.curr_nod_num))
 
         try:
             if self.server_nod_lst[self.curr_nod_num]["status"] == "Succeeded":
                 self.local_clipboard = list(
                     self.server_nod_lst[self.curr_nod_num]["lst2run"]
                 )
-            else:
                 print(
-                    "status(", self.curr_nod_num, ") = ",
-                    self.server_nod_lst[self.curr_nod_num]["status"]
+                    "copy:\n", str(self.local_clipboard),
+                    "\n to local clipboard"
+                )
+            else:
+                logging.info(
+                    "status(" + str(self.curr_nod_num) + str(") = ") +
+                    str(self.server_nod_lst[self.curr_nod_num]["status"])
                 )
 
         except IndexError:
+            print(
+                "paste:\n", str(self.local_clipboard),
+                "\n from local clipboard"
+            )
             self.new_node.clone_from_list(self.local_clipboard)
             self.update_all_param()
-
-        print("self.local_clipboard = ", self.local_clipboard)
 
     def on_hide_click(self, node_numb):
         if node_numb in self.lst2exl:
