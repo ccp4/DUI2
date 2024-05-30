@@ -104,6 +104,9 @@ class LoadSliceMaskImage(QThread):
                   "path"    : self.exp_path,
                   "cmd_str" : my_cmd_lst}
 
+        print("\n my_cmd =", my_cmd, "\n")
+
+
         self.r_time_req = get_request_real_time(
             params_in = my_cmd, main_handler = self.my_handler
         )
@@ -733,10 +736,15 @@ class DoImageView(QObject):
         timer.timeout.connect(self.check_move)
         timer.start(1600)
 
-    def __call__(self, in_img_num, nod_or_path):
-        self.exp_path = None
+    def __call__(self, in_img_num, nod_or_path = True):
+        self.cur_img_num = in_img_num
+
+        #self.nod_or_path = "/tmp/test4dui/run_dui2_nodes/run4/refined.expt"
+
         self.nod_or_path = nod_or_path
-        self.build_background_n_get_nod_num(in_img_num)
+        self.exp_path = None
+
+        self.build_background_n_get_nod_num(self.cur_img_num)
 
     def set_just_imported(self):
         self.just_imported = True
@@ -1257,6 +1265,9 @@ class DoImageView(QObject):
             self.get_x1_y1_x2_y2()
             self.set_inv_scale()
 
+
+            print("self.cur_img_num =", self.cur_img_num)
+
             self.load_slice_image = LoadSliceImage(
                 unit_URL = self.uni_url,
                 nod_num_lst = [self.cur_nod_num],
@@ -1278,6 +1289,10 @@ class DoImageView(QObject):
             self.load_slice_image.start()
 
             # Now Same for mask
+
+
+
+
             self.load_slice_mask_image = LoadSliceMaskImage(
                 unit_URL = self.uni_url,
                 nod_num_lst = [self.cur_nod_num],
@@ -1613,6 +1628,9 @@ class MainImgViewObject(QObject):
         self.img_num_changed()
 
     def set_selection(self, str_select, isdir):
+
+        print("\n\n set_selection \n\n")
+
         self.nod_or_path = str_select
         self.dir_selected = isdir
         self.window.IntroPathEdit.setText(self.nod_or_path)
