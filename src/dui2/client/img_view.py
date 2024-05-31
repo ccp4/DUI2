@@ -739,10 +739,12 @@ class DoImageView(QObject):
     def __call__(self, in_img_num, nod_or_path = True):
         self.cur_img_num = in_img_num
 
-        #self.nod_or_path = "/tmp/test4dui/run_dui2_nodes/run4/refined.expt"
+        #self.nod_or_path = "/tmp/run_dui2_nodes/run3/indexed.expt"
 
         self.nod_or_path = nod_or_path
         self.exp_path = None
+
+        print("self.nod_or_path =", self.nod_or_path)
 
         self.build_background_n_get_nod_num(self.cur_img_num)
 
@@ -1629,7 +1631,7 @@ class MainImgViewObject(QObject):
 
     def set_selection(self, str_select, isdir):
 
-        print("\n\n set_selection \n\n")
+        print("\n set_selection \n")
 
         self.nod_or_path = str_select
         self.dir_selected = isdir
@@ -1659,7 +1661,7 @@ class MainImgViewObject(QObject):
         init_path = dic_str[0]
 
         self.open_widget = FileBrowser(
-            self.window, path_in = init_path, only_dir = True
+            self.window, path_in = init_path, only_dir = False
         )
         self.open_widget.resize(self.open_widget.size() * 2)
         self.open_widget.file_or_dir_selected.connect(self.set_selection)
