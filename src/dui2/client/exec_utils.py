@@ -135,6 +135,9 @@ class get_request_real_time(QThread):
     load_ended = Signal(bytes)
     def __init__(self, params_in = None, main_handler = None):
         super(get_request_real_time, self).__init__()
+
+        print("params_in =", params_in)
+
         data_init = ini_data()
         self.url = data_init.get_url()
         self.params = params_in

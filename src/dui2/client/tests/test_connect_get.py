@@ -28,29 +28,6 @@ uni_url = 'http://127.0.0.1:45678/'
 #uni_url = 'http://127.0.0.1:45679/'
 #uni_url = 'http://supercomputo.cimav.edu.mx:45678/'
 
-'''
-lst_cmd_tst = [
-    "gh import",
-    "gh generate_mask",
-    "gh apply_mask",
-    "gh find_spots",
-    "gh find_rotation_axis",
-    "gh index",
-    "gh refine_bravais_settings",
-    "gh reindex",
-    "gh refine",
-    "gh integrate",
-    "gh symmetry",
-    "gh scale",
-    "gh cosym",
-    "gh slice_sequence",
-    "gh merge",
-    "gh combine_experiments",
-    "gh export",
-    "2,dl"
-]
-'''
-
 if __name__ == "__main__":
     #for cmd_in in lst_cmd_tst:
         #cmd_in = input("type: \"Node,command\":")
