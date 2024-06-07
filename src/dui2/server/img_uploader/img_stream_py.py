@@ -33,12 +33,17 @@ def get_np_full_img(raw_dat):
         data_xy_flex = raw_dat[0].as_double()
         np_arr = data_xy_flex.as_numpy_array()
 
+
+    print("type(np_arr[0,0]) =", type(np_arr[0,0]))
+
     return np_arr, i23_multipanel
 
 
 def np_arr_2_byte_stream(np_arr_in):
     d1 = np_arr_in.shape[0]
     d2 = np_arr_in.shape[1]
+
+    print("type(np_arr_in[0,0]) =", type(np_arr_in[0,0]))
 
     img_arr = np.zeros(d1 * d2 + 2, dtype = float)
     img_arr[0] = float(d1)
