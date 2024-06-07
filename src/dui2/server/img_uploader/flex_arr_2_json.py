@@ -414,7 +414,7 @@ def get_json_w_2d_mask_slise(
             mask_tup_obj = pickle.load(pick_file)
             pick_file.close()
 
-            byte_data, i23_multipanel = img_stream_py.slice_mask_2_str(
+            byte_data, i23_multipanel = img_stream_py.slice_mask_2_byte(
                 mask_tup_obj, inv_scale,
                 int(float(x1)), int(float(y1)),
                 int(float(x2)), int(float(y2))

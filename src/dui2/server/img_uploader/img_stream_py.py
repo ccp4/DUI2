@@ -36,6 +36,18 @@ def get_np_full_img(raw_dat):
     return np_arr, i23_multipanel
 
 
+def np_arr_2_byte_stream(np_arr_in):
+    d1 = np_arr_in.shape[0]
+    d2 = np_arr_in.shape[1]
+
+    img_arr = np.zeros(d1 * d2 + 2, dtype = float)
+    img_arr[0] = float(d1)
+    img_arr[1] = float(d2)
+    img_arr[2:] = np_arr_in.ravel()
+    byte_info = img_arr.tobytes(order='C')
+    return byte_info
+
+
 def slice_arr_2_byte(data2d, inv_scale, x1, y1, x2, y2):
     big_np_arr, i23_multipanel = get_np_full_img(data2d)
 
@@ -89,18 +101,6 @@ def scale_np_arr(big_np_arr, inv_scale):
     return rd_arr
 
 
-def np_arr_2_byte_stream(np_arr_in):
-    d1 = np_arr_in.shape[0]
-    d2 = np_arr_in.shape[1]
-
-    img_arr = np.zeros(d1 * d2 + 2, dtype = float)
-    img_arr[0] = float(d1)
-    img_arr[1] = float(d2)
-    img_arr[2:] = np_arr_in.ravel()
-    byte_info = img_arr.tobytes(order='C')
-    return byte_info
-
-
 def get_np_full_mask(raw_dat):
     i23_multipanel = False
     if len(raw_dat) == 24:
@@ -141,7 +141,7 @@ def get_str_full_mask(raw_dat):
     return str_arr_mask, i23_multipanel
 
 
-def slice_mask_2_str(raw_dat, inv_scale, x1, y1, x2, y2):
+def slice_mask_2_byte(raw_dat, inv_scale, x1, y1, x2, y2):
 
     bool_np_arr, i23_multipanel = get_np_full_mask(raw_dat)
     big_d0 = bool_np_arr.shape[0]
@@ -182,7 +182,7 @@ def slice_mask_2_str(raw_dat, inv_scale, x1, y1, x2, y2):
                         small_arr[:,col_num], short_arr[:,big_col]
                     )
 
-        str_buff = np_arr_2_byte_stream(small_arr)
+        byte_buff = np_arr_2_byte_stream(small_arr)
 
-        return str_buff, i23_multipanel
+        return byte_buff, i23_multipanel
 
