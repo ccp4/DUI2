@@ -37,7 +37,7 @@ if __name__ == "__main__":
 
     full_cmd = {
         'nod_lst': [4], 'path': None,
-        'cmd_str':['gmis', '0', 'inv_scale=1', 'view_rect=0,0,624,747']
+        'cmd_str':['gis', '0', 'inv_scale=1', 'view_rect=0,0,624,747']
     }
 
     try:

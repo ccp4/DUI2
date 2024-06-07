@@ -36,7 +36,7 @@ def get_np_full_img(raw_dat):
     return np_arr, i23_multipanel
 
 
-def slice_arr_2_str( data2d, inv_scale, x1, y1, x2, y2):
+def slice_arr_2_byte(data2d, inv_scale, x1, y1, x2, y2):
     big_np_arr, i23_multipanel = get_np_full_img(data2d)
 
     big_d1 = big_np_arr.shape[0]
@@ -54,18 +54,7 @@ def slice_arr_2_str( data2d, inv_scale, x1, y1, x2, y2):
         logging.info(" array bounding OK ")
 
     np_arr = scale_np_arr(big_np_arr[x1:x2,y1:y2], inv_scale)
-
     byte_info = np_arr_2_byte_stream(np_arr)
-    to_remove = '''
-    d1 = np_arr.shape[0]
-    d2 = np_arr.shape[1]
-
-    img_arr = np.zeros(d1 * d2 + 2, dtype = float)
-    img_arr[0] = float(d1)
-    img_arr[1] = float(d2)
-    img_arr[2:] = np_arr.ravel()
-    byte_info = img_arr.tobytes(order='C')
-    '''
     return byte_info
 
 

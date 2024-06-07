@@ -338,20 +338,7 @@ def get_json_w_img_2d(experiments_list_path, img_num):
         my_sweep = experiments.imagesets()[n_sweep]
         raw_dat = my_sweep.get_raw_data(on_sweep_img_num)
         np_arr, i23_multipanel = img_stream_py.get_np_full_img(raw_dat)
-
-
         byte_info = img_stream_py.np_arr_2_byte_stream(np_arr)
-
-        to_remove = '''
-        d1 = np_arr.shape[0]
-        d2 = np_arr.shape[1]
-
-        img_arr = np.zeros(d1 * d2 + 2, dtype = float)
-        img_arr[0] = float(d1)
-        img_arr[1] = float(d2)
-        img_arr[2:] = np_arr.ravel()
-        byte_info = img_arr.tobytes(order='C')
-        '''
         return byte_info
 
     else:
@@ -369,7 +356,7 @@ def get_json_w_2d_slise(experiments_list_path, img_num, inv_scale, x1, y1, x2, y
         my_sweep = experiments.imagesets()[n_sweep]
         data_xy_flex = my_sweep.get_raw_data(on_sweep_img_num)
 
-        byte_data = img_stream_py.slice_arr_2_str(
+        byte_data = img_stream_py.slice_arr_2_byte(
             data_xy_flex, inv_scale,
             int(float(x1)), int(float(y1)),
             int(float(x2)), int(float(y2))
