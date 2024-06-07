@@ -339,20 +339,19 @@ def get_json_w_img_2d(experiments_list_path, img_num):
         raw_dat = my_sweep.get_raw_data(on_sweep_img_num)
         np_arr, i23_multipanel = img_stream_py.get_np_full_img(raw_dat)
 
+
+        byte_info = img_stream_py.np_arr_2_byte_stream(np_arr)
+
+        to_remove = '''
         d1 = np_arr.shape[0]
         d2 = np_arr.shape[1]
-        code_2_replace = '''
-        str_tup = str(tuple(np_arr.ravel()))
-        str_data = "{\"d1\":" + str(d1) + ",\"d2\":" + str(d2) \
-                 + ",\"str_data\":\"" + str_tup[1:-1] + "\"}"
 
-        return str_data
-        '''
         img_arr = np.zeros(d1 * d2 + 2, dtype = float)
         img_arr[0] = float(d1)
         img_arr[1] = float(d2)
         img_arr[2:] = np_arr.ravel()
         byte_info = img_arr.tobytes(order='C')
+        '''
         return byte_info
 
     else:

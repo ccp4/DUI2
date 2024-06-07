@@ -55,21 +55,17 @@ def slice_arr_2_str( data2d, inv_scale, x1, y1, x2, y2):
 
     np_arr = scale_np_arr(big_np_arr[x1:x2,y1:y2], inv_scale)
 
+    byte_info = np_arr_2_byte_stream(np_arr)
+    to_remove = '''
     d1 = np_arr.shape[0]
     d2 = np_arr.shape[1]
-    code_2_replace = '''
-    rvl_arr = np_arr.ravel()
-    str_tup = str(tuple(rvl_arr))
 
-    clean_str = str_tup.replace(" ", "")
-    str_data = "{\"str_data\":\"" + clean_str[1:-1]+ \
-                "\",\"d1\":" + str(d1) + ",\"d2\":" + str(d2) + "}"
-    '''
     img_arr = np.zeros(d1 * d2 + 2, dtype = float)
     img_arr[0] = float(d1)
     img_arr[1] = float(d2)
     img_arr[2:] = np_arr.ravel()
     byte_info = img_arr.tobytes(order='C')
+    '''
     return byte_info
 
 
@@ -104,24 +100,14 @@ def scale_np_arr(big_np_arr, inv_scale):
     return rd_arr
 
 
-def mask_np_2_str(bool_np_arr):
-    d1 = bool_np_arr.shape[0]
-    d2 = bool_np_arr.shape[1]
+def np_arr_2_byte_stream(np_arr_in):
+    d1 = np_arr_in.shape[0]
+    d2 = np_arr_in.shape[1]
 
-    code_2_replace = '''
-    str_tup = str(bool_np_arr.ravel().tobytes())
-    replace_x = str_tup.replace("\\x0", "")
-    str_stream = replace_x[2:-1]
-
-    str_data = "{\"str_data\":\"" + str_stream + \
-                "\",\"d1\":" + str(d1) + ",\"d2\":" + str(d2) + "}"
-
-    return str_data
-    '''
     img_arr = np.zeros(d1 * d2 + 2, dtype = float)
     img_arr[0] = float(d1)
     img_arr[1] = float(d2)
-    img_arr[2:] = bool_np_arr.ravel()
+    img_arr[2:] = np_arr_in.ravel()
     byte_info = img_arr.tobytes(order='C')
     return byte_info
 
@@ -162,7 +148,7 @@ def get_np_full_mask(raw_dat):
 
 def get_str_full_mask(raw_dat):
     np_arr_mask, i23_multipanel = get_np_full_mask(raw_dat)
-    str_arr_mask = mask_np_2_str(np_arr_mask)
+    str_arr_mask = np_arr_2_byte_stream(np_arr_mask)
     return str_arr_mask, i23_multipanel
 
 
@@ -207,7 +193,7 @@ def slice_mask_2_str(raw_dat, inv_scale, x1, y1, x2, y2):
                         small_arr[:,col_num], short_arr[:,big_col]
                     )
 
-        str_buff = mask_np_2_str(small_arr)
+        str_buff = np_arr_2_byte_stream(small_arr)
 
         return str_buff, i23_multipanel
 
