@@ -68,8 +68,8 @@ class Browser(object):
 
         elif uni_cmd == "gmis":
 
-            print("\n\n cmd_lst =", cmd_lst)
-            print("cmd_dict =", cmd_dict, "\n\n")
+            logging.info("cmd_lst =" + str(cmd_lst))
+            logging.info("cmd_dict =" + str(cmd_dict))
 
             img_num = int(cmd_lst[1])
             inv_scale = 1
@@ -122,15 +122,8 @@ class Browser(object):
             )
 
         elif uni_cmd == "get_reflection_list":
-
-            print("\n cmd_dict =", cmd_dict)
-
             exp_path = cmd_dict["path"][0]
             ref_path = exp_path[:-4] + "refl"
-
-            print("exp_path =", exp_path)
-            print("ref_path =", ref_path, "\n")
-
             refl_lst = flex_arr_2_json.get_refl_lst(
                 [exp_path], [ref_path],
                 int(cmd_lst[1])
