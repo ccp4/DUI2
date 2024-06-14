@@ -464,15 +464,6 @@ class ImportWidget(QWidget):
         self.dist_text_in.setText("Auto")
         self.check_shadow.setChecked(False)
 
-        '''
-        self.rad_but_sys_diag.setChecked(True)
-        self.rad_but_img_file.setChecked(True)
-
-        if not self.run_local:
-            self.rad_but_sys_diag.setEnabled(False)
-            self.rad_but_dui_diag.setChecked(True)
-        '''
-
         self.rad_but_dui_diag.setChecked(True)
         self.rad_but_img_file.setChecked(True)
 
