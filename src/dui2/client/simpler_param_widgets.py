@@ -340,12 +340,12 @@ class ImportWidget(QWidget):
 
         self.diag_rad_butt_vbox = QVBoxLayout()
         group2 = QButtonGroup(self)
-        self.rad_but_sys_diag = QRadioButton("System dialog")
         self.rad_but_dui_diag = QRadioButton("Dui2 dialog")
-        group2.addButton(self.rad_but_sys_diag)
+        self.rad_but_sys_diag = QRadioButton("System dialog")
         group2.addButton(self.rad_but_dui_diag)
-        self.diag_rad_butt_vbox.addWidget(self.rad_but_sys_diag)
+        group2.addButton(self.rad_but_sys_diag)
         self.diag_rad_butt_vbox.addWidget(self.rad_but_dui_diag)
+        self.diag_rad_butt_vbox.addWidget(self.rad_but_sys_diag)
 
         self.imp_txt.textChanged.connect(self.line_changed)
         self.imp_extra_txt.textChanged.connect(self.line_changed)
@@ -464,12 +464,20 @@ class ImportWidget(QWidget):
         self.dist_text_in.setText("Auto")
         self.check_shadow.setChecked(False)
 
+        '''
         self.rad_but_sys_diag.setChecked(True)
         self.rad_but_img_file.setChecked(True)
 
         if not self.run_local:
             self.rad_but_sys_diag.setEnabled(False)
             self.rad_but_dui_diag.setChecked(True)
+        '''
+
+        self.rad_but_dui_diag.setChecked(True)
+        self.rad_but_img_file.setChecked(True)
+
+        if not self.run_local:
+            self.rad_but_sys_diag.setEnabled(False)
 
         self.do_emit = True
 
