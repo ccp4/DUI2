@@ -13,10 +13,18 @@ def get_other_procs():
     logging.info("\n pid(me) =" + str(pid_me))
     list_2_remove = []
     for singl_proc in psutil.process_iter():
+
+
         try:
             lst4cmd = singl_proc.cmdline()
+
+            print("lst4cmd =", lst4cmd)
+
             try:
-                if lst4cmd[-1][-11:] == "run_dui2.py":
+                if(
+                    lst4cmd[-1][-8:] ==  "bin/dui2" or
+                    lst4cmd[-1][-11:] == "run_dui2.py"
+                ):
                     pid_num = int(singl_proc.pid)
                     if pid_num != pid_me:
                         found_me = False
