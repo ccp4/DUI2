@@ -1,6 +1,7 @@
 import numpy as np
 import time, logging
-from dials.array_family import flex
+#from dials.array_family import flex
+from dxtbx.flumpy import to_numpy
 
 def get_np_full_img(raw_dat):
     i23_multipanel = False
@@ -8,7 +9,8 @@ def get_np_full_img(raw_dat):
         i23_multipanel = True
         logging.info("24 panels, assuming i23 data(main image)")
         pan_tup = tuple(range(24))
-        top_pan = raw_dat[pan_tup[0]].as_numpy_array()
+        #top_pan = raw_dat[pan_tup[0]].as_numpy_array()
+        top_pan = to_numpy(raw_dat[pan_tup[0]])
 
         p_siz0 = np.size(top_pan[:, 0:1])
         p_siz1 = np.size(top_pan[0:1, :])
@@ -23,7 +25,8 @@ def get_np_full_img(raw_dat):
         np_arr[0:p_siz0, 0:p_siz1] = top_pan[:, :]
 
         for s_num in pan_tup[1:]:
-            pan_dat = raw_dat[pan_tup[s_num]].as_numpy_array()
+            #pan_dat = raw_dat[pan_tup[s_num]].as_numpy_array()
+            pan_dat = to_numpy(raw_dat[pan_tup[s_num]])
             np_arr[
                 s_num * p_siz_bg : s_num * p_siz_bg + p_siz0, 0:p_siz1
             ] = pan_dat[:, :]
@@ -31,7 +34,8 @@ def get_np_full_img(raw_dat):
     else:
         logging.info("Using the first panel only")
         data_xy_flex = raw_dat[0].as_double()
-        np_arr = data_xy_flex.as_numpy_array()
+        #np_arr = data_xy_flex.as_numpy_array()
+        np_arr = to_numpy(data_xy_flex)
 
     logging.info("type(np_arr[0,0]) = " + str(type(np_arr[0,0])))
 
@@ -112,7 +116,8 @@ def get_np_full_mask(raw_dat):
         logging.info("24 panels, assuming i23 data(masking)")
 
         pan_tup = tuple(range(24))
-        top_pan = raw_dat[pan_tup[0]].as_numpy_array()
+        #top_pan = raw_dat[pan_tup[0]].as_numpy_array()
+        top_pan = to_numpy(raw_dat[pan_tup[0]])
         p_siz0 = np.size(top_pan[:, 0:1])
         p_siz1 = np.size(top_pan[0:1, :])
         p_siz_bg = p_siz0 + 18
@@ -125,7 +130,8 @@ def get_np_full_mask(raw_dat):
         np_arr[0:p_siz0, 0:p_siz1] = top_pan[:, :]
 
         for s_num in pan_tup[1:]:
-            pan_dat = raw_dat[pan_tup[s_num]].as_numpy_array()
+            #pan_dat = raw_dat[pan_tup[s_num]].as_numpy_array()
+            pan_dat = to_numpy(raw_dat[pan_tup[s_num]])
             np_arr[
                 s_num * p_siz_bg : s_num * p_siz_bg + p_siz0, 0:p_siz1
             ] = pan_dat[:, :]
@@ -133,7 +139,8 @@ def get_np_full_mask(raw_dat):
     else:
         logging.info("Using the first panel only")
         data_xy_flex = raw_dat[0]
-        np_arr = data_xy_flex.as_numpy_array()
+        #np_arr = data_xy_flex.as_numpy_array()
+        np_arr = to_numpy(data_xy_flex)
 
     return np_arr, i23_multipanel
 
