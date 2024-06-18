@@ -184,7 +184,7 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
         for lin2go in cmd_dict["nod_lst"]:
             try:
                 #TODO remember to check if the list is empty
-                str_json = flex_arr_2_json.get_json_w_img_2d(
+                str_json = flex_arr_2_json.get_bytes_w_img_2d(
                     step_list[lin2go]._lst_expt_out,
                     int(uni_cmd[1])
                 )
@@ -211,7 +211,7 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
                         [x1, y1, x2, y2] = right_side.split(",")
 
                 #TODO remember to check if the list is empty
-                str_json = flex_arr_2_json.get_json_w_2d_slise(
+                str_json = flex_arr_2_json.get_bytes_w_2d_slise(
                     step_list[lin2go]._lst_expt_out,
                     int(uni_cmd[1]), inv_scale, x1, y1, x2, y2
                 )
@@ -231,7 +231,7 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
         for lin2go in cmd_dict["nod_lst"]:
             try:
                 #TODO remember to check if the list is empty
-                str_json = flex_arr_2_json.get_json_w_mask_img_2d(
+                str_json = flex_arr_2_json.get_bytes_w_mask_img_2d(
                     step_list[lin2go]._lst_expt_out,
                     int(uni_cmd[1])
                 )
@@ -257,7 +257,7 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
                         [x1, y1, x2, y2] = right_side.split(",")
 
                 #TODO remember to check if the list is empty
-                str_json = flex_arr_2_json.get_json_w_2d_mask_slise(
+                str_json = flex_arr_2_json.get_bytes_w_2d_mask_slise(
                     step_list[lin2go]._lst_expt_out,
                     int(uni_cmd[1]), inv_scale, x1, y1, x2, y2
                 )

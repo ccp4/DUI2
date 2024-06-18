@@ -328,7 +328,7 @@ def get_correct_img_num_n_sweep_num(experiments, img_num):
     return on_sweep_img_num, n_sweep
 
 
-def get_json_w_img_2d(experiments_list_path, img_num):
+def get_bytes_w_img_2d(experiments_list_path, img_num):
     experiments = get_experiments(experiments_list_path[0])
     if experiments is not None:
 
@@ -345,7 +345,7 @@ def get_json_w_img_2d(experiments_list_path, img_num):
         return None
 
 
-def get_json_w_2d_slise(experiments_list_path, img_num, inv_scale, x1, y1, x2, y2):
+def get_bytes_w_2d_slise(experiments_list_path, img_num, inv_scale, x1, y1, x2, y2):
     experiments = get_experiments(experiments_list_path[0])
     if experiments is not None:
         pan_num = 0
@@ -372,7 +372,7 @@ def get_json_w_2d_slise(experiments_list_path, img_num, inv_scale, x1, y1, x2, y
         return None
 
 
-def get_json_w_mask_img_2d(experiments_list_path, img_num):
+def get_bytes_w_mask_img_2d(experiments_list_path, img_num):
     experiments = get_experiments(experiments_list_path[0])
     if experiments is not None:
         pan_num = 0
@@ -398,7 +398,7 @@ def get_json_w_mask_img_2d(experiments_list_path, img_num):
         return None
 
 
-def get_json_w_2d_mask_slise(
+def get_bytes_w_2d_mask_slise(
     experiments_list_path, img_num, inv_scale, x1, y1, x2, y2
 ):
     experiments = get_experiments(experiments_list_path[0])

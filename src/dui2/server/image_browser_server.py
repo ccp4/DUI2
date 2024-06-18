@@ -56,7 +56,7 @@ class Browser(object):
                     [x1, y1, x2, y2] = right_side.split(",")
 
             exp_path = cmd_dict["path"][0]
-            byte_data = flex_arr_2_json.get_json_w_2d_slise(
+            byte_data = flex_arr_2_json.get_bytes_w_2d_slise(
                 [exp_path], img_num, inv_scale, x1, y1, x2, y2
             )
 
@@ -84,7 +84,7 @@ class Browser(object):
                     [x1, y1, x2, y2] = right_side.split(",")
 
             exp_path = cmd_dict["path"][0]
-            byte_data = flex_arr_2_json.get_json_w_2d_mask_slise(
+            byte_data = flex_arr_2_json.get_bytes_w_2d_mask_slise(
                 [exp_path], img_num, inv_scale, x1, y1, x2, y2
             )
             if byte_data is not None:
@@ -94,7 +94,7 @@ class Browser(object):
         elif uni_cmd == "gi":
             img_num = int(cmd_lst[1])
             exp_path = cmd_dict["path"][0]
-            str_json = flex_arr_2_json.get_json_w_img_2d(
+            str_json = flex_arr_2_json.get_bytes_w_img_2d(
                 [exp_path], img_num,
             )
 
@@ -106,7 +106,7 @@ class Browser(object):
         elif uni_cmd == "gmi":
             img_num = int(cmd_lst[1])
             exp_path = cmd_dict["path"][0]
-            str_json = flex_arr_2_json.get_json_w_mask_img_2d(
+            str_json = flex_arr_2_json.get_bytes_w_mask_img_2d(
                 [exp_path], img_num,
             )
             if str_json is not None:
