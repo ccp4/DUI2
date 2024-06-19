@@ -33,8 +33,11 @@ class get_request_shot(QObject):
     def __init__(self, parent = None, params_in = None, main_handler = None):
         super(get_request_shot, self).__init__(parent)
         if main_handler == None:
+            print("get_request_shot ... #1")
             data_init = ini_data()
             uni_url = data_init.get_url()
+            print("get_request_shot ... #2")
+            print("params(get_request_shot)=", params_in)
             req = requests.get(uni_url, stream = True, params = params_in)
             compresed = req.content
             try:
@@ -43,6 +46,7 @@ class get_request_shot(QObject):
             except zlib.error:
                 logging.info("zlib. err catch (get_request_shot)")
                 self.to_return = None
+            print("get_request_shot ... #3")
 
             self.done = True
 
@@ -75,9 +79,12 @@ class get_req_json_dat(QObject):
             data_init = ini_data()
             uni_url = data_init.get_url()
             try:
+                print("params(get_req_json_dat)=", params_in)
+                print("get_req_json_dat #1")
                 req_get = requests.get(
-                    uni_url, stream = True, params = params_in, timeout = 45
+                    uni_url, stream = True, params = params_in, timeout = 10
                 )
+                print("get_req_json_dat #2")
                 logging.info("starting request")
                 str_lst = ''
                 line_str = ''
@@ -99,10 +106,17 @@ class get_req_json_dat(QObject):
                         json_out = None
 
             except ConnectionError:
+
+                print(" ... Connection err catch (get_req_json_dat) ...")
+
                 logging.info(" ... Connection err catch (get_req_json_dat) ...")
                 json_out = None
 
             except requests.exceptions.RequestException:
+
+                print(
+                    "..requests.exceptions.RequestException (get_req_json_dat)"
+                )
                 logging.info(
                     "..requests.exceptions.RequestException (get_req_json_dat)"
                 )
@@ -145,7 +159,7 @@ class get_request_real_time(QThread):
         if self.my_handler == None:
             try:
                 req_get = requests.get(
-                    self.url, stream = True, params = self.params, timeout = 65
+                    self.url, stream = True, params = self.params, timeout = 15
                 )
                 req_head = req_get.headers.get('content-length', 0)
                 total_size = int(req_head) + 1

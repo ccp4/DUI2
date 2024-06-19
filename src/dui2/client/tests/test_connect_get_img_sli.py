@@ -42,7 +42,7 @@ if __name__ == "__main__":
 
     try:
         req_get = requests.get(
-            uni_url, stream = True, params = full_cmd, timeout = 65
+            uni_url, stream = True, params = full_cmd, timeout = 15
         )
         req_head = req_get.headers.get('content-length', 0)
         total_size = int(req_head) + 1

@@ -14,16 +14,20 @@ import numpy as np
 
 
 def get_experiments(experiment_path):
+    print("get_experiments   ...   #1")
     logging.info("importing from:" + experiment_path)
     for repeat in range(10):
         try:
+            print("get_experiments   ...   #2")
             new_experiments = ExperimentListFactory.from_json_file(
                 experiment_path
             )
+            print("get_experiments   ...   #3")
             break
 
         except OSError:
             new_experiments = None
+            print("OS Err catch in ExperimentListFactory, trying again")
             logging.info("OS Err catch in ExperimentListFactory, trying again")
             time.sleep(0.333)
 
@@ -32,12 +36,14 @@ def get_experiments(experiment_path):
 
 def get_template_info(exp_path, img_num):
     try:
+        print("get_template(flex_arr_2_json)   ... #1")
         experiments = get_experiments(exp_path)
 
         max_img_num = 0
         for single_sweep in experiments.imagesets():
             max_img_num += len(single_sweep.indices())
 
+        print("get_template(flex_arr_2_json)   ... #2")
         max_img_num -= 1
         if img_num < 0:
             new_img_num = 0
@@ -51,15 +57,16 @@ def get_template_info(exp_path, img_num):
         on_sweep_img_num, n_sweep = get_correct_img_num_n_sweep_num(
             experiments, new_img_num
         )
+        print("get_template(flex_arr_2_json)   ... #3")
         my_sweep = experiments.imagesets()[n_sweep]
 
         str_json = my_sweep.get_template()
+        print("get_template(flex_arr_2_json)   ... #4")
         img_path = my_sweep.get_path(on_sweep_img_num)
-
         raw_dat = my_sweep.get_raw_data(on_sweep_img_num)
         np_arr, i23_multipanel = img_stream_py.get_np_full_img(raw_dat)
         img_with, img_height = np_arr.shape[0], np_arr.shape[1]
-
+        print("get_template(flex_arr_2_json)   ... #5")
         return [str_json, img_with, img_height, img_path, new_img_num, i23_multipanel]
 
     except IndexError:
@@ -312,11 +319,14 @@ def get_refl_pred_lst(expt_path, refl_path, img_num, z_dept):
 
 def get_correct_img_num_n_sweep_num(experiments, img_num):
     lst_num_of_imgs = []
+    print("get_correct_img_num_n_sweep_num   ... #1")
     for single_sweep in experiments.imagesets():
         lst_num_of_imgs.append(len(single_sweep.indices()))
+    print("get_correct_img_num_n_sweep_num   ... #2")
 
     on_sweep_img_num = img_num
     n_sweep = 0
+    print("get_correct_img_num_n_sweep_num   ... #3")
     for num_of_imgs in lst_num_of_imgs:
         if on_sweep_img_num >= num_of_imgs:
             on_sweep_img_num -= num_of_imgs
@@ -324,6 +334,9 @@ def get_correct_img_num_n_sweep_num(experiments, img_num):
 
         else:
             break
+
+    print("get_correct_img_num_n_sweep_num   ... #4")
+
 
     return on_sweep_img_num, n_sweep
 
@@ -373,23 +386,30 @@ def get_bytes_w_2d_slise(experiments_list_path, img_num, inv_scale, x1, y1, x2, 
 
 
 def get_bytes_w_mask_img_2d(experiments_list_path, img_num):
+    print("get_bytes_w_mask_img_2d  ...  #1")
     experiments = get_experiments(experiments_list_path[0])
+    print("get_bytes_w_mask_img_2d  ...  #2")
     if experiments is not None:
+        print("get_bytes_w_mask_img_2d  ...  #3")
         pan_num = 0
         on_sweep_img_num, n_sweep = get_correct_img_num_n_sweep_num(
             experiments, img_num
         )
+        print("get_bytes_w_mask_img_2d  ...  #4")
 
         try:
+            print("get_bytes_w_mask_img_2d  ...  #5")
             imageset_tmp = experiments.imagesets()[n_sweep]
             mask_file = imageset_tmp.external_lookup.mask.filename
             pick_file = open(mask_file, "rb")
             mask_tup_obj = pickle.load(pick_file)
             pick_file.close()
-
+            print("get_bytes_w_mask_img_2d  ...  #6")
             str_data, i23_multipanel = img_stream_py.get_str_full_mask(mask_tup_obj)
+            print("get_bytes_w_mask_img_2d  ...  #7")
 
         except FileNotFoundError:
+            print("FileNotFound Err catch (get_bytes_w_img_2d)")
             str_data = None
 
         return str_data
@@ -420,11 +440,6 @@ def get_bytes_w_2d_mask_slise(
                 int(float(x2)), int(float(y2))
             )
 
-            code_2_replace = '''
-            if str_data == "Error":
-                logging.info('str_data == "Error"')
-                str_data = None
-            '''
             if byte_data == "Error":
                 logging.info('byte_data == "Error"')
                 byte_data = None

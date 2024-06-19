@@ -1,5 +1,5 @@
 import numpy as np
-import json, zlib, time, requests, logging
+import zlib, time, requests, logging
 
 from dui2.client.init_firts import ini_data
 from dui2.client.exec_utils import get_request_shot
@@ -14,54 +14,48 @@ def load_img_json_w_str(
               "cmd_str" : my_cmd_lst}
 
     try:
+        print("load_img_json_w_str  ... #1")
         start_tm = time.time()
 
+        print("load_img_json_w_str  ... #2")
         req_shot = get_request_shot(
             params_in = my_cmd, main_handler = main_handler
         )
-        code_2_replace = '''
-        dic_str = req_shot.result_out()
-        arr_dic = json.loads(dic_str)
-        d1 = arr_dic["d1"]
-        d2 = arr_dic["d2"]
-        str_data = arr_dic["str_data"]
-        arr_1d = np.fromstring(str_data, dtype = float, sep = ',')
-        np_array_out = arr_1d.reshape(d1, d2)
-        '''
+        print("load_img_json_w_str  ... #3")
+
         byte_json =  req_shot.result_out()
         d1d2_n_arr1d = np.frombuffer(byte_json, dtype = float)
         d1 = int(d1d2_n_arr1d[0])
         d2 = int(d1d2_n_arr1d[1])
         np_array_out = d1d2_n_arr1d[2:].reshape(d1, d2)
-
         end_tm = time.time()
-        logging.info("full IMG request BIN " + str(end_tm - start_tm) + "sec")
+
+        print("load_img_json_w_str  ... #4")
+        logging.info("full IMG request BIN time=" + str(end_tm - start_tm) + "sec")
 
     except TypeError:
+        print("\n Type err catch  (load_img_json_w_str) \n")
         logging.info("\n Type err catch  (load_img_json_w_str) \n")
         return None
 
     except ConnectionError:
+        print("\n Connection err catch  (load_img_json_w_str) \n")
         logging.info("\n Connection err catch  (load_img_json_w_str) \n")
         return None
 
     except requests.exceptions.RequestException:
+        print(
+            "\n requests.exceptions.RequestException (load_img_json_w_str) \n"
+        )
         logging.info(
             "\n requests.exceptions.RequestException (load_img_json_w_str) \n"
         )
         return None
 
     except ZeroDivisionError:
+        print("\n ZeroDivision err catch (load_img_json_w_str) \n")
         logging.info("\n ZeroDivision err catch (load_img_json_w_str) \n")
         return None
-
-    code_2_replace = '''
-    except json.decoder.JSONDecodeError:
-        logging.info(
-            "\n json.decoder.JSON Decode Err catch (load_img_json_w_str) \n"
-        )
-        return None
-    '''
 
     return np_array_out
 
@@ -81,17 +75,6 @@ def load_mask_img_json_w_str(
         req_shot = get_request_shot(
             params_in = my_cmd, main_handler = main_handler
         )
-        code_2_replace = '''
-        dic_str =  req_shot.result_out()
-        arr_dic = json.loads(dic_str)
-        d1 = arr_dic["d1"]
-        d2 = arr_dic["d2"]
-        str_data = arr_dic["str_data"]
-
-        n_tup = tuple(str_data)
-        arr_1d = np.asarray(n_tup, dtype = 'float')
-        np_array_out = arr_1d.reshape(d1, d2)
-        '''
 
         byte_json =  req_shot.result_out()
         d1d2_n_arr1d = np.frombuffer(byte_json, dtype = float)
