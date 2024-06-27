@@ -6,6 +6,7 @@ import logging, platform
 import psutil
 import os
 
+
 logging.basicConfig(filename='run_dui2_all_local.log', level=logging.DEBUG)
 
 def get_other_procs():
@@ -64,7 +65,6 @@ def get_other_procs():
 
 def main():
     print("\n platform.system()", platform.system())
-
     get_other_procs()
 
     if platform.system() == "Windows":

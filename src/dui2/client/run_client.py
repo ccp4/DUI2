@@ -21,7 +21,7 @@ copyright (c) CCP4 - DLS
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-import sys, time, logging
+import sys, time, logging, os
 
 from PySide2.QtCore import *
 from PySide2.QtWidgets import *
@@ -34,6 +34,7 @@ from dui2.client.exec_utils import get_req_json_dat
 from dui2.shared_modules import format_utils
 
 def main(par_def = None):
+    os.environ["QTWEBENGINE_CHROMIUM_FLAGS"] = "--no-sandbox"
     data_init = ini_data()
     data_init.set_data(par_def)
     uni_url = str(data_init.get_url())

@@ -5,7 +5,7 @@ except ImportError:
     import img_stream_py
 
 from dials.array_family import flex
-from dxtbx.model.experiment_list import ExperimentListFactory
+from dxtbx.model.experiment_list import ExperimentList
 
 import json, logging
 import time
@@ -16,10 +16,11 @@ import numpy as np
 def get_experiments(experiment_path):
     print("get_experiments   ...   #1")
     logging.info("importing from:" + experiment_path)
+    '''
     for repeat in range(10):
         try:
             print("get_experiments   ...   #2")
-            new_experiments = ExperimentListFactory.from_json_file(
+            new_experiments = ExperimentList.from_file(
                 experiment_path
             )
             print("get_experiments   ...   #3")
@@ -30,6 +31,12 @@ def get_experiments(experiment_path):
             print("OS Err catch in ExperimentListFactory, trying again")
             logging.info("OS Err catch in ExperimentListFactory, trying again")
             time.sleep(0.333)
+    '''
+
+    new_experiments = ExperimentList.from_file(
+        experiment_path
+    )
+
 
     return new_experiments
 

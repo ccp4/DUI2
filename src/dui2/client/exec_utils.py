@@ -154,6 +154,8 @@ class get_request_real_time(QThread):
         self.url = data_init.get_url()
         self.params = params_in
         self.my_handler = main_handler
+        logging.info("params_in(get_request_real_time) got here" + str(params_in))
+
 
     def run(self):
         if self.my_handler == None:
