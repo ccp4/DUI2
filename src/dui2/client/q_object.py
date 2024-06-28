@@ -569,6 +569,10 @@ class MainObject(QObject):
             self.change_layout
         )
 
+        self.window.actionOpen_Tutorial.triggered.connect(
+            self.open_tutorial
+        )
+
         self.html_view = QWebEngineView()
         self.window.verticalLayout_html_view.addWidget(self.html_view)
 
@@ -612,6 +616,10 @@ class MainObject(QObject):
         )
         resp = lst_req.result_out()
         logging.info("aboutToQuit ... 2")
+
+
+    def open_tutorial(self):
+        print("\n open_tutorial \n")
 
     def import_init(self):
         loop = QEventLoop()
