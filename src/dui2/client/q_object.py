@@ -21,7 +21,7 @@ copyright (c) CCP4 - DLS
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-import os, sys, requests, logging
+import os, sys, requests, logging, webbrowser
 
 from PySide2.QtCore import *
 from PySide2.QtWidgets import *
@@ -619,7 +619,17 @@ class MainObject(QObject):
 
 
     def open_tutorial(self):
-        print("\n open_tutorial \n")
+        print("\nOpen_tutorial #1")
+
+        try:
+            webbrowser.open("https://github.com/ccp4/DUI2/wiki")
+
+        except AttributeError:
+            logging.info(
+                "Attribute Err catch, no path for HTML file (OpenBrowser)"
+            )
+
+        print("Open_tutorial #2\n")
 
     def import_init(self):
         loop = QEventLoop()
