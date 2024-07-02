@@ -11,13 +11,12 @@ class ini_data(object):
         if par_def == None:
             par_def = (
                 ("url", 'http://127.0.0.1:45678/'),
+                ("import_init", None),
                 ("all_local", "False"),
                 ("windows_exe", "False"),
             )
 
-
         init_param = format_utils.get_par(par_def, sys.argv[1:])
-
         logging.info("init_param =" + str(init_param))
         global uni_url
         try:
