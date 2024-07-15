@@ -23,66 +23,50 @@ copyright (c) CCP4 - DLS
 
 import sys, zlib
 import requests
+import numpy as np
 
 uni_url = 'http://127.0.0.1:45678/'
 #uni_url = 'http://127.0.0.1:45679/'
 #uni_url = 'http://supercomputo.cimav.edu.mx:45678/'
 
-
 if __name__ == "__main__":
-    '''full_cmd = {
-        'nod_lst': [4], 'path': None,
-        'cmd_str': ['gmis', '0', 'inv_scale=2', 'view_rect=408,248,2043,2205']
-    }'''
 
     full_cmd = {
-        'nod_lst': [4], 'path': None,
-        'cmd_str':['gis', '0', 'inv_scale=1', 'view_rect=0,0,624,747']
+        'nod_lst': [1],
+        'path': None,
+        'cmd_str': ['gis', '2', 'inv_scale=1', 'view_rect=55,66,77,88']
     }
 
-    try:
-        req_get = requests.get(
-            uni_url, stream = True, params = full_cmd, timeout = 15
-        )
-        req_head = req_get.headers.get('content-length', 0)
-        total_size = int(req_head) + 1
-        print("total_size =" + str(total_size))
-        block_size = int(total_size / 6 * 1024)
-        max_size = 16384
-        #max_size = 65536
-        if block_size > max_size:
-            block_size = max_size
+    req_get = requests.get(
+        uni_url, stream = True, params = full_cmd, timeout = 15
+    )
+    req_head = req_get.headers.get('content-length', 0)
+    total_size = int(req_head) + 1
+    print("total_size =" + str(total_size))
+    block_size = int(total_size / 6 * 1024)
+    max_size = 16384
+    #max_size = 65536
+    if block_size > max_size:
+        block_size = max_size
 
-        print("block_size =" + str(block_size))
+    print("block_size =" + str(block_size))
 
-        downloaded_size = 0
-        compresed = bytes()
-        for data in req_get.iter_content(block_size):
-            compresed += data
-            downloaded_size += block_size
-            progress = int(100.0 * (downloaded_size / total_size))
-            #self.prog_new_stat.emit(progress)
-            print("progress =", progress)
+    downloaded_size = 0
+    compresed = bytes()
+    for data in req_get.iter_content(block_size):
+        compresed += data
+        downloaded_size += block_size
+        progress = int(100.0 * (downloaded_size / total_size))
+        print("progress =", progress)
 
-        end_data = zlib.decompress(compresed)
-        print("get_request_real_time ... downloaded")
+    end_data = zlib.decompress(compresed)
+    print("get_request_real_time ... downloaded")
+    #print("end_data =\n", end_data)
 
-        tmp_off = '''
-    except zlib.error:
-        print("zlib. err catch(get_request_real_time) <<")
-        end_data = None
-        '''
+    d1d2_n_arr1d = np.frombuffer(end_data, dtype = float)
+    d1 = int(d1d2_n_arr1d[0])
+    d2 = int(d1d2_n_arr1d[1])
+    np_array_out = d1d2_n_arr1d[2:].reshape(d1, d2)
+    print("np_array_out =", np_array_out)
 
-    except ConnectionError:
-        print("\n Connection err catch (get_request_real_time) \n")
-        end_data = None
-
-    except requests.exceptions.RequestException:
-        print(
-            "\n requests.exceptions.ReqExp (get_request_real_time) \n"
-        )
-        end_data = None
-
-    #self.load_ended.emit(end_data)
-    print("load_ended")
 
