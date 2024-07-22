@@ -800,6 +800,9 @@ class Runner(object):
         self._save_state()
 
     def run_get_data(self, cmd_dict):
+
+        print("run_get_data(", cmd_dict, ")")
+
         unalias_cmd_ini = fix_alias(cmd_dict["lst_wt_cmd"][0])
         unalias_cmd_lst = cmd_dict["lst_wt_cmd"]
         unalias_cmd_lst[0] = unalias_cmd_ini

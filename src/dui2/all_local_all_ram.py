@@ -1,21 +1,31 @@
-import sys, json, os, logging
+import sys, json, os, logging, platform
+
 from dui2.client.q_object import MainObject
 from dui2.client.init_firts import ini_data
 from dui2.shared_modules import format_utils, all_local_gui_connector
-#from dui2.server.data_n_json import iter_dict
-from dui2.server import multi_node
 
+from dui2.server import multi_node
 from dui2.server.init_first import ini_data as server_ini_data
 
 from PySide2.QtCore import *
 from PySide2.QtWidgets import *
 
 
-if __name__ == '__main__':
+#if __name__ == '__main__':
+def main():
+    print("\n platform.system()", platform.system())
+    if platform.system() == "Windows":
+        win_str = "true"
 
+    else:
+        win_str = "false"
+
+    print("win_str =", win_str, "\n")
     par_def = (
         ("init_path", None),
-        ("windows_exe", "false"),
+        ("import_init", None),
+        ("all_local", "true"),
+        ("windows_exe", win_str),
     )
     data_init = ini_data()
     data_init.set_data(par_def = par_def)
