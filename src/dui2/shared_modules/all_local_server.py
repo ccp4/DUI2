@@ -82,12 +82,7 @@ class ReqHandler(object):
     def fake_get(self, url_dict = None, call_obj = None):
         print("url_dict =" + str(url_dict))
         logging.info("url_dict =" + str(url_dict))
-        #tmp_cmd2lst = url_dict["cmd_lst"]
         tmp_cmd2lst = url_dict["cmd_str"]
-
-        cmd_lst = []
-        for inner_str in tmp_cmd2lst:
-            cmd_lst.append(inner_str.split(" "))
 
         nod_lst = []
         try:
@@ -97,8 +92,10 @@ class ReqHandler(object):
         except KeyError:
             logging.info("no node number provided")
 
+
         cmd_dict = {"nod_lst":nod_lst,
-                    "cmd_lst":cmd_lst}
+                    "lst_wt_cmd":tmp_cmd2lst}
+
 
         lst_out = self.tree_runner.run_get_data(cmd_dict)
 

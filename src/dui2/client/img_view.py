@@ -416,7 +416,7 @@ class ImgGraphicsScene(QGraphicsScene):
 
         self.refl_list = refl_list1
         if self.parent_obj.palette == "heat":
-            overlay_colour = Qt.green
+            overlay_colour = Qt.blue
 
         elif self.parent_obj.palette == "grayscale":
             overlay_colour = Qt.cyan
@@ -425,7 +425,7 @@ class ImgGraphicsScene(QGraphicsScene):
             overlay_colour = Qt.darkGreen
 
         elif self.parent_obj.palette == "invert":
-            overlay_colour = Qt.blue
+            overlay_colour = Qt.red
 
         self.overlay_pen = QPen(
             overlay_colour, 0.8, Qt.SolidLine,
