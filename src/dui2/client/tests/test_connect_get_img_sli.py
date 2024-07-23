@@ -30,43 +30,44 @@ uni_url = 'http://127.0.0.1:45678/'
 #uni_url = 'http://supercomputo.cimav.edu.mx:45678/'
 
 if __name__ == "__main__":
+    for img_num in range(500):
+        print("\n\n img_num =", img_num)
+        full_cmd = {
+            'nod_lst': [1],
+            'path': None,
+            'cmd_str': ['gis', str(img_num), 'inv_scale=1', 'view_rect=55,66,77,88']
+        }
 
-    full_cmd = {
-        'nod_lst': [1],
-        'path': None,
-        'cmd_str': ['gis', '2', 'inv_scale=1', 'view_rect=55,66,77,88']
-    }
+        req_get = requests.get(
+            uni_url, stream = True, params = full_cmd, timeout = 15
+        )
+        req_head = req_get.headers.get('content-length', 0)
+        total_size = int(req_head) + 1
+        print("total_size =" + str(total_size))
+        block_size = int(total_size / 6 * 1024)
+        max_size = 16384
+        #max_size = 65536
+        if block_size > max_size:
+            block_size = max_size
 
-    req_get = requests.get(
-        uni_url, stream = True, params = full_cmd, timeout = 15
-    )
-    req_head = req_get.headers.get('content-length', 0)
-    total_size = int(req_head) + 1
-    print("total_size =" + str(total_size))
-    block_size = int(total_size / 6 * 1024)
-    max_size = 16384
-    #max_size = 65536
-    if block_size > max_size:
-        block_size = max_size
+        print("block_size =" + str(block_size))
 
-    print("block_size =" + str(block_size))
+        downloaded_size = 0
+        compresed = bytes()
+        for data in req_get.iter_content(block_size):
+            compresed += data
+            downloaded_size += block_size
+            progress = int(100.0 * (downloaded_size / total_size))
+            print("progress =", progress)
 
-    downloaded_size = 0
-    compresed = bytes()
-    for data in req_get.iter_content(block_size):
-        compresed += data
-        downloaded_size += block_size
-        progress = int(100.0 * (downloaded_size / total_size))
-        print("progress =", progress)
+        end_data = zlib.decompress(compresed)
+        print("get_request_real_time ... downloaded")
+        #print("end_data =\n", end_data)
 
-    end_data = zlib.decompress(compresed)
-    print("get_request_real_time ... downloaded")
-    #print("end_data =\n", end_data)
-
-    d1d2_n_arr1d = np.frombuffer(end_data, dtype = float)
-    d1 = int(d1d2_n_arr1d[0])
-    d2 = int(d1d2_n_arr1d[1])
-    np_array_out = d1d2_n_arr1d[2:].reshape(d1, d2)
-    print("np_array_out =", np_array_out)
+        d1d2_n_arr1d = np.frombuffer(end_data, dtype = float)
+        d1 = int(d1d2_n_arr1d[0])
+        d2 = int(d1d2_n_arr1d[1])
+        np_array_out = d1d2_n_arr1d[2:].reshape(d1, d2)
+        print("np_array_out =\n", np_array_out)
 
 

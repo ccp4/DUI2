@@ -115,21 +115,6 @@ class LoadSliceMaskImage(QThread):
         self.progressing.emit(percent_progr)
 
     def emit_n_end(self, byte_json):
-        code_2_replace = '''
-        try:
-            arr_dic = json.loads(byte_json)
-
-            str_data = arr_dic["str_data"]
-            d1 = arr_dic["d1"]
-            d2 = arr_dic["d2"]
-            n_tup = tuple(str_data)
-            arr_1d = np.asarray(n_tup, dtype = 'float')
-            np_array_out = arr_1d.reshape(d1, d2)
-
-        except json.decoder.JSONDecodeError:
-            np_array_out = None
-
-        '''
         try:
             d1d2_n_arr1d = np.frombuffer(byte_json, dtype = float)
             d1 = int(d1d2_n_arr1d[0])
@@ -237,38 +222,11 @@ class LoadSliceImage(QThread):
             d2 = int(d1d2_n_arr1d[1])
             np_array_out = d1d2_n_arr1d[2:].reshape(d1, d2)
 
-            same_maths_butt_different = '''
-            d_ini = byte_json[0:16]
-            d1_d2 = np.frombuffer(d_ini, dtype = float)
-            d1 = int(d1_d2[0])
-            d2 = int(d1_d2[1])
-            d_trunk = byte_json[0 : d1 * d2 * 8]
-            arr_1d = np.frombuffer(d_trunk, dtype = float)
-            np_array_out = arr_1d.reshape(d1, d2)
-            )'''
-
         except TypeError:
             np_array_out = None
 
         except ValueError:
             np_array_out = None
-
-
-        code_2_replace = '''
-        try:
-            arr_dic = json.loads(byte_json)
-            str_data = arr_dic["str_data"]
-            d1 = arr_dic["d1"]
-            d2 = arr_dic["d2"]
-            arr_1d = np.fromstring(str_data, dtype = float, sep = ',')
-            np_array_out = arr_1d.reshape(d1, d2)
-
-        except json.decoder.JSONDecodeError:
-            np_array_out = None
-
-        except TypeError:
-            np_array_out = None
-        '''
 
         self.slice_loaded.emit(
             {
@@ -807,26 +765,28 @@ class DoImageView(QObject):
             self.i23_multipanel = bool(json_data_lst[5])
             logging.info("Is I23 multidetector:" + str(self.i23_multipanel))
 
-            if self.img_path != new_img_path:
-                x_ax = np.arange(
-                    start = -self.img_d1_d2[1] / 2,
-                    stop = self.img_d1_d2[1] / 2 + 1,
-                    step = 1
-                )
-                y_ax = np.arange(
-                    start = -self.img_d1_d2[0] / 2,
-                    stop = self.img_d1_d2[0] / 2 + 1,
-                    step = 1
-                )
-                sx = x_ax * x_ax
-                sy = y_ax * y_ax
-                xx, yy = np.meshgrid(sx, sy, sparse = True)
-                tmp_2d_arr = xx + yy
-                tmp_2d_arr = tmp_2d_arr.max() - tmp_2d_arr
-                tmp_2d_arr = tmp_2d_arr ** 6
-                self.np_full_img = self.i_min_max[1] * (
-                    tmp_2d_arr / tmp_2d_arr.max()
-                )
+            #if self.img_path != new_img_path:
+            x_ax = np.arange(
+                start = -self.img_d1_d2[1] / 2,
+                stop = self.img_d1_d2[1] / 2 + 1,
+                step = 1
+            )
+            y_ax = np.arange(
+                start = -self.img_d1_d2[0] / 2,
+                stop = self.img_d1_d2[0] / 2 + 1,
+                step = 1
+            )
+            sx = x_ax * x_ax
+            sy = y_ax * y_ax
+            xx, yy = np.meshgrid(sx, sy, sparse = True)
+            tmp_2d_arr = xx + yy
+            tmp_2d_arr = tmp_2d_arr.max() - tmp_2d_arr
+            tmp_2d_arr = tmp_2d_arr ** 6
+            self.np_full_img = self.i_min_max[1] * (
+                tmp_2d_arr / tmp_2d_arr.max()
+            )
+            ##end if
+
             self.img_path = new_img_path
             self.main_obj.window.ImagePathText.setText(str(self.img_path))
 
