@@ -79,12 +79,12 @@ class get_req_json_dat(QObject):
             data_init = ini_data()
             uni_url = data_init.get_url()
             try:
-                #print("params(get_req_json_dat)=", params_in)
-                #print("get_req_json_dat #1")
+                print("params(get_req_json_dat)=", params_in)
+                print("get_req_json_dat #1")
                 req_get = requests.get(
                     uni_url, stream = True, params = params_in, timeout = 10
                 )
-                #print("get_req_json_dat #2")
+                print("get_req_json_dat #2")
                 logging.info("starting request")
                 str_lst = ''
                 line_str = ''
@@ -107,16 +107,16 @@ class get_req_json_dat(QObject):
 
             except ConnectionError:
 
-                #print(" ... Connection err catch (get_req_json_dat) ...")
+                print(" ... Connection err catch (get_req_json_dat) ...")
 
                 logging.info(" ... Connection err catch (get_req_json_dat) ...")
                 json_out = None
 
             except requests.exceptions.RequestException:
 
-                #print(
-                #   "..requests.exceptions.RequestException (get_req_json_dat)"
-                #)
+                print(
+                   "..requests.exceptions.RequestException (get_req_json_dat)"
+                )
                 logging.info(
                     "..requests.exceptions.RequestException (get_req_json_dat)"
                 )
@@ -129,6 +129,7 @@ class get_req_json_dat(QObject):
 
         else:
             logging.info("main_handler =" + str(main_handler))
+            print("main_handler =" + str(main_handler))
             main_handler.get_from_main_dui(params_in, self)
 
     def get_it_str(self, data_comming):

@@ -765,27 +765,29 @@ class DoImageView(QObject):
             self.i23_multipanel = bool(json_data_lst[5])
             logging.info("Is I23 multidetector:" + str(self.i23_multipanel))
 
-            #if self.img_path != new_img_path:
-            x_ax = np.arange(
-                start = -self.img_d1_d2[1] / 2,
-                stop = self.img_d1_d2[1] / 2 + 1,
-                step = 1
-            )
-            y_ax = np.arange(
-                start = -self.img_d1_d2[0] / 2,
-                stop = self.img_d1_d2[0] / 2 + 1,
-                step = 1
-            )
-            sx = x_ax * x_ax
-            sy = y_ax * y_ax
-            xx, yy = np.meshgrid(sx, sy, sparse = True)
-            tmp_2d_arr = xx + yy
-            tmp_2d_arr = tmp_2d_arr.max() - tmp_2d_arr
-            tmp_2d_arr = tmp_2d_arr ** 6
-            self.np_full_img = self.i_min_max[1] * (
-                tmp_2d_arr / tmp_2d_arr.max()
-            )
-            ##end if
+            if(
+                self.img_path != new_img_path or
+                self.old_img_num != self.cur_img_num
+            ):
+                x_ax = np.arange(
+                    start = -self.img_d1_d2[1] / 2,
+                    stop = self.img_d1_d2[1] / 2 + 1,
+                    step = 1
+                )
+                y_ax = np.arange(
+                    start = -self.img_d1_d2[0] / 2,
+                    stop = self.img_d1_d2[0] / 2 + 1,
+                    step = 1
+                )
+                sx = x_ax * x_ax
+                sy = y_ax * y_ax
+                xx, yy = np.meshgrid(sx, sy, sparse = True)
+                tmp_2d_arr = xx + yy
+                tmp_2d_arr = tmp_2d_arr.max() - tmp_2d_arr
+                tmp_2d_arr = tmp_2d_arr ** 6
+                self.np_full_img = self.i_min_max[1] * (
+                    tmp_2d_arr / tmp_2d_arr.max()
+                )
 
             self.img_path = new_img_path
             self.main_obj.window.ImagePathText.setText(str(self.img_path))

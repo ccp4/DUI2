@@ -307,6 +307,8 @@ class ImportWidget(QWidget):
         self.do_emit = True
         self.dir_selected = None
 
+        self.runner_handler = parent
+
         data_init = ini_data()
         self.run_local = data_init.get_if_local()
 
@@ -437,10 +439,18 @@ class ImportWidget(QWidget):
 
             cmd = {"nod_lst":"", "cmd_str":["dir_path"]}
             lst_req = get_req_json_dat(
-                params_in = cmd, main_handler = None
+                params_in = cmd, main_handler = self.runner_handler
             )
             dic_str = lst_req.result_out()
             init_path = dic_str[0]
+
+            example = '''
+            lst_req = get_req_json_dat(
+                params_in = cmd, main_handler = self.runner_handler
+            )
+            json_lamb = lst_req.result_out()
+            '''
+
             if(
                 self.rad_but_template.isChecked() or
                 self.rad_but_img_file.isChecked()
