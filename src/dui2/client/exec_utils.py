@@ -111,16 +111,17 @@ class get_req_json_dat(QObject):
 
                 logging.info(" ... Connection err catch (get_req_json_dat) ...")
                 json_out = None
-
+            tmp_off = '''
             except requests.exceptions.RequestException:
 
                 print(
-                   "..requests.exceptions.RequestException (get_req_json_dat)"
+                    "..requests.exceptions.RequestException (get_req_json_dat)"
                 )
                 logging.info(
                     "..requests.exceptions.RequestException (get_req_json_dat)"
                 )
                 json_out = None
+            '''
 
             if json_out is not None:
                 json_out = json.loads(str_lst)

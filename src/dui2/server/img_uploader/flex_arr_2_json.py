@@ -5,7 +5,8 @@ except ImportError:
     import img_stream_py
 
 from dials.array_family import flex
-from dxtbx.model.experiment_list import ExperimentList
+#from dxtbx.model.experiment_list import ExperimentList
+from dxtbx.model import ExperimentList
 
 import json, logging
 import time
