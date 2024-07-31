@@ -42,14 +42,12 @@ def get_experiments(experiment_path):
 
 def get_template_info(exp_path, img_num):
     try:
-        #print("get_template(flex_arr_2_json)   ... #1")
         experiments = get_experiments(exp_path)
 
         max_img_num = 0
         for single_sweep in experiments.imagesets():
             max_img_num += len(single_sweep.indices())
 
-        #print("get_template(flex_arr_2_json)   ... #2")
         max_img_num -= 1
         if img_num < 0:
             new_img_num = 0
@@ -63,16 +61,23 @@ def get_template_info(exp_path, img_num):
         on_sweep_img_num, n_sweep = get_correct_img_num_n_sweep_num(
             experiments, new_img_num
         )
-        #print("get_template(flex_arr_2_json)   ... #3")
         my_sweep = experiments.imagesets()[n_sweep]
-
         str_json = my_sweep.get_template()
-        #print("get_template(flex_arr_2_json)   ... #4")
+
         img_path = my_sweep.get_path(on_sweep_img_num)
+
+        #code_2_remove = '''
         raw_dat = my_sweep.get_raw_data(on_sweep_img_num)
         np_arr, i23_multipanel = img_stream_py.get_np_full_img(raw_dat)
         img_with, img_height = np_arr.shape[0], np_arr.shape[1]
-        #print("get_template(flex_arr_2_json)   ... #5")
+        #'''
+
+        code_2_test_n_use_instead_of_the_one_above = '''
+        i23_multipanel = False
+        img_height, img_with = experiments[0].detector[0].get_image_size()
+        print(" \n img_with, img_height = ", img_with, img_height, " \n ")
+        '''
+
         return [str_json, img_with, img_height, img_path, new_img_num, i23_multipanel]
 
     except IndexError:
