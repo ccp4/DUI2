@@ -15,15 +15,12 @@ import numpy as np
 
 
 def get_experiments(experiment_path):
-    #print("get_experiments   ...   #1")
     logging.info("importing from:" + experiment_path)
     for repeat in range(10):
         try:
-            #print("get_experiments   ...   #2")
             new_experiments = ExperimentList.from_file(
                 experiment_path
             )
-            #print("get_experiments   ...   #3")
             break
 
         except OSError:
@@ -31,11 +28,6 @@ def get_experiments(experiment_path):
             #print("OS Err catch in ExperimentListFactory, trying again")
             logging.info("OS Err catch in ExperimentListFactory, trying again")
             time.sleep(0.333)
-
-    attempt_wihout_using_try_except = '''
-    new_experiments = ExperimentList.from_file(
-        experiment_path
-    )'''
 
     return new_experiments
 
@@ -330,14 +322,11 @@ def get_refl_pred_lst(expt_path, refl_path, img_num, z_dept):
 
 def get_correct_img_num_n_sweep_num(experiments, img_num):
     lst_num_of_imgs = []
-    #print("get_correct_img_num_n_sweep_num   ... #1")
     for single_sweep in experiments.imagesets():
         lst_num_of_imgs.append(len(single_sweep.indices()))
-    #print("get_correct_img_num_n_sweep_num   ... #2")
 
     on_sweep_img_num = img_num
     n_sweep = 0
-    #print("get_correct_img_num_n_sweep_num   ... #3")
     for num_of_imgs in lst_num_of_imgs:
         if on_sweep_img_num >= num_of_imgs:
             on_sweep_img_num -= num_of_imgs
@@ -346,7 +335,6 @@ def get_correct_img_num_n_sweep_num(experiments, img_num):
         else:
             break
 
-    #print("get_correct_img_num_n_sweep_num   ... #4")
     return on_sweep_img_num, n_sweep
 
 
@@ -395,30 +383,21 @@ def get_bytes_w_2d_slise(experiments_list_path, img_num, inv_scale, x1, y1, x2, 
 
 
 def get_bytes_w_mask_img_2d(experiments_list_path, img_num):
-    #print("get_bytes_w_mask_img_2d  ...  #1")
     experiments = get_experiments(experiments_list_path[0])
-    #print("get_bytes_w_mask_img_2d  ...  #2")
     if experiments is not None:
-        #print("get_bytes_w_mask_img_2d  ...  #3")
         pan_num = 0
         on_sweep_img_num, n_sweep = get_correct_img_num_n_sweep_num(
             experiments, img_num
         )
-        #print("get_bytes_w_mask_img_2d  ...  #4")
-
         try:
-            #print("get_bytes_w_mask_img_2d  ...  #5")
             imageset_tmp = experiments.imagesets()[n_sweep]
             mask_file = imageset_tmp.external_lookup.mask.filename
             pick_file = open(mask_file, "rb")
             mask_tup_obj = pickle.load(pick_file)
             pick_file.close()
-            #print("get_bytes_w_mask_img_2d  ...  #6")
             str_data, i23_multipanel = img_stream_py.get_str_full_mask(mask_tup_obj)
-            #print("get_bytes_w_mask_img_2d  ...  #7")
 
         except FileNotFoundError:
-            #print("FileNotFound Err catch (get_bytes_w_img_2d)")
             str_data = None
 
         return str_data
