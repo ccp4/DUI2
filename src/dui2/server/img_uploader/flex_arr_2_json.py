@@ -44,7 +44,7 @@ def get_height_with_n_i23_multip(ExpLst):
 
     if len(ExpLst[0].detector) == 24:
         i23_multipanel = True
-        img_height = (img_height + 17) * 24
+        img_height = (img_height + 18) * 24
 
     else:
         i23_multipanel = False

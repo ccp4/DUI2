@@ -795,7 +795,7 @@ class MaskWidget(QWidget):
             panel_height = 213
             panel_border = 18
             panel_height_m_border = panel_height - panel_border
-            x_max = 2462
+            x_max = 2463
             y_max = 5111
 
         else:
