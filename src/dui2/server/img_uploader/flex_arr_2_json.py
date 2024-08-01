@@ -32,6 +32,34 @@ def get_experiments(experiment_path):
     return new_experiments
 
 
+def get_height_with_n_i23_multip(ExpLst):
+
+    img_with, img_height = ExpLst[0].detector[0].get_image_size()
+
+
+    print(
+        " \n img_with, img_height ... before correct= ",
+        img_with, img_height," \n "
+    )
+
+    if len(ExpLst[0].detector) == 24:
+        i23_multipanel = True
+        img_height = (img_height + 17) * 24
+
+    else:
+        i23_multipanel = False
+
+    print(
+        " \n img_with, img_height ... after correct= ",
+        img_with, img_height," \n "
+    )
+
+    #print("dir(ExperimentList) = ", dir(ExpLst))
+    print("len(ExperimentList[0].detector) = ", len(ExpLst[0].detector))
+
+    return img_with, img_height, i23_multipanel
+
+
 def get_template_info(exp_path, img_num):
     try:
         experiments = get_experiments(exp_path)
@@ -58,17 +86,15 @@ def get_template_info(exp_path, img_num):
 
         img_path = my_sweep.get_path(on_sweep_img_num)
 
-        #code_2_remove = '''
+        code_2_remove = '''
         raw_dat = my_sweep.get_raw_data(on_sweep_img_num)
         np_arr, i23_multipanel = img_stream_py.get_np_full_img(raw_dat)
         img_with, img_height = np_arr.shape[0], np_arr.shape[1]
-        #'''
-
-        code_2_test_n_use_instead_of_the_one_above = '''
-        i23_multipanel = False
-        img_height, img_with = experiments[0].detector[0].get_image_size()
-        print(" \n img_with, img_height = ", img_with, img_height, " \n ")
         '''
+
+        img_height, img_with, i23_multipanel = get_height_with_n_i23_multip(
+            experiments
+        )
 
         return [str_json, img_with, img_height, img_path, new_img_num, i23_multipanel]
 
