@@ -619,8 +619,6 @@ class MainObject(QObject):
 
 
     def open_tutorial(self):
-        print("\nOpen_tutorial #1")
-
         try:
             webbrowser.open("https://github.com/ccp4/DUI2/wiki")
 
@@ -628,8 +626,9 @@ class MainObject(QObject):
             logging.info(
                 "Attribute Err catch, no path for HTML file (OpenBrowser)"
             )
-
-        print("Open_tutorial #2\n")
+            print(
+                "Attribute Err catch, no path for HTML file (OpenBrowser)"
+            )
 
     def import_init(self):
         loop = QEventLoop()

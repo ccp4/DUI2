@@ -25,7 +25,6 @@ def get_experiments(experiment_path):
 
         except OSError:
             new_experiments = None
-            #print("OS Err catch in ExperimentListFactory, trying again")
             logging.info("OS Err catch in ExperimentListFactory, trying again")
             time.sleep(0.333)
 
@@ -53,8 +52,6 @@ def get_height_with_n_i23_multip(ExpLst):
         " \n img_with, img_height ... after correct= ",
         img_with, img_height," \n "
     )
-
-    #print("dir(ExperimentList) = ", dir(ExpLst))
     print("len(ExperimentList[0].detector) = ", len(ExpLst[0].detector))
 
     return img_with, img_height, i23_multipanel

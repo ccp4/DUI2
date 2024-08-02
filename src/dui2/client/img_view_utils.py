@@ -16,46 +16,33 @@ def load_img_json_w_str(
               "cmd_str" : my_cmd_lst}
 
     try:
-        #print("load_img_json_w_str  ... #1")
         start_tm = time.time()
-
-        #print("load_img_json_w_str  ... #2")
         req_shot = get_request_shot(
             params_in = my_cmd, main_handler = main_handler
         )
-        #print("load_img_json_w_str  ... #3")
-
         byte_json =  req_shot.result_out()
         d1d2_n_arr1d = np.frombuffer(byte_json, dtype = float)
         d1 = int(d1d2_n_arr1d[0])
         d2 = int(d1d2_n_arr1d[1])
         np_array_out = d1d2_n_arr1d[2:].reshape(d1, d2)
         end_tm = time.time()
-
-        #print("load_img_json_w_str  ... #4")
         logging.info("full IMG request BIN time=" + str(end_tm - start_tm) + "sec")
 
     except TypeError:
-        #print("\n Type err catch  (load_img_json_w_str) \n")
         logging.info("\n Type err catch  (load_img_json_w_str) \n")
         return None
 
     except ConnectionError:
-        #print("\n Connection err catch  (load_img_json_w_str) \n")
         logging.info("\n Connection err catch  (load_img_json_w_str) \n")
         return None
 
     except requests.exceptions.RequestException:
-        #print(
-        #    "\n requests.exceptions.RequestException (load_img_json_w_str) \n"
-        #)
         logging.info(
             "\n requests.exceptions.RequestException (load_img_json_w_str) \n"
         )
         return None
 
     except ZeroDivisionError:
-        #print("\n ZeroDivision err catch (load_img_json_w_str) \n")
         logging.info("\n ZeroDivision err catch (load_img_json_w_str) \n")
         return None
 

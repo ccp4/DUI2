@@ -146,17 +146,14 @@ class LoadFullImage(QThread):
         cur_img_num = None, path_in = None, main_handler = None
     ):
         super(LoadFullImage, self).__init__()
-        #print("LoadFullImage #1")
         self.uni_url = unit_URL
         self.cur_nod_num = cur_nod_num
         self.cur_img_num = cur_img_num
         self.exp_path = path_in
         self.my_handler = main_handler
-        #print("LoadFullImage #2")
 
 
     def run(self):
-        #print("LoadFullImage #3")
         np_full_img = load_img_json_w_str(
             self.uni_url,
             nod_num_lst = [self.cur_nod_num],
@@ -164,7 +161,6 @@ class LoadFullImage(QThread):
             exp_path = self.exp_path,
             main_handler = self.my_handler
         )
-        #print("LoadFullImage #4\n\n")
         self.image_loaded.emit(
             (self.cur_nod_num, self.cur_img_num, np_full_img)
         )

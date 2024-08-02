@@ -20,11 +20,6 @@ def get_other_procs():
         try:
             lst4cmd = singl_proc.cmdline()
             try:
-                remove_after_test = '''if(
-                    lst4cmd[-1][-8:] ==  "bin/dui2" or
-                    lst4cmd[-1][-11:] == "run_dui2.py"
-                ):'''
-
                 if(
                     lst4cmd == my_cmdline_lst
                 ):
