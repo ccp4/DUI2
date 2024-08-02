@@ -80,7 +80,7 @@ class get_req_json_dat(QObject):
             uni_url = data_init.get_url()
             try:
                 req_get = requests.get(
-                    uni_url, stream = True, params = params_in, timeout = 10
+                    uni_url, stream = True, params = params_in, timeout = 25
                 )
                 logging.info("starting request")
                 str_lst = ''
@@ -150,7 +150,7 @@ class get_request_real_time(QThread):
         if self.my_handler == None:
             try:
                 req_get = requests.get(
-                    self.url, stream = True, params = self.params, timeout = 15
+                    self.url, stream = True, params = self.params, timeout = 40
                 )
                 req_head = req_get.headers.get('content-length', 0)
                 total_size = int(req_head) + 1

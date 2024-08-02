@@ -35,11 +35,10 @@ def get_height_with_n_i23_multip(ExpLst):
 
     img_with, img_height = ExpLst[0].detector[0].get_image_size()
 
-
-    print(
+    tmp_off = '''print(
         " \n img_with, img_height ... before correct= ",
         img_with, img_height," \n "
-    )
+    )'''
 
     if len(ExpLst[0].detector) == 24:
         i23_multipanel = True
@@ -48,11 +47,14 @@ def get_height_with_n_i23_multip(ExpLst):
     else:
         i23_multipanel = False
 
-    print(
+    tmp_off = '''print(
         " \n img_with, img_height ... after correct= ",
         img_with, img_height," \n "
     )
-    print("len(ExperimentList[0].detector) = ", len(ExpLst[0].detector))
+    print(
+        "len(ExperimentList[0].detector) = ",
+        len(ExpLst[0].detector)
+    )'''
 
     return img_with, img_height, i23_multipanel
 
