@@ -45,10 +45,10 @@ def get_other_procs():
                 pass
 
         except psutil.AccessDenied:
-            logging.info("psutil.AccessDenied Catch")
+            logging.info("psutil.AccessDenied Err Catch")
 
         except psutil.NoSuchProcess:
-            logging.info("psutil.NoSuchProcess Catch")
+            logging.info("psutil.NoSuchProcess Err Catch")
 
         except ProcessLookupError:
             logging.info("ProcessLookup Err Catch")
