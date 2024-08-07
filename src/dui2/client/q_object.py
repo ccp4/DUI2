@@ -851,15 +851,21 @@ class MainObject(QObject):
         self.clicked_4_navigation(node_numb)
         logging.info("on_node_click_w_right" + str(self.curr_nod_num))
 
+        msg_str = False
+
         try:
-            if self.server_nod_lst[self.curr_nod_num]["status"] == "Succeeded":
+            if(
+                self.server_nod_lst[self.curr_nod_num]["status"] == "Succeeded" or
+                self.server_nod_lst[self.curr_nod_num]["status"] == "Busy"
+            ):
                 self.local_clipboard = list(
                     self.server_nod_lst[self.curr_nod_num]["lst2run"]
                 )
-                print(
-                    "copy:\n", str(self.local_clipboard),
-                    "\n to local clipboard"
-                )
+
+                msg_str = "Copyed:\n\n"
+                msg_str += str(self.local_clipboard)
+                msg_str += "\n\n to local clipboard"
+
             else:
                 logging.info(
                     "status(" + str(self.curr_nod_num) + str(") = ") +
@@ -867,12 +873,25 @@ class MainObject(QObject):
                 )
 
         except IndexError:
-            print(
-                "paste:\n", str(self.local_clipboard),
-                "\n from local clipboard"
-            )
             self.new_node.clone_from_list(self.local_clipboard)
             self.update_all_param()
+            msg_str = "Pasted:\n\n"
+            msg_str += str(self.local_clipboard)
+            msg_str += "\n\n from local clipboard"
+
+        if msg_str:
+            print(msg_str)
+            dlg = QDialog()
+            #print(dir(dlg))
+            layout = QVBoxLayout()
+            layout.addWidget(QLabel(msg_str))
+            #layout.addWidget(QPushButton("Ok"))
+            dlg.setLayout(layout)
+
+            dlg.setWindowTitle("Local clipboard use")
+            dlg.exec_()
+
+
 
     def on_hide_click(self, node_numb):
         if node_numb in self.lst2exl:
@@ -1205,21 +1224,23 @@ class MainObject(QObject):
             tmp_cmd_par = self.new_node
             logging.info("\n Updating parameters from ...new_node")
 
-        pars_in = tmp_cmd_par.get_all_params()
+        new_params = tmp_cmd_par.get_all_params()
 
-        if pars_in:
+        if new_params:
             self.param_widgets[self.curr_widg_key]["simple"].update_all_pars(
-                pars_in
+                new_params
             )
 
             try:
                 self.param_widgets[self.curr_widg_key]["advanced"].update_all_pars(
-                    pars_in
+                    new_params
                 )
             except AttributeError:
                 logging.info("No advanced pars")
 
-        print("Not pasting from clipboard")
+        else:
+            print("absent parameters node")
+            logging.info("absent parameters node")
 
     def gray_n_ungray(self):
         try:
