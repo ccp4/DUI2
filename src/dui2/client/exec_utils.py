@@ -518,7 +518,12 @@ class CommandParamControl:
         #TODO remember to handle "self.custm_param"
 
     def get_all_params(self):
-        return self.par_lst[0], self.custm_param
+        try:
+            return self.par_lst[0], self.custm_param
+
+        except IndexError:
+            print("Index Err catch")
+            return False
 
     def get_full_command_list(self):
         lst_out = []

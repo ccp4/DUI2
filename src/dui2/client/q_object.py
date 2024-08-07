@@ -1205,16 +1205,21 @@ class MainObject(QObject):
             tmp_cmd_par = self.new_node
             logging.info("\n Updating parameters from ...new_node")
 
-        self.param_widgets[self.curr_widg_key]["simple"].update_all_pars(
-            tmp_cmd_par.get_all_params()
-        )
+        pars_in = tmp_cmd_par.get_all_params()
 
-        try:
-            self.param_widgets[self.curr_widg_key]["advanced"].update_all_pars(
-                tmp_cmd_par.get_all_params()
+        if pars_in:
+            self.param_widgets[self.curr_widg_key]["simple"].update_all_pars(
+                pars_in
             )
-        except AttributeError:
-            logging.info("No advanced pars")
+
+            try:
+                self.param_widgets[self.curr_widg_key]["advanced"].update_all_pars(
+                    pars_in
+                )
+            except AttributeError:
+                logging.info("No advanced pars")
+
+        print("Not pasting from clipboard")
 
     def gray_n_ungray(self):
         try:
