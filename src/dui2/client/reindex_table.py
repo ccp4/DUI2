@@ -282,9 +282,17 @@ class ReindexTable(QTableWidget):
         return self.better_pos
 
     def update_all_pars(self, tup_lst_pars):
-        logging.info(
+        print(
             "(ReindexTable) time to update par to:" + str(tup_lst_pars) + "\n"
         )
+        try:
+            row_2_click = int(tup_lst_pars[1])
+            self.opt_clicked(int(tup_lst_pars[1]), 1)
+
+        except TypeError:
+            return
+
+        print("ReindexTable  ...  tup_lst_pars[1] =", row_2_click)
 
     def reset_pars(self):
         logging.info(" reset_pars(ReindexTable)")

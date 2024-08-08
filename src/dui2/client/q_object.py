@@ -1226,7 +1226,11 @@ class MainObject(QObject):
 
         new_params = tmp_cmd_par.get_all_params()
 
+        #TODO: consider replasing the "if" with another way to do this
         if new_params:
+
+            print("calling update_all_pars from update_all_param with: ", new_params)
+
             self.param_widgets[self.curr_widg_key]["simple"].update_all_pars(
                 new_params
             )
