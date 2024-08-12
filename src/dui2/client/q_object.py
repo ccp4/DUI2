@@ -849,17 +849,16 @@ class MainObject(QObject):
 
     def on_node_click_w_right(self, node_numb):
         self.clicked_4_navigation(node_numb)
-        logging.info("on_node_click_w_right" + str(self.curr_nod_num))
+        logging.info("on_node_click_w_right" + str(node_numb))
 
         msg_str = False
-
         try:
             if(
-                self.server_nod_lst[self.curr_nod_num]["status"] == "Succeeded" or
-                self.server_nod_lst[self.curr_nod_num]["status"] == "Busy"
+                self.server_nod_lst[node_numb]["status"] == "Succeeded" or
+                self.server_nod_lst[node_numb]["status"] == "Busy"
             ):
                 self.local_clipboard = list(
-                    self.server_nod_lst[self.curr_nod_num]["lst2run"]
+                    self.server_nod_lst[node_numb]["lst2run"]
                 )
 
                 msg_str = "Copyed:\n\n"
@@ -868,11 +867,15 @@ class MainObject(QObject):
 
             else:
                 logging.info(
-                    "status(" + str(self.curr_nod_num) + str(") = ") +
-                    str(self.server_nod_lst[self.curr_nod_num]["status"])
+                    "status(" + str(node_numb) + str(") = ") +
+                    str(self.server_nod_lst[node_numb]["status"])
                 )
 
         except IndexError:
+
+            print("self.local_clipboard =", self.local_clipboard)
+
+
             self.new_node.clone_from_list(self.local_clipboard)
             self.update_all_param()
             msg_str = "Pasted:\n\n"
@@ -890,7 +893,6 @@ class MainObject(QObject):
 
             dlg.setWindowTitle("Local clipboard use")
             dlg.exec_()
-
 
 
     def on_hide_click(self, node_numb):

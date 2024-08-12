@@ -173,18 +173,22 @@ class ReindexTable(QTableWidget):
             self.bak_col = Qt.black
 
     def opt_clicked(self, row, col):
-        logging.info("Solution clicked = " + str(row))
+        try:
+            logging.info("Solution clicked = " + str(row))
 
-        v_sliderValue = self.v_sliderBar.value()
-        h_sliderValue = self.h_sliderBar.value()
+            v_sliderValue = self.v_sliderBar.value()
+            h_sliderValue = self.h_sliderBar.value()
 
-        self.del_opts_lst()
-        self.add_opts_lst(lst_labels=self.list_labl, selected_pos=row)
+            self.del_opts_lst()
+            self.add_opts_lst(lst_labels=self.list_labl, selected_pos=row)
 
-        self.v_sliderBar.setValue(v_sliderValue)
-        self.h_sliderBar.setValue(h_sliderValue)
+            self.v_sliderBar.setValue(v_sliderValue)
+            self.h_sliderBar.setValue(h_sliderValue)
 
-        self.opt_pick(row)
+            self.opt_pick(row)
+
+        except AttributeError:
+            print("skipping opt_clicked (ReindexTable)")
 
     def opt_pick(self, row):
         self.opt_signal.emit(row + 1)
@@ -285,12 +289,19 @@ class ReindexTable(QTableWidget):
         print(
             "(ReindexTable) time to update par to:" + str(tup_lst_pars) + "\n"
         )
+
         try:
-            row_2_click = int(tup_lst_pars[1])
-            self.opt_clicked(int(tup_lst_pars[1]), 1)
+            print("tup_lst_pars[0][0]['value'] =", tup_lst_pars[0][0]['value'])
+            row_2_click = int(tup_lst_pars[0][0]['value'])
+            self.opt_clicked(int(row_2_click), 1)
 
         except TypeError:
             return
+
+        except IndexError:
+            print("Index Err catch")
+            return
+
 
         print("ReindexTable  ...  tup_lst_pars[1] =", row_2_click)
 
