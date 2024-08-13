@@ -488,7 +488,7 @@ class CommandParamControl:
         self.parent_node_lst = [int(max(self.parent_node_lst))]
 
     def clone_from_list(self, lst_par_in):
-        print(" clone_from_list \n lst_par_in =" + str(lst_par_in))
+        logging.info(" clone_from_list ------------")
 
         self.m_cmd_lst = []
         for inner_lst in lst_par_in:
@@ -512,14 +512,9 @@ class CommandParamControl:
                 elif lst_par_in[0][0] == "dials.import":
                     inner_par_lst.append({"name":"", "value":str(str_elem)})
 
-                elif lst_par_in[0][0] == "dials.reindex":
-                    inner_par_lst.append({"name":"", "value":str(str_elem)})
-
             self.par_lst.append(inner_par_lst)
 
-
-
-        print("self.par_lst =" + str(self.par_lst))
+        logging.info("self.par_lst =" + str(self.par_lst))
         #TODO remember to handle "self.custm_param"
 
     def get_all_params(self):
