@@ -4,7 +4,7 @@ client/server implementation of DUI (Dials User Interface)
 
 ## Requirements
 
-This project relies on an installation of `python3` with `dials`, `pyside2` and `requests` among other dependencies. There are two ways to install DUI2:
+This project relies on an installation of `python3` with `dials` (https://dials.github.io/), `pyside2` and `requests` among other dependencies. There are two ways to install DUI2:
 
 
 ## Option 1, Installation with curl and ccp4
