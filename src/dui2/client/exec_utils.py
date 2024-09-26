@@ -230,6 +230,7 @@ def get_help_messages(handler_in):
         "generate_mask",
         "apply_mask",
         "find_spots",
+        "filter_reflections",
         "find_rotation_axis",
         "index",
         "ssx_index",

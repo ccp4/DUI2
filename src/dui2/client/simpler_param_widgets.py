@@ -1178,6 +1178,42 @@ class FindspotsSimplerParameterTab(SimpleParamTab):
         ):
             self.set_rad_pro_alg.setChecked(False)
 
+###################################################################################################
+
+class FilterWidget(QWidget):
+    '''
+    On this widget the user can remove reflections manually
+    The reflections should be clicked in the image viewer, consequently that
+    part of the code is in the << img_view >> module
+    '''
+    all_items_changed = Signal(list)
+    component_changed = Signal(str)
+    def __init__(self, parent = None):
+        super(FilterWidget, self).__init__(parent)
+        self.do_emit = True
+        sys_font = QFont()
+        font_point_size = sys_font.pointSize()
+
+        self.cmd_label = QLabel("TMP none")
+        self.cmd_label.setFont(QFont(
+            "Courier", font_point_size -1, QFont.Bold
+        ))
+
+        self.main_vbox = QVBoxLayout()
+
+        self.main_vbox.addWidget(self.cmd_label)
+
+        self.setLayout(self.main_vbox)
+
+    def reset_pars(self):
+        print("reset_pars(FilterWidget)")
+
+    def update_all_pars(self, tup_lst_pars):
+        print(
+            "update_all_pars(FilterWidget)" + str(tup_lst_pars)
+        )
+
+###################################################################################################
 
 class IndexSimplerParamTab(SimpleParamTab):
     """

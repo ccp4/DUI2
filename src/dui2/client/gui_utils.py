@@ -67,8 +67,21 @@ widgets_defs = {
         "tooltip"       : "dials.find_spots ...",
         "icon"          : "resources/find_spots.png",
         "main_cmd"      :["dials.find_spots"],
+        "nxt_widg_lst"  :[
+            "filter_reflections", "index", "combine_experiments", "ssx_index", "optional"
+        ]
+    },
+
+
+
+    "filter_reflections" : {
+        "tooltip"       : "dials.filter_reflections ...",
+        "icon"          : "resources/filter_reflections.png",
+        "main_cmd"      :["dials.filter_reflections"],
         "nxt_widg_lst"  :["index", "combine_experiments", "ssx_index", "optional"]
     },
+
+
     "index" : {
         "tooltip"       : "dials.index ...",
         "icon"          : "resources/index.png",

@@ -67,6 +67,9 @@ def get_pair_list():
         ("gm",      "dials.generate_mask"                   ),
         ("am",      "dials.apply_mask"                      ),
         ("fd",      "dials.find_spots"                      ),
+
+        ("fl",    "dials.filter_reflections"                ),
+
         ("fr",      "dials.find_rotation_axis"              ),
         ("id",      "dials.index"                           ),
         ("rb",      "dials.refine_bravais_settings"         ),
@@ -101,7 +104,6 @@ def get_pair_list():
         ("Aaa",    "dials.estimate_resolution"                ),
         ("Aaa",    "dials.export_best"                        ),
         ("Aaa",    "dials.export_bitmaps"                     ),
-        ("Aaa",    "dials.filter_reflections"                 ),
         ("Aaa",    "dials.find_bad_pixels"                    ),
         ("Aaa",    "dials.find_hot_pixels"                    ),
         ("Aaa",    "dials.find_shared_models"                 ),

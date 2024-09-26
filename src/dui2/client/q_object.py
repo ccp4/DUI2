@@ -47,6 +47,9 @@ from dui2.client.init_firts import ini_data
 from dui2.client.simpler_param_widgets import RootWidg
 from dui2.client.simpler_param_widgets import ImportWidget
 from dui2.client.simpler_param_widgets import MaskWidget
+
+from dui2.client.simpler_param_widgets import FilterWidget
+
 from dui2.client.simpler_param_widgets import ExportWidget
 from dui2.client.simpler_param_widgets import MergeWidget
 from dui2.client.simpler_param_widgets import OptionalWidget
@@ -138,6 +141,16 @@ class MainObject(QObject):
         self.mask_widg.all_items_changed.connect(self.tmp_mask_changed)
         self.mask_widg.component_changed.connect(self.mask_comp_changed)
         self.window.MaskScrollArea.setWidget(self.mask_widg)
+
+        ##########################################################################################
+
+        self.filt_widg = FilterWidget()
+        self.window.FilterScrollArea.setWidget(self.filt_widg)
+
+        ##########################################################################################
+
+
+
 
         fd_advanced_parameters = build_advanced_params_widget(
             "find_spots_params", self.window.FindspotsSearchLayout,
@@ -384,6 +397,14 @@ class MainObject(QObject):
         self.param_widgets[
             "find_spots"
         ]["main_page"] = self.window.FindspotsPage
+
+        ###################################################################################
+
+        self.param_widgets["filter_reflections"]["simple"] = self.filt_widg
+        self.param_widgets["filter_reflections"]["advanced"] = None
+        self.param_widgets["filter_reflections"]["main_page"] = self.window.FilterPage
+
+        ###################################################################################
 
         self.param_widgets["apply_mask"]["simple"] = self.mask_widg
         self.param_widgets["apply_mask"]["advanced"] = None
