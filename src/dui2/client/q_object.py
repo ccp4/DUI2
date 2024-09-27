@@ -745,7 +745,36 @@ class MainObject(QObject):
             except ValueError:
                 img_num = 0
 
-            self.do_image_view(in_img_num = img_num, nod_or_path = fnd_cur_nod)
+            on_filter = False
+            try:
+
+                print("self.new_node.m_cmd_lst", self.new_node.m_cmd_lst)
+                print(
+                    "(self.new_node.number, self.curr_nod_num) =",
+                    self.new_node.number, self.curr_nod_num
+                )
+                #TODO test if the next if is ok ALWAYS
+                if(
+                    self.new_node is not None and
+                    self.new_node.m_cmd_lst[0] == "dials.filter_reflections" and
+                    self.new_node.number == self.curr_nod_num
+                ):
+                    on_filter = True
+                    fnd_cur_nod = True
+
+                else:
+                    on_filter = False
+
+            except AttributeError:
+                on_filter = False
+
+            if on_filter:
+                print("self.new_node.parent_node_lst =", self.new_node.parent_node_lst)
+
+            self.do_image_view(
+                in_img_num = img_num, nod_or_path = fnd_cur_nod,
+                on_filter_reflections = on_filter
+            )
 
         elif tab_index == 1:
             try:

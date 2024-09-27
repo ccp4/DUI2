@@ -589,11 +589,19 @@ class LoadInThread(QThread):
         self, unit_URL = None, cmd_in = None, main_handler = None
     ):
         super(LoadInThread, self).__init__()
+
+        print("self.cmd(LoadInThread #0) = ")
+
         self.uni_url = unit_URL
         self.cmd = cmd_in
         self.my_handler = main_handler
 
+        print("self.cmd(LoadInThread #1) = ", self.cmd)
+
     def run(self):
+
+        print("self.cmd(LoadInThread #2) = ", self.cmd)
+
         lst_req = get_req_json_dat(
             params_in = self.cmd, main_handler = self.my_handler
         )
@@ -691,10 +699,14 @@ class DoImageView(QObject):
         timer.timeout.connect(self.check_move)
         timer.start(1600)
 
-    def __call__(self, in_img_num, nod_or_path = True):
+    def __call__(
+        self, in_img_num, nod_or_path = True,
+        on_filter_reflections = False
+    ):
         self.cur_img_num = in_img_num
         self.nod_or_path = nod_or_path
         self.exp_path = None
+        self.on_filter_reflections = on_filter_reflections
         self.build_background_n_get_nod_num(self.cur_img_num)
 
     def set_just_imported(self):
@@ -803,22 +815,35 @@ class DoImageView(QObject):
         self.request_reflection_list()
 
     def request_reflection_list(self):
+
+        if self.on_filter_reflections:
+            print("supposed to load reflections from parent node")
+            lst_2_load = self.main_obj.new_node.parent_node_lst
+
+        else:
+            lst_2_load = [self.cur_nod_num]
+
+        print("lst_2_load =", lst_2_load)
+        print("self.nod_or_path=", self.nod_or_path)
+
         if self.nod_or_path is True:
             if self.pop_display_menu.rad_but_obs.isChecked():
                 my_cmd = {
-                    'nod_lst': [self.cur_nod_num],
+                    'nod_lst': lst_2_load,
                     'cmd_str': ["grl", str(self.cur_img_num)]
                 }
 
             else:
                 z_dept_str = str(self.pop_display_menu.z_dept_combo.value())
                 my_cmd = {
-                    'nod_lst': [self.cur_nod_num],
+                    'nod_lst': lst_2_load,
                     'cmd_str': [
                         "grp", str(self.cur_img_num),
                         "z_dept=" + z_dept_str
                     ]
                 }
+
+            print("here  #1")
 
         elif type(self.nod_or_path) is str:
             my_cmd = {
@@ -830,6 +855,8 @@ class DoImageView(QObject):
             self.r_list0 = []
             self.r_list1 = []
             self.refresh_img_n_refl()
+
+        print("here  #2")
 
         if self.nod_or_path is not False:
             try:
@@ -854,7 +881,12 @@ class DoImageView(QObject):
 
             self.ld_ref_thread.start()
 
+        print("here  #3")
+
     def after_requesting_ref_lst(self, req_tup):
+
+        print("here  #4")
+
         json_lst = req_tup
         self.r_list0 = []
         try:
@@ -868,14 +900,19 @@ class DoImageView(QObject):
                         "local_hkl" :   str(inner_dict["local_hkl"]),
                     }
                 )
-            logging.info("Reflection list shown ")
+            logging.info("Reflection list loaded")
+
+            print("here  #5")
 
         except TypeError:
             logging.info("No reflection list to show (Type err catch except)")
+            print("No reflection list to show (Type err catch except)")
 
         except IndexError:
             logging.info("No reflection list to show (Index err catch except)")
+            print("No reflection list to show (Index err catch except)")
 
+        print("len(r_list0) = " + str(len(self.r_list0)))
         self.refresh_img_n_refl()
 
     def after_requesting_predict_lst(self, req_tup):
@@ -1441,13 +1478,6 @@ class DoImageView(QObject):
 
                     if y_ini < 0:
                         y_ini = 0
-                    remove_after_testing = '''
-                    if x_end > self.img_d1_d2[1] - 2:
-                        x_end = self.img_d1_d2[1] - 2
-
-                    if y_end > self.img_d1_d2[0] - 2:
-                        y_end = self.img_d1_d2[0] - 2
-                    '''
 
                     if x_end > self.img_d1_d2[1]:
                         x_end = self.img_d1_d2[1]

@@ -47,6 +47,7 @@ if __name__ == "__main__":
         #full_cmd = {"nod_lst":[parent], "cmd_lst":[cmd]}
 
         req_get = requests.get(uni_url, stream = True, params = full_cmd)
+        print("\n url =\n", req_get.url, "\n")
 
         while True:
             tmp_dat = req_get.raw.readline()
