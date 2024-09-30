@@ -142,18 +142,11 @@ class MainObject(QObject):
         self.mask_widg.component_changed.connect(self.mask_comp_changed)
         self.window.MaskScrollArea.setWidget(self.mask_widg)
 
-        ##########################################################################################
-
         self.filt_widg = FilterWidget()
         self.window.FilterScrollArea.setWidget(self.filt_widg)
         self.filt_widg.all_items_changed.connect(
             self.all_items_param_changed
         )
-
-        ##########################################################################################
-
-
-
 
         fd_advanced_parameters = build_advanced_params_widget(
             "find_spots_params", self.window.FindspotsSearchLayout,
@@ -401,13 +394,9 @@ class MainObject(QObject):
             "find_spots"
         ]["main_page"] = self.window.FindspotsPage
 
-        ###################################################################################
-
         self.param_widgets["filter_reflections"]["simple"] = self.filt_widg
         self.param_widgets["filter_reflections"]["advanced"] = None
         self.param_widgets["filter_reflections"]["main_page"] = self.window.FilterPage
-
-        ###################################################################################
 
         self.param_widgets["apply_mask"]["simple"] = self.mask_widg
         self.param_widgets["apply_mask"]["advanced"] = None
@@ -760,6 +749,8 @@ class MainObject(QObject):
                 ):
                     on_filter = True
                     fnd_cur_nod = True
+
+                    print("par_lst ... =", self.new_node.par_lst)
 
                 else:
                     on_filter = False

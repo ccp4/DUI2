@@ -396,6 +396,18 @@ class ImgGraphicsScene(QGraphicsScene):
 
         self.draw_temp_mask()
 
+    def x_out_lst(self, lst_2_x_out):
+        print("x out list =", lst_2_x_out)
+        for n in lst_2_x_out:
+            n_int = int(n)
+            x1 = self.refl_list[n_int]["x"]
+            y1 = self.refl_list[n_int]["y"]
+
+            n_text = self.addSimpleText("X")
+            n_text.setPos(x1, y1)
+            n_text.setPen(self.overlay_pen)
+
+
     def add_mask_pixmap(self, mask_pixmap):
         self.my_mask_pix_map = mask_pixmap
 
@@ -970,6 +982,25 @@ class DoImageView(QObject):
                     self.my_scene(
                         new_pixmap, self.r_list0, self.list_temp_mask
                     )
+
+                    print("self.main_obj.new_node.par_lst = ", self.main_obj.new_node.par_lst)
+                    if self.on_filter_reflections:
+                        try:
+                            print("self.on_filter_reflections =", self.on_filter_reflections)
+                            if(
+                                self.main_obj.new_node.par_lst[0][0]['name']
+                                == 'remove_by_index'
+                            ):
+                                lst_2_x_out = self.main_obj.new_node.par_lst[0][0]['value']
+                            #[[{'name': 'remove_by_index', 'value': '117,93,164,205,136,185'}]]
+
+                        except IndexError:
+                            lst_2_x_out = []
+
+                        print("lst_2_x_out =", lst_2_x_out)
+                        lst_2_x_out = lst_2_x_out.split(",")
+                        if len(lst_2_x_out) > 0:
+                            self.my_scene.x_out_lst(lst_2_x_out)
 
                 else:
                     self.my_scene(
