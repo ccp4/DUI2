@@ -546,6 +546,8 @@ class MainObject(QObject):
         self.do_image_view = DoImageView(self)
         self.do_image_view.new_mask_comp.connect(self.get_new_mask_comp)
 
+        self.do_image_view.new_refl.connect(self.get_new_refl)
+
         self.curr_outp_tab = self.window.OutputTabWidget.currentIndex()
         self.window.OutputTabWidget.currentChanged.connect(self.refresh_output)
         self.window.ImgNumEdit.editingFinished.connect(self.img_num_changed)
@@ -747,12 +749,6 @@ class MainObject(QObject):
 
             on_filter = False
             try:
-
-                print("self.new_node.m_cmd_lst", self.new_node.m_cmd_lst)
-                print(
-                    "(self.new_node.number, self.curr_nod_num) =",
-                    self.new_node.number, self.curr_nod_num
-                )
                 #TODO test if the next if is ok ALWAYS
                 if(
                     self.new_node is not None and
@@ -767,9 +763,6 @@ class MainObject(QObject):
 
             except AttributeError:
                 on_filter = False
-
-            if on_filter:
-                print("self.new_node.parent_node_lst =", self.new_node.parent_node_lst)
 
             self.do_image_view(
                 in_img_num = img_num, nod_or_path = fnd_cur_nod,
@@ -820,6 +813,9 @@ class MainObject(QObject):
 
     def get_new_mask_comp(self, comp_dict):
         self.mask_widg.get_new_comp(comp_dict)
+
+    def get_new_refl(self, comp_num):
+        self.filt_widg.put_new_refl(comp_num)
 
     def tmp_mask_changed(self, lst_of_lst):
         self.do_image_view.update_tmp_mask(lst_of_lst[0][0:-1])

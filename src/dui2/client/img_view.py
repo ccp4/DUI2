@@ -589,19 +589,11 @@ class LoadInThread(QThread):
         self, unit_URL = None, cmd_in = None, main_handler = None
     ):
         super(LoadInThread, self).__init__()
-
-        print("self.cmd(LoadInThread #0) = ")
-
         self.uni_url = unit_URL
         self.cmd = cmd_in
         self.my_handler = main_handler
 
-        print("self.cmd(LoadInThread #1) = ", self.cmd)
-
     def run(self):
-
-        print("self.cmd(LoadInThread #2) = ", self.cmd)
-
         lst_req = get_req_json_dat(
             params_in = self.cmd, main_handler = self.my_handler
         )
@@ -612,6 +604,7 @@ class LoadInThread(QThread):
 
 class DoImageView(QObject):
     new_mask_comp = Signal(dict)
+    new_refl = Signal(int)
     def __init__(self, parent = None):
         super(DoImageView, self).__init__(parent)
         self.main_obj = parent
@@ -815,16 +808,12 @@ class DoImageView(QObject):
         self.request_reflection_list()
 
     def request_reflection_list(self):
-
         if self.on_filter_reflections:
-            print("supposed to load reflections from parent node")
+            print("loading reflections from parent node")
             lst_2_load = self.main_obj.new_node.parent_node_lst
 
         else:
             lst_2_load = [self.cur_nod_num]
-
-        print("lst_2_load =", lst_2_load)
-        print("self.nod_or_path=", self.nod_or_path)
 
         if self.nod_or_path is True:
             if self.pop_display_menu.rad_but_obs.isChecked():
@@ -843,8 +832,6 @@ class DoImageView(QObject):
                     ]
                 }
 
-            print("here  #1")
-
         elif type(self.nod_or_path) is str:
             my_cmd = {
                 'path': self.nod_or_path,
@@ -855,8 +842,6 @@ class DoImageView(QObject):
             self.r_list0 = []
             self.r_list1 = []
             self.refresh_img_n_refl()
-
-        print("here  #2")
 
         if self.nod_or_path is not False:
             try:
@@ -881,12 +866,7 @@ class DoImageView(QObject):
 
             self.ld_ref_thread.start()
 
-        print("here  #3")
-
     def after_requesting_ref_lst(self, req_tup):
-
-        print("here  #4")
-
         json_lst = req_tup
         self.r_list0 = []
         try:
@@ -902,17 +882,12 @@ class DoImageView(QObject):
                 )
             logging.info("Reflection list loaded")
 
-            print("here  #5")
-
         except TypeError:
             logging.info("No reflection list to show (Type err catch except)")
-            print("No reflection list to show (Type err catch except)")
 
         except IndexError:
             logging.info("No reflection list to show (Index err catch except)")
-            print("No reflection list to show (Index err catch except)")
 
-        print("len(r_list0) = " + str(len(self.r_list0)))
         self.refresh_img_n_refl()
 
     def after_requesting_predict_lst(self, req_tup):
@@ -1464,8 +1439,8 @@ class DoImageView(QObject):
             ):
                 if self.mask_comp == "rect":
                     x_ini = int(self.mask_x_ini)
-                    x_end = int(x_pos)
                     y_ini = int(self.mask_y_ini)
+                    x_end = int(x_pos)
                     y_end = int(y_pos)
                     if x_ini > x_end:
                         x_ini, x_end = x_end, x_ini
@@ -1555,6 +1530,30 @@ class DoImageView(QObject):
 
                 self.mask_x_ini = None
                 self.mask_y_ini = None
+
+        elif self.on_filter_reflections:
+            pos_min = None
+            d_cuad_min = 10000000
+            for num, refl in enumerate(self.r_list0):
+                '''
+                x_ref = refl["x"] + refl["width"] / 2
+                y_ref = refl["y"] + refl["height"] / 2
+                '''
+                x_ref = refl["x"]
+                y_ref = refl["y"]
+
+                dx = x_ref - x_pos
+                dy = y_ref - y_pos
+                d_cuad = dx * dx + dy * dy
+                if d_cuad < d_cuad_min:
+                    d_cuad_min = d_cuad
+                    pos_min = num
+
+            print(
+                "The reflection nearest to (",
+                x_pos, y_pos, ") in the # ", pos_min
+            )
+            self.new_refl.emit(pos_min)
 
 
 class MainImgViewObject(QObject):
