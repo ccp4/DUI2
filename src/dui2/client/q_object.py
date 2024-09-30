@@ -146,6 +146,9 @@ class MainObject(QObject):
 
         self.filt_widg = FilterWidget()
         self.window.FilterScrollArea.setWidget(self.filt_widg)
+        self.filt_widg.all_items_changed.connect(
+            self.all_items_param_changed
+        )
 
         ##########################################################################################
 

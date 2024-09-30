@@ -1187,7 +1187,7 @@ class FilterWidget(QWidget):
     part of the code is in the << img_view >> module
     '''
     all_items_changed = Signal(list)
-    component_changed = Signal(str)
+    #component_changed = Signal(str)
     def __init__(self, parent = None):
         super(FilterWidget, self).__init__(parent)
         self.do_emit = True
@@ -1206,6 +1206,7 @@ class FilterWidget(QWidget):
         self.setLayout(self.main_vbox)
 
     def reset_pars(self):
+        self.ref_lst = []
         print("reset_pars(FilterWidget)")
 
     def update_all_pars(self, tup_lst_pars):
@@ -1215,6 +1216,23 @@ class FilterWidget(QWidget):
 
     def put_new_refl(self, refl_num):
         print("add reflection # ", refl_num, "to the list")
+        self.ref_lst.append(int(refl_num))
+
+        lst2str = ""
+
+        for r_num in self.ref_lst:
+            lst2str += str(r_num) + ","
+
+        lst2str = lst2str[0:-1]
+        lst_2_emit = [
+            [
+                ["remove_by_index", lst2str]
+            ]
+        ]
+        logging.info("lst_2_emit:" + str(lst_2_emit))
+        self.all_items_changed.emit(lst_2_emit)
+
+
 
 ###################################################################################################
 
