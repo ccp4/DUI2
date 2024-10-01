@@ -152,7 +152,6 @@ class LoadFullImage(QThread):
         self.exp_path = path_in
         self.my_handler = main_handler
 
-
     def run(self):
         np_full_img = load_img_json_w_str(
             self.uni_url,
@@ -469,7 +468,6 @@ class PopDisplayMenu(QMenu):
         palette_group = QGroupBox("Palette tuning")
         palette_box_layout = QVBoxLayout()
 
-
         self.i_min_line = QLineEdit(str(self.i_min))
         self.i_min_line.textChanged.connect(self.i_min_changed)
         self.i_max_line = QLineEdit(str(self.i_max))
@@ -496,8 +494,8 @@ class PopDisplayMenu(QMenu):
         palette_box_layout.addWidget(self.palette_select)
 
         palette_group.setLayout(palette_box_layout)
-        # hkl Viewing Tool
 
+        # hkl Viewing Tool
         info_group = QGroupBox("Reflection info")
         ref_box_layout = QVBoxLayout()
 
