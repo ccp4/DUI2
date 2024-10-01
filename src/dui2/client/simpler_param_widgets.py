@@ -1214,8 +1214,6 @@ class FilterWidget(QWidget):
             "update_all_pars(FilterWidget)" + str(tup_lst_pars)
         )
 
-        self.cmd_label.setText("TST ... " + str(tup_lst_pars))
-
     def put_new_refl(self, refl_num):
         print("add reflection # ", refl_num, "to the list")
         self.ref_lst.append(int(refl_num))
