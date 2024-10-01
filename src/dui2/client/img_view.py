@@ -265,11 +265,23 @@ class ImgGraphicsScene(QGraphicsScene):
 
         self.addPixmap(self.curr_pixmap)
         if self.parent_obj.pop_display_menu.rad_but_obs.isChecked():
+            tick_size = 10.0
             for refl in self.refl_list:
                 rectangle = QRectF(
                     refl["x"], refl["y"], refl["width"], refl["height"]
                 )
                 self.addRect(rectangle, self.overlay_pen)
+                if refl["x_me_out"]:
+                    self.addLine(
+                        refl["x"] - tick_size / 2.0, refl["y"] - tick_size / 2.0,
+                        refl["x"] + tick_size, refl["y"] + tick_size,
+                        self.overlay_pen
+                    )
+                    self.addLine(
+                        refl["x"] - tick_size / 2.0, refl["y"] + tick_size,
+                        refl["x"] + tick_size, refl["y"] - tick_size / 2.0,
+                        self.overlay_pen
+                    )
 
         else:
             z_dept_fl = float(self.parent_obj.pop_display_menu.z_dept_combo.value())
@@ -867,17 +879,24 @@ class DoImageView(QObject):
     def after_requesting_ref_lst(self, req_tup):
         json_lst = req_tup
         self.r_list0 = []
+
+        lst_2_x_out = []
+
         try:
             for inner_dict in json_lst:
                 self.r_list0.append(
                     {
-                        "x"         : float(inner_dict["x"]),
-                        "y"         : float(inner_dict["y"]),
-                        "width"     : float(inner_dict["width"]),
-                        "height"    : float(inner_dict["height"]),
-                        "local_hkl" :   str(inner_dict["local_hkl"]),
+                        "x"           : float(inner_dict["x"]),
+                        "y"           : float(inner_dict["y"]),
+                        "width"       : float(inner_dict["width"]),
+                        "height"      : float(inner_dict["height"]),
+                        "local_hkl"   :   str(inner_dict["local_hkl"]),
+                        "big_lst_num" :   int(inner_dict["big_lst_num"]),
+                        "x_me_out"    : False,
                     }
                 )
+
+
             logging.info("Reflection list loaded")
 
         except TypeError:
@@ -885,6 +904,28 @@ class DoImageView(QObject):
 
         except IndexError:
             logging.info("No reflection list to show (Index err catch except)")
+
+
+        try:
+            if self.on_filter_reflections:
+                print("tiking selected reflections")
+                lst_of_str = self.main_obj.new_node.par_lst[0][0]['value'].split(",")
+                for single_str in lst_of_str:
+                    lst_2_x_out.append(int(single_str))
+
+        except IndexError:
+            print("empty list")
+
+        print("lst_2_x_out =", lst_2_x_out)
+
+        works_4_first_img_only = '''
+        for num_2_x in lst_2_x_out:
+            self.r_list0[num_2_x]["x_me_out"] = True
+        '''
+
+        for n, small_lst_refl in enumerate(self.r_list0):
+            if small_lst_refl["big_lst_num"] in lst_2_x_out:
+                self.r_list0[n][x_me_out] = True
 
         self.refresh_img_n_refl()
 
@@ -899,6 +940,7 @@ class DoImageView(QObject):
                         "y"         : float(inner_dict["y"]),
                         "local_hkl" :   str(inner_dict["local_hkl"]),
                         "z_dist"    : float(inner_dict["z_dist"]),
+                        "x_me_out"  : False,
                     }
                 )
 
@@ -1547,11 +1589,15 @@ class DoImageView(QObject):
                     d_cuad_min = d_cuad
                     pos_min = num
 
+
+            pos_2_emit = self.r_list0[pos_min]["big_lst_num"]
+
             print(
                 "The reflection nearest to (",
-                x_pos, y_pos, ") in the # ", pos_min
+                x_pos, y_pos, ") in the # ", pos_2_emit
             )
-            self.new_refl.emit(pos_min)
+
+            self.new_refl.emit(pos_2_emit)
 
 
 class MainImgViewObject(QObject):

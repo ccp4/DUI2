@@ -139,11 +139,12 @@ def list_p_arrange_exp(
                 local_hkl = "NOT indexed"
 
         box_dat = {
-            "x"         :x_ini,
-            "y"         :y_ini,
-            "width"     :width,
-            "height"    :height,
-            "local_hkl" :local_hkl,
+            "x"           :x_ini,
+            "y"           :y_ini,
+            "width"       :width,
+            "height"      :height,
+            "local_hkl"   :local_hkl,
+            "big_lst_num" :int(i)
         }
         if num_of_imagesets > 1:
             add_shift = 0
