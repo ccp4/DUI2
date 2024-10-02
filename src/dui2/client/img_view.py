@@ -272,14 +272,18 @@ class ImgGraphicsScene(QGraphicsScene):
                 )
                 self.addRect(rectangle, self.overlay_pen)
                 if refl["x_me_out"]:
+
+                    xp = refl["x"] + refl["width"] / 2.0
+                    yp = refl["y"] + refl["height"] / 2.0
+
                     self.addLine(
-                        refl["x"] - tick_size / 2.0, refl["y"] - tick_size / 2.0,
-                        refl["x"] + tick_size, refl["y"] + tick_size,
+                        xp - tick_size, yp - tick_size,
+                        xp + tick_size, yp + tick_size,
                         self.overlay_pen
                     )
                     self.addLine(
-                        refl["x"] - tick_size / 2.0, refl["y"] + tick_size,
-                        refl["x"] + tick_size, refl["y"] - tick_size / 2.0,
+                        xp - tick_size, yp + tick_size,
+                        xp + tick_size, yp - tick_size,
                         self.overlay_pen
                     )
 
