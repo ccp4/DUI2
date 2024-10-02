@@ -925,7 +925,9 @@ class DoImageView(QObject):
 
         for n, small_lst_refl in enumerate(self.r_list0):
             if small_lst_refl["big_lst_num"] in lst_2_x_out:
-                self.r_list0[n][x_me_out] = True
+                print("\n n=", n, "\n self.r_list0[n] =", self.r_list0[n])
+
+                self.r_list0[n]["x_me_out"] = True
 
         self.refresh_img_n_refl()
 
