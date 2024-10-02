@@ -880,8 +880,6 @@ class DoImageView(QObject):
         json_lst = req_tup
         self.r_list0 = []
 
-        lst_2_x_out = []
-
         try:
             for inner_dict in json_lst:
                 self.r_list0.append(
@@ -905,7 +903,10 @@ class DoImageView(QObject):
         except IndexError:
             logging.info("No reflection list to show (Index err catch except)")
 
+        self.x_out_selected()
 
+    def x_out_selected(self):
+        lst_2_x_out = []
         try:
             if self.on_filter_reflections:
                 print("tiking selected reflections")
@@ -913,21 +914,12 @@ class DoImageView(QObject):
                 for single_str in lst_of_str:
                     lst_2_x_out.append(int(single_str))
 
+            for n, small_lst_refl in enumerate(self.r_list0):
+                if small_lst_refl["big_lst_num"] in lst_2_x_out:
+                    self.r_list0[n]["x_me_out"] = True
+
         except IndexError:
             print("empty list")
-
-        print("lst_2_x_out =", lst_2_x_out)
-
-        works_4_first_img_only = '''
-        for num_2_x in lst_2_x_out:
-            self.r_list0[num_2_x]["x_me_out"] = True
-        '''
-
-        for n, small_lst_refl in enumerate(self.r_list0):
-            if small_lst_refl["big_lst_num"] in lst_2_x_out:
-                print("\n n=", n, "\n self.r_list0[n] =", self.r_list0[n])
-
-                self.r_list0[n]["x_me_out"] = True
 
         self.refresh_img_n_refl()
 
@@ -1600,6 +1592,8 @@ class DoImageView(QObject):
             )
 
             self.new_refl.emit(pos_2_emit)
+
+            self.x_out_selected()
 
 
 class MainImgViewObject(QObject):
