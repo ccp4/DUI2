@@ -251,8 +251,12 @@ class ImgGraphicsScene(QGraphicsScene):
         self.curr_pixmap = None
         self.my_mask_pix_map = None
 
-        self.overlay_pen = QPen(
-            Qt.white, 0.8, Qt.SolidLine,
+        self.overlay_pen1 = QPen(
+            Qt.white, 0.5, Qt.SolidLine,
+            Qt.RoundCap, Qt.RoundJoin
+        )
+        self.overlay_pen2 = QPen(
+            Qt.white, 0.5, Qt.SolidLine,
             Qt.RoundCap, Qt.RoundJoin
         )
         self.draw_all_hkl = False
@@ -267,24 +271,40 @@ class ImgGraphicsScene(QGraphicsScene):
         if self.parent_obj.pop_display_menu.rad_but_obs.isChecked():
             tick_size = 10.0
             for refl in self.refl_list:
-                rectangle = QRectF(
-                    refl["x"], refl["y"], refl["width"], refl["height"]
+                rectangle1 = QRectF(
+                    refl["x"] - 0.2, refl["y"] - 0.2, refl["width"], refl["height"]
                 )
-                self.addRect(rectangle, self.overlay_pen)
+                self.addRect(rectangle1, self.overlay_pen1)
+
+                rectangle2 = QRectF(
+                    refl["x"] + 0.2, refl["y"] + 0.2, refl["width"], refl["height"]
+                )
+                self.addRect(rectangle2, self.overlay_pen2)
+
                 if refl["x_me_out"]:
 
                     xp = refl["x"] + refl["width"] / 2.0
                     yp = refl["y"] + refl["height"] / 2.0
 
                     self.addLine(
-                        xp - tick_size, yp - tick_size,
-                        xp + tick_size, yp + tick_size,
-                        self.overlay_pen
+                        xp - tick_size - 0.27, yp - tick_size,
+                        xp + tick_size - 0.27, yp + tick_size,
+                        self.overlay_pen1
                     )
                     self.addLine(
-                        xp - tick_size, yp + tick_size,
-                        xp + tick_size, yp - tick_size,
-                        self.overlay_pen
+                        xp - tick_size - 0.27, yp + tick_size,
+                        xp + tick_size - 0.27, yp - tick_size,
+                        self.overlay_pen1
+                    )
+                    self.addLine(
+                        xp - tick_size + 0.27, yp - tick_size,
+                        xp + tick_size + 0.27, yp + tick_size,
+                        self.overlay_pen2
+                    )
+                    self.addLine(
+                        xp - tick_size + 0.27, yp + tick_size,
+                        xp + tick_size + 0.27, yp - tick_size,
+                        self.overlay_pen2
                     )
 
         else:
@@ -293,14 +313,25 @@ class ImgGraphicsScene(QGraphicsScene):
             for refl in self.refl_list:
                 paint_size = max_size - 4.0 * refl["z_dist"] / z_dept_fl
                 self.addLine(
-                    refl["x"], refl["y"] - paint_size,
-                    refl["x"], refl["y"] + paint_size,
-                    self.overlay_pen
+                    refl["x"] + 0.2, refl["y"] - paint_size + 0.2,
+                    refl["x"] + 0.2, refl["y"] + paint_size + 0.2,
+                    self.overlay_pen1
                 )
                 self.addLine(
-                    refl["x"] + paint_size, refl["y"],
-                    refl["x"] - paint_size, refl["y"],
-                    self.overlay_pen
+                    refl["x"] + paint_size + 0.2, refl["y"] + 0.2,
+                    refl["x"] - paint_size + 0.2, refl["y"] + 0.2,
+                    self.overlay_pen1
+                )
+
+                self.addLine(
+                    refl["x"] - 0.2, refl["y"] - paint_size - 0.2,
+                    refl["x"] - 0.2, refl["y"] + paint_size - 0.2,
+                    self.overlay_pen2
+                )
+                self.addLine(
+                    refl["x"] + paint_size - 0.2, refl["y"] - 0.2,
+                    refl["x"] - paint_size - 0.2, refl["y"] - 0.2,
+                    self.overlay_pen2
                 )
 
         if self.my_mask_pix_map is not None:
@@ -330,7 +361,7 @@ class ImgGraphicsScene(QGraphicsScene):
                     rectangle = QRectF(
                         x_rect_1, y_rect_1, tmp_width, tmp_height
                     )
-                    self.addRect(rectangle, self.overlay_pen)
+                    self.addRect(rectangle, self.overlay_pen1)
 
                 elif pict[0] == 'untrusted.circle':
 
@@ -341,7 +372,7 @@ class ImgGraphicsScene(QGraphicsScene):
                     rectangle = QRectF(
                         x_rect_1, y_rect_1, side, side
                     )
-                    self.addEllipse(rectangle, self.overlay_pen)
+                    self.addEllipse(rectangle, self.overlay_pen1)
 
                 elif pict[0] == 'untrusted.polygon':
                     siz_n_blk = (len(lst_num) - 2) / 2
@@ -350,7 +381,7 @@ class ImgGraphicsScene(QGraphicsScene):
                             self.addLine(
                                 lst_num[i * 2], lst_num[i * 2 + 1],
                                 lst_num[i * 2 + 2], lst_num[i * 2 + 3],
-                                self.overlay_pen
+                                self.overlay_pen1
                             )
 
                 elif pict[0] == 'multipanel.rectangle':
@@ -364,7 +395,7 @@ class ImgGraphicsScene(QGraphicsScene):
                     rectangle = QRectF(
                         x_rect_1, y_rect_1, tmp_width, tmp_height
                     )
-                    self.addRect(rectangle, self.overlay_pen)
+                    self.addRect(rectangle, self.overlay_pen1)
 
                 elif pict[0] == 'multipanel.circle':
 
@@ -376,7 +407,7 @@ class ImgGraphicsScene(QGraphicsScene):
                     rectangle = QRectF(
                         x_rect_1, y_rect_1, side, side
                     )
-                    self.addEllipse(rectangle, self.overlay_pen)
+                    self.addEllipse(rectangle, self.overlay_pen1)
 
         except TypeError:
             pass
@@ -385,21 +416,31 @@ class ImgGraphicsScene(QGraphicsScene):
 
         self.refl_list = refl_list1
         if self.parent_obj.palette == "heat":
-            overlay_colour = Qt.blue
+            overlay_colour1 = Qt.blue
+            overlay_colour2 = Qt.cyan
 
         elif self.parent_obj.palette == "grayscale":
-            overlay_colour = Qt.cyan
+            overlay_colour1 = Qt.blue
+            overlay_colour2 = Qt.red
 
         elif self.parent_obj.palette == "heat invert":
-            overlay_colour = Qt.darkGreen
+            overlay_colour1 = Qt.cyan
+            overlay_colour2 = Qt.blue
 
         elif self.parent_obj.palette == "invert":
-            overlay_colour = Qt.red
+            overlay_colour1 = Qt.red
+            overlay_colour2 = Qt.blue
 
-        self.overlay_pen = QPen(
-            overlay_colour, 0.8, Qt.SolidLine,
+        self.overlay_pen1 = QPen(
+            overlay_colour1, 0.4, Qt.SolidLine,
             Qt.RoundCap, Qt.RoundJoin
         )
+
+        self.overlay_pen2 = QPen(
+            overlay_colour2, 0.4, Qt.SolidLine,
+            Qt.RoundCap, Qt.RoundJoin
+        )
+
         self.temp_mask = new_temp_mask
         self.my_pix_map = new_pixmap
         self.draw_ref_rect()
@@ -407,7 +448,7 @@ class ImgGraphicsScene(QGraphicsScene):
             for refl in self.refl_list:
                 n_text = self.addSimpleText(str(refl["local_hkl"]))
                 n_text.setPos(refl["x"], refl["y"])
-                n_text.setPen(self.overlay_pen)
+                n_text.setPen(self.overlay_pen1)
 
         self.draw_temp_mask()
 
@@ -446,7 +487,7 @@ class ImgGraphicsScene(QGraphicsScene):
                 refl = self.refl_list[pos_min]
                 n_text = self.addSimpleText(str(refl["local_hkl"]))
                 n_text.setPos(refl["x"], refl["y"])
-                n_text.setPen(self.overlay_pen)
+                n_text.setPen(self.overlay_pen1)
 
             except (UnboundLocalError, TypeError, AttributeError):
                 not_neded_to_log = ''' logging.info(
@@ -1433,7 +1474,7 @@ class DoImageView(QObject):
                     tmp_width = x1 - x2
                     tmp_height = y1 - y2
                     rectangle = QRectF(x2, y2, tmp_width, tmp_height)
-                    self.my_scene.addRect(rectangle, self.my_scene.overlay_pen)
+                    self.my_scene.addRect(rectangle, self.my_scene.overlay_pen1)
 
                 elif self.mask_comp == "circ":
 
@@ -1445,11 +1486,11 @@ class DoImageView(QObject):
                     )
 
                     self.my_scene.addEllipse(
-                        rectangle, self.my_scene.overlay_pen
+                        rectangle, self.my_scene.overlay_pen1
                     )
                     self.my_scene.addLine(
                         self.mask_x_ini, self.mask_y_ini, x_pos,
-                        y_pos, self.my_scene.overlay_pen
+                        y_pos, self.my_scene.overlay_pen1
                     )
 
                 elif self.mask_comp == "poly":
@@ -1459,7 +1500,7 @@ class DoImageView(QObject):
 
                     self.my_scene.addLine(
                         self.mask_x_ini, self.mask_y_ini, x_pos,
-                        y_pos, self.my_scene.overlay_pen
+                        y_pos, self.my_scene.overlay_pen1
                     )
 
     def on_mouse_press(self, x_pos, y_pos):
@@ -1523,7 +1564,6 @@ class DoImageView(QObject):
                             "i23_multipanel"    : self.i23_multipanel,
                         }
                     )
-
 
                 elif self.mask_comp == "poly":
                     x_ini = int(self.mask_x_ini)
