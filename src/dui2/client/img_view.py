@@ -359,9 +359,15 @@ class ImgGraphicsScene(QGraphicsScene):
                     x_rect_1 = lst_num[0]
                     y_rect_1 = lst_num[2]
                     rectangle = QRectF(
-                        x_rect_1, y_rect_1, tmp_width, tmp_height
+                        x_rect_1 - 0.2, y_rect_1 - 0.2, tmp_width, tmp_height
                     )
                     self.addRect(rectangle, self.overlay_pen1)
+
+                    rectangle = QRectF(
+                        x_rect_1 + 0.2, y_rect_1 + 0.2, tmp_width, tmp_height
+                    )
+                    self.addRect(rectangle, self.overlay_pen2)
+
 
                 elif pict[0] == 'untrusted.circle':
 
@@ -370,9 +376,14 @@ class ImgGraphicsScene(QGraphicsScene):
                     side = 2 * lst_num[2]
 
                     rectangle = QRectF(
-                        x_rect_1, y_rect_1, side, side
+                        x_rect_1 - 0.2, y_rect_1 - 0.2, side, side
                     )
                     self.addEllipse(rectangle, self.overlay_pen1)
+
+                    rectangle = QRectF(
+                        x_rect_1 + 0.2, y_rect_1 + 0.2, side, side
+                    )
+                    self.addEllipse(rectangle, self.overlay_pen2)
 
                 elif pict[0] == 'untrusted.polygon':
                     siz_n_blk = (len(lst_num) - 2) / 2
@@ -447,8 +458,12 @@ class ImgGraphicsScene(QGraphicsScene):
         if self.draw_all_hkl:
             for refl in self.refl_list:
                 n_text = self.addSimpleText(str(refl["local_hkl"]))
-                n_text.setPos(refl["x"], refl["y"])
+                n_text.setPos(refl["x"] - 0.2, refl["y"] - 0.2)
                 n_text.setPen(self.overlay_pen1)
+
+                n_text = self.addSimpleText(str(refl["local_hkl"]))
+                n_text.setPos(refl["x"] + 0.2, refl["y"] + 0.2)
+                n_text.setPen(self.overlay_pen2)
 
         self.draw_temp_mask()
 
@@ -486,8 +501,12 @@ class ImgGraphicsScene(QGraphicsScene):
                 self.draw_ref_rect()
                 refl = self.refl_list[pos_min]
                 n_text = self.addSimpleText(str(refl["local_hkl"]))
-                n_text.setPos(refl["x"], refl["y"])
+                n_text.setPos(refl["x"] - 0.2, refl["y"] - 0.2)
                 n_text.setPen(self.overlay_pen1)
+
+                n_text = self.addSimpleText(str(refl["local_hkl"]))
+                n_text.setPos(refl["x"] + 0.2, refl["y"] + 0.2)
+                n_text.setPen(self.overlay_pen2)
 
             except (UnboundLocalError, TypeError, AttributeError):
                 not_neded_to_log = ''' logging.info(
@@ -1473,21 +1492,34 @@ class DoImageView(QObject):
 
                     tmp_width = x1 - x2
                     tmp_height = y1 - y2
-                    rectangle = QRectF(x2, y2, tmp_width, tmp_height)
-                    self.my_scene.addRect(rectangle, self.my_scene.overlay_pen1)
+
+                    rectangle1 = QRectF(x2 - 0.2, y2 - 0.2, tmp_width, tmp_height)
+                    self.my_scene.addRect(rectangle1, self.my_scene.overlay_pen1)
+
+                    rectangle2 = QRectF(x2 + 0.2, y2 + 0.2, tmp_width, tmp_height)
+                    self.my_scene.addRect(rectangle2, self.my_scene.overlay_pen2)
 
                 elif self.mask_comp == "circ":
 
                     dx = float(x_pos - self.mask_x_ini)
                     dy = float(y_pos - self.mask_y_ini)
                     r = int(np.sqrt(dx * dx + dy * dy))
-                    rectangle = QRectF(
-                        x_pos - r, y_pos - r, 2 * r, 2 * r
+                    rectangle1 = QRectF(
+                        x_pos - r - 0.2, y_pos - r - 0.2, 2 * r, 2 * r
                     )
 
                     self.my_scene.addEllipse(
-                        rectangle, self.my_scene.overlay_pen1
+                        rectangle1, self.my_scene.overlay_pen1
                     )
+
+                    rectangle2 = QRectF(
+                        x_pos - r + 0.2, y_pos - r + 0.2, 2 * r, 2 * r
+                    )
+
+                    self.my_scene.addEllipse(
+                        rectangle2, self.my_scene.overlay_pen2
+                    )
+
                     self.my_scene.addLine(
                         self.mask_x_ini, self.mask_y_ini, x_pos,
                         y_pos, self.my_scene.overlay_pen1
