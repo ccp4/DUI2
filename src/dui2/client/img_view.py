@@ -428,9 +428,8 @@ class ImgGraphicsScene(QGraphicsScene):
             pass
 
     def __call__(self, new_pixmap, refl_list1, new_temp_mask):
-
         self.refl_list = refl_list1
-        if self.parent_obj.palette == "heat":
+        '''if self.parent_obj.palette == "heat":
             overlay_colour1 = Qt.blue
             overlay_colour2 = Qt.cyan
 
@@ -445,6 +444,21 @@ class ImgGraphicsScene(QGraphicsScene):
         elif self.parent_obj.palette == "invert":
             overlay_colour1 = Qt.red
             overlay_colour2 = Qt.blue
+
+        self.overlay_pen1 = QPen(
+            overlay_colour1, 2.5, Qt.SolidLine,
+            Qt.RoundCap, Qt.RoundJoin
+        )'''
+
+        if self.parent_obj.overlay == "blue":
+            overlay_colour1 = Qt.blue
+
+        elif self.parent_obj.overlay == "cyan":
+            overlay_colour1 = Qt.cyan
+
+        else:
+            overlay_colour1 = Qt.red
+
 
         self.overlay_pen1 = QPen(
             overlay_colour1, 2.5, Qt.SolidLine,
@@ -538,6 +552,7 @@ class ImgGraphicsScene(QGraphicsScene):
 class PopDisplayMenu(QMenu):
     new_i_min_max = Signal(int, int)
     new_palette = Signal(str)
+    new_overlay = Signal(str)
     new_redraw = Signal()
     new_ref_list = Signal()
     def __init__(self, parent=None):
@@ -573,8 +588,26 @@ class PopDisplayMenu(QMenu):
             self.palette_changed_by_user
         )
 
+        ####################################################################
+        self.overlay_select = QComboBox()
+        self.overlay_lst = ["blue", "cyan", "red"]
+        for n, plt in enumerate(self.overlay_lst):
+            self.overlay_select.addItem(plt)
+            off_4_now = '''
+            if plt == self.palette:
+                self.palette_select.setCurrentIndex(n)
+            '''
+
+        self.overlay_select.currentIndexChanged.connect(
+            self.overlay_changed_by_user
+        )
+
+        ###################################################################
+
+
         palette_box_layout.addWidget(QLabel("  ... "))
         palette_box_layout.addWidget(self.palette_select)
+        palette_box_layout.addWidget(self.overlay_select)
 
         palette_group.setLayout(palette_box_layout)
 
@@ -644,6 +677,11 @@ class PopDisplayMenu(QMenu):
         self.palette = self.palette_lst[new_palette_num]
         logging.info("self.palette =" + str(self.palette))
         self.new_palette.emit(str(self.palette))
+
+    def overlay_changed_by_user(self, new_overlay_num):
+        self.overlay = self.overlay_lst[new_overlay_num]
+        print("self.overlay =" + str(self.overlay))
+        self.new_overlay.emit(str(self.overlay))
 
     def i_min_max_changed(self):
         self.new_i_min_max.emit(self.i_min, self.i_max)
@@ -735,11 +773,15 @@ class DoImageView(QObject):
         self.i_min_max = [-2, 50]
         self.palette = "grayscale"
         self.just_imported = False
+        self.overlay = "blue"
 
         self.pop_display_menu = PopDisplayMenu(self)
         self.main_obj.window.DisplayButton.setMenu(self.pop_display_menu)
         self.pop_display_menu.new_i_min_max.connect(self.change_i_min_max)
         self.pop_display_menu.new_palette.connect(self.change_palette)
+
+        self.pop_display_menu.new_overlay.connect(self.change_overlay)
+
         self.pop_display_menu.new_redraw.connect(self.refresh_pixel_map)
 
         self.pop_display_menu.new_ref_list.connect(
@@ -1110,6 +1152,10 @@ class DoImageView(QObject):
     def change_palette(self, new_palette):
         self.palette = new_palette
         self.refresh_pixel_map()
+
+    def change_overlay(self, new_overlay):
+        self.overlay = new_overlay
+        self.refresh_img_n_refl()
 
     def menu_display(self, event):
         logging.info("menu_display")
