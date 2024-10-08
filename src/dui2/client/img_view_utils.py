@@ -26,7 +26,9 @@ def load_img_json_w_str(
         d2 = int(d1d2_n_arr1d[1])
         np_array_out = d1d2_n_arr1d[2:].reshape(d1, d2)
         end_tm = time.time()
-        logging.info("full IMG request BIN time=" + str(end_tm - start_tm) + "sec")
+        logging.info(
+            "full IMG request BIN time=" + str(end_tm - start_tm) + "sec"
+        )
 
     except TypeError:
         logging.info("\n Type err catch  (load_img_json_w_str) \n")
