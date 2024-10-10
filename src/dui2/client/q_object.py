@@ -152,9 +152,6 @@ class MainObject(QObject):
 
         ##########################################################################################
 
-
-
-
         fd_advanced_parameters = build_advanced_params_widget(
             "find_spots_params", self.window.FindspotsSearchLayout,
             self.runner_handler

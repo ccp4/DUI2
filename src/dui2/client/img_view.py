@@ -259,7 +259,7 @@ class ImgGraphicsScene(QGraphicsScene):
         self.overlay_pen1.setCosmetic(True)
 
 
-        '''self.overlay_pen2 = QPen(
+        consider_2_remove = '''self.overlay_pen2 = QPen(
             Qt.white, 0.5, Qt.SolidLine,
             Qt.RoundCap, Qt.RoundJoin
         )'''
@@ -280,7 +280,8 @@ class ImgGraphicsScene(QGraphicsScene):
                 )
                 self.addRect(rectangle1, self.overlay_pen1)
 
-                '''rectangle2 = QRectF(
+                consider_2_remove = '''
+                rectangle2 = QRectF(
                     refl["x"] + 0.2, refl["y"] + 0.2, refl["width"], refl["height"]
                 )
                 self.addRect(rectangle2, self.overlay_pen2)'''
@@ -300,7 +301,8 @@ class ImgGraphicsScene(QGraphicsScene):
                         xp + tick_size, yp - tick_size,
                         self.overlay_pen1
                     )
-                    '''self.addLine(
+                    consider_2_remove = '''
+                    self.addLine(
                         xp - tick_size + 0.27, yp - tick_size,
                         xp + tick_size + 0.27, yp + tick_size,
                         self.overlay_pen2
@@ -327,7 +329,8 @@ class ImgGraphicsScene(QGraphicsScene):
                     self.overlay_pen1
                 )
 
-                '''self.addLine(
+                consider_2_remove = '''
+                self.addLine(
                     refl["x"] - 0.2, refl["y"] - paint_size - 0.2,
                     refl["x"] - 0.2, refl["y"] + paint_size - 0.2,
                     self.overlay_pen2
@@ -367,10 +370,12 @@ class ImgGraphicsScene(QGraphicsScene):
                     )
                     self.addRect(rectangle, self.overlay_pen1)
 
-                    '''rectangle = QRectF(
+                    consider_2_remove = '''
+                    rectangle = QRectF(
                         x_rect_1 + 0.2, y_rect_1 + 0.2, tmp_width, tmp_height
                     )
-                    self.addRect(rectangle, self.overlay_pen2)'''
+                    self.addRect(rectangle, self.overlay_pen2)
+                    '''
 
 
                 elif pict[0] == 'untrusted.circle':
@@ -384,10 +389,12 @@ class ImgGraphicsScene(QGraphicsScene):
                     )
                     self.addEllipse(rectangle, self.overlay_pen1)
 
-                    '''rectangle = QRectF(
+                    consider_2_remove = '''
+                    rectangle = QRectF(
                         x_rect_1 + 0.2, y_rect_1 + 0.2, side, side
                     )
-                    self.addEllipse(rectangle, self.overlay_pen2)'''
+                    self.addEllipse(rectangle, self.overlay_pen2)
+                    '''
 
                 elif pict[0] == 'untrusted.polygon':
                     siz_n_blk = (len(lst_num) - 2) / 2
@@ -429,7 +436,8 @@ class ImgGraphicsScene(QGraphicsScene):
 
     def __call__(self, new_pixmap, refl_list1, new_temp_mask):
         self.refl_list = refl_list1
-        '''if self.parent_obj.palette == "heat":
+        consider_2_remove = '''
+        if self.parent_obj.palette == "heat":
             overlay_colour1 = Qt.blue
             overlay_colour2 = Qt.cyan
 
@@ -448,7 +456,8 @@ class ImgGraphicsScene(QGraphicsScene):
         self.overlay_pen1 = QPen(
             overlay_colour1, 2.5, Qt.SolidLine,
             Qt.RoundCap, Qt.RoundJoin
-        )'''
+        )
+        '''
 
         if self.parent_obj.overlay == "blue":
             overlay_colour1 = Qt.blue
@@ -468,10 +477,12 @@ class ImgGraphicsScene(QGraphicsScene):
         self.overlay_pen1.setCosmetic(True)
 
 
-        '''self.overlay_pen2 = QPen(
+        consider_2_remove = '''
+        self.overlay_pen2 = QPen(
             overlay_colour2, 0, Qt.SolidLine,
             Qt.RoundCap, Qt.RoundJoin
-        )'''
+        )
+        '''
 
         self.temp_mask = new_temp_mask
         self.my_pix_map = new_pixmap
@@ -482,9 +493,11 @@ class ImgGraphicsScene(QGraphicsScene):
                 n_text.setPos(refl["x"], refl["y"])
                 n_text.setPen(self.overlay_pen1)
 
-                '''n_text = self.addSimpleText(str(refl["local_hkl"]))
+                consider_2_remove = '''
+                n_text = self.addSimpleText(str(refl["local_hkl"]))
                 n_text.setPos(refl["x"] + 0.2, refl["y"] + 0.2)
-                n_text.setPen(self.overlay_pen2)'''
+                n_text.setPen(self.overlay_pen2)
+                '''
 
         self.draw_temp_mask()
 
@@ -505,7 +518,7 @@ class ImgGraphicsScene(QGraphicsScene):
                 pos_min = None
                 d_cuad_min = 10000000
                 for num, refl in enumerate(self.refl_list):
-                    '''
+                    consider_2_remove = '''
                     x_ref = refl["x"] + refl["width"] / 2
                     y_ref = refl["y"] + refl["height"] / 2
                     '''
@@ -525,9 +538,11 @@ class ImgGraphicsScene(QGraphicsScene):
                 n_text.setPos(refl["x"], refl["y"])
                 n_text.setPen(self.overlay_pen1)
 
-                '''n_text = self.addSimpleText(str(refl["local_hkl"]))
+                consider_2_remove = '''
+                n_text = self.addSimpleText(str(refl["local_hkl"]))
                 n_text.setPos(refl["x"] + 0.2, refl["y"] + 0.2)
-                n_text.setPen(self.overlay_pen2)'''
+                n_text.setPen(self.overlay_pen2)
+                '''
 
             except (UnboundLocalError, TypeError, AttributeError):
                 not_neded_to_log = ''' logging.info(
@@ -588,7 +603,6 @@ class PopDisplayMenu(QMenu):
             self.palette_changed_by_user
         )
 
-        ####################################################################
         self.overlay_select = QComboBox()
         self.overlay_lst = ["blue", "cyan", "red"]
         for n, plt in enumerate(self.overlay_lst):
@@ -601,9 +615,6 @@ class PopDisplayMenu(QMenu):
         self.overlay_select.currentIndexChanged.connect(
             self.overlay_changed_by_user
         )
-
-        ###################################################################
-
 
         palette_box_layout.addWidget(QLabel("  ... "))
         palette_box_layout.addWidget(self.palette_select)
@@ -844,11 +855,11 @@ class DoImageView(QObject):
         self.just_imported = False
 
     def build_background_n_get_nod_num(self, in_img_num):
-        if self.nod_or_path is True:
-            self.cur_nod_num = self.main_obj.curr_nod_num
-
-        elif self.nod_or_path is False:
+        if self.nod_or_path is False or self.on_filter_reflections:
             self.cur_nod_num = self.main_obj.new_node.parent_node_lst[0]
+
+        elif self.nod_or_path is True:
+            self.cur_nod_num = self.main_obj.curr_nod_num
 
         elif type(self.nod_or_path) is str:
             self.cur_nod_num = self.nod_or_path
@@ -858,6 +869,9 @@ class DoImageView(QObject):
         my_cmd = {"nod_lst" : [self.cur_nod_num],
                   "path"    : self.nod_or_path,
                   "cmd_str" : my_cmd_lst}
+
+        print("my_cmd_lst =", my_cmd_lst)
+        print("my_cmd =", my_cmd)
 
         try:
             self.ld_tpl_thread.quit()
@@ -872,10 +886,14 @@ class DoImageView(QObject):
         self.ld_tpl_thread.request_loaded.connect(
             self.after_requesting_template
         )
+
         self.ld_tpl_thread.start()
 
     def after_requesting_template(self, tup_data):
         json_data_lst = tup_data
+
+        print("json_data_lst(DoImageView) =", json_data_lst)
+
         try:
             new_templ = str(json_data_lst[0])
             self.cur_img_num = int(json_data_lst[4])
@@ -888,7 +906,6 @@ class DoImageView(QObject):
 
             self.i23_multipanel = bool(json_data_lst[5])
             logging.info("Is I23 multidetector:" + str(self.i23_multipanel))
-
             if(
                 self.img_path != new_img_path or
                 self.old_img_num != self.cur_img_num
@@ -1549,8 +1566,10 @@ class DoImageView(QObject):
                     rectangle1 = QRectF(x2, y2, tmp_width, tmp_height)
                     self.my_scene.addRect(rectangle1, self.my_scene.overlay_pen1)
 
-                    '''rectangle2 = QRectF(x2 + 0.2, y2 + 0.2, tmp_width, tmp_height)
-                    self.my_scene.addRect(rectangle2, self.my_scene.overlay_pen2)'''
+                    consider_2_remove = '''
+                    rectangle2 = QRectF(x2 + 0.2, y2 + 0.2, tmp_width, tmp_height)
+                    self.my_scene.addRect(rectangle2, self.my_scene.overlay_pen2)
+                    '''
 
                 elif self.mask_comp == "circ":
 
@@ -1565,13 +1584,15 @@ class DoImageView(QObject):
                         rectangle1, self.my_scene.overlay_pen1
                     )
 
-                    '''rectangle2 = QRectF(
+                    consider_2_remove = '''
+                    rectangle2 = QRectF(
                         x_pos - r + 0.2, y_pos - r + 0.2, 2 * r, 2 * r
                     )
 
                     self.my_scene.addEllipse(
                         rectangle2, self.my_scene.overlay_pen2
-                    )'''
+                    )
+                    '''
 
                     self.my_scene.addLine(
                         self.mask_x_ini, self.mask_y_ini, x_pos,
@@ -1698,7 +1719,7 @@ class DoImageView(QObject):
             pos_min = None
             d_cuad_min = 10000000
             for num, refl in enumerate(self.r_list0):
-                '''
+                consider_2_remove = '''
                 x_ref = refl["x"] + refl["width"] / 2
                 y_ref = refl["y"] + refl["height"] / 2
                 '''
