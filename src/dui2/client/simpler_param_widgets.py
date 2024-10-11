@@ -1205,11 +1205,16 @@ class FilterWidget(QWidget):
 
         self.setLayout(self.main_vbox)
 
+    def upate_label(self):
+        self.cmd_label.setText(str(self.ref_lst))
+
     def reset_pars(self):
         self.ref_lst = []
         print("reset_pars(FilterWidget)")
+        self.upate_label()
 
     def update_all_pars(self, tup_lst_pars):
+        self.reset_pars()
         print(
             "update_all_pars(FilterWidget)" + str(tup_lst_pars)
         )
@@ -1226,7 +1231,6 @@ class FilterWidget(QWidget):
 
         if tup_lst_pars[0][0]['name'] == "remove_by_index":
             ref_lst_str = tup_lst_pars[0][0]['value'].split(",")
-            self.ref_lst = []
             for ref_str in ref_lst_str:
                 self.ref_lst.append(int(ref_str))
 
@@ -1252,8 +1256,7 @@ class FilterWidget(QWidget):
         ]
         logging.info("lst_2_emit:" + str(lst_2_emit))
         self.all_items_changed.emit(lst_2_emit)
-
-
+        self.upate_label()
 
 ###################################################################################################
 

@@ -1045,6 +1045,7 @@ class DoImageView(QObject):
                     lst_2_x_out.append(int(single_str))
 
             for n, small_lst_refl in enumerate(self.r_list0):
+                self.r_list0[n]["x_me_out"] = False
                 if small_lst_refl["big_lst_num"] in lst_2_x_out:
                     self.r_list0[n]["x_me_out"] = True
 
