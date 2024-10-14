@@ -258,11 +258,6 @@ class ImgGraphicsScene(QGraphicsScene):
 
         self.overlay_pen1.setCosmetic(True)
 
-
-        consider_2_remove = '''self.overlay_pen2 = QPen(
-            Qt.white, 0.5, Qt.SolidLine,
-            Qt.RoundCap, Qt.RoundJoin
-        )'''
         self.draw_all_hkl = False
         self.draw_near_hkl = True
 
@@ -280,12 +275,6 @@ class ImgGraphicsScene(QGraphicsScene):
                 )
                 self.addRect(rectangle1, self.overlay_pen1)
 
-                consider_2_remove = '''
-                rectangle2 = QRectF(
-                    refl["x"] + 0.2, refl["y"] + 0.2, refl["width"], refl["height"]
-                )
-                self.addRect(rectangle2, self.overlay_pen2)'''
-
                 if refl["x_me_out"]:
 
                     xp = refl["x"] + refl["width"] / 2.0
@@ -301,17 +290,6 @@ class ImgGraphicsScene(QGraphicsScene):
                         xp + tick_size, yp - tick_size,
                         self.overlay_pen1
                     )
-                    consider_2_remove = '''
-                    self.addLine(
-                        xp - tick_size + 0.27, yp - tick_size,
-                        xp + tick_size + 0.27, yp + tick_size,
-                        self.overlay_pen2
-                    )
-                    self.addLine(
-                        xp - tick_size + 0.27, yp + tick_size,
-                        xp + tick_size + 0.27, yp - tick_size,
-                        self.overlay_pen2
-                    )'''
 
         else:
             z_dept_fl = float(self.parent_obj.pop_display_menu.z_dept_combo.value())
@@ -328,18 +306,6 @@ class ImgGraphicsScene(QGraphicsScene):
                     refl["x"] - paint_size, refl["y"],
                     self.overlay_pen1
                 )
-
-                consider_2_remove = '''
-                self.addLine(
-                    refl["x"] - 0.2, refl["y"] - paint_size - 0.2,
-                    refl["x"] - 0.2, refl["y"] + paint_size - 0.2,
-                    self.overlay_pen2
-                )
-                self.addLine(
-                    refl["x"] + paint_size - 0.2, refl["y"] - 0.2,
-                    refl["x"] - paint_size - 0.2, refl["y"] - 0.2,
-                    self.overlay_pen2
-                )'''
 
         if self.my_mask_pix_map is not None:
             self.addPixmap(self.my_mask_pix_map)
@@ -370,13 +336,6 @@ class ImgGraphicsScene(QGraphicsScene):
                     )
                     self.addRect(rectangle, self.overlay_pen1)
 
-                    consider_2_remove = '''
-                    rectangle = QRectF(
-                        x_rect_1 + 0.2, y_rect_1 + 0.2, tmp_width, tmp_height
-                    )
-                    self.addRect(rectangle, self.overlay_pen2)
-                    '''
-
 
                 elif pict[0] == 'untrusted.circle':
 
@@ -389,12 +348,6 @@ class ImgGraphicsScene(QGraphicsScene):
                     )
                     self.addEllipse(rectangle, self.overlay_pen1)
 
-                    consider_2_remove = '''
-                    rectangle = QRectF(
-                        x_rect_1 + 0.2, y_rect_1 + 0.2, side, side
-                    )
-                    self.addEllipse(rectangle, self.overlay_pen2)
-                    '''
 
                 elif pict[0] == 'untrusted.polygon':
                     siz_n_blk = (len(lst_num) - 2) / 2
@@ -436,28 +389,6 @@ class ImgGraphicsScene(QGraphicsScene):
 
     def __call__(self, new_pixmap, refl_list1, new_temp_mask):
         self.refl_list = refl_list1
-        consider_2_remove = '''
-        if self.parent_obj.palette == "heat":
-            overlay_colour1 = Qt.blue
-            overlay_colour2 = Qt.cyan
-
-        elif self.parent_obj.palette == "grayscale":
-            overlay_colour1 = Qt.blue
-            overlay_colour2 = Qt.red
-
-        elif self.parent_obj.palette == "heat invert":
-            overlay_colour1 = Qt.cyan
-            overlay_colour2 = Qt.blue
-
-        elif self.parent_obj.palette == "invert":
-            overlay_colour1 = Qt.red
-            overlay_colour2 = Qt.blue
-
-        self.overlay_pen1 = QPen(
-            overlay_colour1, 2.5, Qt.SolidLine,
-            Qt.RoundCap, Qt.RoundJoin
-        )
-        '''
 
         if self.parent_obj.overlay == "blue":
             overlay_colour1 = Qt.blue
@@ -476,14 +407,6 @@ class ImgGraphicsScene(QGraphicsScene):
 
         self.overlay_pen1.setCosmetic(True)
 
-
-        consider_2_remove = '''
-        self.overlay_pen2 = QPen(
-            overlay_colour2, 0, Qt.SolidLine,
-            Qt.RoundCap, Qt.RoundJoin
-        )
-        '''
-
         self.temp_mask = new_temp_mask
         self.my_pix_map = new_pixmap
         self.draw_ref_rect()
@@ -492,12 +415,6 @@ class ImgGraphicsScene(QGraphicsScene):
                 n_text = self.addSimpleText(str(refl["local_hkl"]))
                 n_text.setPos(refl["x"], refl["y"])
                 n_text.setPen(self.overlay_pen1)
-
-                consider_2_remove = '''
-                n_text = self.addSimpleText(str(refl["local_hkl"]))
-                n_text.setPos(refl["x"] + 0.2, refl["y"] + 0.2)
-                n_text.setPen(self.overlay_pen2)
-                '''
 
         self.draw_temp_mask()
 
@@ -518,10 +435,7 @@ class ImgGraphicsScene(QGraphicsScene):
                 pos_min = None
                 d_cuad_min = 10000000
                 for num, refl in enumerate(self.refl_list):
-                    consider_2_remove = '''
-                    x_ref = refl["x"] + refl["width"] / 2
-                    y_ref = refl["y"] + refl["height"] / 2
-                    '''
+
                     x_ref = refl["x"]
                     y_ref = refl["y"]
 
@@ -538,11 +452,6 @@ class ImgGraphicsScene(QGraphicsScene):
                 n_text.setPos(refl["x"], refl["y"])
                 n_text.setPen(self.overlay_pen1)
 
-                consider_2_remove = '''
-                n_text = self.addSimpleText(str(refl["local_hkl"]))
-                n_text.setPos(refl["x"] + 0.2, refl["y"] + 0.2)
-                n_text.setPen(self.overlay_pen2)
-                '''
 
             except (UnboundLocalError, TypeError, AttributeError):
                 not_neded_to_log = ''' logging.info(
@@ -1567,11 +1476,6 @@ class DoImageView(QObject):
                     rectangle1 = QRectF(x2, y2, tmp_width, tmp_height)
                     self.my_scene.addRect(rectangle1, self.my_scene.overlay_pen1)
 
-                    consider_2_remove = '''
-                    rectangle2 = QRectF(x2 + 0.2, y2 + 0.2, tmp_width, tmp_height)
-                    self.my_scene.addRect(rectangle2, self.my_scene.overlay_pen2)
-                    '''
-
                 elif self.mask_comp == "circ":
 
                     dx = float(x_pos - self.mask_x_ini)
@@ -1584,16 +1488,6 @@ class DoImageView(QObject):
                     self.my_scene.addEllipse(
                         rectangle1, self.my_scene.overlay_pen1
                     )
-
-                    consider_2_remove = '''
-                    rectangle2 = QRectF(
-                        x_pos - r + 0.2, y_pos - r + 0.2, 2 * r, 2 * r
-                    )
-
-                    self.my_scene.addEllipse(
-                        rectangle2, self.my_scene.overlay_pen2
-                    )
-                    '''
 
                     self.my_scene.addLine(
                         self.mask_x_ini, self.mask_y_ini, x_pos,
@@ -1720,10 +1614,7 @@ class DoImageView(QObject):
             pos_min = None
             d_cuad_min = 10000000
             for num, refl in enumerate(self.r_list0):
-                consider_2_remove = '''
-                x_ref = refl["x"] + refl["width"] / 2
-                y_ref = refl["y"] + refl["height"] / 2
-                '''
+
                 x_ref = refl["x"]
                 y_ref = refl["y"]
 
