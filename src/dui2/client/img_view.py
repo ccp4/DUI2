@@ -943,6 +943,7 @@ class DoImageView(QObject):
             logging.info("No reflection list to show (Index err catch except)")
 
         self.x_out_selected()
+        self.refresh_img_n_refl()
 
     def x_out_selected(self):
         lst_2_x_out = []
@@ -961,7 +962,6 @@ class DoImageView(QObject):
         except IndexError:
             print("empty list")
 
-        self.refresh_img_n_refl()
 
     def after_requesting_predict_lst(self, req_tup):
         json_lst = req_tup
@@ -1636,6 +1636,7 @@ class DoImageView(QObject):
             self.new_refl.emit(pos_2_emit)
 
             self.x_out_selected()
+            self.my_scene.draw_ref_rect()
 
 
 class MainImgViewObject(QObject):

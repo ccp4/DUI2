@@ -259,6 +259,8 @@ def main(par_def = None, connection_out = None):
                     "ConnectionReset err catch  ** while sending EOF or JSON"
                 )
 
+            logging.info("\n do_GET ... done ")
+
         def log_message(self, format, *args):
             if run_local:
                 return
