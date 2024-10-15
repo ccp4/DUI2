@@ -819,7 +819,6 @@ class MainObject(QObject):
         self.filt_widg.put_new_refl(comp_num)
 
     def filter_reseted(self):
-        print("filter_reseted")
         self.refresh_output()
 
     def tmp_mask_changed(self, lst_of_lst):

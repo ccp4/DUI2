@@ -1178,7 +1178,6 @@ class FindspotsSimplerParameterTab(SimpleParamTab):
         ):
             self.set_rad_pro_alg.setChecked(False)
 
-###################################################################################################
 
 class FilterWidget(QWidget):
     '''
@@ -1210,7 +1209,7 @@ class FilterWidget(QWidget):
 
     def reset_pars(self):
         self.ref_lst = []
-        print("reset_pars(FilterWidget)")
+        logging.info("reset_pars(FilterWidget)")
         self.upate_label()
         self.just_reseted.emit()
 
@@ -1253,7 +1252,6 @@ class FilterWidget(QWidget):
         self.all_items_changed.emit(lst_2_emit)
         self.upate_label()
 
-###################################################################################################
 
 class IndexSimplerParamTab(SimpleParamTab):
     """
