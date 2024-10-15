@@ -33,11 +33,9 @@ class get_request_shot(QObject):
     def __init__(self, parent = None, params_in = None, main_handler = None):
         super(get_request_shot, self).__init__(parent)
         if main_handler == None:
-            #print("get_request_shot ... #1")
             data_init = ini_data()
             uni_url = data_init.get_url()
-            #print("get_request_shot ... #2")
-            #print("params(get_request_shot)=", params_in)
+
             req = requests.get(uni_url, stream = True, params = params_in)
             compresed = req.content
             try:
@@ -47,7 +45,6 @@ class get_request_shot(QObject):
                 logging.info("zlib. err catch (get_request_shot)")
                 self.to_return = None
 
-            #print("get_request_shot ... #3")
             self.done = True
 
         else:

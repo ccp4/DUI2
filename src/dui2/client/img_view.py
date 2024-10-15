@@ -600,7 +600,7 @@ class PopDisplayMenu(QMenu):
 
     def overlay_changed_by_user(self, new_overlay_num):
         self.overlay = self.overlay_lst[new_overlay_num]
-        print("self.overlay =" + str(self.overlay))
+        logging.info("self.overlay =" + str(self.overlay))
         self.new_overlay.emit(str(self.overlay))
 
     def i_min_max_changed(self):
@@ -779,9 +779,6 @@ class DoImageView(QObject):
                   "path"    : self.nod_or_path,
                   "cmd_str" : my_cmd_lst}
 
-        print("my_cmd_lst =", my_cmd_lst)
-        print("my_cmd =", my_cmd)
-
         try:
             self.ld_tpl_thread.quit()
             self.ld_tpl_thread.wait()
@@ -800,9 +797,6 @@ class DoImageView(QObject):
 
     def after_requesting_template(self, tup_data):
         json_data_lst = tup_data
-
-        print("json_data_lst(DoImageView) =", json_data_lst)
-
         try:
             new_templ = str(json_data_lst[0])
             self.cur_img_num = int(json_data_lst[4])
@@ -858,7 +852,9 @@ class DoImageView(QObject):
 
     def request_reflection_list(self):
         if self.on_filter_reflections:
-            print("loading reflections from parent node")
+            logging.info(
+                "loading reflections from parent node ...on_filter_reflections"
+            )
             lst_2_load = self.main_obj.new_node.parent_node_lst
 
         else:
@@ -949,7 +945,6 @@ class DoImageView(QObject):
         lst_2_x_out = []
         try:
             if self.on_filter_reflections:
-                print("tiking selected reflections")
                 lst_of_str = self.main_obj.new_node.par_lst[0][0]['value'].split(",")
                 for single_str in lst_of_str:
                     lst_2_x_out.append(int(single_str))
@@ -960,8 +955,7 @@ class DoImageView(QObject):
                     self.r_list0[n]["x_me_out"] = True
 
         except IndexError:
-            print("empty list")
-
+            logging.info("empty list(x_out_selected)")
 
     def after_requesting_predict_lst(self, req_tup):
         json_lst = req_tup
@@ -1625,14 +1619,7 @@ class DoImageView(QObject):
                     d_cuad_min = d_cuad
                     pos_min = num
 
-
             pos_2_emit = self.r_list0[pos_min]["big_lst_num"]
-
-            print(
-                "The reflection nearest to (",
-                x_pos, y_pos, ") in the # ", pos_2_emit
-            )
-
             self.new_refl.emit(pos_2_emit)
 
             self.x_out_selected()

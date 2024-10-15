@@ -1210,15 +1210,11 @@ class FilterWidget(QWidget):
 
     def reset_pars(self):
         self.ref_lst = []
-        print("reset_pars(FilterWidget)")
+        logging.info("reset_pars(FilterWidget)")
         self.upate_label()
 
     def update_all_pars(self, tup_lst_pars):
         self.reset_pars()
-        print(
-            "update_all_pars(FilterWidget)" + str(tup_lst_pars)
-        )
-
         example = '''tup_lst_pars = (
             [
                 {
@@ -1234,11 +1230,9 @@ class FilterWidget(QWidget):
             for ref_str in ref_lst_str:
                 self.ref_lst.append(int(ref_str))
 
-            print("FilterWidget.self.ref_lst =", self.ref_lst)
             self._build_str_from_lst()
 
     def put_new_refl(self, refl_num):
-        print("add reflection # ", refl_num, "to the list")
         self.ref_lst.append(int(refl_num))
         self._build_str_from_lst()
 

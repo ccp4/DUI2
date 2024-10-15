@@ -649,9 +649,6 @@ class MainObject(QObject):
             logging.info(
                 "Attribute Err catch, no path for HTML file (OpenBrowser)"
             )
-            print(
-                "Attribute Err catch, no path for HTML file (OpenBrowser)"
-            )
 
     def import_init(self):
         loop = QEventLoop()
@@ -928,7 +925,6 @@ class MainObject(QObject):
         if msg_str:
             print(msg_str)
             dlg = QDialog()
-            #print(dir(dlg))
             layout = QVBoxLayout()
             layout.addWidget(QLabel(msg_str))
             #layout.addWidget(QPushButton("Ok"))
