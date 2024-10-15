@@ -150,6 +150,10 @@ class MainObject(QObject):
             self.all_items_param_changed
         )
 
+        self.filt_widg.just_reseted.connect(
+            self.filter_reseted
+        )
+
         ##########################################################################################
 
         fd_advanced_parameters = build_advanced_params_widget(
@@ -813,6 +817,10 @@ class MainObject(QObject):
 
     def get_new_refl(self, comp_num):
         self.filt_widg.put_new_refl(comp_num)
+
+    def filter_reseted(self):
+        print("filter_reseted")
+        self.refresh_output()
 
     def tmp_mask_changed(self, lst_of_lst):
         self.do_image_view.update_tmp_mask(lst_of_lst[0][0:-1])

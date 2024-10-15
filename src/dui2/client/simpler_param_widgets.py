@@ -1187,7 +1187,7 @@ class FilterWidget(QWidget):
     part of the code is in the << img_view >> module
     '''
     all_items_changed = Signal(list)
-    #component_changed = Signal(str)
+    just_reseted = Signal()
     def __init__(self, parent = None):
         super(FilterWidget, self).__init__(parent)
         self.do_emit = True
@@ -1210,8 +1210,9 @@ class FilterWidget(QWidget):
 
     def reset_pars(self):
         self.ref_lst = []
-        logging.info("reset_pars(FilterWidget)")
+        print("reset_pars(FilterWidget)")
         self.upate_label()
+        self.just_reseted.emit()
 
     def update_all_pars(self, tup_lst_pars):
         self.reset_pars()
