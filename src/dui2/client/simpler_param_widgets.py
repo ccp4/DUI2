@@ -312,6 +312,24 @@ class ImportWidget(QWidget):
         data_init = ini_data()
         self.run_local = data_init.get_if_local()
 
+        print("data_init(ImportWidget) =", dir(data_init))
+
+        print( "import_init =", data_init.get_import_init())
+
+        self.win_exe = data_init.get_win_exe()
+
+        print("win_exe =", self.win_exe)
+
+        '''
+            'get_if_local',
+            'get_import_init',
+            'get_tmp_dir',
+            'get_url',
+            'get_win_exe',
+            'set_data',
+            'set_tmp_dir'
+        '''
+
         sys_font = QFont()
         font_point_size = sys_font.pointSize()
         self.imp_txt = QLineEdit()
@@ -474,11 +492,17 @@ class ImportWidget(QWidget):
         self.dist_text_in.setText("Auto")
         self.check_shadow.setChecked(False)
 
-        self.rad_but_dui_diag.setChecked(True)
         self.rad_but_img_file.setChecked(True)
 
         if not self.run_local:
             self.rad_but_sys_diag.setEnabled(False)
+
+        if self.run_local and self.win_exe:
+            self.rad_but_sys_diag.setChecked(True)
+
+        else:
+            self.rad_but_dui_diag.setChecked(True)
+
 
         self.do_emit = True
 
