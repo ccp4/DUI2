@@ -312,8 +312,6 @@ class ImportWidget(QWidget):
         data_init = ini_data()
         self.run_local = data_init.get_if_local()
 
-        print("data_init(ImportWidget) =", dir(data_init))
-
         print( "import_init =", data_init.get_import_init())
 
         self.win_exe = data_init.get_win_exe()
