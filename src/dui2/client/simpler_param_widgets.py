@@ -497,6 +497,7 @@ class ImportWidget(QWidget):
 
         if self.run_local and self.win_exe:
             self.rad_but_sys_diag.setChecked(True)
+            self.rad_but_dui_diag.setEnabled(False)
 
         else:
             self.rad_but_dui_diag.setChecked(True)
