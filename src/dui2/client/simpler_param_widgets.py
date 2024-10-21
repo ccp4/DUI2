@@ -311,22 +311,8 @@ class ImportWidget(QWidget):
 
         data_init = ini_data()
         self.run_local = data_init.get_if_local()
-
-        print( "import_init =", data_init.get_import_init())
-
         self.win_exe = data_init.get_win_exe()
-
         print("win_exe =", self.win_exe)
-
-        '''
-            'get_if_local',
-            'get_import_init',
-            'get_tmp_dir',
-            'get_url',
-            'get_win_exe',
-            'set_data',
-            'set_tmp_dir'
-        '''
 
         sys_font = QFont()
         font_point_size = sys_font.pointSize()

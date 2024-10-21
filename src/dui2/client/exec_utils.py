@@ -520,7 +520,7 @@ class CommandParamControl:
             return self.par_lst[0], self.custm_param
 
         except IndexError:
-            print("Index Err catch")
+            logging.info("Index Err catch (CommandParamControl)")
             return False
 
     def get_full_command_list(self):

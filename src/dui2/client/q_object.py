@@ -1286,7 +1286,6 @@ class MainObject(QObject):
                 logging.info("No advanced pars")
 
         else:
-            print("absent parameters node")
             logging.info("absent parameters node")
 
     def gray_n_ungray(self):
