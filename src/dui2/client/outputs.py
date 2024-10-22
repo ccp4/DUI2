@@ -129,7 +129,10 @@ class LaunchReciprocalLattice(QThread):
 
             if self.win_exe:
                 cmd_lst[0] += self.ext_str
-                print("launching reciprocal lattice viewer with: \n" + cmd_lst)
+                print(
+                    "launching reciprocal lattice viewer with: \n"
+                     + str(cmd_lst)
+                )
 
             self.my_proc = subprocess.Popen(
                 cmd_lst, shell = False,
