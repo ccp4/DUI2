@@ -205,6 +205,8 @@ class CmdNode(object):
             data_init = ini_data()
 
         self.win_exe = data_init.get_win_exe()
+        self.ext_str = data_init.get_ext_4_win()
+
         self.parent_node_lst = []
         try:
             for single_parent in parent_lst_in:
@@ -379,7 +381,7 @@ class CmdNode(object):
         FilNotFonErr = False
         if is_valid_command:
             if self.win_exe:
-                inner_lst[0] += ".exe"
+                inner_lst[0] += self.ext_str
 
             print("\n Running >> ", inner_lst)
             try:
@@ -518,7 +520,7 @@ class CmdNode(object):
 
             lst_rep_out = []
             if self.win_exe:
-                rep_lst_dat_in[0] += ".exe"
+                rep_lst_dat_in[0] += self.ext_str
 
             rep_proc = subprocess.Popen(
                 rep_lst_dat_in,
@@ -556,7 +558,7 @@ class CmdNode(object):
         self.n_Broken_Pipes += add_log_line(new_line, self.nod_req)
 
         if self.win_exe:
-            pred_lst_dat_in[0] += ".exe"
+            pred_lst_dat_in[0] += self.ext_str
 
         lst_pred_out = []
         pred_proc = subprocess.Popen(

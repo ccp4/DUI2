@@ -64,9 +64,11 @@ def main():
 
     if platform.system() == "Windows":
         win_str = "true"
+        win_ext = ".com"
 
     else:
         win_str = "false"
+        win_ext = None
 
     print("win_str =", win_str, "\n")
 
@@ -77,6 +79,7 @@ def main():
         #("host", "serverip"),
         ("all_local", "true"),
         ("windows_exe", win_str),
+        ("extension_4_windows", win_ext),
     )
 
     pipe_server_1, pipe_server_2 = Pipe()
@@ -93,6 +96,7 @@ def main():
                 ("import_init", None),
                 ("all_local", "true"),
                 ("windows_exe", win_str),
+                ("extension_4_windows", win_ext),
         )
         run_client.main(client_par_def)
 

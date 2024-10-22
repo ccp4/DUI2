@@ -571,6 +571,7 @@ def get_param_list(cmd_str):
 def get_help_list(cmd_str):
     data_init = ini_data()
     win_exe = data_init.get_win_exe()
+    ext_str = data_init.get_ext_4_win()
 
     if cmd_str == "import":
         cmd_str ="dials_import"
@@ -596,7 +597,7 @@ def get_help_list(cmd_str):
         inner_lst = ["dials." + cmd_str , "-h"]
         try:
             if win_exe:
-                inner_lst[0] += ".exe"
+                inner_lst[0] += ext_str
 
             print(
                 "capturing std output from >> " +

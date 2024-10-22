@@ -118,6 +118,7 @@ class LaunchReciprocalLattice(QThread):
         self.ref_path = ref_path
         data_init = ini_data()
         self.win_exe = data_init.get_win_exe()
+        self.ext_str = data_init.get_ext_4_win()
 
     def run(self):
         cmd_lst = [
@@ -125,11 +126,10 @@ class LaunchReciprocalLattice(QThread):
             self.exp_path, self.ref_path,
         ]
         try:
-            ext_str = ".exe"
 
             if self.win_exe:
-                print("win_exe == True ... (LaunchReciprocalLattice)")
-                cmd_lst[0] += ext_str
+                cmd_lst[0] += self.ext_str
+                print("launching reciprocal lattice viewer with: \n" + cmd_lst)
 
             self.my_proc = subprocess.Popen(
                 cmd_lst, shell = False,
