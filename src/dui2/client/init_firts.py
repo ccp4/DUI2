@@ -58,6 +58,7 @@ class ini_data(object):
 
         else:
             win_exe = False
+            ext_4_win = None
 
         logging.info("\n win_exe =" + str(win_exe))
 

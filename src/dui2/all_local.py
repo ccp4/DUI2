@@ -64,7 +64,7 @@ def main():
 
     if platform.system() == "Windows":
         win_str = "true"
-        win_ext = ".com"
+        win_ext = ".bat"
 
     else:
         win_str = "false"
