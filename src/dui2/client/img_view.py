@@ -1,5 +1,5 @@
 """
-DUI2's image visualization utilities
+DUI2's image visualization main programs
 
 Author: Luis Fuentes-Montero (Luiso)
 With strong help from DIALS and CCP4 teams
