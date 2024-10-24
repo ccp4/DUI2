@@ -396,6 +396,9 @@ class ImgGraphicsScene(QGraphicsScene):
         elif self.parent_obj.overlay == "cyan":
             overlay_colour1 = Qt.cyan
 
+        elif self.parent_obj.overlay == "green":
+            overlay_colour1 = Qt.green
+
         else:
             overlay_colour1 = Qt.red
 
@@ -513,13 +516,9 @@ class PopDisplayMenu(QMenu):
         )
 
         self.overlay_select = QComboBox()
-        self.overlay_lst = ["blue", "cyan", "red"]
+        self.overlay_lst = ["blue", "cyan", "red", "green"]
         for n, plt in enumerate(self.overlay_lst):
             self.overlay_select.addItem(plt)
-            off_4_now = '''
-            if plt == self.palette:
-                self.palette_select.setCurrentIndex(n)
-            '''
 
         self.overlay_select.currentIndexChanged.connect(
             self.overlay_changed_by_user
