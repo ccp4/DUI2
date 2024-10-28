@@ -71,17 +71,12 @@ widgets_defs = {
             "filter_reflections", "index", "combine_experiments", "ssx_index", "optional"
         ]
     },
-
-
-
     "filter_reflections" : {
         "tooltip"       : "dials.filter_reflections ...",
         "icon"          : "resources/filter_reflections.png",
         "main_cmd"      :["dials.filter_reflections"],
         "nxt_widg_lst"  :["index", "combine_experiments", "ssx_index", "optional"]
     },
-
-
     "index" : {
         "tooltip"       : "dials.index ...",
         "icon"          : "resources/index.png",
@@ -94,7 +89,6 @@ widgets_defs = {
             "optional"
         ]
     },
-
     "ssx_index" : {
         "tooltip"       : "dials.ssx_index ...",
         "icon"          : "resources/ssx_index.png",
@@ -104,7 +98,6 @@ widgets_defs = {
             "optional"
         ]
     },
-
     "refine_bravais_settings" : {
         "tooltip"       : "dials.refine_bravais_settings ...",
         "icon"          : "resources/refine_bv_set.png",
@@ -188,8 +181,6 @@ widgets_defs = {
             "merge", "split_experiments", "optional"
         ]
     },
-
-
     "split_experiments"   : {
         "tooltip"           : "dials.split_experiments ...",
         "icon"              : "resources/split.png",
@@ -199,8 +190,6 @@ widgets_defs = {
             "merge", "combine_experiments","optional"
         ]
     },
-
-
     "optional" : {
         "tooltip"       : "choose from a list",
         "icon"          : "resources/optional.png",
