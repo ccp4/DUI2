@@ -68,7 +68,7 @@ widgets_defs = {
         "icon"          : "resources/find_spots.png",
         "main_cmd"      :["dials.find_spots"],
         "nxt_widg_lst"  :[
-            "filter_reflections", "index", "combine_experiments", "ssx_index", "optional"
+            "index", "filter_reflections", "combine_experiments", "ssx_index", "optional"
         ]
     },
     "filter_reflections" : {
