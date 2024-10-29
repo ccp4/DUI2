@@ -1744,6 +1744,46 @@ class SymmetrySimplerParamTab(SimpleParamTab):
         self.clearLayout(self.main_v_layout)
         self.build_pars()
 
+###########################################################################################################
+
+class CosymSimplerParamTab(SimpleParamTab):
+    """
+    This widget is the tool for tuning the simpler and most common parameters
+    in the cosym command, this widget is the first to appear once the button
+    "Cosym" is clicked
+    """
+    def __init__(self, parent=None):
+        super(CosymSimplerParamTab, self).__init__()
+        self.do_emit = True
+        self.main_v_layout = QVBoxLayout()
+        self.build_pars()
+        self.setLayout(self.main_v_layout)
+
+    def build_pars(self):
+        label_d_min = QLabel("High resolution limit")
+        hbox_d_min = QHBoxLayout()
+        hbox_d_min.addWidget(label_d_min)
+
+        d_min_line = QLineEdit()
+        d_min_line.setPlaceholderText("Auto")
+        d_min_line.local_path = "d_min"
+        d_min_line.textChanged.connect(self.line_changed)
+        hbox_d_min.addWidget(d_min_line)
+
+        self.main_v_layout.addLayout(hbox_d_min)
+        self.main_v_layout.addStretch()
+
+        self.lst_var_widg = []
+        self.lst_var_widg.append(d_min_line)
+        self.lst_var_widg.append(label_d_min)
+
+    def reset_pars(self):
+        self.clearLayout(self.main_v_layout)
+        self.build_pars()
+
+
+###########################################################################################################
+
 
 class ScaleSimplerParamTab(SimpleParamTab):
     """

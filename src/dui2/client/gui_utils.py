@@ -129,7 +129,7 @@ widgets_defs = {
         "icon"          : "resources/integrate.png",
         "main_cmd"      :["dials.integrate"],
         "nxt_widg_lst"  :[
-            "symmetry", "scale",
+            "symmetry", "scale", "cosym",
             "export", "combine_experiments",
             "split_experiments", "optional"
         ]
@@ -139,7 +139,7 @@ widgets_defs = {
         "icon"          : "resources/ssx_integrate.png",
         "main_cmd"      :["dials.ssx_integrate"],
         "nxt_widg_lst"  :[
-            "symmetry", "scale", "export", "optional"
+            "symmetry", "scale", "cosym", "export", "optional"
         ]
     },
     "symmetry" : {
@@ -151,12 +151,31 @@ widgets_defs = {
             "split_experiments", "optional"
         ]
     },
+
+
+
+
+    "cosym" : {
+        "tooltip"       : "dials.cosym ...",
+        "icon"          : "resources/cosym.png",
+        "main_cmd"      :["dials.cosym"],
+        "nxt_widg_lst"  :[
+            "scale", "export", "merge", "combine_experiments",
+            "split_experiments", "optional"
+        ]
+    },
+
+
+
+
+
+
     "scale" : {
         "tooltip"       : "dials.scale ...",
         "icon"          : "resources/scale.png",
         "main_cmd"      :["dials.scale"],
         "nxt_widg_lst"  :[
-            "symmetry", "merge", "export", "combine_experiments",
+            "symmetry", "cosym", "merge", "export", "combine_experiments",
             "split_experiments", "optional"
         ]
     },
