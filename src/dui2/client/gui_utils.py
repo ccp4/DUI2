@@ -153,8 +153,6 @@ widgets_defs = {
     },
 
 
-
-
     "cosym" : {
         "tooltip"       : "dials.cosym ...",
         "icon"          : "resources/cosym.png",
@@ -164,10 +162,6 @@ widgets_defs = {
             "split_experiments", "optional"
         ]
     },
-
-
-
-
 
 
     "scale" : {
