@@ -93,7 +93,7 @@
                    </font>
                   </property>
                   <property name="currentIndex">
-                   <number>3</number>
+                   <number>0</number>
                   </property>
                   <widget class="QWidget" name="RootPage">
                    <layout class="QGridLayout" name="gridLayout_33">
@@ -122,8 +122,8 @@
                         <rect>
                          <x>0</x>
                          <y>0</y>
-                         <width>638</width>
-                         <height>319</height>
+                         <width>597</width>
+                         <height>316</height>
                         </rect>
                        </property>
                       </widget>
@@ -194,8 +194,8 @@
                         <rect>
                          <x>0</x>
                          <y>0</y>
-                         <width>638</width>
-                         <height>319</height>
+                         <width>98</width>
+                         <height>28</height>
                         </rect>
                        </property>
                       </widget>
@@ -255,8 +255,8 @@
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>630</width>
-                             <height>284</height>
+                             <width>589</width>
+                             <height>281</height>
                             </rect>
                            </property>
                           </widget>
@@ -294,8 +294,8 @@
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>630</width>
-                             <height>280</height>
+                             <width>98</width>
+                             <height>28</height>
                             </rect>
                            </property>
                           </widget>
@@ -337,8 +337,8 @@
                         <rect>
                          <x>0</x>
                          <y>0</y>
-                         <width>638</width>
-                         <height>319</height>
+                         <width>98</width>
+                         <height>28</height>
                         </rect>
                        </property>
                       </widget>
@@ -398,8 +398,8 @@
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>630</width>
-                             <height>284</height>
+                             <width>98</width>
+                             <height>28</height>
                             </rect>
                            </property>
                           </widget>
@@ -1053,8 +1053,8 @@
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>98</width>
-                             <height>28</height>
+                             <width>589</width>
+                             <height>281</height>
                             </rect>
                            </property>
                           </widget>
@@ -1092,8 +1092,8 @@
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>98</width>
-                             <height>28</height>
+                             <width>589</width>
+                             <height>277</height>
                             </rect>
                            </property>
                           </widget>
@@ -1101,6 +1101,98 @@
                         </item>
                         <item row="0" column="0">
                          <layout class="QHBoxLayout" name="SymetrySearchLayout"/>
+                        </item>
+                       </layout>
+                      </widget>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                  <widget class="QWidget" name="CosysmPage">
+                   <layout class="QGridLayout" name="gridLayout_45">
+                    <item row="0" column="0">
+                     <widget class="QTabWidget" name="tabWidget_11">
+                      <property name="currentIndex">
+                       <number>1</number>
+                      </property>
+                      <widget class="QWidget" name="tab_simple_11">
+                       <attribute name="title">
+                        <string>Simple</string>
+                       </attribute>
+                       <layout class="QGridLayout" name="gridLayout_47">
+                        <property name="leftMargin">
+                         <number>2</number>
+                        </property>
+                        <property name="topMargin">
+                         <number>2</number>
+                        </property>
+                        <property name="rightMargin">
+                         <number>2</number>
+                        </property>
+                        <property name="bottomMargin">
+                         <number>2</number>
+                        </property>
+                        <property name="spacing">
+                         <number>2</number>
+                        </property>
+                        <item row="0" column="0">
+                         <widget class="QScrollArea" name="CosymSimplerScrollArea">
+                          <property name="widgetResizable">
+                           <bool>true</bool>
+                          </property>
+                          <widget class="QWidget" name="scrollAreaWidgetContents_30">
+                           <property name="geometry">
+                            <rect>
+                             <x>0</x>
+                             <y>0</y>
+                             <width>575</width>
+                             <height>267</height>
+                            </rect>
+                           </property>
+                          </widget>
+                         </widget>
+                        </item>
+                       </layout>
+                      </widget>
+                      <widget class="QWidget" name="tab_advanced_11">
+                       <attribute name="title">
+                        <string>Advanced</string>
+                       </attribute>
+                       <layout class="QGridLayout" name="gridLayout_46">
+                        <property name="leftMargin">
+                         <number>2</number>
+                        </property>
+                        <property name="topMargin">
+                         <number>2</number>
+                        </property>
+                        <property name="rightMargin">
+                         <number>2</number>
+                        </property>
+                        <property name="bottomMargin">
+                         <number>2</number>
+                        </property>
+                        <property name="spacing">
+                         <number>2</number>
+                        </property>
+                        <item row="1" column="0">
+                         <widget class="QScrollArea" name="CosymAdvancedScrollArea">
+                          <property name="widgetResizable">
+                           <bool>true</bool>
+                          </property>
+                          <widget class="QWidget" name="scrollAreaWidgetContents_31">
+                           <property name="geometry">
+                            <rect>
+                             <x>0</x>
+                             <y>0</y>
+                             <width>575</width>
+                             <height>263</height>
+                            </rect>
+                           </property>
+                          </widget>
+                         </widget>
+                        </item>
+                        <item row="0" column="0">
+                         <layout class="QHBoxLayout" name="CosymSearchLayout"/>
                         </item>
                        </layout>
                       </widget>
@@ -1929,7 +2021,7 @@
      <x>0</x>
      <y>0</y>
      <width>1613</width>
-     <height>22</height>
+     <height>28</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_file">
