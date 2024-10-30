@@ -1622,7 +1622,6 @@ class  IntegrateSimplerParamTab(SimpleParamTab):
         hbox_d_min.addWidget(d_min_line)
         self.main_v_layout.addLayout(hbox_d_min)
 
-        ########################################################################
         hbox_d_max = QHBoxLayout()
         d_max_label = QLabel("Low resolution limit")
         hbox_d_max.addWidget(d_max_label)
@@ -1632,7 +1631,6 @@ class  IntegrateSimplerParamTab(SimpleParamTab):
         d_max_line.textChanged.connect(self.line_changed)
         hbox_d_max.addWidget(d_max_line)
         self.main_v_layout.addLayout(hbox_d_max)
-        ########################################################################
 
         hbox_lay_algorithm_53 = QHBoxLayout()
         label_algorithm_53 = QLabel("Background algorithm")
@@ -1678,7 +1676,6 @@ class  SsxIntegrateSimplerParamTab(SimpleParamTab):
         hbox_d_min.addWidget(d_min_line)
         self.main_v_layout.addLayout(hbox_d_min)
 
-        ########################################################################
         hbox_d_max = QHBoxLayout()
         d_max_label = QLabel("Low resolution limit")
         hbox_d_max.addWidget(d_max_label)
@@ -1688,7 +1685,6 @@ class  SsxIntegrateSimplerParamTab(SimpleParamTab):
         d_max_line.textChanged.connect(self.line_changed)
         hbox_d_max.addWidget(d_max_line)
         self.main_v_layout.addLayout(hbox_d_max)
-        ########################################################################
 
         hbox_lay_algorithm_53 = QHBoxLayout()
         label_algorithm_53 = QLabel("Background algorithm")
@@ -1744,7 +1740,6 @@ class SymmetrySimplerParamTab(SimpleParamTab):
         self.clearLayout(self.main_v_layout)
         self.build_pars()
 
-###########################################################################################################
 
 class CosymSimplerParamTab(SimpleParamTab):
     """
@@ -1782,9 +1777,6 @@ class CosymSimplerParamTab(SimpleParamTab):
         self.build_pars()
 
 
-###########################################################################################################
-
-
 class ScaleSimplerParamTab(SimpleParamTab):
     """
     This widget is the tool for tuning the simpler and most common parameters
@@ -1812,7 +1804,6 @@ class ScaleSimplerParamTab(SimpleParamTab):
         hbox_d_min.addWidget(d_min_line)
         self.main_v_layout.addLayout(hbox_d_min)
 
-        ########################################################################
         hbox_d_max = QHBoxLayout()
         d_max_label = QLabel("Low resolution limit")
         hbox_d_max.addWidget(d_max_label)
@@ -1822,7 +1813,6 @@ class ScaleSimplerParamTab(SimpleParamTab):
         d_max_line.textChanged.connect(self.line_changed)
         hbox_d_max.addWidget(d_max_line)
         self.main_v_layout.addLayout(hbox_d_max)
-        ########################################################################
 
         hbox_lay_mod = QHBoxLayout()
         label_mod = QLabel("Model")

@@ -145,8 +145,6 @@ class MainObject(QObject):
         self.mask_widg.component_changed.connect(self.mask_comp_changed)
         self.window.MaskScrollArea.setWidget(self.mask_widg)
 
-        ##########################################################################################
-
         self.filt_widg = FilterWidget()
         self.window.FilterScrollArea.setWidget(self.filt_widg)
         self.filt_widg.all_items_changed.connect(
@@ -156,8 +154,6 @@ class MainObject(QObject):
         self.filt_widg.just_reseted.connect(
             self.filter_reseted
         )
-
-        ##########################################################################################
 
         fd_advanced_parameters = build_advanced_params_widget(
             "find_spots_params", self.window.FindspotsSearchLayout,
@@ -323,8 +319,6 @@ class MainObject(QObject):
             self.window.SymmetryAdvancedScrollArea
         )
 
-        ##################################################################################################
-
         cosym_simpl_widg = CosymSimplerParamTab()
         cosym_simpl_widg.item_changed.connect(self.item_param_changed)
         self.window.CosymSimplerScrollArea.setWidget(cosym_simpl_widg)
@@ -341,8 +335,6 @@ class MainObject(QObject):
         cosm_advanced_parameters.set_scroll_parent(
             self.window.CosymAdvancedScrollArea
         )
-
-        ##################################################################################################
 
         scale_simpl_widg = ScaleSimplerParamTab()
         scale_simpl_widg.item_changed.connect(self.item_param_changed)
@@ -378,7 +370,6 @@ class MainObject(QObject):
             self.window.CombineAdvancedScrollArea
         )
 
-
         fd_advanced_parameters.twin_widg = find_simpl_widg
         find_simpl_widg.twin_widg = fd_advanced_parameters
         id_advanced_parameters.twin_widg = index_simpl_widg
@@ -404,12 +395,8 @@ class MainObject(QObject):
         ce_advanced_parameters.twin_widg = comb_simpl_widg
         comb_simpl_widg.twin_widg = ce_advanced_parameters
 
-        #######################################################################################
-
         cosm_advanced_parameters.twin_widg = cosym_simpl_widg
         cosym_simpl_widg.twin_widg = cosm_advanced_parameters
-
-        #######################################################################################
 
         tmp_widget_defs = widgets_defs
         self.param_widgets = get_widget_def_dict(
@@ -486,13 +473,9 @@ class MainObject(QObject):
         self.param_widgets["symmetry"]["advanced"] = sm_advanced_parameters
         self.param_widgets["symmetry"]["main_page"] = self.window.SimmetryPage
 
-        #######################################################################################
-
         self.param_widgets["cosym"]["simple"] = cosym_simpl_widg
         self.param_widgets["cosym"]["advanced"] = cosm_advanced_parameters
         self.param_widgets["cosym"]["main_page"] = self.window.CosysmPage
-
-        #######################################################################################
 
         self.param_widgets["scale"]["simple"] = scale_simpl_widg
         self.param_widgets["scale"]["advanced"] = sc_advanced_parameters

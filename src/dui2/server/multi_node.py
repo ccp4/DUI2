@@ -496,13 +496,12 @@ class CmdNode(object):
 
         tmp_html_path = self._run_dir + os.sep + "dials.report.html"
 
-        # if dials.(scale/merge) already generated an html file better use it
+        # if dials.(scale/merge/cosym) already generated an html file
+        # Dui2 should use it instead of running dials.report
+
         tmp_scale_html_path = self._run_dir + os.sep + "dials.scale.html"
         tmp_merge_html_path = self._run_dir + os.sep + "dials.merge.html"
-
-        ################################################################################
         tmp_cosym_html_path = self._run_dir + os.sep + "dials.cosym.html"
-        ###############################################################################
 
         if os.path.exists(tmp_scale_html_path):
             shutil.copy(tmp_scale_html_path, tmp_html_path)
