@@ -1098,7 +1098,7 @@ class TreeDirScene(QGraphicsScene):
                 my_coord_x ,my_coord_y = self.get_coords(pos, -0.6)
                 n_text = self.addSimpleText(str(node["number"]))
                 n_text.setPos(my_coord_x - self.f_width * 0.7,
-                            my_coord_y - self.f_height * 0.8)
+                            my_coord_y - self.f_height * 0.67)
                 n_text.setBrush(brush_col)
 
                 my_coord_x ,my_coord_y = self.get_coords(
@@ -1106,13 +1106,13 @@ class TreeDirScene(QGraphicsScene):
                 )
                 n_text = self.addSimpleText(str(node["number"]))
                 n_text.setPos(my_coord_x - self.f_width * 0.7,
-                            my_coord_y - self.f_height * 0.8)
+                            my_coord_y - self.f_height * 0.67)
                 n_text.setBrush(brush_col)
 
                 stat_text = self.addSimpleText(str(node["stp_stat"]))
                 stat_text.setPos(
                     self.f_width * 0.5,
-                    my_coord_y - self.f_height * 0.8
+                    my_coord_y - self.f_height * 0.67
                 )
                 stat_text.setBrush(brush_col)
                 if str(node["stp_stat"]) == "B":
@@ -1142,7 +1142,7 @@ class TreeDirScene(QGraphicsScene):
                     )
 
                 cmd_text = self.addSimpleText(str(node["str_cmd"]))
-                x1, y1 = self.get_coords(pos - 0.25, max_indent + 5)
+                x1, y1 = self.get_coords(pos - 0.28, max_indent + 5)
                 cmd_text.setPos(x1, y1)
                 cmd_text.setBrush(brush_col)
                 cmd_text.setFont(QFont("Courier"))
