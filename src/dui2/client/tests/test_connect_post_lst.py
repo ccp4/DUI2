@@ -35,7 +35,7 @@ if __name__ == "__main__":
         {
             'nod_lst': [0],
             'cmd_lst': [
-                'dials.import /home/lui/dif_dat/x4w_g1/X4_wide_M1S4_2_*.cbf'
+                "dials.import /home/ufn91840/diff_data/X4_wide/X4_wide_M1S4_2_*.cbf"
             ]
         },{
             'nod_lst': [1],
