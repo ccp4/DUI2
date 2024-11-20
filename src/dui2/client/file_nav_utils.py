@@ -148,7 +148,7 @@ class PathBar(QWidget):
         self.hscrollbar = self.scroll_path.horizontalScrollBar()
         self.hscrollbar.rangeChanged.connect(self.scroll_2_right)
         main_h_layout.addWidget(self.scroll_path)
-        self.back_dir_butt = QPushButton("Go Back\n\n . . \u2B8C")
+        self.back_dir_butt = QPushButton("\n Go Back \n . . \u2B8C  \n")
         self.back_dir_butt.clicked.connect(self.back_one_dir)
         main_h_layout.addWidget(self.back_dir_butt)
         self.par_dir = None
