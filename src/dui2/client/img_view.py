@@ -1403,6 +1403,9 @@ class DoImageView(QObject):
         logging.info("self.easter_egg_active =" + str(self.easter_egg_active))
         self.full_image_loaded = False
 
+        #TODO: have a look to an alternative to next line for solving the read only issue
+        #self.np_full_img.setflags(write=True)
+
     def set_drag_mode(self, mask_mode = False):
         self.mask_mode = mask_mode
         if self.mask_mode:

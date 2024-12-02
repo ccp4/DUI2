@@ -87,10 +87,16 @@ class PathButtons(QWidget):
     up_dir_clickled = Signal(str)
     def __init__(self, parent = None):
         super(PathButtons, self).__init__()
+
         self.main_h_lay = QHBoxLayout()
         self.lst_butt = []
         self.main_h_lay.addStretch()
-        self.setLayout(self.main_h_lay)
+
+        self.main_v_layout = QVBoxLayout()
+        self.path_str = QLabel("/path ... /")
+        self.main_v_layout.addWidget(self.path_str)
+        self.main_v_layout.addLayout(self.main_h_lay)
+        self.setLayout(self.main_v_layout)
 
         dir_path = os.path.dirname(os.path.abspath(__file__))
         self._root_icon = QIcon()
@@ -98,8 +104,8 @@ class PathButtons(QWidget):
         + os.sep + "root.png"
         self._root_icon.addFile(root_icon_path, mode = QIcon.Normal)
 
-
     def update_list(self, new_list):
+
         for single_widget in self.lst_butt:
             single_widget.deleteLater()
             self.main_h_lay.removeWidget(single_widget)
@@ -127,6 +133,15 @@ class PathButtons(QWidget):
         new_lab = QLabel(new_list[-1])
         self.lst_butt.append(new_lab)
         self.main_h_lay.addWidget(new_lab)
+
+        try:
+            current_dir_path = str(parent_dir_path + new_list[-1])
+
+        except TypeError:
+            current_dir_path = "/"
+
+        print("updated path to:" + current_dir_path)
+        self.path_str.setText(current_dir_path)
 
         return parent_dir_path
 
