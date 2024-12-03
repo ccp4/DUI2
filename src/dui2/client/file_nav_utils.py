@@ -91,12 +91,7 @@ class PathButtons(QWidget):
         self.main_h_lay = QHBoxLayout()
         self.lst_butt = []
         self.main_h_lay.addStretch()
-
-        self.main_v_layout = QVBoxLayout()
-        self.path_str = QLabel("/path ... /")
-        self.main_v_layout.addWidget(self.path_str)
-        self.main_v_layout.addLayout(self.main_h_lay)
-        self.setLayout(self.main_v_layout)
+        self.setLayout(self.main_h_lay)
 
         dir_path = os.path.dirname(os.path.abspath(__file__))
         self._root_icon = QIcon()
@@ -135,13 +130,10 @@ class PathButtons(QWidget):
         self.main_h_lay.addWidget(new_lab)
 
         try:
-            current_dir_path = str(parent_dir_path + new_list[-1])
+            self.current_dir_path = str(parent_dir_path + new_list[-1])
 
         except TypeError:
-            current_dir_path = "/"
-
-        print("updated path to:" + current_dir_path)
-        self.path_str.setText(current_dir_path)
+            self.current_dir_path = "/"
 
         return parent_dir_path
 
@@ -253,12 +245,15 @@ class FileBrowser(QDialog):
         main_v_layout.addWidget(self.lst_vw)
 
         low_h_layout = QHBoxLayout()
-        low_h_layout.addStretch()
+        #low_h_layout.addStretch()
 
         self.label_pos = -1
         timer = QTimer(self)
         timer.timeout.connect(self.refresh_label)
         timer.start(500)
+
+        self.imp_dir_path = QLineEdit()
+        low_h_layout.addWidget(self.imp_dir_path)
 
         low_h_layout.addWidget(self.status_label)
         self.OpenButton = QPushButton(" Open ")
@@ -324,6 +319,10 @@ class FileBrowser(QDialog):
         self.label_pos = -1
         self.refresh_sorted1()
         self.try_2_kill_thread()
+
+        self.imp_dir_path.setText(
+            str(self.path_bar.path_buttons.current_dir_path)
+        )
 
     def refresh_sorted1(self):
         if self.rad_but_file_dir.isChecked():
