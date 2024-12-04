@@ -129,12 +129,6 @@ class PathButtons(QWidget):
         self.lst_butt.append(new_lab)
         self.main_h_lay.addWidget(new_lab)
 
-        try:
-            self.current_dir_path = str(parent_dir_path + new_list[-1])
-
-        except TypeError:
-            self.current_dir_path = "/"
-
         return parent_dir_path
 
     def dir_clicked(self):
@@ -317,12 +311,15 @@ class FileBrowser(QDialog):
         self.lst_vw.enter_list(lst_in = lst_dir)
         self.status_label.setText(" ")
         self.label_pos = -1
-        self.refresh_sorted1()
-        self.try_2_kill_thread()
+
 
         self.imp_dir_path.setText(
-            str(self.path_bar.path_buttons.current_dir_path)
+            str(self.curr_path)
         )
+
+
+        self.refresh_sorted1()
+        self.try_2_kill_thread()
 
     def refresh_sorted1(self):
         if self.rad_but_file_dir.isChecked():
@@ -338,6 +335,9 @@ class FileBrowser(QDialog):
             self.open_file()
 
         self.current_file = fl_dic
+        self.imp_dir_path.setText(
+            str(self.current_file["path"])
+        )
 
     def open_file(self):
         try:
@@ -359,6 +359,9 @@ class FileBrowser(QDialog):
                 self.close()
 
         except TypeError:
+
+            print("self.imp_dir_path.text= ", self.imp_dir_path.text())
+
             if self.only_dir:
                 self.file_or_dir_selected.emit(
                     self.curr_path, True
@@ -367,6 +370,7 @@ class FileBrowser(QDialog):
 
             else:
                 print("no file selected yet")
+                self.build_content(str(self.imp_dir_path.text()) + "/")
 
             self.OpenButton.setEnabled(True)
 
