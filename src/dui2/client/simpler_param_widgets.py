@@ -446,13 +446,6 @@ class ImportWidget(QWidget):
             dic_str = lst_req.result_out()
             init_path = dic_str[0]
 
-            example = '''
-            lst_req = get_req_json_dat(
-                params_in = cmd, main_handler = self.runner_handler
-            )
-            json_lamb = lst_req.result_out()
-            '''
-
             if(
                 self.rad_but_template.isChecked() or
                 self.rad_but_img_file.isChecked()
