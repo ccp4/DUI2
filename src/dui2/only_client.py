@@ -10,6 +10,7 @@ def main():
     par_def = (
         ("url", 'http://127.0.0.1:45678/'),
         ("all_local", "false"),
+        ("import_init", None),
         ("windows_exe", "false"),
     )
     run_client.main(par_def)
