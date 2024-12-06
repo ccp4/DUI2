@@ -248,6 +248,7 @@ class FileBrowser(QDialog):
 
         self.imp_dir_path = QLineEdit()
         low_h_layout.addWidget(self.imp_dir_path)
+        self.imp_dir_path.textChanged.connect(self.new_path_text)
 
         low_h_layout.addWidget(self.status_label)
         self.OpenButton = QPushButton(" Open ")
@@ -307,16 +308,18 @@ class FileBrowser(QDialog):
         else:
             self.OpenButton.setEnabled(True)
 
+    def new_path_text(self, new_path):
+        self.last_path_text = str(new_path)
+        print("new_path = ", self.last_path_text)
+
     def done_requesting(self, lst_dir):
         self.lst_vw.enter_list(lst_in = lst_dir)
         self.status_label.setText(" ")
         self.label_pos = -1
 
-
         self.imp_dir_path.setText(
             str(self.curr_path)
         )
-
 
         self.refresh_sorted1()
         self.try_2_kill_thread()
@@ -359,18 +362,15 @@ class FileBrowser(QDialog):
                 self.close()
 
         except TypeError:
+            print("working on path text: ", self.last_path_text)
+            if self.curr_path != self.last_path_text:
+                self.build_content(self.last_path_text)
 
-            print("self.imp_dir_path.text= ", self.imp_dir_path.text())
-
-            if self.only_dir:
+            elif self.only_dir:
                 self.file_or_dir_selected.emit(
                     self.curr_path, True
                 )
                 self.close()
-
-            else:
-                print("no file selected yet")
-                self.build_content(str(self.imp_dir_path.text()) + "/")
 
             self.OpenButton.setEnabled(True)
 
