@@ -22,12 +22,17 @@ class ini_data(object):
 
         logging.info("win_exe = " + str(win_exe))
 
+        global ini_pth
+        ini_pth = init_param["init_path"]
+
     def get_win_exe(self):
         return win_exe
 
     def get_ext_4_win(self):
         return ext_4_win
 
+    def get_ini_path(self):
+        return ini_pth
 
 
 if __name__ == "__main__":

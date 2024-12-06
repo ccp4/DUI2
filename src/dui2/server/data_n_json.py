@@ -351,17 +351,34 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
     elif uni_cmd[0] == "get_dir_ls":
         #TODO rethink if << get_dir_ls >> should be called just << dir_ls >>
         #and consequently go elsewhere
-        try:
-            curr_path = uni_cmd[1].replace("/", os.sep)
-            f_name_list =  sorted(os.listdir(curr_path))
-            dict_list = []
-            for f_name in f_name_list:
-                f_path = curr_path + f_name
-                f_isdir = os.path.isdir(f_path)
-                file_dict = {"fname": f_name, "isdir":f_isdir}
-                dict_list.append(file_dict)
 
-            return_list = dict_list
+        try:
+            reqt_path = str(uni_cmd[1].replace("/", os.sep))
+
+            data_init = ini_data()
+            ini_path = str(data_init.get_ini_path())
+
+
+            if reqt_path[0:len(ini_path)] == ini_path:
+                f_name_list =  sorted(os.listdir(reqt_path))
+                dict_list = []
+                for f_name in f_name_list:
+                    f_path = reqt_path + f_name
+                    f_isdir = os.path.isdir(f_path)
+                    file_dict = {"fname": f_name, "isdir":f_isdir}
+                    dict_list.append(file_dict)
+
+                return_list = dict_list
+
+            else:
+                print(
+                    "Not allowing get_dir_ls >> ", reqt_path,
+                    " when ini_path =", ini_path
+                )
+                err_msg = "permission denied by Dui2 server err catch, " + \
+                "attempt to open not allowed path, not sending file list"
+                logging.info(err_msg)
+                return_list = []
 
         except FileNotFoundError:
             err_msg = "file not found err catch, not sending file list"
