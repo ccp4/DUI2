@@ -176,7 +176,10 @@ class req_dir_ls(QThread):
     def __init__(self, show_hidden = False, curr_path = None):
         super(req_dir_ls, self).__init__()
         self.show_hidden = show_hidden
-        self.curr_path = curr_path
+        if curr_path[-1] != "/":
+            curr_path += "/"
+
+        self.curr_path = str(curr_path)
 
     def run(self):
         cmd = {"nod_lst":"", "cmd_str":["get_dir_ls", self.curr_path]}
@@ -200,8 +203,6 @@ class req_dir_ls(QThread):
             lst_dir = []
 
         self.ended.emit(lst_dir)
-
-
 
 
 class FileBrowser(QDialog):
@@ -350,7 +351,7 @@ class FileBrowser(QDialog):
     def open_file(self):
         try:
             if self.current_file["isdir"]:
-                self.build_content(self.current_file["path"] + "/")
+                self.build_content(self.current_file["path"])
 
             elif self.only_dir:
                 self.file_or_dir_selected.emit(

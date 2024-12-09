@@ -132,12 +132,17 @@ class Browser(object):
 
 
         elif uni_cmd == "get_dir_ls":
+
+            # FIXME
+            # add here the same filter that data_n_json.py
+            # have with reqt_path for security
+
             try:
-                curr_path = cmd_lst[1].replace("/", os.sep)
-                f_name_list =  os.listdir(curr_path)
+                reqt_path = cmd_lst[1].replace("/", os.sep)
+                f_name_list =  os.listdir(reqt_path)
                 dict_list = []
                 for f_name in f_name_list:
-                    f_path = curr_path + f_name
+                    f_path = reqt_path + f_name
                     f_isdir = os.path.isdir(f_path)
                     file_dict = {"fname": f_name, "isdir":f_isdir}
                     dict_list.append(file_dict)
