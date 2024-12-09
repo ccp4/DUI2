@@ -371,7 +371,7 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
                     return_list = dict_list
 
                 except NotADirectoryError:
-                    print("Not ADirectory Err Catch")
+                    print("Not A Directory Err Catch")
                     return_list = []
 
             else:

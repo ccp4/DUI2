@@ -24,6 +24,16 @@ class ini_data(object):
 
         global ini_pth
         ini_pth = init_param["init_path"]
+        if ini_pth == None:
+            if init_param["windows_exe"].lower() == "true":
+                ini_pth = "c:\\"
+
+            else:
+                ini_pth = "/"
+
+            msg_txt = "\n NOT GIVEN init_path \n using " + ini_pth
+            logging.info(msg_txt)
+            print(msg_txt)
 
     def get_win_exe(self):
         return win_exe
