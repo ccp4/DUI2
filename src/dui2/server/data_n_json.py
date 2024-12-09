@@ -356,24 +356,28 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
             reqt_path = str(uni_cmd[1].replace("/", os.sep))
 
             data_init = ini_data()
-            ini_path = str(data_init.get_ini_path())
+            init_path = str(data_init.get_ini_path())
 
+            if reqt_path[0:len(init_path)] == init_path:
+                try:
+                    f_name_list =  sorted(os.listdir(reqt_path))
+                    dict_list = []
+                    for f_name in f_name_list:
+                        f_path = reqt_path + f_name
+                        f_isdir = os.path.isdir(f_path)
+                        file_dict = {"fname": f_name, "isdir":f_isdir}
+                        dict_list.append(file_dict)
 
-            if reqt_path[0:len(ini_path)] == ini_path:
-                f_name_list =  sorted(os.listdir(reqt_path))
-                dict_list = []
-                for f_name in f_name_list:
-                    f_path = reqt_path + f_name
-                    f_isdir = os.path.isdir(f_path)
-                    file_dict = {"fname": f_name, "isdir":f_isdir}
-                    dict_list.append(file_dict)
+                    return_list = dict_list
 
-                return_list = dict_list
+                except NotADirectoryError:
+                    print("Not ADirectory Err Catch")
+                    return_list = []
 
             else:
                 print(
                     "Not allowing get_dir_ls >> ", reqt_path,
-                    " when ini_path =", ini_path
+                    " when init_path =", init_path
                 )
                 err_msg = "permission denied by Dui2 server err catch, " + \
                 "attempt to open not allowed path, not sending file list"

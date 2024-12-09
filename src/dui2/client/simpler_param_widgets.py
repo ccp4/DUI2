@@ -393,6 +393,7 @@ class ImportWidget(QWidget):
 
     def set_selection(self, str_select, isdir):
         logging.info("isdir(set_selection) =" + str(isdir))
+        print("str_select =", str_select)
         if str_select != "":
             self.dir_selected = isdir
             if self.dir_selected:
@@ -411,6 +412,8 @@ class ImportWidget(QWidget):
 
                     elif self.rad_but_img_file.isChecked():
                         file_path_str = build_template(str_select)[1]
+
+                print("file_path_str =", file_path_str)
 
                 self.imp_txt.setText(file_path_str)
 

@@ -185,18 +185,23 @@ class req_dir_ls(QThread):
         )
         os_listdir = lst_req.result_out()
         lst_dir = []
-        for file_dict in os_listdir:
-            f_name = file_dict["fname"]
-            f_isdir = file_dict["isdir"]
-            if f_name[0] != "." or self.show_hidden:
-                f_path = self.curr_path + f_name
-                lst_dir.append(
-                    {
-                        "name": f_name, "isdir":  f_isdir, "path": f_path
-                    }
-                )
+        try:
+            for file_dict in os_listdir:
+                f_name = file_dict["fname"]
+                f_isdir = file_dict["isdir"]
+                if f_name[0] != "." or self.show_hidden:
+                    f_path = self.curr_path + f_name
+                    lst_dir.append(
+                        {
+                            "name": f_name, "isdir":  f_isdir, "path": f_path
+                        }
+                    )
+        except TypeError:
+            lst_dir = []
 
         self.ended.emit(lst_dir)
+
+
 
 
 class FileBrowser(QDialog):
