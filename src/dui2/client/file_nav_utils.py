@@ -99,6 +99,14 @@ class PathButtons(QWidget):
         + os.sep + "root.png"
         self._root_icon.addFile(root_icon_path, mode = QIcon.Normal)
 
+        tmp_lab = QLabel("dummy text")
+        p_size = tmp_lab.font().pointSize()
+        self._curr_dir_font = QFont()
+        self._curr_dir_font.setPointSize(p_size + 3)
+        self._curr_dir_font.setBold(True)
+        self._curr_dir_font.setUnderline(True)
+
+
     def update_list(self, new_list):
 
         for single_widget in self.lst_butt:
@@ -122,10 +130,14 @@ class PathButtons(QWidget):
             self.main_h_lay.addWidget(new_butt)
 
             new_lab = QLabel(">")
+
+
             self.lst_butt.append(new_lab)
             self.main_h_lay.addWidget(new_lab)
 
         new_lab = QLabel(new_list[-1])
+        new_lab.setFont(self._curr_dir_font)
+
         self.lst_butt.append(new_lab)
         self.main_h_lay.addWidget(new_lab)
 
@@ -277,7 +289,14 @@ class FileBrowser(QDialog):
     def build_paren_list(self):
         parents_list = [self.ini_path[:-1]]
         rest_of_path = self.curr_path[len(self.ini_path):]
-        for single_dir in rest_of_path.split("/")[:-1]:
+        try:
+            if rest_of_path[-1] == "/":
+                rest_of_path = rest_of_path[:-1]
+
+        except IndexError:
+            rest_of_path = ""
+
+        for single_dir in rest_of_path.split("/"):
             parents_list.append(single_dir)
 
         self.path_bar.update_list(parents_list)
