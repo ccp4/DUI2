@@ -334,19 +334,18 @@ class FileBrowser(QDialog):
             self.OpenButton.setEnabled(True)
 
     def new_path_text(self, new_path):
-        self.last_path_text = str(new_path)
-        print("new_path = ", self.last_path_text)
+        self.typed_path = str(new_path)
+        print("new_path = ", self.typed_path)
 
     def done_requesting(self, lst_dir):
         self.lst_vw.enter_list(lst_in = lst_dir)
         self.status_label.setText(" ")
         self.label_pos = -1
         self.refresh_sorted1()
-
         self.imp_dir_path.setText(
             str(self.curr_path)
         )
-
+        self.typed_path = None
         self.try_2_kill_thread()
 
     def refresh_sorted1(self):
@@ -366,41 +365,39 @@ class FileBrowser(QDialog):
         self.imp_dir_path.setText(
             str(self.current_file["path"])
         )
+        self.typed_path = None
 
     def open_file(self):
-        try:
-            if self.current_file["isdir"]:
-                self.build_content(self.current_file["path"])
+        if self.typed_path != None:
+            self.build_content(self.typed_path)
 
-            elif self.only_dir:
-                self.select_done.emit(
-                    self.curr_path, True
-                )
+        else:
+            try:
+                if self.current_file["isdir"]:
+                    self.build_content(self.current_file["path"])
+
+                elif self.only_dir:
+                    self.select_done.emit(
+                        self.curr_path, True
+                    )
+                    self.OpenButton.setEnabled(True)
+                    self.close()
+
+                else:
+                    self.select_done.emit(
+                        self.current_file["path"], self.only_dir
+                    )
+                    self.OpenButton.setEnabled(True)
+                    self.close()
+
+            except TypeError:
+                if self.only_dir:
+                    self.select_done.emit(
+                        self.curr_path, True
+                    )
+                    self.close()
+
                 self.OpenButton.setEnabled(True)
-                self.close()
-
-            else:
-                self.select_done.emit(
-                    self.current_file["path"], self.only_dir
-                )
-                self.OpenButton.setEnabled(True)
-                self.close()
-
-            tmp_off = '''
-
-                elif self.curr_path != self.last_path_text:
-                    self.build_content(self.last_path_text)
-
-            '''
-
-        except TypeError:
-            if self.only_dir:
-                self.select_done.emit(
-                    self.curr_path, True
-                )
-                self.close()
-
-            self.OpenButton.setEnabled(True)
 
     def try_2_kill_thread(self):
         try:
