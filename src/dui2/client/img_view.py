@@ -1715,7 +1715,7 @@ class MainImgViewObject(QObject):
             self.window, path_in = init_path, only_dir = False
         )
         self.open_widget.resize(self.open_widget.size() * 2)
-        self.open_widget.file_or_dir_selected.connect(self.set_selection)
+        self.open_widget.select_done.connect(self.set_selection)
 
 
 def main(par_def = None):

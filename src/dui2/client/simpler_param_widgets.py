@@ -462,7 +462,7 @@ class ImportWidget(QWidget):
                 parent = self, path_in = init_path, only_dir = only_dir_bool
             )
             self.open_widget.resize(self.open_widget.size() * 2)
-            self.open_widget.file_or_dir_selected.connect(self.set_selection)
+            self.open_widget.select_done.connect(self.set_selection)
 
     def reset_pars(self):
         self.do_emit = False

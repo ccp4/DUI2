@@ -183,10 +183,10 @@ class PathBar(QWidget):
             self.clicked_up_dir.emit(next_path)
 
 
-class req_dir_ls(QThread):
+class ReqDirList(QThread):
     ended = Signal(list)
     def __init__(self, show_hidden = False, curr_path = None):
-        super(req_dir_ls, self).__init__()
+        super(ReqDirList, self).__init__()
         self.show_hidden = show_hidden
         if curr_path[-1] != "/":
             curr_path += "/"
@@ -218,7 +218,7 @@ class req_dir_ls(QThread):
 
 
 class FileBrowser(QDialog):
-    file_or_dir_selected = Signal(str, bool)
+    select_done = Signal(str, bool)
     def __init__(self, parent = None, path_in = "/", only_dir = False):
         super(FileBrowser, self).__init__(parent)
         self.setWindowTitle("Open IMGs")
@@ -312,7 +312,7 @@ class FileBrowser(QDialog):
         self.build_paren_list()
         show_hidden = self.show_hidden_check.isChecked()
         self.try_2_kill_thread()
-        self.refresh_qthread = req_dir_ls(
+        self.refresh_qthread = ReqDirList(
             show_hidden = show_hidden, curr_path = self.curr_path
         )
         self.refresh_qthread.ended.connect(self.done_requesting)
@@ -341,12 +341,12 @@ class FileBrowser(QDialog):
         self.lst_vw.enter_list(lst_in = lst_dir)
         self.status_label.setText(" ")
         self.label_pos = -1
+        self.refresh_sorted1()
 
         self.imp_dir_path.setText(
             str(self.curr_path)
         )
 
-        self.refresh_sorted1()
         self.try_2_kill_thread()
 
     def refresh_sorted1(self):
@@ -373,26 +373,29 @@ class FileBrowser(QDialog):
                 self.build_content(self.current_file["path"])
 
             elif self.only_dir:
-                self.file_or_dir_selected.emit(
+                self.select_done.emit(
                     self.curr_path, True
                 )
                 self.OpenButton.setEnabled(True)
                 self.close()
 
             else:
-                self.file_or_dir_selected.emit(
+                self.select_done.emit(
                     self.current_file["path"], self.only_dir
                 )
                 self.OpenButton.setEnabled(True)
                 self.close()
 
-        except TypeError:
-            print("working on path text: ", self.last_path_text)
-            if self.curr_path != self.last_path_text:
-                self.build_content(self.last_path_text)
+            tmp_off = '''
 
-            elif self.only_dir:
-                self.file_or_dir_selected.emit(
+                elif self.curr_path != self.last_path_text:
+                    self.build_content(self.last_path_text)
+
+            '''
+
+        except TypeError:
+            if self.only_dir:
+                self.select_done.emit(
                     self.curr_path, True
                 )
                 self.close()
