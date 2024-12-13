@@ -982,10 +982,12 @@ class TreeDirScene(QGraphicsScene):
             for pos, node in enumerate(self.nod_lst):
                 my_x, my_y = self.get_coords(pos, -1)
                 if node["stp_stat"] == "H":
-                    new_ico = self.addPixmap(self.show_icon)
+                    new_ico = self.addPixmap(self.hide_icon)
+                    #new_ico = self.addPixmap(self.show_icon)
 
                 else:
-                    new_ico = self.addPixmap(self.hide_icon)
+                    new_ico = self.addPixmap(self.show_icon)
+                    #new_ico = self.addPixmap(self.hide_icon)
 
                 new_ico.setPos(
                     right_x - self.f_width * 4.6,

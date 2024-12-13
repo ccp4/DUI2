@@ -188,8 +188,12 @@ class ReqDirList(QThread):
     def __init__(self, show_hidden = False, curr_path = None):
         super(ReqDirList, self).__init__()
         self.show_hidden = show_hidden
-        if curr_path[-1] != "/":
-            curr_path += "/"
+        try:
+            if curr_path[-1] != "/":
+                curr_path += "/"
+
+        except IndexError:
+            curr_path = "/"
 
         self.curr_path = str(curr_path)
 
