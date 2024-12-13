@@ -351,8 +351,8 @@ def main(par_def = None, connection_out = None):
                     http_daemon.serve_forever()
 
                 except KeyboardInterrupt:
-                    print("interrupted with keyboard, shild event")
-                    logging.info("caling server_close()")
+                    print("interrupted with keyboard, child event")
+                    logging.info("calling server_close()")
                     http_daemon.server_close()
                     break
 

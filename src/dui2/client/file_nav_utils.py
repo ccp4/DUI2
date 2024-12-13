@@ -335,7 +335,6 @@ class FileBrowser(QDialog):
 
     def new_path_text(self, new_path):
         self.typed_path = str(new_path)
-        print("new_path = ", self.typed_path)
 
     def done_requesting(self, lst_dir):
         self.lst_vw.enter_list(lst_in = lst_dir)
