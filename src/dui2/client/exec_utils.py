@@ -528,13 +528,20 @@ class CommandParamControl:
         for lst_num in range(len(self.m_cmd_lst)):
             str_out = str(self.m_cmd_lst[lst_num])
             for par in self.par_lst[lst_num]:
-                if par["name"] == "":
-                    par_str = " " + par["value"]
+                if par["value"] == "":
+                    print(
+                        "NOT adding parameter <<", par["name"],
+                        ">> as it has no value"
+                    )
 
                 else:
-                    par_str = " " + par["name"] + "=" + par["value"]
+                    if par["name"] == "":
+                        par_str = " " + par["value"]
 
-                str_out += par_str
+                    else:
+                        par_str = " " + par["name"] + "=" + par["value"]
+
+                    str_out += par_str
 
             if self.custm_param is not None:
                 str_out += " " + str(self.custm_param)
