@@ -27,11 +27,9 @@ import os, logging
 
 from PySide2.QtCore import *
 from PySide2.QtWidgets import *
-#from PySide2 import QtUiTools
 from PySide2.QtGui import *
 
 def choice_if_decimal(num_in):
-
     str_f = "{:6.2f}".format(num_in)
     if str_f[-3:] == ".00":
         str_out = str_f[0:-3]
@@ -144,7 +142,6 @@ def ops_list_from_json(json_data = None):
 
 class ReindexTable(QTableWidget):
     opt_signal = Signal(int)
-
     def __init__(self, parent = None):
         super(ReindexTable, self).__init__(parent)
 
@@ -152,16 +149,11 @@ class ReindexTable(QTableWidget):
 
         self.v_sliderBar = self.verticalScrollBar()
         self.h_sliderBar = self.horizontalScrollBar()
-
         #self.tmp_sel = None
-
         sys_font = QFont()
         self.sys_font_point_size = sys_font.pointSize()
-        # self.show()
-
         self.set_colours(True)
         self.setShowGrid(True)
-
 
     def set_colours(self, regular_colours):
         if regular_colours:
@@ -174,16 +166,12 @@ class ReindexTable(QTableWidget):
 
     def opt_clicked(self, row, col):
         logging.info("Solution clicked = " + str(row))
-
         v_sliderValue = self.v_sliderBar.value()
         h_sliderValue = self.h_sliderBar.value()
-
         self.del_opts_lst()
         self.add_opts_lst(lst_labels=self.list_labl, selected_pos=row)
-
         self.v_sliderBar.setValue(v_sliderValue)
         self.h_sliderBar.setValue(h_sliderValue)
-
         self.opt_pick(row)
 
     def opt_pick(self, row):
@@ -214,17 +202,13 @@ class ReindexTable(QTableWidget):
 
         n_row = len(self.list_labl)
         n_col = len(self.list_labl[0])
-
         self.setRowCount(n_row)
         self.setColumnCount(n_col - 1)
-
         alpha_str = " " + u"\u03B1" + " "
         beta_str = " " + u"\u03B2" + " "
         gamma_str = " " + u"\u03B3" + " "
-
         low_delta_str = u"\u03B4"
         delta_max_str = "max " + low_delta_str
-
         header_label_lst = [
             delta_max_str,
             "rmsd",
@@ -304,7 +288,6 @@ def get_label_from_str_list(log_data):
         if single_line[:6] == "+-----":
             end_num = num
             break
-
 
     lst_str = log_data[ini_num:end_num]
     full_label_str = ""

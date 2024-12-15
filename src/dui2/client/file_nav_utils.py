@@ -34,6 +34,7 @@ def f_key(dic_in):
     #return dic_in['name']
     return dic_in['isdir']
 
+
 def sort_dict_list(lst_in):
     lst_out = sorted(lst_in, key=f_key)
     return lst_out
@@ -106,9 +107,7 @@ class PathButtons(QWidget):
         self._curr_dir_font.setBold(True)
         self._curr_dir_font.setUnderline(True)
 
-
     def update_list(self, new_list):
-
         for single_widget in self.lst_butt:
             single_widget.deleteLater()
             self.main_h_lay.removeWidget(single_widget)
@@ -130,8 +129,6 @@ class PathButtons(QWidget):
             self.main_h_lay.addWidget(new_butt)
 
             new_lab = QLabel(">")
-
-
             self.lst_butt.append(new_lab)
             self.main_h_lay.addWidget(new_lab)
 
@@ -165,7 +162,6 @@ class PathBar(QWidget):
         self.back_dir_butt.clicked.connect(self.back_one_dir)
         main_h_layout.addWidget(self.back_dir_butt)
         self.par_dir = None
-
         self.setLayout(main_h_layout)
         self.setFixedHeight(self.height() * 2.6)
 
@@ -261,7 +257,6 @@ class FileBrowser(QDialog):
         main_v_layout.addWidget(self.lst_vw)
 
         low_h_layout = QHBoxLayout()
-        #low_h_layout.addStretch()
 
         self.label_pos = -1
         timer = QTimer(self)
@@ -331,7 +326,6 @@ class FileBrowser(QDialog):
                 self.label_pos = 1
 
             str_4_label = double_str[self.label_pos:self.label_pos + 9]
-
             self.status_label.setText(str_4_label)
 
         else:

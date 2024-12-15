@@ -61,7 +61,6 @@ def _get_all_direct_layout_widget_children(parent):
 class DefaultComboBox(QComboBox):
     """A ComboBox initialised with a list of items and keeps track of which one
     is default"""
-
     def __init__(self, local_path, items, default_index = 0):
         super(DefaultComboBox, self).__init__()
         self.local_path = local_path
@@ -75,9 +74,7 @@ class DefaultComboBox(QComboBox):
 
 class SimpleParamTab(QWidget):
     """Base class shared by all simple parameter tabs"""
-
     item_changed = Signal(str, str, int)
-
     def clearLayout(self, layout):
         if layout is not None:
             while layout.count():
@@ -172,7 +169,6 @@ class SimpleParamTab(QWidget):
         sender = self.sender()
         str_value = sender.text()
         str_path = str(sender.local_path)
-
         self.do_emit_signal(str_path, str_value)
 
     def set_ed_pars(self):
@@ -306,14 +302,11 @@ class ImportWidget(QWidget):
         super(ImportWidget, self).__init__(parent)
         self.do_emit = True
         self.dir_selected = None
-
         self.runner_handler = parent
-
         data_init = ini_data()
         self.run_local = data_init.get_if_local()
         self.win_exe = data_init.get_win_exe()
         print("win_exe =", self.win_exe)
-
         sys_font = QFont()
         font_point_size = sys_font.pointSize()
         self.imp_txt = QLineEdit()
@@ -445,7 +438,6 @@ class ImportWidget(QWidget):
             )
             dic_str = lst_req.result_out()
             init_path = dic_str[0]
-
             if(
                 self.rad_but_template.isChecked() or
                 self.rad_but_img_file.isChecked()
@@ -468,9 +460,7 @@ class ImportWidget(QWidget):
         self.check_rot_axs.setChecked(False)
         self.dist_text_in.setText("Auto")
         self.check_shadow.setChecked(False)
-
         self.rad_but_img_file.setChecked(True)
-
         if not self.run_local:
             self.rad_but_sys_diag.setEnabled(False)
 
@@ -480,7 +470,6 @@ class ImportWidget(QWidget):
 
         else:
             self.rad_but_dui_diag.setChecked(True)
-
 
         self.do_emit = True
 
@@ -557,7 +546,6 @@ class ImportWidget(QWidget):
     def remove_one_param(self, par_str):
         ini_txt = str(self.imp_extra_txt.text())
         lst_pars_ini = ini_txt.split(" ")
-
         lst_par_end = []
         for par in lst_pars_ini:
             if par[0:len(par_str)] != par_str:
@@ -629,7 +617,6 @@ class SplitWidget(QWidget):
     dials.split_experiments command
     """
     all_items_changed = Signal(list)
-
     def __init__(self, parent=None):
         super(SplitWidget, self).__init__()
         self.do_emit = True
@@ -639,7 +626,6 @@ class SplitWidget(QWidget):
 
     def build_pars(self):
         main_box = QVBoxLayout()
-
         hbox_lay_by_detector = QHBoxLayout()
         label_by_detector = QLabel("By detector")
         hbox_lay_by_detector.addWidget(label_by_detector)
@@ -649,7 +635,6 @@ class SplitWidget(QWidget):
         self.box_by_detector.currentIndexChanged.connect(self.update_par_dect)
         hbox_lay_by_detector.addWidget(self.box_by_detector)
         main_box.addLayout(hbox_lay_by_detector)
-
         hbox_lay_by_wavelength = QHBoxLayout()
         label_by_wavelength = QLabel("By wavelength")
         hbox_lay_by_wavelength.addWidget(label_by_wavelength)
@@ -659,7 +644,6 @@ class SplitWidget(QWidget):
         self.box_by_wavelength.currentIndexChanged.connect(self.update_par_wavl)
         hbox_lay_by_wavelength.addWidget(self.box_by_wavelength)
         main_box.addLayout(hbox_lay_by_wavelength)
-
         self.main_v_layout.addLayout(main_box)
         self.main_v_layout.addStretch()
 
@@ -677,8 +661,6 @@ class SplitWidget(QWidget):
 
     def update_all_pars(self, tup_lst_pars):
         logging.info("update_all_pars(SplitWidget)" + str(tup_lst_pars))
-
-        #self.pars_def = {"by_detector": "False", "by_wavelength": "False"}
         for tup_par in tup_lst_pars[0]:
             if tup_par["name"] == "by_detector":
                 self.pars_def["by_detector"] = tup_par["value"]
@@ -841,16 +823,13 @@ class MaskWidget(QWidget):
                     str_cmd_param += "," + str(new_y_end)
                     str_cmd_param += "," + str(p_num)
                     inner_lst_pair = [str_cmd_nam, str_cmd_param]
-
                     self.comp_list.append(inner_lst_pair)
 
             else:
                 extra_str_param = ""
                 y_orig = 0
-
                 new_y_ini = int(comp_dict["y_ini"]) - y_orig
                 new_y_end = int(comp_dict["y_end"]) - y_orig
-
                 str_cmd_nam = "untrusted.rectangle"
                 str_cmd_param =        str(comp_dict["x_ini"])
                 str_cmd_param += "," + str(comp_dict["x_end"])
@@ -861,18 +840,14 @@ class MaskWidget(QWidget):
                 self.comp_list.append(inner_lst_pair)
 
         elif comp_dict["type"] == "circ":
-
             tmp_yc = float(comp_dict["y_c"])
             tmp_xc = float(comp_dict["x_c"])
             tmp_r =  float(comp_dict["r"])
             if comp_dict["i23_multipanel"]:
-
                 if comp_dict["x_c"] > 0 and comp_dict["x_c"] < x_max:
                     logging.info("Centre INside panel(regarding X)")
-
                     y_min = tmp_yc - tmp_r + panel_border
                     y_max = tmp_yc + tmp_r
-
                     pan_ini = int(y_min / panel_height)
                     pan_end = int(y_max / panel_height) + 1
 
@@ -891,23 +866,18 @@ class MaskWidget(QWidget):
                     logging.info(
                         "pan_ini, pan_end=" + str(pan_ini) + " " + str(pan_end)
                     )
-
                     for panel_number in range(pan_ini, pan_end):
                         logging.info("panel_number =" + str(panel_number))
                         new_yc = int(tmp_yc - panel_number * panel_height)
                         extra_str_param = "," + str(panel_number)
-
                         str_cmd_nam = "multipanel.circle"
                         str_cmd_param =        str(comp_dict["x_c"])
                         str_cmd_param += "," + str(new_yc)
                         str_cmd_param += "," + str(int(tmp_r))
-
                         str_cmd_param += extra_str_param
                         str_cmd_param = str(str_cmd_param)
                         inner_lst_pair = [str_cmd_nam, str_cmd_param]
-
                         logging.info("inner_lst_pair =" + str(inner_lst_pair))
-
                         self.comp_list.append(inner_lst_pair)
 
                 else:
@@ -917,16 +887,13 @@ class MaskWidget(QWidget):
                     for panel_number in range(24):
                         y_up_panel = panel_number * panel_height
                         y_dw_panel = (panel_number + 1) * panel_height - panel_border
-
                         dy1 = tmp_yc - y_up_panel
                         dy2 = tmp_yc - y_dw_panel
-
                         d_sqr_lst = []
                         d_sqr_lst.append(float(dx1 * dx1 + dy1 * dy1))
                         d_sqr_lst.append(float(dx1 * dx1 + dy2 * dy2))
                         d_sqr_lst.append(float(dx2 * dx2 + dy1 * dy1))
                         d_sqr_lst.append(float(dx2 * dx2 + dy2 * dy2))
-
                         min_dist_sqr = d_sqr_lst[0]
                         for d_sqr in d_sqr_lst[1:]:
                             if d_sqr < min_dist_sqr:
@@ -935,35 +902,27 @@ class MaskWidget(QWidget):
                         if min_dist_sqr <  tmp_r * tmp_r:
                             new_yc = int(tmp_yc - panel_number * panel_height)
                             extra_str_param = "," + str(panel_number)
-
                             str_cmd_nam = "multipanel.circle"
                             str_cmd_param =        str(comp_dict["x_c"])
                             str_cmd_param += "," + str(new_yc)
                             str_cmd_param += "," + str(int(tmp_r))
-
                             str_cmd_param += extra_str_param
                             str_cmd_param = str(str_cmd_param)
                             inner_lst_pair = [str_cmd_nam, str_cmd_param]
-
                             logging.info("inner_lst_pair =" + str(inner_lst_pair))
-
                             self.comp_list.append(inner_lst_pair)
 
             else:
                 new_yc = int(tmp_yc)
                 extra_str_param = ""
-
                 str_cmd_nam = "untrusted.circle"
                 str_cmd_param =        str(comp_dict["x_c"])
                 str_cmd_param += "," + str(new_yc)
                 str_cmd_param += "," + str(comp_dict["r"])
-
                 str_cmd_param += extra_str_param
                 str_cmd_param = str(str_cmd_param)
                 inner_lst_pair = [str_cmd_nam, str_cmd_param]
-
                 logging.info("inner_lst_pair =" + str(inner_lst_pair))
-
                 self.comp_list.append(inner_lst_pair)
 
         elif comp_dict["type"] == "poly":
@@ -989,7 +948,6 @@ class MaskWidget(QWidget):
     def build_full_list(self):
         first_list = list(self.comp_list)
         first_list.append(["output.mask", "tmp_mask.pickle"])
-
         full_list = [
             first_list,
             [
@@ -1201,9 +1159,7 @@ class FilterWidget(QWidget):
         ))
 
         self.main_vbox = QVBoxLayout()
-
         self.main_vbox.addWidget(self.cmd_label)
-
         self.setLayout(self.main_vbox)
 
     def upate_label(self):
@@ -1411,9 +1367,7 @@ class SsxIndexSimplerParamTab(SimpleParamTab):
         qf.addRow(space_group_label, space_group_line)
         qf.addRow(unit_cell_label, unit_cell_line)
         self.main_v_layout.addLayout(qf)
-
         self.main_v_layout.addStretch()
-
         self.lst_var_widg = _get_all_direct_layout_widget_children(
             self.main_v_layout
         )
@@ -1441,19 +1395,16 @@ class RefineBravaiSimplerParamTab(SimpleParamTab):
             "tukey", "sauter_poon"], default_index=1)
 
         self.detec_fix = QCheckBox("Set detector.fix=distance")
-
         box_outlier_algorithm.currentIndexChanged.connect(
             self.combobox_changed
         )
         self.detec_fix.stateChanged.connect(self.detec_fix_changed)
-
         hbox_lay_outlier_algorithm.addWidget(box_outlier_algorithm)
         self.main_v_layout.addLayout(hbox_lay_outlier_algorithm)
         self.main_v_layout.addWidget(
             QLabel("\n Electron diffraction parameter")
         )
         self.main_v_layout.addWidget(self.detec_fix)
-
         self.main_v_layout.addStretch()
 
         self.lst_var_widg = []
@@ -1523,10 +1474,8 @@ class RefineSimplerParamTab(SimpleParamTab):
         box_scan_varying.currentIndexChanged.connect(self.combobox_changed)
         hbox_lay_scan_varying.addWidget(box_scan_varying)
         self.main_v_layout.addLayout(hbox_lay_scan_varying)
-
         hbox_lay_outlier_algorithm = QHBoxLayout()
         label_outlier_algorithm = QLabel("Outlier rejection algorithm")
-
         hbox_lay_outlier_algorithm.addWidget(label_outlier_algorithm)
         box_outlier_algorithm = DefaultComboBox(
             "refinement.reflections.outlier.algorithm", ["null", "Auto", "mcd",
@@ -1534,17 +1483,14 @@ class RefineSimplerParamTab(SimpleParamTab):
         box_outlier_algorithm.currentIndexChanged.connect(
             self.combobox_changed
         )
-
         hbox_lay_outlier_algorithm.addWidget(box_outlier_algorithm)
         self.main_v_layout.addLayout(hbox_lay_outlier_algorithm)
-
         self.detec_fix = QCheckBox("Set detector.fix=distance")
         self.detec_fix.stateChanged.connect(self.detec_fix_changed)
         self.main_v_layout.addWidget(
             QLabel("\n Electron diffraction parameter")
         )
         self.main_v_layout.addWidget(self.detec_fix)
-
         self.main_v_layout.addStretch()
 
         self.lst_var_widg = []
@@ -1604,7 +1550,6 @@ class  IntegrateSimplerParamTab(SimpleParamTab):
         self.setLayout(self.main_v_layout)
 
     def build_pars(self):
-
         hbox_d_min = QHBoxLayout()
         label_d_min = QLabel("High resolution limit")
         hbox_d_min.addWidget(label_d_min)
@@ -1815,7 +1760,6 @@ class ScaleSimplerParamTab(SimpleParamTab):
         hbox_lay_mod.addWidget(box_mod)
         self.main_v_layout.addLayout(hbox_lay_mod)
 
-
         hbox_lay_wgh_opt_err = QHBoxLayout()
         label_wgh_opt_err = QLabel("Error optimisation model")
         hbox_lay_wgh_opt_err.addWidget(label_wgh_opt_err)
@@ -1823,8 +1767,8 @@ class ScaleSimplerParamTab(SimpleParamTab):
             ["basic", "None"])
         box_wgh_opt_err.currentIndexChanged.connect(self.combobox_changed)
         hbox_lay_wgh_opt_err.addWidget(box_wgh_opt_err)
-        self.main_v_layout.addLayout(hbox_lay_wgh_opt_err)
 
+        self.main_v_layout.addLayout(hbox_lay_wgh_opt_err)
         self.main_v_layout.addStretch()
 
         self.lst_var_widg = []
@@ -1975,7 +1919,6 @@ class ExportWidget(QWidget):
         self.imp_extra_txt = QLineEdit()
         self.imp_extra_txt.textChanged.connect(self.line_changed)
 
-
         self.downl_but = QPushButton("Download/save hklout file")
         self.downl_but.clicked.connect(self.download_hklout)
         self.progress_label = QLabel("...")
@@ -2035,7 +1978,6 @@ class ExportWidget(QWidget):
 
             lst_par.append(["mmcif.hklout", str_value])
 
-
         elif data_format == "mosflm":
             lst_par.append(["mosflm.directory", str_value])
 
@@ -2071,14 +2013,11 @@ class ExportWidget(QWidget):
 
     def is_scale_parent1(self, scale_in_parents):
         # This function should be called from main QObject after reset_pars
-
         self.imp_extra_txt.setText("format=mtz")
         if scale_in_parents:
-            #self.exp_txt.setText("scaled.mtz")
             self.exp_txt.setText("scaled")
 
         else:
-            #self.exp_txt.setText("integrated.mtz")
             self.exp_txt.setText("integrated")
 
         self.line_changed()
@@ -2121,7 +2060,6 @@ class ExportWidget(QWidget):
         self.file_name = fileResul[0]
         if self.file_name != '':
             self.progress_label.setText("Requesting mtz file ...")
-
             data_init = ini_data()
             uni_url = data_init.get_url()
             cmd = {"nod_lst":[self.cur_nod_num], "cmd_str":["get_mtz"]}
@@ -2148,7 +2086,6 @@ class ExportWidget(QWidget):
         #except TypeError:
         #    logging.info("Type Err catch (save_mtz_on_disc)")
         #    #file_out.write(bytes(mtz_info))
-
         file_out.close()
 
     def restore_p_label(self):
@@ -2173,7 +2110,6 @@ class MergeWidget(QWidget):
         state_label.setFont(
             QFont("Courier", font_point_size + 1, QFont.Bold)
         )
-
         self.exp_txt = QLineEdit()
         self.exp_txt.textChanged.connect(self.line_changed)
         self.downl_but = QPushButton("Download/save .mtz file")

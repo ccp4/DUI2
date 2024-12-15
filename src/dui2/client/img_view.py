@@ -189,7 +189,6 @@ class LoadSliceImage(QThread):
 
     def run(self):
         logging.info("loading slice of image ")
-
         my_cmd_lst = [
             "gis", str(self.img_num),
             "inv_scale=" + str(self.inv_scale),
@@ -276,10 +275,8 @@ class ImgGraphicsScene(QGraphicsScene):
                 self.addRect(rectangle1, self.overlay_pen1)
 
                 if refl["x_me_out"]:
-
                     xp = refl["x"] + refl["width"] / 2.0
                     yp = refl["y"] + refl["height"] / 2.0
-
                     self.addLine(
                         xp - tick_size, yp - tick_size,
                         xp + tick_size, yp + tick_size,
@@ -328,7 +325,6 @@ class ImgGraphicsScene(QGraphicsScene):
                 if pict[0] == 'untrusted.rectangle':
                     tmp_width = lst_num[1] - lst_num[0]
                     tmp_height = lst_num[3] - lst_num[2]
-
                     x_rect_1 = lst_num[0]
                     y_rect_1 = lst_num[2]
                     rectangle = QRectF(
@@ -336,18 +332,14 @@ class ImgGraphicsScene(QGraphicsScene):
                     )
                     self.addRect(rectangle, self.overlay_pen1)
 
-
                 elif pict[0] == 'untrusted.circle':
-
                     x_rect_1 = lst_num[0] - lst_num[2]
                     y_rect_1 = lst_num[1] - lst_num[2]
                     side = 2 * lst_num[2]
-
                     rectangle = QRectF(
                         x_rect_1, y_rect_1, side, side
                     )
                     self.addEllipse(rectangle, self.overlay_pen1)
-
 
                 elif pict[0] == 'untrusted.polygon':
                     siz_n_blk = (len(lst_num) - 2) / 2
@@ -362,23 +354,19 @@ class ImgGraphicsScene(QGraphicsScene):
                 elif pict[0] == 'multipanel.rectangle':
                     tmp_width = lst_num[1] - lst_num[0]
                     tmp_height = lst_num[3] - lst_num[2]
-
                     x_rect_1 = lst_num[0]
                     y_rect_1 = lst_num[2]
                     y_rect_1 += 213 * lst_num[4]
-
                     rectangle = QRectF(
                         x_rect_1, y_rect_1, tmp_width, tmp_height
                     )
                     self.addRect(rectangle, self.overlay_pen1)
 
                 elif pict[0] == 'multipanel.circle':
-
                     x_rect_1 = lst_num[0] - lst_num[2]
                     y_rect_1 = lst_num[1] - lst_num[2]
                     side = 2 * lst_num[2]
                     y_rect_1 += 213 * lst_num[3]
-
                     rectangle = QRectF(
                         x_rect_1, y_rect_1, side, side
                     )
@@ -389,7 +377,6 @@ class ImgGraphicsScene(QGraphicsScene):
 
     def __call__(self, new_pixmap, refl_list1, new_temp_mask):
         self.refl_list = refl_list1
-
         if self.parent_obj.overlay == "blue":
             overlay_colour1 = Qt.blue
 
@@ -402,14 +389,11 @@ class ImgGraphicsScene(QGraphicsScene):
         else:
             overlay_colour1 = Qt.red
 
-
         self.overlay_pen1 = QPen(
             overlay_colour1, 2.5, Qt.SolidLine,
             Qt.RoundCap, Qt.RoundJoin
         )
-
         self.overlay_pen1.setCosmetic(True)
-
         self.temp_mask = new_temp_mask
         self.my_pix_map = new_pixmap
         self.draw_ref_rect()
@@ -455,7 +439,6 @@ class ImgGraphicsScene(QGraphicsScene):
                 n_text.setPos(refl["x"], refl["y"])
                 n_text.setPen(self.overlay_pen1)
 
-
             except (UnboundLocalError, TypeError, AttributeError):
                 not_neded_to_log = ''' logging.info(
                     "not found the nearer reflection " +
@@ -489,19 +472,15 @@ class PopDisplayMenu(QMenu):
         self.i_min = int(self.my_parent.i_min_max[0])
         self.i_max = int(self.my_parent.i_min_max[1])
         self.palette = self.my_parent.palette
-
         palette_group = QGroupBox("Palette tuning")
         palette_box_layout = QVBoxLayout()
-
         self.i_min_line = QLineEdit(str(self.i_min))
         self.i_min_line.textChanged.connect(self.i_min_changed)
         self.i_max_line = QLineEdit(str(self.i_max))
         self.i_max_line.textChanged.connect(self.i_max_changed)
-
         i_min_max_layout = QHBoxLayout()
         i_min_max_layout.addWidget(self.i_min_line)
         i_min_max_layout.addWidget(self.i_max_line)
-
         palette_box_layout.addLayout(i_min_max_layout)
 
         self.palette_select = QComboBox()
@@ -523,11 +502,9 @@ class PopDisplayMenu(QMenu):
         self.overlay_select.currentIndexChanged.connect(
             self.overlay_changed_by_user
         )
-
         palette_box_layout.addWidget(QLabel("  ... "))
         palette_box_layout.addWidget(self.palette_select)
         palette_box_layout.addWidget(self.overlay_select)
-
         palette_group.setLayout(palette_box_layout)
 
         # hkl Viewing Tool
@@ -538,34 +515,27 @@ class PopDisplayMenu(QMenu):
         self.chk_box_show.setChecked(True)
         self.chk_box_show.stateChanged.connect(self.sig_new_redraw)
         ref_box_layout.addWidget(self.chk_box_show)
-
         self.rad_but_near_hkl = QRadioButton("Nearest HKL")
         self.rad_but_near_hkl.clicked.connect(self.sig_new_redraw)
         self.rad_but_near_hkl.setChecked(True)
         ref_box_layout.addWidget(self.rad_but_near_hkl)
-
         self.rad_but_all_hkl = QRadioButton("All HKLs")
         self.rad_but_all_hkl.clicked.connect(self.sig_new_redraw)
         ref_box_layout.addWidget(self.rad_but_all_hkl)
-
         self.rad_but_none_hkl = QRadioButton("No HKL")
         self.rad_but_none_hkl.clicked.connect(self.sig_new_redraw)
         ref_box_layout.addWidget(self.rad_but_none_hkl)
-
         info_group.setLayout(ref_box_layout)
 
         # Find vs Predictions
         find_vs_predict_group = QGroupBox("Reflection Type")
         fnd_vs_prd_layout = QVBoxLayout()
-
         self.rad_but_obs = QRadioButton("Observation")
         self.rad_but_obs.clicked.connect(self.sig_new_refl)
         self.rad_but_obs.setChecked(True)
         fnd_vs_prd_layout.addWidget(self.rad_but_obs)
-
         self.rad_but_pred = QRadioButton("Prediction      View Depth")
         self.rad_but_pred.clicked.connect(self.sig_new_refl)
-
         self.z_dept_combo = QSpinBox(self)
         self.z_dept_combo.setMinimum(1)
         self.z_dept_combo.setMaximum(7)
@@ -575,9 +545,7 @@ class PopDisplayMenu(QMenu):
         predict_h_layout.addWidget(self.rad_but_pred)
         predict_h_layout.addWidget(self.z_dept_combo)
         fnd_vs_prd_layout.addLayout(predict_h_layout)
-
         find_vs_predict_group.setLayout(fnd_vs_prd_layout)
-
         my_main_box = QVBoxLayout()
         my_main_box.addWidget(palette_group)
         my_main_box.addWidget(info_group)
@@ -650,35 +618,28 @@ class DoImageView(QObject):
 
         data_init = ini_data()
         self.uni_url = data_init.get_url()
-
         self.l_stat = HandleLoadStatusLabel(self.main_obj)
-
         self.my_scene = ImgGraphicsScene(self)
         self.main_obj.window.imageView.setScene(self.my_scene)
         self.main_obj.window.imageView.setMouseTracking(True)
         self.set_drag_mode()
         self.set_mask_comp()
-
         res_ico_path = self.main_obj.ui_dir_path + os.sep + "resources"
-
         one_one_icon = QIcon()
         one_one_icon_path = res_ico_path + os.sep + "zoom_ono_one_ico.png"
         one_one_icon.addFile(one_one_icon_path, mode = QIcon.Normal)
         self.main_obj.window.ScaleOneOneButton.setIcon(one_one_icon)
         self.main_obj.window.ScaleOneOneButton.clicked.connect(self.OneOneScale)
-
         zoom_in_icon = QIcon()
         zoom_in_icon_path = res_ico_path + os.sep + "zoom_plus_ico.png"
         zoom_in_icon.addFile(zoom_in_icon_path, mode = QIcon.Normal)
         self.main_obj.window.ZoomInButton.setIcon(zoom_in_icon)
         self.main_obj.window.ZoomInButton.clicked.connect(self.ZoomInScale)
-
         zoom_out_icon = QIcon()
         zoom_out_icon_path = res_ico_path + os.sep + "zoom_minus_ico.png"
         zoom_out_icon.addFile(zoom_out_icon_path, mode = QIcon.Normal)
         self.main_obj.window.ZoomOutButton.setIcon(zoom_out_icon)
         self.main_obj.window.ZoomOutButton.clicked.connect(self.ZoomOutScale)
-
         self.main_obj.window.EasterEggButton.clicked.connect(self.easter_egg)
 
         data_init = ini_data()
@@ -698,15 +659,11 @@ class DoImageView(QObject):
         self.main_obj.window.DisplayButton.setMenu(self.pop_display_menu)
         self.pop_display_menu.new_i_min_max.connect(self.change_i_min_max)
         self.pop_display_menu.new_palette.connect(self.change_palette)
-
         self.pop_display_menu.new_overlay.connect(self.change_overlay)
-
         self.pop_display_menu.new_redraw.connect(self.refresh_pixel_map)
-
         self.pop_display_menu.new_ref_list.connect(
             self.request_reflection_list
         )
-
         self.my_scene.img_scale.connect(self.scale_img)
         self.my_scene.new_mouse_pos.connect(self.on_mouse_move)
         self.my_scene.mouse_pressed.connect(self.on_mouse_press)
@@ -805,7 +762,6 @@ class DoImageView(QObject):
                 json_data_lst[1], json_data_lst[2]
             )
             new_img_path = str(json_data_lst[3])
-
             self.i23_multipanel = bool(json_data_lst[5])
             logging.info("Is I23 multidetector:" + str(self.i23_multipanel))
             if(
@@ -913,7 +869,6 @@ class DoImageView(QObject):
     def after_requesting_ref_lst(self, req_tup):
         json_lst = req_tup
         self.r_list0 = []
-
         try:
             for inner_dict in json_lst:
                 self.r_list0.append(
@@ -927,7 +882,6 @@ class DoImageView(QObject):
                         "x_me_out"    : False,
                     }
                 )
-
 
             logging.info("Reflection list loaded")
 
@@ -1127,7 +1081,6 @@ class DoImageView(QObject):
 
         self.load_full_image.image_loaded.connect(self.new_full_img)
         self.load_full_image.start()
-
         self.load_full_mask_image.image_loaded.connect(self.new_full_mask_img)
         self.load_full_mask_image.start()
 
@@ -1688,9 +1641,10 @@ class MainImgViewObject(QObject):
         self.dir_selected = isdir
         self.window.IntroPathEdit.setText(self.nod_or_path)
         my_cmd_lst = ["get_template", "0"]
-        my_cmd = {"path"    : self.nod_or_path,
-                  "cmd_str" : my_cmd_lst}
-
+        my_cmd = {
+            "path"    : self.nod_or_path,
+            "cmd_str" : my_cmd_lst
+        }
         lst_req = get_req_json_dat(
             params_in = my_cmd, main_handler = self.my_handler
         )
@@ -1725,7 +1679,4 @@ def main(par_def = None):
     app = QApplication(sys.argv)
     m_obj = MainImgViewObject(parent = app)
     sys.exit(app.exec_())
-
-
-
 

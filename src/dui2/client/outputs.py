@@ -43,7 +43,6 @@ class LoadFiles(QThread):
         tmp_dir = None, main_handler = None
     ):
         super(LoadFiles, self).__init__()
-        #self.uni_url = unit_URL
         self.cur_nod_num = cur_nod_num
         self.files_path_n_nod_num = {
             "tmp_exp_path"  :tmp_dir + os.sep + "req_file.expt",
@@ -55,7 +54,6 @@ class LoadFiles(QThread):
     def run(self):
         my_cmd = {"nod_lst" : [self.cur_nod_num],
                   "cmd_str" : ["get_experiments_file"]}
-
         req_shot = get_request_shot(
             params_in = my_cmd, main_handler = self.my_handler
         )
@@ -77,7 +75,6 @@ class LoadFiles(QThread):
 
         my_cmd = {"nod_lst" : [self.cur_nod_num],
                   "cmd_str" : ["get_reflections_file"]}
-
         self.req_r_time = get_request_real_time(
             params_in = my_cmd, main_handler = self.my_handler
         )
@@ -126,7 +123,6 @@ class LaunchReciprocalLattice(QThread):
             self.exp_path, self.ref_path,
         ]
         try:
-
             if self.win_exe:
                 cmd_lst[0] += self.ext_str
                 print(
@@ -461,7 +457,6 @@ class DoLoadHTML(QObject):
                     fil_obj = self.loading_html
                 )
 
-
                 self.l_stat.load_started()
                 try:
                     cmd = {
@@ -473,7 +468,6 @@ class DoLoadHTML(QObject):
                     req_shot = get_request_shot(
                         params_in = cmd, main_handler = self.my_handler
                     )
-
                     req_file = req_shot.result_out()
                     if req_file == None:
                         full_file = self.not_avail_html
@@ -567,18 +561,14 @@ class ShowLog(QObject):
     def __init__(self, parent = None):
         super(ShowLog, self).__init__(parent)
         self.main_obj = parent
-
         data_init = ini_data()
         self.uni_url = data_init.get_url()
-
         sys_font = QFont()
         font_point_size = sys_font.pointSize()
         my_font = QFont("Courier", font_point_size, QFont.Bold)
         my_font.setFixedPitch(True)
-
         self.main_obj.window.incoming_text.setFont(my_font)
         self.main_obj.window.incoming_text.setCurrentFont(my_font)
-
         self.reset_mem()
         self.set_colours(True)
 
@@ -694,7 +684,6 @@ class ShowLog(QObject):
 
         else:
             txt2show = ["not runnable node"]
-
 
         self.main_obj.window.incoming_text.clear()
         self.main_obj.window.incoming_text.setTextColor(self.green_color)

@@ -55,20 +55,13 @@ from dui2.client.simpler_param_widgets import MergeWidget
 from dui2.client.simpler_param_widgets import OptionalWidget
 from dui2.client.simpler_param_widgets import SplitWidget
 
-
-
-
-
 from dui2.client.simpler_param_widgets import (
     FindspotsSimplerParameterTab, IndexSimplerParamTab,
     SsxIndexSimplerParamTab, SsxIntegrateSimplerParamTab,
     RefineBravaiSimplerParamTab, RefineSimplerParamTab,
     IntegrateSimplerParamTab, SymmetrySimplerParamTab,
-
-    CosymSimplerParamTab,
-
-    ScaleSimplerParamTab, CombineExperimentSimplerParamTab,
-
+    CosymSimplerParamTab, ScaleSimplerParamTab,
+    CombineExperimentSimplerParamTab,
 )
 from dui2.shared_modules._version import __version__
 
@@ -663,7 +656,6 @@ class MainObject(QObject):
         resp = lst_req.result_out()
         logging.info("aboutToQuit ... 2")
 
-
     def open_tutorial(self):
         try:
             webbrowser.open("https://github.com/ccp4/DUI2/wiki")
@@ -919,9 +911,7 @@ class MainObject(QObject):
     def on_node_click_w_right(self, node_numb):
         self.clicked_4_navigation(node_numb)
         logging.info("on_node_click_w_right" + str(self.curr_nod_num))
-
         msg_str = False
-
         try:
             if(
                 self.server_nod_lst[self.curr_nod_num]["status"] == "Succeeded" or
@@ -958,8 +948,6 @@ class MainObject(QObject):
 
             dlg.setWindowTitle("Local clipboard use")
             dlg.exec_()
-
-
 
     def on_hide_click(self, node_numb):
         if node_numb in self.lst2exl:
@@ -1049,10 +1037,8 @@ class MainObject(QObject):
             self.icon_path_cl = self.ui_dir_path + os.sep + \
                 "resources" + os.sep + "new_layout_clear.png"
             self.spc_ico = QPixmap(self.icon_path_cl).scaled(QSize(38, 42))
-
             self.tmp_lab_ico = QLabel()
             self.tmp_lab_ico.setPixmap(self.spc_ico)
-
             self.tmp_hlay.addWidget(self.tmp_lab_ico)
             self.nxt_2do_layout.addLayout(self.tmp_hlay)
 
@@ -1083,7 +1069,6 @@ class MainObject(QObject):
                     nxt_butt.clicked.connect(self.nxt_clicked)
                     nxt_butt.setIcon(self.param_widgets[bt_str]["icon"])
                     nxt_butt.setIconSize(QSize(38, 42))
-
                     self.nxt_2do_layout.addWidget(nxt_butt, stretch = 8)
 
         except IndexError:
@@ -1112,7 +1097,6 @@ class MainObject(QObject):
 
     def nxt_key_clicked(self, str_key):
         logging.info("nxt_clicked ... str_key: " + str_key)
-
         if str_key == "reindex":
             cmd = {
                 "nod_lst":[self.curr_nod_num],
@@ -1291,7 +1275,6 @@ class MainObject(QObject):
             logging.info("\n Updating parameters from ...new_node")
 
         new_params = tmp_cmd_par.get_all_params()
-
         if new_params:
             self.param_widgets[self.curr_widg_key]["simple"].update_all_pars(
                 new_params
@@ -1461,9 +1444,7 @@ class MainObject(QObject):
     def req_stop(self):
         logging.info("req_stop")
         nod_lst = [str(self.curr_nod_num)]
-        #cmd = {"nod_lst":nod_lst, "cmd_lst":[["stop"]]}
         cmd = {"nod_lst":nod_lst, "cmd_lst":["stop"]}
-
         post_thread = post_req_w_output(
             cmd_in = cmd, main_handler = self.runner_handler
         )
@@ -1474,14 +1455,11 @@ class MainObject(QObject):
     def reset_graph_triggered(self):
         reset_Y_N_dialg = QMessageBox()
         reset_Y_N_dialg.setWindowTitle("Confirm reset")
-
         txt_str = "\n Are you sure you want to reset \n this is not reversible"
-
         reset_Y_N_dialg.setText(txt_str)
         reset_Y_N_dialg.setStandardButtons(QMessageBox.Yes | QMessageBox.Cancel)
         reset_Y_N_dialg.setIcon(QMessageBox.Question)
         button = reset_Y_N_dialg.exec()
-
         if button == QMessageBox.Yes:
             logging.info("reset_graph_triggered(QObject)")
             cmd = {"nod_lst":"", "cmd_lst":["reset_graph"]}
@@ -1546,11 +1524,9 @@ class MainObject(QObject):
 
     def update_after_split(self, lst_new_nods):
         logging.info("respose_split =" + str(lst_new_nods))
-
         do_pred_n_rept = bool(
             self.window.RunPedictAndReportCheckBox.checkState()
         )
-
         if do_pred_n_rept:
             cmd = {
                 "nod_lst":[lst_new_nods], "cmd_lst":["run_predict_n_report"]

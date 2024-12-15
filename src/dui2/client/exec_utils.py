@@ -35,7 +35,6 @@ class get_request_shot(QObject):
         if main_handler == None:
             data_init = ini_data()
             uni_url = data_init.get_url()
-
             req = requests.get(uni_url, stream = True, params = params_in)
             compresed = req.content
             try:
@@ -60,7 +59,6 @@ class get_request_shot(QObject):
         logging.info("type(data_comming) = " + str(type(data_comming)))
         self.to_return = data_comming
         self.done = True
-
 
     def result_out(self):
         while self.done == False:
@@ -125,7 +123,6 @@ class get_req_json_dat(QObject):
         #logging.info("data_comming =", data_comming)
         self.to_return = data_comming
 
-
     def result_out(self):
         return self.to_return ##### search here for the all_local_all_ram issue
 
@@ -141,7 +138,6 @@ class get_request_real_time(QThread):
         self.params = params_in
         self.my_handler = main_handler
         logging.info("params_in(get_request_real_time) got here" + str(params_in))
-
 
     def run(self):
         if self.my_handler == None:
@@ -159,7 +155,6 @@ class get_request_real_time(QThread):
                     block_size = max_size
 
                 logging.info("block_size =" + str(block_size))
-
                 downloaded_size = 0
                 compresed = bytes()
                 for data in req_get.iter_content(block_size):

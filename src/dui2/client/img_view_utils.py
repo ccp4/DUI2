@@ -23,9 +23,7 @@ copyright (c) CCP4 - DLS
 
 
 import numpy as np
-import zlib, time, requests, logging
-
-#FIXME: do we need zlib here?
+import time, requests, logging
 
 from dui2.client.init_firts import ini_data
 from dui2.client.exec_utils import get_request_shot

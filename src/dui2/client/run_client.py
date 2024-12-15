@@ -27,7 +27,6 @@ from PySide2.QtCore import *
 from PySide2.QtWidgets import *
 
 from dui2.client.q_object import MainObject
-
 from dui2.client.init_firts import ini_data
 from dui2.client.exec_utils import get_req_json_dat
 
@@ -47,7 +46,6 @@ def main(par_def = None):
     logging.info(
         'get_if_local =' + str(data_init.get_if_local()) + 'get_url =' + uni_url
     )
-
     cmd = {"nod_lst":[""], "cmd_str":["display"]}
     dummy_nod_lst = None
     n_secs = 3

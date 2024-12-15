@@ -68,14 +68,17 @@ widgets_defs = {
         "icon"          : "resources/find_spots.png",
         "main_cmd"      :["dials.find_spots"],
         "nxt_widg_lst"  :[
-            "index", "filter_reflections", "combine_experiments", "ssx_index", "optional"
+            "index", "filter_reflections", "combine_experiments",
+            "ssx_index", "optional"
         ]
     },
     "filter_reflections" : {
         "tooltip"       : "dials.filter_reflections ...",
         "icon"          : "resources/filter_reflections.png",
         "main_cmd"      :["dials.filter_reflections"],
-        "nxt_widg_lst"  :["index", "combine_experiments", "ssx_index", "optional"]
+        "nxt_widg_lst"  :[
+            "index", "combine_experiments", "ssx_index", "optional"
+        ]
     },
     "index" : {
         "tooltip"       : "dials.index ...",
@@ -151,8 +154,6 @@ widgets_defs = {
             "split_experiments", "optional"
         ]
     },
-
-
     "cosym" : {
         "tooltip"       : "dials.cosym ...",
         "icon"          : "resources/cosym.png",
@@ -162,8 +163,6 @@ widgets_defs = {
             "split_experiments", "optional"
         ]
     },
-
-
     "scale" : {
         "tooltip"       : "dials.scale ...",
         "icon"          : "resources/scale.png",
@@ -316,9 +315,7 @@ class MyQComboBox(QComboBox):
 
 
 class AdvancedParameters(QWidget):
-
     item_changed = Signal(str, str)
-
     def __init__(self, parent = None):
         super(AdvancedParameters, self).__init__(parent)
         self.do_emit = True
@@ -331,9 +328,7 @@ class AdvancedParameters(QWidget):
         self.my_scroll_area = scroll_parent
 
     def build_pars(self, lst_phil_obj, h_box_search):
-
         h_box_search.addWidget(QLabel("Search:"))
-
         self.search_input = QLineEdit()
         self.search_input.textChanged.connect(self.search_changed)
         h_box_search.addWidget(self.search_input)
@@ -347,7 +342,6 @@ class AdvancedParameters(QWidget):
         self.norm_labl_font = QFont(
             "Courier", self.font_point_size, QFont.Bold
         )
-
         for data_info in self.lst_par_line:
             label_str = "    " * data_info["indent"]
             label_str += data_info["name"]
@@ -356,7 +350,6 @@ class AdvancedParameters(QWidget):
             new_label.setFont(self.norm_labl_font)
             data_info["Label"] = new_label
             new_hbox = QHBoxLayout()
-
             try:
                 default = data_info["default"]
 
@@ -379,7 +372,6 @@ class AdvancedParameters(QWidget):
                 new_hbox.addWidget(new_label)
 
                 new_combo = MyQComboBox()
-
                 found_none = False
                 for opt_itm in data_info["opt_lst"]:
                     new_combo.addItem(opt_itm)
@@ -428,7 +420,6 @@ class AdvancedParameters(QWidget):
 
     def update_param(self, param_in, value_in):
         logging.info("\n update_param (Advanced)" + str(param_in) + str(value_in))
-
         for widget in self.children():
             widget_path = None
             if isinstance(widget, QLineEdit):
@@ -500,6 +491,7 @@ class AdvancedParameters(QWidget):
         self.num_fnd_widg += 1
         if self.num_fnd_widg >= len(self.lst_found_widg):
             self.num_fnd_widg = 0
+
         try:
             self.my_scroll_area.ensureWidgetVisible(
                 self.lst_found_widg[self.num_fnd_widg]
@@ -571,6 +563,7 @@ def draw_quadratic_bezier_3_points(
                 p3x - col_size * arrow_head_W, p3y + row_size * arrow_head_H,
                 lin_pen
             )
+
         else:
             scene_obj.addLine(
                 p3x, p3y,
@@ -742,24 +735,19 @@ class TreeDirScene(QGraphicsScene):
                 stp_siz, mode = Qt.SmoothTransformation
             )
 
-
-
         hide_show_siz = QSize(self.f_width * 3.5, self.f_height * 1.2)
-
         hide_icon_path = ui_dir_path + os.sep + "resources" \
                          + os.sep + "hide_branch.png"
         hid_px_map = QPixmap(hide_icon_path)
         self.hide_icon = hid_px_map.scaled(
             hide_show_siz, mode = Qt.SmoothTransformation
         )
-
         show_icon_path = ui_dir_path + os.sep + "resources" \
                          + os.sep + "show_branch.png"
         show_px_map = QPixmap(show_icon_path)
         self.show_icon = show_px_map.scaled(
             hide_show_siz, mode = Qt.SmoothTransformation
         )
-
         self.set_colours(True)
         self.set_sharp_turns(True)
         self.set_arrowhead(True)
@@ -796,9 +784,7 @@ class TreeDirScene(QGraphicsScene):
             self.font_blue_brush = QBrush(Qt.blue, Qt.SolidPattern)
             self.font_red_brush = QBrush(Qt.darkRed, Qt.SolidPattern)
             self.font_green_brush = QBrush(Qt.darkGreen, Qt.SolidPattern)
-
             self.font_gray_brush = QBrush(Qt.gray, Qt.SolidPattern)
-
             self.cursor_brush = QBrush(Qt.cyan, Qt.SolidPattern)
             self.first_gray_brush = QBrush(Qt.lightGray, Qt.SolidPattern)
             self.another_gray_brush = QBrush(Qt.white, Qt.SolidPattern)
@@ -812,11 +798,9 @@ class TreeDirScene(QGraphicsScene):
             self.arrow_blue_pen = QPen(
                 Qt.blue, 1.6, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
             )
-
             self.arrow_gray_pen = QPen(
                 Qt.gray, 1.6, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
             )
-
             self.gray_pen = QPen(
                 Qt.gray, 2, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
             )
@@ -828,9 +812,7 @@ class TreeDirScene(QGraphicsScene):
             self.font_blue_brush = QBrush(Qt.cyan, Qt.SolidPattern)
             self.font_red_brush = QBrush(Qt.red, Qt.SolidPattern)
             self.font_green_brush = QBrush(Qt.green, Qt.SolidPattern)
-
             self.font_gray_brush = QBrush(Qt.darkCyan, Qt.SolidPattern)
-
             self.cursor_brush = QBrush(Qt.blue, Qt.SolidPattern)
             self.first_gray_brush = QBrush(Qt.gray, Qt.SolidPattern)
             self.another_gray_brush = QBrush(Qt.darkGray, Qt.SolidPattern)
@@ -902,7 +884,6 @@ class TreeDirScene(QGraphicsScene):
         x_ms = event.scenePos().x()
         y_ms = event.scenePos().y()
         ms_b = event.button()
-
         node_numb = None
         min_d = None
         for num, nod in enumerate(self.lst_nod_pos):
@@ -954,10 +935,7 @@ class TreeDirScene(QGraphicsScene):
                 len(self.nod_lst),
                 max_indent * 1.2 + max_cmd_len * 0.3 + 7
             )
-
-            #testing size of << hide >> icon
             right_x += self.f_width * 3.8
-
             left_x, up_y = self.get_coords(-1, -1)
             dx = right_x - left_x
             dy = down_y - up_y
@@ -983,11 +961,9 @@ class TreeDirScene(QGraphicsScene):
                 my_x, my_y = self.get_coords(pos, -1)
                 if node["stp_stat"] == "H":
                     new_ico = self.addPixmap(self.hide_icon)
-                    #new_ico = self.addPixmap(self.show_icon)
 
                 else:
                     new_ico = self.addPixmap(self.show_icon)
-                    #new_ico = self.addPixmap(self.hide_icon)
 
                 new_ico.setPos(
                     right_x - self.f_width * 4.6,
@@ -1099,18 +1075,21 @@ class TreeDirScene(QGraphicsScene):
 
                 my_coord_x ,my_coord_y = self.get_coords(pos, -0.6)
                 n_text = self.addSimpleText(str(node["number"]))
-                n_text.setPos(my_coord_x - self.f_width * 0.7,
-                            my_coord_y - self.f_height * 0.67)
+                n_text.setPos(
+                    my_coord_x - self.f_width * 0.7,
+                    my_coord_y - self.f_height * 0.67
+                )
                 n_text.setBrush(brush_col)
 
                 my_coord_x ,my_coord_y = self.get_coords(
                     pos, max_indent * 1.2 + max_cmd_len * 0.3 + 6.1
                 )
                 n_text = self.addSimpleText(str(node["number"]))
-                n_text.setPos(my_coord_x - self.f_width * 0.7,
-                            my_coord_y - self.f_height * 0.67)
+                n_text.setPos(
+                    my_coord_x - self.f_width * 0.7,
+                    my_coord_y - self.f_height * 0.67
+                )
                 n_text.setBrush(brush_col)
-
                 stat_text = self.addSimpleText(str(node["stp_stat"]))
                 stat_text.setPos(
                     self.f_width * 0.5,
@@ -1155,14 +1134,12 @@ class TreeDirScene(QGraphicsScene):
         self, nod_lst_in = [], curr_nod_num = 0,
         new_node = None, lst2exl_in = []
     ):
-
         tmp_local_lst = copy_lst_nodes(nod_lst_in)
         self.nod_lst_2_paint = add_ready_node(tmp_local_lst, new_node)
         lst_str = self.tree_obj(
             lst_nod = self.nod_lst_2_paint, lst2exl = lst2exl_in
         )
         lst_2d_dat = self.tree_obj.get_tree_data()
-
         self.nod_lst = lst_2d_dat
         self.curr_nod_num = curr_nod_num
         self.draw_all()
