@@ -386,7 +386,7 @@ class CmdNode(object):
                 inner_lst[0] += self.ext_str
             '''
 
-            inner_lst[0] = shutil.which(inner_lst[0])
+            inner_lst[0] = str(shutil.which(inner_lst[0]))
 
             print("\n Running >> ", inner_lst)
             try:
@@ -539,7 +539,7 @@ class CmdNode(object):
                 rep_lst_dat_in[0] += self.ext_str
             '''
 
-            rep_lst_dat_in[0] = shutil.which(rep_lst_dat_in[0])
+            rep_lst_dat_in[0] = str(shutil.which(rep_lst_dat_in[0]))
 
             rep_proc = subprocess.Popen(
                 rep_lst_dat_in,
@@ -581,7 +581,7 @@ class CmdNode(object):
             pred_lst_dat_in[0] += self.ext_str
         '''
 
-        rep_lst_dat_in[0] = shutil.which(rep_lst_dat_in[0])
+        pred_lst_dat_in[0] = str(shutil.which(pred_lst_dat_in[0]))
 
         lst_pred_out = []
         pred_proc = subprocess.Popen(

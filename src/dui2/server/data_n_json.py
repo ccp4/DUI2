@@ -632,7 +632,7 @@ def get_help_list(cmd_str):
                 inner_lst[0] += ext_str
             '''
 
-            inner_lst[0] = shutil.which(inner_lst[0])
+            inner_lst[0] = str(shutil.which(inner_lst[0]))
 
             print(
                 "capturing std output from >> " +
