@@ -65,7 +65,7 @@ Next install `git`:
 
 Finally clone the DUI2 repository (pre-release branch):
 
-       git clone -b v2024.12.13  https://github.com/ccp4/DUI2.git
+       git clone -b v2024.12.17  https://github.com/ccp4/DUI2.git
 
 
 

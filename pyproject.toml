@@ -1,6 +1,6 @@
 [project]
 name = "dui2"
-version = "2024.12.13"
+version = "2024.12.17"
 description = "New multi-tasking version of Dui"
 requires-python = ">=3.7"
 dependencies = [
