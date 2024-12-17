@@ -22,7 +22,7 @@ copyright (c) CCP4 - DLS
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 import json, os, glob, logging
-import subprocess
+import subprocess, shutil
 import importlib
 import libtbx.phil
 
@@ -627,8 +627,12 @@ def get_help_list(cmd_str):
         my_cmd_hlp = ["None(ModuleNotFoundError)"]
         inner_lst = ["dials." + cmd_str , "-h"]
         try:
+            code_2_remove = '''
             if win_exe:
                 inner_lst[0] += ext_str
+            '''
+
+            inner_lst[0] = shutil.which(inner_lst[0])
 
             print(
                 "capturing std output from >> " +

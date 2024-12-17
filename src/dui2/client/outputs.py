@@ -130,6 +130,8 @@ class LaunchReciprocalLattice(QThread):
                      + str(cmd_lst)
                 )
 
+            cmd_lst[0] = shutil.which(cmd_lst[0])
+
             self.my_proc = subprocess.Popen(
                 cmd_lst, shell = False,
                 stdout = subprocess.PIPE,

@@ -381,8 +381,12 @@ class CmdNode(object):
         is_valid_command = find_if_in_list(inner_lst[0])
         FilNotFonErr = False
         if is_valid_command:
+            code_2_remove = '''
             if self.win_exe:
                 inner_lst[0] += self.ext_str
+            '''
+
+            inner_lst[0] = shutil.which(inner_lst[0])
 
             print("\n Running >> ", inner_lst)
             try:
@@ -530,8 +534,12 @@ class CmdNode(object):
             self.n_Broken_Pipes += add_log_line(new_line, self.nod_req)
 
             lst_rep_out = []
+            code_2_remove = '''
             if self.win_exe:
                 rep_lst_dat_in[0] += self.ext_str
+            '''
+
+            rep_lst_dat_in[0] = shutil.which(rep_lst_dat_in[0])
 
             rep_proc = subprocess.Popen(
                 rep_lst_dat_in,
@@ -568,8 +576,12 @@ class CmdNode(object):
         new_line = "Generating Predictions"
         self.n_Broken_Pipes += add_log_line(new_line, self.nod_req)
 
+        code_2_remove = '''
         if self.win_exe:
             pred_lst_dat_in[0] += self.ext_str
+        '''
+
+        rep_lst_dat_in[0] = shutil.which(rep_lst_dat_in[0])
 
         lst_pred_out = []
         pred_proc = subprocess.Popen(
