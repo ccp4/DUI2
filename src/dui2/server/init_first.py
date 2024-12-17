@@ -11,14 +11,22 @@ class ini_data(object):
         init_param = format_utils.get_par(par_def, sys.argv[1:])
         logging.info("init_param =" + str(init_param))
         global win_exe
-        global ext_4_win
+
         if init_param["windows_exe"].lower() == "true":
             win_exe = True
-            ext_4_win = init_param["extension_4_windows"]
 
         else:
             win_exe = False
+
+        code_2_remove = '''
+        global ext_4_win
+
+        if win_exe == True:
+            ext_4_win = init_param["extension_4_windows"]
+
+        else:
             ext_4_win = None
+        '''
 
         logging.info("win_exe = " + str(win_exe))
 
@@ -38,8 +46,10 @@ class ini_data(object):
     def get_win_exe(self):
         return win_exe
 
+        code_2_remove = '''
     def get_ext_4_win(self):
         return ext_4_win
+        '''
 
     def get_ini_path(self):
         return ini_pth

@@ -115,7 +115,9 @@ class LaunchReciprocalLattice(QThread):
         self.ref_path = ref_path
         data_init = ini_data()
         self.win_exe = data_init.get_win_exe()
+        code_2_remove = '''
         self.ext_str = data_init.get_ext_4_win()
+        '''
 
     def run(self):
         cmd_lst = [

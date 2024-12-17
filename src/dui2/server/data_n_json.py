@@ -602,7 +602,10 @@ def get_param_list(cmd_str):
 def get_help_list(cmd_str):
     data_init = ini_data()
     win_exe = data_init.get_win_exe()
+
+    code_2_remove = '''
     ext_str = data_init.get_ext_4_win()
+    '''
 
     if cmd_str == "import":
         cmd_str ="dials_import"

@@ -79,8 +79,10 @@ def main():
         #("host", "serverip"),
         ("all_local", "true"),
         ("windows_exe", win_str),
-        ("extension_4_windows", win_ext),
     )
+    code_2_remove = '''
+        ("extension_4_windows", win_ext),
+    '''
 
     pipe_server_1, pipe_server_2 = Pipe()
     prcs_serv = Process(
@@ -96,9 +98,11 @@ def main():
                 ("import_init", None),
                 ("all_local", "true"),
                 ("windows_exe", win_str),
-                ("extension_4_windows", win_ext),
         )
         run_client.main(client_par_def)
+        code_2_remove = '''
+                ("extension_4_windows", win_ext),
+        '''
 
         prcs_serv.join()
         logging.info("Closing server naturally")
