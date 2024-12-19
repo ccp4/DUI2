@@ -115,9 +115,6 @@ class LaunchReciprocalLattice(QThread):
         self.ref_path = ref_path
         data_init = ini_data()
         self.win_exe = data_init.get_win_exe()
-        code_2_remove = '''
-        self.ext_str = data_init.get_ext_4_win()
-        '''
 
     def run(self):
         cmd_lst = [
@@ -125,11 +122,6 @@ class LaunchReciprocalLattice(QThread):
             self.exp_path, self.ref_path,
         ]
         try:
-            code_2_remove = '''
-            if self.win_exe:
-                cmd_lst[0] += self.ext_str
-            '''
-
             cmd_lst[0] = str(shutil.which(cmd_lst[0]))
             print(
                 "launching reciprocal lattice viewer with: \n"

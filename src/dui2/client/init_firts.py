@@ -78,16 +78,6 @@ class ini_data(object):
         else:
             win_exe = False
 
-        code_2_remove = '''
-        global ext_4_win
-
-        if win_exe == True:
-            ext_4_win = init_param["extension_4_windows"]
-
-        else:
-            ext_4_win = None
-        '''
-
         logging.info("\n win_exe =" + str(win_exe))
 
     def set_tmp_dir(self, dir_path_in):
@@ -108,11 +98,6 @@ class ini_data(object):
 
     def get_win_exe(self):
         return win_exe
-
-        code_2_remove = '''
-    def get_ext_4_win(self):
-        return ext_4_win
-        '''
 
 
 if __name__ == "__main__":

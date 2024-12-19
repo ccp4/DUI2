@@ -602,11 +602,6 @@ def get_param_list(cmd_str):
 def get_help_list(cmd_str):
     data_init = ini_data()
     win_exe = data_init.get_win_exe()
-
-    code_2_remove = '''
-    ext_str = data_init.get_ext_4_win()
-    '''
-
     if cmd_str == "import":
         cmd_str ="dials_import"
 
@@ -630,13 +625,7 @@ def get_help_list(cmd_str):
         my_cmd_hlp = ["None(ModuleNotFoundError)"]
         inner_lst = ["dials." + cmd_str , "-h"]
         try:
-            code_2_remove = '''
-            if win_exe:
-                inner_lst[0] += ext_str
-            '''
-
             inner_lst[0] = str(shutil.which(inner_lst[0]))
-
             print(
                 "capturing std output from >> " +
                 inner_lst[0] + " " + inner_lst[1]

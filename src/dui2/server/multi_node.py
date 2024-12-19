@@ -206,10 +206,6 @@ class CmdNode(object):
             data_init = ini_data()
 
         self.win_exe = data_init.get_win_exe()
-        code_2_remove = '''
-        self.ext_str = data_init.get_ext_4_win()
-        '''
-
         self.parent_node_lst = []
         try:
             for single_parent in parent_lst_in:
@@ -388,14 +384,7 @@ class CmdNode(object):
                 full_string += " " + nxt_pars
 
             print("\n cmd (from OS shell) = ", full_string)
-
-            code_2_remove = '''
-            if self.win_exe:
-                inner_lst[0] += self.ext_str
-            '''
-
             inner_lst[0] = str(shutil.which(inner_lst[0]))
-
             print("\n Running (from Python) >> ", inner_lst)
             try:
                 self.my_proc = subprocess.Popen(
@@ -542,13 +531,7 @@ class CmdNode(object):
             self.n_Broken_Pipes += add_log_line(new_line, self.nod_req)
 
             lst_rep_out = []
-            code_2_remove = '''
-            if self.win_exe:
-                rep_lst_dat_in[0] += self.ext_str
-            '''
-
             rep_lst_dat_in[0] = str(shutil.which(rep_lst_dat_in[0]))
-
             rep_proc = subprocess.Popen(
                 rep_lst_dat_in,
                 shell = False,
@@ -583,12 +566,6 @@ class CmdNode(object):
 
         new_line = "Generating Predictions"
         self.n_Broken_Pipes += add_log_line(new_line, self.nod_req)
-
-        code_2_remove = '''
-        if self.win_exe:
-            pred_lst_dat_in[0] += self.ext_str
-        '''
-
         pred_lst_dat_in[0] = str(shutil.which(pred_lst_dat_in[0]))
 
         lst_pred_out = []
