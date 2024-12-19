@@ -383,6 +383,12 @@ class CmdNode(object):
         is_valid_command = find_if_in_list(inner_lst[0])
         FilNotFonErr = False
         if is_valid_command:
+            full_string = str(inner_lst[0])
+            for nxt_pars in inner_lst[1:]:
+                full_string += " " + nxt_pars
+
+            print("\n cmd (from OS shell) = ", full_string)
+
             code_2_remove = '''
             if self.win_exe:
                 inner_lst[0] += self.ext_str
@@ -390,7 +396,7 @@ class CmdNode(object):
 
             inner_lst[0] = str(shutil.which(inner_lst[0]))
 
-            print("\n Running >> ", inner_lst)
+            print("\n Running (from Python) >> ", inner_lst)
             try:
                 self.my_proc = subprocess.Popen(
                     inner_lst,
