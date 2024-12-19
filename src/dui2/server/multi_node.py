@@ -385,7 +385,7 @@ class CmdNode(object):
 
             print("\n cmd (from OS shell) = ", full_string)
             inner_lst[0] = str(shutil.which(inner_lst[0]))
-            print("\n Running (from Python) >> ", inner_lst)
+            print("\n Running (from Python) >> ", inner_lst, "\n")
             try:
                 self.my_proc = subprocess.Popen(
                     inner_lst,
