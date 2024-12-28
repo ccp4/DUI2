@@ -374,8 +374,7 @@ class CmdNode(object):
     def run_cmd(self, req_obj = None):
         self.nod_req = req_obj
         self.status = "Busy"
-        inner_lst = self.full_cmd_lst[-1]
-
+        inner_lst = list(self.full_cmd_lst[-1])
         is_valid_command = find_if_in_list(inner_lst[0])
         FilNotFonErr = False
         if is_valid_command:
@@ -826,18 +825,14 @@ class Runner(object):
 
         elif unalias_cmd_lst == ["history"]:
             print("Running history command")
-
-
             lst_nod = []
             for uni in self.step_list:
-                node = {
-                            "_base_dir"             :uni._base_dir,
+                lst_nod.append(
+                    {
                             "full_cmd_lst"          :uni.full_cmd_lst,
                             "_run_dir"              :uni._run_dir,
-                            "log_file_path"         :uni.log_file_path,
-                }
-                lst_nod.append(node)
-
+                    }
+                )
             return_list = lst_nod
 
         elif unalias_cmd_lst == ["closed"]:
