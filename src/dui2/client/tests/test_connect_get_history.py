@@ -43,8 +43,22 @@ if __name__ == "__main__":
             break
 
         else:
-            print("\n str(line_str) =", str(line_str))
             json_out = json.loads(line_str)
+            print("\n json_out) =", json_out)
+
+            lst_cmds = []
             for node_dict in json_out:
-                print("\n working dir =", node_dict["run_dir"])
-                print("\n list of commands =", node_dict["full_cmd_lst"])
+                lst_cmds.append("mkdir " + node_dict["run_dir"])
+                lst_cmds.append("cd " + node_dict["run_dir"])
+                for dials_cmds in node_dict["full_cmd_lst"]:
+                    cmd_line = dials_cmds[0]
+                    for param in dials_cmds[1:]:
+                        cmd_line += " " + param
+
+                    lst_cmds.append(cmd_line)
+
+            print("\n List of commands: \n")
+            for single_command in lst_cmds:
+                print(single_command)
+
+            print("\n")
