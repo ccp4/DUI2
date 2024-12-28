@@ -659,7 +659,6 @@ class Runner(object):
         root_node.set_root()
         self.step_list = [root_node]
         self.bigger_lin = 0
-        #self.lst_cmd_in = []
 
     def run_dials_command(self, cmd_dict = None, req_obj = None):
         found_duplicated = False
@@ -826,7 +825,6 @@ class Runner(object):
             return_list = [self._dir_path]
 
         elif unalias_cmd_lst == ["history"]:
-            #return_list = self.lst_cmd_in
             logging.info("history command is temporarily off")
 
         elif unalias_cmd_lst == ["closed"]:
