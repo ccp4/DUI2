@@ -829,8 +829,8 @@ class Runner(object):
             for uni in self.step_list:
                 lst_nod.append(
                     {
+                            "run_dir"              :uni._run_dir,
                             "full_cmd_lst"          :uni.full_cmd_lst,
-                            "_run_dir"              :uni._run_dir,
                     }
                 )
             return_list = lst_nod

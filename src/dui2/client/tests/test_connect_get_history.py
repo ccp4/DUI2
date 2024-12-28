@@ -43,6 +43,8 @@ if __name__ == "__main__":
             break
 
         else:
-            print('string received')
-            #print(str(line_str[:-1]))
-
+            print("\n str(line_str) =", str(line_str))
+            json_out = json.loads(line_str)
+            for node_dict in json_out:
+                print("\n working dir =", node_dict["run_dir"])
+                print("\n list of commands =", node_dict["full_cmd_lst"])
