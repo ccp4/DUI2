@@ -825,7 +825,20 @@ class Runner(object):
             return_list = [self._dir_path]
 
         elif unalias_cmd_lst == ["history"]:
-            logging.info("history command is temporarily off")
+            print("Running history command")
+
+
+            lst_nod = []
+            for uni in self.step_list:
+                node = {
+                            "_base_dir"             :uni._base_dir,
+                            "full_cmd_lst"          :uni.full_cmd_lst,
+                            "_run_dir"              :uni._run_dir,
+                            "log_file_path"         :uni.log_file_path,
+                }
+                lst_nod.append(node)
+
+            return_list = lst_nod
 
         elif unalias_cmd_lst == ["closed"]:
             return_list = ["closed received"]
