@@ -921,7 +921,7 @@ class MainObject(QObject):
                     self.server_nod_lst[self.curr_nod_num]["lst2run"]
                 )
 
-                msg_str = "Copyed:\n\n"
+                msg_str = "Copied:\n\n"
                 msg_str += str(self.local_clipboard)
                 msg_str += "\n\n to local clipboard"
 
