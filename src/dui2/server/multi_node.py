@@ -825,15 +825,25 @@ class Runner(object):
 
         elif unalias_cmd_lst == ["history"]:
             print("Running history command")
-            lst_nod = []
+
+            lst_cmds = []
             for uni in self.step_list:
-                lst_nod.append(
-                    {
-                            "run_dir"              :uni._run_dir,
-                            "full_cmd_lst"          :uni.full_cmd_lst,
-                    }
-                )
-            return_list = lst_nod
+                lst_cmds.append("mkdir " + uni._run_dir)
+                lst_cmds.append("cd " + uni._run_dir)
+                for dials_cmds in uni.full_cmd_lst:
+                    cmd_line = dials_cmds[0]
+                    for param in dials_cmds[1:]:
+                        cmd_line += " " + param
+
+                    lst_cmds.append(cmd_line)
+
+            print("\n List of commands: \n")
+            for single_command in lst_cmds:
+                print(single_command)
+
+            print("\n")
+
+            return_list = lst_cmds
 
         elif unalias_cmd_lst == ["closed"]:
             return_list = ["closed received"]
