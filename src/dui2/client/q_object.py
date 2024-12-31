@@ -589,10 +589,11 @@ class MainObject(QObject):
 
         self.parent_app.aboutToQuit.connect(self.close_event)
 
-        self.window.actionExit.triggered.connect(self.exit_triggered)
+        self.window.actionShow_History.triggered.connect(self.history_triggered)
         self.window.actionReset_Control_Graph.triggered.connect(
             self.reset_graph_triggered
         )
+        self.window.actionExit.triggered.connect(self.exit_triggered)
         self.window.actionBright_on_off.triggered.connect(
             self.bright_fonts_triggered
         )
@@ -634,6 +635,10 @@ class MainObject(QObject):
 
         self.refresh_output()
         self.tree_scene.try_draw_all()
+
+    def history_triggered(self):
+        print("\n\n history_triggered \n\n")
+
 
     def exit_triggered(self):
         logging.info("exit_triggered(QObject)")
