@@ -827,15 +827,16 @@ class Runner(object):
             print("Running history command")
 
             lst_cmds = []
-            for uni in self.step_list:
+            for pos, uni in enumerate(self.step_list):
                 lst_cmds.append("mkdir " + uni._run_dir)
-                lst_cmds.append("cd " + uni._run_dir)
-                for dials_cmds in uni.full_cmd_lst:
-                    cmd_line = dials_cmds[0]
-                    for param in dials_cmds[1:]:
-                        cmd_line += " " + param
+                if pos > 0:
+                    lst_cmds.append("cd " + uni._run_dir)
+                    for dials_cmds in uni.full_cmd_lst:
+                        cmd_line = dials_cmds[0]
+                        for param in dials_cmds[1:]:
+                            cmd_line += " " + param
 
-                    lst_cmds.append(cmd_line)
+                        lst_cmds.append(cmd_line)
 
             print("\n List of commands: \n")
             for single_command in lst_cmds:
