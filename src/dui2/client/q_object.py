@@ -640,6 +640,19 @@ class MainObject(QObject):
         print("\n\n history_triggered \n\n")
 
 
+        cmd = {"nod_lst":"", "cmd_str":["history"]}
+        lst_req = get_req_json_dat(
+            params_in = cmd, main_handler = self.runner_handler
+        )
+        json_out = lst_req.result_out()
+
+        print("\n List of commands: \n")
+        for single_command in json_out:
+            print(single_command)
+
+        print("\n\n")
+
+
     def exit_triggered(self):
         logging.info("exit_triggered(QObject)")
         msgBox  = QMessageBox()
