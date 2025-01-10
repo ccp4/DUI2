@@ -689,15 +689,33 @@ class ShowLog(QObject):
             self.main_obj.window.incoming_text.insertPlainText(sing_help_line)
 
 
-def box_4_history(main_obj):
-    cmd = {"nod_lst":"", "cmd_str":["history"]}
-    lst_req = get_req_json_dat(
-        params_in = cmd, main_handler = main_obj.runner_handler
-    )
-    json_out = lst_req.result_out()
+class History_Box(QDialog):
+    def __init__(self, parent = None):
+        super(History_Box, self).__init__(parent)
+        self.incoming_text = QTextEdit()
+        self.incoming_text.setFont(QFont("Monospace"))
 
-    print("\n List of commands: \n" + "#" * 80 + "\n")
-    for single_command in json_out:
-        print(single_command)
+        Save_Butn = QPushButton("Save ...")
+        Save_Butn.clicked.connect(self.request_history)
 
-    print("\n")
+        mainLayout = QVBoxLayout()
+        mainLayout.addWidget(self.incoming_text)
+        mainLayout.addWidget(Save_Butn)
+        self.setLayout(mainLayout)
+        self.setWindowTitle("Show history as a script")
+
+    def get_main_obj(self, parent):
+        self.main_obj = parent
+
+    def request_history(self):
+        cmd = {"nod_lst":"", "cmd_str":["history"]}
+        lst_req = get_req_json_dat(
+            params_in = cmd, main_handler = self.main_obj.runner_handler
+        )
+        json_out = lst_req.result_out()
+
+        print("\n List of commands: \n" + "#" * 80 + "\n")
+        for single_command in json_out:
+            print(single_command)
+
+        print("\n")

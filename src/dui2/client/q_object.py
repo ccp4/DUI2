@@ -35,7 +35,7 @@ from dui2.client.gui_utils import (
     find_scale_cmd, find_next_cmd, check_if_predict_n_report
 )
 from dui2.client.outputs import (
-    DoLoadHTML, ShowLog, box_4_history, HandleReciprocalLatticeView
+    DoLoadHTML, ShowLog, History_Box, HandleReciprocalLatticeView
 )
 from dui2.client.img_view import DoImageView
 from dui2.client.reindex_table import ReindexTable, get_label_from_str_list
@@ -639,7 +639,9 @@ class MainObject(QObject):
         self.tree_scene.try_draw_all()
 
     def history_triggered(self):
-        box_4_history(self)
+        self.H_Box = History_Box()
+        self.H_Box.get_main_obj(self)
+        self.H_Box.show()
 
     def exit_triggered(self):
         logging.info("exit_triggered(QObject)")
