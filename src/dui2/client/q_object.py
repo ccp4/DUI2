@@ -34,7 +34,9 @@ from dui2.client.gui_utils import (
     TreeDirScene, widgets_defs, get_widget_def_dict, make_square_srting,
     find_scale_cmd, find_next_cmd, check_if_predict_n_report
 )
-from dui2.client.outputs import DoLoadHTML, ShowLog, HandleReciprocalLatticeView
+from dui2.client.outputs import (
+    DoLoadHTML, ShowLog, box_4_history, HandleReciprocalLatticeView
+)
 from dui2.client.img_view import DoImageView
 from dui2.client.reindex_table import ReindexTable, get_label_from_str_list
 from dui2.client.exec_utils import (
@@ -637,21 +639,7 @@ class MainObject(QObject):
         self.tree_scene.try_draw_all()
 
     def history_triggered(self):
-        print("\n\n history_triggered \n\n")
-
-
-        cmd = {"nod_lst":"", "cmd_str":["history"]}
-        lst_req = get_req_json_dat(
-            params_in = cmd, main_handler = self.runner_handler
-        )
-        json_out = lst_req.result_out()
-
-        print("\n List of commands: \n")
-        for single_command in json_out:
-            print(single_command)
-
-        print("\n\n")
-
+        box_4_history(self)
 
     def exit_triggered(self):
         logging.info("exit_triggered(QObject)")

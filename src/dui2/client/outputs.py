@@ -689,3 +689,15 @@ class ShowLog(QObject):
             self.main_obj.window.incoming_text.insertPlainText(sing_help_line)
 
 
+def box_4_history(main_obj):
+    cmd = {"nod_lst":"", "cmd_str":["history"]}
+    lst_req = get_req_json_dat(
+        params_in = cmd, main_handler = main_obj.runner_handler
+    )
+    json_out = lst_req.result_out()
+
+    print("\n List of commands: \n" + "#" * 80 + "\n")
+    for single_command in json_out:
+        print(single_command)
+
+    print("\n")
