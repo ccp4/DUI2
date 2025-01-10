@@ -640,7 +640,7 @@ class MainObject(QObject):
 
     def history_triggered(self):
         self.H_Box = History_Box()
-        self.H_Box.get_main_obj(self)
+        self.H_Box.get_main_obj_n_request(self)
         self.H_Box.show()
 
     def exit_triggered(self):

@@ -696,7 +696,7 @@ class History_Box(QDialog):
         self.incoming_text.setFont(QFont("Monospace"))
 
         Save_Butn = QPushButton("Save ...")
-        Save_Butn.clicked.connect(self.request_history)
+        Save_Butn.clicked.connect(self.open_save)
 
         mainLayout = QVBoxLayout()
         mainLayout.addWidget(self.incoming_text)
@@ -704,18 +704,48 @@ class History_Box(QDialog):
         self.setLayout(mainLayout)
         self.setWindowTitle("Show history as a script")
 
-    def get_main_obj(self, parent):
+    def get_main_obj_n_request(self, parent):
         self.main_obj = parent
-
-    def request_history(self):
         cmd = {"nod_lst":"", "cmd_str":["history"]}
         lst_req = get_req_json_dat(
             params_in = cmd, main_handler = self.main_obj.runner_handler
         )
-        json_out = lst_req.result_out()
-
+        json_lst_out = lst_req.result_out()
+        self.lst_of_cmd = []
         print("\n List of commands: \n" + "#" * 80 + "\n")
-        for single_command in json_out:
+        for single_command in json_lst_out:
             print(single_command)
+            self.lst_of_cmd.append(str(single_command + "\n"))
+
+        for new_line in self.lst_of_cmd:
+            self.incoming_text.moveCursor(QTextCursor.End)
+            self.incoming_text.insertPlainText(new_line)
+
 
         print("\n")
+
+    def open_save(self):
+        print("time to save")
+        ini_file = "dials_use_history.sh"
+
+        file_path = QFileDialog.getSaveFileName(
+            self, "Download MTZ File", ini_file, "Intensity  (*.mtz)"
+        )
+        print("file_path =", file_path)
+
+        file_name = file_path[0]
+        if file_name != '':
+            print("file_name =", file_name)
+            with open(file_name, 'w', encoding="utf-8") as f:
+                for sigl_comm in self.lst_of_cmd:
+                    f.write(sigl_comm)
+
+        else:
+            print("Canceled saving")
+
+
+
+
+
+
+
