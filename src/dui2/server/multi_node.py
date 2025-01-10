@@ -68,9 +68,7 @@ def get_pair_list():
         ("gm",      "dials.generate_mask"                   ),
         ("am",      "dials.apply_mask"                      ),
         ("fd",      "dials.find_spots"                      ),
-
         ("fl",    "dials.filter_reflections"                ),
-
         ("fr",      "dials.find_rotation_axis"              ),
         ("id",      "dials.index"                           ),
         ("rb",      "dials.refine_bravais_settings"         ),
@@ -838,11 +836,13 @@ class Runner(object):
 
                         lst_cmds.append(cmd_line)
 
+            not_needed_for_now = '''
             print("\n List of commands: \n")
             for single_command in lst_cmds:
                 print(single_command)
 
             print("\n")
+            '''
 
             return_list = lst_cmds
 

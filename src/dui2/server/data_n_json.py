@@ -54,10 +54,7 @@ from dials.command_line.combine_experiments import (
 from dui2.server.img_uploader import flex_arr_2_json
 from dui2.server.init_first import ini_data
 
-#############################################################################
 from dials.command_line.cosym import phil_scope as phil_scope_cosym
-
-#############################################################################
 
 
 def spit_out(str_out = None, req_obj = None, out_type = None):
@@ -586,10 +583,7 @@ def get_param_list(cmd_str):
             "integrate_params"               :phil_scope_integrate.objects     ,
             "ssx_integrate_params"           :ssx_phil_scope_integrate.objects ,
             "symmetry_params"                :phil_scope_symmetry.objects      ,
-
-
-            "cosym_params"                    :phil_scope_cosym.objects ,
-
+            "cosym_params"                   :phil_scope_cosym.objects ,
             "scale_params"                   :phil_scope_scale.objects         ,
             "combine_experiments_params"     :phil_scope_combine_params.objects,
         }
