@@ -650,6 +650,7 @@ class Runner(object):
             self._recover_state(recovery_data)
 
         self.num_phil_file = 0
+        self.win_exe = self.data_init.get_win_exe()
 
     def start_from_zero(self):
         root_node = CmdNode(parent_lst_in = None, data_init = self.data_init)
@@ -824,9 +825,15 @@ class Runner(object):
         elif unalias_cmd_lst == ["history"]:
             print("Running history command")
 
+            if self.win_exe:
+                make_dir_str = "md "
+
+            else:
+                make_dir_str = "mkdir "
+
             lst_cmds = []
             for pos, uni in enumerate(self.step_list):
-                lst_cmds.append("mkdir " + uni._run_dir)
+                lst_cmds.append(make_dir_str + uni._run_dir)
                 if pos > 0:
                     lst_cmds.append("cd " + uni._run_dir)
                     for dials_cmds in uni.full_cmd_lst:
