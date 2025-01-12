@@ -692,6 +692,10 @@ class ShowLog(QObject):
 class History_Box(QDialog):
     def __init__(self, parent = None):
         super(History_Box, self).__init__(parent)
+
+        data_init = ini_data()
+        self.win_exe = data_init.get_win_exe()
+
         self.incoming_text = QTextEdit()
         self.incoming_text.setFont(QFont("Monospace"))
 
@@ -726,7 +730,14 @@ class History_Box(QDialog):
 
     def open_save(self):
         print("time to save")
-        ini_file = "dials_use_history.sh"
+
+        if self.win_exe:
+            ext_str = ".bat"
+
+        else:
+            ext_str = ".sh"
+
+        ini_file = "dials_use_history" + ext_str
 
         file_path = QFileDialog.getSaveFileName(
             self, "Download MTZ File", ini_file, "Intensity  (*.mtz)"
