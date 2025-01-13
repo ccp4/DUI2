@@ -740,7 +740,7 @@ class History_Box(QDialog):
         ini_file = "dials_use_history" + ext_str
 
         file_path = QFileDialog.getSaveFileName(
-            self, "Download MTZ File", ini_file, "Intensity  (*.mtz)"
+            self, "Download MTZ File", ini_file
         )
         print("file_path =", file_path)
 
