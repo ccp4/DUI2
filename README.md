@@ -37,7 +37,7 @@ There are three available command line tools after installation:
 
 ## Option 2, Installation of everything (including Dials) with conda, mamba and git
 
-This assumes you have already installed an Anaconda package manger like `miniconda` and have a BASH shell active with the `conda` command enabled.
+This assumes you have already installed an Anaconda package manger like `miniconda` and have a BASH shell active with the `conda` command enabled, see https://docs.anaconda.com/miniconda/install/ for details.
 
 First update `conda`:
 
@@ -45,7 +45,7 @@ First update `conda`:
 
 We will use `mamba` to make the installation of `Dials` and other needed dependencies in a virtual environment easier and faster:
 
-       conda install -c=conda-forge mamba
+       conda install -c=conda-forge mamba -y
 
 Provably Anaconda will ask you to run a specific command or to close and reopen your shell to make the installation of `mamba` effective
 
