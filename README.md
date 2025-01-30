@@ -31,43 +31,36 @@ There are three available command line tools after installation:
 
        dui2_server_side host=MY_HOST port=MY_PORT init_path=/PATH/TO/USER/DATA
 
-3. Client App (GUI front end that talks to the server app)
+3. Client App (GUI front end that talks to the Server App)
 
        dui2_client_app url=http://...[URL of the server]
 
-## Option 2, Installation of everything (including Dials) with conda and git
+## Option 2, Installation of everything (including Dials) with conda, mamba and git
 
-This assumes you have already installed an Anaconda package manger like `miniconda` and have a BASH shell active with the `conda` command enabled. If you have already installed one of the packages, like for example `git` you may skip the step where you install it.
+This assumes you have already installed an Anaconda package manger like `miniconda` and have a BASH shell active with the `conda` command enabled.
 
 First update `conda`:
 
        conda update conda -y
 
-We will need to downgrade the version of `Python` to make possible the installation of `dials`, consider doing the entire installation on a different virtual environment:
+We will use `mamba` to make the installation of `Dials` and other needed dependencies in a virtual environment easier and faster:
 
-       conda install python=3.11
+       conda install -c=conda-forge mamba
 
-Next install `dials`, this may take several minutes:
+Provably Anaconda will ask you to run a specific command or to close and reopen your shell to make the installation of `mamba` effective
 
-       conda install -c conda-forge dials -y
+Next create a virtual environment with `Dials`, `PySide V2`, `PyQt webengine` and `git` inside it, replace `/PATH/TO/ENV/W/NAME` with the path where you want to install `Dials` and the GUI dependencies. This may take a few minutes:
 
-Then install `PySide V2`, again several minutes, be very patient:
+       mamba create -p /PATH/TO/ENV/W/NAME -c conda-forge python=3.11 dials pyside2 pyqtwebengine git
 
-       conda install -c conda-forge pyside2 -y
+Now we should activate our newly created environment, again replace `/PATH/TO/ENV/W/NAME` with the path where you installed `Dials` and other dependencies:
 
-Next install an `HTML` viewer compatible with in `PySide V2`:
+       conda activate /PATH/TO/ENV/W/NAME
 
-       conda install -c conda-forge pyqtwebengine -y
 
-Next install `git`:
-
-       conda install -c conda-forge git -y
-
-Finally clone the DUI2 repository (pre-release branch):
+Finally clone the DUI2 source code from GitHub repository:
 
        git clone -b v2025.1.12  https://github.com/ccp4/DUI2.git
-
-
 
 The same tools as if installed with `curl` and `CCP4` are available, just different ways to invoke them. Remember that if you are running Dui2 from another directory, to put the full path of the `.py` file:
 
