@@ -2002,6 +2002,9 @@ class ExportWidget(QWidget):
 
             lst_par.append(["json.filename", str_value])
 
+        self.str_2_save = str(str_value)
+        print("self.str_2_save =", self.str_2_save)
+
         logging.info("lst_par(ExportWidget) = " + str(lst_par))
         self.all_items_changed.emit([lst_par])
 
@@ -2053,7 +2056,7 @@ class ExportWidget(QWidget):
         self.cur_nod_num = nod_num
 
     def download_hklout(self):
-        ini_file = os.getcwd() + os.sep + self.exp_txt.text()
+        ini_file = os.getcwd() + os.sep + self.str_2_save
         fileResul = QFileDialog.getSaveFileName(
             self, "Download MTZ File", ini_file, "Intensity  (*.mtz)"
         )
