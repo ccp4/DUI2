@@ -33,9 +33,9 @@ if __name__ == "__main__":
     img_num = 0
     print("\n\n img_num =", img_num)
     full_cmd = {
-        'nod_lst': [1],
+        'nod_lst': [2],
         'path': None,
-        'cmd_str': ['gis', str(img_num), 'inv_scale=1', 'view_rect=55,66,77,88']
+        'cmd_str': ['gmis', str(img_num), 'inv_scale=1', 'view_rect=1342,1187,1350,1196']
     }
 
     req_get = requests.get(

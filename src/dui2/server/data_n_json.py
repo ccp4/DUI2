@@ -259,6 +259,9 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
                     elif left_side == "view_rect":
                         [x1, y1, x2, y2] = right_side.split(",")
 
+
+                        print("\n[x1, y1, x2, y2] =", [x1, y1, x2, y2], "\n")
+
                 #TODO remember to check if the list is empty
                 str_json = flex_arr_2_json.get_bytes_w_2d_mask_slise(
                     step_list[lin2go]._lst_expt_out,
