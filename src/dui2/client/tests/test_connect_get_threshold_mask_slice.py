@@ -35,7 +35,7 @@ if __name__ == "__main__":
     full_cmd = {
         'nod_lst': [2],
         'path': None,
-        'cmd_str': ['gmis', str(img_num), 'inv_scale=1', 'view_rect=1342,1187,1350,1196']
+        'cmd_str': ['gtmis', str(img_num), 'inv_scale=1', 'view_rect=1342,1187,1350,1196']
     }
 
     req_get = requests.get(

@@ -191,3 +191,95 @@ def slice_mask_2_byte(raw_dat, inv_scale, x1, y1, x2, y2):
 
         return byte_buff, i23_multipanel
 
+
+def from_image_n_mask_2_threshold(image, mask):
+
+    #FIXME remember that the next parameters are NOT hard coded
+    nsig_b = 3
+    nsig_s = 3
+    global_threshold = 0
+    min_count = 2
+    gain = 1.0
+    size = (3, 3)
+
+    np_mask = to_numpy(mask)
+    np_img = to_numpy(image)
+    abs_img = convert_2_black_n_white(np_img)
+
+    sum_np_mask = np_mask + abs_img - 1.5
+    added_np_mask = convert_2_black_n_white(sum_np_mask)
+    bool_np_mask = added_np_mask.astype(bool)
+    mask_w_panels = from_numpy(bool_np_mask)
+    gain_map = flex.double(flex.grid(image.all()), gain)
+    my_algorithm = "dispersion_extended"
+
+    if my_algorithm == "dispersion_extended":
+        algorithm = DispersionExtendedThresholdDebug
+    elif my_algorithm == "dispersion":
+        algorithm = DispersionThresholdDebug
+
+    to_view_later = '''
+    else:
+        algorithm = RadialProfileThresholdDebug(
+            image, self.settings.n_iqr, self.settings.blur, self.settings.n_bins
+        )
+
+    radial_profile {
+      n_iqr = 6
+      blur = narrow wide
+      n_bins = 100
+    '''
+
+    flex_debug_img = algorithm(
+        image.as_double(),
+        mask_w_panels,
+        gain_map, size, nsig_b, nsig_s, global_threshold, min_count,
+    )
+
+    return flex_debug_img
+
+def slice_mask_threshold_2_byte(raw_dat, inv_scale, x1, y1, x2, y2):
+    print("<< HERE >>   #2")
+
+    bool_np_arr, i23_multipanel = get_np_full_mask(raw_dat)
+    big_d0 = bool_np_arr.shape[0]
+    big_d1 = bool_np_arr.shape[1]
+
+    if(
+        x1 >= big_d0 or x2 > big_d0 or x1 < 0 or x2 <= 0 or
+        y1 >= big_d1 or y2 > big_d1 or y1 < 0 or y2 <= 0 or
+        x1 > x2 or y1 > y2
+    ):
+        logging.info("\n ***  array bounding error  *** \n")
+        return "Error"
+
+    else:
+        logging.info(" array bounding OK ")
+        slice_np_arr = bool_np_arr[x1:x2,y1:y2]
+        a_d0 = slice_np_arr.shape[0]
+        a_d1 = slice_np_arr.shape[1]
+
+        small_d0 = int(0.995 + a_d0 / inv_scale)
+        short_arr = np.zeros((small_d0, a_d1), dtype = bool)
+        for row_num in range(small_d0):
+            for sub_row_num in range(inv_scale):
+                big_row = row_num * inv_scale + sub_row_num
+                if big_row < a_d0:
+                    short_arr[row_num,:] = np.bitwise_or(
+                        short_arr[row_num,:], slice_np_arr[big_row, :]
+                    )
+
+        small_d1 = int(0.995 + a_d1 / inv_scale)
+        small_arr = np.zeros((small_d0, small_d1), dtype = bool)
+
+        for col_num in range(small_d1):
+            for sub_col_num in range(inv_scale):
+                big_col = col_num * inv_scale + sub_col_num
+                if big_col < a_d1:
+                    small_arr[:,col_num] = np.bitwise_or(
+                        small_arr[:,col_num], short_arr[:,big_col]
+                    )
+
+        byte_buff = np_arr_2_byte_stream(small_arr)
+
+        return byte_buff, i23_multipanel

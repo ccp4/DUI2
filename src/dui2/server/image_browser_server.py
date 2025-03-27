@@ -67,7 +67,6 @@ class Browser(object):
                 return None
 
         elif uni_cmd == "gmis":
-
             logging.info("cmd_lst =" + str(cmd_lst))
             logging.info("cmd_dict =" + str(cmd_dict))
 
