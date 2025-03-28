@@ -1,7 +1,10 @@
 import numpy as np
 import time, logging
-#from dials.array_family import flex
-from dxtbx.flumpy import to_numpy
+from dials.array_family import flex
+from dxtbx.flumpy import to_numpy, from_numpy
+from dials.algorithms.image.threshold import (
+    DispersionThresholdDebug, DispersionExtendedThresholdDebug
+)
 
 def get_np_full_img(raw_dat):
     i23_multipanel = False
@@ -191,8 +194,13 @@ def slice_mask_2_byte(raw_dat, inv_scale, x1, y1, x2, y2):
 
         return byte_buff, i23_multipanel
 
+def convert_2_black_n_white(np_img):
+    sig_img = (np_img + 0.00000001) / np.abs(np_img + 0.00000001)
+    abs_img = (sig_img + 1) / 2
+    return abs_img
 
-def from_image_n_mask_2_threshold(image, mask):
+
+def from_image_n_mask_2_threshold(np_img, np_mask):
 
     #FIXME remember that the next parameters are NOT hard coded
     nsig_b = 3
@@ -202,15 +210,15 @@ def from_image_n_mask_2_threshold(image, mask):
     gain = 1.0
     size = (3, 3)
 
-    np_mask = to_numpy(mask)
-    np_img = to_numpy(image)
+    #np_mask = to_numpy(mask)
+    #np_img = to_numpy(image)
     abs_img = convert_2_black_n_white(np_img)
 
     sum_np_mask = np_mask + abs_img - 1.5
     added_np_mask = convert_2_black_n_white(sum_np_mask)
     bool_np_mask = added_np_mask.astype(bool)
     mask_w_panels = from_numpy(bool_np_mask)
-    gain_map = flex.double(flex.grid(image.all()), gain)
+    gain_map = flex.double(flex.grid(np_img.shape), gain)
     my_algorithm = "dispersion_extended"
 
     if my_algorithm == "dispersion_extended":
@@ -218,6 +226,7 @@ def from_image_n_mask_2_threshold(image, mask):
     elif my_algorithm == "dispersion":
         algorithm = DispersionThresholdDebug
 
+    image = from_numpy(np_img)
     to_view_later = '''
     else:
         algorithm = RadialProfileThresholdDebug(
@@ -229,7 +238,6 @@ def from_image_n_mask_2_threshold(image, mask):
       blur = narrow wide
       n_bins = 100
     '''
-
     flex_debug_img = algorithm(
         image.as_double(),
         mask_w_panels,
@@ -241,17 +249,32 @@ def from_image_n_mask_2_threshold(image, mask):
 def slice_mask_threshold_2_byte(
     image_raw_dat, mask_raw_dat, inv_scale, x1, y1, x2, y2
 ):
-    print("<< HERE >>   #2")
-    print("len(mask_raw_dat) =", len(mask_raw_dat))
-    print("len(image_raw_dat) =", len(image_raw_dat))
+    print("<< HERE >>   #2 \n")
     bool_np_arr, i23_multipanel = get_np_full_mask(mask_raw_dat)
-    print("bool_np_arr, i23_multipanel =", bool_np_arr, i23_multipanel)
-    np_full_img, i23_multipanel = get_np_full_img(image_raw_dat)
-    print("np_full_img, i23_multipanel =", np_full_img, i23_multipanel)
-    print("<< HERE >>   #3 \n")
 
-    big_d0 = bool_np_arr.shape[0]
-    big_d1 = bool_np_arr.shape[1]
+    print("type(bool_np_arr) =", type(bool_np_arr))
+
+    print("<< HERE >>   #3 \n")
+    np_full_img, i23_multipanel = get_np_full_img(image_raw_dat)
+
+    #flex_image = from_numpy(np_full_img)
+    #flex_mask = from_numpy(bool_np_arr)
+    print("<<< HERE #4 >>>\n")
+
+    debug_mask_obj = from_image_n_mask_2_threshold(np_full_img, bool_np_arr)
+
+    print("<<< HERE #5 >>>\n")
+    flex_debug_mask = debug_mask_obj.final_mask()
+    np_debug_mask = to_numpy(flex_debug_mask)
+    print("<<< HERE #6 >>>\n")
+
+
+    print("np_debug_mask =", np_debug_mask)
+    print("type(np_debug_mask) =", type(np_debug_mask))
+
+
+    big_d0 = np_debug_mask.shape[0]
+    big_d1 = np_debug_mask.shape[1]
 
     if(
         x1 >= big_d0 or x2 > big_d0 or x1 < 0 or x2 <= 0 or
@@ -263,7 +286,7 @@ def slice_mask_threshold_2_byte(
 
     else:
         logging.info(" array bounding OK ")
-        slice_np_arr = bool_np_arr[x1:x2,y1:y2]
+        slice_np_arr = np_debug_mask[x1:x2,y1:y2]
         a_d0 = slice_np_arr.shape[0]
         a_d1 = slice_np_arr.shape[1]
 
