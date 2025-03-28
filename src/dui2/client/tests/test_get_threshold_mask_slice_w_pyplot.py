@@ -45,7 +45,8 @@ if __name__ == "__main__":
         'cmd_str': [
             'gtmis', str(img_num), 'inv_scale=1',
             #'view_rect=1342,1187,1350,1196'
-            'view_rect=1095,860,1105,870'
+            #'view_rect=1095,860,1105,870'
+            'view_rect=595,560,1305,1270'
             #coordds= row1,col1, row2,col2
         ]
     }
