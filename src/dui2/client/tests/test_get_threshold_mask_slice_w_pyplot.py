@@ -25,6 +25,13 @@ import sys, zlib
 import requests
 import numpy as np
 
+from matplotlib import pyplot as plt
+
+def draw_pyplot(img_arr):
+    plt.imshow(img_arr, interpolation = "nearest")
+    plt.show()
+
+
 uni_url = 'http://127.0.0.1:45678/'
 #uni_url = 'http://127.0.0.1:45679/'
 #uni_url = 'http://supercomputo.cimav.edu.mx:45678/'
@@ -74,3 +81,4 @@ if __name__ == "__main__":
     d2 = int(d1d2_n_arr1d[1])
     np_array_out = d1d2_n_arr1d[2:].reshape(d1, d2)
     print("np_array_out =\n", np_array_out)
+    draw_pyplot(np_array_out)
