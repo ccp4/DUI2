@@ -461,13 +461,15 @@ def get_bytes_w_2d_threshold_mask_slise(
 
         imageset_tmp = experiments.imagesets()[n_sweep]
         mask_file = imageset_tmp.external_lookup.mask.filename
+        img_tup_obj = imageset_tmp.get_raw_data(on_sweep_img_num)
+
         try:
             pick_file = open(mask_file, "rb")
             mask_tup_obj = pickle.load(pick_file)
             pick_file.close()
 
             byte_data, i23_multipanel = img_stream_py.slice_mask_threshold_2_byte(
-                mask_tup_obj, inv_scale,
+                img_tup_obj, mask_tup_obj, inv_scale,
                 int(float(x1)), int(float(y1)),
                 int(float(x2)), int(float(y2))
             )

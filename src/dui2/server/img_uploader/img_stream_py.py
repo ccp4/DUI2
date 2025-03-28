@@ -238,10 +238,18 @@ def from_image_n_mask_2_threshold(image, mask):
 
     return flex_debug_img
 
-def slice_mask_threshold_2_byte(raw_dat, inv_scale, x1, y1, x2, y2):
+def slice_mask_threshold_2_byte(
+    image_raw_dat, mask_raw_dat, inv_scale, x1, y1, x2, y2
+):
     print("<< HERE >>   #2")
+    print("len(mask_raw_dat) =", len(mask_raw_dat))
+    print("len(image_raw_dat) =", len(image_raw_dat))
+    bool_np_arr, i23_multipanel = get_np_full_mask(mask_raw_dat)
+    print("bool_np_arr, i23_multipanel =", bool_np_arr, i23_multipanel)
+    np_full_img, i23_multipanel = get_np_full_img(image_raw_dat)
+    print("np_full_img, i23_multipanel =", np_full_img, i23_multipanel)
+    print("<< HERE >>   #3 \n")
 
-    bool_np_arr, i23_multipanel = get_np_full_mask(raw_dat)
     big_d0 = bool_np_arr.shape[0]
     big_d1 = bool_np_arr.shape[1]
 
