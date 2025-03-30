@@ -280,26 +280,32 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
     elif uni_cmd[0] == "get_threshold_mask_image_slice":
         for lin2go in cmd_dict["nod_lst"]:
             try:
+                #TODO remember to check if the list is empty
                 inv_scale = 1
                 for sub_par in uni_cmd[2:]:
                     eq_pos = sub_par.find("=")
                     left_side = sub_par[0:eq_pos]
                     right_side = sub_par[eq_pos + 1:]
+                    print("right_side =", right_side)
+
                     if left_side == "inv_scale":
                         inv_scale = int(right_side)
 
                     elif left_side == "view_rect":
                         [x1, y1, x2, y2] = right_side.split(",")
 
-                #TODO remember to check if the list is empty
+                    elif left_side == "params":
+                        params = eval(right_side)
+                        print("params =", params)
 
-                params = {}
+                hard_coded_would_be = '''
                 params["nsig_b"] = 3
                 params["nsig_s"] = 3
                 params["global_threshold"] = 0
                 params["min_count"] = 2
                 params["gain"] = 1.0
                 params["size"] = (3, 3)
+                '''
 
                 str_json = flex_arr_2_json.get_bytes_w_2d_threshold_mask_slise(
                     step_list[lin2go]._lst_expt_out,

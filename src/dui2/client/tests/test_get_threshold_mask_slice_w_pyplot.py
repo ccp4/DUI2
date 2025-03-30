@@ -47,8 +47,9 @@ if __name__ == "__main__":
             #'view_rect=1342,1187,1350,1196'
             #'view_rect=1095,860,1105,870'
             #'view_rect=595,560,1305,1270'
-            'view_rect=595,560,4805,2270'
+            'view_rect=595,560,4805,2270',
             #coordds= row1,col1, row2,col2
+            'params={"nsig_b":3,"nsig_s":3,"global_threshold":0,"min_count":2,"gain":1.0,"size":(3, 3)}'
         ]
     }
 
