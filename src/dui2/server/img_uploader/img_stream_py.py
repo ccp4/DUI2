@@ -251,26 +251,12 @@ def slice_mask_threshold_2_byte(
 ):
     print("<< HERE >>   #2 \n")
     bool_np_arr, i23_multipanel = get_np_full_mask(mask_raw_dat)
-
-    print("type(bool_np_arr) =", type(bool_np_arr))
-
-    print("<< HERE >>   #3 \n")
     np_full_img, i23_multipanel = get_np_full_img(image_raw_dat)
-
-    #flex_image = from_numpy(np_full_img)
-    #flex_mask = from_numpy(bool_np_arr)
-    print("<<< HERE #4 >>>\n")
-
     debug_mask_obj = from_image_n_mask_2_threshold(np_full_img, bool_np_arr)
-
-    print("<<< HERE #5 >>>\n")
     flex_debug_mask = debug_mask_obj.final_mask()
     np_debug_mask = to_numpy(flex_debug_mask)
-    print("<<< HERE #6 >>>\n")
-
-
-    print("np_debug_mask =", np_debug_mask)
     print("type(np_debug_mask) =", type(np_debug_mask))
+    print("<<< HERE #3 >>>\n")
 
 
     big_d0 = np_debug_mask.shape[0]
