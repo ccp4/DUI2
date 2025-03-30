@@ -450,7 +450,7 @@ def convert_2_black_n_white(np_img):
 
 
 def get_bytes_w_2d_threshold_mask_slise(
-    experiments_list_path, img_num, inv_scale, x1, y1, x2, y2
+    experiments_list_path, img_num, inv_scale, x1, y1, x2, y2, params
 ):
     print(">> HERE <<   #1")
     experiments = get_experiments(experiments_list_path[0])
@@ -471,7 +471,8 @@ def get_bytes_w_2d_threshold_mask_slise(
             byte_data, i23_multipanel = img_stream_py.slice_mask_threshold_2_byte(
                 img_tup_obj, mask_tup_obj, inv_scale,
                 int(float(x1)), int(float(y1)),
-                int(float(x2)), int(float(y2))
+                int(float(x2)), int(float(y2)),
+                params
             )
 
             if byte_data == "Error":

@@ -200,15 +200,13 @@ def convert_2_black_n_white(np_img):
     return abs_img
 
 
-def from_image_n_mask_2_threshold(np_img, np_mask):
-
-    #FIXME remember that the next parameters are NOT hard coded
-    nsig_b = 3
-    nsig_s = 3
-    global_threshold = 0
-    min_count = 2
-    gain = 1.0
-    size = (3, 3)
+def from_image_n_mask_2_threshold(np_img, np_mask, params):
+    nsig_b           = params["nsig_b"]
+    nsig_s           = params["nsig_s"]
+    global_threshold = params["global_threshold"]
+    min_count        = params["min_count"]
+    gain             = params["gain"]
+    size             = params["size"]
 
     #np_mask = to_numpy(mask)
     #np_img = to_numpy(image)
@@ -247,17 +245,16 @@ def from_image_n_mask_2_threshold(np_img, np_mask):
     return flex_debug_img
 
 def slice_mask_threshold_2_byte(
-    image_raw_dat, mask_raw_dat, inv_scale, x1, y1, x2, y2
+    image_raw_dat, mask_raw_dat, inv_scale, x1, y1, x2, y2, params
 ):
     print("<< HERE >>   #2 \n")
     bool_np_arr, i23_multipanel = get_np_full_mask(mask_raw_dat)
     np_full_img, i23_multipanel = get_np_full_img(image_raw_dat)
-    debug_mask_obj = from_image_n_mask_2_threshold(np_full_img, bool_np_arr)
+    debug_mask_obj = from_image_n_mask_2_threshold(np_full_img, bool_np_arr, params)
     flex_debug_mask = debug_mask_obj.final_mask()
     np_debug_mask = to_numpy(flex_debug_mask)
     print("type(np_debug_mask) =", type(np_debug_mask))
     print("<<< HERE #3 >>>\n")
-
 
     big_d0 = np_debug_mask.shape[0]
     big_d1 = np_debug_mask.shape[1]

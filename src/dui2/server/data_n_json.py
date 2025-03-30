@@ -292,9 +292,18 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
                         [x1, y1, x2, y2] = right_side.split(",")
 
                 #TODO remember to check if the list is empty
+
+                params = {}
+                params["nsig_b"] = 3
+                params["nsig_s"] = 3
+                params["global_threshold"] = 0
+                params["min_count"] = 2
+                params["gain"] = 1.0
+                params["size"] = (3, 3)
+
                 str_json = flex_arr_2_json.get_bytes_w_2d_threshold_mask_slise(
                     step_list[lin2go]._lst_expt_out,
-                    int(uni_cmd[1]), inv_scale, x1, y1, x2, y2
+                    int(uni_cmd[1]), inv_scale, x1, y1, x2, y2, params
                 )
                 if str_json is not None:
                     return_list = str_json
