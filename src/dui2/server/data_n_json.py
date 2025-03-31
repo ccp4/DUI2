@@ -276,7 +276,6 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
             except ValueError:
                 logging.info("\n  err catch , wrong command, not sending mask IMG \n")
 
-##############################################################################################
     elif uni_cmd[0] == "get_threshold_mask_image_slice":
         for lin2go in cmd_dict["nod_lst"]:
             try:
@@ -298,15 +297,6 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
                         params = eval(right_side)
                         print("params =", params)
 
-                hard_coded_would_be = '''
-                params["nsig_b"] = 3
-                params["nsig_s"] = 3
-                params["global_threshold"] = 0
-                params["min_count"] = 2
-                params["gain"] = 1.0
-                params["size"] = (3, 3)
-                '''
-
                 str_json = flex_arr_2_json.get_bytes_w_2d_threshold_mask_slise(
                     step_list[lin2go]._lst_expt_out,
                     int(uni_cmd[1]), inv_scale, x1, y1, x2, y2, params
@@ -323,8 +313,6 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
                 logging.info(
                     "\n  err catch , wrong command, not sending threshold mask IMG \n"
                 )
-
-##############################################################################################
 
 
     elif uni_cmd[0] == "get_reflection_list":
