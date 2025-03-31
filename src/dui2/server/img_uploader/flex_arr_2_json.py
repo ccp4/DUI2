@@ -448,11 +448,45 @@ def convert_2_black_n_white(np_img):
     abs_img = (sig_img + 1) / 2
     return abs_img
 
+def get_bytes_w_2d_threshold_mask(
+    experiments_list_path, img_num, params
+):
+    print(">> HERE FULL IMG<<   #1")
+    experiments = get_experiments(experiments_list_path[0])
+    if experiments is not None:
+        on_sweep_img_num, n_sweep = get_correct_img_num_n_sweep_num(
+            experiments, img_num
+        )
+
+        imageset_tmp = experiments.imagesets()[n_sweep]
+        mask_file = imageset_tmp.external_lookup.mask.filename
+        img_tup_obj = imageset_tmp.get_raw_data(on_sweep_img_num)
+
+        try:
+            pick_file = open(mask_file, "rb")
+            mask_tup_obj = pickle.load(pick_file)
+            pick_file.close()
+
+            byte_data, i23_multipanel = img_stream_py.mask_threshold_2_byte(
+                img_tup_obj, mask_tup_obj, params
+            )
+
+            if byte_data == "Error":
+                logging.info('byte_data == "Error"')
+                byte_data = None
+
+        except FileNotFoundError:
+            byte_data = None
+
+        return byte_data
+
+    else:
+        return None
+
 
 def get_bytes_w_2d_threshold_mask_slise(
     experiments_list_path, img_num, inv_scale, x1, y1, x2, y2, params
 ):
-    print(">> HERE <<   #1")
     experiments = get_experiments(experiments_list_path[0])
     if experiments is not None:
         on_sweep_img_num, n_sweep = get_correct_img_num_n_sweep_num(
