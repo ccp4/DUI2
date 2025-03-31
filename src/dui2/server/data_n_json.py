@@ -271,10 +271,31 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
                     return_list = str_json
 
             except (IndexError, AttributeError):
-                logging.info("\n  err catch , wrong line, not sending mask IMG \n")
+                logging.info(
+                    "\n  err catch , wrong line, not sending mask IMG \n"
+                )
 
             except ValueError:
-                logging.info("\n  err catch , wrong command, not sending mask IMG \n")
+                logging.info(
+                    "\n  err catch , wrong command, not sending mask IMG \n"
+                )
+
+
+    elif uni_cmd[0] == "get_threshold_mask_image":
+        for lin2go in cmd_dict["nod_lst"]:
+            try:
+                #TODO remember to check if the list is empty
+                str_json = flex_arr_2_json.get_bytes_w_mask_img_2d(
+                    step_list[lin2go]._lst_expt_out,
+                    int(uni_cmd[1])
+                )
+                #byt_data = bytes(str_json.encode('utf-8'))
+                #return_list = byt_data
+                return_list = str_json
+
+            except (IndexError, AttributeError, ValueError):
+                logging.info("\n  err catch , wrong line, not sending IMG \n")
+
 
     elif uni_cmd[0] == "get_threshold_mask_image_slice":
         for lin2go in cmd_dict["nod_lst"]:

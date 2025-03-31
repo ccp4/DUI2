@@ -37,13 +37,13 @@ uni_url = 'http://127.0.0.1:45678/'
 #uni_url = 'http://supercomputo.cimav.edu.mx:45678/'
 
 if __name__ == "__main__":
-    for img_num in range(3):
+    for img_num in [1,3,5,7]:
         print("\n\n img_num =", img_num)
         full_cmd = {
             'nod_lst': [2],
             'path': None,
             'cmd_str': [
-                'gtmis', str(img_num), 'inv_scale=1',
+                'gtmis', str(img_num), 'inv_scale=' +str(img_num),
                 #'view_rect=1342,1187,1350,1196'
                 #'view_rect=1095,860,1105,870'
                 'view_rect=595,560,1305,1270',

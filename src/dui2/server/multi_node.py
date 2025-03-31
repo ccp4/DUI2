@@ -49,6 +49,7 @@ def get_pair_list():
         ("gmi",     "get_mask_image"                        ),
         ("gmis",    "get_mask_image_slice"                  ),
         ("gtmis",   "get_threshold_mask_image_slice"        ),
+        ("gtmi",    "get_threshold_mask_image"              ),
         ("grp",     "get_predictions"                       ),
         ("grl",     "get_reflection_list"                   ),
         ("gef",     "get_experiments_file"                  ),
