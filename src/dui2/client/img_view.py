@@ -469,6 +469,7 @@ class PopDisplayMenu(QMenu):
         super().__init__()
         self.my_parent = parent
 
+        # Palette tuning
         self.i_min = int(self.my_parent.i_min_max[0])
         self.i_max = int(self.my_parent.i_min_max[1])
         self.palette = self.my_parent.palette
@@ -503,8 +504,19 @@ class PopDisplayMenu(QMenu):
             self.overlay_changed_by_user
         )
         palette_box_layout.addWidget(QLabel("  ... "))
-        palette_box_layout.addWidget(self.palette_select)
-        palette_box_layout.addWidget(self.overlay_select)
+
+
+        palette_h_layout = QHBoxLayout()
+        palette_h_layout.addWidget(QLabel(" Image palette "))
+        palette_h_layout.addWidget(self.palette_select)
+        palette_box_layout.addLayout(palette_h_layout)
+
+        colour_h_layout = QHBoxLayout()
+        colour_h_layout.addWidget(QLabel(" Overlayed reflections  "))
+        colour_h_layout.addWidget(self.overlay_select)
+        palette_box_layout.addLayout(colour_h_layout)
+
+
         palette_group.setLayout(palette_box_layout)
 
         # hkl Viewing Tool
@@ -546,10 +558,75 @@ class PopDisplayMenu(QMenu):
         predict_h_layout.addWidget(self.z_dept_combo)
         fnd_vs_prd_layout.addLayout(predict_h_layout)
         find_vs_predict_group.setLayout(fnd_vs_prd_layout)
-        my_main_box = QVBoxLayout()
-        my_main_box.addWidget(palette_group)
-        my_main_box.addWidget(info_group)
-        my_main_box.addWidget(find_vs_predict_group)
+
+        ########################################### Threshold Viewing options
+        sp_threshold_group = QGroupBox("Spot finder threshold view")
+        threshold_box_layout = QVBoxLayout()
+
+        self.threshold_box_show = QCheckBox("Show threshold")
+        self.threshold_box_show.setChecked(False)
+
+        threshold_box_layout.addWidget(self.threshold_box_show)
+
+        self.threshold_params={
+            "nsig_b":3, "nsig_s":3, "global_threshold":0,
+            "min_count":2, "gain":1.0, "size":(3, 3)
+        }
+
+        self.param_nsig_b = QLineEdit(str(self.threshold_params["nsig_b"]))
+        self.param_nsig_s = QLineEdit(str(self.threshold_params["nsig_s"]))
+        self.param_global_threshold = QLineEdit(
+            str(self.threshold_params["global_threshold"])
+        )
+        self.param_min_count = QLineEdit(
+            str(self.threshold_params["min_count"])
+        )
+        self.param_gain = QLineEdit(str(self.threshold_params["gain"]))
+        self.param_size = QLineEdit(str(self.threshold_params["size"]))
+
+        hbox_nsig_b= QHBoxLayout()
+        hbox_nsig_s= QHBoxLayout()
+        hbox_global_threshold = QHBoxLayout()
+        hbox_min_count= QHBoxLayout()
+        hbox_gain= QHBoxLayout()
+        hbox_size= QHBoxLayout()
+
+        hbox_nsig_b.addWidget(QLabel("nsig_b"))
+        hbox_nsig_s.addWidget(QLabel("nsig_s"))
+        hbox_global_threshold .addWidget(QLabel("global_threshold"))
+        hbox_min_count.addWidget(QLabel("min_count"))
+        hbox_gain.addWidget(QLabel("gain"))
+        hbox_size.addWidget(QLabel("size"))
+
+        hbox_nsig_b.addWidget(self.param_nsig_b)
+        hbox_nsig_s.addWidget(self.param_nsig_s)
+        hbox_global_threshold.addWidget(self.param_global_threshold)
+        hbox_min_count.addWidget(self.param_min_count)
+        hbox_gain.addWidget(self.param_gain)
+        hbox_size.addWidget(self.param_size)
+
+        threshold_box_layout.addLayout(hbox_nsig_b)
+        threshold_box_layout.addLayout(hbox_nsig_s)
+        threshold_box_layout.addLayout(hbox_global_threshold)
+        threshold_box_layout.addLayout(hbox_min_count)
+        threshold_box_layout.addLayout(hbox_gain)
+        threshold_box_layout.addLayout(hbox_size)
+
+        sp_threshold_group.setLayout(threshold_box_layout)
+
+        # Main menu box
+        left_side_box = QVBoxLayout()
+        left_side_box.addWidget(palette_group)
+        left_side_box.addWidget(info_group)
+
+        right_side_box = QVBoxLayout()
+        right_side_box.addWidget(find_vs_predict_group)
+        right_side_box.addWidget(sp_threshold_group)
+
+        my_main_box = QHBoxLayout()
+        my_main_box.addLayout(left_side_box)
+        my_main_box.addLayout(right_side_box)
+
         self.setLayout(my_main_box)
 
     def sig_new_redraw(self):
