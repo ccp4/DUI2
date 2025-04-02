@@ -39,6 +39,13 @@ uni_url = 'http://127.0.0.1:45678/'
 if __name__ == "__main__":
     for img_num in [1,3,5,7]:
         print("\n\n img_num =", img_num)
+
+        params_dict = {
+            "nsig_b":3,"nsig_s":3,"global_threshold":0,
+            "min_count":2,"gain":1.0,"size":(3, 3)
+        }
+        print("params_dict =", params_dict)
+        params_str = str(params_dict)
         full_cmd = {
             'nod_lst': [2],
             'path': None,
@@ -46,11 +53,11 @@ if __name__ == "__main__":
                 'gtmis', str(img_num), 'inv_scale=' +str(img_num),
                 #'view_rect=1342,1187,1350,1196'
                 #'view_rect=1095,860,1105,870'
-                'view_rect=595,560,1305,1270',
+                #'view_rect=595,560,1305,1270',
                 'view_rect=95,60,2305,2270',
                 #'view_rect=595,560,4805,2270',
                 #coordds= row1,col1, row2,col2
-                'params={"nsig_b":3,"nsig_s":3,"global_threshold":0,"min_count":2,"gain":1.0,"size":(3, 3)}'
+                'params=' + params_str
             ]
         }
 
