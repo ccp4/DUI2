@@ -568,7 +568,7 @@ class PopDisplayMenu(QMenu):
 
         threshold_box_layout.addWidget(self.threshold_box_show)
 
-        self.threshold_params={
+        self.threshold_params = {
             "nsig_b":3, "nsig_s":3, "global_threshold":0,
             "min_count":2, "gain":1.0, "size":(3, 3)
         }
@@ -582,7 +582,17 @@ class PopDisplayMenu(QMenu):
             str(self.threshold_params["min_count"])
         )
         self.param_gain = QLineEdit(str(self.threshold_params["gain"]))
-        self.param_size = QLineEdit(str(self.threshold_params["size"]))
+        self.param_size = QLineEdit(
+            str(self.threshold_params["size"][0]) + "," +
+            str(self.threshold_params["size"][1])
+        )
+
+        self.param_nsig_b.textChanged.connect(self.threshold_param_changed)
+        self.param_nsig_s.textChanged.connect(self.threshold_param_changed)
+        self.param_global_threshold.textChanged.connect(self.threshold_param_changed)
+        self.param_min_count.textChanged.connect(self.threshold_param_changed)
+        self.param_gain.textChanged.connect(self.threshold_param_changed)
+        self.param_size.textChanged.connect(self.threshold_param_changed)
 
         hbox_nsig_b= QHBoxLayout()
         hbox_nsig_s= QHBoxLayout()
@@ -628,6 +638,45 @@ class PopDisplayMenu(QMenu):
         my_main_box.addLayout(right_side_box)
 
         self.setLayout(my_main_box)
+
+    def threshold_param_changed(self, value):
+        print("threshold_param_changed to:" + str(value))
+
+        print("param_nsig_b           =", str(self.param_nsig_b.text()))
+        print("param_nsig_s           =", str(self.param_nsig_s.text()))
+        print("param_global_threshold =", str(self.param_global_threshold.text()))
+        print("param_min_count        =", str(self.param_min_count.text()))
+        print("param_gain             =", str(self.param_gain.text()))
+        print("param_size             =", str(self.param_size.text()))
+
+        #"nsig_b":3,
+        #"nsig_s":3,
+        #"global_threshold":0,
+        #"min_count":2,
+        #"gain":1.0,
+        #"size":(3, 3)
+
+        lst_size = str(self.param_size.text()).split(",")
+        print("lst_size =", lst_size)
+        try:
+            tupl_size = (int(lst_size[0]), int(lst_size[1]))
+
+        except (ValueError, IndexError):
+            tupl_size = (3,3)
+
+        print("tupl_size = ", tupl_size)
+
+        self.threshold_params = {
+            "nsig_b":               int(self.param_nsig_b.text()) ,
+            "nsig_s":               int(self.param_nsig_s.text()) ,
+            "global_threshold":     int(self.param_global_threshold.text()) ,
+            "min_count":            int(self.param_min_count.text()) ,
+            "gain":                 float(self.param_gain.text()) ,
+            "size":                 tupl_size
+        }
+
+        print("threshold_params =", self.threshold_params)
+
 
     def sig_new_redraw(self):
         logging.info("new_redraw")
