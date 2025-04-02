@@ -465,6 +465,7 @@ class PopDisplayMenu(QMenu):
     new_overlay = Signal(str)
     new_redraw = Signal()
     new_ref_list = Signal()
+    new_threshold_param = Signal(dict)
     def __init__(self, parent=None):
         super().__init__()
         self.my_parent = parent
@@ -504,8 +505,6 @@ class PopDisplayMenu(QMenu):
             self.overlay_changed_by_user
         )
         palette_box_layout.addWidget(QLabel("  ... "))
-
-
         palette_h_layout = QHBoxLayout()
         palette_h_layout.addWidget(QLabel(" Image palette "))
         palette_h_layout.addWidget(self.palette_select)
@@ -640,22 +639,10 @@ class PopDisplayMenu(QMenu):
         self.setLayout(my_main_box)
 
     def threshold_param_changed(self, value):
-        print("threshold_param_changed to:" + str(value))
-
-        print("param_nsig_b           =", str(self.param_nsig_b.text()))
-        print("param_nsig_s           =", str(self.param_nsig_s.text()))
-        print("param_global_threshold =", str(self.param_global_threshold.text()))
-        print("param_min_count        =", str(self.param_min_count.text()))
-        print("param_gain             =", str(self.param_gain.text()))
-        print("param_size             =", str(self.param_size.text()))
-
-        #"nsig_b":3,
-        #"nsig_s":3,
-        #"global_threshold":0,
-        #"min_count":2,
-        #"gain":1.0,
-        #"size":(3, 3)
-
+        default = '''
+        "nsig_b":3, "nsig_s":3, "global_threshold":0,
+        "min_count":2, "gain":1.0, "size":(3, 3)
+        '''
         lst_size = str(self.param_size.text()).split(",")
         print("lst_size =", lst_size)
         try:
@@ -665,7 +652,6 @@ class PopDisplayMenu(QMenu):
             tupl_size = (3,3)
 
         print("tupl_size = ", tupl_size)
-
         self.threshold_params = {
             "nsig_b":               int(self.param_nsig_b.text()) ,
             "nsig_s":               int(self.param_nsig_s.text()) ,
@@ -674,9 +660,7 @@ class PopDisplayMenu(QMenu):
             "gain":                 float(self.param_gain.text()) ,
             "size":                 tupl_size
         }
-
-        print("threshold_params =", self.threshold_params)
-
+        self.new_threshold_param.emit(self.threshold_params)
 
     def sig_new_redraw(self):
         logging.info("new_redraw")
@@ -790,6 +774,9 @@ class DoImageView(QObject):
         self.pop_display_menu.new_ref_list.connect(
             self.request_reflection_list
         )
+        self.pop_display_menu.new_threshold_param.connect(
+            self.request_threshold_mask
+        )
         self.my_scene.img_scale.connect(self.scale_img)
         self.my_scene.new_mouse_pos.connect(self.on_mouse_move)
         self.my_scene.mouse_pressed.connect(self.on_mouse_press)
@@ -844,6 +831,9 @@ class DoImageView(QObject):
                 logging.info("Type Err catch(tune_palette_ini)")
 
         self.just_imported = False
+
+    def request_threshold_mask(self, new_params):
+        print("New threshold_params =", new_params)
 
     def build_background_n_get_nod_num(self, in_img_num):
         if self.nod_or_path is False or self.on_filter_reflections:
