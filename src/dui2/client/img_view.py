@@ -567,23 +567,23 @@ class PopDisplayMenu(QMenu):
 
         threshold_box_layout.addWidget(self.threshold_box_show)
 
-        self.threshold_params = {
+        local_threshold_params = {
             "nsig_b":3, "nsig_s":3, "global_threshold":0,
             "min_count":2, "gain":1.0, "size":(3, 3)
         }
 
-        self.param_nsig_b = QLineEdit(str(self.threshold_params["nsig_b"]))
-        self.param_nsig_s = QLineEdit(str(self.threshold_params["nsig_s"]))
+        self.param_nsig_b = QLineEdit(str(local_threshold_params["nsig_b"]))
+        self.param_nsig_s = QLineEdit(str(local_threshold_params["nsig_s"]))
         self.param_global_threshold = QLineEdit(
-            str(self.threshold_params["global_threshold"])
+            str(local_threshold_params["global_threshold"])
         )
         self.param_min_count = QLineEdit(
-            str(self.threshold_params["min_count"])
+            str(local_threshold_params["min_count"])
         )
-        self.param_gain = QLineEdit(str(self.threshold_params["gain"]))
+        self.param_gain = QLineEdit(str(local_threshold_params["gain"]))
         self.param_size = QLineEdit(
-            str(self.threshold_params["size"][0]) + "," +
-            str(self.threshold_params["size"][1])
+            str(local_threshold_params["size"][0]) + "," +
+            str(local_threshold_params["size"][1])
         )
 
         self.param_nsig_b.textChanged.connect(self.threshold_param_changed)
@@ -639,28 +639,56 @@ class PopDisplayMenu(QMenu):
         self.setLayout(my_main_box)
 
     def threshold_param_changed(self, value):
-        default = '''
+        default = {
         "nsig_b":3, "nsig_s":3, "global_threshold":0,
         "min_count":2, "gain":1.0, "size":(3, 3)
-        '''
-        lst_size = str(self.param_size.text()).split(",")
-        print("lst_size =", lst_size)
+        }
         try:
-            tupl_size = (int(lst_size[0]), int(lst_size[1]))
+            tmp_nsig_b = int(self.param_nsig_b.text())
+
+        except ValueError:
+            tmp_nsig_b = default["nsig_b"]
+
+        try:
+            tmp_nsig_s = int(self.param_nsig_s.text())
+
+        except ValueError:
+            tmp_nsig_s = default["nsig_s"]
+
+        try:
+            tmp_global_threshold = int(self.param_global_threshold.text())
+
+        except ValueError:
+            tmp_global_threshold = default["global_threshold"]
+
+        try:
+            tmp_min_count = int(self.param_min_count.text())
+
+        except ValueError:
+            tmp_min_count = default["min_count"]
+
+        try:
+            tmp_gain = float(self.param_gain.text())
+
+        except ValueError:
+            tmp_gain = default["gain"]
+
+        lst_size = str(self.param_size.text()).split(",")
+        try:
+            tmp_size = (int(lst_size[0]), int(lst_size[1]))
 
         except (ValueError, IndexError):
-            tupl_size = (3,3)
+            tmp_size = default["size"]
 
-        print("tupl_size = ", tupl_size)
-        self.threshold_params = {
-            "nsig_b":               int(self.param_nsig_b.text()) ,
-            "nsig_s":               int(self.param_nsig_s.text()) ,
-            "global_threshold":     int(self.param_global_threshold.text()) ,
-            "min_count":            int(self.param_min_count.text()) ,
-            "gain":                 float(self.param_gain.text()) ,
-            "size":                 tupl_size
+        local_threshold_params = {
+            "nsig_b":               tmp_nsig_b,
+            "nsig_s":               tmp_nsig_s,
+            "global_threshold":     tmp_global_threshold,
+            "min_count":            tmp_min_count,
+            "gain":                 tmp_gain,
+            "size":                 tmp_size
         }
-        self.new_threshold_param.emit(self.threshold_params)
+        self.new_threshold_param.emit(local_threshold_params)
 
     def sig_new_redraw(self):
         logging.info("new_redraw")
@@ -833,7 +861,8 @@ class DoImageView(QObject):
         self.just_imported = False
 
     def update_threshold_params(self, new_params):
-        print("New threshold_params =", new_params)
+        self.threshold_params = new_params
+        print("New threshold_params =", self.threshold_params)
 
     def build_background_n_get_nod_num(self, in_img_num):
         if self.nod_or_path is False or self.on_filter_reflections:
