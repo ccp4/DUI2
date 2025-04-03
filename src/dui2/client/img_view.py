@@ -80,7 +80,7 @@ class LoadSliceMaskImage(QThread):
         path_in = None, thrs_pars_in = None, main_handler = None
     ):
         super(LoadSliceMaskImage, self).__init__()
-        self.uni_url =       unit_URL
+        self.uni_url =       unit_URL     #TODO: check if this variable is needed here
         self.nod_num_lst =   nod_num_lst
         self.img_num =       img_num
         self.inv_scale =     inv_scale
@@ -96,16 +96,41 @@ class LoadSliceMaskImage(QThread):
         logging.info("loading mask slice of image ")
 
         print("LoadSliceMaskImage.thrs_hld_pars =", self.thrs_hld_pars)
+        if self.thrs_hld_pars is None:
+            my_cmd_lst = [
+                "gmis", str(self.img_num),
+                "inv_scale=" + str(self.inv_scale),
+                "view_rect=" + str(self.x1) + "," + str(self.y1) +
+                          "," + str(self.x2) + "," + str(self.y2)
+            ]
+            my_cmd = {"nod_lst" : self.nod_num_lst,
+                      "path"    : self.exp_path,
+                      "cmd_str" : my_cmd_lst}
 
-        my_cmd_lst = [
-            "gmis", str(self.img_num),
-            "inv_scale=" + str(self.inv_scale),
-            "view_rect=" + str(self.x1) + "," + str(self.y1) +
-                      "," + str(self.x2) + "," + str(self.y2)
-        ]
-        my_cmd = {"nod_lst" : self.nod_num_lst,
-                  "path"    : self.exp_path,
-                  "cmd_str" : my_cmd_lst}
+        else:
+            old_guide = '''
+            my_cmd_lst = [
+                "gmis", str(self.img_num),
+                "inv_scale=" + str(self.inv_scale),
+                "view_rect=" + str(self.x1) + "," + str(self.y1) +
+                          "," + str(self.x2) + "," + str(self.y2)
+            ]
+            my_cmd = {"nod_lst" : self.nod_num_lst,
+                      "path"    : self.exp_path,
+                      "cmd_str" : my_cmd_lst}
+            '''
+            params_str = str(self.thrs_hld_pars)
+            my_cmd = {
+                'nod_lst': self.nod_num_lst,
+                'path': self.exp_path,
+                'cmd_str': [
+                    'gtmis', str(self.img_num),
+                    'inv_scale=' +str(self.inv_scale),
+                    'view_rect=' + str(self.x1) + "," + str(self.y1) +
+                              "," + str(self.x2) + "," + str(self.y2),
+                    'params=' + params_str
+                ]
+            }
 
         self.r_time_req = get_request_real_time(
             params_in = my_cmd, main_handler = self.my_handler
