@@ -1180,7 +1180,16 @@ class DoImageView(QObject):
             logging.info("None self.np_full_img")
 
         try:
-            m_rgb_np = self.bmp_mask.img_2d_rgb(data2d = self.np_full_mask_img)
+            if self.threshold_params is None:
+                m_rgb_np = self.bmp_mask.img_2d_rgb(
+                    data2d = self.np_full_mask_img
+                )
+
+            else:
+                m_rgb_np = self.bmp_mask.img_2d_rgb_threshold(
+                    data2d = self.np_full_mask_img
+                )
+
             q_img = QImage(
                 m_rgb_np.data,
                 np.size(m_rgb_np[0:1, :, 0:1]),
