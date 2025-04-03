@@ -775,7 +775,7 @@ class DoImageView(QObject):
             self.request_reflection_list
         )
         self.pop_display_menu.new_threshold_param.connect(
-            self.request_threshold_mask
+            self.update_threshold_params
         )
         self.my_scene.img_scale.connect(self.scale_img)
         self.my_scene.new_mouse_pos.connect(self.on_mouse_move)
@@ -832,7 +832,7 @@ class DoImageView(QObject):
 
         self.just_imported = False
 
-    def request_threshold_mask(self, new_params):
+    def update_threshold_params(self, new_params):
         print("New threshold_params =", new_params)
 
     def build_background_n_get_nod_num(self, in_img_num):
