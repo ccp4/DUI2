@@ -77,23 +77,26 @@ class LoadSliceMaskImage(QThread):
         self, unit_URL = None, nod_num_lst = None,
         img_num = None, inv_scale = None,
         x1 = None, y1 = None, x2 = None, y2 = None,
-        path_in = None, main_handler = None
+        path_in = None, thrs_pars_in = None, main_handler = None
     ):
         super(LoadSliceMaskImage, self).__init__()
-        self.uni_url =      unit_URL
-        self.nod_num_lst =  nod_num_lst
-        self.img_num =      img_num
-        self.inv_scale =    inv_scale
-        self.x1 =           x1
-        self.y1 =           y1
-        self.x2 =           x2
-        self.y2 =           y2
-        self.exp_path =     path_in
-        self.r_time_req_lst = []
-        self.my_handler = main_handler
+        self.uni_url =       unit_URL
+        self.nod_num_lst =   nod_num_lst
+        self.img_num =       img_num
+        self.inv_scale =     inv_scale
+        self.x1 =            x1
+        self.y1 =            y1
+        self.x2 =            x2
+        self.y2 =            y2
+        self.exp_path =      path_in
+        self.thrs_hld_pars = thrs_pars_in
+        self.my_handler =    main_handler
 
     def run(self):
         logging.info("loading mask slice of image ")
+
+        print("LoadSliceMaskImage.thrs_hld_pars =", self.thrs_hld_pars)
+
         my_cmd_lst = [
             "gmis", str(self.img_num),
             "inv_scale=" + str(self.inv_scale),
@@ -175,17 +178,16 @@ class LoadSliceImage(QThread):
         path_in = None, main_handler = None
     ):
         super(LoadSliceImage, self).__init__()
-        self.uni_url =      unit_URL
-        self.nod_num_lst =  nod_num_lst
-        self.img_num =      img_num
-        self.inv_scale =    inv_scale
-        self.x1 =           x1
-        self.y1 =           y1
-        self.x2 =           x2
-        self.y2 =           y2
-        self.exp_path =     path_in
-        self.r_time_req_lst = []
-        self.my_handler = main_handler
+        self.uni_url =       unit_URL
+        self.nod_num_lst =   nod_num_lst
+        self.img_num =       img_num
+        self.inv_scale =     inv_scale
+        self.x1 =            x1
+        self.y1 =            y1
+        self.x2 =            x2
+        self.y2 =            y2
+        self.exp_path =      path_in
+        self.my_handler =    main_handler
 
     def run(self):
         logging.info("loading slice of image ")
@@ -828,6 +830,8 @@ class DoImageView(QObject):
 
         self.list_temp_mask = None
 
+        self.threshold_params = None
+
         timer = QTimer(self)
         timer.timeout.connect(self.check_move)
         timer.start(1600)
@@ -1432,6 +1436,7 @@ class DoImageView(QObject):
                 x2 = self.x2,
                 y2 = self.y2,
                 path_in = self.exp_path,
+                thrs_pars_in = self.threshold_params,
                 main_handler = self.my_handler
             )
             self.load_slice_mask_image.slice_loaded.connect(

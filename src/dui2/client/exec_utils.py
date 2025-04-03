@@ -262,7 +262,6 @@ class Mtz_Data_Request(QThread):
         super(Mtz_Data_Request, self).__init__()
         self.cmd = cmd
         self.my_handler = main_handler
-        self.r_time_req_lst = []
 
     def run(self):
         self.say_goodbye()
