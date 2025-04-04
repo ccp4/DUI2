@@ -47,23 +47,26 @@ from dui2.client.file_nav_utils import FileBrowser
 class LoadFullMaskImage(QThread):
     image_loaded = Signal(tuple)
     def __init__(
-        self, unit_URL = None, cur_nod_num = None,
-        cur_img_num = None, path_in = None, main_handler = None
+        self, unit_URL = None, cur_nod_num = None, cur_img_num = None,
+        path_in = None, thrs_pars_in = None, main_handler = None
     ):
         super(LoadFullMaskImage, self).__init__()
-        self.uni_url = unit_URL
+        self.uni_url = unit_URL   #TODO: check if this variable is needed here
         self.cur_nod_num = cur_nod_num
         self.cur_img_num = cur_img_num
         self.exp_path = path_in
+        self.thrs_hld_pars = thrs_pars_in
         self.my_handler = main_handler
 
     def run(self):
+        print("LoadFullMaskImage.thrs_hld_pars =", self.thrs_hld_pars)
         np_full_img = load_mask_img_json_w_str(
             self.uni_url,
             nod_num_lst = [self.cur_nod_num],
             img_num = self.cur_img_num,
             exp_path = self.exp_path,
-            main_handler = self.my_handler
+            threshold_params = self.thrs_hld_pars,
+            main_handler = self.my_handler,
         )
         self.image_loaded.emit(
             (self.cur_nod_num, self.cur_img_num, np_full_img)
@@ -1259,6 +1262,7 @@ class DoImageView(QObject):
             cur_nod_num = self.cur_nod_num,
             cur_img_num = self.cur_img_num,
             path_in = self.exp_path,
+            thrs_pars_in = self.threshold_params,
             main_handler = self.my_handler
         )
 

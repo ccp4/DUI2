@@ -75,12 +75,27 @@ def load_img_json_w_str(
 
 def load_mask_img_json_w_str(
     uni_url = None, nod_num_lst = None, img_num = 0,
-    exp_path = None, main_handler = None
+    exp_path = None, threshold_params = None, main_handler = None
 ):
-    my_cmd_lst = ["gmi", str(img_num)]
-    my_cmd = {"nod_lst" : nod_num_lst,
-              "path"    : exp_path,
-              "cmd_str" : my_cmd_lst}
+
+    if threshold_params is None:
+        my_cmd_lst = ["gmi", str(img_num)]
+        my_cmd = {"nod_lst" : nod_num_lst,
+                  "path"    : exp_path,
+                  "cmd_str" : my_cmd_lst}
+
+    else:
+        params_str = str(threshold_params)
+        my_cmd = {
+            'nod_lst': nod_num_lst,
+            'path': exp_path,
+            'cmd_str': [
+                'gtmi', str(img_num),
+                'params=' + params_str
+            ]
+        }
+
+    print("threshold_params(load_mask_img_json_w_str) = ", threshold_params)
 
     try:
         start_tm = time.time()
