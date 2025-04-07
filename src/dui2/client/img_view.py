@@ -961,10 +961,10 @@ class DoImageView(QObject):
             logging.info("Not loaded new template in full")
 
         try:
-            self.np_full_mask_img = np.ones((
+            self.np_full_mask_img = np.zeros((
                 self.img_d1_d2[0], self.img_d1_d2[1]
                 ), dtype = 'float')
-            self.np_full_mask_img[:,:] = 1.0
+            #self.np_full_mask_img[:,:] = 0.0
 
         except TypeError:
             self.np_full_mask_img = None
