@@ -605,6 +605,7 @@ class PopDisplayMenu(QMenu):
             str(local_threshold_params["size"][1])
         )
 
+        self.threshold_box_show.stateChanged.connect(self.threshold_param_changed)
         self.param_nsig_b.textChanged.connect(self.threshold_param_changed)
         self.param_nsig_s.textChanged.connect(self.threshold_param_changed)
         self.param_global_threshold.textChanged.connect(self.threshold_param_changed)
