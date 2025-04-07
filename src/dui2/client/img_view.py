@@ -104,33 +104,22 @@ class LoadSliceMaskImage(QThread):
                 "gmis", str(self.img_num),
                 "inv_scale=" + str(self.inv_scale),
                 "view_rect=" + str(self.x1) + "," + str(self.y1) +
-                          "," + str(self.x2) + "," + str(self.y2)
+                         "," + str(self.x2) + "," + str(self.y2)
             ]
             my_cmd = {"nod_lst" : self.nod_num_lst,
                       "path"    : self.exp_path,
                       "cmd_str" : my_cmd_lst}
 
         else:
-            old_guide = '''
-            my_cmd_lst = [
-                "gmis", str(self.img_num),
-                "inv_scale=" + str(self.inv_scale),
-                "view_rect=" + str(self.x1) + "," + str(self.y1) +
-                          "," + str(self.x2) + "," + str(self.y2)
-            ]
-            my_cmd = {"nod_lst" : self.nod_num_lst,
-                      "path"    : self.exp_path,
-                      "cmd_str" : my_cmd_lst}
-            '''
             params_str = str(self.thrs_hld_pars)
             my_cmd = {
                 'nod_lst': self.nod_num_lst,
                 'path': self.exp_path,
                 'cmd_str': [
                     'gtmis', str(self.img_num),
-                    'inv_scale=' +str(self.inv_scale),
+                    'inv_scale=' + str(self.inv_scale),
                     'view_rect=' + str(self.x1) + "," + str(self.y1) +
-                              "," + str(self.x2) + "," + str(self.y2),
+                             "," + str(self.x2) + "," + str(self.y2),
                     'params=' + params_str
                 ]
             }
@@ -1183,15 +1172,18 @@ class DoImageView(QObject):
             logging.info("None self.np_full_img")
 
         try:
+            soon_2_be_removed = '''
             if self.threshold_params is None:
                 m_rgb_np = self.bmp_mask.img_2d_rgb(
                     data2d = self.np_full_mask_img
                 )
 
             else:
-                m_rgb_np = self.bmp_mask.img_2d_rgb_threshold(
+                m_rgb_np = self.bmp_mask.img_2d_rgb(
                     data2d = self.np_full_mask_img
                 )
+            '''
+            m_rgb_np = self.bmp_mask.img_2d_rgb(data2d = self.np_full_mask_img)
 
             q_img = QImage(
                 m_rgb_np.data,

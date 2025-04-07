@@ -145,6 +145,8 @@ def get_np_full_mask(raw_dat):
 
 def get_str_full_mask(raw_dat):
     np_arr_mask, i23_multipanel = get_np_full_mask(raw_dat)
+    print("type(np_arr_mask) =", type(np_arr_mask), "... get_str_full_mask")
+    np_arr_mask = 1 - np_arr_mask
     str_arr_mask = np_arr_2_byte_stream(np_arr_mask)
     return str_arr_mask, i23_multipanel
 
@@ -152,6 +154,8 @@ def get_str_full_mask(raw_dat):
 def slice_mask_2_byte(raw_dat, inv_scale, x1, y1, x2, y2):
 
     bool_np_arr, i23_multipanel = get_np_full_mask(raw_dat)
+    bool_np_arr = 1 - bool_np_arr
+    print("type(bool_np_arr) =", type(bool_np_arr), "... slice_mask_2_byte")
     big_d0 = bool_np_arr.shape[0]
     big_d1 = bool_np_arr.shape[1]
 

@@ -283,7 +283,9 @@ class np2bmp_mask(object):
             return None
 
         img_all_chanl = np.empty( (self.height, self.width), 'int')
-        img_all_chanl[:,:] = 254.0 - data2d[:,:] * 254.0
+
+        #img_all_chanl[:,:] = 254.0 - data2d[:,:] * 254.0
+        img_all_chanl[:,:] = data2d[:,:] * 254.0
 
         img_array = np.zeros( (self.height, self.width, 4) , dtype=np.uint8)
         img_array[:, :, 3] = img_all_chanl[:,:] / 3.0    #Transp
@@ -293,6 +295,8 @@ class np2bmp_mask(object):
         #TODO: find why the last chanel(Blue) is used for a Red colour
         return img_array
 
+
+        soon_2_be_removed = '''
     def img_2d_rgb_threshold(self, data2d = None):
         try:
             self.width = np.size( data2d[0:1, :] )
@@ -313,4 +317,4 @@ class np2bmp_mask(object):
         #TODO: find why the last chanel(Blue) is used for a Red colour
         return img_array
 
-
+        '''
