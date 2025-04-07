@@ -295,26 +295,3 @@ class np2bmp_mask(object):
         #TODO: find why the last chanel(Blue) is used for a Red colour
         return img_array
 
-
-        soon_2_be_removed = '''
-    def img_2d_rgb_threshold(self, data2d = None):
-        try:
-            self.width = np.size( data2d[0:1, :] )
-            self.height = np.size( data2d[:, 0:1] )
-
-        except TypeError:
-            return None
-
-        img_all_chanl = np.empty( (self.height, self.width), 'int')
-        #img_all_chanl[:,:] = 254.0 - data2d[:,:] * 254.0
-        img_all_chanl[:,:] = data2d[:,:] * 254.0
-
-        img_array = np.zeros( (self.height, self.width, 4) , dtype=np.uint8)
-        img_array[:, :, 3] = img_all_chanl[:,:] * 0.8     #Transp
-        #img_array[:, :, 2] = img_all_chanl[:,:]          #Blue
-        #img_array[:, :, 1] = img_all_chanl[:,:]          #Green
-        img_array[:, :, 0] = img_all_chanl[:,:]          #Red
-        #TODO: find why the last chanel(Blue) is used for a Red colour
-        return img_array
-
-        '''
