@@ -189,13 +189,11 @@ class LoadSliceImage(QThread):
     progressing = Signal(int)
     slice_loaded = Signal(dict)
     def __init__(
-        self, unit_URL = None, nod_num_lst = None,
-        img_num = None, inv_scale = None,
+        self, nod_num_lst = None, img_num = None, inv_scale = None,
         x1 = None, y1 = None, x2 = None, y2 = None,
         path_in = None, main_handler = None
     ):
         super(LoadSliceImage, self).__init__()
-        self.uni_url =       unit_URL
         self.nod_num_lst =   nod_num_lst
         self.img_num =       img_num
         self.inv_scale =     inv_scale
@@ -207,7 +205,7 @@ class LoadSliceImage(QThread):
         self.my_handler =    main_handler
 
     def run(self):
-        logging.info("loading slice of image ")
+        logging.info("loading slice of image")
         my_cmd_lst = [
             "gis", str(self.img_num),
             "inv_scale=" + str(self.inv_scale),
@@ -1436,7 +1434,6 @@ class DoImageView(QObject):
             self.get_x1_y1_x2_y2()
             self.set_inv_scale()
             self.load_slice_image = LoadSliceImage(
-                unit_URL = self.uni_url,
                 nod_num_lst = [self.cur_nod_num],
                 img_num = self.cur_img_num,
                 inv_scale = self.inv_scale,
