@@ -767,6 +767,7 @@ class LoadInThread(QThread):
 class DoImageView(QObject):
     new_mask_comp = Signal(dict)
     new_refl = Signal(int)
+    need_2_reload = Signal()
     def __init__(self, parent = None):
         super(DoImageView, self).__init__(parent)
         self.main_obj = parent
@@ -883,6 +884,8 @@ class DoImageView(QObject):
     def update_threshold_params(self, new_params):
         self.threshold_params = new_params
         print("New threshold_params =", self.threshold_params)
+        self.need_2_reload.emit()
+        self.slice_show_img()
 
     def build_background_n_get_nod_num(self, in_img_num):
         if self.nod_or_path is False or self.on_filter_reflections:
@@ -1171,17 +1174,6 @@ class DoImageView(QObject):
             logging.info("None self.np_full_img")
 
         try:
-            soon_2_be_removed = '''
-            if self.threshold_params is None:
-                m_rgb_np = self.bmp_mask.img_2d_rgb(
-                    data2d = self.np_full_mask_img
-                )
-
-            else:
-                m_rgb_np = self.bmp_mask.img_2d_rgb(
-                    data2d = self.np_full_mask_img
-                )
-            '''
             m_rgb_np = self.bmp_mask.img_2d_rgb(data2d = self.np_full_mask_img)
 
             q_img = QImage(
@@ -1531,11 +1523,11 @@ class DoImageView(QObject):
 
     def easter_egg(self, event):
         self.easter_egg_active = not self.easter_egg_active
+        print("Easter egg activated/deactivated")
+        print("scaling and cropping behaviour:" + str(self.easter_egg_active))
+        print("remember to change the image (next/previous)")
         logging.info("self.easter_egg_active =" + str(self.easter_egg_active))
         self.full_image_loaded = False
-
-        #TODO: have a look to an alternative to next line for solving the read only issue
-        #self.np_full_img.setflags(write=True)
 
     def set_drag_mode(self, mask_mode = False):
         self.mask_mode = mask_mode

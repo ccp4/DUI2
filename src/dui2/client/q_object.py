@@ -565,6 +565,7 @@ class MainObject(QObject):
         self.do_image_view.new_mask_comp.connect(self.get_new_mask_comp)
 
         self.do_image_view.new_refl.connect(self.get_new_refl)
+        self.do_image_view.need_2_reload.connect(self.image_reload)
 
         self.curr_outp_tab = self.window.OutputTabWidget.currentIndex()
         self.window.OutputTabWidget.currentChanged.connect(self.refresh_output)
@@ -827,6 +828,11 @@ class MainObject(QObject):
         else:
             self.recip_latt.quit_kill_all()
             self.recip_latt.launch_RL_view(self.curr_nod_num)
+
+    def image_reload(self):
+        print("\n need_2_reload activated .... ini")
+        self.refresh_output()
+        print("end .... need_2_reload activated \n")
 
     def mask_comp_changed(self, mask_comp):
         self.do_image_view.set_mask_comp(mask_comp)
