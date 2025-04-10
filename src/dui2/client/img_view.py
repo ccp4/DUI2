@@ -1400,6 +1400,8 @@ class DoImageView(QObject):
 
             self.l_stat.load_finished()
 
+        self.refresh_pixel_map()
+
     def update_progress(self, progress):
         self.l_stat.load_progress(progress)
 
