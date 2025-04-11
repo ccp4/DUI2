@@ -138,32 +138,23 @@ def get_np_full_mask_from_image(raw_image_data):
     if len(raw_image_data) == 24:
         print("24 panels, assuming i23 data(masking 2)")
         i23_multipanel = True
-
-        #############################################################
-
         pan_tup_size = 24
-
         np_top_pan = to_numpy(top_data_xy_flex)
 
         p_siz0 = np.size(np_top_pan[:, 0:1])
         p_siz1 = np.size(np_top_pan[0:1, :])
-
         p_siz_bg = p_siz0 + 18
-
         im_siz0 = p_siz_bg * pan_tup_size
         im_siz1 = p_siz1
 
         np_arr = np.zeros((im_siz0, im_siz1), dtype=np.double)
         np_arr[:, :] = -1
         np_arr[0:p_siz0, 0:p_siz1] = np_top_pan[:, :]
-
         for s_num in range(1,pan_tup_size):
             pan_dat = np.copy(np_top_pan)
             np_arr[
                 s_num * p_siz_bg : s_num * p_siz_bg + p_siz0, 0:p_siz1
             ] = pan_dat[:, :]
-
-        #############################################################
 
     else:
         print("Using the first panel only (masking 2)")
@@ -192,24 +183,7 @@ def get_np_full_mask(raw_mask_data, raw_image_data):
         print("Type Err catch (get_np_full_img)")
         np_arr, i23_multipanel = get_np_full_mask_from_image(raw_image_data)
 
-
-
-
     return np_arr, i23_multipanel
-
-copy_pasted = '''
-    try:
-        mask_file = my_sweep.external_lookup.mask.filename
-        pick_file = open(mask_file, "rb")
-        mask_tup_obj = pickle.load(pick_file)
-        pick_file.close()
-        mask = mask_tup_obj[0]
-        print("type(mask) =", type(mask))
-
-    except FileNotFoundError:
-        mask = flex.bool(flex.grid(image.all()),True)
-    '''
-
 
 def get_str_full_mask(raw_dat):
     np_arr_mask, i23_multipanel = get_np_full_mask(raw_dat, None)
@@ -280,8 +254,6 @@ def from_image_n_mask_2_threshold(np_img, np_mask, params):
     gain             = params["gain"]
     size             = params["size"]
 
-    #np_mask = to_numpy(mask)
-    #np_img = to_numpy(image)
     abs_img = convert_2_black_n_white(np_img)
 
     sum_np_mask = np_mask + abs_img - 1.5
