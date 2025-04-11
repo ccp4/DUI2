@@ -47,7 +47,7 @@ if __name__ == "__main__":
         print("params_dict =", params_dict)
         params_str = str(params_dict)
         full_cmd = {
-            'nod_lst': [2],
+            'nod_lst': [1],
             'path': None,
             'cmd_str': [
                 'gtmis', str(img_num), 'inv_scale=' +str(img_num),

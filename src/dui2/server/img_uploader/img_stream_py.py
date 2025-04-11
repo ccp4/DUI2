@@ -12,10 +12,10 @@ def get_np_full_img(raw_dat):
         i23_multipanel = True
         logging.info("24 panels, assuming i23 data(main image)")
         pan_tup = tuple(range(24))
-        top_pan = to_numpy(raw_dat[pan_tup[0]])
+        np_top_pan = to_numpy(raw_dat[pan_tup[0]])
 
-        p_siz0 = np.size(top_pan[:, 0:1])
-        p_siz1 = np.size(top_pan[0:1, :])
+        p_siz0 = np.size(np_top_pan[:, 0:1])
+        p_siz1 = np.size(np_top_pan[0:1, :])
 
         p_siz_bg = p_siz0 + 18
 
@@ -24,7 +24,7 @@ def get_np_full_img(raw_dat):
 
         np_arr = np.zeros((im_siz0, im_siz1), dtype=np.double)
         np_arr[:, :] = -1
-        np_arr[0:p_siz0, 0:p_siz1] = top_pan[:, :]
+        np_arr[0:p_siz0, 0:p_siz1] = np_top_pan[:, :]
 
         for s_num in pan_tup[1:]:
             pan_dat = to_numpy(raw_dat[pan_tup[s_num]])
@@ -109,42 +109,110 @@ def scale_np_arr(big_np_arr, inv_scale):
     return rd_arr
 
 
-def get_np_full_mask(raw_dat):
-    i23_multipanel = False
-    if len(raw_dat) == 24:
-        i23_multipanel = True
-        logging.info("24 panels, assuming i23 data(masking)")
+def get_np_full_mask_from_i23_raw(raw_mask_data):
+    pan_tup = tuple(range(24))
+    np_top_pan = to_numpy(raw_mask_data[pan_tup[0]])
+    p_siz0 = np.size(np_top_pan[:, 0:1])
+    p_siz1 = np.size(np_top_pan[0:1, :])
+    p_siz_bg = p_siz0 + 18
 
-        pan_tup = tuple(range(24))
-        top_pan = to_numpy(raw_dat[pan_tup[0]])
-        p_siz0 = np.size(top_pan[:, 0:1])
-        p_siz1 = np.size(top_pan[0:1, :])
+    im_siz0 = p_siz_bg * len(pan_tup)
+    im_siz1 = p_siz1
+
+    np_arr = np.zeros((im_siz0, im_siz1), dtype=bool)
+    np_arr[:, :] = 1
+    np_arr[0:p_siz0, 0:p_siz1] = np_top_pan[:, :]
+
+    for s_num in pan_tup[1:]:
+        pan_dat = to_numpy(raw_mask_data[pan_tup[s_num]])
+        np_arr[
+            s_num * p_siz_bg : s_num * p_siz_bg + p_siz0, 0:p_siz1
+        ] = pan_dat[:, :]
+
+    return np_arr
+
+def get_np_full_mask_from_image(raw_image_data):
+    i23_multipanel = False
+    first_flex_panel = raw_image_data[0]
+    top_data_xy_flex = flex.bool(flex.grid(first_flex_panel.all()),True)
+    if len(raw_image_data) == 24:
+        print("24 panels, assuming i23 data(masking 2)")
+        i23_multipanel = True
+
+        #############################################################
+
+        pan_tup_size = 24
+
+        np_top_pan = to_numpy(top_data_xy_flex)
+
+        p_siz0 = np.size(np_top_pan[:, 0:1])
+        p_siz1 = np.size(np_top_pan[0:1, :])
+
         p_siz_bg = p_siz0 + 18
 
-        im_siz0 = p_siz_bg * len(pan_tup)
+        im_siz0 = p_siz_bg * pan_tup_size
         im_siz1 = p_siz1
 
-        np_arr = np.zeros((im_siz0, im_siz1), dtype=bool)
-        np_arr[:, :] = 1
-        np_arr[0:p_siz0, 0:p_siz1] = top_pan[:, :]
+        np_arr = np.zeros((im_siz0, im_siz1), dtype=np.double)
+        np_arr[:, :] = -1
+        np_arr[0:p_siz0, 0:p_siz1] = np_top_pan[:, :]
 
-        for s_num in pan_tup[1:]:
-            pan_dat = to_numpy(raw_dat[pan_tup[s_num]])
+        for s_num in range(1,pan_tup_size):
+            pan_dat = np.copy(np_top_pan)
             np_arr[
                 s_num * p_siz_bg : s_num * p_siz_bg + p_siz0, 0:p_siz1
             ] = pan_dat[:, :]
 
+        #############################################################
+
     else:
-        logging.info("Using the first panel only")
-        data_xy_flex = raw_dat[0]
-        np_arr = to_numpy(data_xy_flex)
+        print("Using the first panel only (masking 2)")
+        np_arr = to_numpy(top_data_xy_flex)
 
     return np_arr, i23_multipanel
 
 
+def get_np_full_mask(raw_mask_data, raw_image_data):
+
+    print("\n << HERE (get_np_full_mask) >> \n")
+    print("type(raw_image_data) " + str(type(raw_image_data)) + "\n")
+    i23_multipanel = False
+    try:
+        if len(raw_mask_data) == 24:
+            print("24 panels, assuming i23 data(masking 1)")
+            i23_multipanel = True
+            np_arr = get_np_full_mask_from_i23_raw(raw_mask_data)
+
+        else:
+            print("Using the first panel only (masking 1)")
+            data_xy_flex = raw_mask_data[0]
+            np_arr = to_numpy(data_xy_flex)
+
+    except TypeError:
+        print("Type Err catch (get_np_full_img)")
+        np_arr, i23_multipanel = get_np_full_mask_from_image(raw_image_data)
+
+
+
+
+    return np_arr, i23_multipanel
+
+copy_pasted = '''
+    try:
+        mask_file = my_sweep.external_lookup.mask.filename
+        pick_file = open(mask_file, "rb")
+        mask_tup_obj = pickle.load(pick_file)
+        pick_file.close()
+        mask = mask_tup_obj[0]
+        print("type(mask) =", type(mask))
+
+    except FileNotFoundError:
+        mask = flex.bool(flex.grid(image.all()),True)
+    '''
+
 
 def get_str_full_mask(raw_dat):
-    np_arr_mask, i23_multipanel = get_np_full_mask(raw_dat)
+    np_arr_mask, i23_multipanel = get_np_full_mask(raw_dat, None)
     print("type(np_arr_mask) =", type(np_arr_mask), "... get_str_full_mask")
     np_arr_mask = 1 - np_arr_mask
     str_arr_mask = np_arr_2_byte_stream(np_arr_mask)
@@ -153,7 +221,7 @@ def get_str_full_mask(raw_dat):
 
 def slice_mask_2_byte(raw_dat, inv_scale, x1, y1, x2, y2):
 
-    bool_np_arr, i23_multipanel = get_np_full_mask(raw_dat)
+    bool_np_arr, i23_multipanel = get_np_full_mask(raw_dat, None)
     bool_np_arr = 1 - bool_np_arr
     print("type(bool_np_arr) =", type(bool_np_arr), "... slice_mask_2_byte")
     big_d0 = bool_np_arr.shape[0]
@@ -252,7 +320,7 @@ def mask_threshold_2_byte(
     image_raw_dat, mask_raw_dat, params
 ):
     print("<< HERE FULL IMG >>   #2 \n")
-    bool_np_arr, i23_multipanel = get_np_full_mask(mask_raw_dat)
+    bool_np_arr, i23_multipanel = get_np_full_mask(mask_raw_dat, image_raw_dat)
     np_full_img, i23_multipanel = get_np_full_img(image_raw_dat)
     debug_mask_obj = from_image_n_mask_2_threshold(np_full_img, bool_np_arr, params)
     flex_debug_mask = debug_mask_obj.final_mask()
@@ -266,7 +334,7 @@ def slice_mask_threshold_2_byte(
     image_raw_dat, mask_raw_dat, inv_scale, x1, y1, x2, y2, params
 ):
     print("<< HERE >>   #2 \n")
-    bool_np_arr, i23_multipanel = get_np_full_mask(mask_raw_dat)
+    bool_np_arr, i23_multipanel = get_np_full_mask(mask_raw_dat, image_raw_dat)
     np_full_img, i23_multipanel = get_np_full_img(image_raw_dat)
     debug_mask_obj = from_image_n_mask_2_threshold(np_full_img, bool_np_arr, params)
     flex_debug_mask = debug_mask_obj.final_mask()

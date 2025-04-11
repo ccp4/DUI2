@@ -40,7 +40,7 @@ if __name__ == "__main__":
     for img_num in [1,2]:
         print("\n\n img_num =", img_num)
         full_cmd = {
-            'nod_lst': [2],
+            'nod_lst': [1],
             'path': None,
             'cmd_str': [
                 'gtmi', str(img_num),

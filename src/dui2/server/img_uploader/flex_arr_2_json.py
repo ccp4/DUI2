@@ -467,16 +467,21 @@ def get_bytes_w_2d_threshold_mask(
             mask_tup_obj = pickle.load(pick_file)
             pick_file.close()
 
-            byte_data, i23_multipanel = img_stream_py.mask_threshold_2_byte(
-                img_tup_obj, mask_tup_obj, params
-            )
-
-            if byte_data == "Error":
-                logging.info('byte_data == "Error"')
-                byte_data = None
-
         except FileNotFoundError:
+            print("FileNotFoundError <<< get_bytes_w_2d_threshold_mask")
+            mask_tup_obj = None
+
+
+        print("mask_tup_obj = ", mask_tup_obj)
+
+        byte_data, i23_multipanel = img_stream_py.mask_threshold_2_byte(
+            img_tup_obj, mask_tup_obj, params
+        )
+
+        if byte_data == "Error":
+            logging.info('byte_data == "Error"')
             byte_data = None
+
 
         return byte_data
 
@@ -502,19 +507,20 @@ def get_bytes_w_2d_threshold_mask_slise(
             mask_tup_obj = pickle.load(pick_file)
             pick_file.close()
 
-            byte_data, i23_multipanel = img_stream_py.slice_mask_threshold_2_byte(
-                img_tup_obj, mask_tup_obj, inv_scale,
-                int(float(x1)), int(float(y1)),
-                int(float(x2)), int(float(y2)),
-                params
-            )
-
-            if byte_data == "Error":
-                logging.info('byte_data == "Error"')
-                byte_data = None
-
         except FileNotFoundError:
+            mask_tup_obj = None
+
+        byte_data, i23_multipanel = img_stream_py.slice_mask_threshold_2_byte(
+            img_tup_obj, mask_tup_obj, inv_scale,
+            int(float(x1)), int(float(y1)),
+            int(float(x2)), int(float(y2)),
+            params
+        )
+
+        if byte_data == "Error":
+            logging.info('byte_data == "Error"')
             byte_data = None
+
 
         return byte_data
 
