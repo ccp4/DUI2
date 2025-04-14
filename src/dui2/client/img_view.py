@@ -768,6 +768,7 @@ class DoImageView(QObject):
     new_mask_comp = Signal(dict)
     new_refl = Signal(int)
     need_2_reload = Signal()
+
     def __init__(self, parent = None):
         super(DoImageView, self).__init__(parent)
         self.main_obj = parent
@@ -848,6 +849,8 @@ class DoImageView(QObject):
         self.list_temp_mask = None
 
         self.threshold_params = None
+        self.old_threshold_params = None
+
 
         timer = QTimer(self)
         timer.timeout.connect(self.check_move)
@@ -883,9 +886,7 @@ class DoImageView(QObject):
 
     def update_threshold_params(self, new_params):
         self.threshold_params = new_params
-        print("New threshold_params =", self.threshold_params)
         self.need_2_reload.emit()
-        self.slice_show_img()
 
     def build_background_n_get_nod_num(self, in_img_num):
         if self.nod_or_path is False or self.on_filter_reflections:
@@ -1255,15 +1256,19 @@ class DoImageView(QObject):
         self.load_full_mask_image.start()
 
     def check_move(self):
+
         self.get_x1_y1_x2_y2()
         if(
             self.old_x1 != self.x1 or self.old_y1 != self.y1 or
             self.old_x2 != self.x2 or self.old_y2 != self.y2 or
             self.old_inv_scl != self.inv_scale or
             self.old_nod_num != self.cur_nod_num or
-            self.old_img_num != self.cur_img_num
+            self.old_img_num != self.cur_img_num or
+            self.old_threshold_params != self.threshold_params
         ):
-            logging.info("scaled, dragged or changed image")
+            print(
+                "\n scaled, dragged, changed image or threshold_params changed \n"
+            )
             self.slice_show_img()
 
         self.old_x1 = self.x1
@@ -1273,6 +1278,7 @@ class DoImageView(QObject):
         self.old_inv_scl = self.inv_scale
         self.old_nod_num = self.cur_nod_num
         self.old_img_num = self.cur_img_num
+        self.old_threshold_params = self.threshold_params
 
     def det_tmp_x1_y1_x2_y2(self):
         viewport_rect = QRect(
