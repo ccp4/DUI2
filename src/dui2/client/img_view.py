@@ -657,56 +657,60 @@ class PopDisplayMenu(QMenu):
         self.setLayout(my_main_box)
 
     def threshold_param_changed(self, value):
-        default = {
-        "nsig_b":3, "nsig_s":3, "global_threshold":0,
-        "min_count":2, "gain":1.0, "size":(3, 3)
-        }
-        try:
-            tmp_nsig_b = int(self.param_nsig_b.text())
+        if self.threshold_box_show.isChecked():
+            default = {
+            "nsig_b":3, "nsig_s":3, "global_threshold":0,
+            "min_count":2, "gain":1.0, "size":(3, 3)
+            }
+            try:
+                tmp_nsig_b = int(self.param_nsig_b.text())
 
-        except ValueError:
-            tmp_nsig_b = default["nsig_b"]
+            except ValueError:
+                tmp_nsig_b = default["nsig_b"]
 
-        try:
-            tmp_nsig_s = int(self.param_nsig_s.text())
+            try:
+                tmp_nsig_s = int(self.param_nsig_s.text())
 
-        except ValueError:
-            tmp_nsig_s = default["nsig_s"]
+            except ValueError:
+                tmp_nsig_s = default["nsig_s"]
 
-        try:
-            tmp_global_threshold = int(self.param_global_threshold.text())
+            try:
+                tmp_global_threshold = int(self.param_global_threshold.text())
 
-        except ValueError:
-            tmp_global_threshold = default["global_threshold"]
+            except ValueError:
+                tmp_global_threshold = default["global_threshold"]
 
-        try:
-            tmp_min_count = int(self.param_min_count.text())
+            try:
+                tmp_min_count = int(self.param_min_count.text())
 
-        except ValueError:
-            tmp_min_count = default["min_count"]
+            except ValueError:
+                tmp_min_count = default["min_count"]
 
-        try:
-            tmp_gain = float(self.param_gain.text())
+            try:
+                tmp_gain = float(self.param_gain.text())
 
-        except ValueError:
-            tmp_gain = default["gain"]
+            except ValueError:
+                tmp_gain = default["gain"]
 
-        lst_size = str(self.param_size.text()).split(",")
-        try:
-            tmp_size = (int(lst_size[0]), int(lst_size[1]))
+            lst_size = str(self.param_size.text()).split(",")
+            try:
+                tmp_size = (int(lst_size[0]), int(lst_size[1]))
 
-        except (ValueError, IndexError):
-            tmp_size = default["size"]
+            except (ValueError, IndexError):
+                tmp_size = default["size"]
 
-        local_threshold_params = {
-            "nsig_b":               tmp_nsig_b,
-            "nsig_s":               tmp_nsig_s,
-            "global_threshold":     tmp_global_threshold,
-            "min_count":            tmp_min_count,
-            "gain":                 tmp_gain,
-            "size":                 tmp_size
-        }
-        self.new_threshold_param.emit(local_threshold_params)
+            local_threshold_params = {
+                "nsig_b":               tmp_nsig_b,
+                "nsig_s":               tmp_nsig_s,
+                "global_threshold":     tmp_global_threshold,
+                "min_count":            tmp_min_count,
+                "gain":                 tmp_gain,
+                "size":                 tmp_size
+            }
+            self.new_threshold_param.emit(local_threshold_params)
+
+        else:
+            self.new_threshold_param.emit(None)
 
     def sig_new_redraw(self):
         logging.info("new_redraw")
@@ -1266,8 +1270,8 @@ class DoImageView(QObject):
             self.old_img_num != self.cur_img_num or
             self.old_threshold_params != self.threshold_params
         ):
-            print(
-                "\n scaled, dragged, changed image or threshold_params changed \n"
+            logging.info(
+                "scaled, dragged, changed image or threshold_params changed"
             )
             self.slice_show_img()
 

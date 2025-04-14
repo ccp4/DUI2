@@ -95,8 +95,6 @@ def load_mask_img_json_w_str(
             ]
         }
 
-    print("threshold_params(load_mask_img_json_w_str) = ", threshold_params)
-
     try:
         start_tm = time.time()
 
