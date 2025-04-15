@@ -255,6 +255,50 @@ def get_help_messages(handler_in):
     return help_dict
 
 
+def rename_par(key_in):
+    dict_transform = {
+        'gain':                         'spotfinder.threshold.dispersion.gain',
+        'nsig_b':           'spotfinder.threshold.dispersion.sigma_background',
+        'nsig_s':               'spotfinder.threshold.dispersion.sigma_strong',
+        'global_threshold': 'spotfinder.threshold.dispersion.global_threshold',
+        'min_count':               'spotfinder.threshold.dispersion.min_local',
+        'size':                  'spotfinder.threshold.dispersion.kernel_size'
+    }
+
+    try:
+        str_out = dict_transform[key_in]
+
+    except KeyError:
+        str_out = None
+
+    return str_out
+
+
+def build_list_w_pars(dict_in):
+    lst_out = ['dials.find_spots']
+    lst_key = list(dict_in)
+    for key in lst_key:
+        try:
+            full_str_val = str(dict_in[key])
+            str_val = full_str_val.replace(" ", "")
+            lst_out.append(rename_par(key) + "=" + str_val)
+
+        except TypeError:
+            pass
+
+    return lst_out
+
+
+def build_thresh_comd(dict_in):
+    try:
+        lst_out = [build_list_w_pars(dict_in)]
+
+    except TypeError:
+        lst_out = [[]]
+
+    return lst_out
+
+
 class Mtz_Data_Request(QThread):
     update_progress = Signal(int)
     done_download = Signal(bytes)
@@ -483,28 +527,32 @@ class CommandParamControl:
         logging.info(" clone_from_list ------------")
 
         self.m_cmd_lst = []
-        for inner_lst in lst_par_in:
-            self.m_cmd_lst.append(str(inner_lst[0]))
+        try:
+            for inner_lst in lst_par_in:
+                self.m_cmd_lst.append(str(inner_lst[0]))
 
-        self.par_lst = []
-        for inner_lst in lst_par_in:
-            lst_par = []
+            self.par_lst = []
+            for inner_lst in lst_par_in:
+                lst_par = []
 
-            for pos, str_elem in enumerate(inner_lst):
-                if "=" in str_elem or pos > 0:
-                    lst_par.append(str_elem)
+                for pos, str_elem in enumerate(inner_lst):
+                    if "=" in str_elem or pos > 0:
+                        lst_par.append(str_elem)
 
-            inner_par_lst = []
-            for str_elem in lst_par:
-                if "=" in str_elem:
-                    tmp_lst = str_elem.split("=")
-                    inner_par_lst.append(
-                        {"name":str(tmp_lst[0]), "value":str(tmp_lst[1])}
-                    )
-                elif lst_par_in[0][0] == "dials.import":
-                    inner_par_lst.append({"name":"", "value":str(str_elem)})
+                inner_par_lst = []
+                for str_elem in lst_par:
+                    if "=" in str_elem:
+                        tmp_lst = str_elem.split("=")
+                        inner_par_lst.append(
+                            {"name":str(tmp_lst[0]), "value":str(tmp_lst[1])}
+                        )
+                    elif lst_par_in[0][0] == "dials.import":
+                        inner_par_lst.append({"name":"", "value":str(str_elem)})
 
-            self.par_lst.append(inner_par_lst)
+                self.par_lst.append(inner_par_lst)
+
+        except IndexError:
+            self.par_lst = []
 
         logging.info("self.par_lst =" + str(self.par_lst))
         #TODO remember to handle "self.custm_param"
