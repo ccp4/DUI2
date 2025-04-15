@@ -294,7 +294,13 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
 
                     if left_side == "params":
                         params = eval(right_side)
-                        print("params =", params)
+                        print("nsig_b            =",params["nsig_b"])
+                        print("nsig_s            =",params["nsig_s"])
+                        print("global_threshold  =",params["global_threshold"])
+                        print("min_count         =",params["min_count"])
+                        print("gain              =",params["gain"])
+                        print("size              =",params["size"])
+
 
                 str_json = flex_arr_2_json.get_bytes_w_2d_threshold_mask(
                     step_list[lin2go]._lst_expt_out,
@@ -334,16 +340,12 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
 
                     elif left_side == "params":
                         params = eval(right_side)
-                        print("params =", params)
-
-
                         print("nsig_b            =",params["nsig_b"])
                         print("nsig_s            =",params["nsig_s"])
                         print("global_threshold  =",params["global_threshold"])
                         print("min_count         =",params["min_count"])
                         print("gain              =",params["gain"])
                         print("size              =",params["size"])
-
 
                 str_json = flex_arr_2_json.get_bytes_w_2d_threshold_mask_slise(
                     step_list[lin2go]._lst_expt_out,

@@ -451,7 +451,6 @@ def convert_2_black_n_white(np_img):
 def get_bytes_w_2d_threshold_mask(
     experiments_list_path, img_num, params
 ):
-    print(">> HERE FULL IMG<<   #1")
     experiments = get_experiments(experiments_list_path[0])
     if experiments is not None:
         on_sweep_img_num, n_sweep = get_correct_img_num_n_sweep_num(
@@ -470,9 +469,6 @@ def get_bytes_w_2d_threshold_mask(
         except FileNotFoundError:
             print("FileNotFoundError <<< get_bytes_w_2d_threshold_mask")
             mask_tup_obj = None
-
-
-        print("mask_tup_obj = ", mask_tup_obj)
 
         byte_data, i23_multipanel = img_stream_py.mask_threshold_2_byte(
             img_tup_obj, mask_tup_obj, params
