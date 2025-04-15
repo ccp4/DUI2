@@ -663,19 +663,19 @@ class PopDisplayMenu(QMenu):
             "min_count":2, "gain":1.0, "size":(3, 3)
             }
             try:
-                tmp_nsig_b = int(self.param_nsig_b.text())
+                tmp_nsig_b = float(self.param_nsig_b.text())
 
             except ValueError:
                 tmp_nsig_b = default["nsig_b"]
 
             try:
-                tmp_nsig_s = int(self.param_nsig_s.text())
+                tmp_nsig_s = float(self.param_nsig_s.text())
 
             except ValueError:
                 tmp_nsig_s = default["nsig_s"]
 
             try:
-                tmp_global_threshold = int(self.param_global_threshold.text())
+                tmp_global_threshold = float(self.param_global_threshold.text())
 
             except ValueError:
                 tmp_global_threshold = default["global_threshold"]

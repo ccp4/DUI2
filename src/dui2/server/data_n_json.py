@@ -345,9 +345,6 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
                         print("size              =",params["size"])
 
 
-
-
-
                 str_json = flex_arr_2_json.get_bytes_w_2d_threshold_mask_slise(
                     step_list[lin2go]._lst_expt_out,
                     int(uni_cmd[1]), inv_scale, x1, y1, x2, y2, params
