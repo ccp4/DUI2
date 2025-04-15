@@ -482,6 +482,7 @@ class PopDisplayMenu(QMenu):
     new_overlay = Signal(str)
     new_redraw = Signal()
     new_ref_list = Signal()
+    user_param_pass = Signal()
     new_threshold_param = Signal(dict)
     def __init__(self, parent=None):
         super().__init__()
@@ -606,6 +607,8 @@ class PopDisplayMenu(QMenu):
             str(self.default_threshold_params["size"][1])
         )
 
+        self.user_pass_btn = QPushButton("Apply in spot find")
+
         self.threshold_box_show.stateChanged.connect(
             self.threshold_param_changed
         )
@@ -617,6 +620,7 @@ class PopDisplayMenu(QMenu):
         self.param_min_count.textChanged.connect(self.threshold_param_changed)
         self.param_gain.textChanged.connect(self.threshold_param_changed)
         self.param_size.textChanged.connect(self.threshold_param_changed)
+        self.user_pass_btn.clicked.connect(self.user_applied)
 
         hbox_nsig_b= QHBoxLayout()
         hbox_nsig_s= QHBoxLayout()
@@ -645,6 +649,7 @@ class PopDisplayMenu(QMenu):
         threshold_box_layout.addLayout(hbox_min_count)
         threshold_box_layout.addLayout(hbox_gain)
         threshold_box_layout.addLayout(hbox_size)
+        threshold_box_layout.addWidget(self.user_pass_btn)
 
         sp_threshold_group.setLayout(threshold_box_layout)
 
@@ -715,6 +720,10 @@ class PopDisplayMenu(QMenu):
         else:
             self.new_threshold_param.emit(None)
 
+    def user_applied(self):
+        print("user_pass_btn")
+        self.user_param_pass.emit()
+
     def sig_new_redraw(self):
         logging.info("new_redraw")
         self.new_redraw.emit()
@@ -773,6 +782,7 @@ class LoadInThread(QThread):
 
 class DoImageView(QObject):
     new_mask_comp = Signal(dict)
+    user_pass_threshold_param = Signal(dict)
     new_refl = Signal(int)
     need_2_reload = Signal()
 
@@ -832,6 +842,8 @@ class DoImageView(QObject):
         self.pop_display_menu.new_threshold_param.connect(
             self.update_threshold_params
         )
+        self.pop_display_menu.user_param_pass.connect(self.user_applied)
+
         self.my_scene.img_scale.connect(self.scale_img)
         self.my_scene.new_mouse_pos.connect(self.on_mouse_move)
         self.my_scene.mouse_pressed.connect(self.on_mouse_press)
@@ -893,7 +905,10 @@ class DoImageView(QObject):
 
     def update_threshold_params(self, new_params):
         self.threshold_params = new_params
-        self.need_2_reload.emit()
+        self.need_2_reload.emit() #TODO: rethink if this signal is needed here
+
+    def user_applied(self):
+        self.user_pass_threshold_param.emit(self.threshold_params)
 
     def build_background_n_get_nod_num(self, in_img_num):
         if self.nod_or_path is False or self.on_filter_reflections:

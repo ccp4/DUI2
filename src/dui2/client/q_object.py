@@ -567,6 +567,10 @@ class MainObject(QObject):
         self.do_image_view.new_refl.connect(self.get_new_refl)
         self.do_image_view.need_2_reload.connect(self.refresh_output)
 
+        self.do_image_view.user_pass_threshold_param.connect(
+            self.update_threshold_params
+        )
+
         self.curr_outp_tab = self.window.OutputTabWidget.currentIndex()
         self.window.OutputTabWidget.currentChanged.connect(self.refresh_output)
         self.window.ImgNumEdit.editingFinished.connect(self.img_num_changed)
@@ -844,6 +848,9 @@ class MainObject(QObject):
 
     def filter_reseted(self):
         self.refresh_output()
+
+    def update_threshold_params(self, new_params):
+        print("MainObject.update_threshold_params(new_params): \n", new_params)
 
     def tmp_mask_changed(self, lst_of_lst):
         self.do_image_view.update_tmp_mask(lst_of_lst[0][0:-1])
