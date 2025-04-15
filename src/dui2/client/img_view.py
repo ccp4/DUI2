@@ -584,29 +584,36 @@ class PopDisplayMenu(QMenu):
 
         threshold_box_layout.addWidget(self.threshold_box_show)
 
-        local_threshold_params = {
-            "nsig_b":3, "nsig_s":3, "global_threshold":0,
-            "min_count":2, "gain":1.0, "size":(3, 3)
+        self.default_threshold_params = {
+        "nsig_b":6.0, "nsig_s":3.0, "global_threshold":0,
+        "min_count":2, "gain":1.0, "size":(3, 3)
         }
-
-        self.param_nsig_b = QLineEdit(str(local_threshold_params["nsig_b"]))
-        self.param_nsig_s = QLineEdit(str(local_threshold_params["nsig_s"]))
+        self.param_nsig_b = QLineEdit(
+            str(self.default_threshold_params["nsig_b"])
+        )
+        self.param_nsig_s = QLineEdit(
+            str(self.default_threshold_params["nsig_s"])
+        )
         self.param_global_threshold = QLineEdit(
-            str(local_threshold_params["global_threshold"])
+            str(self.default_threshold_params["global_threshold"])
         )
         self.param_min_count = QLineEdit(
-            str(local_threshold_params["min_count"])
+            str(self.default_threshold_params["min_count"])
         )
-        self.param_gain = QLineEdit(str(local_threshold_params["gain"]))
+        self.param_gain = QLineEdit(str(self.default_threshold_params["gain"]))
         self.param_size = QLineEdit(
-            str(local_threshold_params["size"][0]) + "," +
-            str(local_threshold_params["size"][1])
+            str(self.default_threshold_params["size"][0]) + "," +
+            str(self.default_threshold_params["size"][1])
         )
 
-        self.threshold_box_show.stateChanged.connect(self.threshold_param_changed)
+        self.threshold_box_show.stateChanged.connect(
+            self.threshold_param_changed
+        )
         self.param_nsig_b.textChanged.connect(self.threshold_param_changed)
         self.param_nsig_s.textChanged.connect(self.threshold_param_changed)
-        self.param_global_threshold.textChanged.connect(self.threshold_param_changed)
+        self.param_global_threshold.textChanged.connect(
+            self.threshold_param_changed
+        )
         self.param_min_count.textChanged.connect(self.threshold_param_changed)
         self.param_gain.textChanged.connect(self.threshold_param_changed)
         self.param_size.textChanged.connect(self.threshold_param_changed)
@@ -658,46 +665,42 @@ class PopDisplayMenu(QMenu):
 
     def threshold_param_changed(self, value):
         if self.threshold_box_show.isChecked():
-            default = {
-            "nsig_b":3, "nsig_s":3, "global_threshold":0,
-            "min_count":2, "gain":1.0, "size":(3, 3)
-            }
             try:
                 tmp_nsig_b = float(self.param_nsig_b.text())
 
             except ValueError:
-                tmp_nsig_b = default["nsig_b"]
+                tmp_nsig_b = self.default_threshold_params["nsig_b"]
 
             try:
                 tmp_nsig_s = float(self.param_nsig_s.text())
 
             except ValueError:
-                tmp_nsig_s = default["nsig_s"]
+                tmp_nsig_s = self.default_threshold_params["nsig_s"]
 
             try:
                 tmp_global_threshold = float(self.param_global_threshold.text())
 
             except ValueError:
-                tmp_global_threshold = default["global_threshold"]
+                tmp_global_threshold = self.default_threshold_params["global_threshold"]
 
             try:
                 tmp_min_count = int(self.param_min_count.text())
 
             except ValueError:
-                tmp_min_count = default["min_count"]
+                tmp_min_count = self.default_threshold_params["min_count"]
 
             try:
                 tmp_gain = float(self.param_gain.text())
 
             except ValueError:
-                tmp_gain = default["gain"]
+                tmp_gain = self.default_threshold_params["gain"]
 
             lst_size = str(self.param_size.text()).split(",")
             try:
                 tmp_size = (int(lst_size[0]), int(lst_size[1]))
 
             except (ValueError, IndexError):
-                tmp_size = default["size"]
+                tmp_size = self.default_threshold_params["size"]
 
             local_threshold_params = {
                 "nsig_b":               tmp_nsig_b,
