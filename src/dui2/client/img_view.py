@@ -624,15 +624,14 @@ class InfoDisplayMenu(QMenu):
         self.palette = self.my_parent.palette
         palette_group = QGroupBox("Palette tuning")
         palette_box_layout = QVBoxLayout()
-
-        palette_box_layout.addWidget(QLabel("Min(i)         Max(i)"))
-
         self.i_min_line = QLineEdit(str(self.i_min))
         self.i_min_line.textChanged.connect(self.i_min_changed)
         self.i_max_line = QLineEdit(str(self.i_max))
         self.i_max_line.textChanged.connect(self.i_max_changed)
         i_min_max_layout = QHBoxLayout()
+        i_min_max_layout.addWidget(QLabel("Min(i)"))
         i_min_max_layout.addWidget(self.i_min_line)
+        i_min_max_layout.addWidget(QLabel("Max(i)"))
         i_min_max_layout.addWidget(self.i_max_line)
         palette_box_layout.addLayout(i_min_max_layout)
 
