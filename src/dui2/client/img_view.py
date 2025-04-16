@@ -624,6 +624,9 @@ class InfoDisplayMenu(QMenu):
         self.palette = self.my_parent.palette
         palette_group = QGroupBox("Palette tuning")
         palette_box_layout = QVBoxLayout()
+
+        palette_box_layout.addWidget(QLabel("Min(i)         Max(i)"))
+
         self.i_min_line = QLineEdit(str(self.i_min))
         self.i_min_line.textChanged.connect(self.i_min_changed)
         self.i_max_line = QLineEdit(str(self.i_max))
@@ -652,7 +655,6 @@ class InfoDisplayMenu(QMenu):
         self.overlay_select.currentIndexChanged.connect(
             self.overlay_changed_by_user
         )
-        palette_box_layout.addWidget(QLabel("  ... "))
         palette_h_layout = QHBoxLayout()
         palette_h_layout.addWidget(QLabel(" Image palette "))
         palette_h_layout.addWidget(self.palette_select)
@@ -662,6 +664,8 @@ class InfoDisplayMenu(QMenu):
         colour_h_layout.addWidget(QLabel(" Overlayed reflections  "))
         colour_h_layout.addWidget(self.overlay_select)
         palette_box_layout.addLayout(colour_h_layout)
+
+        palette_box_layout.addStretch() #Maybe we will remove this stretch soon
 
         palette_group.setLayout(palette_box_layout)
 
@@ -707,9 +711,9 @@ class InfoDisplayMenu(QMenu):
 
         left_side_box = QVBoxLayout()
         left_side_box.addWidget(palette_group)
-        left_side_box.addWidget(info_group)
 
         right_side_box = QVBoxLayout()
+        right_side_box.addWidget(info_group)
         right_side_box.addWidget(find_vs_predict_group)
 
         my_main_box = QHBoxLayout()
