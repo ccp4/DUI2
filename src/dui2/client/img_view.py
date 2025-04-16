@@ -476,15 +476,150 @@ class ImgGraphicsScene(QGraphicsScene):
         self.mouse_released.emit(x_pos, y_pos)
 
 
-class PopDisplayMenu(QMenu):
+class ThresholdDisplayMenu(QMenu):
+    user_param_pass = Signal()
+    new_threshold_param = Signal(dict)
+    def __init__(self, parent = None):
+        super().__init__()
+        my_main_box = QVBoxLayout()
+        self.threshold_box_show = QCheckBox("Show threshold")
+        self.threshold_box_show.setChecked(False)
+        self.default_threshold_params = {
+        "nsig_b":6.0, "nsig_s":3.0, "global_threshold":0,
+        "min_count":2, "gain":1.0, "size":(3, 3)
+        }
+        self.param_nsig_b = QLineEdit(
+            str(self.default_threshold_params["nsig_b"])
+        )
+        self.param_nsig_s = QLineEdit(
+            str(self.default_threshold_params["nsig_s"])
+        )
+        self.param_global_threshold = QLineEdit(
+            str(self.default_threshold_params["global_threshold"])
+        )
+        self.param_min_count = QLineEdit(
+            str(self.default_threshold_params["min_count"])
+        )
+        self.param_gain = QLineEdit(str(self.default_threshold_params["gain"]))
+        self.param_size = QLineEdit(
+            str(self.default_threshold_params["size"][0]) + "," +
+            str(self.default_threshold_params["size"][1])
+        )
+        self.user_pass_btn = QPushButton("Apply in spot find")
+
+        self.threshold_box_show.stateChanged.connect(
+            self.threshold_param_changed
+        )
+
+        self.param_nsig_b.textChanged.connect(self.threshold_param_changed)
+        self.param_nsig_s.textChanged.connect(self.threshold_param_changed)
+        self.param_global_threshold.textChanged.connect(
+            self.threshold_param_changed
+        )
+        self.param_min_count.textChanged.connect(self.threshold_param_changed)
+        self.param_gain.textChanged.connect(self.threshold_param_changed)
+        self.param_size.textChanged.connect(self.threshold_param_changed)
+        self.user_pass_btn.clicked.connect(self.user_applied)
+
+
+        my_main_box.addWidget(self.threshold_box_show)
+
+        hbox_nsig_b= QHBoxLayout()
+        hbox_nsig_s= QHBoxLayout()
+        hbox_global_threshold = QHBoxLayout()
+        hbox_min_count= QHBoxLayout()
+        hbox_gain= QHBoxLayout()
+        hbox_size= QHBoxLayout()
+        hbox_nsig_b.addWidget(QLabel("nsig_b"))
+        hbox_nsig_s.addWidget(QLabel("nsig_s"))
+        hbox_global_threshold .addWidget(QLabel("global_threshold"))
+        hbox_min_count.addWidget(QLabel("min_count"))
+        hbox_gain.addWidget(QLabel("gain"))
+        hbox_size.addWidget(QLabel("size"))
+        hbox_nsig_b.addWidget(self.param_nsig_b)
+        hbox_nsig_s.addWidget(self.param_nsig_s)
+        hbox_global_threshold.addWidget(self.param_global_threshold)
+        hbox_min_count.addWidget(self.param_min_count)
+        hbox_gain.addWidget(self.param_gain)
+        hbox_size.addWidget(self.param_size)
+
+        my_main_box.addLayout(hbox_nsig_b)
+        my_main_box.addLayout(hbox_nsig_s)
+        my_main_box.addLayout(hbox_global_threshold)
+        my_main_box.addLayout(hbox_min_count)
+        my_main_box.addLayout(hbox_gain)
+        my_main_box.addLayout(hbox_size)
+        my_main_box.addWidget(self.user_pass_btn)
+
+        self.setLayout(my_main_box)
+
+    def threshold_param_changed(self, value):
+        if self.threshold_box_show.isChecked():
+            try:
+                tmp_nsig_b = float(self.param_nsig_b.text())
+
+            except ValueError:
+                tmp_nsig_b = self.default_threshold_params["nsig_b"]
+
+            try:
+                tmp_nsig_s = float(self.param_nsig_s.text())
+
+            except ValueError:
+                tmp_nsig_s = self.default_threshold_params["nsig_s"]
+
+            try:
+                tmp_global_threshold = float(self.param_global_threshold.text())
+
+            except ValueError:
+                tmp_global_threshold = self.default_threshold_params["global_threshold"]
+
+            try:
+                tmp_min_count = int(self.param_min_count.text())
+
+            except ValueError:
+                tmp_min_count = self.default_threshold_params["min_count"]
+
+            try:
+                tmp_gain = float(self.param_gain.text())
+
+            except ValueError:
+                tmp_gain = self.default_threshold_params["gain"]
+
+            lst_size = str(self.param_size.text()).split(",")
+            try:
+                tmp_size = (int(lst_size[0]), int(lst_size[1]))
+
+            except (ValueError, IndexError):
+                tmp_size = self.default_threshold_params["size"]
+
+            local_threshold_params = {
+                "nsig_b":               tmp_nsig_b,
+                "nsig_s":               tmp_nsig_s,
+                "global_threshold":     tmp_global_threshold,
+                "min_count":            tmp_min_count,
+                "gain":                 tmp_gain,
+                "size":                 tmp_size
+            }
+            self.new_threshold_param.emit(local_threshold_params)
+
+        else:
+            self.new_threshold_param.emit(None)
+
+    def user_applied(self):
+        print("user_pass_btn")
+        self.user_param_pass.emit()
+
+
+
+class InfoDisplayMenu(QMenu):
     new_i_min_max = Signal(int, int)
     new_palette = Signal(str)
     new_overlay = Signal(str)
     new_redraw = Signal()
     new_ref_list = Signal()
-    user_param_pass = Signal()
-    new_threshold_param = Signal(dict)
-    def __init__(self, parent=None):
+    #user_param_pass = Signal()
+    #new_threshold_param = Signal(dict)
+    def __init__(self, parent = None):
         super().__init__()
         self.my_parent = parent
 
@@ -576,10 +711,9 @@ class PopDisplayMenu(QMenu):
         fnd_vs_prd_layout.addLayout(predict_h_layout)
         find_vs_predict_group.setLayout(fnd_vs_prd_layout)
 
-        ########################################### Threshold Viewing options
+        '''########################################### Threshold Viewing options
         sp_threshold_group = QGroupBox("Spot finder threshold view")
         threshold_box_layout = QVBoxLayout()
-
         self.threshold_box_show = QCheckBox("Show threshold")
         self.threshold_box_show.setChecked(False)
 
@@ -608,19 +742,6 @@ class PopDisplayMenu(QMenu):
         )
 
         self.user_pass_btn = QPushButton("Apply in spot find")
-
-        self.threshold_box_show.stateChanged.connect(
-            self.threshold_param_changed
-        )
-        self.param_nsig_b.textChanged.connect(self.threshold_param_changed)
-        self.param_nsig_s.textChanged.connect(self.threshold_param_changed)
-        self.param_global_threshold.textChanged.connect(
-            self.threshold_param_changed
-        )
-        self.param_min_count.textChanged.connect(self.threshold_param_changed)
-        self.param_gain.textChanged.connect(self.threshold_param_changed)
-        self.param_size.textChanged.connect(self.threshold_param_changed)
-        self.user_pass_btn.clicked.connect(self.user_applied)
 
         hbox_nsig_b= QHBoxLayout()
         hbox_nsig_s= QHBoxLayout()
@@ -652,6 +773,7 @@ class PopDisplayMenu(QMenu):
         threshold_box_layout.addWidget(self.user_pass_btn)
 
         sp_threshold_group.setLayout(threshold_box_layout)
+        '''
 
         # Main menu box
         left_side_box = QVBoxLayout()
@@ -660,69 +782,13 @@ class PopDisplayMenu(QMenu):
 
         right_side_box = QVBoxLayout()
         right_side_box.addWidget(find_vs_predict_group)
-        right_side_box.addWidget(sp_threshold_group)
+        #right_side_box.addWidget(sp_threshold_group)
 
         my_main_box = QHBoxLayout()
         my_main_box.addLayout(left_side_box)
         my_main_box.addLayout(right_side_box)
 
         self.setLayout(my_main_box)
-
-    def threshold_param_changed(self, value):
-        if self.threshold_box_show.isChecked():
-            try:
-                tmp_nsig_b = float(self.param_nsig_b.text())
-
-            except ValueError:
-                tmp_nsig_b = self.default_threshold_params["nsig_b"]
-
-            try:
-                tmp_nsig_s = float(self.param_nsig_s.text())
-
-            except ValueError:
-                tmp_nsig_s = self.default_threshold_params["nsig_s"]
-
-            try:
-                tmp_global_threshold = float(self.param_global_threshold.text())
-
-            except ValueError:
-                tmp_global_threshold = self.default_threshold_params["global_threshold"]
-
-            try:
-                tmp_min_count = int(self.param_min_count.text())
-
-            except ValueError:
-                tmp_min_count = self.default_threshold_params["min_count"]
-
-            try:
-                tmp_gain = float(self.param_gain.text())
-
-            except ValueError:
-                tmp_gain = self.default_threshold_params["gain"]
-
-            lst_size = str(self.param_size.text()).split(",")
-            try:
-                tmp_size = (int(lst_size[0]), int(lst_size[1]))
-
-            except (ValueError, IndexError):
-                tmp_size = self.default_threshold_params["size"]
-
-            local_threshold_params = {
-                "nsig_b":               tmp_nsig_b,
-                "nsig_s":               tmp_nsig_s,
-                "global_threshold":     tmp_global_threshold,
-                "min_count":            tmp_min_count,
-                "gain":                 tmp_gain,
-                "size":                 tmp_size
-            }
-            self.new_threshold_param.emit(local_threshold_params)
-
-        else:
-            self.new_threshold_param.emit(None)
-
-    def user_applied(self):
-        print("user_pass_btn")
-        self.user_param_pass.emit()
 
     def sig_new_redraw(self):
         logging.info("new_redraw")
@@ -830,7 +896,13 @@ class DoImageView(QObject):
         self.just_imported = False
         self.overlay = "blue"
 
-        self.pop_display_menu = PopDisplayMenu(self)
+
+
+        self.pop_threshold_menu = ThresholdDisplayMenu(self)
+        self.main_obj.window.ThresholdButton.setMenu(self.pop_threshold_menu)
+
+
+        self.pop_display_menu = InfoDisplayMenu(self)
         self.main_obj.window.DisplayButton.setMenu(self.pop_display_menu)
         self.pop_display_menu.new_i_min_max.connect(self.change_i_min_max)
         self.pop_display_menu.new_palette.connect(self.change_palette)
@@ -839,10 +911,10 @@ class DoImageView(QObject):
         self.pop_display_menu.new_ref_list.connect(
             self.request_reflection_list
         )
-        self.pop_display_menu.new_threshold_param.connect(
+        self.pop_threshold_menu.new_threshold_param.connect(
             self.update_threshold_params
         )
-        self.pop_display_menu.user_param_pass.connect(self.user_applied)
+        self.pop_threshold_menu.user_param_pass.connect(self.user_applied)
 
         self.my_scene.img_scale.connect(self.scale_img)
         self.my_scene.new_mouse_pos.connect(self.on_mouse_move)
