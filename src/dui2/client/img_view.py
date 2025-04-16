@@ -668,6 +668,14 @@ class InfoDisplayMenu(QMenu):
 
         palette_group.setLayout(palette_box_layout)
 
+
+        # mask colouring
+        mask_colour_group = QGroupBox("Mask overlay")
+        fnd_vs_prd_layout = QVBoxLayout()
+        fnd_vs_prd_layout.addWidget(QLabel("test"))
+
+        mask_colour_group.setLayout(fnd_vs_prd_layout)
+
         # hkl Viewing Tool
         info_group = QGroupBox("Reflection info")
         ref_box_layout = QVBoxLayout()
@@ -710,6 +718,7 @@ class InfoDisplayMenu(QMenu):
 
         left_side_box = QVBoxLayout()
         left_side_box.addWidget(palette_group)
+        left_side_box.addWidget(mask_colour_group)
 
         right_side_box = QVBoxLayout()
         right_side_box.addWidget(info_group)
