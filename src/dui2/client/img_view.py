@@ -510,7 +510,6 @@ class ThresholdDisplayMenu(QMenu):
         self.threshold_box_show.stateChanged.connect(
             self.threshold_param_changed
         )
-
         self.param_nsig_b.textChanged.connect(self.threshold_param_changed)
         self.param_nsig_s.textChanged.connect(self.threshold_param_changed)
         self.param_global_threshold.textChanged.connect(
@@ -520,7 +519,6 @@ class ThresholdDisplayMenu(QMenu):
         self.param_gain.textChanged.connect(self.threshold_param_changed)
         self.param_size.textChanged.connect(self.threshold_param_changed)
         self.user_pass_btn.clicked.connect(self.user_applied)
-
 
         my_main_box.addWidget(self.threshold_box_show)
 
@@ -610,15 +608,12 @@ class ThresholdDisplayMenu(QMenu):
         self.user_param_pass.emit()
 
 
-
 class InfoDisplayMenu(QMenu):
     new_i_min_max = Signal(int, int)
     new_palette = Signal(str)
     new_overlay = Signal(str)
     new_redraw = Signal()
     new_ref_list = Signal()
-    #user_param_pass = Signal()
-    #new_threshold_param = Signal(dict)
     def __init__(self, parent = None):
         super().__init__()
         self.my_parent = parent
@@ -668,7 +663,6 @@ class InfoDisplayMenu(QMenu):
         colour_h_layout.addWidget(self.overlay_select)
         palette_box_layout.addLayout(colour_h_layout)
 
-
         palette_group.setLayout(palette_box_layout)
 
         # hkl Viewing Tool
@@ -711,78 +705,12 @@ class InfoDisplayMenu(QMenu):
         fnd_vs_prd_layout.addLayout(predict_h_layout)
         find_vs_predict_group.setLayout(fnd_vs_prd_layout)
 
-        '''########################################### Threshold Viewing options
-        sp_threshold_group = QGroupBox("Spot finder threshold view")
-        threshold_box_layout = QVBoxLayout()
-        self.threshold_box_show = QCheckBox("Show threshold")
-        self.threshold_box_show.setChecked(False)
-
-        threshold_box_layout.addWidget(self.threshold_box_show)
-
-        self.default_threshold_params = {
-        "nsig_b":6.0, "nsig_s":3.0, "global_threshold":0,
-        "min_count":2, "gain":1.0, "size":(3, 3)
-        }
-        self.param_nsig_b = QLineEdit(
-            str(self.default_threshold_params["nsig_b"])
-        )
-        self.param_nsig_s = QLineEdit(
-            str(self.default_threshold_params["nsig_s"])
-        )
-        self.param_global_threshold = QLineEdit(
-            str(self.default_threshold_params["global_threshold"])
-        )
-        self.param_min_count = QLineEdit(
-            str(self.default_threshold_params["min_count"])
-        )
-        self.param_gain = QLineEdit(str(self.default_threshold_params["gain"]))
-        self.param_size = QLineEdit(
-            str(self.default_threshold_params["size"][0]) + "," +
-            str(self.default_threshold_params["size"][1])
-        )
-
-        self.user_pass_btn = QPushButton("Apply in spot find")
-
-        hbox_nsig_b= QHBoxLayout()
-        hbox_nsig_s= QHBoxLayout()
-        hbox_global_threshold = QHBoxLayout()
-        hbox_min_count= QHBoxLayout()
-        hbox_gain= QHBoxLayout()
-        hbox_size= QHBoxLayout()
-
-        hbox_nsig_b.addWidget(QLabel("nsig_b"))
-        hbox_nsig_s.addWidget(QLabel("nsig_s"))
-        hbox_global_threshold .addWidget(QLabel("global_threshold"))
-        hbox_min_count.addWidget(QLabel("min_count"))
-        hbox_gain.addWidget(QLabel("gain"))
-        hbox_size.addWidget(QLabel("size"))
-
-        hbox_nsig_b.addWidget(self.param_nsig_b)
-        hbox_nsig_s.addWidget(self.param_nsig_s)
-        hbox_global_threshold.addWidget(self.param_global_threshold)
-        hbox_min_count.addWidget(self.param_min_count)
-        hbox_gain.addWidget(self.param_gain)
-        hbox_size.addWidget(self.param_size)
-
-        threshold_box_layout.addLayout(hbox_nsig_b)
-        threshold_box_layout.addLayout(hbox_nsig_s)
-        threshold_box_layout.addLayout(hbox_global_threshold)
-        threshold_box_layout.addLayout(hbox_min_count)
-        threshold_box_layout.addLayout(hbox_gain)
-        threshold_box_layout.addLayout(hbox_size)
-        threshold_box_layout.addWidget(self.user_pass_btn)
-
-        sp_threshold_group.setLayout(threshold_box_layout)
-        '''
-
-        # Main menu box
         left_side_box = QVBoxLayout()
         left_side_box.addWidget(palette_group)
         left_side_box.addWidget(info_group)
 
         right_side_box = QVBoxLayout()
         right_side_box.addWidget(find_vs_predict_group)
-        #right_side_box.addWidget(sp_threshold_group)
 
         my_main_box = QHBoxLayout()
         my_main_box.addLayout(left_side_box)
