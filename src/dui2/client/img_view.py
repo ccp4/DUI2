@@ -393,7 +393,12 @@ class ImgGraphicsScene(QGraphicsScene):
             pass
 
     def __call__(self, new_pixmap, refl_list1, new_temp_mask):
+        self.my_pix_map = new_pixmap
         self.refl_list = refl_list1
+        self.temp_mask = new_temp_mask
+        self.refresh_imgs()
+
+    def refresh_imgs(self):
         if self.parent_obj.overlay == "blue":
             overlay_colour1 = Qt.blue
 
@@ -411,8 +416,6 @@ class ImgGraphicsScene(QGraphicsScene):
             Qt.RoundCap, Qt.RoundJoin
         )
         self.overlay_pen1.setCosmetic(True)
-        self.temp_mask = new_temp_mask
-        self.my_pix_map = new_pixmap
         self.draw_ref_rect()
         if self.draw_all_hkl:
             for refl in self.refl_list:
