@@ -671,15 +671,28 @@ class InfoDisplayMenu(QMenu):
 
         # mask colouring
         mask_colour_group = QGroupBox("Mask overlay")
-        fnd_vs_prd_layout = QVBoxLayout()
-        fnd_vs_prd_layout.addWidget(QLabel("test"))
+        mask_col_v_layout = QVBoxLayout()
+        mask_col_v_layout.addWidget(QLabel("test"))
 
-        mask_colour_group.setLayout(fnd_vs_prd_layout)
+
+        self.mask_colour_select = QComboBox()
+        self.mask_col_lst = ["red", "green", "blue"]
+        for n, plt in enumerate(self.mask_col_lst):
+            self.mask_colour_select.addItem(plt)
+            if plt == self.palette:
+                self.mask_colour_select.setCurrentIndex(n)
+
+        self.mask_colour_select.currentIndexChanged.connect(
+            self.mask_colour_changed_by_user
+        )
+        mask_col_v_layout.addWidget(self.mask_colour_select)
+        mask_colour_group.setLayout(mask_col_v_layout)
+
+
 
         # hkl Viewing Tool
         info_group = QGroupBox("Reflection info")
         ref_box_layout = QVBoxLayout()
-
         self.chk_box_show = QCheckBox("Show reflection info")
         self.chk_box_show.setChecked(True)
         self.chk_box_show.stateChanged.connect(self.sig_new_redraw)
@@ -747,6 +760,9 @@ class InfoDisplayMenu(QMenu):
         self.overlay = self.overlay_lst[new_overlay_num]
         logging.info("self.overlay =" + str(self.overlay))
         self.new_overlay.emit(str(self.overlay))
+
+    def mask_colour_changed_by_user(self, new_mask_colour):
+        print("new_mask_colour = ", new_mask_colour)
 
     def i_min_max_changed(self):
         self.new_i_min_max.emit(self.i_min, self.i_max)
