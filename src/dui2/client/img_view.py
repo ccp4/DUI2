@@ -612,6 +612,7 @@ class InfoDisplayMenu(QMenu):
     new_i_min_max = Signal(int, int)
     new_palette = Signal(str)
     new_overlay = Signal(str)
+    new_mask_colour = Signal(str)
     new_redraw = Signal()
     new_ref_list = Signal()
     def __init__(self, parent = None):
@@ -761,8 +762,10 @@ class InfoDisplayMenu(QMenu):
         logging.info("self.overlay =" + str(self.overlay))
         self.new_overlay.emit(str(self.overlay))
 
-    def mask_colour_changed_by_user(self, new_mask_colour):
-        print("new_mask_colour = ", new_mask_colour)
+    def mask_colour_changed_by_user(self, new_colour_number):
+        print("new_colour_number = ", new_colour_number)
+        new_colour = self.mask_col_lst[new_colour_number]
+        self.new_mask_colour.emit(str(new_colour))
 
     def i_min_max_changed(self):
         self.new_i_min_max.emit(self.i_min, self.i_max)
@@ -852,17 +855,18 @@ class DoImageView(QObject):
         self.just_imported = False
         self.overlay = "blue"
 
-
-
         self.pop_threshold_menu = ThresholdDisplayMenu(self)
         self.main_obj.window.ThresholdButton.setMenu(self.pop_threshold_menu)
-
 
         self.pop_display_menu = InfoDisplayMenu(self)
         self.main_obj.window.DisplayButton.setMenu(self.pop_display_menu)
         self.pop_display_menu.new_i_min_max.connect(self.change_i_min_max)
         self.pop_display_menu.new_palette.connect(self.change_palette)
         self.pop_display_menu.new_overlay.connect(self.change_overlay)
+
+        self.pop_display_menu.new_mask_colour.connect(self.change_mask_colour)
+        self.mask_colour = "red"
+
         self.pop_display_menu.new_redraw.connect(self.refresh_pixel_map)
         self.pop_display_menu.new_ref_list.connect(
             self.request_reflection_list
@@ -1225,7 +1229,9 @@ class DoImageView(QObject):
             logging.info("None self.np_full_img")
 
         try:
-            m_rgb_np = self.bmp_mask.img_2d_rgb(data2d = self.np_full_mask_img)
+            m_rgb_np = self.bmp_mask.img_2d_rgb(
+                data2d = self.np_full_mask_img, colour_in = self.mask_colour
+            )
 
             q_img = QImage(
                 m_rgb_np.data,
@@ -1245,6 +1251,11 @@ class DoImageView(QObject):
 
     def change_palette(self, new_palette):
         self.palette = new_palette
+        self.refresh_pixel_map()
+
+    def change_mask_colour(self, new_colour):
+        self.mask_colour = new_colour
+        print("self.mask_colour =", self.mask_colour)
         self.refresh_pixel_map()
 
     def change_overlay(self, new_overlay):
@@ -1290,7 +1301,6 @@ class DoImageView(QObject):
             path_in = self.exp_path,
             main_handler = self.my_handler
         )
-
         self.load_full_mask_image = LoadFullMaskImage(
             unit_URL = self.uni_url,
             cur_nod_num = self.cur_nod_num,
@@ -1299,14 +1309,12 @@ class DoImageView(QObject):
             thrs_pars_in = self.threshold_params,
             main_handler = self.my_handler
         )
-
         self.load_full_image.image_loaded.connect(self.new_full_img)
         self.load_full_image.start()
         self.load_full_mask_image.image_loaded.connect(self.new_full_mask_img)
         self.load_full_mask_image.start()
 
     def check_move(self):
-
         self.get_x1_y1_x2_y2()
         if(
             self.old_x1 != self.x1 or self.old_y1 != self.y1 or

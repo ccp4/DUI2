@@ -272,7 +272,7 @@ class np2bmp_mask(object):
     def __init__(self):
         logging.info("Dummy __init__ (np2bmp_mask)")
 
-    def img_2d_rgb(self, data2d = None):
+    def img_2d_rgb(self, data2d = None, colour_in = None):
         try:
             self.width = np.size( data2d[0:1, :] )
             self.height = np.size( data2d[:, 0:1] )
@@ -287,9 +287,19 @@ class np2bmp_mask(object):
 
         img_array = np.zeros( (self.height, self.width, 4) , dtype=np.uint8)
         img_array[:, :, 3] = img_all_chanl[:,:] / 3.0    #Transp
-        #img_array[:, :, 2] = img_all_chanl[:,:]          #Blue
-        img_array[:, :, 1] = img_all_chanl[:,:]         #Green
-        #img_array[:, :, 0] = img_all_chanl[:,:]         #Red
+
+        print("colour_in =", colour_in)
+
+
+        if colour_in == "blue":
+            img_array[:, :, 0] = img_all_chanl[:,:]          #Blue
+
+        elif colour_in == "green":
+            img_array[:, :, 1] = img_all_chanl[:,:]         #Green
+
+        else:
+            img_array[:, :, 2] = img_all_chanl[:,:]         #Red
+
         #TODO: find why the last chanel(Blue) is used for a Red colour
         return img_array
 
