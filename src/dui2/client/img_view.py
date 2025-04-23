@@ -616,6 +616,7 @@ class InfoDisplayMenu(QMenu):
     new_palette = Signal(str)
     new_overlay = Signal(str)
     new_mask_colour = Signal(str)
+    new_mask_transp = Signal(float)
     new_redraw = Signal()
     new_ref_list = Signal()
     def __init__(self, parent = None):
@@ -676,8 +677,7 @@ class InfoDisplayMenu(QMenu):
         # mask colouring
         mask_colour_group = QGroupBox("Mask overlay")
         mask_col_v_layout = QVBoxLayout()
-        mask_col_v_layout.addWidget(QLabel("test"))
-
+        mask_col_v_layout.addWidget(QLabel("colour"))
 
         self.mask_colour_select = QComboBox()
         self.mask_col_lst = ["red", "green", "blue"]
@@ -690,9 +690,15 @@ class InfoDisplayMenu(QMenu):
             self.mask_colour_changed_by_user
         )
         mask_col_v_layout.addWidget(self.mask_colour_select)
+
+        # mask transparency
+        mask_col_v_layout.addWidget(QLabel("transparency"))
+        self.transp_slider = QSlider(Qt.Horizontal)
+        self.transp_slider.setMinimum(10)
+        self.transp_slider.setMaximum(90)
+        self.transp_slider.valueChanged.connect(self.transp_changed)
+        mask_col_v_layout.addWidget(self.transp_slider)
         mask_colour_group.setLayout(mask_col_v_layout)
-
-
 
         # hkl Viewing Tool
         info_group = QGroupBox("Reflection info")
@@ -769,6 +775,12 @@ class InfoDisplayMenu(QMenu):
         print("new_colour_number = ", new_colour_number)
         new_colour = self.mask_col_lst[new_colour_number]
         self.new_mask_colour.emit(str(new_colour))
+
+    def transp_changed(self, new_transp_entered):
+        print("new_transp_entered =", new_transp_entered)
+        new_transp = new_transp_entered / 100.0
+        print("new_transp =", new_transp)
+        self.new_mask_transp.emit(float(new_transp))
 
     def i_min_max_changed(self):
         self.new_i_min_max.emit(self.i_min, self.i_max)
@@ -870,7 +882,11 @@ class DoImageView(QObject):
         self.pop_display_menu.new_mask_colour.connect(self.change_mask_colour)
         self.mask_colour = "red"
 
+        self.pop_display_menu.new_mask_transp.connect(self.change_mask_transp)
+        self.mask_transp = 0.5
+
         self.pop_display_menu.new_redraw.connect(self.refresh_pixel_map)
+
         self.pop_display_menu.new_ref_list.connect(
             self.request_reflection_list
         )
@@ -1233,7 +1249,8 @@ class DoImageView(QObject):
 
         try:
             m_rgb_np = self.bmp_mask.img_2d_rgb(
-                data2d = self.np_full_mask_img, colour_in = self.mask_colour
+                data2d = self.np_full_mask_img,
+                colour_in = self.mask_colour, transp = self.mask_transp
             )
 
             q_img = QImage(
@@ -1260,6 +1277,11 @@ class DoImageView(QObject):
     def change_mask_colour(self, new_colour):
         self.mask_colour = new_colour
         print("self.mask_colour =", self.mask_colour)
+        self.refresh_pixel_map()
+
+    def change_mask_transp(self, new_transp):
+        self.mask_transp = new_transp
+        print("self.mask_transp =", self.mask_transp)
         self.refresh_pixel_map()
 
     def change_overlay(self, new_overlay):
