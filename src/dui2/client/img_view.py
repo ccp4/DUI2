@@ -676,8 +676,11 @@ class InfoDisplayMenu(QMenu):
 
         # mask colouring
         mask_colour_group = QGroupBox("Mask overlay")
-        mask_col_v_layout = QVBoxLayout()
-        mask_col_v_layout.addWidget(QLabel("colour"))
+        mask_col_n_tra_v_layout = QVBoxLayout()
+
+        mask_col_h_layout = QHBoxLayout()
+
+        mask_col_h_layout.addWidget(QLabel("colour"))
 
         self.mask_colour_select = QComboBox()
         self.mask_col_lst = ["red", "green", "blue"]
@@ -689,16 +692,20 @@ class InfoDisplayMenu(QMenu):
         self.mask_colour_select.currentIndexChanged.connect(
             self.mask_colour_changed_by_user
         )
-        mask_col_v_layout.addWidget(self.mask_colour_select)
+        mask_col_h_layout.addWidget(self.mask_colour_select)
+
+        mask_col_n_tra_v_layout.addLayout(mask_col_h_layout)
 
         # mask transparency
-        mask_col_v_layout.addWidget(QLabel("transparency"))
+        mask_tra_h_layout = QHBoxLayout()
+        mask_tra_h_layout.addWidget(QLabel("transparency"))
         self.transp_slider = QSlider(Qt.Horizontal)
         self.transp_slider.setMinimum(10)
         self.transp_slider.setMaximum(90)
         self.transp_slider.valueChanged.connect(self.transp_changed)
-        mask_col_v_layout.addWidget(self.transp_slider)
-        mask_colour_group.setLayout(mask_col_v_layout)
+        mask_tra_h_layout.addWidget(self.transp_slider)
+        mask_col_n_tra_v_layout.addLayout(mask_tra_h_layout)
+        mask_colour_group.setLayout(mask_col_n_tra_v_layout)
 
         # hkl Viewing Tool
         info_group = QGroupBox("Reflection info")
