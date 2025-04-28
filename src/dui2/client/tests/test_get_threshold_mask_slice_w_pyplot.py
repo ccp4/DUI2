@@ -41,13 +41,13 @@ if __name__ == "__main__":
         print("\n\n img_num =", img_num)
 
         params_dict = {
-            "nsig_b":3,"nsig_s":3,"global_threshold":0,
-            "min_count":2,"gain":1.0,"size":(3, 3)
+            "algorithm":"dispersion_extended", "nsig_b":3,"nsig_s":3,
+            "global_threshold":0, "min_count":2,"gain":1.0,"size":(3, 3)
         }
         print("params_dict =", params_dict)
         params_str = str(params_dict)
         full_cmd = {
-            'nod_lst': [1],
+            'nod_lst': [2],
             'path': None,
             'cmd_str': [
                 'gtmis', str(img_num), 'inv_scale=' +str(img_num),

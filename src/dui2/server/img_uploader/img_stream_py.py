@@ -251,6 +251,14 @@ def from_image_n_mask_2_threshold(np_img, np_mask, params):
     gain             = params["gain"]
     size             = params["size"]
 
+    #TODO: make this try except more robust
+    try:
+        my_algorithm = params["algorithm"]
+
+    except KeyError:
+        print("defaulting to <<dispersion_extended>> algorithm")
+        my_algorithm = "dispersion_extended"
+
     abs_img = convert_2_black_n_white(np_img)
 
     sum_np_mask = np_mask + abs_img - 1.5
@@ -258,14 +266,16 @@ def from_image_n_mask_2_threshold(np_img, np_mask, params):
     bool_np_mask = added_np_mask.astype(bool)
     mask_w_panels = from_numpy(bool_np_mask)
     gain_map = flex.double(flex.grid(np_img.shape), gain)
-    my_algorithm = "dispersion_extended"
 
+    image = from_numpy(np_img)
+
+    print("algorithm =", my_algorithm)
     if my_algorithm == "dispersion_extended":
         algorithm = DispersionExtendedThresholdDebug
+
     elif my_algorithm == "dispersion":
         algorithm = DispersionThresholdDebug
 
-    image = from_numpy(np_img)
     to_view_later = '''
     else:
         algorithm = RadialProfileThresholdDebug(
