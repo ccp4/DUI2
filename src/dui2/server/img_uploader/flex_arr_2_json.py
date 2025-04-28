@@ -471,7 +471,7 @@ def get_bytes_w_2d_threshold_mask(
             mask_tup_obj = None
 
         byte_data, i23_multipanel = img_stream_py.mask_threshold_2_byte(
-            img_tup_obj, mask_tup_obj, params
+            img_tup_obj, mask_tup_obj, params, imageset_tmp
         )
 
         if byte_data == "Error":
@@ -510,7 +510,7 @@ def get_bytes_w_2d_threshold_mask_slise(
             img_tup_obj, mask_tup_obj, inv_scale,
             int(float(x1)), int(float(y1)),
             int(float(x2)), int(float(y2)),
-            params
+            params, imageset_tmp
         )
 
         if byte_data == "Error":
