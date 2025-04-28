@@ -243,57 +243,89 @@ def convert_2_black_n_white(np_img):
     return abs_img
 
 
+class RadialProfileThresholdDebug:
+    # The radial_profile threshold algorithm does not have an associated
+    # 'Debug' class. It does not create the same set of intermediate images
+    # as the dispersion algorithms, so we can delegate to a
+    # DispersionThresholdDebug object for those, while overriding the final_mask
+    # method. This wrapper class handles that.
+    def __init__(self, imageset, n_iqr, blur, n_bins):
+        self.imageset = imageset
+        params = find_spots_phil_scope.extract()
+        params.spotfinder.threshold.radial_profile.blur = blur
+        params.spotfinder.threshold.radial_profile.n_bins = n_bins
+        params.spotfinder.threshold.radial_profile.n_iqr = n_iqr
+        self.radial_profile = SpotFinderThreshold.load("radial_profile")(params)
+        self._i_panel = 0
+
+    def __call__(self, *args):
+        dispersion = DispersionThresholdDebug(*args)
+        image = args[0]
+        mask = args[1]
+        dispersion._final_mask = self.radial_profile.compute_threshold(
+            image, mask, imageset=self.imageset, i_panel=self._i_panel
+        )
+        dispersion.final_mask = types.MethodType(lambda x: x._final_mask, dispersion)
+        self._i_panel += 1
+        return dispersion
+
+
 def from_image_n_mask_2_threshold(np_img, np_mask, params):
-    nsig_b           = params["nsig_b"]
-    nsig_s           = params["nsig_s"]
-    global_threshold = params["global_threshold"]
-    min_count        = params["min_count"]
-    gain             = params["gain"]
-    size             = params["size"]
-
-    #TODO: make this try except more robust
-    try:
-        my_algorithm = params["algorithm"]
-
-    except KeyError:
-        print("defaulting to <<dispersion_extended>> algorithm")
-        my_algorithm = "dispersion_extended"
-
+    print("\n\n params =", params, "\n\n")
     abs_img = convert_2_black_n_white(np_img)
-
     sum_np_mask = np_mask + abs_img - 1.5
     added_np_mask = convert_2_black_n_white(sum_np_mask)
     bool_np_mask = added_np_mask.astype(bool)
     mask_w_panels = from_numpy(bool_np_mask)
-    gain_map = flex.double(flex.grid(np_img.shape), gain)
-
     image = from_numpy(np_img)
 
-    print("algorithm =", my_algorithm)
-    if my_algorithm == "dispersion_extended":
+
+    image_ppp_something = None # tmp hack
+    if params["algorithm"] == "dispersion_extended":
         algorithm = DispersionExtendedThresholdDebug
 
-    elif my_algorithm == "dispersion":
+    elif params["algorithm"] == "dispersion":
         algorithm = DispersionThresholdDebug
 
-    to_view_later = '''
     else:
         algorithm = RadialProfileThresholdDebug(
-            image, self.settings.n_iqr, self.settings.blur, self.settings.n_bins
+            image_ppp_something, params["n_iqr"], params["blur"], params["n_bins"]
         )
-
-    radial_profile {
-      n_iqr = 6
-      blur = narrow wide
-      n_bins = 100
-    '''
+    gain_map = flex.double(flex.grid(np_img.shape), params["gain"])
     flex_debug_img = algorithm(
         image.as_double(),
         mask_w_panels,
-        gain_map, size, nsig_b, nsig_s, global_threshold, min_count,
+        gain_map, params["size"], params["nsig_b"], params["nsig_s"],
+        params["global_threshold"], params["min_count"],
+
     )
+    old_way = '''
+    if my_algorithm == "dispersion_extended":
+        gain_map = flex.double(flex.grid(np_img.shape), params["gain"])
+        flex_debug_img = DispersionExtendedThresholdDebug(
+            image.as_double(),
+            mask_w_panels,
+            gain_map, params["size"], params["nsig_b"], params["nsig_s"],
+            params["global_threshold"], params["min_count"],
+        )
+
+    elif my_algorithm == "dispersion":
+        gain_map = flex.double(flex.grid(np_img.shape), params["gain"])
+        flex_debug_img = DispersionThresholdDebug(
+            image.as_double(),
+            mask_w_panels,
+            gain_map, params["size"], params["nsig_b"], params["nsig_s"],
+            params["global_threshold"], params["min_count"],
+        )
+
+    elif my_algorithm == "radial_profile":
+        flex_debug_img = RadialProfileThresholdDebug(
+            image.as_double(), params["n_iqr"], params["blur"], params["n_bins"]
+        )
+    '''
 
     return flex_debug_img
+
 
 def mask_threshold_2_byte(
     image_raw_dat, mask_raw_dat, params

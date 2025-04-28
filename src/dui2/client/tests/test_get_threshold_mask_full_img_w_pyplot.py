@@ -40,7 +40,7 @@ if __name__ == "__main__":
     for img_num in [1,2]:
         print("\n\n img_num =", img_num)
         params_dict = {
-            "algorithm":"dispersion", "nsig_b":4,"nsig_s":5,
+            "algorithm":"dispersion_extended", "nsig_b":4,"nsig_s":5,
             "global_threshold":1, "min_count":2,"gain":1.0,"size":(3, 3)
         }
         print("params_dict =", params_dict)
