@@ -488,8 +488,8 @@ class ThresholdDisplayMenu(QMenu):
         self.threshold_box_show = QCheckBox("Show threshold")
         self.threshold_box_show.setChecked(False)
         self.default_threshold_params = {
-        "nsig_b":6.0, "nsig_s":3.0, "global_threshold":0,
-        "min_count":2, "gain":1.0, "size":(3, 3)
+            "algorithm":"dispersion_extended", "nsig_b":6.0, "nsig_s":3.0,
+            "global_threshold":0, "min_count":2, "gain":1.0, "size":(3, 3)
         }
         self.param_nsig_b = QLineEdit(
             str(self.default_threshold_params["nsig_b"])
@@ -510,6 +510,18 @@ class ThresholdDisplayMenu(QMenu):
         )
         self.user_pass_btn = QPushButton("Apply in spot find")
 
+        ####################################################################
+        self.algorithm_select = QComboBox()
+        self.algorithm_lst = ["dispersion_extended", "dispersion"]
+        for n, plt in enumerate(self.algorithm_lst):
+            self.algorithm_select.addItem(plt)
+
+        self.algorithm_select.currentIndexChanged.connect(
+            self.threshold_param_changed
+        )
+        ####################################################################
+
+
         self.threshold_box_show.stateChanged.connect(
             self.threshold_param_changed
         )
@@ -525,12 +537,15 @@ class ThresholdDisplayMenu(QMenu):
 
         my_main_box.addWidget(self.threshold_box_show)
 
-        hbox_nsig_b= QHBoxLayout()
-        hbox_nsig_s= QHBoxLayout()
+        hbox_algorithm = QHBoxLayout()
+        hbox_nsig_b = QHBoxLayout()
+        hbox_nsig_s = QHBoxLayout()
         hbox_global_threshold = QHBoxLayout()
-        hbox_min_count= QHBoxLayout()
-        hbox_gain= QHBoxLayout()
-        hbox_size= QHBoxLayout()
+        hbox_min_count = QHBoxLayout()
+        hbox_gain = QHBoxLayout()
+        hbox_size = QHBoxLayout()
+        hbox_algorithm.addWidget(QLabel("Threshold algorithm"))
+        hbox_algorithm.addWidget(self.algorithm_select)
         hbox_nsig_b.addWidget(QLabel("nsig_b"))
         hbox_nsig_s.addWidget(QLabel("nsig_s"))
         hbox_global_threshold .addWidget(QLabel("global_threshold"))
@@ -544,18 +559,36 @@ class ThresholdDisplayMenu(QMenu):
         hbox_gain.addWidget(self.param_gain)
         hbox_size.addWidget(self.param_size)
 
-        my_main_box.addLayout(hbox_nsig_b)
-        my_main_box.addLayout(hbox_nsig_s)
-        my_main_box.addLayout(hbox_global_threshold)
-        my_main_box.addLayout(hbox_min_count)
-        my_main_box.addLayout(hbox_gain)
-        my_main_box.addLayout(hbox_size)
+
+        my_main_box.addLayout(hbox_algorithm)
+
+        v_left_box = QVBoxLayout()
+        v_left_box.addLayout(hbox_nsig_b)
+        v_left_box.addLayout(hbox_nsig_s)
+        v_left_box.addLayout(hbox_global_threshold)
+
+        v_right_box = QVBoxLayout()
+        v_right_box.addLayout(hbox_min_count)
+        v_right_box.addLayout(hbox_gain)
+        v_right_box.addLayout(hbox_size)
+
+        center_h_box = QHBoxLayout()
+        center_h_box.addLayout(v_left_box)
+        center_h_box.addLayout(v_right_box)
+
+        my_main_box.addLayout(center_h_box)
+
         my_main_box.addWidget(self.user_pass_btn)
 
         self.setLayout(my_main_box)
 
     def threshold_param_changed(self, value):
         if self.threshold_box_show.isChecked():
+
+            tmp_algo = self.algorithm_lst[int(
+                self.algorithm_select.currentIndex()
+            )]
+
             try:
                 tmp_nsig_b = float(self.param_nsig_b.text())
 
@@ -594,6 +627,7 @@ class ThresholdDisplayMenu(QMenu):
                 tmp_size = self.default_threshold_params["size"]
 
             local_threshold_params = {
+                "algorithm":            tmp_algo,
                 "nsig_b":               tmp_nsig_b,
                 "nsig_s":               tmp_nsig_s,
                 "global_threshold":     tmp_global_threshold,

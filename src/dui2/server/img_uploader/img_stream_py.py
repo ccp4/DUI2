@@ -283,18 +283,22 @@ def from_image_n_mask_2_threshold(np_img, np_mask, params, imageset_tmp):
     mask_w_panels = from_numpy(bool_np_mask)
     image = from_numpy(np_img)
 
+    try:
+        if params["algorithm"] == "dispersion_extended":
+            algorithm = DispersionExtendedThresholdDebug
 
-    image_ppp_something = None # tmp hack
-    if params["algorithm"] == "dispersion_extended":
+        elif params["algorithm"] == "dispersion":
+            algorithm = DispersionThresholdDebug
+
+        else:
+            algorithm = RadialProfileThresholdDebug(
+                imageset_tmp, params["n_iqr"], params["blur"], params["n_bins"]
+            )
+
+    except KeyError:
+        print("defaulting to << dispersion_extended >> algorithm")
         algorithm = DispersionExtendedThresholdDebug
 
-    elif params["algorithm"] == "dispersion":
-        algorithm = DispersionThresholdDebug
-
-    else:
-        algorithm = RadialProfileThresholdDebug(
-            imageset_tmp, params["n_iqr"], params["blur"], params["n_bins"]
-        )
     gain_map = flex.double(flex.grid(np_img.shape), params["gain"])
     flex_debug_img = algorithm(
         image.as_double(),
@@ -303,31 +307,6 @@ def from_image_n_mask_2_threshold(np_img, np_mask, params, imageset_tmp):
         params["global_threshold"], params["min_count"],
 
     )
-    old_way = '''
-    if my_algorithm == "dispersion_extended":
-        gain_map = flex.double(flex.grid(np_img.shape), params["gain"])
-        flex_debug_img = DispersionExtendedThresholdDebug(
-            image.as_double(),
-            mask_w_panels,
-            gain_map, params["size"], params["nsig_b"], params["nsig_s"],
-            params["global_threshold"], params["min_count"],
-        )
-
-    elif my_algorithm == "dispersion":
-        gain_map = flex.double(flex.grid(np_img.shape), params["gain"])
-        flex_debug_img = DispersionThresholdDebug(
-            image.as_double(),
-            mask_w_panels,
-            gain_map, params["size"], params["nsig_b"], params["nsig_s"],
-            params["global_threshold"], params["min_count"],
-        )
-
-    elif my_algorithm == "radial_profile":
-        flex_debug_img = RadialProfileThresholdDebug(
-            image.as_double(), params["n_iqr"], params["blur"], params["n_bins"]
-        )
-    '''
-
     return flex_debug_img
 
 
