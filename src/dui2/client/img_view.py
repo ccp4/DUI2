@@ -512,7 +512,7 @@ class ThresholdDisplayMenu(QMenu):
 
         ####################################################################
         self.algorithm_select = QComboBox()
-        self.algorithm_lst = ["dispersion_extended", "dispersion"]
+        self.algorithm_lst = ["dispersion_extended", "dispersion", "radial_profile"]
         for n, plt in enumerate(self.algorithm_lst):
             self.algorithm_select.addItem(plt)
 
@@ -635,6 +635,13 @@ class ThresholdDisplayMenu(QMenu):
                 "gain":                 tmp_gain,
                 "size":                 tmp_size
             }
+
+            if tmp_algo == "radial_profile":
+                local_threshold_params["n_iqr"] = 6.0
+                local_threshold_params["blur"] = None
+                local_threshold_params["n_bins"] = 100
+
+
             self.new_threshold_param.emit(local_threshold_params)
 
         else:
