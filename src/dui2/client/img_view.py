@@ -489,8 +489,10 @@ class ThresholdDisplayMenu(QMenu):
         self.threshold_box_show.setChecked(False)
         self.default_threshold_params = {
             "algorithm":"dispersion_extended", "nsig_b":6.0, "nsig_s":3.0,
-            "global_threshold":0, "min_count":2, "gain":1.0, "size":(3, 3)
+            "global_threshold":0, "min_count":2, "gain":1.0, "size":(3, 3),
+            "n_iqr":6.0, "blur":None,"n_bins":100
         }
+
         self.param_nsig_b = QLineEdit(
             str(self.default_threshold_params["nsig_b"])
         )
@@ -510,18 +512,31 @@ class ThresholdDisplayMenu(QMenu):
         )
         self.user_pass_btn = QPushButton("Apply in spot find")
 
-        ####################################################################
         self.algorithm_select = QComboBox()
         self.algorithm_lst = ["dispersion_extended", "dispersion", "radial_profile"]
-        for n, plt in enumerate(self.algorithm_lst):
-            self.algorithm_select.addItem(plt)
+        for n, algo in enumerate(self.algorithm_lst):
+            self.algorithm_select.addItem(algo)
+        ####################################################################
+        self.param_n_iqr = QLineEdit("6.0")
+
+        self.blur_select = QComboBox()
+        self.blur_lst = [None, "narrow", "wide"]
+        for n, blr in enumerate(self.blur_lst):
+            self.blur_select.addItem(str(blr))
+
+        self.param_n_bins = QLineEdit("100")
+
+        self.param_n_iqr.textChanged.connect(self.threshold_param_changed)
+        self.blur_select.currentIndexChanged.connect(
+            self.threshold_param_changed
+        )
+        self.param_n_bins.textChanged.connect(self.threshold_param_changed)
+        ####################################################################
+
 
         self.algorithm_select.currentIndexChanged.connect(
             self.threshold_param_changed
         )
-        ####################################################################
-
-
         self.threshold_box_show.stateChanged.connect(
             self.threshold_param_changed
         )
@@ -577,6 +592,13 @@ class ThresholdDisplayMenu(QMenu):
         center_h_box.addLayout(v_right_box)
 
         my_main_box.addLayout(center_h_box)
+
+
+        my_main_box.addWidget(self.param_n_iqr)
+        my_main_box.addWidget(self.blur_select)
+        my_main_box.addWidget(self.param_n_bins)
+
+
 
         my_main_box.addWidget(self.user_pass_btn)
 
@@ -637,10 +659,25 @@ class ThresholdDisplayMenu(QMenu):
             }
 
             if tmp_algo == "radial_profile":
-                local_threshold_params["n_iqr"] = 6.0
-                local_threshold_params["blur"] = None
-                local_threshold_params["n_bins"] = 100
+                try:
+                    tmp_n_iqr = float(self.param_n_iqr.text())
 
+                except ValueError:
+                    tmp_n_iqr = self.default_threshold_params["n_iqr"]
+
+                tmp_blur = self.blur_lst[int(
+                    self.blur_select.currentIndex()
+                )]
+
+                try:
+                    tmp_n_bins = int(self.param_n_bins.text())
+
+                except ValueError:
+                    tmp_n_bins = self.default_threshold_params["n_bins"]
+
+                local_threshold_params["n_iqr"] = tmp_n_iqr
+                local_threshold_params["blur"] = tmp_blur
+                local_threshold_params["n_bins"] = tmp_n_bins
 
             self.new_threshold_param.emit(local_threshold_params)
 

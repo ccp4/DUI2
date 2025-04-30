@@ -283,7 +283,7 @@ def from_image_n_mask_2_threshold(np_img, np_mask, params, imageset_tmp):
     mask_w_panels = from_numpy(bool_np_mask)
     image = from_numpy(np_img)
 
-    print("params[\"algorithm\"]", params["algorithm"], "\n")
+    print("\nparams = ", params, "\n")
 
 
     #try:
