@@ -519,15 +519,15 @@ class ThresholdDisplayMenu(QMenu):
         ####################################################################
         self.param_n_iqr = QLineEdit("6.0")
 
-        self.blur_select = QComboBox()
+        self.param_blur_select = QComboBox()
         self.blur_lst = [None, "narrow", "wide"]
         for n, blr in enumerate(self.blur_lst):
-            self.blur_select.addItem(str(blr))
+            self.param_blur_select.addItem(str(blr))
 
         self.param_n_bins = QLineEdit("100")
 
         self.param_n_iqr.textChanged.connect(self.threshold_param_changed)
-        self.blur_select.currentIndexChanged.connect(
+        self.param_blur_select.currentIndexChanged.connect(
             self.threshold_param_changed
         )
         self.param_n_bins.textChanged.connect(self.threshold_param_changed)
@@ -574,6 +574,15 @@ class ThresholdDisplayMenu(QMenu):
         hbox_gain.addWidget(self.param_gain)
         hbox_size.addWidget(self.param_size)
 
+        hbox_rad_niqr = QHBoxLayout()
+        hbox_rad_niqr.addWidget(QLabel("n_iqr"))
+        hbox_rad_niqr.addWidget(self.param_n_iqr)
+        hbox_rad_blur = QHBoxLayout()
+        hbox_rad_blur.addWidget(QLabel("blur"))
+        hbox_rad_blur.addWidget(self.param_blur_select)
+        hbox_rad_nbin = QHBoxLayout()
+        hbox_rad_nbin.addWidget(QLabel("n_bins"))
+        hbox_rad_nbin.addWidget(self.param_n_bins)
 
         my_main_box.addLayout(hbox_algorithm)
 
@@ -582,22 +591,22 @@ class ThresholdDisplayMenu(QMenu):
         v_left_box.addLayout(hbox_nsig_s)
         v_left_box.addLayout(hbox_global_threshold)
 
+        v_centr_box = QVBoxLayout()
+        v_centr_box.addLayout(hbox_min_count)
+        v_centr_box.addLayout(hbox_gain)
+        v_centr_box.addLayout(hbox_size)
+
         v_right_box = QVBoxLayout()
-        v_right_box.addLayout(hbox_min_count)
-        v_right_box.addLayout(hbox_gain)
-        v_right_box.addLayout(hbox_size)
+        v_right_box.addLayout(hbox_rad_niqr)
+        v_right_box.addLayout(hbox_rad_blur)
+        v_right_box.addLayout(hbox_rad_nbin)
 
         center_h_box = QHBoxLayout()
         center_h_box.addLayout(v_left_box)
+        center_h_box.addLayout(v_centr_box)
         center_h_box.addLayout(v_right_box)
 
         my_main_box.addLayout(center_h_box)
-
-
-        my_main_box.addWidget(self.param_n_iqr)
-        my_main_box.addWidget(self.blur_select)
-        my_main_box.addWidget(self.param_n_bins)
-
 
 
         my_main_box.addWidget(self.user_pass_btn)
@@ -666,7 +675,7 @@ class ThresholdDisplayMenu(QMenu):
                     tmp_n_iqr = self.default_threshold_params["n_iqr"]
 
                 tmp_blur = self.blur_lst[int(
-                    self.blur_select.currentIndex()
+                    self.param_blur_select.currentIndex()
                 )]
 
                 try:
