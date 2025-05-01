@@ -262,7 +262,11 @@ def rename_par(key_in):
         'nsig_s':               'spotfinder.threshold.dispersion.sigma_strong',
         'global_threshold': 'spotfinder.threshold.dispersion.global_threshold',
         'min_count':               'spotfinder.threshold.dispersion.min_local',
-        'size':                  'spotfinder.threshold.dispersion.kernel_size'
+        'size':                  'spotfinder.threshold.dispersion.kernel_size',
+        'n_iqr':                   'spotfinder.threshold.radial_profile.n_iqr',
+        'blur':                     'spotfinder.threshold.radial_profile.blur',
+        'n_bins':                 'spotfinder.threshold.radial_profile.n_bins',
+        'algorithm':                          'spotfinder.threshold.algorithm'
     }
 
     try:
@@ -273,11 +277,13 @@ def rename_par(key_in):
 
     return str_out
 
-
 def build_list_w_pars(dict_in):
     lst_out = ['dials.find_spots']
     lst_key = list(dict_in)
     for key in lst_key:
+
+        print("key =", key, "val =", dict_in[key])
+
         try:
             full_str_val = str(dict_in[key])
             str_val = full_str_val.replace(" ", "")

@@ -273,10 +273,6 @@ class np2bmp_mask(object):
         logging.info("Dummy __init__ (np2bmp_mask)")
 
     def img_2d_rgb(self, data2d = None, colour_in = None, transp = None):
-
-        print("colour_in =  ", colour_in )
-        print("transp =     ", transp )
-
         try:
             self.width = np.size( data2d[0:1, :] )
             self.height = np.size( data2d[:, 0:1] )

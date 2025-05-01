@@ -851,14 +851,17 @@ class MainObject(QObject):
 
     def update_threshold_params(self, new_params):
         try:
-            print("MainObject.update_threshold_params(new_params): \n", new_params)
+            print(
+                "MainObject.update_threshold_params(new_params): \n",
+                new_params
+            )
             lst_cmd_2_run = build_thresh_comd(new_params)
             print("\n lst_cmd_2_run =", lst_cmd_2_run, "\n")
             self.new_node.clone_from_list(lst_cmd_2_run)
             self.update_all_param()
 
         except AttributeError:
-            print("\n\n   Error \n\n Pick showing threshold mode first \n\n")
+            print("\n\n   Error \n\n Not ready for passing parameters \n\n")
 
     def tmp_mask_changed(self, lst_of_lst):
         self.do_image_view.update_tmp_mask(lst_of_lst[0][0:-1])
