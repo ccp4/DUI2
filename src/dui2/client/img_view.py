@@ -482,13 +482,7 @@ class ImgGraphicsScene(QGraphicsScene):
 class DispersionParamWidget(QWidget):
     def __init__(self, default_params_in):
         super(DispersionParamWidget, self).__init__()
-        #FIXME: use a more global << default_threshold_params >>
         default_threshold_params = default_params_in
-        '''default_threshold_params = {
-            "algorithm":"dispersion_extended", "nsig_b":6.0, "nsig_s":3.0,
-            "global_threshold":0, "min_count":2, "gain":1.0, "size":(3, 3),
-            "n_iqr":6.0, "blur":None,"n_bins":100
-        }'''
         self.param_nsig_b = QLineEdit(
             str(default_threshold_params["nsig_b"])
         )
@@ -596,21 +590,26 @@ class ThresholdDisplayMenu(QMenu):
 
         hbox_algorithm.addWidget(self.algorithm_select)
 
-        stacked_box = QHBoxLayout()
+        #stacked_box = QHBoxLayout()
+        self.step_param_widg =  QStackedWidget()
+
 
         self.rad_par_wig = RadialParamWidget()
-        stacked_box.addWidget(self.rad_par_wig)
+        #stacked_box.addWidget(self.rad_par_wig)
+        self.step_param_widg.addWidget(self.rad_par_wig)
 
         self.dispr_par_widg = DispersionParamWidget(
             self.default_threshold_params
         )
-        stacked_box.addWidget(self.dispr_par_widg)
+        #stacked_box.addWidget(self.dispr_par_widg)
+        self.step_param_widg.addWidget(self.dispr_par_widg)
 
         self.user_pass_btn = QPushButton("Apply in spot find")
 
         my_main_box.addWidget(self.threshold_box_show)
         my_main_box.addLayout(hbox_algorithm)
-        my_main_box.addLayout(stacked_box)
+        #my_main_box.addLayout(stacked_box)
+        my_main_box.addWidget(self.step_param_widg)
         my_main_box.addWidget(self.user_pass_btn)
 
 
@@ -646,11 +645,23 @@ class ThresholdDisplayMenu(QMenu):
             self.threshold_param_changed
         )
         self.algorithm_select.currentIndexChanged.connect(
-            self.threshold_param_changed
+            self.algorithm_changed
         )
         self.user_pass_btn.clicked.connect(self.user_applied)
 
         self.setLayout(my_main_box)
+
+    def algorithm_changed(self):
+        tmp_algo = self.algorithm_lst[int(
+            self.algorithm_select.currentIndex()
+        )]
+        if tmp_algo == "radial_profile":
+            self.step_param_widg.setCurrentWidget(self.rad_par_wig)
+
+        else:
+            self.step_param_widg.setCurrentWidget(self.dispr_par_widg)
+
+        self.threshold_param_changed(None)
 
     def threshold_param_changed(self, value):
         if self.threshold_box_show.isChecked():
