@@ -479,6 +479,99 @@ class ImgGraphicsScene(QGraphicsScene):
         self.mouse_released.emit(x_pos, y_pos)
 
 
+class DispersionParamWidget(QWidget):
+    def __init__(self):
+        super(DispersionParamWidget, self).__init__()
+        #FIXME: use a more global << default_threshold_params >>
+        default_threshold_params = {
+            "algorithm":"dispersion_extended", "nsig_b":6.0, "nsig_s":3.0,
+            "global_threshold":0, "min_count":2, "gain":1.0, "size":(3, 3),
+            "n_iqr":6.0, "blur":None,"n_bins":100
+        }
+        self.param_nsig_b = QLineEdit(
+            str(default_threshold_params["nsig_b"])
+        )
+        self.param_nsig_s = QLineEdit(
+            str(default_threshold_params["nsig_s"])
+        )
+        self.param_global_threshold = QLineEdit(
+            str(default_threshold_params["global_threshold"])
+        )
+        self.param_min_count = QLineEdit(
+            str(default_threshold_params["min_count"])
+        )
+        self.param_gain = QLineEdit(str(default_threshold_params["gain"]))
+        self.param_size = QLineEdit(
+            str(default_threshold_params["size"][0]) + "," +
+            str(default_threshold_params["size"][1])
+        )
+
+        hbox_nsig_b = QHBoxLayout()
+        hbox_nsig_s = QHBoxLayout()
+        hbox_global_threshold = QHBoxLayout()
+        hbox_min_count = QHBoxLayout()
+        hbox_gain = QHBoxLayout()
+        hbox_size = QHBoxLayout()
+        hbox_nsig_b.addWidget(QLabel("nsig_b"))
+        hbox_nsig_s.addWidget(QLabel("nsig_s"))
+        hbox_global_threshold .addWidget(QLabel("global_threshold"))
+        hbox_min_count.addWidget(QLabel("min_count"))
+        hbox_gain.addWidget(QLabel("gain"))
+        hbox_size.addWidget(QLabel("Kernel size"))
+        hbox_nsig_b.addWidget(self.param_nsig_b)
+        hbox_nsig_s.addWidget(self.param_nsig_s)
+        hbox_global_threshold.addWidget(self.param_global_threshold)
+        hbox_min_count.addWidget(self.param_min_count)
+        hbox_gain.addWidget(self.param_gain)
+        hbox_size.addWidget(self.param_size)
+
+        v_left_box = QVBoxLayout()
+        v_left_box.addLayout(hbox_nsig_b)
+        v_left_box.addLayout(hbox_nsig_s)
+        v_left_box.addLayout(hbox_global_threshold)
+
+        v_centr_box = QVBoxLayout()
+        v_centr_box.addLayout(hbox_min_count)
+        v_centr_box.addLayout(hbox_gain)
+        v_centr_box.addLayout(hbox_size)
+
+        center_h_box = QHBoxLayout()
+        center_h_box.addLayout(v_left_box)
+        center_h_box.addLayout(v_centr_box)
+        self.setLayout(center_h_box)
+
+
+class RadialParamWidget(QWidget):
+    def __init__(self):
+        super(RadialParamWidget, self).__init__()
+        #FIXME it should use << default_threshold_params >> here
+        self.param_n_iqr = QLineEdit("6.0")
+
+        self.param_blur_select = QComboBox()
+        self.blur_lst = [None, "narrow", "wide"]
+        for n, blr in enumerate(self.blur_lst):
+            self.param_blur_select.addItem(str(blr))
+
+        self.param_n_bins = QLineEdit("100")
+
+        hbox_rad_niqr = QHBoxLayout()
+        hbox_rad_niqr.addWidget(QLabel("IQR multiplier"))
+        hbox_rad_niqr.addWidget(self.param_n_iqr)
+        hbox_rad_blur = QHBoxLayout()
+        hbox_rad_blur.addWidget(QLabel("blur"))
+        hbox_rad_blur.addWidget(self.param_blur_select)
+        hbox_rad_nbin = QHBoxLayout()
+        hbox_rad_nbin.addWidget(QLabel("N bins"))
+        hbox_rad_nbin.addWidget(self.param_n_bins)
+
+        v_right_box = QVBoxLayout()
+        v_right_box.addLayout(hbox_rad_niqr)
+        v_right_box.addLayout(hbox_rad_blur)
+        v_right_box.addLayout(hbox_rad_nbin)
+
+        self.setLayout(v_right_box)
+
+
 class ThresholdDisplayMenu(QMenu):
     user_param_pass = Signal()
     new_threshold_param = Signal(dict)
@@ -493,124 +586,66 @@ class ThresholdDisplayMenu(QMenu):
             "n_iqr":6.0, "blur":None,"n_bins":100
         }
 
-        self.param_nsig_b = QLineEdit(
-            str(self.default_threshold_params["nsig_b"])
-        )
-        self.param_nsig_s = QLineEdit(
-            str(self.default_threshold_params["nsig_s"])
-        )
-        self.param_global_threshold = QLineEdit(
-            str(self.default_threshold_params["global_threshold"])
-        )
-        self.param_min_count = QLineEdit(
-            str(self.default_threshold_params["min_count"])
-        )
-        self.param_gain = QLineEdit(str(self.default_threshold_params["gain"]))
-        self.param_size = QLineEdit(
-            str(self.default_threshold_params["size"][0]) + "," +
-            str(self.default_threshold_params["size"][1])
-        )
-        self.user_pass_btn = QPushButton("Apply in spot find")
 
+        hbox_algorithm = QHBoxLayout()
+        hbox_algorithm.addWidget(QLabel("Threshold algorithm"))
         self.algorithm_select = QComboBox()
         self.algorithm_lst = ["dispersion_extended", "dispersion", "radial_profile"]
         for n, algo in enumerate(self.algorithm_lst):
             self.algorithm_select.addItem(algo)
-        ####################################################################
-        self.param_n_iqr = QLineEdit("6.0")
 
-        self.param_blur_select = QComboBox()
-        self.blur_lst = [None, "narrow", "wide"]
-        for n, blr in enumerate(self.blur_lst):
-            self.param_blur_select.addItem(str(blr))
+        hbox_algorithm.addWidget(self.algorithm_select)
 
-        self.param_n_bins = QLineEdit("100")
+        stacked_box = QHBoxLayout()
 
-        self.param_n_iqr.textChanged.connect(self.threshold_param_changed)
-        self.param_blur_select.currentIndexChanged.connect(
+        self.rad_par_wig = RadialParamWidget()
+        stacked_box.addWidget(self.rad_par_wig)
+
+        self.dispr_par_widg = DispersionParamWidget()
+        stacked_box.addWidget(self.dispr_par_widg)
+
+        self.user_pass_btn = QPushButton("Apply in spot find")
+        my_main_box.addWidget(self.user_pass_btn)
+
+        self.rad_par_wig.param_n_iqr.textChanged.connect(
             self.threshold_param_changed
         )
-        self.param_n_bins.textChanged.connect(self.threshold_param_changed)
-        ####################################################################
-
-
-        self.algorithm_select.currentIndexChanged.connect(
+        self.rad_par_wig.param_blur_select.currentIndexChanged.connect(
             self.threshold_param_changed
         )
+        self.rad_par_wig.param_n_bins.textChanged.connect(
+            self.threshold_param_changed
+        )
+        self.dispr_par_widg.param_nsig_b.textChanged.connect(
+            self.threshold_param_changed
+        )
+        self.dispr_par_widg.param_nsig_s.textChanged.connect(
+            self.threshold_param_changed
+        )
+        self.dispr_par_widg.param_global_threshold.textChanged.connect(
+            self.threshold_param_changed
+        )
+        self.dispr_par_widg.param_min_count.textChanged.connect(
+            self.threshold_param_changed
+        )
+        self.dispr_par_widg.param_gain.textChanged.connect(
+            self.threshold_param_changed
+        )
+        self.dispr_par_widg.param_size.textChanged.connect(
+            self.threshold_param_changed
+        )
+
         self.threshold_box_show.stateChanged.connect(
             self.threshold_param_changed
         )
-        self.param_nsig_b.textChanged.connect(self.threshold_param_changed)
-        self.param_nsig_s.textChanged.connect(self.threshold_param_changed)
-        self.param_global_threshold.textChanged.connect(
+        self.algorithm_select.currentIndexChanged.connect(
             self.threshold_param_changed
         )
-        self.param_min_count.textChanged.connect(self.threshold_param_changed)
-        self.param_gain.textChanged.connect(self.threshold_param_changed)
-        self.param_size.textChanged.connect(self.threshold_param_changed)
         self.user_pass_btn.clicked.connect(self.user_applied)
 
         my_main_box.addWidget(self.threshold_box_show)
-
-        hbox_algorithm = QHBoxLayout()
-        hbox_nsig_b = QHBoxLayout()
-        hbox_nsig_s = QHBoxLayout()
-        hbox_global_threshold = QHBoxLayout()
-        hbox_min_count = QHBoxLayout()
-        hbox_gain = QHBoxLayout()
-        hbox_size = QHBoxLayout()
-        hbox_algorithm.addWidget(QLabel("Threshold algorithm"))
-        hbox_algorithm.addWidget(self.algorithm_select)
-        hbox_nsig_b.addWidget(QLabel("nsig_b"))
-        hbox_nsig_s.addWidget(QLabel("nsig_s"))
-        hbox_global_threshold .addWidget(QLabel("global_threshold"))
-        hbox_min_count.addWidget(QLabel("min_count"))
-        hbox_gain.addWidget(QLabel("gain"))
-        hbox_size.addWidget(QLabel("Kernel size"))
-        hbox_nsig_b.addWidget(self.param_nsig_b)
-        hbox_nsig_s.addWidget(self.param_nsig_s)
-        hbox_global_threshold.addWidget(self.param_global_threshold)
-        hbox_min_count.addWidget(self.param_min_count)
-        hbox_gain.addWidget(self.param_gain)
-        hbox_size.addWidget(self.param_size)
-
-        hbox_rad_niqr = QHBoxLayout()
-        hbox_rad_niqr.addWidget(QLabel("IQR multiplier"))
-        hbox_rad_niqr.addWidget(self.param_n_iqr)
-        hbox_rad_blur = QHBoxLayout()
-        hbox_rad_blur.addWidget(QLabel("blur"))
-        hbox_rad_blur.addWidget(self.param_blur_select)
-        hbox_rad_nbin = QHBoxLayout()
-        hbox_rad_nbin.addWidget(QLabel("N bins"))
-        hbox_rad_nbin.addWidget(self.param_n_bins)
-
         my_main_box.addLayout(hbox_algorithm)
-
-        v_left_box = QVBoxLayout()
-        v_left_box.addLayout(hbox_nsig_b)
-        v_left_box.addLayout(hbox_nsig_s)
-        v_left_box.addLayout(hbox_global_threshold)
-
-        v_centr_box = QVBoxLayout()
-        v_centr_box.addLayout(hbox_min_count)
-        v_centr_box.addLayout(hbox_gain)
-        v_centr_box.addLayout(hbox_size)
-
-        v_right_box = QVBoxLayout()
-        v_right_box.addLayout(hbox_rad_niqr)
-        v_right_box.addLayout(hbox_rad_blur)
-        v_right_box.addLayout(hbox_rad_nbin)
-
-        center_h_box = QHBoxLayout()
-        center_h_box.addLayout(v_left_box)
-        center_h_box.addLayout(v_centr_box)
-        center_h_box.addLayout(v_right_box)
-
-        my_main_box.addLayout(center_h_box)
-
-
-        my_main_box.addWidget(self.user_pass_btn)
-
+        my_main_box.addLayout(stacked_box)
         self.setLayout(my_main_box)
 
     def threshold_param_changed(self, value):
@@ -621,36 +656,36 @@ class ThresholdDisplayMenu(QMenu):
             )]
 
             try:
-                tmp_nsig_b = float(self.param_nsig_b.text())
+                tmp_nsig_b = float(self.dispr_par_widg.param_nsig_b.text())
 
             except ValueError:
                 tmp_nsig_b = self.default_threshold_params["nsig_b"]
 
             try:
-                tmp_nsig_s = float(self.param_nsig_s.text())
+                tmp_nsig_s = float(self.dispr_par_widg.param_nsig_s.text())
 
             except ValueError:
                 tmp_nsig_s = self.default_threshold_params["nsig_s"]
 
             try:
-                tmp_global_threshold = float(self.param_global_threshold.text())
+                tmp_global_threshold = float(self.dispr_par_widg.param_global_threshold.text())
 
             except ValueError:
                 tmp_global_threshold = self.default_threshold_params["global_threshold"]
 
             try:
-                tmp_min_count = int(self.param_min_count.text())
+                tmp_min_count = int(self.dispr_par_widg.param_min_count.text())
 
             except ValueError:
                 tmp_min_count = self.default_threshold_params["min_count"]
 
             try:
-                tmp_gain = float(self.param_gain.text())
+                tmp_gain = float(self.dispr_par_widg.param_gain.text())
 
             except ValueError:
                 tmp_gain = self.default_threshold_params["gain"]
 
-            lst_size = str(self.param_size.text()).split(",")
+            lst_size = str(self.dispr_par_widg.param_size.text()).split(",")
             try:
                 tmp_size = (int(lst_size[0]), int(lst_size[1]))
 
@@ -669,17 +704,17 @@ class ThresholdDisplayMenu(QMenu):
 
             if tmp_algo == "radial_profile":
                 try:
-                    tmp_n_iqr = float(self.param_n_iqr.text())
+                    tmp_n_iqr = float(self.rad_par_wig.param_n_iqr.text())
 
                 except ValueError:
                     tmp_n_iqr = self.default_threshold_params["n_iqr"]
 
-                tmp_blur = self.blur_lst[int(
-                    self.param_blur_select.currentIndex()
+                tmp_blur = self.rad_par_wig.blur_lst[int(
+                    self.rad_par_wig.param_blur_select.currentIndex()
                 )]
 
                 try:
-                    tmp_n_bins = int(self.param_n_bins.text())
+                    tmp_n_bins = int(self.rad_par_wig.param_n_bins.text())
 
                 except ValueError:
                     tmp_n_bins = self.default_threshold_params["n_bins"]
