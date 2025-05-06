@@ -71,7 +71,7 @@ def slice_arr_2_byte(data2d, inv_scale, x1, y1, x2, y2):
         y1 >= big_d2 or y2 > big_d2 or y1 < 0 or y2 <= 0 or
         x1 > x2 or y1 > y2
     ):
-        logging.info("\n ***  array bounding error  *** \n")
+        logging.info("***  array bounding error  ***")
         return "Error"
 
     else:
@@ -140,7 +140,7 @@ def get_np_full_mask_from_image(raw_image_data):
     first_flex_panel = raw_image_data[0]
     top_data_xy_flex = flex.bool(flex.grid(first_flex_panel.all()),True)
     if len(raw_image_data) == 24:
-        print("24 panels, assuming i23 data(masking 2)")
+        logging.info("24 panels, assuming i23 data(masking 2)")
         i23_multipanel = True
         pan_tup_size = 24
         np_top_pan = to_numpy(top_data_xy_flex)
@@ -161,7 +161,7 @@ def get_np_full_mask_from_image(raw_image_data):
             ] = pan_dat[:, :]
 
     else:
-        print("Using the first panel only (masking 2)")
+        logging.info("Using the first panel only (masking 2)")
         np_arr = to_numpy(top_data_xy_flex)
 
     return np_arr, i23_multipanel
@@ -171,24 +171,27 @@ def get_np_full_mask(raw_mask_data, raw_image_data):
     i23_multipanel = False
     try:
         if len(raw_mask_data) == 24:
-            print("24 panels, assuming i23 data(masking 1)")
+            logging.info("24 panels, assuming i23 data(masking 1)")
             i23_multipanel = True
             np_arr = get_np_full_mask_from_i23_raw(raw_mask_data)
 
         else:
-            print("Using the first panel only (masking 1)")
+            logging.info("Using the first panel only (masking 1)")
             data_xy_flex = raw_mask_data[0]
             np_arr = to_numpy(data_xy_flex)
 
     except TypeError:
-        print("Type Err catch (get_np_full_img)")
+        logging.info("Type Err catch (get_np_full_img)")
         np_arr, i23_multipanel = get_np_full_mask_from_image(raw_image_data)
 
     return np_arr, i23_multipanel
 
 def get_str_full_mask(raw_dat):
     np_arr_mask, i23_multipanel = get_np_full_mask(raw_dat, None)
-    print("type(np_arr_mask) =", type(np_arr_mask), "... get_str_full_mask")
+    logging.info(
+        "type(np_arr_mask) =" + str(type(np_arr_mask))
+        + str("... get_str_full_mask")
+    )
     np_arr_mask = 1 - np_arr_mask
     str_arr_mask = np_arr_2_byte_stream(np_arr_mask)
     return str_arr_mask, i23_multipanel
@@ -198,7 +201,10 @@ def slice_mask_2_byte(raw_dat, inv_scale, x1, y1, x2, y2):
 
     bool_np_arr, i23_multipanel = get_np_full_mask(raw_dat, None)
     bool_np_arr = 1 - bool_np_arr
-    print("type(bool_np_arr) =", type(bool_np_arr), "... slice_mask_2_byte")
+    logging.info(
+        "type(bool_np_arr) =" + str(type(bool_np_arr))
+        + "... slice_mask_2_byte"
+    )
     big_d0 = bool_np_arr.shape[0]
     big_d1 = bool_np_arr.shape[1]
 
@@ -207,7 +213,7 @@ def slice_mask_2_byte(raw_dat, inv_scale, x1, y1, x2, y2):
         y1 >= big_d1 or y2 > big_d1 or y1 < 0 or y2 <= 0 or
         x1 > x2 or y1 > y2
     ):
-        logging.info("\n ***  array bounding error  *** \n")
+        logging.info("***  array bounding error  ***")
         return "Error"
 
     else:
@@ -275,7 +281,6 @@ class RadialProfileThresholdDebug:
 
 
 def from_image_n_mask_2_threshold(np_img, np_mask, params, imageset_tmp):
-    print("\n\n params =", params, "\n\n")
     abs_img = convert_2_black_n_white(np_img)
     sum_np_mask = np_mask + abs_img - 1.5
     added_np_mask = convert_2_black_n_white(sum_np_mask)
@@ -283,10 +288,6 @@ def from_image_n_mask_2_threshold(np_img, np_mask, params, imageset_tmp):
     mask_w_panels = from_numpy(bool_np_mask)
     image = from_numpy(np_img)
 
-    print("\nparams = ", params, "\n")
-
-
-    #try:
     if params["algorithm"] == "dispersion_extended":
         algorithm = DispersionExtendedThresholdDebug
 
@@ -297,11 +298,6 @@ def from_image_n_mask_2_threshold(np_img, np_mask, params, imageset_tmp):
         algorithm = RadialProfileThresholdDebug(
             imageset_tmp, params["n_iqr"], params["blur"], params["n_bins"]
         )
-    '''
-    except KeyError:
-        print("defaulting to << dispersion_extended >> algorithm")
-        algorithm = DispersionExtendedThresholdDebug
-    '''
 
     gain_map = flex.double(flex.grid(np_img.shape), params["gain"])
     flex_debug_img = algorithm(
@@ -346,7 +342,7 @@ def slice_mask_threshold_2_byte(
         y1 >= big_d1 or y2 > big_d1 or y1 < 0 or y2 <= 0 or
         x1 > x2 or y1 > y2
     ):
-        logging.info("\n ***  array bounding error  *** \n")
+        logging.info("***  array bounding error  ***")
         return "Error"
 
     else:

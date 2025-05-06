@@ -727,10 +727,6 @@ class MainObject(QObject):
         self.shift_img_num(1)
 
     def refresh_output(self, tab_index = None):
-
-        print("\nMainObject.refresh_output\n")
-
-
         if tab_index == None:
             tab_index = self.window.OutputTabWidget.currentIndex()
 
@@ -851,17 +847,17 @@ class MainObject(QObject):
 
     def update_threshold_params(self, new_params):
         try:
-            print(
+            not_needed_4_now = '''print(
                 "MainObject.update_threshold_params(new_params): \n",
                 new_params
-            )
+            )'''
             lst_cmd_2_run = build_thresh_comd(new_params)
             print("\n lst_cmd_2_run =", lst_cmd_2_run, "\n")
             self.new_node.clone_from_list(lst_cmd_2_run)
             self.update_all_param()
 
         except AttributeError:
-            print("\n\n   Error \n\n Not ready for passing parameters \n\n")
+            print("\n Error \n\n Not ready for passing parameters \n")
 
     def tmp_mask_changed(self, lst_of_lst):
         self.do_image_view.update_tmp_mask(lst_of_lst[0][0:-1])
@@ -970,7 +966,6 @@ class MainObject(QObject):
             msg_str += "\n\n from local clipboard"
 
         if msg_str:
-            print(msg_str)
             dlg = QDialog()
             layout = QVBoxLayout()
             layout.addWidget(QLabel(msg_str))
@@ -1299,11 +1294,11 @@ class MainObject(QObject):
             tmp_cmd_par.clone_from_list(
                 self.server_nod_lst[self.curr_nod_num]["lst2run"]
             )
-            logging.info("\n Updating parameters from server_nod_lst")
+            logging.info("Updating parameters from server_nod_lst")
 
         except IndexError:
             tmp_cmd_par = self.new_node
-            logging.info("\n Updating parameters from ...new_node")
+            logging.info("Updating parameters from ...new_node")
 
         new_params = tmp_cmd_par.get_all_params()
         if new_params:

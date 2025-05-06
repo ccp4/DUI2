@@ -59,7 +59,6 @@ class LoadFullMaskImage(QThread):
         self.my_handler = main_handler
 
     def run(self):
-        print("LoadFullMaskImage.thrs_hld_pars =", self.thrs_hld_pars)
         np_full_img = load_mask_img_json_w_str(
             self.uni_url,
             nod_num_lst = [self.cur_nod_num],
@@ -96,9 +95,7 @@ class LoadSliceMaskImage(QThread):
         self.my_handler =    main_handler
 
     def run(self):
-        logging.info("loading mask slice of image ")
-
-        print("LoadSliceMaskImage.thrs_hld_pars =", self.thrs_hld_pars)
+        logging.info("LoadSliceMaskImage.thrs_hld_pars =" + str(self.thrs_hld_pars))
         if self.thrs_hld_pars is None:
             my_cmd_lst = [
                 "gmis", str(self.img_num),
@@ -744,7 +741,7 @@ class ThresholdDisplayMenu(QMenu):
             self.new_threshold_param.emit(None)
 
     def user_applied(self):
-        print("user_pass_btn")
+        logging.info("user_pass_btn")
         self.user_param_pass.emit()
 
 
@@ -916,14 +913,12 @@ class InfoDisplayMenu(QMenu):
         self.new_overlay.emit(str(self.overlay))
 
     def mask_colour_changed_by_user(self, new_colour_number):
-        print("new_colour_number = ", new_colour_number)
         new_colour = self.mask_col_lst[new_colour_number]
         self.new_mask_colour.emit(str(new_colour))
 
     def transp_changed(self, new_transp_entered):
-        print("new_transp_entered =", new_transp_entered)
         new_transp = new_transp_entered / 100.0
-        print("new_transp =", new_transp)
+        #print("new_transp =", new_transp)
         self.new_mask_transp.emit(float(new_transp))
 
     def i_min_max_changed(self):
@@ -1420,12 +1415,12 @@ class DoImageView(QObject):
 
     def change_mask_colour(self, new_colour):
         self.mask_colour = new_colour
-        print("self.mask_colour =", self.mask_colour)
+        #print("self.mask_colour =", self.mask_colour)
         self.refresh_pixel_map()
 
     def change_mask_transp(self, new_transp):
         self.mask_transp = new_transp
-        print("self.mask_transp =", self.mask_transp)
+        #print("self.mask_transp =", self.mask_transp)
         self.refresh_pixel_map()
 
     def change_overlay(self, new_overlay):

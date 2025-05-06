@@ -53,21 +53,21 @@ def load_img_json_w_str(
         )
 
     except TypeError:
-        logging.info("\n Type err catch  (load_img_json_w_str) \n")
+        logging.info("Type err catch  (load_img_json_w_str)")
         return None
 
     except ConnectionError:
-        logging.info("\n Connection err catch  (load_img_json_w_str) \n")
+        logging.info("Connection err catch  (load_img_json_w_str)")
         return None
 
     except requests.exceptions.RequestException:
         logging.info(
-            "\n requests.exceptions.RequestException (load_img_json_w_str) \n"
+            "requests.exceptions.RequestException (load_img_json_w_str)"
         )
         return None
 
     except ZeroDivisionError:
-        logging.info("\n ZeroDivision err catch (load_img_json_w_str) \n")
+        logging.info("ZeroDivision err catch (load_img_json_w_str)")
         return None
 
     return np_array_out
@@ -114,7 +114,7 @@ def load_mask_img_json_w_str(
         )
 
     except TypeError:
-        logging.info("\n Type err catch  (load_mask_img_json_w_str) \n")
+        logging.info("Type err catch  (load_mask_img_json_w_str)")
         return None
 
     except ConnectionError:
@@ -123,13 +123,13 @@ def load_mask_img_json_w_str(
 
     except requests.exceptions.RequestException:
         logging.info(
-            "\n requests.exceptions.RequestException" +
-            " (load_mask_img_json_w_str) \n"
+            "requests.exceptions.RequestException" +
+            " (load_mask_img_json_w_str)"
         )
         return None
 
     except ZeroDivisionError:
-        logging.info("\n ZeroDivision err catch (load_mask_img_json_w_str) \n")
+        logging.info("ZeroDivision err catch (load_mask_img_json_w_str)")
         return None
 
     return np_array_out
@@ -287,9 +287,6 @@ class np2bmp_mask(object):
 
         img_array = np.zeros( (self.height, self.width, 4) , dtype=np.uint8)
         img_array[:, :, 3] = img_all_chanl[:,:] * transp   #Transp
-
-        print("colour_in =", colour_in)
-
 
         if colour_in == "blue":
             img_array[:, :, 0] = img_all_chanl[:,:]          #Blue

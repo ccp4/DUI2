@@ -171,12 +171,12 @@ class get_request_real_time(QThread):
                 end_data = None
 
             except ConnectionError:
-                logging.info("\n Connection err catch (get_request_real_time) \n")
+                logging.info("Connection err catch (get_request_real_time)")
                 end_data = None
 
             except requests.exceptions.RequestException:
                 logging.info(
-                    "\n requests.exceptions.ReqExp (get_request_real_time) \n"
+                    "requests.exceptions.ReqExp (get_request_real_time)"
                 )
                 end_data = None
 
@@ -281,9 +281,6 @@ def build_list_w_pars(dict_in):
     lst_out = ['dials.find_spots']
     lst_key = list(dict_in)
     for key in lst_key:
-
-        print("key =", key, "val =", dict_in[key])
-
         try:
             full_str_val = str(dict_in[key])
             str_val = full_str_val.replace(" ", "")
@@ -376,12 +373,12 @@ class post_req_w_output(QThread):
                         try:
                             nod_p_num = int(line_str.split("=")[1])
                             self.number = nod_p_num
-                            logging.info("\n QThread.number =" + str(self.number))
+                            logging.info("QThread.number =" + str(self.number))
                             self.first_line.emit(self.number)
 
                         except IndexError:
                             logging.info(
-                                "\n post_req_w_output ... Index err catch \n"
+                                "post_req_w_output ... Index err catch"
                             )
                             not_yet_read = True
 
@@ -428,7 +425,7 @@ class post_req_w_output(QThread):
                 self.already_read = True
 
             except IndexError:
-                logging.info("\n post_req_w_output ... Index err catch \n")
+                logging.info("post_req_w_output ... Index err catch")
 
         elif '/*EOF*/' in line_str :
             self.about_to_end.emit(self.number, self.do_predict_n_report)
@@ -451,7 +448,7 @@ class CommandParamControl:
             self.par_lst.append([])
 
         self.custm_param = None
-        logging.info("\n New 'CommandParamControl':")
+        logging.info("New 'CommandParamControl':")
         logging.info(" par_lst(__init__) =" + str(self.par_lst))
 
     def reset_all_params(self):
@@ -461,7 +458,7 @@ class CommandParamControl:
     def set_new_main_command(self, new_command):
         dials_command = "dials." + new_command
         self.m_cmd_lst = [dials_command]
-        logging.info("\n self.m_cmd_lst  =" + str(self.m_cmd_lst))
+        logging.info("self.m_cmd_lst  =" + str(self.m_cmd_lst))
 
     def set_parameter(self, new_name, new_value, lst_num = 0):
         logging.info(" par_lst(set_parameter) ini =" + str(self.par_lst))

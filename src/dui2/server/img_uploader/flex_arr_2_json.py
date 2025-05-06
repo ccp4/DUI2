@@ -153,21 +153,21 @@ def get_refl_lst(expt_path, refl_path, img_num):
         table = flex.reflection_table.from_file(refl_path[0])
 
     except IndexError:
-        logging.info("\n sending empty reflection Lst (Index err catch ) \n")
+        logging.info("sending empty reflection Lst (Index err catch )")
         return []
 
     except TypeError:
-        logging.info("\n sending empty reflection Lst (Type err catch ) \n")
+        logging.info("sending empty reflection Lst (Type err catch )")
         return []
 
     except FileNotFoundError:
         logging.info(
-            "\n sending empty reflection Lst (File Not Found err catch) \n"
+            "sending empty reflection Lst (File Not Found err catch)"
         )
         return []
 
     except OSError:
-        logging.info("\n sending empty reflection Lst (OS err catch) \n")
+        logging.info("sending empty reflection Lst (OS err catch)")
         return []
 
 
@@ -467,7 +467,7 @@ def get_bytes_w_2d_threshold_mask(
             pick_file.close()
 
         except FileNotFoundError:
-            print("FileNotFoundError <<< get_bytes_w_2d_threshold_mask")
+            logging.info("FileNotFoundError <<< get_bytes_w_2d_threshold_mask")
             mask_tup_obj = None
 
         byte_data, i23_multipanel = img_stream_py.mask_threshold_2_byte(
