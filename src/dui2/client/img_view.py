@@ -601,7 +601,7 @@ class ThresholdDisplayMenu(QMenu):
         #stacked_box.addWidget(self.dispr_par_widg)
         self.step_param_widg.addWidget(self.dispr_par_widg)
 
-        self.user_pass_btn = QPushButton("Apply in spot find")
+        self.user_pass_btn = QPushButton("Apply to spot find")
 
         my_main_box.addWidget(self.threshold_box_show)
         my_main_box.addLayout(hbox_algorithm)
@@ -647,6 +647,7 @@ class ThresholdDisplayMenu(QMenu):
         self.user_pass_btn.clicked.connect(self.user_applied)
 
         self.setLayout(my_main_box)
+        self.algorithm_changed()
 
     def algorithm_changed(self):
         tmp_algo = self.algorithm_lst[int(
