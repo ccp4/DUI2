@@ -300,13 +300,19 @@ def from_image_n_mask_2_threshold(np_img, np_mask, params, imageset_tmp):
         )
 
     gain_map = flex.double(flex.grid(np_img.shape), params["gain"])
+
+    print("\n\n gain_map.all() =", gain_map.all())
+    print("mask_w_panels.all() =", mask_w_panels.all())
+    print("image.all() =", image.all(), "\n\n")
+
     flex_debug_img = algorithm(
         image.as_double(),
         mask_w_panels,
         gain_map, params["size"], params["nsig_b"], params["nsig_s"],
         params["global_threshold"], params["min_count"],
-
     )
+
+    print("got here")
     return flex_debug_img
 
 
