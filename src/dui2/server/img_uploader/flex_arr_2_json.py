@@ -13,6 +13,13 @@ import time
 import pickle
 import numpy as np
 
+from dxtbx.flumpy import to_numpy, from_numpy
+from dials.command_line.find_spots import phil_scope as find_spots_phil_scope
+from dials.extensions import SpotFinderThreshold
+from dials.algorithms.image.threshold import (
+    DispersionThresholdDebug, DispersionExtendedThresholdDebug
+)
+import types
 
 def get_experiments(experiment_path):
     logging.info("importing from:" + experiment_path)
@@ -442,6 +449,7 @@ def get_bytes_w_2d_mask_slise(
     else:
         return None
 
+old_version = '''
 
 def convert_2_black_n_white(np_img):
     sig_img = (np_img + 0.00000001) / np.abs(np_img + 0.00000001)
@@ -483,7 +491,55 @@ def get_bytes_w_2d_threshold_mask(
 
     else:
         return None
+'''
 
+def get_2d_threshold_mask_tupl(
+    experiments_list_path, img_num, params
+):
+    experiments = get_experiments(experiments_list_path[0])
+
+    if experiments is not None:
+        on_sweep_img_num, n_sweep = get_correct_img_num_n_sweep_num(
+            experiments, img_num
+        )
+
+        tup_lst = img_stream_py.get_dispersion_debug_obj_tup(
+            expt_path = experiments_list_path[n_sweep],
+            on_sweep_img_num = img_num,
+            params_in = params
+        )
+        return tup_lst
+
+    else:
+        return None
+
+
+
+def get_bytes_w_2d_threshold_mask(
+    experiments_list_path, img_num, params
+):
+
+    if experiments_list_path is not None:
+        tuple_of_flex_mask = get_2d_threshold_mask_tupl(
+            experiments_list_path, img_num, params
+        )
+        if len(tuple_of_flex_mask) == 24:
+            print("24 panels, assuming i23 data(masking 1)")
+            i23_multipanel = True
+            np_arr = img_stream_py.get_np_full_mask_from_i23_raw(
+                raw_mask_data_in = tuple_of_flex_mask, border_to_one = False
+            )
+
+        else:
+            print("Using the first panel only (masking 1)")
+            data_xy_flex = tuple_of_flex_mask[0]
+            np_arr = to_numpy(data_xy_flex)
+
+        byte_data = img_stream_py.np_arr_2_byte_stream(np_arr)
+        return byte_data
+
+    else:
+        return None
 
 def get_bytes_w_2d_threshold_mask_slise(
     experiments_list_path, img_num, inv_scale, x1, y1, x2, y2, params

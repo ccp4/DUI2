@@ -1,6 +1,6 @@
 import numpy as np
 import time, logging
-import types
+import types, pickle
 from dials.array_family import flex
 from dials.command_line.find_spots import phil_scope as find_spots_phil_scope
 from dials.extensions import SpotFinderThreshold
@@ -9,6 +9,7 @@ from dials.algorithms.image.threshold import (
     DispersionThresholdDebug, DispersionExtendedThresholdDebug
 )
 
+from dxtbx.model import ExperimentList
 
 def get_np_full_img(raw_dat):
     i23_multipanel = False
@@ -112,10 +113,11 @@ def scale_np_arr(big_np_arr, inv_scale):
     rd_arr = np.round(small_arr, 1)
     return rd_arr
 
-
-def get_np_full_mask_from_i23_raw(raw_mask_data):
+def get_np_full_mask_from_i23_raw(
+    raw_mask_data_in = None, border_to_one = False
+):
     pan_tup = tuple(range(24))
-    np_top_pan = to_numpy(raw_mask_data[pan_tup[0]])
+    np_top_pan = to_numpy(raw_mask_data_in[pan_tup[0]])
     p_siz0 = np.size(np_top_pan[:, 0:1])
     p_siz1 = np.size(np_top_pan[0:1, :])
     p_siz_bg = p_siz0 + 18
@@ -124,11 +126,13 @@ def get_np_full_mask_from_i23_raw(raw_mask_data):
     im_siz1 = p_siz1
 
     np_arr = np.zeros((im_siz0, im_siz1), dtype=bool)
-    np_arr[:, :] = 1
+    if border_to_one:
+        np_arr[:, :] = 1
+
     np_arr[0:p_siz0, 0:p_siz1] = np_top_pan[:, :]
 
     for s_num in pan_tup[1:]:
-        pan_dat = to_numpy(raw_mask_data[pan_tup[s_num]])
+        pan_dat = to_numpy(raw_mask_data_in[pan_tup[s_num]])
         np_arr[
             s_num * p_siz_bg : s_num * p_siz_bg + p_siz0, 0:p_siz1
         ] = pan_dat[:, :]
@@ -166,14 +170,15 @@ def get_np_full_mask_from_image(raw_image_data):
 
     return np_arr, i23_multipanel
 
-
 def get_np_full_mask(raw_mask_data, raw_image_data):
     i23_multipanel = False
     try:
         if len(raw_mask_data) == 24:
             logging.info("24 panels, assuming i23 data(masking 1)")
             i23_multipanel = True
-            np_arr = get_np_full_mask_from_i23_raw(raw_mask_data)
+            np_arr = get_np_full_mask_from_i23_raw(
+                raw_mask_data_in = raw_mask_data, border_to_one = True
+            )
 
         else:
             logging.info("Using the first panel only (masking 1)")
@@ -185,6 +190,7 @@ def get_np_full_mask(raw_mask_data, raw_image_data):
         np_arr, i23_multipanel = get_np_full_mask_from_image(raw_image_data)
 
     return np_arr, i23_multipanel
+
 
 def get_str_full_mask(raw_dat):
     np_arr_mask, i23_multipanel = get_np_full_mask(raw_dat, None)
@@ -247,89 +253,13 @@ def slice_mask_2_byte(raw_dat, inv_scale, x1, y1, x2, y2):
 
         return byte_buff, i23_multipanel
 
+
 def convert_2_black_n_white(np_img):
     sig_img = (np_img + 0.00000001) / np.abs(np_img + 0.00000001)
     abs_img = (sig_img + 1) / 2
     return abs_img
 
-
-class RadialProfileThresholdDebug:
-    # The radial_profile threshold algorithm does not have an associated
-    # 'Debug' class. It does not create the same set of intermediate images
-    # as the dispersion algorithms, so we can delegate to a
-    # DispersionThresholdDebug object for those, while overriding the final_mask
-    # method. This wrapper class handles that.
-    def __init__(self, imageset, n_iqr, blur, n_bins):
-        self.imageset = imageset
-        params = find_spots_phil_scope.extract()
-        params.spotfinder.threshold.radial_profile.blur = blur
-        params.spotfinder.threshold.radial_profile.n_bins = n_bins
-        params.spotfinder.threshold.radial_profile.n_iqr = n_iqr
-        self.radial_profile = SpotFinderThreshold.load("radial_profile")(params)
-        self._i_panel = 0
-
-    def __call__(self, *args):
-        dispersion = DispersionThresholdDebug(*args)
-        image = args[0]
-        mask = args[1]
-        dispersion._final_mask = self.radial_profile.compute_threshold(
-            image, mask, imageset=self.imageset, i_panel=self._i_panel
-        )
-        dispersion.final_mask = types.MethodType(lambda x: x._final_mask, dispersion)
-        self._i_panel += 1
-        return dispersion
-
-
-def from_image_n_mask_2_threshold(np_img, np_mask, params, imageset_tmp):
-    abs_img = convert_2_black_n_white(np_img)
-    sum_np_mask = np_mask + abs_img - 1.5
-    added_np_mask = convert_2_black_n_white(sum_np_mask)
-    bool_np_mask = added_np_mask.astype(bool)
-    mask_w_panels = from_numpy(bool_np_mask)
-    image = from_numpy(np_img)
-
-    if params["algorithm"] == "dispersion_extended":
-        algorithm = DispersionExtendedThresholdDebug
-
-    elif params["algorithm"] == "dispersion":
-        algorithm = DispersionThresholdDebug
-
-    else:
-        algorithm = RadialProfileThresholdDebug(
-            imageset_tmp, params["n_iqr"], params["blur"], params["n_bins"]
-        )
-
-    gain_map = flex.double(flex.grid(np_img.shape), params["gain"])
-
-    print("\n\n gain_map.all() =", gain_map.all())
-    print("mask_w_panels.all() =", mask_w_panels.all())
-    print("image.all() =", image.all(), "\n\n")
-
-    flex_debug_img = algorithm(
-        image.as_double(),
-        mask_w_panels,
-        gain_map, params["size"], params["nsig_b"], params["nsig_s"],
-        params["global_threshold"], params["min_count"],
-    )
-
-    print("got here")
-    return flex_debug_img
-
-
-def mask_threshold_2_byte(
-    image_raw_dat, mask_raw_dat, params, imageset_tmp
-):
-    bool_np_arr, i23_multipanel = get_np_full_mask(mask_raw_dat, image_raw_dat)
-    np_full_img, i23_multipanel = get_np_full_img(image_raw_dat)
-    debug_mask_obj = from_image_n_mask_2_threshold(
-        np_full_img, bool_np_arr, params, imageset_tmp
-    )
-    flex_debug_mask = debug_mask_obj.final_mask()
-    np_debug_mask = to_numpy(flex_debug_mask)
-    byte_buff = np_arr_2_byte_stream(np_debug_mask)
-    return byte_buff, i23_multipanel
-
-
+soon_2_be_removed = '''
 def slice_mask_threshold_2_byte(
     image_raw_dat, mask_raw_dat, inv_scale, x1, y1, x2, y2, params, imageset_tmp
 ):
@@ -381,3 +311,136 @@ def slice_mask_threshold_2_byte(
         byte_buff = np_arr_2_byte_stream(small_arr)
 
         return byte_buff, i23_multipanel
+'''
+class RadialProfileThresholdDebug:
+    # The radial_profile threshold algorithm does not have an associated
+    # 'Debug' class. It does not create the same set of intermediate images
+    # as the dispersion algorithms, so we can delegate to a
+    # DispersionThresholdDebug object for those, while overriding the final_mask
+    # method. This wrapper class handles that.
+
+    # This class was Copy/Pasted and edited from the module spotfinder_frame.py
+    # that is part of the Dials image viewer
+
+    def __init__(self, imageset, n_iqr, blur, n_bins):
+        self.imageset = imageset
+        params = find_spots_phil_scope.extract()
+        params.spotfinder.threshold.radial_profile.blur = blur
+        params.spotfinder.threshold.radial_profile.n_bins = n_bins
+        params.spotfinder.threshold.radial_profile.n_iqr = n_iqr
+        self.radial_profile = SpotFinderThreshold.load("radial_profile")(params)
+        self.i_panel = 0
+
+    def __call__(self, *args):
+        dispersion = DispersionThresholdDebug(*args)
+        image = args[0]
+        mask = args[1]
+        dispersion._final_mask = self.radial_profile.compute_threshold(
+            image, mask, imageset=self.imageset, i_panel=self.i_panel
+        )
+        dispersion.final_mask = types.MethodType(lambda x: x._final_mask, dispersion)
+        return dispersion
+
+
+def from_image_n_mask_2_threshold(
+    my_algorithm, flex_image, mask, imageset_tmp, pars, panel_number
+):
+    np_mask = to_numpy(mask)
+    np_img = to_numpy(flex_image)
+    abs_img = convert_2_black_n_white(np_img)
+
+    (
+        nsig_b, nsig_s, global_threshold, min_count, gain, size,
+        n_iqr, blur, n_bins
+    ) = pars
+
+    sum_np_mask = np_mask + abs_img - 1.5
+    added_np_mask = convert_2_black_n_white(sum_np_mask)
+
+    bool_np_mask = added_np_mask.astype(bool)
+    mask_w_panels = from_numpy(bool_np_mask)
+    gain_map = flex.double(flex.grid(flex_image.all()), gain)
+    if my_algorithm == "dispersion_extended":
+        algorithm = DispersionExtendedThresholdDebug
+
+    elif my_algorithm == "dispersion":
+        algorithm = DispersionThresholdDebug
+
+    else:
+        algorithm = RadialProfileThresholdDebug(
+            imageset_tmp, n_iqr, blur, n_bins
+        )
+    algorithm.i_panel = panel_number
+    debug = algorithm(
+        flex_image.as_double(),
+        mask_w_panels,
+        gain_map, size, nsig_b, nsig_s, global_threshold, min_count,
+    )
+    return debug
+
+def get_dispersion_debug_obj_tup(
+    expt_path = "/tmp/...", on_sweep_img_num = 0, params_in = {None}
+):
+    try:
+        nsig_b =            params_in["nsig_b"]
+        nsig_s =            params_in["nsig_s"]
+        global_threshold =  params_in["global_threshold"]
+        min_count =         params_in["min_count"]
+        gain =              params_in["gain"]
+        size =              params_in["size"]
+
+    except KeyError:
+        nsig_b =            6.0
+        nsig_s =            3.0
+        global_threshold =  0.0
+        min_count =         2
+        gain =              1.0
+        size =              (3,3)
+
+    try:
+        n_iqr =     params_in["n_iqr"]
+        blur =      params_in["blur"]
+        n_bins =    params_in["n_bins"]
+
+    except KeyError:
+        n_iqr =     6
+        blur =      None
+        n_bins =    100
+
+
+    experiments = ExperimentList.from_file(expt_path)
+    my_imageset = experiments.imagesets()[0]
+
+    detector = my_imageset.get_detector()
+    print("len(detector obj) =", len(detector))
+
+    obj_w_alg_lst = []
+    for panel_number in range(len(detector)):
+        flex_image = my_imageset.get_raw_data(on_sweep_img_num)[panel_number]
+        try:
+            mask_file = my_imageset.external_lookup.mask.filename
+            pick_file = open(mask_file, "rb")
+            mask_tup_obj = pickle.load(pick_file)
+            pick_file.close()
+            mask = mask_tup_obj[panel_number]
+
+        except FileNotFoundError:
+            mask = flex.bool(flex.grid(flex_image.all()),True)
+
+        pars = (
+            nsig_b, nsig_s, global_threshold, min_count, gain, size,
+            n_iqr, blur, n_bins
+        )
+
+        obj_w_alg = from_image_n_mask_2_threshold(
+            params_in["algorithm"],
+            flex_image, mask, my_imageset, pars, panel_number
+        )
+        fin_mask = obj_w_alg.final_mask()
+        obj_w_alg_lst.append(fin_mask)
+
+    obj_w_alg_tup = tuple(obj_w_alg_lst)
+    return obj_w_alg_tup
+
+
+

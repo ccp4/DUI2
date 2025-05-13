@@ -680,6 +680,7 @@ class ThresholdDisplayMenu(QMenu):
             except ValueError:
                 tmp_nsig_s = self.default_threshold_params["nsig_s"]
 
+            #TODO try to restrict to { global_threshold > 0 }
             try:
                 tmp_global_threshold = float(self.dispr_par_widg.param_global_threshold.text())
 
