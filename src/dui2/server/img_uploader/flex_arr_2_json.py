@@ -471,7 +471,6 @@ def get_2d_threshold_mask_tupl(
         return None
 
 
-
 def get_bytes_w_2d_threshold_mask(
     experiments_list_path, img_num, params
 ):
@@ -480,14 +479,12 @@ def get_bytes_w_2d_threshold_mask(
             experiments_list_path, img_num, params
         )
         if len(tuple_of_flex_mask) == 24:
-            print("24 panels, assuming i23 data(masking 1)")
             i23_multipanel = True
             np_arr = img_stream_py.get_np_full_mask_from_i23_raw(
                 raw_mask_data_in = tuple_of_flex_mask, border_to_one = False
             )
 
         else:
-            print("Using the first panel only (masking 1)")
             data_xy_flex = tuple_of_flex_mask[0]
             np_arr = to_numpy(data_xy_flex)
 
@@ -496,45 +493,7 @@ def get_bytes_w_2d_threshold_mask(
 
     else:
         return None
-old_version = '''
-def get_bytes_w_2d_threshold_mask_slise(
-    experiments_list_path, img_num, inv_scale, x1, y1, x2, y2, params
-):
-    experiments = get_experiments(experiments_list_path[0])
-    if experiments is not None:
-        on_sweep_img_num, n_sweep = get_correct_img_num_n_sweep_num(
-            experiments, img_num
-        )
 
-        imageset_tmp = experiments.imagesets()[n_sweep]
-        mask_file = imageset_tmp.external_lookup.mask.filename
-        img_tup_obj = imageset_tmp.get_raw_data(on_sweep_img_num)
-
-        try:
-            pick_file = open(mask_file, "rb")
-            mask_tup_obj = pickle.load(pick_file)
-            pick_file.close()
-
-        except FileNotFoundError:
-            mask_tup_obj = None
-
-        byte_data, i23_multipanel = img_stream_py.slice_mask_threshold_2_byte(
-            img_tup_obj, mask_tup_obj, inv_scale,
-            int(float(x1)), int(float(y1)),
-            int(float(x2)), int(float(y2)),
-            params, imageset_tmp
-        )
-
-        if byte_data == "Error":
-            logging.info('byte_data == "Error"')
-            byte_data = None
-
-
-        return byte_data
-
-    else:
-        return None
-'''
 
 def get_bytes_w_2d_threshold_mask_slise(
     experiments_list_path, img_num, inv_scale, x1, y1, x2, y2, params
@@ -544,17 +503,15 @@ def get_bytes_w_2d_threshold_mask_slise(
             experiments_list_path, img_num, params
         )
         if len(tuple_of_flex_mask) == 24:
-            print("24 panels, assuming i23 data(masking 1)")
             i23_multipanel = True
             np_arr = img_stream_py.get_np_full_mask_from_i23_raw(
                 raw_mask_data_in = tuple_of_flex_mask, border_to_one = False
             )
 
         else:
-            print("Using the first panel only (masking 1)")
             data_xy_flex = tuple_of_flex_mask[0]
             np_arr = to_numpy(data_xy_flex)
-
+        #TODO: find why I this: << float inside int >>
         np_arr = img_stream_py.mask_threshold_2_slise(
             np_arr, inv_scale,
             int(float(x1)), int(float(y1)),
