@@ -312,6 +312,58 @@ def slice_mask_threshold_2_byte(
 
         return byte_buff, i23_multipanel
 '''
+
+def mask_threshold_2_slise(
+    flex_debug_mask, inv_scale, x1, y1, x2, y2
+):
+
+    print("flex_debug_mask, inv_scale, x1, y1, x2, y2:\n", flex_debug_mask, inv_scale, x1, y1, x2, y2)
+
+    np_debug_mask = to_numpy(flex_debug_mask)
+    big_d0 = np_debug_mask.shape[0]
+    big_d1 = np_debug_mask.shape[1]
+
+    print("big_d0 =", big_d0)
+    print("x1 =", x1)
+
+    if(
+        x1 >= big_d0 or x2 > big_d0 or x1 < 0 or x2 <= 0 or
+        y1 >= big_d1 or y2 > big_d1 or y1 < 0 or y2 <= 0 or
+        x1 > x2 or y1 > y2
+    ):
+        logging.info("***  array bounding error  ***")
+        return "Error"
+
+    else:
+        logging.info(" array bounding OK ")
+        slice_np_arr = np_debug_mask[x1:x2,y1:y2]
+        a_d0 = slice_np_arr.shape[0]
+        a_d1 = slice_np_arr.shape[1]
+
+        small_d0 = int(0.995 + a_d0 / inv_scale)
+        short_arr = np.zeros((small_d0, a_d1), dtype = bool)
+        for row_num in range(small_d0):
+            for sub_row_num in range(inv_scale):
+                big_row = row_num * inv_scale + sub_row_num
+                if big_row < a_d0:
+                    short_arr[row_num,:] = np.bitwise_or(
+                        short_arr[row_num,:], slice_np_arr[big_row, :]
+                    )
+
+        small_d1 = int(0.995 + a_d1 / inv_scale)
+        small_arr = np.zeros((small_d0, small_d1), dtype = bool)
+
+        for col_num in range(small_d1):
+            for sub_col_num in range(inv_scale):
+                big_col = col_num * inv_scale + sub_col_num
+                if big_col < a_d1:
+                    small_arr[:,col_num] = np.bitwise_or(
+                        small_arr[:,col_num], short_arr[:,big_col]
+                    )
+
+        return small_arr
+
+
 class RadialProfileThresholdDebug:
     # The radial_profile threshold algorithm does not have an associated
     # 'Debug' class. It does not create the same set of intermediate images
