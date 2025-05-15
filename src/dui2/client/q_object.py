@@ -939,6 +939,7 @@ class MainObject(QObject):
         self.clicked_4_navigation(node_numb)
         logging.info("on_node_click_w_right" + str(self.curr_nod_num))
         msg_str = False
+
         try:
             if(
                 self.server_nod_lst[self.curr_nod_num]["status"] == "Succeeded" or
@@ -948,9 +949,15 @@ class MainObject(QObject):
                     self.server_nod_lst[self.curr_nod_num]["lst2run"]
                 )
 
+                msg_str_ini = "Copied:\n\n"
+                msg_str_fin = "\n\n to local clipboard"
+                msg_str = True
+
+                old_version = '''
                 msg_str = "Copied:\n\n"
                 msg_str += str(self.local_clipboard)
                 msg_str += "\n\n to local clipboard"
+                '''
 
             else:
                 logging.info(
@@ -961,16 +968,26 @@ class MainObject(QObject):
         except IndexError:
             self.new_node.clone_from_list(self.local_clipboard)
             self.update_all_param()
-            msg_str = "Pasted:\n\n"
-            msg_str += str(self.local_clipboard)
-            msg_str += "\n\n from local clipboard"
+            msg_str_ini = "Pasted:\n\n"
+            msg_str_fin = "\n\n from local clipboard"
+            msg_str = True
 
         if msg_str:
+            clipboard_str = ""
+            for single_param in self.local_clipboard[0]:
+                clipboard_str += str(single_param) + "\n"
+
+            msg_str = msg_str_ini
+            msg_str += clipboard_str
+            msg_str += msg_str_fin
+
             dlg = QDialog()
             layout = QVBoxLayout()
             layout.addWidget(QLabel(msg_str))
-            #layout.addWidget(QPushButton("Ok"))
+            ok_butt = QPushButton("Ok/Close")
+            layout.addWidget(ok_butt)
             dlg.setLayout(layout)
+            ok_butt.clicked.connect(dlg.accept)
 
             dlg.setWindowTitle("Local clipboard use")
             dlg.exec_()
