@@ -1012,7 +1012,15 @@ class DoImageView(QObject):
         self.overlay = "blue"
 
         self.pop_threshold_menu = ThresholdDisplayMenu(self)
-        self.main_obj.window.ThresholdButton.setMenu(self.pop_threshold_menu)
+        try:
+            self.main_obj.window.ThresholdButton.setMenu(self.pop_threshold_menu)
+            self.pop_threshold_menu.new_threshold_param.connect(
+                self.update_threshold_params
+            )
+            self.pop_threshold_menu.user_param_pass.connect(self.user_applied)
+
+        except AttributeError:
+            self.pop_threshold_menu.deleteLater()
 
         self.pop_display_menu = InfoDisplayMenu(self)
         self.main_obj.window.DisplayButton.setMenu(self.pop_display_menu)
@@ -1031,11 +1039,6 @@ class DoImageView(QObject):
         self.pop_display_menu.new_ref_list.connect(
             self.request_reflection_list
         )
-        self.pop_threshold_menu.new_threshold_param.connect(
-            self.update_threshold_params
-        )
-        self.pop_threshold_menu.user_param_pass.connect(self.user_applied)
-
         self.my_scene.img_scale.connect(self.scale_img)
         self.my_scene.new_mouse_pos.connect(self.on_mouse_move)
         self.my_scene.mouse_pressed.connect(self.on_mouse_press)
