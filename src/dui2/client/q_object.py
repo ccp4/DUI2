@@ -948,16 +948,9 @@ class MainObject(QObject):
                 self.local_clipboard = list(
                     self.server_nod_lst[self.curr_nod_num]["lst2run"]
                 )
-
                 msg_str_ini = "Copied:\n\n"
                 msg_str_fin = "\n\n to local clipboard"
                 msg_str = True
-
-                old_version = '''
-                msg_str = "Copied:\n\n"
-                msg_str += str(self.local_clipboard)
-                msg_str += "\n\n to local clipboard"
-                '''
 
             else:
                 logging.info(
@@ -966,11 +959,21 @@ class MainObject(QObject):
                 )
 
         except IndexError:
-            self.new_node.clone_from_list(self.local_clipboard)
-            self.update_all_param()
-            msg_str_ini = "Pasted:\n\n"
-            msg_str_fin = "\n\n from local clipboard"
-            msg_str = True
+            try:
+                if self.local_clipboard[0][0] == self.new_node.m_cmd_lst[0]:
+                    self.new_node.clone_from_list(self.local_clipboard)
+                    self.update_all_param()
+                    msg_str_ini = "Pasted:\n\n"
+                    msg_str_fin = "\n\n from local clipboard"
+                    msg_str = True
+
+                else:
+                    msg_str = False
+
+            except IndexError:
+                msg_str = False
+
+        print("\n local_clipboard =", self.local_clipboard)
 
         if msg_str:
             clipboard_str = ""
@@ -981,16 +984,19 @@ class MainObject(QObject):
             msg_str += clipboard_str
             msg_str += msg_str_fin
 
-            dlg = QDialog()
-            layout = QVBoxLayout()
-            layout.addWidget(QLabel(msg_str))
-            ok_butt = QPushButton("Ok/Close")
-            layout.addWidget(ok_butt)
-            dlg.setLayout(layout)
-            ok_butt.clicked.connect(dlg.accept)
+        else:
+            msg_str = "\n Error \n"
 
-            dlg.setWindowTitle("Local clipboard use")
-            dlg.exec_()
+        dlg = QDialog()
+        layout = QVBoxLayout()
+        layout.addWidget(QLabel(msg_str))
+        ok_butt = QPushButton("Ok/Close")
+        layout.addWidget(ok_butt)
+        dlg.setLayout(layout)
+        ok_butt.clicked.connect(dlg.accept)
+
+        dlg.setWindowTitle("Local clipboard use")
+        dlg.exec_()
 
     def on_hide_click(self, node_numb):
         if node_numb in self.lst2exl:
