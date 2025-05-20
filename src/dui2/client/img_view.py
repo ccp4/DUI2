@@ -701,7 +701,7 @@ class ThresholdDisplayMenu(QMenu):
 
             lst_size = str(self.dispr_par_widg.param_size.text()).split(",")
             try:
-                tmp_size = (int(lst_size[0]), int(lst_size[1]))
+                tmp_size = [int(lst_size[0]), int(lst_size[1])]
 
             except (ValueError, IndexError):
                 tmp_size = self.default_threshold_params["size"]
