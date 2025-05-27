@@ -96,7 +96,6 @@ class Browser(object):
             str_json = flex_arr_2_json.get_bytes_w_img_2d(
                 [exp_path], img_num,
             )
-
             if str_json is not None:
                 #byt_data = bytes(str_json.encode('utf-8'))
                 #return_list = byt_data
@@ -128,7 +127,6 @@ class Browser(object):
                 int(cmd_lst[1])
             )
             return_list = refl_lst
-
 
         elif uni_cmd == "get_dir_ls":
 
@@ -229,7 +227,6 @@ def main(par_def = None, connection_out = None):
                 )
 
     ################################################ PROPER MAIN BROWSER
-
 
     init_param = format_utils.get_par(par_def, sys.argv[1:])
 

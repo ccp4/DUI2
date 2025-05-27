@@ -149,11 +149,9 @@ def list_p_arrange_exp(
     return img_lst
 
 
-
 def get_refl_lst(expt_path, refl_path, img_num):
     try:
         experiments = get_experiments(expt_path[0])
-
         all_sweeps = experiments.imagesets()
         num_of_imagesets = len(all_sweeps)
         logging.info("refl_path =" + str(refl_path))
@@ -176,7 +174,6 @@ def get_refl_lst(expt_path, refl_path, img_num):
     except OSError:
         logging.info("sending empty reflection Lst (OS err catch)")
         return []
-
 
     try:
         pan_col = list(map(int, table["panel"]))
@@ -275,7 +272,6 @@ def single_image_arrange_predic(
 def get_refl_pred_lst(expt_path, refl_path, img_num, z_dept):
     try:
         experiments = get_experiments(expt_path[0])
-
         all_sweeps = experiments.imagesets()
         num_of_imagesets = len(all_sweeps)
         logging.info("refl_path =" + str(refl_path))
@@ -303,7 +299,6 @@ def get_refl_pred_lst(expt_path, refl_path, img_num, z_dept):
             shift = single_sweep.get_scan().get_image_range()[0] - 1
             num_of_imgs_lst.append(num_of_imgs)
             imgs_shift_lst.append(shift)
-
 
         box_flat_data_lst = []
         if n_imgs > 0:
@@ -370,7 +365,6 @@ def get_bytes_w_2d_slise(experiments_list_path, img_num, inv_scale, x1, y1, x2, 
         on_sweep_img_num, n_sweep = get_correct_img_num_n_sweep_num(
             experiments, img_num
         )
-
         my_sweep = experiments.imagesets()[n_sweep]
         data_xy_flex = my_sweep.get_raw_data(on_sweep_img_num)
 

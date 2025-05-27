@@ -113,6 +113,7 @@ def scale_np_arr(big_np_arr, inv_scale):
     rd_arr = np.round(small_arr, 1)
     return rd_arr
 
+
 def get_np_full_mask_from_i23_raw(
     raw_mask_data_in = None, border_to_one = False
 ):
@@ -138,6 +139,7 @@ def get_np_full_mask_from_i23_raw(
         ] = pan_dat[:, :]
 
     return np_arr
+
 
 def get_np_full_mask_from_image(raw_image_data):
     i23_multipanel = False
@@ -169,6 +171,7 @@ def get_np_full_mask_from_image(raw_image_data):
         np_arr = to_numpy(top_data_xy_flex)
 
     return np_arr, i23_multipanel
+
 
 def get_np_full_mask(raw_mask_data, raw_image_data):
     i23_multipanel = False
@@ -204,7 +207,6 @@ def get_str_full_mask(raw_dat):
 
 
 def slice_mask_2_byte(raw_dat, inv_scale, x1, y1, x2, y2):
-
     bool_np_arr, i23_multipanel = get_np_full_mask(raw_dat, None)
     bool_np_arr = 1 - bool_np_arr
     logging.info(
@@ -370,6 +372,7 @@ def from_image_n_mask_2_threshold(
     )
     return debug
 
+
 def get_dispersion_debug_obj_tup(
     expt_path = "/tmp/...", on_sweep_img_num = 0, params_in = {None}
 ):
@@ -398,7 +401,6 @@ def get_dispersion_debug_obj_tup(
         n_iqr =     6
         blur =      None
         n_bins =    100
-
 
     experiments = ExperimentList.from_file(expt_path)
     my_imageset = experiments.imagesets()[0]

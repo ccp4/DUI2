@@ -850,14 +850,6 @@ class Runner(object):
 
                         lst_cmds.append(cmd_line)
 
-            not_needed_for_now = '''
-            print("\n List of commands: \n")
-            for single_command in lst_cmds:
-                print(single_command)
-
-            print("\n")
-            '''
-
             return_list = lst_cmds
 
         elif unalias_cmd_lst == ["closed"]:
@@ -905,7 +897,6 @@ class Runner(object):
         lst_str = []
         for single_region in untrusted_list:
             logging.info("single_region =" + str(single_region))
-
             if single_region[0:17] == 'multipanel.circle':
                 lst_nums = single_region[18:].split(",")
                 lst_str.append("untrusted {")
@@ -927,7 +918,6 @@ class Runner(object):
                 )
                 lst_str.append("}")
 
-
         lst_str.append("output {")
         lst_str.append("  mask = tmp_mask.pickle")
         lst_str.append("}")
@@ -937,21 +927,17 @@ class Runner(object):
         logging.info("phil_file_name =" + str(phil_file_name))
 
         f = open(phil_file_name, 'w', encoding="utf-8")
-
         for str_2_write in lst_str:
             f.write(str_2_write + "\n")
 
         f.close()
-
         return phil_file_name
-
 
     def split_node(self, node):
 
         #TODO: don't run this if this node is not a split_experiments command
 
         lst_nod_out = [int(node.number)]
-
         with open(node.log_file_path) as myfile:
             log_line_lst = myfile.readlines()
 
@@ -1062,22 +1048,22 @@ class Runner(object):
         lst_nod = []
         for uni in self.step_list:
             node = {
-                        "_base_dir"             :uni._base_dir,
-                        "cmd_dict_ini"          :uni.cmd_dict_ini,
-                        "full_cmd_lst"          :uni.full_cmd_lst,
-                        "lst2run"               :uni.lst2run,
-                        "_lst_expt_in"          :uni._lst_expt_in,
-                        "_lst_refl_in"          :uni._lst_refl_in,
-                        "_lst_expt_out"         :uni._lst_expt_out,
-                        "_lst_refl_out"         :uni._lst_refl_out,
-                        "_run_dir"              :uni._run_dir,
-                        "_html_rep"             :uni._html_rep,
-                        "_predic_refl"          :uni._predic_refl,
-                        "log_file_path"         :uni.log_file_path,
-                        "number"                :uni.number,
-                        "parent_node_lst"       :uni.parent_node_lst,
-                        "child_node_lst"        :uni.child_node_lst,
-                        "status"                :uni.status
+                "_base_dir"             :uni._base_dir,
+                "cmd_dict_ini"          :uni.cmd_dict_ini,
+                "full_cmd_lst"          :uni.full_cmd_lst,
+                "lst2run"               :uni.lst2run,
+                "_lst_expt_in"          :uni._lst_expt_in,
+                "_lst_refl_in"          :uni._lst_refl_in,
+                "_lst_expt_out"         :uni._lst_expt_out,
+                "_lst_refl_out"         :uni._lst_refl_out,
+                "_run_dir"              :uni._run_dir,
+                "_html_rep"             :uni._html_rep,
+                "_predic_refl"          :uni._predic_refl,
+                "log_file_path"         :uni.log_file_path,
+                "number"                :uni.number,
+                "parent_node_lst"       :uni.parent_node_lst,
+                "child_node_lst"        :uni.child_node_lst,
+                "status"                :uni.status
             }
             lst_nod.append(node)
 

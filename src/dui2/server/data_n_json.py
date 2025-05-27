@@ -168,7 +168,6 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
                 )
                 return_list = []
 
-
     elif uni_cmd[0] == "get_template":
         for lin2go in cmd_dict["nod_lst"]:
             try:
@@ -183,6 +182,7 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
                 logging.info(
                     " err catch , wrong line, not sending template string"
                 )
+
     elif uni_cmd[0] == "get_image":
         for lin2go in cmd_dict["nod_lst"]:
             try:
@@ -191,9 +191,6 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
                     step_list[lin2go]._lst_expt_out,
                     int(uni_cmd[1])
                 )
-
-                #byt_data = bytes(str_json.encode('utf-8'))
-                #return_list = byt_data
                 return_list = str_json
 
             except (IndexError, AttributeError, ValueError):
@@ -219,8 +216,6 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
                     int(uni_cmd[1]), inv_scale, x1, y1, x2, y2
                 )
                 if str_json is not None:
-                    #byt_data = bytes(str_json.encode('utf-8'))
-                    #return_list = byt_data
                     return_list = str_json
 
             except (IndexError, AttributeError):
@@ -228,7 +223,6 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
 
             except ValueError:
                 logging.info("err catch , wrong command, not sending IMG")
-
 
     elif uni_cmd[0] == "get_mask_image":
         for lin2go in cmd_dict["nod_lst"]:
@@ -238,8 +232,6 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
                     step_list[lin2go]._lst_expt_out,
                     int(uni_cmd[1])
                 )
-                #byt_data = bytes(str_json.encode('utf-8'))
-                #return_list = byt_data
                 return_list = str_json
 
             except (IndexError, AttributeError, ValueError):
@@ -306,8 +298,6 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
                 logging.info(
                     "err catch , wrong command, not sending threshold mask IMG"
                 )
-
-
 
     elif uni_cmd[0] == "get_threshold_mask_image_slice":
         for lin2go in cmd_dict["nod_lst"]:
