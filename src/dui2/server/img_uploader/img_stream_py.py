@@ -186,7 +186,7 @@ def get_np_full_mask(raw_mask_data, raw_image_data):
             np_arr = to_numpy(data_xy_flex)
 
     except TypeError:
-        logging.info("Type Err catch (get_np_full_img)")
+        logging.info("Type Err catch (get_np_full_mask)")
         np_arr, i23_multipanel = get_np_full_mask_from_image(raw_image_data)
 
     return np_arr, i23_multipanel

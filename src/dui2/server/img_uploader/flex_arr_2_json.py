@@ -350,7 +350,6 @@ def get_correct_img_num_n_sweep_num(experiments, img_num):
 def get_bytes_w_img_2d(experiments_list_path, img_num):
     experiments = get_experiments(experiments_list_path[0])
     if experiments is not None:
-
         on_sweep_img_num, n_sweep = get_correct_img_num_n_sweep_num(
             experiments, img_num
         )
