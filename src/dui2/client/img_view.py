@@ -504,11 +504,11 @@ class DispersionParamWidget(QWidget):
         hbox_min_count = QHBoxLayout()
         hbox_gain = QHBoxLayout()
         hbox_size = QHBoxLayout()
-        hbox_nsig_b.addWidget(QLabel("nsig_b"))
-        hbox_nsig_s.addWidget(QLabel("nsig_s"))
-        hbox_global_threshold .addWidget(QLabel("global_threshold"))
-        hbox_min_count.addWidget(QLabel("min_count"))
-        hbox_gain.addWidget(QLabel("gain"))
+        hbox_nsig_b.addWidget(QLabel("Sigma background"))
+        hbox_nsig_s.addWidget(QLabel("Sigma strong"))
+        hbox_global_threshold.addWidget(QLabel("Global threshold"))
+        hbox_min_count.addWidget(QLabel("Min local"))
+        hbox_gain.addWidget(QLabel("Gain"))
         hbox_size.addWidget(QLabel("Kernel size"))
         hbox_nsig_b.addWidget(self.param_nsig_b)
         hbox_nsig_s.addWidget(self.param_nsig_s)
@@ -574,8 +574,8 @@ class ThresholdDisplayMenu(QMenu):
         self.threshold_box_show.setChecked(False)
         self.default_threshold_params = {
             "algorithm":"dispersion_extended", "nsig_b":6.0, "nsig_s":3.0,
-            "global_threshold":0, "min_count":2, "gain":1.0, "size":(3, 3),
-            "n_iqr":6.0, "blur":None,"n_bins":100
+            "global_threshold":0.0, "min_count":2, "gain":1.0, "size":(3, 3),
+            "n_iqr":6, "blur":None,"n_bins":100
         }
 
         hbox_algorithm = QHBoxLayout()
@@ -721,6 +721,7 @@ class ThresholdDisplayMenu(QMenu):
                     tmp_n_iqr = int(self.rad_par_wig.param_n_iqr.text())
 
                 except ValueError:
+                    print("assigning default value to n_iqr ...(ValueError) ")
                     tmp_n_iqr = self.default_threshold_params["n_iqr"]
 
                 tmp_blur = self.rad_par_wig.blur_lst[int(
