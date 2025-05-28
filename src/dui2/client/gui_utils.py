@@ -488,17 +488,21 @@ class AdvancedParameters(QWidget):
 
     def find_next_search_click(self):
         logging.info("find_next_search_click(AdvancedParameters)")
-        self.num_fnd_widg += 1
-        if self.num_fnd_widg >= len(self.lst_found_widg):
-            self.num_fnd_widg = 0
-
         try:
-            self.my_scroll_area.ensureWidgetVisible(
-                self.lst_found_widg[self.num_fnd_widg]
-            )
+            self.num_fnd_widg += 1
+            if self.num_fnd_widg >= len(self.lst_found_widg):
+                self.num_fnd_widg = 0
 
-        except IndexError:
-            logging.info("No match found")
+            try:
+                self.my_scroll_area.ensureWidgetVisible(
+                    self.lst_found_widg[self.num_fnd_widg]
+                )
+
+            except IndexError:
+                logging.info("No match found")
+
+        except AttributeError:
+            logging.info("failed to search ... (AdvancedParameters)")
 
     def search_changed(self):
         sender = self.sender()
