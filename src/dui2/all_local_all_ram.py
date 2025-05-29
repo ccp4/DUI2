@@ -13,6 +13,9 @@ from PySide2.QtWidgets import *
 
 #if __name__ == '__main__':
 def main():
+
+    os.environ["QTWEBENGINE_CHROMIUM_FLAGS"] = "--no-sandbox"
+
     print("\n platform.system()", platform.system())
     if platform.system() == "Windows":
         win_str = "true"
