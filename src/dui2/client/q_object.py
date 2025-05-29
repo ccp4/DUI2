@@ -92,7 +92,7 @@ class MainObject(QObject):
         root_widg = RootWidg()
         self.window.RootScrollArea.setWidget(root_widg)
 
-        self.imp_widg = ImportWidget()
+        self.imp_widg = ImportWidget(self.runner_handler)
         self.imp_widg.all_items_changed.connect(self.all_items_param_changed)
         self.window.ImportScrollArea.setWidget(self.imp_widg)
 

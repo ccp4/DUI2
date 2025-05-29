@@ -299,7 +299,7 @@ class ImportWidget(QWidget):
     '''
     all_items_changed = Signal(list)
     def __init__(self, parent = None):
-        super(ImportWidget, self).__init__(parent)
+        super(ImportWidget, self).__init__()
         self.do_emit = True
         self.dir_selected = None
         self.runner_handler = parent
@@ -433,10 +433,16 @@ class ImportWidget(QWidget):
         else:
 
             cmd = {"nod_lst":"", "cmd_str":["dir_path"]}
+
+            print("\n self.runner_handler =", self.runner_handler, "\n")
+
             lst_req = get_req_json_dat(
                 params_in = cmd, main_handler = self.runner_handler
             )
             dic_str = lst_req.result_out()
+
+            print("dic_str =", dic_str)
+
             init_path = dic_str[0]
             if(
                 self.rad_but_template.isChecked() or

@@ -65,7 +65,7 @@ def main():
             recovery_data = None, dat_ini = server_data_init
         )
 
-    #cmd_tree_runner.set_dir_path(tree_ini_path)
+    cmd_runner.set_dir_path(tree_ini_path)
     app = QApplication(sys.argv)
 
     m_gui_obj = all_local_gui_connector.MainGuiObject(
