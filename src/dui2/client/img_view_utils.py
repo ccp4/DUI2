@@ -23,7 +23,7 @@ copyright (c) CCP4 - DLS
 
 
 import numpy as np
-import time, requests, logging
+import time, logging
 
 from dui2.client.init_firts import ini_data
 from dui2.client.exec_utils import get_request_shot
@@ -48,26 +48,16 @@ def load_img_json_w_str(
         d2 = int(d1d2_n_arr1d[1])
         np_array_out = d1d2_n_arr1d[2:].reshape(d1, d2)
         end_tm = time.time()
-        logging.info(
+        print(
             "full IMG request BIN time=" + str(end_tm - start_tm) + "sec"
         )
 
     except TypeError:
-        logging.info("Type err catch  (load_img_json_w_str)")
-        return None
-
-    except ConnectionError:
-        logging.info("Connection err catch  (load_img_json_w_str)")
-        return None
-
-    except requests.exceptions.RequestException:
-        logging.info(
-            "requests.exceptions.RequestException (load_img_json_w_str)"
-        )
+        print("Type err catch  (load_img_json_w_str)")
         return None
 
     except ZeroDivisionError:
-        logging.info("ZeroDivision err catch (load_img_json_w_str)")
+        print("ZeroDivision err catch (load_img_json_w_str)")
         return None
 
     return np_array_out
@@ -114,22 +104,11 @@ def load_mask_img_json_w_str(
         )
 
     except TypeError:
-        logging.info("Type err catch  (load_mask_img_json_w_str)")
-        return None
-
-    except ConnectionError:
-        logging.info("Connection err catch  (load_mask_img_json_w_str)")
-        return None
-
-    except requests.exceptions.RequestException:
-        logging.info(
-            "requests.exceptions.RequestException" +
-            " (load_mask_img_json_w_str)"
-        )
+        print("Type err catch  (load_mask_img_json_w_str)")
         return None
 
     except ZeroDivisionError:
-        logging.info("ZeroDivision err catch (load_mask_img_json_w_str)")
+        print("ZeroDivision err catch (load_mask_img_json_w_str)")
         return None
 
     return np_array_out
