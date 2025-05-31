@@ -29,7 +29,7 @@ from PySide2.QtGui import *
 from PySide2 import QtUiTools
 
 import numpy as np
-import json, time, requests
+import json, time
 
 from dui2.client.init_firts import ini_data
 from dui2.client.exec_utils import (
