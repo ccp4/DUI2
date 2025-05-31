@@ -21,7 +21,7 @@ copyright (c) CCP4 - DLS
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-import sys, os, requests, logging
+import sys, os, logging
 from PySide2.QtCore import *
 from PySide2.QtWidgets import *
 from PySide2 import QtUiTools
@@ -390,9 +390,11 @@ class DoLoadHTML(QObject):
         + "  Loading ..." \
         + second_half
 
+        code_2_remove = '''
         self.failed_html = first_half \
         + "  Failed Connection" \
         + second_half
+        '''
 
         self.new_file_path = None
 
@@ -499,6 +501,7 @@ class DoLoadHTML(QObject):
                     logging.info("\n Connection err catch (DoLoadHTML) \n")
                     full_file = ''
 
+                    do_not_duplicate = '''
                 except ConnectionError:
                     logging.info("\n Connection err catch (DoLoadHTML) \n")
                     full_file = ''
@@ -508,6 +511,7 @@ class DoLoadHTML(QObject):
                         "\nrequests.exceptions.RequestException (DoLoadHTML)\n"
                     )
                     full_file = self.failed_html
+                    '''
 
             if len(full_file) < 5:
                 html_show(
