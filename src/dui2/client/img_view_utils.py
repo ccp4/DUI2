@@ -37,6 +37,7 @@ def load_img_json_w_str(
               "path"    : exp_path,
               "cmd_str" : my_cmd_lst}
 
+    print("\n\n load_img_json_w_str   ... Ini")
     try:
         start_tm = time.time()
         req_shot = get_request_shot(
@@ -52,14 +53,16 @@ def load_img_json_w_str(
             "full IMG request BIN time=" + str(end_tm - start_tm) + "sec"
         )'''
 
+
     except TypeError:
-        #print("Type err catch  (load_img_json_w_str)")
+        print("Type err catch  (load_img_json_w_str)")
         return None
 
     except ZeroDivisionError:
-        #print("ZeroDivision err catch (load_img_json_w_str)")
+        print("ZeroDivision err catch (load_img_json_w_str)")
         return None
 
+    print("\n\n load_img_json_w_str   ... End")
     return np_array_out
 
 
