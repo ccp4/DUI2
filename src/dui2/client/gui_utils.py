@@ -33,7 +33,6 @@ from dui2.shared_modules import format_utils
 def check_if_predict_n_report(str_key):
     should_skip = True
     if str_key in [
-        "import",
         "refine_bravais_settings",
         "generate_mask",
         "apply_mask",
@@ -55,7 +54,7 @@ widgets_defs = {
         "tooltip"       : "dials.import ...",
         "icon"          : "resources/import.png",
         "main_cmd"      :["dials.import"],
-        "nxt_widg_lst"  :["find_spots", "apply_mask"]
+        "nxt_widg_lst"  :["find_spots", "apply_mask", "split_experiments"]
     },
     "apply_mask" : {
         "tooltip"       : "dials.generate_mask && dials.apply_mask ...",
@@ -69,7 +68,7 @@ widgets_defs = {
         "main_cmd"      :["dials.find_spots"],
         "nxt_widg_lst"  :[
             "index", "filter_reflections", "combine_experiments",
-            "ssx_index", "optional"
+            "ssx_index", "split_experiments", "optional"
         ]
     },
     "filter_reflections" : {
@@ -198,7 +197,7 @@ widgets_defs = {
         "icon"              : "resources/split.png",
         "main_cmd"          :["dials.split_experiments"],
         "nxt_widg_lst"      :[
-            "refine", "integrate", "export",
+            "find_spots", "apply_mask", "refine", "integrate", "export",
             "merge", "combine_experiments","optional"
         ]
     },
@@ -261,10 +260,16 @@ class find_next_cmd(object):
     ):
         self.nod_lst = nod_lst_in
         self.remove_combine = False
+        self.remove_split = False
         if str_key == "combine_experiments":
             parent_num = parent_nod_num_lst[0]
             str_key = self.nod_lst[parent_num]["cmd2show"][0][6:]
             self.remove_combine = True
+
+        elif str_key == "split_experiments":
+            parent_num = parent_nod_num_lst[0]
+            str_key = self.nod_lst[parent_num]["cmd2show"][0][6:]
+            self.remove_split = True
 
         try:
             self.default_list = param_widgets[str_key]["nxt_widg_lst"]
@@ -290,6 +295,13 @@ class find_next_cmd(object):
         if self.remove_combine:
             try:
                 fin_cmd_lst.remove("combine_experiments")
+
+            except ValueError:
+                return ["optional"]
+
+        elif self.remove_split:
+            try:
+                fin_cmd_lst.remove("split_experiments")
 
             except ValueError:
                 return ["optional"]
