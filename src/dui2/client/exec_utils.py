@@ -44,17 +44,17 @@ class get_request_shot(QObject):
                     self.to_return = zlib.decompress(compresed)
 
                 except zlib.error:
-                    print("zlib. err catch (get_request_shot)")
+                    #print("zlib. err catch (get_request_shot)")
                     self.to_return = None
 
             except ConnectionError:
-                print("Connection err catch  (get request shot)")
+                #print("Connection err catch  (get request shot)")
                 self.to_return = None
 
             except requests.exceptions.RequestException:
-                print(
+                '''print(
                     "requests.exceptions.RequestException (get request shot)"
-                )
+                )'''
                 self.to_return = None
 
             self.done = True
