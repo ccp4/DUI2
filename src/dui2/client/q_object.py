@@ -70,9 +70,11 @@ class MainObject(QObject):
         self.ui_dir_path = os.path.dirname(os.path.abspath(__file__))
         ui_path = self.ui_dir_path + os.sep + "dui_client.ui"
         logging.info("ui_path =" + ui_path)
-
+        print("creating QWindow ...1")
         self.window = QtUiTools.QUiLoader().load(ui_path)
+        print("creating QWindow ...2")
         self.window.setWindowTitle("CCP4 DUI2 v:" + __version__)
+        print("creating QWindow ...3")
 
         dui2_icon = QIcon()
         st_icon_path = self.ui_dir_path + os.sep + "resources" \
