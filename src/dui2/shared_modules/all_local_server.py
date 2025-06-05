@@ -91,6 +91,7 @@ class ReqHandler(object):
 
         except KeyError:
             logging.info("no node number provided")
+            print("no node number provided")
 
 
         cmd_dict = {"nod_lst":nod_lst,
