@@ -23,8 +23,7 @@ copyright (c) CCP4 - DLS
 
 import sys, time, logging, os
 
-from PySide2.QtCore import *
-from PySide2.QtWidgets import *
+from dui2.shared_modules.qt_libs import *
 
 from dui2.client.q_object import MainObject
 from dui2.client.init_firts import ini_data

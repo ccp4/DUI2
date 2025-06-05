@@ -23,12 +23,7 @@ copyright (c) CCP4 - DLS
 
 import os, sys, requests, logging, webbrowser
 
-from PySide2.QtCore import *
-from PySide2.QtWidgets import *
-from PySide2 import QtUiTools
-from PySide2.QtGui import *
-
-from PySide2.QtWebEngineWidgets import QWebEngineView
+from dui2.shared_modules.qt_libs import *
 
 from dui2.client.gui_utils import (
     TreeDirScene, widgets_defs, get_widget_def_dict, make_square_srting,

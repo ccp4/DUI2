@@ -22,7 +22,8 @@ copyright (c) CCP4 - DLS
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 
-from PySide2.QtCore import *
+from dui2.shared_modules.qt_libs import *
+
 import requests, json, os, sys, zlib, time, logging
 
 from dui2.client.gui_utils import AdvancedParameters, widgets_defs

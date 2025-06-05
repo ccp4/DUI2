@@ -25,9 +25,7 @@ import json
 import sys
 import os, logging
 
-from PySide2.QtCore import *
-from PySide2.QtWidgets import *
-from PySide2.QtGui import *
+from dui2.shared_modules.qt_libs import *
 
 def choice_if_decimal(num_in):
     str_f = "{:6.2f}".format(num_in)

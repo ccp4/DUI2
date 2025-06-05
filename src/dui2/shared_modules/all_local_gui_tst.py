@@ -1,8 +1,7 @@
 import sys, os, time, json, logging
-from PySide2.QtCore import *
-from PySide2.QtWidgets import *
-from PySide2.QtGui import *
-from PySide2 import QtUiTools
+
+from dui2.shared_modules.qt_libs import *
+
 from dui2.shared_modules import all_local_server, format_utils
 from dui2.server.data_n_json import iter_dict
 from dui2.server import multi_node

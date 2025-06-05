@@ -23,10 +23,8 @@ copyright (c) CCP4 - DLS
 
 
 import sys, os, logging
-from PySide2.QtCore import *
-from PySide2.QtWidgets import *
-from PySide2.QtGui import *
-from PySide2 import QtUiTools
+
+from dui2.shared_modules.qt_libs import *
 
 import numpy as np
 import json, time

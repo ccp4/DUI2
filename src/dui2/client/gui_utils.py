@@ -22,10 +22,9 @@ copyright (c) CCP4 - DLS
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 import sys, os, logging
-from PySide2.QtCore import *
-from PySide2.QtWidgets import *
-from PySide2 import QtUiTools
-from PySide2.QtGui import *
+
+from dui2.shared_modules.qt_libs import *
+
 import numpy as np
 
 from dui2.shared_modules import format_utils

@@ -7,9 +7,7 @@ from dui2.shared_modules import format_utils, all_local_gui_connector
 from dui2.server import multi_node
 from dui2.server.init_first import ini_data as server_ini_data
 
-from PySide2.QtCore import *
-from PySide2.QtWidgets import *
-
+from dui2.shared_modules.qt_libs import *
 
 #if __name__ == '__main__':
 def main():

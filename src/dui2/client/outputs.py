@@ -22,10 +22,8 @@ copyright (c) CCP4 - DLS
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 import sys, os, logging
-from PySide2.QtCore import *
-from PySide2.QtWidgets import *
-from PySide2 import QtUiTools
-from PySide2.QtGui import *
+
+from dui2.shared_modules.qt_libs import *
 
 from dui2.client.exec_utils import (
     get_req_json_dat, get_request_shot, get_request_real_time
