@@ -23,21 +23,20 @@ copyright (c) CCP4 - DLS
 
 
 try:
+    from PySide6.QtWebEngineWidgets import QWebEngineView
     from PySide6 import QtUiTools
     from PySide6.QtCore import *
     from PySide6.QtWidgets import *
     from PySide6.QtGui import *
-    from PySide2.QtWebEngineWidgets import QWebEngineView
     print("Using PySide6 as Qt bindings")
 
 except ModuleNotFoundError:
+    from PySide2.QtWebEngineWidgets import QWebEngineView
     from PySide2 import QtUiTools
     from PySide2.QtCore import *
     from PySide2.QtWidgets import *
     from PySide2.QtGui import *
-    from PySide2.QtWebEngineWidgets import QWebEngineView
     print("Using PySide2 as Qt bindings")
-
 
 should_be_imported_like_this = '''
 from dui2.shared_modules.qt_libs import *
