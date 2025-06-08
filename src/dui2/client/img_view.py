@@ -149,10 +149,6 @@ class LoadSliceMaskImage(QThread):
             }
         )
 
-    def say_good_bye(self):
-        self.r_time_req.quit()
-        self.r_time_req.wait()
-
 
 class LoadFullImage(QThread):
     image_loaded = Signal(tuple)
@@ -244,10 +240,6 @@ class LoadSliceImage(QThread):
                 "y2"          :  self.y2
             }
         )
-
-    def say_good_bye(self):
-        self.r_time_req.quit()
-        self.r_time_req.wait()
 
 
 class ImgGraphicsScene(QGraphicsScene):
@@ -1054,6 +1046,11 @@ class DoImageView(QObject):
         self.full_image_loaded = False
         self.img_path = "?"
 
+        self.load_full_image_list = []
+        self.load_full_mask_list = []
+        self.load_slice_image_list = []
+        self.load_slice_mask_list = []
+
         (self.old_x1, self.old_y1, self.old_x2, self.old_y2) = (-1, -1, -1, -1)
         self.old_inv_scl = self.inv_scale
         self.old_nod_num = self.cur_nod_num
@@ -1449,28 +1446,14 @@ class DoImageView(QObject):
 
     def full_img_show(self):
         self.full_image_loaded = False
-        try:
-            self.load_full_image.quit()
-            self.load_full_image.wait()
-
-        except AttributeError:
-            logging.info("first full image loading")
-
-        try:
-            self.load_full_mask_image.quit()
-            self.load_full_mask_image.wait()
-
-        except AttributeError:
-            logging.info("first full image loading")
-
-        self.load_full_image = LoadFullImage(
+        full_image_thread = LoadFullImage(
             unit_URL = self.uni_url,
             cur_nod_num = self.cur_nod_num,
             cur_img_num = self.cur_img_num,
             path_in = self.exp_path,
             main_handler = self.my_handler
         )
-        self.load_full_mask_image = LoadFullMaskImage(
+        load_full_mask_image_thread = LoadFullMaskImage(
             unit_URL = self.uni_url,
             cur_nod_num = self.cur_nod_num,
             cur_img_num = self.cur_img_num,
@@ -1478,10 +1461,12 @@ class DoImageView(QObject):
             thrs_pars_in = self.threshold_params,
             main_handler = self.my_handler
         )
-        self.load_full_image.image_loaded.connect(self.new_full_img)
-        self.load_full_image.start()
-        self.load_full_mask_image.image_loaded.connect(self.new_full_mask_img)
-        self.load_full_mask_image.start()
+        full_image_thread.image_loaded.connect(self.new_full_img)
+        full_image_thread.start()
+        self.load_full_image_list.append(full_image_thread)
+        load_full_mask_image_thread.image_loaded.connect(self.new_full_mask_img)
+        load_full_mask_image_thread.start()
+        self.load_full_mask_list.append(load_full_mask_image_thread)
 
     def check_move(self):
         self.get_x1_y1_x2_y2()
@@ -1641,26 +1626,9 @@ class DoImageView(QObject):
     def slice_show_img(self):
         if self.full_image_loaded == False and self.easter_egg_active:
             self.l_stat.load_started()
-
-            try:
-                self.load_slice_image.say_good_bye()
-                self.load_slice_image.quit()
-                self.load_slice_image.wait()
-
-            except AttributeError:
-                logging.info("first slice of image loading")
-
-            try:
-                self.load_slice_mask_image.say_good_bye()
-                self.load_slice_mask_image.quit()
-                self.load_slice_mask_image.wait()
-
-            except AttributeError:
-                logging.info("first slice of mask image loading")
-
             self.get_x1_y1_x2_y2()
             self.set_inv_scale()
-            self.load_slice_image = LoadSliceImage(
+            load_slice_image_thread = LoadSliceImage(
                 nod_num_lst = [self.cur_nod_num],
                 img_num = self.cur_img_num,
                 inv_scale = self.inv_scale,
@@ -1671,17 +1639,17 @@ class DoImageView(QObject):
                 path_in = self.exp_path,
                 main_handler = self.my_handler
             )
-            self.load_slice_image.slice_loaded.connect(
+            load_slice_image_thread.slice_loaded.connect(
                 self.new_slice_img
             )
-            self.load_slice_image.progressing.connect(
+            load_slice_image_thread.progressing.connect(
                 self.update_progress
             )
-            self.load_slice_image.start()
+            load_slice_image_thread.start()
+            self.load_slice_image_list.append(load_slice_image_thread)
 
             # Now Same for mask
-
-            self.load_slice_mask_image = LoadSliceMaskImage(
+            load_slice_mask_thread = LoadSliceMaskImage(
                 unit_URL = self.uni_url,
                 nod_num_lst = [self.cur_nod_num],
                 img_num = self.cur_img_num,
@@ -1694,13 +1662,14 @@ class DoImageView(QObject):
                 thrs_pars_in = self.threshold_params,
                 main_handler = self.my_handler
             )
-            self.load_slice_mask_image.slice_loaded.connect(
+            load_slice_mask_thread.slice_loaded.connect(
                 self.new_slice_mask_img
             )
-            self.load_slice_mask_image.progressing.connect(
+            load_slice_mask_thread.progressing.connect(
                 self.update_progress
             )
-            self.load_slice_mask_image.start()
+            load_slice_mask_thread.start()
+            self.load_slice_mask_list.append(load_slice_mask_thread)
 
     def OneOneScale(self, event):
         logging.info("OneOneScale")
