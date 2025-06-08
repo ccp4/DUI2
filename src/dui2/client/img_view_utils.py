@@ -37,7 +37,6 @@ def load_img_json_w_str(
               "path"    : exp_path,
               "cmd_str" : my_cmd_lst}
 
-    print("\n\n load_img_json_w_str   ... Ini")
     try:
         start_tm = time.time()
         req_shot = get_request_shot(
@@ -49,20 +48,20 @@ def load_img_json_w_str(
         d2 = int(d1d2_n_arr1d[1])
         np_array_out = d1d2_n_arr1d[2:].reshape(d1, d2)
         end_tm = time.time()
-        '''print(
+        logging.info(
             "full IMG request BIN time=" + str(end_tm - start_tm) + "sec"
-        )'''
+        )
 
 
     except TypeError:
-        print("Type err catch  (load_img_json_w_str)")
+        logging.info("Type err catch  (load_img_json_w_str)")
         return None
 
     except ZeroDivisionError:
-        print("ZeroDivision err catch (load_img_json_w_str)")
+        logging.info("ZeroDivision err catch (load_img_json_w_str)")
         return None
 
-    print("\n\n load_img_json_w_str   ... End")
+    logging.info("load_img_json_w_str  ... End")
     return np_array_out
 
 
@@ -107,11 +106,11 @@ def load_mask_img_json_w_str(
         )
 
     except TypeError:
-        #print("Type err catch  (load_mask_img_json_w_str)")
+        logging.info("Type err catch  (load_mask_img_json_w_str)")
         return None
 
     except ZeroDivisionError:
-        #print("ZeroDivision err catch (load_mask_img_json_w_str)")
+        logging.info("ZeroDivision err catch (load_mask_img_json_w_str)")
         return None
 
     return np_array_out

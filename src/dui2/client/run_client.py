@@ -58,9 +58,7 @@ def main(par_def = None):
         else:
             logging.info("dummy_nod_lst != None ...\n launching GUI")
 
-    print("creating QApplication ...1")
     app = QApplication(sys.argv)
-    print("creating QApplication ...2")
     m_obj = MainObject(parent = app)
     sys.exit(app.exec_())
 
