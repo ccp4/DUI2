@@ -28,13 +28,26 @@ from dui2.shared_modules.qt_libs import *
 
 from dui2.client.exec_utils import get_req_json_dat
 
+def get_number_from_string(dict_in):
+    str_in = dict_in['name']
+    num_char = ""
+    for char_part in str_in:
+        if char_part in "0123456789":
+            num_char += char_part
+    try:
+        return int(num_char)
+
+    except ValueError:
+        return 0
+
+
 def f_key(dic_in):
     #return dic_in['name']
     return dic_in['isdir']
 
 
-def sort_dict_list(lst_in):
-    lst_out = sorted(lst_in, key=f_key)
+def sort_dict_list(lst_in, key_in):
+    lst_out = sorted(lst_in, key=key_in)
     return lst_out
 
 
@@ -56,12 +69,17 @@ class MyDirView_list(QListWidget):
     def enter_list(self, lst_in):
         self.ini_dict_list = list(lst_in)
 
-    def refresh_list(self, sorting = False):
-        if sorting:
-            self.dict_list = list(sort_dict_list(self.ini_dict_list))
+    def refresh_list(self, sorting = "abc"):
+        if sorting == "abc":
+            self.dict_list = list(self.ini_dict_list)
+
+        elif sorting == "123":
+            self.dict_list = list(sort_dict_list(self.ini_dict_list, f_key))
 
         else:
-            self.dict_list = list(self.ini_dict_list)
+            self.dict_list = list(sort_dict_list(
+                self.ini_dict_list, get_number_from_string
+            ))
 
         self.items_list = []
         for n_widg, single_file in enumerate(self.dict_list):
@@ -227,13 +245,16 @@ class FileBrowser(QDialog):
         hi_h_layout = QHBoxLayout()
 
         self.rad_but_file_dir = QRadioButton("File/Dir")
-        self.rad_but_name = QRadioButton("Name")
+        self.rad_but_name_abc = QRadioButton("Name(ABC)")
+        self.rad_but_name_123 = QRadioButton("Name(123)")
         hi_h_layout.addWidget(self.rad_but_file_dir)
-        hi_h_layout.addWidget(self.rad_but_name)
-        self.rad_but_name.setChecked(True)
+        hi_h_layout.addWidget(self.rad_but_name_abc)
+        hi_h_layout.addWidget(self.rad_but_name_123)
+        self.rad_but_name_abc.setChecked(True)
 
         self.rad_but_file_dir.toggled.connect(self.refresh_sorted1)
-        self.rad_but_name.toggled.connect(self.refresh_sorted1)
+        self.rad_but_name_abc.toggled.connect(self.refresh_sorted1)
+        self.rad_but_name_123.toggled.connect(self.refresh_sorted1)
 
         hi_h_layout.addStretch()
         hi_h_layout.addWidget(self.show_hidden_check)
@@ -345,10 +366,13 @@ class FileBrowser(QDialog):
 
     def refresh_sorted1(self):
         if self.rad_but_file_dir.isChecked():
-            self.lst_vw.refresh_list(sorting = True)
+            self.lst_vw.refresh_list(sorting = "123")
+
+        elif self.rad_but_name_abc.isChecked():
+            self.lst_vw.refresh_list(sorting = "abc")
 
         else:
-            self.lst_vw.refresh_list(sorting = False)
+            self.lst_vw.refresh_list(sorting = "dir")
 
         self.OpenButton.setEnabled(True)
 
