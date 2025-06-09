@@ -1059,9 +1059,15 @@ class DoImageView(QObject):
         self.old_threshold_params = None
 
 
-        timer = QTimer(self)
-        timer.timeout.connect(self.check_move)
-        timer.start(1600)
+        timer_4_move = QTimer(self)
+        timer_4_move.timeout.connect(self.check_move)
+        timer_4_move.start(1600)
+
+        timer_4_threads = QTimer(self)
+        timer_4_threads.timeout.connect(self.review_thread_list)
+        timer_4_threads.start(2000)
+
+
 
     def __call__(
         self, in_img_num, nod_or_path = True,
@@ -1072,6 +1078,24 @@ class DoImageView(QObject):
         self.exp_path = None
         self.on_filter_reflections = on_filter_reflections
         self.build_background_n_get_nod_num(self.cur_img_num)
+
+    def review_thread_list(self):
+        #print("review_thread_list (init)", len(self.load_thread_list))
+        if len(self.load_thread_list) > 20:
+            for num, single_thread in enumerate(self.load_thread_list[0:-15]):
+                if single_thread.isRunning():
+                    try:
+                        single_thread.quit()
+                        single_thread.wait()
+                        print("quitted & waited thread")
+
+                    except AttributeError:
+                        print("no need to quit/wait thread")
+
+        if len(self.load_thread_list) > 30:
+            del self.load_thread_list[0:-25]
+
+        #print("review_thread_list (end)", len(self.load_thread_list), "\n")
 
     def set_just_imported(self):
         self.just_imported = True
