@@ -1046,10 +1046,7 @@ class DoImageView(QObject):
         self.full_image_loaded = False
         self.img_path = "?"
 
-        self.load_full_image_list = []
-        self.load_full_mask_list = []
-        self.load_slice_image_list = []
-        self.load_slice_mask_list = []
+        self.load_thread_list = []
 
         (self.old_x1, self.old_y1, self.old_x2, self.old_y2) = (-1, -1, -1, -1)
         self.old_inv_scl = self.inv_scale
@@ -1117,21 +1114,15 @@ class DoImageView(QObject):
                   "path"    : self.nod_or_path,
                   "cmd_str" : my_cmd_lst}
 
-        try:
-            self.ld_tpl_thread.quit()
-            self.ld_tpl_thread.wait()
-
-        except AttributeError:
-            logging.info("first reflection list loading")
-
-        self.ld_tpl_thread = LoadInThread(
+        load_template_thread = LoadInThread(
             self.uni_url, my_cmd, self.my_handler
         )
-        self.ld_tpl_thread.request_loaded.connect(
+        load_template_thread.request_loaded.connect(
             self.after_requesting_template
         )
 
-        self.ld_tpl_thread.start()
+        load_template_thread.start()
+        self.load_thread_list.append(load_template_thread)
 
     def after_requesting_template(self, tup_data):
         json_data_lst = tup_data
@@ -1226,27 +1217,21 @@ class DoImageView(QObject):
             self.refresh_img_n_refl()
 
         if self.nod_or_path is not False:
-            try:
-                self.ld_ref_thread.quit()
-                self.ld_ref_thread.wait()
-
-            except AttributeError:
-                logging.info("first reflection list loading")
-
-            self.ld_ref_thread = LoadInThread(
+            load_reflx_thread = LoadInThread(
                 self.uni_url, my_cmd, self.my_handler
             )
             if self.pop_display_menu.rad_but_obs.isChecked():
-                self.ld_ref_thread.request_loaded.connect(
+                load_reflx_thread.request_loaded.connect(
                     self.after_requesting_ref_lst
                 )
 
             else:
-                self.ld_ref_thread.request_loaded.connect(
+                load_reflx_thread.request_loaded.connect(
                     self.after_requesting_predict_lst
                 )
 
-            self.ld_ref_thread.start()
+            load_reflx_thread.start()
+            self.load_thread_list.append(load_reflx_thread)
 
     def after_requesting_ref_lst(self, req_tup):
         json_lst = req_tup
@@ -1463,10 +1448,10 @@ class DoImageView(QObject):
         )
         full_image_thread.image_loaded.connect(self.new_full_img)
         full_image_thread.start()
-        self.load_full_image_list.append(full_image_thread)
+        self.load_thread_list.append(full_image_thread)
         load_full_mask_image_thread.image_loaded.connect(self.new_full_mask_img)
         load_full_mask_image_thread.start()
-        self.load_full_mask_list.append(load_full_mask_image_thread)
+        self.load_thread_list.append(load_full_mask_image_thread)
 
     def check_move(self):
         self.get_x1_y1_x2_y2()
@@ -1646,7 +1631,7 @@ class DoImageView(QObject):
                 self.update_progress
             )
             load_slice_image_thread.start()
-            self.load_slice_image_list.append(load_slice_image_thread)
+            self.load_thread_list.append(load_slice_image_thread)
 
             # Now Same for mask
             load_slice_mask_thread = LoadSliceMaskImage(
@@ -1669,7 +1654,7 @@ class DoImageView(QObject):
                 self.update_progress
             )
             load_slice_mask_thread.start()
-            self.load_slice_mask_list.append(load_slice_mask_thread)
+            self.load_thread_list.append(load_slice_mask_thread)
 
     def OneOneScale(self, event):
         logging.info("OneOneScale")
