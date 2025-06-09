@@ -312,7 +312,7 @@ class ImportWidget(QWidget):
             QFont("Courier", font_point_size + 1, QFont.Bold)
         )
         self.imp_extra_txt = QLineEdit()
-        self.open_butt = QPushButton("\n  Open images  \n")
+        self.open_butt = QPushButton("\n  Browse images  \n")
 
         self.open_rad_butt_hbox = QHBoxLayout()
         group1 = QButtonGroup(self)
