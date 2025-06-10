@@ -801,15 +801,19 @@ class InfoDisplayMenu(QMenu):
 
         palette_group.setLayout(palette_box_layout)
 
-
-        # mask colouring
+        #Mask overlay
         mask_colour_group = QGroupBox("Mask overlay")
         mask_col_n_tra_v_layout = QVBoxLayout()
 
+        # mask showing
+        self.chk_box_mask_show = QCheckBox("Show mask")
+        self.chk_box_mask_show.setChecked(True)
+        self.chk_box_mask_show.stateChanged.connect(self.sig_new_redraw)
+        mask_col_n_tra_v_layout.addWidget(self.chk_box_mask_show)
+
+        # mask colouring
         mask_col_h_layout = QHBoxLayout()
-
         mask_col_h_layout.addWidget(QLabel("colour"))
-
         self.mask_colour_select = QComboBox()
         self.mask_col_lst = ["red", "green", "blue"]
         for n, plt in enumerate(self.mask_col_lst):
@@ -1408,8 +1412,19 @@ class DoImageView(QObject):
             logging.info("None self.np_full_img")
 
         try:
+            if(
+                self.pop_display_menu.chk_box_mask_show.isChecked() or
+                self.pop_threshold_menu.threshold_box_show.isChecked()
+            ):
+                data_mask = self.np_full_mask_img
+
+            else:
+                data_mask= np.zeros((
+                    self.img_d1_d2[0], self.img_d1_d2[1]
+                ), dtype = 'float')
+
             m_rgb_np = self.bmp_mask.img_2d_rgb(
-                data2d = self.np_full_mask_img,
+                data2d = data_mask,
                 colour_in = self.mask_colour, transp = self.mask_transp
             )
 
