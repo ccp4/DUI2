@@ -1335,6 +1335,16 @@ class DoImageView(QObject):
         self.refresh_img_n_refl()
 
     def refresh_img_n_refl(self):
+        try:
+            if len(self.r_list0) > 0 or len(self.r_list1) > 0:
+                logging.info("un-ticking << show threshold >> option")
+                self.pop_threshold_menu.threshold_box_show.setChecked(False)
+
+        except AttributeError:
+            logging.info(
+                "leaving << show threshold >> untouched, no reflection list"
+            )
+
         self.refresh_pixel_map()
         if not self.easter_egg_active:
             self.full_img_show()
