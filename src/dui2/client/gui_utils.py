@@ -83,8 +83,8 @@ widgets_defs = {
         "icon"          : "resources/index.png",
         "main_cmd"      :["dials.index"],
         "nxt_widg_lst"  :[
-            "refine",
             "refine_bravais_settings",
+            "refine",
             "combine_experiments",
             "split_experiments",
             "optional"
