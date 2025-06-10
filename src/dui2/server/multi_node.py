@@ -365,6 +365,8 @@ class CmdNode(object):
         #TODO reconsider if the next if is needed for failed steps
         if self._lst_expt_out == []:
             self._lst_expt_out = list(self._lst_expt_in)
+            if self._lst_expt_out == []:
+                self.status = "Failed"
 
         self._lst_refl_out = glob.glob(self._run_dir + os.sep + "*.refl")
         #TODO reconsider if the next if is needed for failed steps
