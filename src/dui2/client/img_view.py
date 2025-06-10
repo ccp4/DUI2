@@ -736,6 +736,7 @@ class ThresholdDisplayMenu(QMenu):
     def user_applied(self):
         logging.info("user_pass_btn")
         self.user_param_pass.emit()
+        self.hide()
 
 
 class InfoDisplayMenu(QMenu):

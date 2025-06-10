@@ -841,12 +841,8 @@ class MainObject(QObject):
 
     def update_threshold_params(self, new_params):
         try:
-            not_needed_4_now = '''print(
-                "MainObject.update_threshold_params(new_params): \n",
-                new_params
-            )'''
             lst_cmd_2_run = build_thresh_comd(new_params)
-            print("lst_cmd_2_run =" + lst_cmd_2_run)
+            print("lst_cmd_2_run =" , lst_cmd_2_run)
             self.new_node.clone_from_list(lst_cmd_2_run)
             self.update_all_param()
 
