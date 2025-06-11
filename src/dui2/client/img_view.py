@@ -1349,6 +1349,11 @@ class DoImageView(QObject):
                 "leaving << show threshold >> untouched, no reflection list"
             )
 
+        except RuntimeError:
+            print(
+                "Runtime Err Catch, seems to be running without this menu 1"
+            )
+
         self.refresh_pixel_map()
         if not self.easter_egg_active:
             self.full_img_show()
@@ -1440,6 +1445,12 @@ class DoImageView(QObject):
 
         except AttributeError:
             logging.info("no mask to draw here")
+
+        except RuntimeError:
+            print(
+                "Runtime Err Catch, seems to be running without this menu 2"
+            )
+
 
     def change_i_min_max(self, new_i_min, new_i_max):
         self.i_min_max = [new_i_min, new_i_max]
