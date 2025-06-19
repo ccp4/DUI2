@@ -1154,17 +1154,23 @@ class DoImageView(QObject):
         self.load_thread_list.append(load_template_thread)
 
     def after_requesting_template(self, tup_data):
-        json_data_lst = tup_data
+        #json_data_lst = tup_data
+        json_data_dict = tup_data[0]
+
+        print("type(json_data_dict) =", type(json_data_dict))
+        print("json_data_dict =", json_data_dict)
+
         try:
-            new_templ = str(json_data_lst[0])
-            self.cur_img_num = int(json_data_lst[4])
+            new_templ = str(json_data_dict["str_json"])
             self.main_obj.window.ImgNumEdit.setText(str(self.cur_img_num))
             logging.info("new_templ = " + new_templ)
             self.img_d1_d2 = (
-                json_data_lst[1], json_data_lst[2]
+                json_data_dict["img_with"], json_data_dict["img_height"]
             )
-            new_img_path = str(json_data_lst[3])
-            self.i23_multipanel = bool(json_data_lst[5])
+            new_img_path = str(json_data_dict["img_path"])
+            self.cur_img_num = int(json_data_dict["new_img_num"])
+            self.i23_multipanel = bool(json_data_dict["i23_multipanel"])
+
             logging.info("Is I23 multidetector:" + str(self.i23_multipanel))
             if(
                 self.img_path != new_img_path or
@@ -2068,14 +2074,17 @@ class MainImgViewObject(QObject):
         lst_req = get_req_json_dat(
             params_in = my_cmd, main_handler = self.my_handler
         )
-        json_data_lst = lst_req.result_out()
+        json_data_dict = lst_req.result_out()[0]
         try:
-            new_templ = json_data_lst[0]
-            self.img_d1_d2 = (json_data_lst[1], json_data_lst[2])
-            self.refresh_output(nod_or_path = self.nod_or_path)
+            new_templ = str(json_data_dict["str_json"])
+            logging.info("new_templ = " + new_templ)
+            self.img_d1_d2 = (
+                json_data_dict["img_with"], json_data_dict["img_height"]
+            )
 
         except TypeError:
             logging.info("Type Err catch while opening imgs")
+
 
     def open_dir_widget(self):
         cmd = {"nod_lst":"", "cmd_str":["dir_path"]}

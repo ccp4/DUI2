@@ -78,7 +78,24 @@ def get_template_info(exp_path, img_num):
             experiments
         )
 
-        return [str_json, img_with, img_height, img_path, new_img_num, i23_multipanel]
+        print("\n\n get_template_info(img_uploader)")
+
+        print("\n exp_path, img_num =", exp_path, img_num, "\n\n")
+
+        #return [str_json, img_with, img_height, img_path, new_img_num, i23_multipanel]
+
+        dict_data = {
+            "str_json"       :str_json       ,
+            "img_with"       :img_with       ,
+            "img_height"     :img_height     ,
+            "img_path"       :img_path       ,
+            "new_img_num"    :new_img_num    ,
+            "i23_multipanel" :i23_multipanel
+        }
+
+
+
+        return [dict_data]
 
     except IndexError:
         logging.info(" *** Index err catch  in template ***")
