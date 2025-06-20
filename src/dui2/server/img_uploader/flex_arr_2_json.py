@@ -78,9 +78,22 @@ def get_template_info(exp_path, img_num):
             experiments
         )
 
-        print("\n\n get_template_info(img_uploader)")
+        print("\n\n get_template_info(img_uploader)   ... part 1")
 
-        print("\n exp_path, img_num =", exp_path, img_num, "\n\n")
+        exp = experiments[0]
+
+        # Get direct beam from detector data
+        pnl_beam_intersects, (beam_x_mm, beam_y_mm) = \
+            exp.detector.get_ray_intersection(exp.beam.get_s0())
+        pnl = exp.detector[pnl_beam_intersects]
+        x_px_size, y_px_size = pnl.get_pixel_size()
+        x_beam_pix = beam_x_mm / x_px_size
+        y_beam_pix = beam_y_mm / y_px_size
+        det_mov =  float(pnl_beam_intersects) * 213.0
+        y_beam_pix += det_mov
+        print("x_beam_pix, y_beam_pix =", x_beam_pix, y_beam_pix)
+
+        print("\n exp_path, img_num =", exp_path, img_num, " ... part 2\n\n")
 
         #return [str_json, img_with, img_height, img_path, new_img_num, i23_multipanel]
 

@@ -1159,8 +1159,8 @@ class DoImageView(QObject):
             #json_data_lst = tup_data
             json_data_dict = tup_data[0]
 
-            print("type(json_data_dict) =", type(json_data_dict))
-            print("json_data_dict =", json_data_dict)
+            #print("type(json_data_dict) =", type(json_data_dict))
+            #print("json_data_dict =", json_data_dict)
 
             new_templ = str(json_data_dict["str_json"])
             self.main_obj.window.ImgNumEdit.setText(str(self.cur_img_num))
