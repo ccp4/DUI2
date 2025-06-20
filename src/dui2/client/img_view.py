@@ -2081,17 +2081,17 @@ class MainImgViewObject(QObject):
         lst_req = get_req_json_dat(
             params_in = my_cmd, main_handler = self.my_handler
         )
-        json_data_dict = lst_req.result_out()[0]
         try:
+            json_data_dict = lst_req.result_out()[0]
             new_templ = str(json_data_dict["str_json"])
             logging.info("new_templ = " + new_templ)
             self.img_d1_d2 = (
                 json_data_dict["img_with"], json_data_dict["img_height"]
             )
+            self.refresh_output(nod_or_path = self.nod_or_path)
 
-        except TypeError:
+        except(TypeError, IndexError):
             logging.info("Type Err catch while opening imgs")
-
 
     def open_dir_widget(self):
         cmd = {"nod_lst":"", "cmd_str":["dir_path"]}
