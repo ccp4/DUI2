@@ -77,9 +77,6 @@ def get_template_info(exp_path, img_num):
         img_height, img_with, i23_multipanel = get_height_with_n_i23_multip(
             experiments
         )
-
-        print("\n\n get_template_info(img_uploader)   ... part 1")
-
         exp = experiments[0]
 
         # Get direct beam from detector data
@@ -92,10 +89,6 @@ def get_template_info(exp_path, img_num):
         det_mov =  float(pnl_beam_intersects) * 213.0
         y_beam_pix += det_mov
 
-        print("\n exp_path, img_num =", exp_path, img_num, " ... part 2\n\n")
-
-        #return [str_json, img_with, img_height, img_path, new_img_num, i23_multipanel]
-
         dict_data = {
             "str_json"       :str_json       ,
             "img_with"       :img_with       ,
@@ -106,8 +99,6 @@ def get_template_info(exp_path, img_num):
             "x_beam_pix"     :x_beam_pix     ,
             "y_beam_pix"     :y_beam_pix
         }
-
-
 
         return [dict_data]
 
