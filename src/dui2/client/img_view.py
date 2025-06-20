@@ -311,6 +311,9 @@ class ImgGraphicsScene(QGraphicsScene):
         if self.my_mask_pix_map is not None:
             self.addPixmap(self.my_mask_pix_map)
 
+    def draw_beam_center(self):
+        print("beam_xy_pair =", self.beam_xy_pair)
+
     def update_tmp_mask(self, new_temp_mask):
         self.temp_mask = new_temp_mask
 
@@ -379,10 +382,13 @@ class ImgGraphicsScene(QGraphicsScene):
         except TypeError:
             pass
 
-    def __call__(self, new_pixmap, refl_list1, new_temp_mask):
+    def __call__(
+        self, new_pixmap, refl_list1, new_temp_mask, new_beam_xy_pair
+    ):
         self.my_pix_map = new_pixmap
         self.refl_list = refl_list1
         self.temp_mask = new_temp_mask
+        self.beam_xy_pair = new_beam_xy_pair
         self.refresh_imgs()
 
     def refresh_imgs(self):
@@ -411,6 +417,7 @@ class ImgGraphicsScene(QGraphicsScene):
                 n_text.setPen(self.overlay_pen1)
 
         self.draw_temp_mask()
+        self.draw_beam_center()
 
     def add_mask_pixmap(self, mask_pixmap):
         self.my_mask_pix_map = mask_pixmap
@@ -1050,6 +1057,7 @@ class DoImageView(QObject):
         self.inv_scale = 1
         self.full_image_loaded = False
         self.img_path = "?"
+        self.beam_xy_pair = None
 
         self.load_thread_list = []
 
@@ -1156,12 +1164,7 @@ class DoImageView(QObject):
     def after_requesting_template(self, tup_data):
 
         try:
-            #json_data_lst = tup_data
             json_data_dict = tup_data[0]
-
-            #print("type(json_data_dict) =", type(json_data_dict))
-            #print("json_data_dict =", json_data_dict)
-
             new_templ = str(json_data_dict["str_json"])
             self.main_obj.window.ImgNumEdit.setText(str(self.cur_img_num))
             logging.info("new_templ = " + new_templ)
@@ -1171,12 +1174,9 @@ class DoImageView(QObject):
             new_img_path = str(json_data_dict["img_path"])
             self.cur_img_num = int(json_data_dict["new_img_num"])
             self.i23_multipanel = bool(json_data_dict["i23_multipanel"])
-
-            logging.info("Is I23 multidetector:" + str(self.i23_multipanel))
-            print(
-                "x_beam_pix, y_beam_pix (client side) =",
-                json_data_dict["x_beam_pix"],
-                json_data_dict["y_beam_pix"]
+            self.beam_xy_pair = (
+                float(json_data_dict["x_beam_pix"]),
+                float(json_data_dict["y_beam_pix"])
             )
 
             if(
@@ -1413,17 +1413,19 @@ class DoImageView(QObject):
             if show_refl:
                 if self.pop_display_menu.rad_but_obs.isChecked():
                     self.my_scene(
-                        new_pixmap, self.r_list0, self.list_temp_mask
+                        new_pixmap, self.r_list0, self.list_temp_mask,
+                        self.beam_xy_pair
                     )
 
                 else:
                     self.my_scene(
-                        new_pixmap, self.r_list1, self.list_temp_mask
+                        new_pixmap, self.r_list1, self.list_temp_mask,
+                        self.beam_xy_pair
                     )
 
             else:
                 self.my_scene(
-                    new_pixmap, [], self.list_temp_mask
+                    new_pixmap, [], self.list_temp_mask, self.beam_xy_pair
                 )
 
         except (TypeError, AttributeError):
