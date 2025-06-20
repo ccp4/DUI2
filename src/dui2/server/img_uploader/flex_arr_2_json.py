@@ -91,7 +91,6 @@ def get_template_info(exp_path, img_num):
         y_beam_pix = beam_y_mm / y_px_size
         det_mov =  float(pnl_beam_intersects) * 213.0
         y_beam_pix += det_mov
-        print("x_beam_pix, y_beam_pix =", x_beam_pix, y_beam_pix)
 
         print("\n exp_path, img_num =", exp_path, img_num, " ... part 2\n\n")
 
@@ -103,7 +102,9 @@ def get_template_info(exp_path, img_num):
             "img_height"     :img_height     ,
             "img_path"       :img_path       ,
             "new_img_num"    :new_img_num    ,
-            "i23_multipanel" :i23_multipanel
+            "i23_multipanel" :i23_multipanel ,
+            "x_beam_pix"     :x_beam_pix     ,
+            "y_beam_pix"     :y_beam_pix
         }
 
 

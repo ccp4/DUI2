@@ -1173,6 +1173,12 @@ class DoImageView(QObject):
             self.i23_multipanel = bool(json_data_dict["i23_multipanel"])
 
             logging.info("Is I23 multidetector:" + str(self.i23_multipanel))
+            print(
+                "x_beam_pix, y_beam_pix (client side) =",
+                json_data_dict["x_beam_pix"],
+                json_data_dict["y_beam_pix"]
+            )
+
             if(
                 self.img_path != new_img_path or
                 self.old_img_num != self.cur_img_num
