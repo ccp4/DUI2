@@ -1154,13 +1154,14 @@ class DoImageView(QObject):
         self.load_thread_list.append(load_template_thread)
 
     def after_requesting_template(self, tup_data):
-        #json_data_lst = tup_data
-        json_data_dict = tup_data[0]
-
-        print("type(json_data_dict) =", type(json_data_dict))
-        print("json_data_dict =", json_data_dict)
 
         try:
+            #json_data_lst = tup_data
+            json_data_dict = tup_data[0]
+
+            print("type(json_data_dict) =", type(json_data_dict))
+            print("json_data_dict =", json_data_dict)
+
             new_templ = str(json_data_dict["str_json"])
             self.main_obj.window.ImgNumEdit.setText(str(self.cur_img_num))
             logging.info("new_templ = " + new_templ)
