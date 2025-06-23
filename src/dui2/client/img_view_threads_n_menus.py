@@ -344,29 +344,18 @@ class ThresholdDisplayMenu(QMenu):
             self.algorithm_select.addItem(algo)
 
         hbox_algorithm.addWidget(self.algorithm_select)
-
-        #stacked_box = QHBoxLayout()
         self.step_param_widg =  QStackedWidget()
-
-
         self.rad_par_wig = RadialParamWidget()
-        #stacked_box.addWidget(self.rad_par_wig)
         self.step_param_widg.addWidget(self.rad_par_wig)
-
         self.dispr_par_widg = DispersionParamWidget(
             self.default_threshold_params
         )
-        #stacked_box.addWidget(self.dispr_par_widg)
         self.step_param_widg.addWidget(self.dispr_par_widg)
-
         self.user_pass_btn = QPushButton("Apply to spot find")
-
         my_main_box.addWidget(self.threshold_box_show)
         my_main_box.addLayout(hbox_algorithm)
-        #my_main_box.addLayout(stacked_box)
         my_main_box.addWidget(self.step_param_widg)
         my_main_box.addWidget(self.user_pass_btn)
-
 
         self.rad_par_wig.param_n_iqr.textChanged.connect(
             self.threshold_param_changed
