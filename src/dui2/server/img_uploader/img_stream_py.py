@@ -376,6 +376,8 @@ def from_image_n_mask_2_threshold(
 def get_dispersion_debug_obj_tup(
     expt_path = "/tmp/...", on_sweep_img_num = 0, params_in = {None}
 ):
+    print("params_in =", params_in)
+
     try:
         nsig_b =            params_in["nsig_b"]
         nsig_s =            params_in["nsig_s"]
@@ -402,6 +404,12 @@ def get_dispersion_debug_obj_tup(
         blur =      None
         n_bins =    100
 
+    try:
+        algorithm = params_in["algorithm"]
+
+    except KeyError:
+        algorithm = 'dispersion_extended'
+
     experiments = ExperimentList.from_file(expt_path)
     my_imageset = experiments.imagesets()[0]
 
@@ -426,8 +434,7 @@ def get_dispersion_debug_obj_tup(
         )
 
         obj_w_alg = from_image_n_mask_2_threshold(
-            params_in["algorithm"],
-            flex_image, mask, my_imageset, pars, panel_number
+            algorithm, flex_image, mask, my_imageset, pars, panel_number
         )
         fin_mask = obj_w_alg.final_mask()
         obj_w_alg_lst.append(fin_mask)
