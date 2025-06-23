@@ -313,7 +313,7 @@ class ImgGraphicsScene(QGraphicsScene):
             self.addPixmap(self.my_mask_pix_map)
 
     def draw_beam_center(self):
-        #print("beam_xy_pair =", self.beam_xy_pair)
+        print("beam_xy_pair =", self.beam_xy_pair)
         x_bc = self.beam_xy_pair[0]
         y_bc = self.beam_xy_pair[1]
         l_size = 20.0
@@ -327,7 +327,7 @@ class ImgGraphicsScene(QGraphicsScene):
 
     def update_tmp_mask(self, new_temp_mask):
         self.temp_mask = new_temp_mask
-        self.draw_beam_center()
+        #self.draw_beam_center()
 
     def draw_temp_mask(self):
         try:
@@ -402,6 +402,7 @@ class ImgGraphicsScene(QGraphicsScene):
         self.temp_mask = new_temp_mask
         self.beam_xy_pair = new_beam_xy_pair
         self.refresh_imgs()
+        #self.draw_beam_center()
 
     def refresh_imgs(self):
         if self.parent_obj.overlay == "blue":
@@ -429,7 +430,6 @@ class ImgGraphicsScene(QGraphicsScene):
                 n_text.setPen(self.overlay_pen1)
 
         self.draw_temp_mask()
-        self.draw_beam_center()
 
     def add_mask_pixmap(self, mask_pixmap):
         self.my_mask_pix_map = mask_pixmap
@@ -1469,6 +1469,7 @@ class DoImageView(QObject):
             new_m_pixmap = QPixmap.fromImage(q_img)
             self.my_scene.add_mask_pixmap(new_m_pixmap)
             self.my_scene.refresh_imgs()
+            #self.my_scene.draw_beam_center()
 
         except AttributeError:
             logging.info("no mask to draw here")

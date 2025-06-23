@@ -376,8 +376,6 @@ def from_image_n_mask_2_threshold(
 def get_dispersion_debug_obj_tup(
     expt_path = "/tmp/...", on_sweep_img_num = 0, params_in = {None}
 ):
-    print("params_in =", params_in)
-
     try:
         nsig_b =            params_in["nsig_b"]
         nsig_s =            params_in["nsig_s"]
