@@ -328,8 +328,6 @@ class ThresholdDisplayMenu(QMenu):
     def __init__(self, parent = None):
         super().__init__()
         my_main_box = QVBoxLayout()
-        self.threshold_box_show = QCheckBox("Show threshold")
-        self.threshold_box_show.setChecked(False)
         self.default_threshold_params = {
             "algorithm":"dispersion_extended", "nsig_b":6.0, "nsig_s":3.0,
             "global_threshold":0.0, "min_count":2, "gain":1.0, "size":(3, 3),
@@ -352,7 +350,6 @@ class ThresholdDisplayMenu(QMenu):
         )
         self.step_param_widg.addWidget(self.dispr_par_widg)
         self.user_pass_btn = QPushButton("Apply to spot find")
-        my_main_box.addWidget(self.threshold_box_show)
         my_main_box.addLayout(hbox_algorithm)
         my_main_box.addWidget(self.step_param_widg)
         my_main_box.addWidget(self.user_pass_btn)
@@ -385,9 +382,6 @@ class ThresholdDisplayMenu(QMenu):
             self.threshold_param_changed
         )
 
-        self.threshold_box_show.stateChanged.connect(
-            self.threshold_param_changed
-        )
         self.algorithm_select.currentIndexChanged.connect(
             self.algorithm_changed
         )
@@ -409,7 +403,9 @@ class ThresholdDisplayMenu(QMenu):
         self.threshold_param_changed(None)
 
     def threshold_param_changed(self, value):
-        if self.threshold_box_show.isChecked():
+        #if self.threshold_box_show.isChecked():
+        a = True # fix this two lines
+        if a:
 
             tmp_algo = self.algorithm_lst[int(
                 self.algorithm_select.currentIndex()
@@ -559,14 +555,26 @@ class InfoDisplayMenu(QMenu):
         palette_group.setLayout(palette_box_layout)
 
         #Mask overlay
-        mask_colour_group = QGroupBox("Mask overlay")
+        mask_colour_group = QGroupBox("Overlay viewing")
         mask_col_n_tra_v_layout = QVBoxLayout()
 
         # mask showing
-        self.chk_box_mask_show = QCheckBox("Show mask")
+        self.chk_box_mask_show = QCheckBox("Excluding mask")
         self.chk_box_mask_show.setChecked(True)
         self.chk_box_mask_show.stateChanged.connect(self.sig_new_redraw)
         mask_col_n_tra_v_layout.addWidget(self.chk_box_mask_show)
+
+
+        # threshold showing
+        self.threshold_box_show = QCheckBox("Spot finding threshold")
+        self.threshold_box_show.setChecked(False)
+        mask_col_n_tra_v_layout.addWidget(self.threshold_box_show)
+        self.threshold_box_show.stateChanged.connect(
+            self.sig_new_redraw
+        )
+        #  ... if self.threshold_box_show.isChecked():
+
+
 
         # mask colouring
         mask_col_h_layout = QHBoxLayout()
