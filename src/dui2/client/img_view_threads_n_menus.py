@@ -216,6 +216,24 @@ class LoadSliceImage(QThread):
         )
 
 
+class LoadInThread(QThread):
+    request_loaded = Signal(tuple)
+    def __init__(
+        self, unit_URL = None, cmd_in = None, main_handler = None
+    ):
+        super(LoadInThread, self).__init__()
+        self.uni_url = unit_URL
+        self.cmd = cmd_in
+        self.my_handler = main_handler
+
+    def run(self):
+        lst_req = get_req_json_dat(
+            params_in = self.cmd, main_handler = self.my_handler
+        )
+        response = lst_req.result_out()
+        self.request_loaded.emit((response))
+
+
 class DispersionParamWidget(QWidget):
     def __init__(self, default_params_in):
         super(DispersionParamWidget, self).__init__()
@@ -686,23 +704,4 @@ class InfoDisplayMenu(QMenu):
         logging.info("i_max_changed; value=" + str(value))
         self.i_max = int(value)
         self.i_min_max_changed()
-
-
-class LoadInThread(QThread):
-    request_loaded = Signal(tuple)
-    def __init__(
-        self, unit_URL = None, cmd_in = None, main_handler = None
-    ):
-        super(LoadInThread, self).__init__()
-        self.uni_url = unit_URL
-        self.cmd = cmd_in
-        self.my_handler = main_handler
-
-    def run(self):
-        lst_req = get_req_json_dat(
-            params_in = self.cmd, main_handler = self.my_handler
-        )
-        response = lst_req.result_out()
-
-        self.request_loaded.emit((response))
 
