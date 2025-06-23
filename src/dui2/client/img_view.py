@@ -263,6 +263,7 @@ class ImgGraphicsScene(QGraphicsScene):
 
         self.draw_all_hkl = False
         self.draw_near_hkl = True
+        self.beam_xy_pair = (-1, -1)
 
     def draw_ref_rect(self):
         self.clear()
@@ -312,24 +313,21 @@ class ImgGraphicsScene(QGraphicsScene):
             self.addPixmap(self.my_mask_pix_map)
 
     def draw_beam_center(self):
-        print("beam_xy_pair =", self.beam_xy_pair)
+        #print("beam_xy_pair =", self.beam_xy_pair)
         x_bc = self.beam_xy_pair[0]
         y_bc = self.beam_xy_pair[1]
         l_size = 20.0
         self.addLine(
-            x_bc, y_bc - l_size,
-            x_bc, y_bc + l_size,
-            self.overlay_pen1
+            x_bc, y_bc - l_size, x_bc, y_bc + l_size, self.overlay_pen1
         )
 
         self.addLine(
-            x_bc - l_size, y_bc,
-            x_bc + l_size, y_bc,
-            self.overlay_pen1
+            x_bc - l_size, y_bc, x_bc + l_size, y_bc, self.overlay_pen1
         )
 
     def update_tmp_mask(self, new_temp_mask):
         self.temp_mask = new_temp_mask
+        self.draw_beam_center()
 
     def draw_temp_mask(self):
         try:
@@ -404,7 +402,6 @@ class ImgGraphicsScene(QGraphicsScene):
         self.temp_mask = new_temp_mask
         self.beam_xy_pair = new_beam_xy_pair
         self.refresh_imgs()
-        self.draw_beam_center()
 
     def refresh_imgs(self):
         if self.parent_obj.overlay == "blue":
@@ -432,6 +429,7 @@ class ImgGraphicsScene(QGraphicsScene):
                 n_text.setPen(self.overlay_pen1)
 
         self.draw_temp_mask()
+        self.draw_beam_center()
 
     def add_mask_pixmap(self, mask_pixmap):
         self.my_mask_pix_map = mask_pixmap
@@ -1479,7 +1477,6 @@ class DoImageView(QObject):
             print(
                 "Runtime Err Catch, seems to be running without this menu 2"
             )
-
 
     def change_i_min_max(self, new_i_min, new_i_max):
         self.i_min_max = [new_i_min, new_i_max]
