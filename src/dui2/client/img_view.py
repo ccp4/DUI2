@@ -1,5 +1,5 @@
 """
-DUI2's image visualization main programs
+DUI2's image visualization main classes
 
 Author: Luis Fuentes-Montero (Luiso)
 With strong help from DIALS and CCP4 teams
