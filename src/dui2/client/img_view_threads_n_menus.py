@@ -37,8 +37,6 @@ from dui2.client.img_view_utils import (
     load_img_json_w_str, load_mask_img_json_w_str
 )
 
-
-
 class LoadFullMaskImage(QThread):
     image_loaded = Signal(tuple)
     def __init__(
@@ -427,87 +425,87 @@ class ThresholdDisplayMenu(QMenu):
 
     def threshold_param_changed(self, value):
         #if self.threshold_box_show.isChecked():
-        a = True # fix this two lines
-        if a:
 
-            tmp_algo = self.algorithm_lst[int(
-                self.algorithm_select.currentIndex()
+        tmp_algo = self.algorithm_lst[int(
+            self.algorithm_select.currentIndex()
+        )]
+
+        try:
+            tmp_nsig_b = float(self.dispr_par_widg.param_nsig_b.text())
+
+        except ValueError:
+            tmp_nsig_b = self.default_threshold_params["nsig_b"]
+
+        try:
+            tmp_nsig_s = float(self.dispr_par_widg.param_nsig_s.text())
+
+        except ValueError:
+            tmp_nsig_s = self.default_threshold_params["nsig_s"]
+
+        #TODO try to restrict to { global_threshold > 0 }
+        try:
+            tmp_global_threshold = float(self.dispr_par_widg.param_global_threshold.text())
+
+        except ValueError:
+            tmp_global_threshold = self.default_threshold_params["global_threshold"]
+
+        try:
+            tmp_min_count = int(self.dispr_par_widg.param_min_count.text())
+
+        except ValueError:
+            tmp_min_count = self.default_threshold_params["min_count"]
+
+        try:
+            tmp_gain = float(self.dispr_par_widg.param_gain.text())
+
+        except ValueError:
+            tmp_gain = self.default_threshold_params["gain"]
+
+        lst_size = str(self.dispr_par_widg.param_size.text()).split(",")
+        try:
+            tmp_size = [int(lst_size[0]), int(lst_size[1])]
+
+        except (ValueError, IndexError):
+            tmp_size = self.default_threshold_params["size"]
+
+        local_threshold_params = {
+            "algorithm":            tmp_algo,
+            "nsig_b":               tmp_nsig_b,
+            "nsig_s":               tmp_nsig_s,
+            "global_threshold":     tmp_global_threshold,
+            "min_count":            tmp_min_count,
+            "gain":                 tmp_gain,
+            "size":                 tmp_size
+        }
+
+        if tmp_algo == "radial_profile":
+            try:
+                tmp_n_iqr = int(self.rad_par_wig.param_n_iqr.text())
+
+            except ValueError:
+                print("assigning default value to n_iqr ...(ValueError) ")
+                tmp_n_iqr = self.default_threshold_params["n_iqr"]
+
+            tmp_blur = self.rad_par_wig.blur_lst[int(
+                self.rad_par_wig.param_blur_select.currentIndex()
             )]
 
             try:
-                tmp_nsig_b = float(self.dispr_par_widg.param_nsig_b.text())
+                tmp_n_bins = int(self.rad_par_wig.param_n_bins.text())
 
             except ValueError:
-                tmp_nsig_b = self.default_threshold_params["nsig_b"]
+                tmp_n_bins = self.default_threshold_params["n_bins"]
 
-            try:
-                tmp_nsig_s = float(self.dispr_par_widg.param_nsig_s.text())
+            local_threshold_params["n_iqr"] = tmp_n_iqr
+            local_threshold_params["blur"] = tmp_blur
+            local_threshold_params["n_bins"] = tmp_n_bins
 
-            except ValueError:
-                tmp_nsig_s = self.default_threshold_params["nsig_s"]
+        self.new_threshold_param.emit(local_threshold_params)
 
-            #TODO try to restrict to { global_threshold > 0 }
-            try:
-                tmp_global_threshold = float(self.dispr_par_widg.param_global_threshold.text())
-
-            except ValueError:
-                tmp_global_threshold = self.default_threshold_params["global_threshold"]
-
-            try:
-                tmp_min_count = int(self.dispr_par_widg.param_min_count.text())
-
-            except ValueError:
-                tmp_min_count = self.default_threshold_params["min_count"]
-
-            try:
-                tmp_gain = float(self.dispr_par_widg.param_gain.text())
-
-            except ValueError:
-                tmp_gain = self.default_threshold_params["gain"]
-
-            lst_size = str(self.dispr_par_widg.param_size.text()).split(",")
-            try:
-                tmp_size = [int(lst_size[0]), int(lst_size[1])]
-
-            except (ValueError, IndexError):
-                tmp_size = self.default_threshold_params["size"]
-
-            local_threshold_params = {
-                "algorithm":            tmp_algo,
-                "nsig_b":               tmp_nsig_b,
-                "nsig_s":               tmp_nsig_s,
-                "global_threshold":     tmp_global_threshold,
-                "min_count":            tmp_min_count,
-                "gain":                 tmp_gain,
-                "size":                 tmp_size
-            }
-
-            if tmp_algo == "radial_profile":
-                try:
-                    tmp_n_iqr = int(self.rad_par_wig.param_n_iqr.text())
-
-                except ValueError:
-                    print("assigning default value to n_iqr ...(ValueError) ")
-                    tmp_n_iqr = self.default_threshold_params["n_iqr"]
-
-                tmp_blur = self.rad_par_wig.blur_lst[int(
-                    self.rad_par_wig.param_blur_select.currentIndex()
-                )]
-
-                try:
-                    tmp_n_bins = int(self.rad_par_wig.param_n_bins.text())
-
-                except ValueError:
-                    tmp_n_bins = self.default_threshold_params["n_bins"]
-
-                local_threshold_params["n_iqr"] = tmp_n_iqr
-                local_threshold_params["blur"] = tmp_blur
-                local_threshold_params["n_bins"] = tmp_n_bins
-
-            self.new_threshold_param.emit(local_threshold_params)
-
+        old_connected_2_commented_IF = '''
         else:
             self.new_threshold_param.emit(None)
+        '''
 
     def user_applied(self):
         logging.info("user_pass_btn")

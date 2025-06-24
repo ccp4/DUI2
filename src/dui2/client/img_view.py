@@ -487,7 +487,6 @@ class DoImageView(QObject):
         self.load_thread_list.append(load_template_thread)
 
     def after_requesting_template(self, tup_data):
-
         try:
             json_data_dict = tup_data[0]
             new_templ = str(json_data_dict["str_json"])
@@ -759,7 +758,7 @@ class DoImageView(QObject):
         try:
             if(
                 self.pop_display_menu.chk_box_mask_show.isChecked() or
-                self.pop_threshold_menu.threshold_box_show.isChecked()
+                self.pop_display_menu.threshold_box_show.isChecked()
             ):
                 data_mask = self.np_full_mask_img
 
@@ -786,6 +785,7 @@ class DoImageView(QObject):
 
         except AttributeError:
             logging.info("no mask to draw here")
+            print("no mask to draw here (AttributeError)")
 
         except RuntimeError:
             print(
