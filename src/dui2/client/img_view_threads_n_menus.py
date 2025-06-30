@@ -521,6 +521,7 @@ class InfoDisplayMenu(QMenu):
     new_mask_transp = Signal(float)
     new_redraw = Signal()
     new_ref_list = Signal()
+    new_mask_y_n = Signal()
     def __init__(self, parent = None):
         super().__init__()
         self.my_parent = parent
@@ -582,7 +583,7 @@ class InfoDisplayMenu(QMenu):
         # mask showing
         self.chk_box_mask_show = QCheckBox("Excluding mask")
         self.chk_box_mask_show.setChecked(True)
-        self.chk_box_mask_show.stateChanged.connect(self.sig_new_redraw)
+        self.chk_box_mask_show.stateChanged.connect(self.sig_mask_yes_or_not)
         mask_col_n_tra_v_layout.addWidget(self.chk_box_mask_show)
 
 
@@ -591,7 +592,7 @@ class InfoDisplayMenu(QMenu):
         self.threshold_box_show.setChecked(False)
         mask_col_n_tra_v_layout.addWidget(self.threshold_box_show)
         self.threshold_box_show.stateChanged.connect(
-            self.sig_new_redraw
+            self.sig_mask_yes_or_not
         )
         #  ... if self.threshold_box_show.isChecked():
 
@@ -681,6 +682,9 @@ class InfoDisplayMenu(QMenu):
     def sig_new_redraw(self):
         logging.info("new_redraw")
         self.new_redraw.emit()
+
+    def sig_mask_yes_or_not(self):
+        self.new_mask_y_n.emit()
 
     def sig_new_refl(self):
         logging.info("new_ref_list")

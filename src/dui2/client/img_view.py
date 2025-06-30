@@ -195,7 +195,7 @@ class ImgGraphicsScene(QGraphicsScene):
                     self.addEllipse(rectangle, self.overlay_pen1)
 
         except TypeError:
-            pass
+            print("Type Err Catch(draw_temp_mask)")
 
     def __call__(
         self, new_pixmap, refl_list1, new_temp_mask, new_beam_xy_pair
@@ -363,6 +363,7 @@ class DoImageView(QObject):
         self.mask_transp = 0.5
 
         self.pop_display_menu.new_redraw.connect(self.refresh_pixel_map)
+        self.pop_display_menu.new_mask_y_n.connect(self.emit_reload)
 
         self.pop_display_menu.new_ref_list.connect(
             self.request_reflection_list
@@ -455,7 +456,10 @@ class DoImageView(QObject):
 
     def update_threshold_params(self, new_params):
         self.threshold_params = new_params
-        self.need_2_reload.emit() #TODO: rethink if this signal is needed here
+        self.emit_reload()
+
+    def emit_reload(self):
+        self.need_2_reload.emit()
 
     def user_applied(self):
         self.user_pass_threshold_param.emit(self.threshold_params)
@@ -541,6 +545,11 @@ class DoImageView(QObject):
 
         except TypeError:
             self.np_full_mask_img = None
+
+        print(
+            "\n self.img_d1_d2[0], self.img_d1_d2[1] =",
+            self.img_d1_d2[0], self.img_d1_d2[1], "\n"
+        )
 
         self.request_reflection_list()
 
@@ -782,6 +791,7 @@ class DoImageView(QObject):
             self.my_scene.add_mask_pixmap(new_m_pixmap)
             self.my_scene.refresh_imgs()
             #self.my_scene.draw_beam_center()
+            print("updating QPixmap (mask)")
 
         except AttributeError:
             logging.info("no mask to draw here")
