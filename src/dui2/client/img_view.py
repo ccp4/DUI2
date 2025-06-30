@@ -116,7 +116,7 @@ class ImgGraphicsScene(QGraphicsScene):
             self.addPixmap(self.my_mask_pix_map)
 
     def draw_beam_center(self):
-        print("beam_xy_pair =", self.beam_xy_pair)
+        #print("beam_xy_pair =", self.beam_xy_pair)
         x_bc = self.beam_xy_pair[0]
         y_bc = self.beam_xy_pair[1]
         l_size = 20.0
@@ -195,7 +195,8 @@ class ImgGraphicsScene(QGraphicsScene):
                     self.addEllipse(rectangle, self.overlay_pen1)
 
         except TypeError:
-            print("Type Err Catch(draw_temp_mask)")
+            #print("Type Err Catch(draw_temp_mask)")
+            logging.info("Type Err Catch(draw_temp_mask)")
 
     def __call__(
         self, new_pixmap, refl_list1, new_temp_mask, new_beam_xy_pair
@@ -426,10 +427,11 @@ class DoImageView(QObject):
                     try:
                         single_thread.quit()
                         single_thread.wait()
-                        print("quitted & waited thread")
+                        #print("quitted & waited thread")
 
                     except AttributeError:
-                        print("no need to quit/wait thread")
+                        #print("no need to quit/wait thread")
+                        logging.info("no need to quit/wait thread")
 
         if len(self.load_thread_list) > 30:
             del self.load_thread_list[0:-25]
@@ -554,11 +556,6 @@ class DoImageView(QObject):
 
         except TypeError:
             self.np_full_mask_img = None
-
-        print(
-            "\n self.img_d1_d2[0], self.img_d1_d2[1] =",
-            self.img_d1_d2[0], self.img_d1_d2[1], "\n"
-        )
 
         self.request_reflection_list()
 
@@ -705,7 +702,10 @@ class DoImageView(QObject):
             )
 
         except RuntimeError:
-            print(
+            '''print(
+                "Runtime Err Catch, seems to be running without this menu 1"
+            )'''
+            logging.info(
                 "Runtime Err Catch, seems to be running without this menu 1"
             )
 
@@ -800,14 +800,17 @@ class DoImageView(QObject):
             self.my_scene.add_mask_pixmap(new_m_pixmap)
             self.my_scene.refresh_imgs()
             #self.my_scene.draw_beam_center()
-            print("updating QPixmap (mask)")
+            #print("updating QPixmap (mask)")
 
         except AttributeError:
             logging.info("no mask to draw here")
-            print("no mask to draw here (AttributeError)")
+            #print("no mask to draw here (AttributeError)")
 
         except RuntimeError:
-            print(
+            '''print(
+                "Runtime Err Catch, seems to be running without this menu 2"
+            )'''
+            logging.info(
                 "Runtime Err Catch, seems to be running without this menu 2"
             )
 
