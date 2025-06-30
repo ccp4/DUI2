@@ -338,7 +338,7 @@ class DoImageView(QObject):
         self.i_min_max = [-2, 50]
         self.palette = "grayscale"
         self.just_imported = False
-        self.overlay = "blue"
+        self.overlay = "cyan"
 
         self.pop_threshold_menu = ThresholdDisplayMenu(self)
         try:

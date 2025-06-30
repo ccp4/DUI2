@@ -555,7 +555,7 @@ class InfoDisplayMenu(QMenu):
         )
 
         self.overlay_select = QComboBox()
-        self.overlay_lst = ["blue", "cyan", "red", "green"]
+        self.overlay_lst = ["cyan", "blue", "red", "green"]
         for n, plt in enumerate(self.overlay_lst):
             self.overlay_select.addItem(plt)
 
