@@ -363,7 +363,7 @@ class DoImageView(QObject):
         self.mask_transp = 0.5
 
         self.pop_display_menu.new_redraw.connect(self.refresh_pixel_map)
-        self.pop_display_menu.new_mask_y_n.connect(self.emit_reload)
+        self.pop_display_menu.new_mask_y_n.connect(self.update_if_threshold)
 
         self.pop_display_menu.new_ref_list.connect(
             self.request_reflection_list
@@ -456,6 +456,15 @@ class DoImageView(QObject):
 
     def update_threshold_params(self, new_params):
         self.threshold_params = new_params
+        self.emit_reload()
+
+    def update_if_threshold(self):
+        if self.pop_display_menu.chk_box_mask_show.isChecked():
+            self.threshold_params = None
+
+        else:
+            self.threshold_params = self.pop_threshold_menu.threshold_params_dict
+
         self.emit_reload()
 
     def emit_reload(self):

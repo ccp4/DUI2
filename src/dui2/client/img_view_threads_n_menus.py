@@ -468,7 +468,7 @@ class ThresholdDisplayMenu(QMenu):
         except (ValueError, IndexError):
             tmp_size = self.default_threshold_params["size"]
 
-        local_threshold_params = {
+        self.threshold_params_dict = {
             "algorithm":            tmp_algo,
             "nsig_b":               tmp_nsig_b,
             "nsig_s":               tmp_nsig_s,
@@ -496,11 +496,11 @@ class ThresholdDisplayMenu(QMenu):
             except ValueError:
                 tmp_n_bins = self.default_threshold_params["n_bins"]
 
-            local_threshold_params["n_iqr"] = tmp_n_iqr
-            local_threshold_params["blur"] = tmp_blur
-            local_threshold_params["n_bins"] = tmp_n_bins
+            self.threshold_params_dict["n_iqr"] = tmp_n_iqr
+            self.threshold_params_dict["blur"] = tmp_blur
+            self.threshold_params_dict["n_bins"] = tmp_n_bins
 
-        self.new_threshold_param.emit(local_threshold_params)
+        self.new_threshold_param.emit(self.threshold_params_dict)
 
         old_connected_2_commented_IF = '''
         else:
