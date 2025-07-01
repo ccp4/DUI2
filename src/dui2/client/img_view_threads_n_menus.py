@@ -596,7 +596,12 @@ class InfoDisplayMenu(QMenu):
         )
         #  ... if self.threshold_box_show.isChecked():
 
-
+        self.old_transp = -1.0
+        self.new_transp = -2.0
+        self.slider_timer = QTimer(self)
+        self.slider_timer.timeout.connect(self.do_if_n_emit_new_transp)
+        self.just_emited_slider = True
+        self.slider_timer.start(250)
 
         # mask colouring
         mask_col_h_layout = QHBoxLayout()
@@ -705,9 +710,18 @@ class InfoDisplayMenu(QMenu):
         self.new_mask_colour.emit(str(new_colour))
 
     def transp_changed(self, new_transp_entered):
-        new_transp = new_transp_entered / 100.0
-        #print("new_transp =", new_transp)
-        self.new_mask_transp.emit(float(new_transp))
+        self.new_transp = new_transp_entered / 100.0
+        self.just_emited_slider = False
+
+    def do_if_n_emit_new_transp(self):
+        if(
+            self.old_transp == self.new_transp and not self.just_emited_slider
+        ):
+            print("doing emit")
+            self.new_mask_transp.emit(float(self.new_transp))
+            self.just_emited_slider = True
+
+        self.old_transp = self.new_transp
 
     def i_min_max_changed(self):
         self.new_i_min_max.emit(self.i_min, self.i_max)
