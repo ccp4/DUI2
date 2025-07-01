@@ -807,11 +807,13 @@ class DoImageView(QObject):
             #print("no mask to draw here (AttributeError)")
 
         except RuntimeError:
-            '''print(
-                "Runtime Err Catch, seems to be running without this menu 2"
-            )'''
             logging.info(
                 "Runtime Err Catch, seems to be running without this menu 2"
+            )
+
+        except TypeError:
+            logging.info(
+                "Type Err Catch, attempting to show a mask without xy(max)"
             )
 
     def change_i_min_max(self, new_i_min, new_i_max):
