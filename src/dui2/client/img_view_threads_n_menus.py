@@ -717,7 +717,7 @@ class InfoDisplayMenu(QMenu):
         if(
             self.old_transp == self.new_transp and not self.just_emited_slider
         ):
-            print("doing emit")
+            logging.info("doing emit for update on mask transparency")
             self.new_mask_transp.emit(float(self.new_transp))
             self.just_emited_slider = True
 
