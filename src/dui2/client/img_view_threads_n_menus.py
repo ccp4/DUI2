@@ -502,11 +502,6 @@ class ThresholdDisplayMenu(QMenu):
 
         self.new_threshold_param.emit(self.threshold_params_dict)
 
-        old_connected_2_commented_IF = '''
-        else:
-            self.new_threshold_param.emit(None)
-        '''
-
     def user_applied(self):
         logging.info("user_pass_btn")
         self.user_param_pass.emit()
@@ -689,11 +684,11 @@ class InfoDisplayMenu(QMenu):
         self.new_redraw.emit()
 
     def threshold_box_show_clicked(self):
-        self.chk_box_mask_show.setChecked(False)
+        #self.chk_box_mask_show.setChecked(False)
         self.sig_mask_yes_or_not()
 
     def chk_box_mask_show_clicked(self):
-        self.threshold_box_show.setChecked(False)
+        #self.threshold_box_show.setChecked(False)
         self.sig_mask_yes_or_not()
 
     def sig_mask_yes_or_not(self):
