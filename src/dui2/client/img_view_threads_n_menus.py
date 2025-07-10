@@ -571,25 +571,25 @@ class InfoDisplayMenu(QMenu):
 
         palette_group.setLayout(palette_box_layout)
 
-        #Mask overlay
-        mask_colour_group = QGroupBox("Overlay viewing")
-        mask_col_n_tra_v_layout = QVBoxLayout()
-
-        # mask showing
-        self.chk_box_mask_show = QCheckBox("Excluding mask")
-        self.chk_box_mask_show.setChecked(True)
-        self.chk_box_mask_show.stateChanged.connect(
-            self.chk_box_mask_show_clicked
+        # Overlay mask showing (Y/N)
+        mask_group = QGroupBox("Overlay mask viewing")
+        mask_select_box = QVBoxLayout()
+        self.exl_mask_rad = QRadioButton("Excluding mask")
+        self.exl_mask_rad.clicked.connect(
+            self.sig_mask_yes_or_not
         )
-        mask_col_n_tra_v_layout.addWidget(self.chk_box_mask_show)
-
-        # threshold showing
-        self.threshold_box_show = QCheckBox("Spot finding threshold")
-        self.threshold_box_show.setChecked(False)
-        mask_col_n_tra_v_layout.addWidget(self.threshold_box_show)
-        self.threshold_box_show.stateChanged.connect(
-            self.threshold_box_show_clicked
+        mask_select_box.addWidget(self.exl_mask_rad)
+        self.threshol_mask_rad = QRadioButton("Spot finding threshold mask")
+        self.threshol_mask_rad.clicked.connect(
+            self.sig_mask_yes_or_not
         )
+        mask_select_box.addWidget(self.threshol_mask_rad)
+        self.no_mask_rad = QRadioButton("No mask")
+        self.no_mask_rad.clicked.connect(
+            self.sig_mask_yes_or_not
+        )
+        mask_select_box.addWidget(self.no_mask_rad)
+        mask_group.setLayout(mask_select_box)
 
         self.old_transp = -1.0
         self.new_transp = -2.0
@@ -613,7 +613,9 @@ class InfoDisplayMenu(QMenu):
         )
         mask_col_h_layout.addWidget(self.mask_colour_select)
 
+        mask_col_n_tra_v_layout = QVBoxLayout()
         mask_col_n_tra_v_layout.addLayout(mask_col_h_layout)
+        mask_select_box.addLayout(mask_col_n_tra_v_layout)
 
         # mask transparency
         mask_tra_h_layout = QHBoxLayout()
@@ -624,7 +626,7 @@ class InfoDisplayMenu(QMenu):
         self.transp_slider.valueChanged.connect(self.transp_changed)
         mask_tra_h_layout.addWidget(self.transp_slider)
         mask_col_n_tra_v_layout.addLayout(mask_tra_h_layout)
-        mask_colour_group.setLayout(mask_col_n_tra_v_layout)
+        #mask_colour_group.setLayout(mask_col_n_tra_v_layout)
 
         # hkl Viewing Tool
         info_group = QGroupBox("Reflection info")
@@ -667,7 +669,8 @@ class InfoDisplayMenu(QMenu):
 
         left_side_box = QVBoxLayout()
         left_side_box.addWidget(palette_group)
-        left_side_box.addWidget(mask_colour_group)
+        #left_side_box.addWidget(mask_colour_group)
+        left_side_box.addWidget(mask_group)
 
         right_side_box = QVBoxLayout()
         right_side_box.addWidget(info_group)
@@ -682,14 +685,6 @@ class InfoDisplayMenu(QMenu):
     def sig_new_redraw(self):
         logging.info("new_redraw")
         self.new_redraw.emit()
-
-    def threshold_box_show_clicked(self):
-        #self.chk_box_mask_show.setChecked(False)
-        self.sig_mask_yes_or_not()
-
-    def chk_box_mask_show_clicked(self):
-        #self.threshold_box_show.setChecked(False)
-        self.sig_mask_yes_or_not()
 
     def sig_mask_yes_or_not(self):
         self.new_mask_y_n.emit()

@@ -463,13 +463,14 @@ class DoImageView(QObject):
         self.emit_reload()
 
     def update_masking(self):
-        if self.pop_display_menu.chk_box_mask_show.isChecked():
+        if self.pop_display_menu.exl_mask_rad.isChecked():
             self.threshold_params = None
-            print("chk_box_mask_show.isChecked")
+            print("exl_mask_rad.isChecked")
 
-        elif self.pop_display_menu.threshold_box_show.isChecked():
+        elif self.pop_display_menu.threshol_mask_rad.isChecked():
             self.threshold_params = self.pop_threshold_menu.threshold_params_dict
-            print("threshold_box_show.isChecked")
+            print("threshol_mask_rad.isChecked")
+
 
         print("update_masking")
         self.emit_reload()
@@ -780,15 +781,15 @@ class DoImageView(QObject):
 
         try:
             if(
-                self.pop_display_menu.chk_box_mask_show.isChecked() or
-                self.pop_display_menu.threshold_box_show.isChecked()
+                self.pop_display_menu.exl_mask_rad.isChecked() or
+                self.pop_display_menu.threshol_mask_rad.isChecked()
             ):
                 data_mask = self.np_full_mask_img
-
             else:
                 data_mask= np.zeros((
                     self.img_d1_d2[0], self.img_d1_d2[1]
                 ), dtype = 'float')
+
 
             m_rgb_np = self.bmp_mask.img_2d_rgb(
                 data2d = data_mask,
