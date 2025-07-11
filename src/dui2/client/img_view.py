@@ -455,6 +455,7 @@ class DoImageView(QObject):
         self.just_imported = False
 
     def update_threshold_params(self, new_params):
+        self.pop_display_menu.set_thresh_mask()
         self.threshold_params = new_params
         self.emit_reload()
 
@@ -466,7 +467,6 @@ class DoImageView(QObject):
         elif self.pop_display_menu.threshol_mask_rad.isChecked():
             self.threshold_params = self.pop_threshold_menu.threshold_params_dict
             print("threshol_mask_rad.isChecked")
-
 
         print("update_masking")
         self.emit_reload()
@@ -1149,10 +1149,6 @@ class DoImageView(QObject):
             self.main_obj.window.imageView.setDragMode(
                 QGraphicsView.NoDrag
             )
-            replasing = '''
-            self.pop_display_menu.exl_mask_rad.setChecked(True)
-            #self.pop_display_menu.sig_mask_yes_or_not()
-            '''
             self.pop_display_menu.set_exl_mask()
 
         else:
