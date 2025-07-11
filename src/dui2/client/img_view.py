@@ -289,7 +289,6 @@ class ImgGraphicsScene(QGraphicsScene):
         self.mouse_released.emit(x_pos, y_pos)
 
 
-
 class DoImageView(QObject):
     new_mask_comp = Signal(dict)
     user_pass_threshold_param = Signal(dict)
@@ -398,7 +397,6 @@ class DoImageView(QObject):
         self.threshold_params = None
         self.old_threshold_params = None
 
-
         timer_4_move = QTimer(self)
         timer_4_move.timeout.connect(self.check_move)
         timer_4_move.start(1600)
@@ -406,8 +404,6 @@ class DoImageView(QObject):
         timer_4_threads = QTimer(self)
         timer_4_threads.timeout.connect(self.review_thread_list)
         timer_4_threads.start(2000)
-
-
 
     def __call__(
         self, in_img_num, nod_or_path = True,
@@ -832,12 +828,10 @@ class DoImageView(QObject):
 
     def change_mask_colour(self, new_colour):
         self.mask_colour = new_colour
-        #print("self.mask_colour =", self.mask_colour)
         self.refresh_pixel_map()
 
     def change_mask_transp(self, new_transp):
         self.mask_transp = new_transp
-        #print("self.mask_transp =", self.mask_transp)
         self.refresh_pixel_map()
 
     def change_overlay(self, new_overlay):
@@ -1155,6 +1149,11 @@ class DoImageView(QObject):
             self.main_obj.window.imageView.setDragMode(
                 QGraphicsView.NoDrag
             )
+            replasing = '''
+            self.pop_display_menu.exl_mask_rad.setChecked(True)
+            #self.pop_display_menu.sig_mask_yes_or_not()
+            '''
+            self.pop_display_menu.set_exl_mask()
 
         else:
             self.main_obj.window.imageView.setDragMode(
@@ -1366,7 +1365,6 @@ class DoImageView(QObject):
 
             pos_2_emit = self.r_list0[pos_min]["big_lst_num"]
             self.new_refl.emit(pos_2_emit)
-
             self.x_out_selected()
             self.my_scene.draw_ref_rect()
 

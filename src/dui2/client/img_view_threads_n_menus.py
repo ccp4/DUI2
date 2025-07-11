@@ -626,7 +626,6 @@ class InfoDisplayMenu(QMenu):
         self.transp_slider.valueChanged.connect(self.transp_changed)
         mask_tra_h_layout.addWidget(self.transp_slider)
         mask_col_n_tra_v_layout.addLayout(mask_tra_h_layout)
-        #mask_colour_group.setLayout(mask_col_n_tra_v_layout)
 
         # hkl Viewing Tool
         info_group = QGroupBox("Reflection info")
@@ -669,7 +668,6 @@ class InfoDisplayMenu(QMenu):
 
         left_side_box = QVBoxLayout()
         left_side_box.addWidget(palette_group)
-        #left_side_box.addWidget(mask_colour_group)
         left_side_box.addWidget(mask_group)
 
         right_side_box = QVBoxLayout()
@@ -688,6 +686,15 @@ class InfoDisplayMenu(QMenu):
 
     def sig_mask_yes_or_not(self):
         self.new_mask_y_n.emit()
+
+    def set_exl_mask(self):
+        if self.exl_mask_rad.isChecked():
+            print("no need to set exl_mask_rad")
+
+        else:
+            self.exl_mask_rad.setChecked(True)
+            self.sig_mask_yes_or_not()
+            print("setting exl_mask_rad to (Yes)")
 
     def sig_new_refl(self):
         logging.info("new_ref_list")
