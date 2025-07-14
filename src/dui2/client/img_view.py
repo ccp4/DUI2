@@ -27,7 +27,7 @@ import sys, os, logging
 from dui2.shared_modules.qt_libs import *
 
 import numpy as np
-import json, time
+import json
 
 from dui2.client.init_firts import ini_data
 from dui2.client.exec_utils import get_req_json_dat
@@ -67,6 +67,11 @@ class ImgGraphicsScene(QGraphicsScene):
         self.draw_all_hkl = False
         self.draw_near_hkl = True
         self.beam_xy_pair = (-1, -1)
+
+        timer_4_b_centr = QTimer(self)
+        timer_4_b_centr.timeout.connect(self.check_if_draw_b_centr)
+        self.draw_b_center = False
+        timer_4_b_centr.start(500)
 
     def draw_ref_rect(self):
         self.clear()
@@ -115,6 +120,12 @@ class ImgGraphicsScene(QGraphicsScene):
         if self.my_mask_pix_map is not None:
             self.addPixmap(self.my_mask_pix_map)
 
+    def check_if_draw_b_centr(self):
+        if self.draw_b_center:
+            self.draw_beam_center()
+
+        self.draw_b_center = False
+
     def draw_beam_center(self):
         #print("beam_xy_pair =", self.beam_xy_pair)
         x_bc = self.beam_xy_pair[0]
@@ -130,7 +141,7 @@ class ImgGraphicsScene(QGraphicsScene):
 
     def update_tmp_mask(self, new_temp_mask):
         self.temp_mask = new_temp_mask
-        #self.draw_beam_center()
+        self.draw_b_center = True
 
     def draw_temp_mask(self):
         try:
@@ -206,7 +217,7 @@ class ImgGraphicsScene(QGraphicsScene):
         self.temp_mask = new_temp_mask
         self.beam_xy_pair = new_beam_xy_pair
         self.refresh_imgs()
-        #self.draw_beam_center()
+        self.draw_b_center = True
 
     def refresh_imgs(self):
         if self.parent_obj.overlay == "blue":
@@ -800,8 +811,7 @@ class DoImageView(QObject):
             new_m_pixmap = QPixmap.fromImage(q_img)
             self.my_scene.add_mask_pixmap(new_m_pixmap)
             self.my_scene.refresh_imgs()
-            #self.my_scene.draw_beam_center()
-            #print("updating QPixmap (mask)")
+            self.my_scene.self.draw_b_center = True
 
         except AttributeError:
             logging.info("no mask to draw here")

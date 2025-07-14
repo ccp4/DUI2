@@ -171,7 +171,7 @@ class SimpleParamTab(QWidget):
     def set_ed_pars(self):
         logging.info("set_ed_pars(SimpleParamTab)")
 
-
+maybe_will_be_removed = '''
 class ProgBarBox(QProgressDialog):
     def __init__(self, max_val=100, min_val=0, text="Working", parent = None):
         logging.info("ProgBarBox __init__")
@@ -202,7 +202,7 @@ class ProgBarBox(QProgressDialog):
         self.setValue(100)
         logging.info("ProgBarBox ended")
         self.close()
-
+'''
 
 def build_template(str_path_in):
     logging.info("time to build template from:" + str(str_path_in))
