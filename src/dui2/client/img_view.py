@@ -44,6 +44,65 @@ from dui2.client.img_view_threads_n_menus import (
 from dui2.client.file_nav_utils import FileBrowser
 
 
+class CrosshairItem(QGraphicsItem):
+    def __init__(self, positions, z_depths, z_depth_ref, pen, max_size=6, parent=None):
+        super().__init__(parent)
+        self.positions = positions  # List of (x,y) tuples
+        self.z_depths = z_depths    # List of z_dist values
+        self.z_depth_ref = z_depth_ref
+        self.pen = pen
+        self.max_size = max_size
+        self._bounding_rect = QRectF()
+
+        if not self.positions:
+            self._bounding_rect = QRectF()
+            return
+
+        # Calculate the largest possible crosshair size
+        max_paint_size = self.max_size
+        min_x = min(pos[0] for pos in self.positions) - max_paint_size
+        max_x = max(pos[0] for pos in self.positions) + max_paint_size
+        min_y = min(pos[1] for pos in self.positions) - max_paint_size
+        max_y = max(pos[1] for pos in self.positions) + max_paint_size
+
+        self._bounding_rect = QRectF(min_x, min_y, max_x - min_x, max_y - min_y)
+
+    def paint(self, painter, option, widget=None):
+        painter.setPen(self.pen)
+        for (x, y), z_dist in zip(self.positions, self.z_depths):
+            paint_size = self.max_size - 4.0 * z_dist / self.z_depth_ref
+            # Vertical line
+            painter.drawLine(x, y - paint_size, x, y + paint_size)
+            # Horizontal line
+            painter.drawLine(x - paint_size, y, x + paint_size, y)
+
+    def boundingRect(self):
+        return self._bounding_rect
+
+
+class MultiRectItem(QGraphicsItem):
+    def __init__(self, rects, pen, parent=None):
+        super().__init__(parent)
+        self.rects = rects  # List of QRectF
+        self.pen = pen
+        self._bounding_rect = QRectF()
+
+        if not self.rects:
+            self._bounding_rect = QRectF()
+            return
+
+        self._bounding_rect = self.rects[0]
+        for rect in self.rects[1:]:
+            self._bounding_rect = self._bounding_rect.united(rect)
+
+    def paint(self, painter, option, widget=None):
+        painter.setPen(self.pen)
+        for rect in self.rects:
+            painter.drawRect(rect)
+
+    def boundingRect(self):
+        return self._bounding_rect
+
 
 class ImgGraphicsScene(QGraphicsScene):
     img_scale = Signal(float)
@@ -64,6 +123,9 @@ class ImgGraphicsScene(QGraphicsScene):
 
         self.overlay_pen1.setCosmetic(True)
 
+        self._multi_rect_item = None  # Will hold our optimized item
+        self._crosshair_item = None  # Will hold our optimized item
+
         self.draw_all_hkl = False
         self.draw_near_hkl = True
         self.beam_xy_pair = (-1, -1)
@@ -74,6 +136,7 @@ class ImgGraphicsScene(QGraphicsScene):
         timer_4_b_centr.start(500)
 
     def draw_ref_rect(self):
+
         self.clear()
         if self.my_pix_map is not None:
             self.curr_pixmap = self.my_pix_map
@@ -81,12 +144,14 @@ class ImgGraphicsScene(QGraphicsScene):
         self.addPixmap(self.curr_pixmap)
         if self.parent_obj.pop_display_menu.rad_but_obs.isChecked():
             tick_size = 10.0
-            for refl in self.refl_list:
-                rectangle1 = QRectF(
-                    refl["x"], refl["y"], refl["width"], refl["height"]
-                )
-                self.addRect(rectangle1, self.overlay_pen1)
+            # Create list of QRectF objects first
+            rects = [QRectF(refl["x"], refl["y"], refl["width"], refl["height"])
+                    for refl in self.refl_list]
 
+            self._multi_rect_item = MultiRectItem(rects, self.overlay_pen1)
+            self.addItem(self._multi_rect_item)
+
+            for refl in self.refl_list:
                 if refl["x_me_out"]:
                     xp = refl["x"] + refl["width"] / 2.0
                     yp = refl["y"] + refl["height"] / 2.0
@@ -103,22 +168,21 @@ class ImgGraphicsScene(QGraphicsScene):
 
         else:
             z_dept_fl = float(self.parent_obj.pop_display_menu.z_dept_combo.value())
-            max_size = 6
-            for refl in self.refl_list:
-                paint_size = max_size - 4.0 * refl["z_dist"] / z_dept_fl
-                self.addLine(
-                    refl["x"], refl["y"] - paint_size,
-                    refl["x"], refl["y"] + paint_size,
-                    self.overlay_pen1
-                )
-                self.addLine(
-                    refl["x"] + paint_size, refl["y"],
-                    refl["x"] - paint_size, refl["y"],
-                    self.overlay_pen1
-                )
+
+            # Prepare data for the crosshair item
+            positions = [(refl["x"], refl["y"]) for refl in self.refl_list]
+            z_depths = [refl["z_dist"] for refl in self.refl_list]
+
+            self._crosshair_item = CrosshairItem(
+                positions, z_depths, z_dept_fl,
+                self.overlay_pen1, max_size=6
+            )
+            self.addItem(self._crosshair_item)
+
 
         if self.my_mask_pix_map is not None:
             self.addPixmap(self.my_mask_pix_map)
+
 
     def check_if_draw_b_centr(self):
         if self.draw_b_center:
