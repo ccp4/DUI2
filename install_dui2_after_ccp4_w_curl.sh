@@ -4,7 +4,7 @@ INI_DIR_PATH=$(pwd)
 printf "========================================\n"
 printf "#           DOWNLOADING DUI2           #\n"
 printf "========================================\n\n"
-TAG_VER="2025.5.28"
+TAG_VER="2025.7.17"
 TO_CURL="https://github.com/ccp4/DUI2/archive/refs/tags/v$TAG_VER.zip"
 curl -L -O $TO_CURL
 printf "========================================\n"
