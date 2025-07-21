@@ -310,7 +310,6 @@ class HandleLoadStatusLabel(QObject):
         logging.info("load_finished (HandleLoadStatusLabel)")
 
 def html_show(tmp_html_path, qt_html_obj, fil_obj):
-
     new_file_path = str(tmp_html_path)
     tmp_file = open(tmp_html_path, "w")
     #
@@ -498,18 +497,6 @@ class DoLoadHTML(QObject):
                 except AttributeError:
                     logging.info("\n Connection err catch (DoLoadHTML) \n")
                     full_file = ''
-
-                    do_not_duplicate = '''
-                except ConnectionError:
-                    logging.info("\n Connection err catch (DoLoadHTML) \n")
-                    full_file = ''
-
-                except requests.exceptions.RequestException:
-                    logging.info(
-                        "\nrequests.exceptions.RequestException (DoLoadHTML)\n"
-                    )
-                    full_file = self.failed_html
-                    '''
 
             if len(full_file) < 5:
                 html_show(

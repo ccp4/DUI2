@@ -21,7 +21,7 @@ copyright (c) CCP4 - DLS
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-import os, sys, requests, logging, webbrowser
+import os, sys, requests, logging, webbrowser, time
 
 from dui2.shared_modules.qt_libs import *
 
@@ -38,6 +38,7 @@ from dui2.client.exec_utils import (
     get_optional_list, build_advanced_params_widget, get_req_json_dat,
     get_help_messages, post_req_w_output, CommandParamControl, build_thresh_comd
 )
+
 
 from dui2.client.init_firts import ini_data
 
@@ -615,6 +616,8 @@ class MainObject(QObject):
         )
 
         self.html_view = QWebEngineView()
+        self.new_pred_n_repo = False
+
         self.window.verticalLayout_html_view.addWidget(self.html_view)
 
         self.window.show()
@@ -801,6 +804,11 @@ class MainObject(QObject):
 
         elif tab_index == 2:
             self.do_load_html(do_request = fnd_cur_nod)
+
+            if self.new_pred_n_repo:
+                diff_time = time.time() - self.repp_n_pred_time
+                logging.info("time for << do_load_html >> =" + str(diff_time))
+                self.new_pred_n_repo = False
 
         elif tab_index == 3 and self.window.ReLauncCheckBox.isChecked():
             self.recip_latt.quit_kill_all()
@@ -1527,6 +1535,7 @@ class MainObject(QObject):
         logging.info("respose_from_reset(err code):" + str(line))
 
     def what_2_do_after_dials_cmd(self, nod_num_out, do_pred_n_rept):
+        self.new_pred_n_repo = False
         if(
             self.server_nod_lst[nod_num_out]['cmd2show'][0] ==
             'dials.import'
@@ -1548,6 +1557,12 @@ class MainObject(QObject):
             self.thrd_lst.append(new_thrd)
 
         elif do_pred_n_rept:
+
+
+            self.repp_n_pred_time = time.time()
+            self.new_pred_n_repo = True
+
+
             cmd = {"nod_lst":[nod_num_out], "cmd_lst":["run_predict_n_report"]}
             self.do_load_html.reset_lst_html()
             new_thrd = post_req_w_output(
