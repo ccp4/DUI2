@@ -78,7 +78,7 @@ The same tools as if installed with `curl` and `CCP4` are available, just differ
 
 ## Option 3 (EXPERIMENTAL), Installation of latest Dials and PySide6 with curl and git
 
-This assumes you have installed `curl` and `git` on your GNU/Linux system.
+This assumes you have installed `curl`, `pip` and `git` on your GNU/Linux system.
 
 First download installer script:
 
