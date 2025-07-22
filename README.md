@@ -76,4 +76,17 @@ The same tools as if installed with `curl` and `CCP4` are available, just differ
 
        python DUI2/src/run_dui2_client.py url=http://...[URL of the server]
 
+## Option 3 (EXPERIMENTAL), Installation of latest Dials and PySide6 with curl and git
+
+This assumes you have installed `curl` and `git` on your GNU/Linux system.
+
+First download installer script:
+
+      curl -L -O https://raw.githubusercontent.com/ccp4/DUI2/master/dui_instaler_w_dials_v3p25.sh
+
+Next run the downloaded script with `bash` remember to add the installation directory:
+
+      bash dui_instaler_w_dials_v3p25.sh /INSTALATION/DIR
+
+As in option 2 now you have available the same tools, good luck.
 
