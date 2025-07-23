@@ -1,4 +1,4 @@
-mkdir $1
+mkdir -p $1
 cd $1
 INI_DIR_PATH=$(pwd)
 printf "\n\n Downloading Dials \n\n"
