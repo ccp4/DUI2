@@ -394,13 +394,20 @@ class DoImageView(QObject):
         zoom_in_icon.addFile(zoom_in_icon_path, mode = QIcon.Normal)
         self.main_obj.window.ZoomInButton.setIcon(zoom_in_icon)
         self.main_obj.window.ZoomInButton.clicked.connect(self.ZoomInScale)
+
         zoom_out_icon = QIcon()
         zoom_out_icon_path = res_ico_path + os.sep + "zoom_minus_ico.png"
         zoom_out_icon.addFile(zoom_out_icon_path, mode = QIcon.Normal)
         self.main_obj.window.ZoomOutButton.setIcon(zoom_out_icon)
         self.main_obj.window.ZoomOutButton.clicked.connect(self.ZoomOutScale)
-        self.main_obj.window.EasterEggButton.clicked.connect(self.easter_egg)
+
+        zoom_full_out_icon = QIcon()
+        zoom_full_out_icon_path = res_ico_path + os.sep + "zoom_border.png"
+        zoom_full_out_icon.addFile(zoom_full_out_icon_path, mode = QIcon.Normal)
+        self.main_obj.window.UnZoomFullButton.setIcon(zoom_full_out_icon)
         self.main_obj.window.UnZoomFullButton.clicked.connect(self.UnZoomFullImg)
+
+        self.main_obj.window.EasterEggButton.clicked.connect(self.easter_egg)
 
         data_init = ini_data()
         self.run_local = data_init.get_if_local()
