@@ -1008,7 +1008,7 @@ class DoImageView(QObject):
         except TypeError:
             (self.x1, self.y1, self.x2, self.y2) = (-1, -1, -1, -1)
 
-    def get_scale_label(self):
+    def get_scale_n_set_label(self):
         avg_scale = float(
             self.main_obj.window.imageView.transform().m11() +
             self.main_obj.window.imageView.transform().m22()
@@ -1019,7 +1019,7 @@ class DoImageView(QObject):
         return avg_scale
 
     def set_inv_scale(self):
-        avg_scale = self.get_scale_label()
+        avg_scale = self.get_scale_n_set_label()
         self.inv_scale = int(1.0 / avg_scale)
 
         if self.inv_scale < 1:
@@ -1157,17 +1157,17 @@ class DoImageView(QObject):
     def OneOneScale(self, event):
         logging.info("OneOneScale")
         self.main_obj.window.imageView.resetTransform()
-        avg_scale = self.get_scale_label()
+        avg_scale = self.get_scale_n_set_label()
 
     def ZoomInScale(self, event):
         logging.info("ZoomInScale")
         self.scale_img(1.05)
-        avg_scale = self.get_scale_label()
+        avg_scale = self.get_scale_n_set_label()
 
     def ZoomOutScale(self, event):
         logging.info("ZoomOutScale")
         self.scale_img(0.95)
-        avg_scale = self.get_scale_label()
+        avg_scale = self.get_scale_n_set_label()
 
     def scale_img(self, relative_new_scale):
         tmp_x1, tmp_y1, tmp_x2, tmp_y2 = self.det_tmp_x1_y1_x2_y2()
