@@ -400,6 +400,7 @@ class DoImageView(QObject):
         self.main_obj.window.ZoomOutButton.setIcon(zoom_out_icon)
         self.main_obj.window.ZoomOutButton.clicked.connect(self.ZoomOutScale)
         self.main_obj.window.EasterEggButton.clicked.connect(self.easter_egg)
+        self.main_obj.window.UnZoomFullButton.clicked.connect(self.UnZoomFullImg)
 
         data_init = ini_data()
         self.run_local = data_init.get_if_local()
@@ -523,7 +524,7 @@ class DoImageView(QObject):
                 self.pop_display_menu.i_max_line.setText(i_max_to_edit)
 
                 #TODO is it here where we want to call the next function?
-                self.UnZoomFullImg()
+                self.UnZoomFullImg(None)
 
             except TypeError:
                 logging.info("Type Err catch(tune_palette_ini)")
@@ -1171,7 +1172,7 @@ class DoImageView(QObject):
         self.scale_img(0.95)
         avg_scale = self.get_scale_n_set_label()
 
-    def UnZoomFullImg(self):
+    def UnZoomFullImg(self, event):
         img_d1, img_d2 = self.img_d1_d2[0], self.img_d1_d2[1]
         print("img_d1, img_d2 =", img_d1, img_d2)
         self.main_obj.window.imageView.fitInView(
