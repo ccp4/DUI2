@@ -489,8 +489,34 @@ class DoImageView(QObject):
         self.exp_path = None
         self.on_filter_reflections = on_filter_reflections
         self.build_background_n_get_nod_num(self.cur_img_num)
-
         logging.info("self.threshold_params =" + str(self.threshold_params))
+
+    def calculate_unzoom_scale(self):
+
+        img_d1, img_d2 = self.img_d1_d2[0], self.img_d1_d2[1]
+        print("img_d1, img_d2 =", img_d1, img_d2)
+        unstable = '''
+        img_view_width, img_view_height = (
+            self.main_obj.window.imageView.viewport().width(),
+            self.main_obj.window.imageView.viewport().height()
+        )
+        print(
+            "img_view_width, img_view_height =", img_view_width, img_view_height
+        )
+        inv_scale_1 = img_view_width / img_d1
+        inv_scale_2 = img_view_height / img_d2
+        print("inv_scale_1, inv_scale_2 =", inv_scale_1, inv_scale_2)
+
+        if inv_scale_1 > inv_scale_2:
+            self.inv_scale = inv_scale_1
+
+        else:
+            self.inv_scale = inv_scale_2
+        '''
+
+        self.main_obj.window.imageView.fitInView(
+            QRect(0,0, img_d2, img_d1), aspectRadioMode=Qt.KeepAspectRatio
+        )
 
     def review_thread_list(self):
         if len(self.load_thread_list) > 20:
@@ -522,6 +548,9 @@ class DoImageView(QObject):
                 i_max_to_edit = str(int((medi_i + 1) * 10))
                 logging.info("moving max palette to: " + i_max_to_edit)
                 self.pop_display_menu.i_max_line.setText(i_max_to_edit)
+
+                #TODO is it here where we want to call the next function?
+                self.calculate_unzoom_scale()
 
             except TypeError:
                 logging.info("Type Err catch(tune_palette_ini)")
