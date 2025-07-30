@@ -479,6 +479,7 @@ class DoImageView(QObject):
 
         self.threshold_params = None
         self.old_threshold_params = None
+        self.try_2_un_zoom()
 
         timer_4_move = QTimer(self)
         timer_4_move.timeout.connect(self.check_move)
@@ -487,6 +488,7 @@ class DoImageView(QObject):
         timer_4_threads = QTimer(self)
         timer_4_threads.timeout.connect(self.review_thread_list)
         timer_4_threads.start(2000)
+        QTimer.singleShot(4000, self.try_2_un_zoom)
 
     def __call__(
         self, in_img_num, nod_or_path = True,
@@ -519,6 +521,9 @@ class DoImageView(QObject):
 
     def set_just_imported(self):
         self.just_imported = True
+
+    def try_2_un_zoom(self):
+        self.UnZoomFullImg(None)
 
     def tune_palette_ini(
         self,x_ini = None, x_end = None, y_ini = None, y_end = None
@@ -1180,12 +1185,16 @@ class DoImageView(QObject):
         avg_scale = self.get_scale_n_set_label()
 
     def UnZoomFullImg(self, event):
-        img_d1, img_d2 = self.img_d1_d2[0], self.img_d1_d2[1]
-        print("img_d1, img_d2 =", img_d1, img_d2)
-        self.main_obj.window.imageView.fitInView(
-            QRect(0,0, img_d2, img_d1), aspectRadioMode=Qt.KeepAspectRatio
-        )
-        avg_scale = self.get_scale_n_set_label()
+        try:
+            img_d1, img_d2 = self.img_d1_d2[0], self.img_d1_d2[1]
+            print("img_d1, img_d2 =", img_d1, img_d2)
+            self.main_obj.window.imageView.fitInView(
+                QRect(0,0, img_d2, img_d1), aspectRadioMode=Qt.KeepAspectRatio
+            )
+            avg_scale = self.get_scale_n_set_label()
+
+        except TypeError:
+            print("not ready for un-zooming")
 
     def scale_img(self, relative_new_scale):
         tmp_x1, tmp_y1, tmp_x2, tmp_y2 = self.det_tmp_x1_y1_x2_y2()

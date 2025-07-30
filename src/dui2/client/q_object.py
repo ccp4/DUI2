@@ -578,7 +578,6 @@ class MainObject(QObject):
 
         self.server_nod_lst = []
         self.request_display()
-
         self.opt4lay = 0
         self.show_layout_button = True
         self.change_layout()
@@ -676,6 +675,7 @@ class MainObject(QObject):
             )
 
     def import_init(self):
+        #FIXME do this QTimer.singleShot the way it is done in DoImageView
         loop = QEventLoop()
         QTimer.singleShot(200, loop.quit)
         loop.exec_()
