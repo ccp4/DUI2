@@ -33,6 +33,9 @@ from dui2.shared_modules import format_utils
 
 def main(par_def = None):
     os.environ["QTWEBENGINE_CHROMIUM_FLAGS"] = "--no-sandbox"
+    os.environ["QT_QPA_PLATFORM"] = "xcb"
+    os.environ["WAYLAND_DISPLAY"] = ""
+
     data_init = ini_data()
     data_init.set_data(par_def)
     uni_url = str(data_init.get_url())

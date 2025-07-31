@@ -9,10 +9,11 @@ from dui2.server.init_first import ini_data as server_ini_data
 
 from dui2.shared_modules.qt_libs import *
 
-#if __name__ == '__main__':
 def main():
 
     os.environ["QTWEBENGINE_CHROMIUM_FLAGS"] = "--no-sandbox"
+    os.environ["QT_QPA_PLATFORM"] = "xcb"
+    os.environ["WAYLAND_DISPLAY"] = ""
 
     print("\n platform.system()", platform.system())
     if platform.system() == "Windows":
