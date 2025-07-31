@@ -479,7 +479,6 @@ class DoImageView(QObject):
 
         self.threshold_params = None
         self.old_threshold_params = None
-        self.try_2_un_zoom()
 
         timer_4_move = QTimer(self)
         timer_4_move.timeout.connect(self.check_move)
@@ -488,6 +487,7 @@ class DoImageView(QObject):
         timer_4_threads = QTimer(self)
         timer_4_threads.timeout.connect(self.review_thread_list)
         timer_4_threads.start(2000)
+
         QTimer.singleShot(4000, self.try_2_un_zoom)
 
     def __call__(
@@ -535,7 +535,7 @@ class DoImageView(QObject):
                 logging.info("moving max palette to: " + i_max_to_edit)
                 self.pop_display_menu.i_max_line.setText(i_max_to_edit)
 
-                #TODO is it here where we want to call the next function?
+                #TODO is it here where we want to call the UnZoomFullImg?
                 self.UnZoomFullImg(None)
 
             except TypeError:
@@ -1212,7 +1212,6 @@ class DoImageView(QObject):
                     )
                 )
             ):
-
                 self.main_obj.window.imageView.scale(
                     relative_new_scale, relative_new_scale
                 )
