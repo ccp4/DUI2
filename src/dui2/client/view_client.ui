@@ -134,6 +134,13 @@
          </widget>
         </item>
         <item>
+         <widget class="QPushButton" name="UnZoomFullButton">
+          <property name="text">
+           <string>Full Image</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QLabel" name="InvScaleLabel">
           <property name="text">
            <string>scale = 1 / 1</string>
