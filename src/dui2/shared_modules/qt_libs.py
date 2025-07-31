@@ -24,6 +24,7 @@ copyright (c) CCP4 - DLS
 
 try:
     from PySide6.QtWebEngineWidgets import QWebEngineView
+    from PySide6.QtWebEngineCore import QWebEngineSettings
     from PySide6 import QtUiTools
     from PySide6.QtCore import *
     from PySide6.QtWidgets import *
@@ -31,7 +32,7 @@ try:
     print("Using PySide6 as Qt bindings")
 
 except ModuleNotFoundError:
-    from PySide2.QtWebEngineWidgets import QWebEngineView
+    from PySide2.QtWebEngineWidgets import QWebEngineView, QWebEngineSettings
     from PySide2 import QtUiTools
     from PySide2.QtCore import *
     from PySide2.QtWidgets import *

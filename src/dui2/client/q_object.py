@@ -615,6 +615,20 @@ class MainObject(QObject):
         )
 
         self.html_view = QWebEngineView()
+
+        settings = self.html_view.settings()
+        settings.setAttribute(
+            QWebEngineSettings.WebAttribute.JavascriptEnabled, True
+        )
+        settings.setAttribute(
+            QWebEngineSettings.WebAttribute.LocalContentCanAccessRemoteUrls,
+            True
+        )
+        settings.setAttribute(
+            QWebEngineSettings.WebAttribute.AllowRunningInsecureContent,
+            True
+        )
+
         self.new_pred_n_repo = False
 
         self.window.verticalLayout_html_view.addWidget(self.html_view)

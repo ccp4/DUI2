@@ -531,7 +531,7 @@ class CmdNode(object):
             for refl_2_add in self._lst_refl_out:
                 rep_lst_dat_in.append(refl_2_add)
 
-            rep_lst_dat_in.append("external_dependencies=embed")
+            #rep_lst_dat_in.append("external_dependencies=embed")
             logging.info("\n running:" + str(rep_lst_dat_in))
 
             new_line = "Generating HTML report"
