@@ -2,10 +2,9 @@
 
 client/server implementation of DUI (Dials User Interface)
 
-## Requirements
+## Requirements for installing the latest version of DUI2
 
-This project relies on an installation of `python3` with `dials` (https://dials.github.io/), `pyside2` and `requests` among other dependencies. There are two ways to install DUI2:
-
+It's worth noting that DUI2 comes pre-installed with CCP4. The project depends on a working installation of `python3` along with several key packages, including `dials`, `pyside2` or `pyside3`, and `requests`, among others. There are three main ways to install the latest version of DUI2:
 
 ## Option 1, Installation with curl and ccp4
 
