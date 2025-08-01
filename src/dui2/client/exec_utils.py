@@ -342,7 +342,7 @@ class Mtz_Data_Request(QThread):
     def say_goodbye(self):
         try:
             self.r_time_req.quit()
-            self.r_time_req.wait()
+            #self.r_time_req.wait()
 
         except AttributeError:
             logging.info("not found QThread(get_request_real_time)")
@@ -445,7 +445,7 @@ class post_req_w_output(QThread):
             self.about_to_end.emit(self.number, self.do_predict_n_report)
             self.done = True
             self.exit()
-            self.wait()
+            #self.wait()
 
         else:
             self.new_line_out.emit(line_str, self.number, "Busy")

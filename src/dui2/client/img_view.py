@@ -484,9 +484,11 @@ class DoImageView(QObject):
         timer_4_move.timeout.connect(self.check_move)
         timer_4_move.start(1600)
 
+        to_be_removed = '''
         timer_4_threads = QTimer(self)
         timer_4_threads.timeout.connect(self.review_thread_list)
         timer_4_threads.start(2000)
+        '''
 
         QTimer.singleShot(4000, self.try_2_un_zoom)
 
@@ -501,23 +503,24 @@ class DoImageView(QObject):
         self.build_background_n_get_nod_num(self.cur_img_num)
         logging.info("self.threshold_params =" + str(self.threshold_params))
 
-    def review_thread_list(self):
-        if len(self.load_thread_list) > 20:
+    def add_2_thread_list_n_review(self, new_thread):
+        if len(self.load_thread_list) > 30:
             for num, single_thread in enumerate(self.load_thread_list[0:-15]):
                 if single_thread.isRunning():
                     try:
                         single_thread.quit()
-                        single_thread.wait()
-                        #print("quitted & waited thread")
+                        #single_thread.wait()
 
                     except AttributeError:
-                        #print("no need to quit/wait thread")
-                        logging.info("no need to quit/wait thread")
+                        logging.info("no need to quit n" + str(num) + " thread")
 
-        if len(self.load_thread_list) > 30:
-            del self.load_thread_list[0:-25]
+            #print("resigned a few threads")
 
-        #print("review_thread_list (end)", len(self.load_thread_list), "\n")
+        if len(self.load_thread_list) > 60:
+            del self.load_thread_list[0:-45]
+            #print("erased bunch of threads")
+
+        self.load_thread_list.append(new_thread)
 
     def set_just_imported(self):
         self.just_imported = True
@@ -590,7 +593,7 @@ class DoImageView(QObject):
         )
 
         load_template_thread.start()
-        self.load_thread_list.append(load_template_thread)
+        self.add_2_thread_list_n_review(load_template_thread)
 
     def after_requesting_template(self, tup_data):
         try:
@@ -703,7 +706,7 @@ class DoImageView(QObject):
                 )
 
             load_reflx_thread.start()
-            self.load_thread_list.append(load_reflx_thread)
+            self.add_2_thread_list_n_review(load_reflx_thread)
 
     def after_requesting_ref_lst(self, req_tup):
         json_lst = req_tup
@@ -961,10 +964,10 @@ class DoImageView(QObject):
         )
         full_image_thread.image_loaded.connect(self.new_full_img)
         full_image_thread.start()
-        self.load_thread_list.append(full_image_thread)
+        self.add_2_thread_list_n_review(full_image_thread)
         load_full_mask_image_thread.image_loaded.connect(self.new_full_mask_img)
         load_full_mask_image_thread.start()
-        self.load_thread_list.append(load_full_mask_image_thread)
+        self.add_2_thread_list_n_review(load_full_mask_image_thread)
 
     def check_move(self):
         self.get_x1_y1_x2_y2()
@@ -1144,7 +1147,7 @@ class DoImageView(QObject):
                 self.update_progress
             )
             load_slice_image_thread.start()
-            self.load_thread_list.append(load_slice_image_thread)
+            self.add_2_thread_list_n_review(load_slice_image_thread)
 
             # Now Same for mask
             load_slice_mask_thread = LoadSliceMaskImage(
@@ -1167,7 +1170,7 @@ class DoImageView(QObject):
                 self.update_progress
             )
             load_slice_mask_thread.start()
-            self.load_thread_list.append(load_slice_mask_thread)
+            self.add_2_thread_list_n_review(load_slice_mask_thread)
 
     def OneOneScale(self, event):
         logging.info("OneOneScale")

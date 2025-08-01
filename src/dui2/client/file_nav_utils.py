@@ -421,7 +421,7 @@ class FileBrowser(QDialog):
     def try_2_kill_thread(self):
         try:
             self.refresh_qthread.quit()
-            self.refresh_qthread.wait()
+            #self.refresh_qthread.wait()
             logging.info("killed thread (FileBrowser)")
 
         except AttributeError:
