@@ -484,12 +484,6 @@ class DoImageView(QObject):
         timer_4_move.timeout.connect(self.check_move)
         timer_4_move.start(1600)
 
-        to_be_removed = '''
-        timer_4_threads = QTimer(self)
-        timer_4_threads.timeout.connect(self.review_thread_list)
-        timer_4_threads.start(2000)
-        '''
-
         QTimer.singleShot(4000, self.try_2_un_zoom)
 
     def __call__(
@@ -599,13 +593,13 @@ class DoImageView(QObject):
         try:
             json_data_dict = tup_data[0]
             new_templ = str(json_data_dict["str_json"])
-            self.main_obj.window.ImgNumEdit.setText(str(self.cur_img_num))
             logging.info("new_templ = " + new_templ)
             self.img_d1_d2 = (
                 json_data_dict["img_with"], json_data_dict["img_height"]
             )
             new_img_path = str(json_data_dict["img_path"])
             self.cur_img_num = int(json_data_dict["new_img_num"])
+            self.main_obj.window.ImgNumEdit.setText(str(self.cur_img_num))
             self.i23_multipanel = bool(json_data_dict["i23_multipanel"])
             self.beam_xy_pair = (
                 float(json_data_dict["x_beam_pix"]),
