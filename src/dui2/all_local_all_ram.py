@@ -9,8 +9,10 @@ from dui2.server.init_first import ini_data as server_ini_data
 
 from dui2.shared_modules.qt_libs import *
 
+'''
 def my_cleanup_4_threads():
     print("\n my_cleanup_4_threads \n")
+'''
 
 def main():
 
@@ -68,16 +70,14 @@ def main():
         )
 
     cmd_runner.set_dir_path(tree_ini_path)
-    app = QApplication(sys.argv)
-    app.aboutToQuit.connect(my_cleanup_4_threads)
 
+    app = QApplication(sys.argv)
     m_gui_obj = all_local_gui_connector.MainGuiObject(
         parent = app, cmd_tree_runner = cmd_runner
     )
     m_obj = MainObject(parent = app, multi_runner = m_gui_obj)
+    app.aboutToQuit.connect(m_obj.exit_w_cross)
     sys.exit(app.exec_())
-
-    ##################################################################
 
 
 
