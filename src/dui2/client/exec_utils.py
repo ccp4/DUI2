@@ -33,9 +33,8 @@ from dui2.shared_modules import format_utils
 class get_request_shot(QObject):
     def __init__(self, parent = None, params_in = None, main_handler = None):
         super(get_request_shot, self).__init__(parent)
+        self.to_return = None
         if main_handler == None:
-
-
             try:
                 data_init = ini_data()
                 uni_url = data_init.get_url()
@@ -84,6 +83,7 @@ class get_request_shot(QObject):
 class get_req_json_dat(QObject):
     def __init__(self, parent = None, params_in = None, main_handler = None):
         super(get_req_json_dat, self).__init__(parent)
+        self.to_return = None
         if main_handler == None:
             data_init = ini_data()
             uni_url = data_init.get_url()
