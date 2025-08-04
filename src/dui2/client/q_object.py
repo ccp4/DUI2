@@ -595,6 +595,10 @@ class MainObject(QObject):
             self.reset_graph_triggered
         )
         self.window.actionExit.triggered.connect(self.exit_triggered)
+
+        #self.window.destroyed.connect(self.exit_w_cross)
+        #print(dir(self.window))
+
         self.window.actionBright_on_off.triggered.connect(
             self.bright_fonts_triggered
         )
@@ -659,7 +663,7 @@ class MainObject(QObject):
         self.H_Box.show()
 
     def exit_triggered(self):
-        logging.info("exit_triggered(QObject)")
+        print("exit_triggered(QObject) ... 1")
         msgBox  = QMessageBox()
         txt_exit =  "If you are closing by accident,"
         txt_exit += " you don\'t need to worry.    \n"
@@ -667,7 +671,11 @@ class MainObject(QObject):
         txt_exit += "it will pickup just where it left off.  "
         msgBox.setText(txt_exit)
         msgBox.exec()
+        print("exit_triggered(QObject) ... 2")
         self.parent_app.exit()
+
+    def exit_w_cross(self):
+        print("\n exit_w_cross \n")
 
     def close_event(self):
         logging.info("aboutToQuit ... 1")

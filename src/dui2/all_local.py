@@ -85,7 +85,7 @@ def main():
     )
     prcs_serv.start()
     new_port = pipe_server_1.recv()
-    logging.info("# time to launch client app with port =" + str(new_port))
+    print("\n time to launch client app with port =" + str(new_port) + "\n")
     if new_port is not None:
         client_par_def = (
                 ("url", 'http://127.0.0.1:' + str(new_port) + '/'),
@@ -95,4 +95,4 @@ def main():
         )
         run_client.main(client_par_def)
         prcs_serv.join()
-        logging.info("Closing server naturally")
+        print("\n Closing server naturally \n")
