@@ -659,7 +659,7 @@ class MainObject(QObject):
         self.H_Box.show()
 
     def exit_triggered(self):
-        print("exit_triggered(QObject) ... 1")
+        logging.info("exit_triggered(QObject) ... 1")
         msgBox  = QMessageBox()
         txt_exit =  "If you are closing by accident,"
         txt_exit += " you don\'t need to worry.    \n"
@@ -667,7 +667,7 @@ class MainObject(QObject):
         txt_exit += "it will pickup just where it left off.  "
         msgBox.setText(txt_exit)
         msgBox.exec()
-        print("exit_triggered(QObject) ... 2")
+        logging.info("exit_triggered(QObject) ... 2")
         self.parent_app.exit()
 
     def close_event(self):
@@ -678,9 +678,7 @@ class MainObject(QObject):
             params_in = cmd, main_handler = self.runner_handler
         )
         resp = lst_req.result_out()
-
         self.do_image_view.quit_kill_all()
-
         print("\n aboutToQuit ... 2 \n")
 
     def open_tutorial(self):
