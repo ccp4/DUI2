@@ -451,7 +451,8 @@ class ImportWidget(QWidget):
                 only_dir_bool = True
 
             self.open_widget = FileBrowser(
-                parent = self, path_in = init_path, only_dir = only_dir_bool
+                parent = self, path_in = init_path, only_dir = only_dir_bool,
+                runner_handler = self.runner_handler
             )
             self.open_widget.resize(self.open_widget.size() * 2)
             self.open_widget.select_done.connect(self.set_selection)

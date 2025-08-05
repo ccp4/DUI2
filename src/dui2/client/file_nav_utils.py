@@ -197,8 +197,11 @@ class PathBar(QWidget):
 
 class ReqDirList(QThread):
     ended = Signal(list)
-    def __init__(self, show_hidden = False, curr_path = None):
+    def __init__(
+        self, show_hidden = False, curr_path = None, my_handler = None
+    ):
         super(ReqDirList, self).__init__()
+        self.my_handler = my_handler
         self.show_hidden = show_hidden
         try:
             if curr_path[-1] != "/":
@@ -212,31 +215,41 @@ class ReqDirList(QThread):
     def run(self):
         cmd = {"nod_lst":"", "cmd_str":["get_dir_ls", self.curr_path]}
         lst_req = get_req_json_dat(
-            params_in = cmd, main_handler = None
+            params_in = cmd, main_handler = self.my_handler
         )
         os_listdir = lst_req.result_out()
+
+        print("os_listdir =", os_listdir)
+
+
         lst_dir = []
-        try:
-            for file_dict in os_listdir:
-                f_name = file_dict["fname"]
-                f_isdir = file_dict["isdir"]
-                if f_name[0] != "." or self.show_hidden:
-                    f_path = self.curr_path + f_name
-                    lst_dir.append(
-                        {
-                            "name": f_name, "isdir":  f_isdir, "path": f_path
-                        }
-                    )
-        except TypeError:
-            lst_dir = []
+        #try:
+        for file_dict in os_listdir:
+            f_name = file_dict["fname"]
+            f_isdir = file_dict["isdir"]
+            if f_name[0] != "." or self.show_hidden:
+                f_path = self.curr_path + f_name
+                lst_dir.append(
+                    {
+                        "name": f_name, "isdir":  f_isdir, "path": f_path
+                    }
+                )
+        #except TypeError:
+        #    lst_dir = []
 
         self.ended.emit(lst_dir)
 
 
 class FileBrowser(QDialog):
     select_done = Signal(str, bool)
-    def __init__(self, parent = None, path_in = "/", only_dir = False):
+    def __init__(
+        self, parent = None, path_in = "/", only_dir = False,
+        runner_handler = None
+    ):
         super(FileBrowser, self).__init__(parent)
+
+        self.main_handler = runner_handler
+
         self.setWindowTitle("Open IMGs")
         main_v_layout = QVBoxLayout()
         self.show_hidden_check = QCheckBox("Show Hidden Files")
@@ -302,6 +315,9 @@ class FileBrowser(QDialog):
 
     def build_content(self, path_in):
         self.curr_path = path_in
+
+        print("\n FileBrowser.curr_path =", self.curr_path, "\n")
+
         self.refresh_content()
 
     def build_paren_list(self):
@@ -331,7 +347,8 @@ class FileBrowser(QDialog):
         show_hidden = self.show_hidden_check.isChecked()
         self.try_2_kill_thread()
         self.refresh_qthread = ReqDirList(
-            show_hidden = show_hidden, curr_path = self.curr_path
+            show_hidden = show_hidden, curr_path = self.curr_path,
+            my_handler = self.main_handler
         )
         self.refresh_qthread.ended.connect(self.done_requesting)
         self.label_pos = 1

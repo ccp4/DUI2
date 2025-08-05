@@ -84,6 +84,9 @@ class get_req_json_dat(QObject):
     def __init__(self, parent = None, params_in = None, main_handler = None):
         super(get_req_json_dat, self).__init__(parent)
         self.to_return = None
+
+        print("params_in =", params_in)
+
         if main_handler == None:
             data_init = ini_data()
             uni_url = data_init.get_url()
@@ -112,10 +115,11 @@ class get_req_json_dat(QObject):
                         json_out = None
 
             except ConnectionError:
-                logging.info(" ... Connection err catch (get_req_json_dat) ...")
+                print(" ... Connection err catch (get_req_json_dat) ...")
                 json_out = None
+
             except requests.exceptions.RequestException:
-                logging.info(
+                print(
                     "..requests.exceptions.RequestException (get_req_json_dat)"
                 )
                 json_out = None
@@ -126,7 +130,7 @@ class get_req_json_dat(QObject):
             self.to_return = json_out
 
         else:
-            logging.info("main_handler =" + str(main_handler))
+            print("main_handler =" + str(main_handler))
             main_handler.get_from_main_dui(params_in, self)
 
     def get_it_str(self, data_comming):
