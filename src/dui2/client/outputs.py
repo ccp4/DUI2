@@ -236,10 +236,10 @@ class HandleReciprocalLatticeView(QObject):
                     load_thread.wait()
 
                 except AttributeError:
-                    logging.info("Not loading files yet")
+                    logging.info("Not loading files yet (output)")
 
         except AttributeError:
-            logging.info("Not loading files yet")
+            logging.info("Not loading files yet (output)")
 
         self.load_thread_lst = []
 

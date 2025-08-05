@@ -595,10 +595,6 @@ class MainObject(QObject):
             self.reset_graph_triggered
         )
         self.window.actionExit.triggered.connect(self.exit_triggered)
-
-        #self.window.destroyed.connect(self.exit_w_cross)
-        #print(dir(self.window))
-
         self.window.actionBright_on_off.triggered.connect(
             self.bright_fonts_triggered
         )
@@ -674,18 +670,18 @@ class MainObject(QObject):
         print("exit_triggered(QObject) ... 2")
         self.parent_app.exit()
 
-    def exit_w_cross(self):
-        print("\n exit_w_cross \n")
-
     def close_event(self):
-        logging.info("aboutToQuit ... 1")
+        print("\n aboutToQuit ... 1\n ")
         self.recip_latt.quit_kill_all()
         cmd = {"nod_lst":"", "cmd_str":["closed"]}
         lst_req = get_req_json_dat(
             params_in = cmd, main_handler = self.runner_handler
         )
         resp = lst_req.result_out()
-        logging.info("aboutToQuit ... 2")
+
+        self.do_image_view.quit_kill_all()
+
+        print("\n aboutToQuit ... 2 \n")
 
     def open_tutorial(self):
         try:

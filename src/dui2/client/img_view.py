@@ -508,13 +508,46 @@ class DoImageView(QObject):
                     except AttributeError:
                         logging.info("no need to quit n" + str(num) + " thread")
 
-            #print("resigned a few threads")
-
         if len(self.load_thread_list) > 60:
             del self.load_thread_list[0:-45]
             #print("erased bunch of threads")
 
         self.load_thread_list.append(new_thread)
+
+    def quit_kill_all(self):
+
+
+        for thread in self.load_thread_list:
+            if thread.isRunning():
+                thread.quit()
+                if not thread.wait(2000):  # Wait up to 2 seconds per thread
+                    print(f"Thread {thread} did not exit gracefully")
+                    thread.terminate()  # Force termination if necessary
+                    thread.wait()
+
+        old_2_remove = '''
+        print("len(load_thread_list)=", len(self.load_thread_list))
+        for num, load_thread in enumerate(self.load_thread_list):
+            if load_thread.isRunning():
+                print("load_thread n ", num, " is running")
+
+            else:
+                print("Not running load_thread n ", num)
+
+        try:
+            for num, load_thread in enumerate(self.load_thread_list):
+                print("thread n:", num)
+                try:
+                    if load_thread.isRunning():
+                        load_thread.kill()
+                        load_thread.wait()
+
+                except AttributeError:
+                    print("Not loading files yet (img_view)")
+
+        except AttributeError:
+            print("Not loading files yet (img_view)")
+        '''
 
     def set_just_imported(self):
         self.just_imported = True
@@ -1222,8 +1255,13 @@ class DoImageView(QObject):
         m11 = self.main_obj.window.imageView.transform().m11()
         m22 = self.main_obj.window.imageView.transform().m22()
         if m11 < 0 or m22 < 0:
-            self.main_obj.window.imageView.setMatrix(
-                QMatrix(
+
+            print("turning m11 or m22 as it change to (N < 0)")
+
+            #self.main_obj.window.imageView.setMatrix(
+            self.main_obj.window.imageView.setTransform(
+                #QMatrix(
+                QTransform(
                     float(abs(m11)), float(0.0), float(0.0),
                     float(abs(m22)), float(0.0), float(0.0)
                 )
