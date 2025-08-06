@@ -218,24 +218,21 @@ class ReqDirList(QThread):
             params_in = cmd, main_handler = self.my_handler
         )
         os_listdir = lst_req.result_out()
-
-        print("os_listdir =", os_listdir)
-
-
         lst_dir = []
-        #try:
-        for file_dict in os_listdir:
-            f_name = file_dict["fname"]
-            f_isdir = file_dict["isdir"]
-            if f_name[0] != "." or self.show_hidden:
-                f_path = self.curr_path + f_name
-                lst_dir.append(
-                    {
-                        "name": f_name, "isdir":  f_isdir, "path": f_path
-                    }
-                )
-        #except TypeError:
-        #    lst_dir = []
+        try:
+            for file_dict in os_listdir:
+                f_name = file_dict["fname"]
+                f_isdir = file_dict["isdir"]
+                if f_name[0] != "." or self.show_hidden:
+                    f_path = self.curr_path + f_name
+                    lst_dir.append(
+                        {
+                            "name": f_name, "isdir":  f_isdir, "path": f_path
+                        }
+                    )
+
+        except TypeError:
+            lst_dir = []
 
         self.ended.emit(lst_dir)
 
@@ -315,9 +312,6 @@ class FileBrowser(QDialog):
 
     def build_content(self, path_in):
         self.curr_path = path_in
-
-        print("\n FileBrowser.curr_path =", self.curr_path, "\n")
-
         self.refresh_content()
 
     def build_paren_list(self):
