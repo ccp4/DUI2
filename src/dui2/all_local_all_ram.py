@@ -25,7 +25,7 @@ def main():
 
     print("win_str =", win_str, "\n")
     par_def = (
-        ("init_path", None),
+        ("init_path", "/"),
         ("import_init", None),
         ("all_local", "true"),
         ("windows_exe", win_str),
