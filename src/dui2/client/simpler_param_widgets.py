@@ -434,7 +434,23 @@ class ImportWidget(QWidget):
                 params_in = cmd, main_handler = self.runner_handler
             )
             dic_str = lst_req.result_out()
-            init_path = dic_str[0]
+
+            print("dic_str =", dic_str)
+
+            path_n_one = str(dic_str[0])
+            str_already_there = str(self.imp_txt.text())
+
+            print("path_n_one =", path_n_one)
+            print("str_already_there =", str_already_there)
+
+            if path_n_one in str_already_there:
+                print("here #1")
+                init_path = str_already_there
+
+            else:
+                print("here #2")
+                init_path = path_n_one
+
             if(
                 self.rad_but_template.isChecked() or
                 self.rad_but_img_file.isChecked()
@@ -445,8 +461,8 @@ class ImportWidget(QWidget):
                 only_dir_bool = True
 
             self.open_widget = FileBrowser(
-                parent = self, path_in = init_path, only_dir = only_dir_bool,
-                runner_handler = self.runner_handler
+                parent = self, path_ini = init_path, limit_path = path_n_one,
+                only_dir = only_dir_bool, runner_handler = self.runner_handler
             )
             self.open_widget.resize(self.open_widget.size() * 2)
             self.open_widget.select_done.connect(self.set_selection)

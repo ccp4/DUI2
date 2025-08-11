@@ -240,8 +240,8 @@ class ReqDirList(QThread):
 class FileBrowser(QDialog):
     select_done = Signal(str, bool)
     def __init__(
-        self, parent = None, path_in = "/", only_dir = False,
-        runner_handler = None
+        self, parent = None, path_ini = "/", limit_path = "/",
+        only_dir = False, runner_handler = None
     ):
         super(FileBrowser, self).__init__(parent)
 
@@ -280,8 +280,10 @@ class FileBrowser(QDialog):
         main_v_layout.addWidget(self.path_bar)
 
         self.lst_vw =  MyDirView_list()
-        self.ini_path = path_in
-        self.build_content(self.ini_path)
+
+        self.ini_path = limit_path
+        self.build_content(path_ini)
+
         self.lst_vw.file_clickled.connect(self.fill_clik)
         main_v_layout.addWidget(self.lst_vw)
 
