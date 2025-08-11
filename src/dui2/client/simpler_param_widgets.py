@@ -287,6 +287,14 @@ def remove_border_quotes(str_in):
     return str_out
 
 
+def from_path_2_dir(str_path_in):
+    print("str_path_in =", str_path_in)
+    pos = str_path_in.rfind(os.sep)
+    print("pos =", pos)
+    str_path_out = str_path_in[0:pos]
+    return str_path_out
+
+
 class ImportWidget(QWidget):
     '''
         This widget behaves differently from most of the other  << simple >>
@@ -402,6 +410,8 @@ class ImportWidget(QWidget):
                     elif self.rad_but_img_file.isChecked():
                         file_path_str = build_template(str_select)[1]
 
+                print("file_path_str =", file_path_str)
+
                 self.imp_txt.setText(file_path_str)
 
             self.line_changed()
@@ -438,7 +448,7 @@ class ImportWidget(QWidget):
             print("dic_str =", dic_str)
 
             path_n_one = str(dic_str[0])
-            str_already_there = str(self.imp_txt.text())
+            str_already_there = from_path_2_dir(str(self.imp_txt.text()))
 
             print("path_n_one =", path_n_one)
             print("str_already_there =", str_already_there)
