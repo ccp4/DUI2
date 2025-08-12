@@ -447,19 +447,19 @@ class ImportWidget(QWidget):
 
             print("dic_str =", dic_str)
 
-            path_n_one = str(dic_str[0])
+            path_serv_limit = str(dic_str[0])
             str_already_there = from_path_2_dir(str(self.imp_txt.text()))
 
-            print("path_n_one =", path_n_one)
+            print("path_serv_limit =", path_serv_limit)
             print("str_already_there =", str_already_there)
 
-            if path_n_one in str_already_there:
+            if path_serv_limit in str_already_there:
                 print("here #1")
                 init_path = str_already_there
 
             else:
                 print("here #2")
-                init_path = path_n_one
+                init_path = path_serv_limit
 
             if(
                 self.rad_but_template.isChecked() or
@@ -471,8 +471,9 @@ class ImportWidget(QWidget):
                 only_dir_bool = True
 
             self.open_widget = FileBrowser(
-                parent = self, path_ini = init_path, limit_path = path_n_one,
-                only_dir = only_dir_bool, runner_handler = self.runner_handler
+                parent = self, path_ini = init_path,
+                limit_path = path_serv_limit, only_dir = only_dir_bool,
+                runner_handler = self.runner_handler
             )
             self.open_widget.resize(self.open_widget.size() * 2)
             self.open_widget.select_done.connect(self.set_selection)

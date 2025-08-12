@@ -281,7 +281,7 @@ class FileBrowser(QDialog):
 
         self.lst_vw =  MyDirView_list()
 
-        self.ini_path = limit_path
+        self.root_limit_path = limit_path
         self.build_content(path_ini)
 
         self.lst_vw.file_clickled.connect(self.fill_clik)
@@ -317,8 +317,8 @@ class FileBrowser(QDialog):
         self.refresh_content()
 
     def build_paren_list(self):
-        parents_list = [self.ini_path[:-1]]
-        rest_of_path = self.curr_path[len(self.ini_path):]
+        parents_list = [self.root_limit_path[:-1]]
+        rest_of_path = self.curr_path[len(self.root_limit_path):]
         try:
             if rest_of_path[-1] == "/":
                 rest_of_path = rest_of_path[:-1]
