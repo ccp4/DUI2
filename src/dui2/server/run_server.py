@@ -32,26 +32,7 @@ from dui2.server.init_first import ini_data
 from dui2.shared_modules import format_utils
 from dui2.shared_modules._version import __version__
 
-def split_w_quotes(str_in):
-    lst_par_cmd = []
-    quote_ini = False
-    spc_last_pos = -1
-    for posi, char in enumerate(str_in):
-        if char == " " and not quote_ini:
-            str2add = str(str_in[spc_last_pos + 1:posi])
-            lst_par_cmd.append(str2add)
-            spc_last_pos = posi
-
-        elif char == "\"" or  char == "\'":
-            if not quote_ini:
-                quote_ini = True
-
-            else:
-                quote_ini = False
-
-    str2add = str(str_in[spc_last_pos + 1:])
-    lst_par_cmd.append(str2add)
-    return lst_par_cmd
+from dui2.shared_modules.format_utils import split_w_quotes
 
 def main(par_def = None, connection_out = None):
     format_utils.print_logo()

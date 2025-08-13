@@ -21,29 +21,26 @@ copyright (c) CCP4 - DLS
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-#import http.server, socketserver
-#from urllib.parse import urlparse, parse_qs
 import json, os, sys, time, logging
 
 from dui2.server import multi_node
-#from dui2.server.data_n_json import iter_dict, spit_out
 from dui2.server.data_n_json import spit_out
-from dui2.shared_modules import format_utils
-#from dui2.server.init_first import ini_data
+
+from dui2.shared_modules.format_utils import split_w_quotes
 
 class ReqHandler(object):
     def __init__(self, runner_in):
         self.tree_runner = runner_in
 
     def fake_post(self, url_dict = None, call_obj = None):
-        logging.info("\n url_dict =" + str(url_dict))
+        print("\n url_dict =" + str(url_dict))
 
         tmp_cmd2lst = url_dict["cmd_lst"]
-        logging.info("tmp_cmd2lst =" + str(tmp_cmd2lst))
+        print("tmp_cmd2lst =" + str(tmp_cmd2lst))
 
         cmd_lst = []
         for inner_str in tmp_cmd2lst:
-            cmd_lst.append(inner_str.split(" "))
+            cmd_lst.append(split_w_quotes(inner_str))
 
         nod_lst = []
         try:
