@@ -13,8 +13,6 @@ from dui2.shared_modules.qt_libs import *
 def main():
 
     os.environ["QTWEBENGINE_CHROMIUM_FLAGS"] = "--no-sandbox"
-    os.environ["QT_QPA_PLATFORM"] = "xcb"
-    os.environ["WAYLAND_DISPLAY"] = ""
 
     print("\n platform.system()", platform.system())
     if platform.system() == "Windows":
@@ -22,6 +20,8 @@ def main():
 
     else:
         win_str = "false"
+        os.environ["QT_QPA_PLATFORM"] = "xcb"
+        os.environ["WAYLAND_DISPLAY"] = ""
 
     print("win_str =", win_str, "\n")
     par_def = (

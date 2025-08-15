@@ -21,7 +21,7 @@ copyright (c) CCP4 - DLS
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-import sys, time, logging, os
+import sys, time, logging, os, platform
 
 from dui2.shared_modules.qt_libs import *
 
@@ -33,8 +33,13 @@ from dui2.shared_modules import format_utils
 
 def main(par_def = None):
     os.environ["QTWEBENGINE_CHROMIUM_FLAGS"] = "--no-sandbox"
-    os.environ["QT_QPA_PLATFORM"] = "xcb"
-    os.environ["WAYLAND_DISPLAY"] = ""
+    if platform.system() == "Windows":
+        print("Running on Windows")
+
+    else:
+        print("Running on Unix-like O.S.")
+        os.environ["QT_QPA_PLATFORM"] = "xcb"
+        os.environ["WAYLAND_DISPLAY"] = ""
 
     data_init = ini_data()
     data_init.set_data(par_def)
