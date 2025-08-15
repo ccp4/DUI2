@@ -413,12 +413,12 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
             reqt_path = str(uni_cmd[1].replace("/", os.sep))
 
             data_init = ini_data()
-            init_path = str(data_init.get_lim_path())
+            limit_path = str(data_init.get_lim_path())
 
             print("\n reqt_path =", reqt_path)
-            print("init_path =", init_path, "\n")
+            print("limit_path =", limit_path, "\n")
 
-            if reqt_path[0:len(init_path)] == init_path:
+            if reqt_path[0:len(limit_path)] == limit_path:
                 try:
                     f_name_list =  sorted(os.listdir(reqt_path))
                     dict_list = []
@@ -437,7 +437,7 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
             else:
                 print(
                     "Not allowing get_dir_ls >> ", reqt_path,
-                    " when init_path =", init_path
+                    " when limit_path =", limit_path
                 )
                 err_msg = "permission denied by Dui2 server err catch, " + \
                 "attempt to open not allowed path, not sending file list"
