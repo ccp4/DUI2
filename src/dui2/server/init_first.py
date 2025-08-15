@@ -20,24 +20,31 @@ class ini_data(object):
 
         logging.info("win_exe = " + str(win_exe))
 
-        global ini_pth
-        ini_pth = init_param["init_path"]
-        if ini_pth == None:
+        global lim_pth
+        lim_pth = init_param["limit_path"]
+        if lim_pth == None:
             if init_param["windows_exe"].lower() == "true":
-                ini_pth = "c:\\"
+                lim_pth = "c:\\"
 
             else:
-                ini_pth = "/"
+                lim_pth = "/"
 
-            msg_txt = "\n NOT GIVEN init_path \n using " + ini_pth
+            msg_txt = "\n NOT GIVEN limit_path \n using " + lim_pth
             logging.info(msg_txt)
             print(msg_txt)
+
 
     def get_win_exe(self):
         return win_exe
 
+    #FIXME remove who calls the next function
+    to_remove = '''
     def get_ini_path(self):
         return ini_pth
+    '''
+
+    def get_lim_path(self):
+        return lim_pth
 
 
 if __name__ == "__main__":

@@ -1115,3 +1115,6 @@ class Runner(object):
 
         self._dir_path = dir_path_in
 
+        print("\n\n self._dir_path =", self._dir_path, "\n\n")
+
+

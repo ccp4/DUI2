@@ -25,7 +25,7 @@ def main():
 
     print("win_str =", win_str, "\n")
     par_def = (
-        ("init_path", "/"),
+        ("limit_path", "/"),
         ("import_init", None),
         ("all_local", "true"),
         ("windows_exe", win_str),
@@ -44,7 +44,7 @@ def main():
 
     init_param = format_utils.get_par(par_def, sys.argv[1:])
     run_local = True
-    tree_ini_path = init_param["init_path"]
+    tree_ini_path = init_param["limit_path"]
     if tree_ini_path == None:
         logging.info(
             " using the dir from where the commad 'dui2_server_side' was invoqued"

@@ -5,7 +5,7 @@ import logging
 logging.basicConfig(filename='run_dui2_server.log', level=logging.DEBUG)
 
 server_par_def = (
-    ("init_path", None),
+    ("limit_path", None),
     ("port", 45678),
     ("host", "127.0.0.1"),
     #("host", "serverip"),

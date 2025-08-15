@@ -2,7 +2,7 @@ from multiprocessing import Process, Pipe
 from dui2.server import image_browser_server
 import logging
 server_par_def = (
-    ("init_path", None),
+    ("limit_path", None),
     ("port", 45678),
     ("host", "127.0.0.1"),
     #("host", "serverip"),

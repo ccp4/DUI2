@@ -71,7 +71,7 @@ def main():
     print("win_str =", win_str, "\n")
 
     server_par_def = (
-        ("init_path", None),
+        ("limit_path", None),
         ("port", 45678),
         ("host", "127.0.0.1"),
         #("host", "serverip"),

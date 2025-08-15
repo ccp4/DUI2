@@ -413,7 +413,10 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
             reqt_path = str(uni_cmd[1].replace("/", os.sep))
 
             data_init = ini_data()
-            init_path = str(data_init.get_ini_path())
+            init_path = str(data_init.get_lim_path())
+
+            print("\n reqt_path =", reqt_path)
+            print("init_path =", init_path, "\n")
 
             if reqt_path[0:len(init_path)] == init_path:
                 try:

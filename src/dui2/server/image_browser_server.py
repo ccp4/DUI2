@@ -34,6 +34,7 @@ from dui2.shared_modules import format_utils
 class Browser(object):
     def __init__(self, path_str):
         self._init_path = path_str
+        self._limit_path = path_str
 
     def run_get_data(self, cmd_dict):
         cmd_lst = cmd_dict["cmd_str"]
@@ -159,6 +160,7 @@ class Browser(object):
 
         elif uni_cmd == "dir_path":
             return_list = [self._init_path]
+            #return_list = [self._limit_path]
 
         return return_list
 
@@ -242,17 +244,18 @@ def main(par_def = None, connection_out = None):
 
     logging.info("run_local =" + str(run_local))
 
-    tree_ini_path = init_param["init_path"]
-    if tree_ini_path == None:
-        print("\n NOT GIVEN init path, using ", os.getcwd())
-        tree_ini_path = os.getcwd()
+    tree_lim_path = init_param["limit_path"]
+    if tree_lim_path == None:
+        print("\n NOT GIVEN limit path, using ", os.getcwd())
+        tree_lim_path = os.getcwd()
 
-    if tree_ini_path[-1] != os.sep:
-        tree_ini_path += os.sep
+    if tree_lim_path[-1] != os.sep:
+        tree_lim_path += os.sep
 
-    logging.info("\n << using init path as: " + tree_ini_path + ">>")
-    print("\n << using init path as: " + tree_ini_path + ">>")
-    browser_runner = Browser(tree_ini_path)
+    logging.info("\n << using limit path as: " + tree_lim_path + ">>")
+    print("\n << using limit path as: " + tree_lim_path + ">>")
+    browser_runner = Browser(tree_lim_path)
+
     launch_success = False
     n_secs = 5
     while launch_success == False:

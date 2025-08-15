@@ -279,18 +279,18 @@ def main(par_def = None, connection_out = None):
     logging.info("run_local = " + str(run_local))
 
     if run_local:
-        tree_ini_path = "/"
+        tree_lim_path = "/"
 
     else:
-        tree_ini_path = init_param["init_path"]
-        if tree_ini_path == None:
+        tree_lim_path = init_param["limit_path"]
+        if tree_lim_path == None:
             if init_param["windows_exe"].lower() == "true":
-                tree_ini_path = "c:\\"
+                tree_lim_path = "c:\\"
 
             else:
-                tree_ini_path = "/"
+                tree_lim_path = "/"
 
-            msg_txt = "\n NOT GIVEN init_path \n using " + tree_ini_path
+            msg_txt = "\n NOT GIVEN limit_path \n using " + tree_lim_path
             logging.info(msg_txt)
             print(msg_txt)
 
@@ -312,7 +312,7 @@ def main(par_def = None, connection_out = None):
     except FileNotFoundError:
         cmd_tree_runner = multi_node.Runner(None)
 
-    cmd_tree_runner.set_dir_path(tree_ini_path)
+    cmd_tree_runner.set_dir_path(tree_lim_path)
     cmd_tree_runner.run_get_data(
         {"nod_lst":[""], "lst_wt_cmd":["display"]}
     )
