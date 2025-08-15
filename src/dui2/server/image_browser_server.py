@@ -33,7 +33,7 @@ from dui2.shared_modules import format_utils
 
 class Browser(object):
     def __init__(self, path_str):
-        self._init_path = path_str
+        #self._init_path = path_str
         self._limit_path = path_str
 
     def run_get_data(self, cmd_dict):
@@ -159,8 +159,8 @@ class Browser(object):
                 return_list = []
 
         elif uni_cmd == "dir_path":
-            return_list = [self._init_path]
-            #return_list = [self._limit_path]
+            #return_list = [self._init_path]
+            return_list = [self._limit_path]
 
         return return_list
 
