@@ -939,7 +939,7 @@ class MainObject(QObject):
             self.new_node is not None and
             node_numb != self.curr_nod_num and
             node_numb != self.new_node.number and
-            self.window.NodeSelecCheck.checkState() and
+            bool(self.window.NodeSelecCheck.checkState()) and
             self.server_nod_lst[node_numb]["status"] == "Succeeded" and
             self.new_node.m_cmd_lst == ["dials.combine_experiments"]
         ):
