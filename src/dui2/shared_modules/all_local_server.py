@@ -23,7 +23,7 @@ copyright (c) CCP4 - DLS
 
 import json, os, sys, time, logging
 
-from dui2.server import multi_node
+#from dui2.server import multi_node
 from dui2.server.data_n_json import spit_out
 
 from dui2.shared_modules.format_utils import split_w_quotes

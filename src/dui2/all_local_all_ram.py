@@ -44,6 +44,16 @@ def main():
 
     init_param = format_utils.get_par(par_def, sys.argv[1:])
     run_local = True
+
+    nodes_dir = "run_dui2_nodes"
+    try:
+        os.mkdir(nodes_dir)
+
+    except FileExistsError:
+        print("assuming Dui2 already ran here")
+
+    os.chdir(nodes_dir)
+
     tree_ini_path = init_param["limit_path"]
     if tree_ini_path == None:
         logging.info(
