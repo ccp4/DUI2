@@ -13,7 +13,8 @@ dependencies = [
 dui2_server = "dui2.only_server:main"
 
 [project.gui-scripts]
-dui2 = "dui2.all_local:main"
+dui2 = "dui2.all_local_all_ram:main"
+dui2_old_stable = "dui2.all_local:main"
 dui2_client = "dui2.only_client:main"
 
 
