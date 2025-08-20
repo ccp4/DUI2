@@ -395,6 +395,15 @@ class DoLoadHTML(QObject):
 
         self.new_file_path = None
 
+    def do_first_show(self):
+        print("\n here at DoLoadHTML ...  1  \n")
+        html_show(
+            tmp_html_path = self.tmp_dir + os.sep + "loading.html",
+            qt_html_obj = self.main_obj.html_view,
+            fil_obj = self.not_avail_html
+        )
+        print("\n here at DoLoadHTML ...  2  \n")
+
     def reset_lst_html(self):
         self.lst_html = []
 

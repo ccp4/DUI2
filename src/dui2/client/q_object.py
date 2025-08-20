@@ -553,6 +553,7 @@ class MainObject(QObject):
             self.RecipLattOpenClicked
         )
 
+        self.html_view = QWebEngineView()
         self.do_load_html = DoLoadHTML(self)
         self.log_show = ShowLog(self)
 
@@ -614,8 +615,6 @@ class MainObject(QObject):
             self.open_tutorial
         )
 
-        self.html_view = QWebEngineView()
-
         settings = self.html_view.settings()
         settings.setAttribute(
             QWebEngineSettings.WebAttribute.JavascriptEnabled, True
@@ -628,6 +627,8 @@ class MainObject(QObject):
             QWebEngineSettings.WebAttribute.AllowRunningInsecureContent,
             True
         )
+
+        self.do_load_html.do_first_show()
 
         self.new_pred_n_repo = False
 
