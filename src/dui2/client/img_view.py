@@ -942,6 +942,7 @@ class DoImageView(QObject):
         self.np_full_img = tup_data[2]
         self.tune_palette_ini()
         self.refresh_pixel_map()
+        self.full_mask_show()
 
     def new_full_mask_img(self, tup_data):
         self.np_full_mask_img = tup_data[2]
@@ -949,13 +950,19 @@ class DoImageView(QObject):
 
     def full_img_show(self):
         self.full_image_loaded = False
-        full_image_thread = LoadFullImage(
+        load_full_image_thread = LoadFullImage(
             unit_URL = self.uni_url,
             cur_nod_num = self.cur_nod_num,
             cur_img_num = self.cur_img_num,
             path_in = self.exp_path,
             main_handler = self.my_handler
         )
+
+        load_full_image_thread.image_loaded.connect(self.new_full_img)
+        load_full_image_thread.start()
+        self.add_2_thread_list_n_review(load_full_image_thread)
+
+    def full_mask_show(self):
         load_full_mask_image_thread = LoadFullMaskImage(
             unit_URL = self.uni_url,
             cur_nod_num = self.cur_nod_num,
@@ -964,9 +971,6 @@ class DoImageView(QObject):
             thrs_pars_in = self.threshold_params,
             main_handler = self.my_handler
         )
-        full_image_thread.image_loaded.connect(self.new_full_img)
-        full_image_thread.start()
-        self.add_2_thread_list_n_review(full_image_thread)
         load_full_mask_image_thread.image_loaded.connect(self.new_full_mask_img)
         load_full_mask_image_thread.start()
         self.add_2_thread_list_n_review(load_full_mask_image_thread)

@@ -37,6 +37,7 @@ from dui2.client.img_view_utils import (
     load_img_json_w_str, load_mask_img_json_w_str
 )
 
+
 class LoadFullMaskImage(QThread):
     image_loaded = Signal(tuple)
     def __init__(
@@ -59,6 +60,32 @@ class LoadFullMaskImage(QThread):
             exp_path = self.exp_path,
             threshold_params = self.thrs_hld_pars,
             main_handler = self.my_handler,
+        )
+        self.image_loaded.emit(
+            (self.cur_nod_num, self.cur_img_num, np_full_img)
+        )
+
+
+class LoadFullImage(QThread):
+    image_loaded = Signal(tuple)
+    def __init__(
+        self, unit_URL = None, cur_nod_num = None,
+        cur_img_num = None, path_in = None, main_handler = None
+    ):
+        super(LoadFullImage, self).__init__()
+        self.uni_url = unit_URL
+        self.cur_nod_num = cur_nod_num
+        self.cur_img_num = cur_img_num
+        self.exp_path = path_in
+        self.my_handler = main_handler
+
+    def run(self):
+        np_full_img = load_img_json_w_str(
+            self.uni_url,
+            nod_num_lst = [self.cur_nod_num],
+            img_num = self.cur_img_num,
+            exp_path = self.exp_path,
+            main_handler = self.my_handler
         )
         self.image_loaded.emit(
             (self.cur_nod_num, self.cur_img_num, np_full_img)
@@ -142,32 +169,6 @@ class LoadSliceMaskImage(QThread):
                 "x2"          :  self.x2,
                 "y2"          :  self.y2
             }
-        )
-
-
-class LoadFullImage(QThread):
-    image_loaded = Signal(tuple)
-    def __init__(
-        self, unit_URL = None, cur_nod_num = None,
-        cur_img_num = None, path_in = None, main_handler = None
-    ):
-        super(LoadFullImage, self).__init__()
-        self.uni_url = unit_URL
-        self.cur_nod_num = cur_nod_num
-        self.cur_img_num = cur_img_num
-        self.exp_path = path_in
-        self.my_handler = main_handler
-
-    def run(self):
-        np_full_img = load_img_json_w_str(
-            self.uni_url,
-            nod_num_lst = [self.cur_nod_num],
-            img_num = self.cur_img_num,
-            exp_path = self.exp_path,
-            main_handler = self.my_handler
-        )
-        self.image_loaded.emit(
-            (self.cur_nod_num, self.cur_img_num, np_full_img)
         )
 
 
