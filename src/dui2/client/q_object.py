@@ -935,11 +935,12 @@ class MainObject(QObject):
         self.display()
 
     def on_node_click_w_left(self, node_numb):
+        str_tick_state = str(self.window.NodeSelecCheck.checkState())
         if (
             self.new_node is not None and
             node_numb != self.curr_nod_num and
             node_numb != self.new_node.number and
-            bool(self.window.NodeSelecCheck.checkState()) and
+            str_tick_state[-7:] == "Checked" and
             self.server_nod_lst[node_numb]["status"] == "Succeeded" and
             self.new_node.m_cmd_lst == ["dials.combine_experiments"]
         ):
