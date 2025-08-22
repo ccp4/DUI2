@@ -509,8 +509,12 @@ class DoImageView(QObject):
                         logging.info("no need to quit n" + str(num) + " thread")
 
         if len(self.load_thread_list) > 60:
-            del self.load_thread_list[0:-45]
             #print("erased bunch of threads")
+            del self.load_thread_list[0:-45]
+            ustable = '''
+            for thread_2_remove in self.load_thread_list[0:-45]:
+                thread_2_remove.deleteLater()
+            '''
 
         self.load_thread_list.append(new_thread)
 
@@ -643,6 +647,7 @@ class DoImageView(QObject):
 
         except (IndexError, TypeError):
             logging.info("Not loaded new template in full")
+            self.np_full_img = None
 
         try:
             self.np_full_mask_img = np.zeros((
