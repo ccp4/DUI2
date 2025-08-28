@@ -232,7 +232,8 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
                     step_list[lin2go]._lst_expt_out,
                     int(uni_cmd[1])
                 )
-                return_list = str_json
+                if str_json is not None:
+                    return_list = str_json
 
             except (IndexError, AttributeError, ValueError):
                 logging.info("err catch , wrong line, not sending IMG")
