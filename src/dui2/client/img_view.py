@@ -498,8 +498,8 @@ class DoImageView(QObject):
         logging.info("self.threshold_params =" + str(self.threshold_params))
 
     def add_2_thread_list_n_review(self, new_thread):
-        if len(self.load_thread_list) > 30:
-            for num, single_thread in enumerate(self.load_thread_list[0:-15]):
+        if len(self.load_thread_list) > 20:
+            for num, single_thread in enumerate(self.load_thread_list[0:-10]):
                 if single_thread.isRunning():
                     try:
                         single_thread.quit()
@@ -522,7 +522,7 @@ class DoImageView(QObject):
         for thread in self.load_thread_list:
             if thread.isRunning():
                 thread.quit()
-                if not thread.wait(2000):  # Wait up to 2 seconds per thread
+                if not thread.wait(1200):  # Wait up to 1.2 seconds per thread
                     print(f"Thread {thread} did not exit gracefully")
                     thread.terminate()  # Force termination if necessary
 
