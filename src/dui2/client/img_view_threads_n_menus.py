@@ -484,7 +484,7 @@ class ThresholdDisplayMenu(QMenu):
                 tmp_n_iqr = int(self.rad_par_wig.param_n_iqr.text())
 
             except ValueError:
-                #print("assigning default value to n_iqr ...(ValueError) ")
+                logging.info("assigning default value to n_iqr ...(ValueError) ")
                 tmp_n_iqr = self.default_threshold_params["n_iqr"]
 
             tmp_blur = self.rad_par_wig.blur_lst[int(

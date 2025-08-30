@@ -14,7 +14,7 @@ def main():
 
     os.environ["QTWEBENGINE_CHROMIUM_FLAGS"] = "--no-sandbox"
 
-    print("\n platform.system()", platform.system())
+    logging.info("platform.system()" + str(platform.system()))
     if platform.system() == "Windows":
         win_str = "true"
 
@@ -23,7 +23,6 @@ def main():
         os.environ["QT_QPA_PLATFORM"] = "xcb"
         os.environ["WAYLAND_DISPLAY"] = ""
 
-    print("win_str =", win_str, "\n")
     par_def = (
         ("limit_path", "/"),
         ("import_init", None),

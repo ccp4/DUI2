@@ -36,12 +36,6 @@ from dui2.shared_modules.format_utils import split_w_quotes
 
 def main(par_def = None, connection_out = None):
     format_utils.print_logo()
-
-    #print("os.environ[<<OMP_NUM_THREADS>>] =", os.environ["OMP_NUM_THREADS"])
-    #os.environ["OMP_NUM_THREADS"] = "1"
-    #print("os.environ[<<OMP_NUM_THREADS>>] =", os.environ["OMP_NUM_THREADS"])
-    #OMP_NUM_THREADS=1
-
     print("DUI2 Version = ", __version__)
     class ReqHandler(http.server.BaseHTTPRequestHandler):
         def do_POST(self):

@@ -47,7 +47,7 @@ class ini_data(object):
         except KeyError:
             uni_url = None
 
-        print("URL(client side) = ", uni_url)
+        logging.info("URL(client side) = " + str(uni_url))
 
         global run_local
         try:

@@ -85,7 +85,6 @@ def main():
     )
     prcs_serv.start()
     new_port = pipe_server_1.recv()
-    print("\n time to launch client app with port =" + str(new_port) + "\n")
     if new_port is not None:
         client_par_def = (
                 ("url", 'http://127.0.0.1:' + str(new_port) + '/'),

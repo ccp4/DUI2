@@ -191,7 +191,6 @@ class ImgGraphicsScene(QGraphicsScene):
         self.draw_b_center = False
 
     def draw_beam_center(self):
-        #print("beam_xy_pair =", self.beam_xy_pair)
         x_bc = self.beam_xy_pair[0]
         y_bc = self.beam_xy_pair[1]
         l_size = 20.0
@@ -270,7 +269,6 @@ class ImgGraphicsScene(QGraphicsScene):
                     self.addEllipse(rectangle, self.overlay_pen1)
 
         except TypeError:
-            #print("Type Err Catch(draw_temp_mask)")
             logging.info("Type Err Catch(draw_temp_mask)")
 
     def __call__(
@@ -509,12 +507,8 @@ class DoImageView(QObject):
                         logging.info("no need to quit n" + str(num) + " thread")
 
         if len(self.load_thread_list) > 60:
-            #print("erased bunch of threads")
+            logging.info("erased bunch of threads")
             del self.load_thread_list[0:-45]
-            ustable = '''
-            for thread_2_remove in self.load_thread_list[0:-45]:
-                thread_2_remove.deleteLater()
-            '''
 
         self.load_thread_list.append(new_thread)
 
@@ -803,9 +797,6 @@ class DoImageView(QObject):
             )
 
         except RuntimeError:
-            '''print(
-                "Runtime Err Catch, seems to be running without this menu 1"
-            )'''
             logging.info(
                 "Runtime Err Catch, seems to be running without this menu 1"
             )
@@ -1201,7 +1192,6 @@ class DoImageView(QObject):
     def UnZoomFullImg(self, event):
         try:
             img_d1, img_d2 = self.img_d1_d2[0], self.img_d1_d2[1]
-            print("img_d1, img_d2 =", img_d1, img_d2)
             self.main_obj.window.imageView.fitInView(
                 QRect(0,0, img_d2, img_d1), aspectRadioMode=Qt.KeepAspectRatio
             )

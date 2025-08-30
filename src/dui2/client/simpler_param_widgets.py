@@ -288,9 +288,7 @@ def remove_border_quotes(str_in):
 
 
 def from_path_2_dir(str_path_in):
-    print("str_path_in =", str_path_in)
     pos = str_path_in.rfind(os.sep)
-    print("pos =", pos)
     str_path_out = str_path_in[0:pos]
     return str_path_out
 
@@ -311,7 +309,6 @@ class ImportWidget(QWidget):
         data_init = ini_data()
         self.run_local = data_init.get_if_local()
         self.win_exe = data_init.get_win_exe()
-        print("win_exe =", self.win_exe)
         sys_font = QFont()
         font_point_size = sys_font.pointSize()
         self.imp_txt = QLineEdit()
@@ -410,8 +407,6 @@ class ImportWidget(QWidget):
                     elif self.rad_but_img_file.isChecked():
                         file_path_str = build_template(str_select)[1]
 
-                print("file_path_str =", file_path_str)
-
                 self.imp_txt.setText(file_path_str)
 
             self.line_changed()
@@ -445,20 +440,13 @@ class ImportWidget(QWidget):
             )
             dic_str = lst_req.result_out()
 
-            print("dic_str =", dic_str)
-
             path_serv_limit = str(dic_str[0])
             str_already_there = from_path_2_dir(str(self.imp_txt.text()))
 
-            print("path_serv_limit =", path_serv_limit)
-            print("str_already_there =", str_already_there)
-
             if path_serv_limit in str_already_there:
-                print("here #1")
                 init_path = str_already_there
 
             else:
-                print("here #2")
                 init_path = path_serv_limit
 
             if(
@@ -2125,12 +2113,13 @@ class ExportWidget(QWidget):
     def save_mtz_on_disc(self, mtz_info):
         self.progress_label.setText("...")
         file_out = open(self.file_name, "wb")
-        #try:
-        file_out.write(mtz_info)
-        #file_out.write(bytes(mtz_info))
-        #except TypeError:
-        #    logging.info("Type Err catch (save_mtz_on_disc)")
-        #    #file_out.write(bytes(mtz_info))
+        try:
+            file_out.write(mtz_info)
+
+        except TypeError:
+            logging.info("Type Err catch (save_mtz_on_disc)")
+            file_out.write(bytes(mtz_info, 'utf-8'))
+
         file_out.close()
 
     def restore_p_label(self):
@@ -2246,12 +2235,13 @@ class MergeWidget(QWidget):
     def save_mtz_on_disc(self, mtz_info):
         self.progress_label.setText("...")
         file_out = open(self.file_name, "wb")
+
         try:
             file_out.write(mtz_info)
 
         except TypeError:
             logging.info("Type Err catch (save_mtz_on_disc)")
-            #file_out.write(bytes(mtz_info))
+            file_out.write(bytes(mtz_info, 'utf-8'))
 
         file_out.close()
 

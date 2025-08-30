@@ -415,10 +415,8 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
 
             data_init = ini_data()
             limit_path = str(data_init.get_lim_path())
-
-            print("\n reqt_path =", reqt_path)
-            print("limit_path =", limit_path, "\n")
-
+            logging.info("reqt_path =" + str(reqt_path))
+            logging.info("limit_path =" + str( limit_path))
             if reqt_path[0:len(limit_path)] == limit_path:
                 try:
                     f_name_list =  sorted(os.listdir(reqt_path))
@@ -432,6 +430,7 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
                     return_list = dict_list
 
                 except NotADirectoryError:
+                    logging.info("Not A Directory Err Catch")
                     print("Not A Directory Err Catch")
                     return_list = []
 

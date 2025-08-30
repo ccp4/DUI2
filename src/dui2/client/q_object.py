@@ -672,7 +672,7 @@ class MainObject(QObject):
         self.parent_app.exit()
 
     def close_event(self):
-        print("\n aboutToQuit ... 1\n ")
+        print(" ... innit Quit")
         self.recip_latt.quit_kill_all()
         cmd = {"nod_lst":"", "cmd_str":["closed"]}
         lst_req = get_req_json_dat(
@@ -680,7 +680,7 @@ class MainObject(QObject):
         )
         resp = lst_req.result_out()
         self.do_image_view.quit_kill_all()
-        print("\n aboutToQuit ... 2 \n")
+        print(" end Quit ...")
 
     def open_tutorial(self):
         try:

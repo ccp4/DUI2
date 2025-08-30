@@ -33,10 +33,9 @@ class ReqHandler(object):
         self.tree_runner = runner_in
 
     def fake_post(self, url_dict = None, call_obj = None):
-        print("\n url_dict =" + str(url_dict))
-
+        logging.info(" url_dict(ReqHandler) =" + str(url_dict))
         tmp_cmd2lst = url_dict["cmd_lst"]
-        print("tmp_cmd2lst =" + str(tmp_cmd2lst))
+        logging.info("tmp_cmd2lst =" + str(tmp_cmd2lst))
 
         cmd_lst = []
         for inner_str in tmp_cmd2lst:
@@ -87,8 +86,6 @@ class ReqHandler(object):
 
         except KeyError:
             logging.info("no node number provided")
-            print("no node number provided")
-
 
         cmd_dict = {"nod_lst":nod_lst,
                     "lst_wt_cmd":tmp_cmd2lst}
