@@ -53,13 +53,6 @@ class MultiRunner(QObject):
         while not self.n_thread.isFinished():
             time.sleep(0.1)
 
-            needs_testing = '''
-            loop = QEventLoop()
-            QTimer.singleShot(0.1, loop.quit)
-            loop.exec()  # Waits 0.1 seconds without freezing GUI
-            '''
-
-
     def post_work(self, handler, cmd_in, obj_out):
         self.n_thread = connect_post_thread(handler, cmd_in, obj_out)
         self.thread_lst.append(self.n_thread)
@@ -67,12 +60,6 @@ class MultiRunner(QObject):
 
         while not self.n_thread.isFinished():
             time.sleep(0.1)
-
-            needs_testing = '''
-            loop = QEventLoop()
-            QTimer.singleShot(0.1, loop.quit)
-            loop.exec()  # Waits 0.1 seconds without freezing GUI
-            '''
 
 
 class MainGuiObject(QObject):
