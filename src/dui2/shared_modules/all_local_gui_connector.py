@@ -45,21 +45,32 @@ class MultiRunner(QObject):
         super(MultiRunner, self).__init__()
         self.thread_lst = []
 
-    def get_work(self, handler, cmd_in, obj_out):
-        self.n_thread = connect_get_thread(handler, cmd_in, obj_out)
-        self.thread_lst.append(self.n_thread)
-        self.n_thread.start()
+        self._my_timer = QTimer(self)
+        self._my_timer.timeout.connect(self.clean_memory)
+        self._my_timer.start(2000)
 
-        while not self.n_thread.isFinished():
+    def get_work(self, handler, cmd_in, obj_out):
+        new_thread = connect_get_thread(handler, cmd_in, obj_out)
+        new_thread.start()
+        self.thread_lst.append(new_thread)
+
+        while not new_thread.isFinished():
             time.sleep(0.1)
 
     def post_work(self, handler, cmd_in, obj_out):
-        self.n_thread = connect_post_thread(handler, cmd_in, obj_out)
-        self.thread_lst.append(self.n_thread)
-        self.n_thread.start()
+        new_thread = connect_post_thread(handler, cmd_in, obj_out)
+        self.thread_lst.append(new_thread)
+        new_thread.start()
 
-        while not self.n_thread.isFinished():
+        while not new_thread.isFinished():
             time.sleep(0.1)
+
+    def clean_memory(self):
+        for trd in self.thread_lst:
+            if trd.isFinished():
+                # del trd
+                # or
+                self.thread_lst.remove(trd)
 
 
 class MainGuiObject(QObject):
