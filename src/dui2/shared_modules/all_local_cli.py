@@ -34,7 +34,6 @@ def main(par_def = None):
 
     run_local = True
 
-
     tree_ini_path = init_param["init_path"]
     if tree_ini_path == None:
         logging.info("\n NOT GIVEN init_path")
