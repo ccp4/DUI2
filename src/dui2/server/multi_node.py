@@ -967,7 +967,7 @@ class Runner(object):
                         "skipping the string:\n" + single_line_str + "\n"
                     )
 
-        for junior_number in range(1, num_split + 1):
+        for junior_number in range(1, max_num_split + 1):
             self.find_next_number()
             new_node = CmdNode(
                 parent_lst_in = None, data_init = self.data_init
@@ -1022,8 +1022,8 @@ class Runner(object):
 
         node.set_exe_files_out()
         str_out = " Done duplicating node #" + str(node.number)
-        str_out += ", into " + str(num_split + 1) + " new nodes"
-        logging.info("\n" + str_out + "\n")
+        str_out += ", into " + str(max_num_split + 1) + " new nodes"
+        print("\n" + str_out + "\n")
 
         return lst_nod_out
 
