@@ -1594,13 +1594,13 @@ class MainObject(QObject):
             self.refresh_output()
 
     def update_after_split(self, lst_new_nods):
-        logging.info("respose_split =" + str(lst_new_nods))
+        print("\n respose_split =" + str(lst_new_nods) + "\n")
         do_pred_n_rept = bool(
             self.window.RunPedictAndReportCheckBox.checkState()
         )
         if do_pred_n_rept:
             cmd = {
-                "nod_lst":[lst_new_nods], "cmd_lst":["run_predict_n_report"]
+                "nod_lst":lst_new_nods, "cmd_lst":["run_predict_n_report"]
             }
             self.do_load_html.reset_lst_html()
             new_thrd = post_req_w_output(

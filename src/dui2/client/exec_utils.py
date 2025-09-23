@@ -411,6 +411,12 @@ class post_req_w_output(QThread):
 
                     self.usleep(1)
 
+                print("\n here #1 ")
+                print(
+                    "do_predict_n_report = " + str(self.do_predict_n_report)
+                    + "\n"
+                )
+
                 self.about_to_end.emit(self.number, self.do_predict_n_report)
 
             except requests.exceptions.RequestException:
@@ -442,6 +448,11 @@ class post_req_w_output(QThread):
                 logging.info("post_req_w_output ... Index err catch")
 
         elif '/*EOF*/' in line_str :
+            print("\n here #2 \n")
+            print(
+                "do_predict_n_report = " + str(self.do_predict_n_report)
+                + "\n"
+            )
             self.about_to_end.emit(self.number, self.do_predict_n_report)
             self.done = True
             self.exit()
@@ -449,6 +460,13 @@ class post_req_w_output(QThread):
 
         else:
             self.new_line_out.emit(line_str, self.number, "Busy")
+
+        if line_str[0:12] == "lst_nod_out:":
+                logging.info("found << lst_nod_out: >>")
+                righ_side = line_str[12:-1]
+                logging.info("righ_side = <<" + righ_side + ">>" )
+                lst_nod_out = json.loads(righ_side)
+                self.lst_out.emit(lst_nod_out)
 
 
 class CommandParamControl:

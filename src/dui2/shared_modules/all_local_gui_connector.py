@@ -30,6 +30,8 @@ class connect_post_thread(QThread):
         self.my_cmd = cmd_in
         self.my_caller = obj_out
 
+        print("my_cmd(connect_post_thread)=" + str(self.my_cmd) + "\n")
+
     def run(self):
         self.my_handler.fake_post(
             url_dict = self.my_cmd, call_obj = self
