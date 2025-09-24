@@ -1222,13 +1222,13 @@ class MainObject(QObject):
                 self.new_node.set_all_parameters(lst_of_lst)
 
             logging.info(
-                " new_node(all_items_param_changed):\n" +
-                str(self.new_node.par_lst) + "\n"
+                " new_node(all_items_param_changed):" +
+                str(self.new_node.par_lst)
             )
 
         except AttributeError:
             logging.info(
-                "Not updating parameters, no (green node or twin widget)\n"
+                "Not updating parameters, no (green node or twin widget)"
             )
 
 

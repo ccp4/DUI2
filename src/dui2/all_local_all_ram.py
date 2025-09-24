@@ -9,6 +9,7 @@ from dui2.server.init_first import ini_data as server_ini_data
 
 from dui2.shared_modules.qt_libs import *
 
+logging.basicConfig(filename='run_dui2_all_local_all_ram.log', level=logging.DEBUG)
 
 def main():
 

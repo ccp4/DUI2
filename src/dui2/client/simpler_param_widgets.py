@@ -772,7 +772,7 @@ class MaskWidget(QWidget):
         self.update_comp_label()
 
     def reset_pars(self):
-        logging.info("\n reset_pars(MaskWidget) \n")
+        logging.info("reset_pars(MaskWidget)")
         self.comp_list = []
         self.update_comp_label()
 
