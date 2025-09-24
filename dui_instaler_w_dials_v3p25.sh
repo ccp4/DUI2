@@ -13,7 +13,7 @@ printf "\n\n Installing dependency: PySide6 \n\n"
 dials.python -m pip install pyside6
 cd $INI_DIR_PATH/
 printf "\n\n Downloading Dui2 with git \n\n"
-git clone -b v2025.8.19  https://github.com/ccp4/DUI2.git
+git clone -b v2025.9.24  https://github.com/ccp4/DUI2.git
 printf "\n\n Done \n\n"
 printf "\n\n You should type:\n\n"
 printf "   source $INI_DIR_PATH/dials-v3-25-0/dials_env.sh  "
