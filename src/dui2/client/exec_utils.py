@@ -44,17 +44,17 @@ class get_request_shot(QObject):
                     self.to_return = zlib.decompress(compresed)
 
                 except zlib.error:
-                    #print("zlib. err catch (get_request_shot)")
+                    logging.info("zlib. err catch (get_request_shot)")
                     self.to_return = None
 
             except ConnectionError:
-                #print("Connection err catch  (get request shot)")
+                logging.info("Connection err catch  (get request shot)")
                 self.to_return = None
 
             except requests.exceptions.RequestException:
-                '''print(
+                logging.info(
                     "requests.exceptions.RequestException (get request shot)"
-                )'''
+                )
                 self.to_return = None
 
             self.done = True
@@ -411,10 +411,8 @@ class post_req_w_output(QThread):
 
                     self.usleep(1)
 
-                print("\n here #1 ")
-                print(
+                logging.info(
                     "do_predict_n_report = " + str(self.do_predict_n_report)
-                    + "\n"
                 )
 
                 self.about_to_end.emit(self.number, self.do_predict_n_report)
@@ -448,10 +446,8 @@ class post_req_w_output(QThread):
                 logging.info("post_req_w_output ... Index err catch")
 
         elif '/*EOF*/' in line_str :
-            print("\n here #2 \n")
-            print(
+            logging.info(
                 "do_predict_n_report = " + str(self.do_predict_n_report)
-                + "\n"
             )
             self.about_to_end.emit(self.number, self.do_predict_n_report)
             self.done = True

@@ -1594,7 +1594,7 @@ class MainObject(QObject):
             self.refresh_output()
 
     def update_after_split(self, lst_new_nods):
-        print("\n respose_split =" + str(lst_new_nods) + "\n")
+        logging.info("respose_split =" + str(lst_new_nods))
         do_pred_n_rept = bool(
             self.window.RunPedictAndReportCheckBox.checkState()
         )

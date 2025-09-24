@@ -35,7 +35,7 @@ class ReqHandler(object):
     def fake_post(self, url_dict = None, call_obj = None):
         logging.info(" url_dict(ReqHandler) =" + str(url_dict))
         tmp_cmd2lst = url_dict["cmd_lst"]
-        print("\n tmp_cmd2lst =" + str(tmp_cmd2lst) + "\n")
+        logging.info("tmp_cmd2lst =" + str(tmp_cmd2lst))
 
         cmd_lst = []
         for inner_str in tmp_cmd2lst:
