@@ -46,7 +46,9 @@ def main(par_def = None, connection_out = None):
 
             try:
                 tmp_cmd2lst = url_dict["cmd_lst"]
-                print("\n token(POST) = ", url_dict["token"], "\n")
+                token_in = url_dict["token"][0]
+                if token_in != 'dummy for now':
+                    return
 
             except KeyError:
                 logging.info(
@@ -146,8 +148,10 @@ def main(par_def = None, connection_out = None):
             url_dict = parse_qs(urlparse(url_path).query)
             try:
                 lst_wt_cmd =  url_dict["cmd_str"]
-
-                print("\n token(GET) = ", url_dict["token"], "\n")
+                token_in = url_dict["token"][0]
+                if token_in != 'dummy for now':
+                    print("wrong  token")
+                    return
 
             except KeyError:
                 logging.info(
