@@ -38,7 +38,11 @@ class get_request_shot(QObject):
             try:
                 data_init = ini_data()
                 uni_url = data_init.get_url()
-                req = requests.get(uni_url, stream = True, params = params_in)
+                token = data_init.get_token()
+                params_out = dict(params_in)
+                params_out["token"] = token
+
+                req = requests.get(uni_url, stream = True, params = params_out)
                 compresed = req.content
                 try:
                     self.to_return = zlib.decompress(compresed)
@@ -87,9 +91,13 @@ class get_req_json_dat(QObject):
         if main_handler == None:
             data_init = ini_data()
             uni_url = data_init.get_url()
+            token = data_init.get_token()
             try:
+                params_out = dict(params_in)
+                params_out["token"] = token
+
                 req_get = requests.get(
-                    uni_url, stream = True, params = params_in, timeout = 25
+                    uni_url, stream = True, params = params_out, timeout = 25
                 )
                 logging.info("starting request")
                 str_lst = ''
@@ -149,6 +157,7 @@ class get_request_real_time(QThread):
         logging.info("params_in(get_request_real_time) =" + str(params_in))
         data_init = ini_data()
         self.url = data_init.get_url()
+        self.token = data_init.get_token()
         self.params = params_in
         self.my_handler = main_handler
         logging.info("params_in(get_request_real_time) got here" + str(params_in))
@@ -156,8 +165,11 @@ class get_request_real_time(QThread):
     def run(self):
         if self.my_handler == None:
             try:
+                params_out = dict(self.params)
+                params_out["token"] = self.token
+
                 req_get = requests.get(
-                    self.url, stream = True, params = self.params, timeout = 40
+                    self.url, stream = True, params = params_out, timeout = 40
                 )
                 req_head = req_get.headers.get('content-length', 0)
                 total_size = int(req_head) + 1
@@ -360,6 +372,7 @@ class post_req_w_output(QThread):
 
         data_init = ini_data()
         self.uni_url = data_init.get_url()
+        self.token = data_init.get_token()
         self.cmd = cmd_in
         self.my_handler = main_handler
         self.number = None
@@ -368,8 +381,11 @@ class post_req_w_output(QThread):
     def run(self):
         if self.my_handler == None:
             try:
+                data_in = dict(self.cmd)
+                data_in["token"] = self.token
+
                 self.request = requests.post(
-                    self.uni_url, stream = True, data = self.cmd
+                    self.uni_url, stream = True, data = data_in
                 )
 
                 line_str = ''

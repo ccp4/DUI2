@@ -46,9 +46,12 @@ def main(par_def = None, connection_out = None):
 
             try:
                 tmp_cmd2lst = url_dict["cmd_lst"]
+                print("\n token(POST) = ", url_dict["token"], "\n")
 
             except KeyError:
-                logging.info("no command in request (KeyError)")
+                logging.info(
+                    "no command or no token in POST request (Key Err Catch)"
+                )
                 try:
                     self.send_header('Content-type', 'text/plain')
                     self.end_headers()
@@ -144,8 +147,12 @@ def main(par_def = None, connection_out = None):
             try:
                 lst_wt_cmd =  url_dict["cmd_str"]
 
+                print("\n token(GET) = ", url_dict["token"], "\n")
+
             except KeyError:
-                logging.info("no command in request (Key err catch )")
+                logging.info(
+                    "no command or no token in GET request (Key Err Catch)"
+                )
                 try:
                     self.send_header('Content-type', 'text/plain')
                     self.end_headers()

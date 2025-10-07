@@ -49,6 +49,9 @@ class ini_data(object):
 
         logging.info("URL(client side) = " + str(uni_url))
 
+        global token
+        token = "dummy for now"
+
         global run_local
         try:
             if init_param["all_local"].lower() == "true":
@@ -92,6 +95,9 @@ class ini_data(object):
 
     def get_url(self):
         return uni_url
+
+    def get_token(self):
+        return token
 
     def get_tmp_dir(self):
         return tmp_dir
