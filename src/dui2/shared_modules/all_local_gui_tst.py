@@ -7,6 +7,8 @@ from dui2.server.data_n_json import iter_dict
 from dui2.server import multi_node
 from dui2.server.init_first import ini_data
 
+#TODO: check if this module is needed at all
+
 class connect_thread(QThread):
     logging.infoing = Signal(str)
     def __init__(self, handler, cmd_in):

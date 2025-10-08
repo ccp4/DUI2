@@ -43,6 +43,8 @@ def main():
     data_init.set_tmp_dir(tmp_dat_dir)
 
     init_param = format_utils.get_par(par_def, sys.argv[1:])
+
+    #TODO: check if the following line is useful
     run_local = True
 
     nodes_dir = "run_dui2_nodes"
