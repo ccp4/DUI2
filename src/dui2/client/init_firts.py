@@ -50,7 +50,7 @@ class ini_data(object):
         logging.info("URL(client side) = " + str(uni_url))
 
         global token
-        token = "dummy for now"
+        token = 'dummy_4_now'
 
         global run_local
         try:

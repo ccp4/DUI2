@@ -47,7 +47,7 @@ def main(par_def = None, connection_out = None):
             try:
                 tmp_cmd2lst = url_dict["cmd_lst"]
                 token_in = url_dict["token"][0]
-                if not run_local and token_in != 'dummy for now':
+                if not run_local and token_in != 'dummy_4_now':
                     print("\n request (POST) with wrong token \n")
                     return
 
@@ -150,7 +150,7 @@ def main(par_def = None, connection_out = None):
             try:
                 lst_wt_cmd =  url_dict["cmd_str"]
                 token_in = url_dict["token"][0]
-                if not run_local and token_in != 'dummy for now':
+                if not run_local and token_in != 'dummy_4_now':
                     print("\n request (GET) with wrong token \n")
                     return
 
