@@ -11,6 +11,7 @@ server_par_def = (
     #("host", "serverip"),
     ("all_local", "false"),
     ("windows_exe", "false"),
+    ("token", "dummy_4_now"),
 )
 
 def main():

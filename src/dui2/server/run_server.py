@@ -46,8 +46,8 @@ def main(par_def = None, connection_out = None):
 
             try:
                 tmp_cmd2lst = url_dict["cmd_lst"]
-                token_in = url_dict["token"][0]
-                if not run_local and token_in != 'dummy_4_now':
+                token_from_url = url_dict["token"][0]
+                if not run_local and token_from_url != token_from_cli:
                     print("\n request (POST) with wrong token \n")
                     return
 
@@ -149,8 +149,8 @@ def main(par_def = None, connection_out = None):
             url_dict = parse_qs(urlparse(url_path).query)
             try:
                 lst_wt_cmd =  url_dict["cmd_str"]
-                token_in = url_dict["token"][0]
-                if not run_local and token_in != 'dummy_4_now':
+                token_from_url = url_dict["token"][0]
+                if not run_local and token_from_url != token_from_cli:
                     print("\n request (GET) with wrong token \n")
                     return
 
@@ -269,6 +269,9 @@ def main(par_def = None, connection_out = None):
 
     data_init = ini_data()
     data_init.set_data(par_def)
+
+    token_from_cli = data_init.get_token()
+    print("token_from_cli =", token_from_cli)
 
     init_param = format_utils.get_par(par_def, sys.argv[1:])
     logging.info("init_param(server) =" + str(init_param))

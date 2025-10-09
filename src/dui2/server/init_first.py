@@ -33,11 +33,18 @@ class ini_data(object):
             logging.info(msg_txt)
             print(msg_txt)
 
+        global token
+        token = 'dummy_4_now'
+        token = init_param["token"]
+
     def get_win_exe(self):
         return win_exe
 
     def get_lim_path(self):
         return lim_pth
+
+    def get_token(self):
+        return token
 
 
 if __name__ == "__main__":

@@ -20,6 +20,7 @@ def main():
         win_str = "true"
 
     else:
+        #TODO: test this variables on m1 mac
         win_str = "false"
         os.environ["QT_QPA_PLATFORM"] = "xcb"
         os.environ["WAYLAND_DISPLAY"] = ""
