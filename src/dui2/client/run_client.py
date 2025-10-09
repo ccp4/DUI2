@@ -45,6 +45,9 @@ def main(par_def = None):
     data_init.set_data(par_def)
     uni_url = str(data_init.get_url())
 
+    token_from_cli = data_init.get_token()
+    print("token(client side)=", token_from_cli)
+
     tmp_dat_dir = format_utils.create_tmp_dir()
     logging.info("creating " + str(tmp_dat_dir) + "for temporary files")
 

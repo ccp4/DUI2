@@ -92,6 +92,7 @@ def main():
                 ("import_init", None),
                 ("all_local", "true"),
                 ("windows_exe", win_str),
+                ("token", "dummy_4_now"),
         )
         run_client.main(client_par_def)
         prcs_serv.join()

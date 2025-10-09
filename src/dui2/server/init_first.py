@@ -34,7 +34,6 @@ class ini_data(object):
             print(msg_txt)
 
         global token
-        token = 'dummy_4_now'
         token = init_param["token"]
 
     def get_win_exe(self):

@@ -271,7 +271,7 @@ def main(par_def = None, connection_out = None):
     data_init.set_data(par_def)
 
     token_from_cli = data_init.get_token()
-    print("token_from_cli =", token_from_cli)
+    print("token(server side)=", token_from_cli)
 
     init_param = format_utils.get_par(par_def, sys.argv[1:])
     logging.info("init_param(server) =" + str(init_param))

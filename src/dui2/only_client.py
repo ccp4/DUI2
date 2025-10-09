@@ -12,6 +12,7 @@ def main():
         ("all_local", "false"),
         ("import_init", None),
         ("windows_exe", "false"),
+        ("token", "dummy_4_now"),
     )
     run_client.main(par_def)
     print("Closing client naturally")

@@ -30,6 +30,7 @@ def main():
         ("import_init", None),
         ("all_local", "true"),
         ("windows_exe", win_str),
+        ("token", "dummy_4_now"),
     )
     data_init = ini_data()
     data_init.set_data(par_def = par_def)
