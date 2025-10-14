@@ -2,9 +2,8 @@ from urllib.parse import urlparse, parse_qs
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json, sys
 
-#from dui2 import only_server
-
-from sever_side import AuthSystem
+from dui2 import only_server
+from dui2.multi_user.sever_side import AuthSystem
 
 """ The HTTP request handler """
 class RequestHandler(BaseHTTPRequestHandler):
@@ -50,6 +49,8 @@ class RequestHandler(BaseHTTPRequestHandler):
         username = url_dict["data_user"]
         password = url_dict["data_pass"]
 
+        do_launch_dui2 = False
+
         if command == 'register':
             success, message = self.auth.create_user(username, password)
             print(f"Result: {message}")
@@ -58,7 +59,7 @@ class RequestHandler(BaseHTTPRequestHandler):
             success, message = self.auth.login(username, password)
             if success:
                 print(f"Login successful! Your token: {message}")
-                #only_server.main()
+                do_launch_dui2 = True
 
             else:
                 print(f"Login failed: {message}")
@@ -70,6 +71,9 @@ class RequestHandler(BaseHTTPRequestHandler):
             resp_dict = {"success":False, "message":"command not found"}
 
         self.send_ok_dict(body = resp_dict)
+
+        if do_launch_dui2:
+            only_server.main()
 
     def do_GET(self):
         print("do_GET")
@@ -106,7 +110,7 @@ class RequestHandler(BaseHTTPRequestHandler):
 
 def main():
     ip_adr = "127.0.0.1"
-    port_num = 45678
+    port_num = 34567
     httpd = HTTPServer((ip_adr, port_num), RequestHandler)
     full_url = "http://" + ip_adr + ":" + str(port_num)
     print("Hosting server on:", full_url )
@@ -115,8 +119,4 @@ def main():
 
     except KeyboardInterrupt:
         print(" Keyboard Interrupt ")
-
-if __name__ == "__main__":
-    print("Starting server")
-    main()
 

@@ -62,7 +62,7 @@ class Form(QWidget):
         print("obj_dat =", obj_dat)
         try:
             req_post = requests.post(
-                "http://127.0.0.1:45678", data = json.dumps(obj_dat)
+                "http://127.0.0.1:34567", data = json.dumps(obj_dat)
             )
             lst_out = req_post.content
             print("lst_out =" + str(json.loads(lst_out)))
