@@ -1,12 +1,14 @@
 from urllib.parse import urlparse, parse_qs
 from http.server import BaseHTTPRequestHandler, HTTPServer
-import json
+import json, sys
+
+#from dui2 import only_server
 
 from sever_side import AuthSystem
 
 """ The HTTP request handler """
 class RequestHandler(BaseHTTPRequestHandler):
-
+    auth = AuthSystem()
     def _send_cors_headers(self):
         ''' Sets headers required for CORS '''
         self.send_header("Access-Control-Allow-Origin", "*")
@@ -49,13 +51,15 @@ class RequestHandler(BaseHTTPRequestHandler):
         password = url_dict["data_pass"]
 
         if command == 'register':
-            success, message = auth.create_user(username, password)
+            success, message = self.auth.create_user(username, password)
             print(f"Result: {message}")
 
         elif command == 'login':
-            success, message = auth.login(username, password)
+            success, message = self.auth.login(username, password)
             if success:
                 print(f"Login successful! Your token: {message}")
+                #only_server.main()
+
             else:
                 print(f"Login failed: {message}")
 
@@ -100,11 +104,7 @@ class RequestHandler(BaseHTTPRequestHandler):
         self.send_ok_dict(body = resp_dict)
 
 
-if __name__ == "__main__":
-    print("Starting server")
-
-    auth = AuthSystem()
-
+def main():
     ip_adr = "127.0.0.1"
     port_num = 45678
     httpd = HTTPServer((ip_adr, port_num), RequestHandler)
@@ -115,3 +115,8 @@ if __name__ == "__main__":
 
     except KeyboardInterrupt:
         print(" Keyboard Interrupt ")
+
+if __name__ == "__main__":
+    print("Starting server")
+    main()
+
