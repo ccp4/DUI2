@@ -65,7 +65,8 @@ class Form(QWidget):
                 "http://127.0.0.1:34567", data = json.dumps(obj_dat)
             )
             lst_out = req_post.content
-            print("lst_out =" + str(json.loads(lst_out)))
+            dict_resp = json.loads(lst_out)
+            print("lst_out =" + str(dict_resp))
 
         except requests.exceptions.RequestException:
             print(

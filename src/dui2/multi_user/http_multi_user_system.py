@@ -76,8 +76,10 @@ class RequestHandler(BaseHTTPRequestHandler):
 
         self.send_ok_dict(body = resp_dict)
 
+        tmp_off = '''
         if do_launch_dui2:
             only_server.main()
+        '''
 
     def do_GET(self):
         print("do_GET")
