@@ -1,5 +1,9 @@
 from urllib.parse import urlparse, parse_qs
-from http.server import BaseHTTPRequestHandler, HTTPServer
+from http.server import BaseHTTPRequestHandler#, HTTPServer
+
+import http.server, socketserver
+
+
 import json, sys
 
 from dui2 import only_server
@@ -111,12 +115,20 @@ class RequestHandler(BaseHTTPRequestHandler):
 def main():
     ip_adr = "127.0.0.1"
     port_num = 34567
-    httpd = HTTPServer((ip_adr, port_num), RequestHandler)
-    full_url = "http://" + ip_adr + ":" + str(port_num)
-    print("Hosting server on:", full_url )
-    try:
-        httpd.serve_forever()
 
-    except KeyboardInterrupt:
-        print(" Keyboard Interrupt ")
+    socketserver.ThreadingTCPServer.allow_reuse_address = True
+
+    with socketserver.ThreadingTCPServer(
+        (ip_adr, port_num), RequestHandler
+    ) as httpd:
+        print("Hosting server on: \n http://" + ip_adr + ":" + str(port_num))
+        try:
+            httpd.serve_forever()
+
+        except KeyboardInterrupt:
+            print(" Interrupted with Keyboard ")
+            httpd.server_close()
+
+
+
 
