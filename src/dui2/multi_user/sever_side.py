@@ -2,7 +2,7 @@ import hashlib, secrets, getpass
 import os, json
 from datetime import datetime
 
-class AuthSystem:
+class AuthSystem(object):
     def __init__(self, filename = "users_data.json"):
         self.filename = filename
         self.users = self.load_data()

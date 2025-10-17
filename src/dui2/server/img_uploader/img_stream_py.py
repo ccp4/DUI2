@@ -306,7 +306,7 @@ def mask_threshold_2_slise(
         return small_arr
 
 
-class RadialProfileThresholdDebug:
+class RadialProfileThresholdDebug(object):
     # The radial_profile threshold algorithm does not have an associated
     # 'Debug' class. It does not create the same set of intermediate images
     # as the dispersion algorithms, so we can delegate to a

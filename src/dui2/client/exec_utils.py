@@ -481,7 +481,7 @@ class post_req_w_output(QThread):
                 self.lst_out.emit(lst_nod_out)
 
 
-class CommandParamControl:
+class CommandParamControl(object):
     '''
     keeps track of command to run with parameters included
     '''
