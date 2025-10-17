@@ -12,6 +12,7 @@ from dui2.multi_user.sever_side import AuthSystem
 """ The HTTP request handler """
 class RequestHandler(BaseHTTPRequestHandler):
     auth = AuthSystem()
+    lst_dui2_servers = []
     def _send_cors_headers(self):
         ''' Sets headers required for CORS '''
         self.send_header("Access-Control-Allow-Origin", "*")
@@ -76,10 +77,10 @@ class RequestHandler(BaseHTTPRequestHandler):
 
         self.send_ok_dict(body = resp_dict)
 
-        tmp_off = '''
         if do_launch_dui2:
-            only_server.main()
-        '''
+            new_dui2_server = only_server.main()
+            self.lst_dui2_servers.append(new_dui2_server)
+
 
     def do_GET(self):
         print("do_GET")
