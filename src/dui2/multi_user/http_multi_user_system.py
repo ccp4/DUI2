@@ -78,7 +78,7 @@ class RequestHandler(BaseHTTPRequestHandler):
         self.send_ok_dict(body = resp_dict)
 
         if do_launch_dui2:
-            new_dui2_server = only_server.main()
+            new_dui2_server = only_server.main(do_join = False)
             self.lst_dui2_servers.append(new_dui2_server)
 
 

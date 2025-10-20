@@ -14,20 +14,21 @@ server_par_def = (
     ("token", "dummy_4_now"),
 )
 
-def main():
+def main(do_join = True):
     pipe_server_1, pipe_server_2 = Pipe()
     prcs_serv = Process(
         target = run_server.main,
         args = (server_par_def, pipe_server_2)
     )
     prcs_serv.start()
-    try:
-        new_port = pipe_server_1.recv()
-        print("# time to launch client app with port =" +  str(new_port))
-        prcs_serv.join()
-        print("Closing server naturally")
 
-    except KeyboardInterrupt:
-        print("Interrupted with Keyboard, parent event")
+    new_port = pipe_server_1.recv()
+    print("# time to launch client app with port =" +  str(new_port))
+    if do_join:
+        try:
+            prcs_serv.join()
+            print("Closing server naturally")
 
+        except KeyboardInterrupt:
+            print("Interrupted with Keyboard, parent event")
 
