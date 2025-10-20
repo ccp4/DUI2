@@ -78,9 +78,11 @@ class Form(QWidget):
                 "something went wrong  << JSONDecodeError >> "
             )
 
-
-if __name__ == '__main__':
+def main():
     app = QApplication(sys.argv)
     form = Form()
     sys.exit(app.exec_())
+
+if __name__ == '__main__':
+    main()
 
