@@ -1,5 +1,7 @@
 import sys, os, requests, json
 
+from dui2 import only_client
+
 try:
     from PySide6 import QtUiTools
     from PySide6.QtCore import *
@@ -40,10 +42,13 @@ class Form(QWidget):
         self.show()
 
     def login_clicked(self):
-        self.post_clicked(new_command = "login")
+        dict_resp = self.post_clicked(new_command = "login")
+        print("dict_resp(login) =" + str(dict_resp))
+        #sys.exit(only_client.main())
 
     def register_clicked(self):
-        self.post_clicked(new_command = "register")
+        dict_resp = self.post_clicked(new_command = "register")
+        print("dict_resp(register) =" + str(dict_resp))
 
     def post_clicked(self, new_command):
         print("Post clicked")
@@ -66,7 +71,7 @@ class Form(QWidget):
             )
             lst_out = req_post.content
             dict_resp = json.loads(lst_out)
-            print("lst_out =" + str(dict_resp))
+            return dict_resp
 
         except requests.exceptions.RequestException:
             print(
