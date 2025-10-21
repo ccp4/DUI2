@@ -32,3 +32,6 @@ def main(do_join = True):
         except KeyboardInterrupt:
             print("Interrupted with Keyboard, parent event")
 
+    else:
+        print("\n launched from multi-user manager \n")
+
