@@ -44,16 +44,22 @@ class Form(QWidget):
     def login_clicked(self):
         dict_resp = self.post_clicked(new_command = "login")
         print("dict_resp(login) =" + str(dict_resp))
+        try:
+            if dict_resp['body']['success']:
+                new_token = dict_resp['body']['message']
 
-        if dict_resp['body']['success']:
-            new_token = dict_resp['body']['message']
+                #cutting the last part from ~/ ... /DUI2/src/dui2/only_client.py
+                dui_main_path = str(only_client.__file__)[:-20]
+                code_path = dui_main_path + os.sep + "run_dui2_client.py"
 
-            #cutting the last part from ~/ ... /DUI2/src/dui2/only_client.py
-            dui_main_path = str(only_client.__file__)[:-20]
-            code_path = dui_main_path + os.sep + "run_dui2_client.py"
+                print("\n time to run:", sys.executable, " ", code_path)
+                print("with new_token =", new_token, "\n")
 
-            print("\n time to run:", sys.executable, " ", code_path)
-            print("with new_token =", new_token, "\n")
+            else:
+                print("\n failed to login \n")
+
+        except TypeError:
+            print("something went wrong  << TypeError >>")
 
     def register_clicked(self):
         dict_resp = self.post_clicked(new_command = "register")

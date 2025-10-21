@@ -78,6 +78,9 @@ class RequestHandler(BaseHTTPRequestHandler):
         self.send_ok_dict(body = resp_dict)
 
         if do_launch_dui2:
+            #TODO: consider launching a separated process only if you can
+            #TODO: get or pass the token, instead of the next line
+
             new_dui2_server = only_server.main(do_join = False)
             self.lst_dui2_servers.append(new_dui2_server)
 
