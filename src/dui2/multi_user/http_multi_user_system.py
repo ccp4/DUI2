@@ -4,7 +4,7 @@ from http.server import BaseHTTPRequestHandler#, HTTPServer
 import http.server, socketserver
 
 
-import json, sys
+import json, sys, os, subprocess
 
 from dui2 import only_server
 from dui2.multi_user.sever_side import AuthSystem
@@ -62,9 +62,17 @@ class RequestHandler(BaseHTTPRequestHandler):
             success, message = self.auth.login(username, password)
             if success:
                 print(f"Login successful! Your token: {message}")
-                #TODO: consider launching a separated process only if you can
-                #TODO: get or pass the token, instead of the next line
-                new_dui2_server = only_server.main(do_join = False)
+
+                dui_main_path = str(only_server.__file__)[:-20]
+                code_path = dui_main_path + os.sep + "run_dui2_server.py"
+
+                print("\n time to run:", sys.executable, " ", code_path)
+                print("with new_token =", message, "\n")
+
+                cmd_lst = [str(sys.executable), str(code_path)]
+                new_dui2_server = subprocess.Popen(
+                    args = cmd_lst, shell = False
+                )
                 self.lst_dui2_servers.append(new_dui2_server)
 
             else:
