@@ -54,8 +54,6 @@ class RequestHandler(BaseHTTPRequestHandler):
         username = url_dict["data_user"]
         password = url_dict["data_pass"]
 
-        do_launch_dui2 = False
-
         if command == 'register':
             success, message = self.auth.create_user(username, password)
             print(f"Result: {message}")
@@ -64,7 +62,10 @@ class RequestHandler(BaseHTTPRequestHandler):
             success, message = self.auth.login(username, password)
             if success:
                 print(f"Login successful! Your token: {message}")
-                do_launch_dui2 = True
+                #TODO: consider launching a separated process only if you can
+                #TODO: get or pass the token, instead of the next line
+                new_dui2_server = only_server.main(do_join = False)
+                self.lst_dui2_servers.append(new_dui2_server)
 
             else:
                 print(f"Login failed: {message}")
@@ -76,14 +77,6 @@ class RequestHandler(BaseHTTPRequestHandler):
             resp_dict = {"success":False, "message":"command not found"}
 
         self.send_ok_dict(body = resp_dict)
-
-        if do_launch_dui2:
-            #TODO: consider launching a separated process only if you can
-            #TODO: get or pass the token, instead of the next line
-
-            new_dui2_server = only_server.main(do_join = False)
-            self.lst_dui2_servers.append(new_dui2_server)
-
 
     def do_GET(self):
         print("do_GET")
