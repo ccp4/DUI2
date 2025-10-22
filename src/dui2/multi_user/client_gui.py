@@ -48,16 +48,13 @@ class Form(QWidget):
         print("dict_resp(login) =" + str(dict_resp))
         try:
             if dict_resp['body']['success']:
-                new_token = dict_resp['body']['message']
+                token = dict_resp['body']['message']['token']
 
                 #cutting the last part from ~/ ... /DUI2/src/dui2/only_client.py
                 dui_main_path = str(only_client.__file__)[:-20]
                 code_path = dui_main_path + os.sep + "run_dui2_client.py"
-
-                print("\n time to run:", sys.executable, " ", code_path)
-                print("with new_token =", new_token, "\n")
-
-                cmd_lst = [str(sys.executable), str(code_path)]
+                token_str = "token=" + str(token)
+                cmd_lst = [str(sys.executable), str(code_path), token_str]
                 new_proc = subprocess.Popen(args = cmd_lst, shell = False)
                 self.lst_procs.append(new_proc)
 
