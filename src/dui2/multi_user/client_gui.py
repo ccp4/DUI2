@@ -1,4 +1,4 @@
-import sys, os, requests, json
+import sys, os, requests, json, subprocess
 
 from dui2 import only_client
 
@@ -39,6 +39,8 @@ class Form(QWidget):
         low_h_layout.addWidget(self.register_button)
         main_box.addLayout(low_h_layout)
         self.setLayout(main_box)
+
+        self.lst_procs = []
         self.show()
 
     def login_clicked(self):
@@ -54,6 +56,10 @@ class Form(QWidget):
 
                 print("\n time to run:", sys.executable, " ", code_path)
                 print("with new_token =", new_token, "\n")
+
+                cmd_lst = [str(sys.executable), str(code_path)]
+                new_proc = subprocess.Popen(args = cmd_lst, shell = False)
+                self.lst_procs.append(new_proc)
 
             else:
                 print("\n failed to login \n")
@@ -89,14 +95,10 @@ class Form(QWidget):
             return dict_resp
 
         except requests.exceptions.RequestException:
-            print(
-                "something went wrong  << RequestException >> "
-            )
+            print("something went wrong  << RequestException >> ")
 
         except json.decoder.JSONDecodeError:
-            print(
-                "something went wrong  << JSONDecodeError >> "
-            )
+            print("something went wrong  << JSONDecodeError >> ")
 
 def main():
     app = QApplication(sys.argv)

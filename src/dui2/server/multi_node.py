@@ -616,6 +616,9 @@ class CmdNode(object):
                 "attempting to stop the execution of node" + str(self.number)
             )
             try:
+
+                #TODO consider using directly self.my_proc.kill() instead of
+                #TODO the next lines
                 pid_num = self.my_proc.pid
                 main_proc = psutil.Process(pid_num)
                 for child in main_proc.children(recursive=True):

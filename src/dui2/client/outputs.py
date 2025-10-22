@@ -161,6 +161,8 @@ class LaunchReciprocalLattice(QThread):
             os.remove(self.exp_path)
 
         try:
+            #TODO consider using directly self.my_proc.kill() instead of
+            #TODO the next lines
             pid_num = self.my_proc.pid
             main_proc = psutil.Process(pid_num)
             logging.info("try 2 kill children procs")
