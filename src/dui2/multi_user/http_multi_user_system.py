@@ -9,10 +9,13 @@ import json, sys, os, subprocess
 from dui2 import only_server
 from dui2.multi_user.sever_side import AuthSystem
 
+new_port = 5
+
 """ The HTTP request handler """
 class RequestHandler(BaseHTTPRequestHandler):
     auth = AuthSystem()
     lst_dui2_servers = []
+
     def _send_cors_headers(self):
         ''' Sets headers required for CORS '''
         self.send_header("Access-Control-Allow-Origin", "*")
@@ -55,8 +58,13 @@ class RequestHandler(BaseHTTPRequestHandler):
         password = url_dict["data_pass"]
 
         if command == 'register':
-            success, token_or_message = self.auth.create_user(username, password)
+            success, token_or_message = self.auth.create_user(
+                username, password
+            )
             print(f"Result: {token_or_message}")
+            msg_dict = {
+             "token":token_or_message,
+            }
 
         elif command == 'login':
             success, token_or_message = self.auth.login(username, password)
@@ -68,17 +76,31 @@ class RequestHandler(BaseHTTPRequestHandler):
                 code_path = dui_main_path + os.sep + "run_dui2_server.py"
                 token_str = "token=" + str(token_or_message)
 
-                cmd_lst = [str(sys.executable), str(code_path), token_str]
+                global new_port
+                print("\n server.new_port =", new_port, "\n")
+                port_str = "port=" + str(new_port)
+
+                cmd_lst = [
+                    str(sys.executable), str(code_path), token_str, port_str
+                ]
+                print("\n Running: \n", cmd_lst, "\n")
                 new_dui2_server = subprocess.Popen(
                     args = cmd_lst, shell = False
                 )
                 self.lst_dui2_servers.append(new_dui2_server)
+                msg_dict = {
+                     "token":token_or_message,
+                     "port":new_port
+                }
+                new_port += 1
 
             else:
                 print(f"Login failed: {token_or_message}")
-
+                msg_dict = {
+                 "token":token_or_message,
+                }
         try:
-            resp_dict = {"success":success, "message":{"token":token_or_message}}
+            resp_dict = {"success":success, "message":msg_dict}
 
         except UnboundLocalError:
             resp_dict = {"success":False, "message":"Unbound Local Err Catch"}
@@ -101,10 +123,10 @@ class RequestHandler(BaseHTTPRequestHandler):
             token = url_dict['token'][0]
 
             if command == 'validate':
-                success, message = auth.validate(token)
+                success, message = self.auth.validate(token)
 
             elif command == 'logout':
-                success, message = auth.logout(token)
+                success, message = self.auth.logout(token)
 
             try:
                 resp_dict = {"success":success, "message":message}
@@ -126,14 +148,22 @@ def main():
 
     with socketserver.ThreadingTCPServer(
         (ip_adr, port_num), RequestHandler
-    ) as httpd:
+    ) as server:
+
+        #instances = RequestHandler.get_instances()
+        #print("instances =", instances)
+
         print("Hosting server on: \n http://" + ip_adr + ":" + str(port_num))
+
+        global new_port
+        new_port = port_num + 1
+
         try:
-            httpd.serve_forever()
+            server.serve_forever()
 
         except KeyboardInterrupt:
             print(" Interrupted with Keyboard ")
-            httpd.server_close()
+            server.server_close()
 
 
 

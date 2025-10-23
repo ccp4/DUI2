@@ -61,12 +61,18 @@ class Form(QWidget):
         try:
             if dict_resp['body']['success']:
                 token = dict_resp['body']['message']['token']
-
+                port =  dict_resp['body']['message']['port']
                 #cutting the last part from ~/ ... /DUI2/src/dui2/only_client.py
                 dui_main_path = str(only_client.__file__)[:-20]
                 code_path = dui_main_path + os.sep + "run_dui2_client.py"
                 token_str = "token=" + str(token)
-                cmd_lst = [str(sys.executable), str(code_path), token_str]
+                url_str = 'url=http://127.0.0.1:' + str(port) + '/'
+                cmd_lst = [
+                    str(sys.executable), str(code_path), token_str, url_str
+                ]
+
+                print("\n Running: \n", cmd_lst, "\n")
+
                 new_proc = subprocess.Popen(args = cmd_lst, shell = False)
                 self.lst_procs.append(new_proc)
 
