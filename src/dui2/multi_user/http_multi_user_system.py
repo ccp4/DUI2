@@ -61,12 +61,12 @@ class RequestHandler(BaseHTTPRequestHandler):
         elif command == 'login':
             success, token_or_message = self.auth.login(username, password)
             if success:
-                token = token_or_message
-                print(f"Login successful! Your token: {token}")
+                token_or_message = token_or_message
+                print(f"Login successful! Your token: {token_or_message}")
 
                 dui_main_path = str(only_server.__file__)[:-20]
                 code_path = dui_main_path + os.sep + "run_dui2_server.py"
-                token_str = "token=" + str(token)
+                token_str = "token=" + str(token_or_message)
 
                 cmd_lst = [str(sys.executable), str(code_path), token_str]
                 new_dui2_server = subprocess.Popen(
@@ -78,10 +78,10 @@ class RequestHandler(BaseHTTPRequestHandler):
                 print(f"Login failed: {token_or_message}")
 
         try:
-            resp_dict = {"success":success, "message":{"token":token}}
+            resp_dict = {"success":success, "message":{"token":token_or_message}}
 
         except UnboundLocalError:
-            resp_dict = {"success":False, "message":"Username already exists"}
+            resp_dict = {"success":False, "message":"Unbound Local Err Catch"}
 
         self.send_ok_dict(body = resp_dict)
 

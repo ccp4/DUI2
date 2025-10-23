@@ -1,4 +1,4 @@
-import sys, os, requests, json, subprocess
+import sys, os, requests, json, subprocess, platform
 
 from dui2 import only_client
 
@@ -15,6 +15,18 @@ except ModuleNotFoundError:
     from PySide2.QtWidgets import *
     from PySide2.QtGui import *
     print("Using PySide2 as Qt bindings")
+
+
+if platform.system() == "Windows":
+    win_str = "true"
+
+else:
+    #TODO: test this variables on m1 mac
+    win_str = "false"
+    os.environ["QT_QPA_PLATFORM"] = "xcb"
+    os.environ["WAYLAND_DISPLAY"] = ""
+
+
 
 class Form(QWidget):
     def __init__(self, parent = None):
