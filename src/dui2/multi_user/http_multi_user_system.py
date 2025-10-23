@@ -55,8 +55,8 @@ class RequestHandler(BaseHTTPRequestHandler):
         password = url_dict["data_pass"]
 
         if command == 'register':
-            success, message = self.auth.create_user(username, password)
-            print(f"Result: {message}")
+            success, token_or_message = self.auth.create_user(username, password)
+            print(f"Result: {token_or_message}")
 
         elif command == 'login':
             success, token_or_message = self.auth.login(username, password)
