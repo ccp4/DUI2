@@ -3,7 +3,7 @@ import os, json
 from datetime import datetime
 
 class AuthSystem(object):
-    def __init__(self, filename = "users_data.json"):
+    def __init__(self, filename = "run_dui2_multi_user.json"):
         self.filename = filename
         self.users = self.load_data()
         self.tokens = {}  # token -> username
