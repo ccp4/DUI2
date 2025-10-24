@@ -28,8 +28,11 @@ else:
 
 
 class Form(QWidget):
-    def __init__(self, parent = None):
+    def __init__(self, parent = None, url_ini = None):
         super(Form, self).__init__(parent)
+
+        self.main_url = url_ini
+
         main_box = QVBoxLayout()
         top_layout_1 = QHBoxLayout()
         top_layout_1.addWidget(QLabel("User"))
@@ -101,7 +104,7 @@ class Form(QWidget):
         print("obj_dat =", obj_dat)
         try:
             req_post = requests.post(
-                "http://127.0.0.1:34567", data = json.dumps(obj_dat)
+                self.main_url, data = json.dumps(obj_dat)
             )
             lst_out = req_post.content
             dict_resp = json.loads(lst_out)
@@ -116,6 +119,8 @@ class Form(QWidget):
 
 def main():
     app = QApplication(sys.argv)
-    form = Form()
+    form = Form(url_ini = "http://127.0.0.1:34567")
+    #form = Form(url_ini = "http://127.0.0.1:2345")
+
     sys.exit(app.exec_())
 
