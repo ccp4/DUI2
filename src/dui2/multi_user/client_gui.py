@@ -27,7 +27,6 @@ else:
     os.environ["WAYLAND_DISPLAY"] = ""
 
 
-
 class Form(QWidget):
     def __init__(self, parent = None):
         super(Form, self).__init__(parent)
@@ -70,7 +69,6 @@ class Form(QWidget):
                 cmd_lst = [
                     str(sys.executable), str(code_path), token_str, url_str
                 ]
-
                 print("\n Running: \n", cmd_lst, "\n")
 
                 new_proc = subprocess.Popen(args = cmd_lst, shell = False)
@@ -114,6 +112,7 @@ class Form(QWidget):
 
         except json.decoder.JSONDecodeError:
             print("something went wrong  << JSONDecodeError >> ")
+
 
 def main():
     app = QApplication(sys.argv)

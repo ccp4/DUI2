@@ -1,9 +1,6 @@
 from urllib.parse import urlparse, parse_qs
-from http.server import BaseHTTPRequestHandler#, HTTPServer
-
+from http.server import BaseHTTPRequestHandler
 import http.server, socketserver
-
-
 import json, sys, os, subprocess
 
 from dui2 import only_server
@@ -33,7 +30,6 @@ class RequestHandler(BaseHTTPRequestHandler):
         response["connection status"] = "OK"
         response["body"] = body
         print("response =", response)
-
         self.wfile.write(bytes(json.dumps(response), "utf8"))
 
     def do_POST(self):
@@ -46,9 +42,7 @@ class RequestHandler(BaseHTTPRequestHandler):
         dataLength = int(self.headers["Content-Length"])
         print("dataLength =", dataLength)
         data = self.rfile.read(dataLength)
-
         body_str = str(data.decode('utf-8'))
-
         print("body_str =", body_str)
         url_dict = json.loads(body_str)
         command = url_dict["command"]
@@ -62,9 +56,7 @@ class RequestHandler(BaseHTTPRequestHandler):
                 username, password
             )
             print(f"Result: {token_or_message}")
-            msg_dict = {
-             "token":token_or_message,
-            }
+            msg_dict = {"token":token_or_message}
 
         elif command == 'login':
             success, token_or_message = self.auth.login(username, password)
@@ -96,9 +88,11 @@ class RequestHandler(BaseHTTPRequestHandler):
 
             else:
                 print(f"Login failed: {token_or_message}")
-                msg_dict = {
-                 "token":token_or_message,
-                }
+                msg_dict = {"token":token_or_message,}
+
+        else:
+            resp_dict = {"success":False, "message":"Command Not Found"}
+
         try:
             resp_dict = {"success":success, "message":msg_dict}
 
@@ -121,7 +115,6 @@ class RequestHandler(BaseHTTPRequestHandler):
         try:
             command = url_dict['command'][0]
             token = url_dict['token'][0]
-
             if command == 'validate':
                 success, message = self.auth.validate(token)
 
@@ -143,15 +136,10 @@ class RequestHandler(BaseHTTPRequestHandler):
 def main():
     ip_adr = "127.0.0.1"
     port_num = 34567
-
     socketserver.ThreadingTCPServer.allow_reuse_address = True
-
     with socketserver.ThreadingTCPServer(
         (ip_adr, port_num), RequestHandler
     ) as server:
-
-        #instances = RequestHandler.get_instances()
-        #print("instances =", instances)
 
         print("Hosting server on: \n http://" + ip_adr + ":" + str(port_num))
 
@@ -164,7 +152,5 @@ def main():
         except KeyboardInterrupt:
             print(" Interrupted with Keyboard ")
             server.server_close()
-
-
 
 
