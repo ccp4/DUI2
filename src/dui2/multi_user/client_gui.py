@@ -1,6 +1,7 @@
 import sys, os, requests, json, subprocess, platform
 
 from dui2 import only_client
+from dui2.shared_modules import format_utils
 
 try:
     from PySide6 import QtUiTools
@@ -28,10 +29,15 @@ else:
 
 
 class Form(QWidget):
-    def __init__(self, parent = None, url_ini = None):
+    def __init__(self, parent = None, domain = None, port_num = None):
         super(Form, self).__init__(parent)
 
-        self.main_url = url_ini
+        self.main_url = domain + ":" + str(port_num)
+
+        print("\n self.main_url =", self.main_url, "\n")
+
+
+        #http://127.0.0.1:34567
 
         main_box = QVBoxLayout()
         top_layout_1 = QHBoxLayout()
@@ -102,6 +108,9 @@ class Form(QWidget):
             "data_pass":data_pass
         }
         print("obj_dat =", obj_dat)
+
+        print("self.main_url =", self.main_url)
+
         try:
             req_post = requests.post(
                 self.main_url, data = json.dumps(obj_dat)
@@ -118,9 +127,19 @@ class Form(QWidget):
 
 
 def main():
+
+
+    par_def = (
+        ("port", 34567),
+        ("domain", "http://127.0.0.1"),
+    )
+    init_param = format_utils.get_par(par_def, sys.argv[1:])
+
+    domain = init_param["domain"]
+    port_num = int(init_param["port"])
+
     app = QApplication(sys.argv)
-    form = Form(url_ini = "http://127.0.0.1:34567")
-    #form = Form(url_ini = "http://127.0.0.1:2345")
+    form = Form(parent = None, domain = domain, port_num = port_num)
 
     sys.exit(app.exec_())
 
