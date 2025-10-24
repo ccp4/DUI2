@@ -4,9 +4,8 @@ import http.server, socketserver
 import json, sys, os, subprocess
 
 from dui2 import only_server
+from dui2.shared_modules import format_utils
 from dui2.multi_user.sever_side import AuthSystem
-
-new_port = 5
 
 """ The HTTP request handler """
 class RequestHandler(BaseHTTPRequestHandler):
@@ -134,14 +133,25 @@ class RequestHandler(BaseHTTPRequestHandler):
 
 
 def main():
-    ip_adr = "127.0.0.1"
-    port_num = 34567
+    par_def = (
+        ("port", 34567),
+        ("host", "127.0.0.1"),
+        #("host", "serverip"),
+    )
+    init_param = format_utils.get_par(par_def, sys.argv[1:])
+
+    host = init_param["host"]
+    port_num = int(init_param["port"])
+
+    print("host =", host)
+    print("port_num =", port_num)
+
     socketserver.ThreadingTCPServer.allow_reuse_address = True
     with socketserver.ThreadingTCPServer(
-        (ip_adr, port_num), RequestHandler
+        (host, port_num), RequestHandler
     ) as server:
 
-        print("Hosting server on: \n http://" + ip_adr + ":" + str(port_num))
+        print("Hosting server on: \n http://" + host + ":" + str(port_num))
 
         global new_port
         new_port = port_num + 1
