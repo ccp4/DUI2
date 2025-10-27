@@ -18,22 +18,30 @@ except ModuleNotFoundError:
     print("Using PySide2 as Qt bindings")
 
 
-if platform.system() == "Windows":
-    win_str = "true"
+def url_vs_domain_plus_port(domain = None, port_num = None, url_opt = None):
+    if url_opt == None:
+        domain_ini = domain + ":"
+        main_url = domain_ini + str(port_num)
+        return domain_ini, main_url
 
-else:
-    #TODO: test this variables on m1 mac
-    win_str = "false"
-    os.environ["QT_QPA_PLATFORM"] = "xcb"
-    os.environ["WAYLAND_DISPLAY"] = ""
+    else:
+        for pos, single_char in enumerate(url_opt):
+            if single_char == ":":
+                domain_ini = url_opt[:pos + 1]
+
+        return domain_ini, url_opt
 
 
 class Form(QWidget):
-    def __init__(self, parent = None, domain = None, port_num = None):
+    def __init__(
+        self, parent = None, domain = None, port_num = None, url_opt = None
+    ):
         super(Form, self).__init__(parent)
 
-        self.domain_ini = domain + ":"
-        self.main_url = self.domain_ini + str(port_num)
+        self.domain_ini, self.main_url = url_vs_domain_plus_port(
+            domain, port_num, url_opt
+        )
+
 
         guide_url_parts = '''
 
@@ -43,8 +51,10 @@ https://    www.    example    .com    :8080    /path/to/myfile.html    ?key1=va
 Scheme   Subdomain   Domain     TLD     Port           Path               Query String   Fragment
 
         '''
-
-        print("\n self.main_url =", self.main_url, "\n")
+        print(
+            "\n self.domain_ini, self.main_url = \n",
+            str(self.domain_ini), str(self.main_url) , "\n"
+        )
 
         main_box = QVBoxLayout()
         top_layout_1 = QHBoxLayout()
@@ -115,7 +125,6 @@ Scheme   Subdomain   Domain     TLD     Port           Path               Query 
             "data_pass":data_pass
         }
         print("obj_dat =", obj_dat)
-
         print("self.main_url =", self.main_url)
 
         try:
@@ -135,18 +144,30 @@ Scheme   Subdomain   Domain     TLD     Port           Path               Query 
 
 def main():
 
+    if platform.system() == "Windows":
+        win_str = "true"
+
+    else:
+        #TODO: test this variables on m1 mac
+        win_str = "false"
+        os.environ["QT_QPA_PLATFORM"] = "xcb"
+        os.environ["WAYLAND_DISPLAY"] = ""
 
     par_def = (
-        ("port", 34567),
         ("domain", "http://127.0.0.1"),
+        ("port", 34567),
+        ("url", None)
     )
     init_param = format_utils.get_par(par_def, sys.argv[1:])
 
     domain = init_param["domain"]
     port_num = int(init_param["port"])
+    url_opt = init_param["url"]
 
     app = QApplication(sys.argv)
-    form = Form(parent = None, domain = domain, port_num = port_num)
+    form = Form(
+        parent = None, domain = domain, port_num = port_num, url_opt = url_opt
+    )
 
     sys.exit(app.exec_())
 
