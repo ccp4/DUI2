@@ -32,12 +32,19 @@ class Form(QWidget):
     def __init__(self, parent = None, domain = None, port_num = None):
         super(Form, self).__init__(parent)
 
-        self.main_url = domain + ":" + str(port_num)
+        self.domain_ini = domain + ":"
+        self.main_url = self.domain_ini + str(port_num)
+
+        guide_url_parts = '''
+
+https://    www.    example    .com    :8080    /path/to/myfile.html    ?key1=value1    #section2
+\_____/    \__/     \______/    \__/    \___/    \_________________/    \___________/    \_______/
+   |         |          |         |       |             |                     |             |
+Scheme   Subdomain   Domain     TLD     Port           Path               Query String   Fragment
+
+        '''
 
         print("\n self.main_url =", self.main_url, "\n")
-
-
-        #http://127.0.0.1:34567
 
         main_box = QVBoxLayout()
         top_layout_1 = QHBoxLayout()
@@ -74,7 +81,7 @@ class Form(QWidget):
                 dui_main_path = str(only_client.__file__)[:-20]
                 code_path = dui_main_path + os.sep + "run_dui2_client.py"
                 token_str = "token=" + str(token)
-                url_str = 'url=http://127.0.0.1:' + str(port) + '/'
+                url_str = 'url=' + self.domain_ini + str(port) + '/'
                 cmd_lst = [
                     str(sys.executable), str(code_path), token_str, url_str
                 ]
