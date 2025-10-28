@@ -22,7 +22,7 @@ copyright (c) CCP4 - DLS
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 
-import sys, os, logging
+import sys, os, logging, platform
 
 from dui2.shared_modules.qt_libs import *
 
@@ -1489,7 +1489,6 @@ class MainImgViewObject(QObject):
         self.window.setWindowTitle("CCP4 DUIs embedded image viewer")
 
         data_init = ini_data()
-        data_init.set_data()
         self.uni_url = data_init.get_url()
 
         self.curr_nod_num = 1
@@ -1566,6 +1565,19 @@ class MainImgViewObject(QObject):
 
 
 def main(par_def = None):
+
+    if platform.system() == "Windows":
+        win_str = "true"
+
+    else:
+        #TODO: test this variables on m1 mac
+        win_str = "false"
+        os.environ["QT_QPA_PLATFORM"] = "xcb"
+        os.environ["WAYLAND_DISPLAY"] = ""
+
+    print("par_def( img_view.main) =", par_def)
+
+
     data_init = ini_data()
     data_init.set_data(par_def)
     uni_url = data_init.get_url()

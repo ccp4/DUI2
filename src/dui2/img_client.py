@@ -7,6 +7,7 @@ def main():
         ("url", 'http://127.0.0.1:45678/'),
         ("all_local", "false"),
         ("windows_exe", "false"),
+        ("token", "dummy_4_now"),
     )
 
     img_view.main(par_def)
