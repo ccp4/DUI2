@@ -109,8 +109,6 @@ class RequestHandler(BaseHTTPRequestHandler):
         url_path = self.path
         url_dict = parse_qs(urlparse(url_path).query)
 
-        print("url_path =", url_path)
-        print("url_dict =", url_dict)
         try:
             command = url_dict['command'][0]
             token = url_dict['token'][0]

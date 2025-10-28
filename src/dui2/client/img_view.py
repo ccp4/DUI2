@@ -1575,9 +1575,6 @@ def main(par_def = None):
         os.environ["QT_QPA_PLATFORM"] = "xcb"
         os.environ["WAYLAND_DISPLAY"] = ""
 
-    print("par_def( img_view.main) =", par_def)
-
-
     data_init = ini_data()
     data_init.set_data(par_def)
     uni_url = data_init.get_url()

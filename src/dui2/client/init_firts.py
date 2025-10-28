@@ -30,8 +30,6 @@ class ini_data(object):
         logging.info("ini_data.__init__()")
 
     def set_data(self, par_def = None):
-        print("par_def(ini_data ... 1) =", par_def)
-
         if par_def == None:
             par_def = (
                 ("url", 'http://127.0.0.1:45678/'),
@@ -39,8 +37,6 @@ class ini_data(object):
                 ("all_local", "False"),
                 ("windows_exe", "False"),
             )
-
-        print("par_def(ini_data ... 2) =", par_def)
 
         init_param = format_utils.get_par(par_def, sys.argv[1:])
         logging.info("init_param =" + str(init_param))

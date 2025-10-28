@@ -118,15 +118,11 @@ Scheme   Subdomain   Domain     TLD     Port           Path               Query 
         print("PostCommadEdit =", command)
         print("LineEditUser =", data_user)
         print("LineEditPass =", data_pass)
-
         obj_dat = {
             "command":command,
             "data_user":data_user,
             "data_pass":data_pass
         }
-        print("obj_dat =", obj_dat)
-        print("self.main_url =", self.main_url)
-
         try:
             req_post = requests.post(
                 self.main_url, data = json.dumps(obj_dat)
