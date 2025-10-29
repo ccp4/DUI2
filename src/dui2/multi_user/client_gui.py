@@ -42,15 +42,6 @@ class Form(QWidget):
             domain, port_num, url_opt
         )
 
-
-        guide_url_parts = '''
-
-https://    www.    example    .com    :8080    /path/to/myfile.html    ?key1=value1    #section2
-\_____/    \__/     \______/    \__/    \___/    \_________________/    \___________/    \_______/
-   |         |          |         |       |             |                     |             |
-Scheme   Subdomain   Domain     TLD     Port           Path               Query String   Fragment
-
-        '''
         print(
             "\n self.domain_ini, self.main_url = \n",
             str(self.domain_ini), str(self.main_url) , "\n"

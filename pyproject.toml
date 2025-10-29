@@ -16,7 +16,7 @@ dui2_multi_user_server = "dui2.multi_user.http_multi_user_system:main"
 dui2 = "dui2.all_local_all_ram:main"
 dui2_old_stable = "dui2.all_local:main"
 dui2_client = "dui2.only_client:main"
-
+dui2_login = "dui2.multi_user.client_gui:main"
 
 [tool.setuptools.package-data]
 "dui2.client" = ["dui_client.ui"]
