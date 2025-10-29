@@ -11,6 +11,7 @@ dependencies = [
 
 [project.scripts]
 dui2_server = "dui2.only_server:main"
+dui2_multi_user_server = "dui2.multi_user.http_multi_user_system:main"
 
 [project.gui-scripts]
 dui2 = "dui2.all_local_all_ram:main"
