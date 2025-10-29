@@ -6,7 +6,6 @@ requires-python = ">=3.7"
 dependencies = [
   'requests > 2',
   'h5py >= 3.7.0',
-  'PySide2 > 5.15.1'
 ]
 
 [project.scripts]
