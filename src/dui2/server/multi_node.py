@@ -384,7 +384,7 @@ class CmdNode(object):
             for nxt_pars in inner_lst[1:]:
                 full_string += " " + nxt_pars
 
-            logging.info("cmd (from OS shell) = " + full_string)
+            print("cmd (from OS shell) = " + full_string)
             inner_lst[0] = str(shutil.which(inner_lst[0]))
             logging.info("Running (from Python) >> " + str(inner_lst))
             try:
