@@ -383,9 +383,7 @@ class post_req_w_output(QThread):
             try:
                 data_in = dict(self.cmd)
                 data_in["token"] = self.token
-
-                print("data_in(post_req_w_output)=" + str(data_in))
-
+                logging.info("data_in(post_req_w_output)=" + str(data_in))
                 self.request = requests.post(
                     self.uni_url, stream = True, data = data_in
                 )
