@@ -1610,9 +1610,6 @@ class MainObject(QObject):
             self.refresh_output()
 
     def post_ended(self):
-
-        print("\n post_ended \n")
-
         self.request_display()
         self.check_nxt_btn()
 
