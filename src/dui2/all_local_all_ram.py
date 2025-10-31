@@ -25,6 +25,8 @@ def main():
         os.environ["QT_QPA_PLATFORM"] = "xcb"
         os.environ["WAYLAND_DISPLAY"] = ""
 
+    #    ("limit_path", "/home/ufn91840/V_Box_compartido"),
+
     par_def = (
         ("limit_path", "/"),
         ("import_init", None),

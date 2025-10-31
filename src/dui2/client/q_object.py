@@ -1575,12 +1575,8 @@ class MainObject(QObject):
             self.thrd_lst.append(new_thrd)
 
         elif do_pred_n_rept:
-
-
             self.repp_n_pred_time = time.time()
             self.new_pred_n_repo = True
-
-
             cmd = {"nod_lst":[nod_num_out], "cmd_lst":["run_predict_n_report"]}
             self.do_load_html.reset_lst_html()
             new_thrd = post_req_w_output(
@@ -1614,6 +1610,9 @@ class MainObject(QObject):
             self.refresh_output()
 
     def post_ended(self):
+
+        print("\n post_ended \n")
+
         self.request_display()
         self.check_nxt_btn()
 

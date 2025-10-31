@@ -419,18 +419,17 @@ class post_req_w_output(QThread):
                         self.new_line_out.emit(line_str, self.number, "Busy")
 
                     if line_str[0:12] == "lst_nod_out:":
-                            logging.info("found << lst_nod_out: >>")
-                            righ_side = line_str[12:-1]
-                            logging.info("righ_side = <<" + righ_side + ">>" )
-                            lst_nod_out = json.loads(righ_side)
-                            self.lst_out.emit(lst_nod_out)
+                        logging.info("found << lst_nod_out: >>")
+                        righ_side = line_str[12:-1]
+                        logging.info("righ_side = <<" + righ_side + ">>" )
+                        lst_nod_out = json.loads(righ_side)
+                        self.lst_out.emit(lst_nod_out)
 
                     self.usleep(1)
 
                 logging.info(
                     "do_predict_n_report = " + str(self.do_predict_n_report)
                 )
-
                 self.about_to_end.emit(self.number, self.do_predict_n_report)
 
             except requests.exceptions.RequestException:
@@ -474,11 +473,11 @@ class post_req_w_output(QThread):
             self.new_line_out.emit(line_str, self.number, "Busy")
 
         if line_str[0:12] == "lst_nod_out:":
-                logging.info("found << lst_nod_out: >>")
-                righ_side = line_str[12:-1]
-                logging.info("righ_side = <<" + righ_side + ">>" )
-                lst_nod_out = json.loads(righ_side)
-                self.lst_out.emit(lst_nod_out)
+            logging.info("found << lst_nod_out: >>")
+            righ_side = line_str[12:-1]
+            logging.info("righ_side = <<" + righ_side + ">>" )
+            lst_nod_out = json.loads(righ_side)
+            self.lst_out.emit(lst_nod_out)
 
 
 class CommandParamControl(object):
