@@ -2086,10 +2086,16 @@ class ExportWidget(QWidget):
         self.cur_nod_num = nod_num
 
     def download_hklout(self):
-        ini_file = os.getcwd() + os.sep + self.str_2_save
+        #ini_file = os.getcwd() + os.sep + self.str_2_save
+
+        parent_dir = os.path.dirname(os.getcwd())
+
         fileResul = QFileDialog.getSaveFileName(
-            self, "Download MTZ File", ini_file, "Intensity  (*.mtz)"
+            parent = self, caption = "Download MTZ File", dir = parent_dir,
+            filter="Intensity  (*.mtz)", selectedFilter = "intensity.mtz"
         )
+        #    self, "Download MTZ File", ini_file, "Intensity  (*.mtz)"
+
         self.file_name = fileResul[0]
         if self.file_name != '':
             self.progress_label.setText("Requesting mtz file ...")
