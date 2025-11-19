@@ -2086,15 +2086,11 @@ class ExportWidget(QWidget):
         self.cur_nod_num = nod_num
 
     def download_hklout(self):
-        #ini_file = os.getcwd() + os.sep + self.str_2_save
-
-        parent_dir = os.path.dirname(os.getcwd())
-
+        path_n_file = os.path.dirname(os.getcwd()) + os.sep + self.str_2_save
         fileResul = QFileDialog.getSaveFileName(
-            parent = self, caption = "Download MTZ File", dir = parent_dir,
+            parent = self, caption = "Download MTZ File", dir = path_n_file,
             filter="Intensity  (*.mtz)", selectedFilter = "intensity.mtz"
         )
-        #    self, "Download MTZ File", ini_file, "Intensity  (*.mtz)"
 
         self.file_name = fileResul[0]
         if self.file_name != '':
@@ -2213,10 +2209,17 @@ class MergeWidget(QWidget):
         self.cur_nod_num = nod_num
 
     def download_hklout(self):
-        ini_file = os.getcwd() + os.sep + self.exp_txt.text()
+
+        path_n_file = os.path.dirname(os.getcwd()) + os.sep + self.exp_txt.text()
         fileResul = QFileDialog.getSaveFileName(
-            self, "Download MTZ File", ini_file, "Intensity  (*.mtz)"
+            parent = self, caption = "Download MTZ File", dir = path_n_file,
+            filter="Intensity  (*.mtz)", selectedFilter = "intensity.mtz"
         )
+
+        #ini_file = os.getcwd() + os.sep + self.exp_txt.text()
+        #fileResul = QFileDialog.getSaveFileName(
+        #    self, "Download MTZ File", ini_file, "Intensity  (*.mtz)"
+        #)
         self.file_name = fileResul[0]
         if self.file_name != '':
             self.progress_label.setText("Requesting mtz file ...")
