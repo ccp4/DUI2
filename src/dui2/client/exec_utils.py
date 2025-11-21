@@ -206,6 +206,7 @@ class get_request_real_time(QThread):
                 )
                 end_data = None
 
+            print("load ended Y (get_request_real_time)")
             self.load_ended.emit(end_data)
 
         else:
@@ -215,11 +216,25 @@ class get_request_real_time(QThread):
 
     def get_it_str(self, data_comming):
         self.prog_new_stat.emit(95)
-        self.load_ended.emit(data_comming)
+        print("\n get_it_str(get_request_real_time)", "\n")
+
+        if isinstance(data_comming, str):
+            self.load_ended.emit(data_comming)
+
+        else:
+            print("type(data_comming) =", type(data_comming))
+
 
     def get_it_bin(self, data_comming):
         self.prog_new_stat.emit(95)
-        self.load_ended.emit(data_comming)
+        print("get_it_bin(get_request_real_time)")
+
+        if isinstance(data_comming, (bytes, bytearray)):
+            self.load_ended.emit(data_comming)
+
+        else:
+            print("type(data_comming) =", type(data_comming), "\n")
+            #self.load_ended.emit(None)
 
 
 def get_optional_list(cmd_str, handler_in):

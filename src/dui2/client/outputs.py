@@ -50,31 +50,22 @@ class LoadFiles(QThread):
         self.my_handler = main_handler
 
     def run(self):
-        my_cmd = {"nod_lst" : [self.cur_nod_num],
+        my_cmd_exp = {"nod_lst" : [self.cur_nod_num],
                   "cmd_str" : ["get_experiments_file"]}
         req_shot = get_request_shot(
-            params_in = my_cmd, main_handler = self.my_handler
+            params_in = my_cmd_exp, main_handler = self.my_handler
         )
         exp_req = req_shot.result_out()
-        if exp_req == None:
-            self.loading_failed.emit()
-            return
-
-        try:
-            full_exp_file = exp_req.decode('utf-8')
-
-        except AttributeError:
-            self.loading_failed.emit()
-            return
-
+        full_exp_file = exp_req.decode('utf-8')
         tmp_file = open(self.files_path_n_nod_num["tmp_exp_path"], "w")
         tmp_file.write(full_exp_file)
         tmp_file.close()
 
-        my_cmd = {"nod_lst" : [self.cur_nod_num],
+
+        my_cmd_refl = {"nod_lst" : [self.cur_nod_num],
                   "cmd_str" : ["get_reflections_file"]}
         self.req_r_time = get_request_real_time(
-            params_in = my_cmd, main_handler = self.my_handler
+            params_in = my_cmd_refl, main_handler = self.my_handler
         )
         self.req_r_time.prog_new_stat.connect(self.emit_progr)
         self.req_r_time.load_ended.connect(self.unzip_n_emit_end)
@@ -84,17 +75,13 @@ class LoadFiles(QThread):
         self.progressing.emit(percent_progr)
 
     def unzip_n_emit_end(self, full_ref_file):
+        print("type(full_ref_file) =", type(full_ref_file))
+
+        tmp_file = open(self.files_path_n_nod_num["tmp_ref_path"], "wb") # wb is the right one
+        tmp_file.write(full_ref_file)
+        tmp_file.close()
+
         self.say_good_bye()
-        try:
-            tmp_file = open(self.files_path_n_nod_num["tmp_ref_path"], "wb")
-            tmp_file.write(full_ref_file)
-            tmp_file.close()
-
-        except TypeError:
-            logging.info("Type Err catch loading refl file")
-            self.loading_failed.emit()
-            return
-
         self.files_loaded.emit(self.files_path_n_nod_num)
 
     def kill_proc(self):
@@ -104,6 +91,8 @@ class LoadFiles(QThread):
     def say_good_bye(self):
         self.req_r_time.quit()
         self.req_r_time.wait()
+
+
 
 
 class LaunchReciprocalLattice(QThread):
@@ -226,7 +215,7 @@ class HandleReciprocalLatticeView(QObject):
         self.main_obj.window.progressBar.setValue(100)
 
     def failed_loading(self):
-        logging.info("\n not running reciprocal_lattice_viewer, wrong node \n")
+        print("\n not running reciprocal_lattice_viewer, wrong node \n")
         self.main_obj.window.progressBar.setValue(0)
 
     def quit_kill_all(self):
