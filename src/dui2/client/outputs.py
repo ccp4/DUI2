@@ -93,8 +93,6 @@ class LoadFiles(QThread):
         self.req_r_time.wait()
 
 
-
-
 class LaunchReciprocalLattice(QThread):
     def __init__(self, exp_path, ref_path):
         super(LaunchReciprocalLattice, self).__init__()
@@ -143,8 +141,8 @@ class LaunchReciprocalLattice(QThread):
             logging.info("**  err catch  ** poll =" + str(self.my_proc.poll()))
 
     def kill_proc(self):
-        if os.path.exists(self.exp_path):
-            os.remove(self.exp_path)
+        if os.path.exists(self.ref_path):
+            os.remove(self.ref_path)
 
         if os.path.exists(self.exp_path):
             os.remove(self.exp_path)
