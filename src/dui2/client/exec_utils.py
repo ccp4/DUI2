@@ -138,11 +138,9 @@ class get_req_json_dat(QObject):
             main_handler.get_from_main_dui(params_in, self)
 
     def get_it_str(self, data_comming):
-        #logging.info("data_comming =", data_comming)
         self.to_return = data_comming
 
     def get_it_bin(self, data_comming):
-        #logging.info("data_comming =", data_comming)
         self.to_return = data_comming
 
     def result_out(self):

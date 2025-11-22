@@ -56,11 +56,22 @@ class LoadFiles(QThread):
             params_in = my_cmd_exp, main_handler = self.my_handler
         )
         exp_req = req_shot.result_out()
-        full_exp_file = exp_req.decode('utf-8')
+        try:
+            full_exp_file = exp_req.decode('utf-8')
+
+        except TypeError:
+            print("Type Err Catch (LoadFiles)")
+            self.loading_failed.emit()
+            return
+
+        except AttributeError:
+            print("Attribute Err Catch (LoadFiles)")
+            self.loading_failed.emit()
+            return
+
         tmp_file = open(self.files_path_n_nod_num["tmp_exp_path"], "w")
         tmp_file.write(full_exp_file)
         tmp_file.close()
-
 
         my_cmd_refl = {"nod_lst" : [self.cur_nod_num],
                   "cmd_str" : ["get_reflections_file"]}
@@ -77,9 +88,14 @@ class LoadFiles(QThread):
     def unzip_n_emit_end(self, full_ref_file):
         print("type(full_ref_file) =", type(full_ref_file))
 
-        tmp_file = open(self.files_path_n_nod_num["tmp_ref_path"], "wb") # wb is the right one
-        tmp_file.write(full_ref_file)
-        tmp_file.close()
+        try:
+            tmp_file = open(self.files_path_n_nod_num["tmp_ref_path"], "wb") # wb is the right one
+            tmp_file.write(full_ref_file)
+            tmp_file.close()
+
+        except TypeError:
+            self.loading_failed.emit()
+            return
 
         self.say_good_bye()
         self.files_loaded.emit(self.files_path_n_nod_num)
