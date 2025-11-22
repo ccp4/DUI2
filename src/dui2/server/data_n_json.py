@@ -119,6 +119,21 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
                     "FileNotFound Err catch , sending empty mtz"
                 )
 
+
+    elif uni_cmd[0] == "get_files_path":
+        for lin2go in cmd_dict["nod_lst"]:
+            try:
+                exp_path = str(step_list[lin2go]._lst_expt_out[0])
+                ref_path = str(step_list[lin2go]._lst_refl_out[0])
+                return_list.append(
+                    {"experiments":exp_path, "reflections": ref_path}
+                )
+
+            except (IndexError, FileNotFoundError):
+                logging.info(
+                    " err catch , wrong line, NOT sending experiments file"
+                )
+
     elif uni_cmd[0] == "get_experiments_file":
         for lin2go in cmd_dict["nod_lst"]:
             try:

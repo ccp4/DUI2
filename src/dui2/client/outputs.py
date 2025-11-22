@@ -41,46 +41,80 @@ class LoadFiles(QThread):
         tmp_dir = None, main_handler = None
     ):
         super(LoadFiles, self).__init__()
+
+        print("\n main_handler(LoadFiles) =", main_handler, "\n")
+
         self.cur_nod_num = cur_nod_num
-        self.files_path_n_nod_num = {
-            "tmp_exp_path"  :tmp_dir + os.sep + "req_file.expt",
-            "tmp_ref_path"  :tmp_dir + os.sep + "req_file.refl",
-            "cur_nod_num"   :int(cur_nod_num)
-        }
         self.my_handler = main_handler
+        if self.my_handler == None:
+            self.files_path_n_nod_num = {
+                "tmp_exp_path"  :tmp_dir + os.sep + "req_file.expt",
+                "tmp_ref_path"  :tmp_dir + os.sep + "req_file.refl",
+                "cur_nod_num"   :int(cur_nod_num)
+            }
+
+        else:
+            self.files_path_n_nod_num = {
+                "tmp_exp_path"  :None,
+                "tmp_ref_path"  :None,
+                "cur_nod_num"   :int(cur_nod_num)
+            }
 
     def run(self):
-        my_cmd_exp = {"nod_lst" : [self.cur_nod_num],
-                  "cmd_str" : ["get_experiments_file"]}
-        req_shot = get_request_shot(
-            params_in = my_cmd_exp, main_handler = self.my_handler
-        )
-        exp_req = req_shot.result_out()
-        try:
-            full_exp_file = exp_req.decode('utf-8')
+        if self.my_handler == None:
 
-        except TypeError:
-            print("Type Err Catch (LoadFiles)")
-            self.loading_failed.emit()
-            return
+            my_cmd_exp = {"nod_lst" : [self.cur_nod_num],
+                      "cmd_str" : ["get_experiments_file"]}
+            req_shot = get_request_shot(
+                params_in = my_cmd_exp, main_handler = self.my_handler
+            )
+            exp_req = req_shot.result_out()
+            try:
+                full_exp_file = exp_req.decode('utf-8')
 
-        except AttributeError:
-            print("Attribute Err Catch (LoadFiles)")
-            self.loading_failed.emit()
-            return
+            except TypeError:
+                print("Type Err Catch (LoadFiles)")
+                self.loading_failed.emit()
+                return
 
-        tmp_file = open(self.files_path_n_nod_num["tmp_exp_path"], "w")
-        tmp_file.write(full_exp_file)
-        tmp_file.close()
+            except AttributeError:
+                print("Attribute Err Catch (LoadFiles)")
+                self.loading_failed.emit()
+                return
 
-        my_cmd_refl = {"nod_lst" : [self.cur_nod_num],
-                  "cmd_str" : ["get_reflections_file"]}
-        self.req_r_time = get_request_real_time(
-            params_in = my_cmd_refl, main_handler = self.my_handler
-        )
-        self.req_r_time.prog_new_stat.connect(self.emit_progr)
-        self.req_r_time.load_ended.connect(self.unzip_n_emit_end)
-        self.req_r_time.start()
+            tmp_file = open(self.files_path_n_nod_num["tmp_exp_path"], "w")
+            tmp_file.write(full_exp_file)
+            tmp_file.close()
+
+            my_cmd_refl = {"nod_lst" : [self.cur_nod_num],
+                      "cmd_str" : ["get_reflections_file"]}
+            self.req_r_time = get_request_real_time(
+                params_in = my_cmd_refl, main_handler = self.my_handler
+            )
+            self.req_r_time.prog_new_stat.connect(self.emit_progr)
+            self.req_r_time.load_ended.connect(self.unzip_n_emit_end)
+            self.req_r_time.start()
+
+        else:
+            my_cmd = {"nod_lst" : [self.cur_nod_num],
+                      "cmd_str" : ["get_files_path"]}
+
+            lst_req = get_req_json_dat(
+                params_in = my_cmd, main_handler = self.my_handler
+            )
+            try:
+                data_dict = lst_req.result_out()[0]
+                self.files_path_n_nod_num["tmp_exp_path"] = data_dict["experiments"]
+                self.files_path_n_nod_num["tmp_ref_path"] = data_dict["reflections"]
+                self.files_loaded.emit(self.files_path_n_nod_num)
+
+            except TypeError:
+                print("Type Err catch while Loading data 4 R Lat View")
+                self.loading_failed.emit()
+
+            except IndexError:
+                print("Type Index catch while Loading data 4 R Lat View")
+                self.loading_failed.emit()
 
     def emit_progr(self, percent_progr):
         self.progressing.emit(percent_progr)
@@ -105,8 +139,12 @@ class LoadFiles(QThread):
         self.say_good_bye()
 
     def say_good_bye(self):
-        self.req_r_time.quit()
-        self.req_r_time.wait()
+        if self.my_handler == None:
+            self.req_r_time.quit()
+            self.req_r_time.wait()
+
+        else:
+            print("No need to kill << get_request_real_time >> QThread")
 
 
 class LaunchReciprocalLattice(QThread):

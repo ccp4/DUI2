@@ -44,6 +44,7 @@ def get_pair_list():
         ("gh",      "get_help"                              ),
         ("gmt",     "get_mtz"                               ),
         ("gt",      "get_template"                          ),
+        ("gfp",     "get_files_path"                        ),
         ("gi",      "get_image"                             ),
         ("gis",     "get_image_slice"                       ),
         ("gmi",     "get_mask_image"                        ),
