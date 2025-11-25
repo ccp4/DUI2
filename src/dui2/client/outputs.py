@@ -195,11 +195,14 @@ class LaunchReciprocalLattice(QThread):
             logging.info("**  err catch  ** poll =" + str(self.my_proc.poll()))
 
     def kill_proc(self):
+
+        tst_without_this = '''
         if os.path.exists(self.ref_path):
             os.remove(self.ref_path)
 
         if os.path.exists(self.exp_path):
             os.remove(self.exp_path)
+        '''
 
         try:
             #TODO consider using directly self.my_proc.kill() instead of
