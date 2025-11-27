@@ -359,6 +359,9 @@ class AdvancedParameters(QWidget):
             new_label = QLabel(label_str)
             new_label.setAutoFillBackground(True)
             new_label.setFont(self.norm_labl_font)
+
+            new_label.setToolTip(data_info["help"])
+
             data_info["Label"] = new_label
             new_hbox = QHBoxLayout()
             try:

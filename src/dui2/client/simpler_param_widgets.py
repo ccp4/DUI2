@@ -23,7 +23,7 @@ copyright (c) CCP4 - DLS
 
 import os, sys, json, logging
 
-default_max_nproc = 4
+#default_max_nproc = 4
 
 from dui2.shared_modules.qt_libs import *
 

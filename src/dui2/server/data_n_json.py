@@ -476,13 +476,14 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
     return return_list
 
 
-class build_json_data(object):
+class build_param_dict_data(object):
     """
     Recursively navigates the Phil objects and creates another list
     of dictionaries with info about parameters, this new list is still
     ramified with objects hierarchy
     """
-    def __init__(self, phl_obj_lst):
+    def __init__(self, phl_obj_lst, convert_nproc_2_auto):
+        self.nproc_2_auto = convert_nproc_2_auto
         self.lst_obj = []
         for single_obj in phl_obj_lst:
             nxt = self.deep_in_recurs(single_obj)
@@ -506,7 +507,6 @@ class build_json_data(object):
                 "opt_lst"       :None,
                 "default"       :None
             }
-
             if single_obj.type.phil_type == "bool":
                 param_info["type"] = "bool"
                 param_info["opt_lst"] = ["True", "False", "Auto"]
@@ -541,6 +541,9 @@ class build_json_data(object):
                     pass
 
                 param_info["default"] = tmp_str_default
+
+                if self.nproc_2_auto and param_info["name"] == "nproc":
+                    param_info["default"] = "Auto"
 
             return param_info
 
@@ -666,7 +669,15 @@ def get_param_list(cmd_str):
             "combine_experiments_params"     :phil_scope_combine_params.objects,
         }
 
-    lst_dict = build_json_data(connect_dict[cmd_str])
+    if cmd_str == "find_spots_params" or cmd_str == "integrate_params":
+        do_convertion_4_nprog = True
+
+    else:
+        do_convertion_4_nprog = False
+
+    lst_dict = build_param_dict_data(
+        connect_dict[cmd_str], do_convertion_4_nprog
+    )
     lst_phil_obj = lst_dict()
     return lst_phil_obj
 

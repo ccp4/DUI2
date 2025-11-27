@@ -717,13 +717,15 @@ class ShowLog(QObject):
                 txt2show =self.main_obj.help_msg_dict[str_cmd_key]
 
             except AttributeError:
-                txt2show = ["not runnable node"]
+                txt2show = ["..."]
+                print("Attribute Err Catch from ShowLog.show_ready_log")
 
             except KeyError:
-                txt2show = ["No help available"]
+                print("Key Err Catch from ShowLog.show_ready_log")
 
         else:
-            txt2show = ["not runnable node"]
+            txt2show = ["."]
+            print("else case  from ShowLog.show_ready_log")
 
         self.main_obj.window.incoming_text.clear()
         self.main_obj.window.incoming_text.setTextColor(self.green_color)
