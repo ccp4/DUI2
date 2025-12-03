@@ -615,8 +615,8 @@ class CommandParamControl(object):
             str_out = str(self.m_cmd_lst[lst_num])
             for par in self.par_lst[lst_num]:
                 if par["value"] == "":
-                    print(
-                        "NOT adding parameter <<", par["name"],
+                    logging.info(
+                        "NOT adding parameter << " + str(par["name"]) +
                         ">> as it has no value"
                     )
 

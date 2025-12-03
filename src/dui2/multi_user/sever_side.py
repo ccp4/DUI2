@@ -13,7 +13,10 @@ class AuthSystem(object):
             try:
                 with open(self.filename, 'r') as f:
                     return json.load(f)
-            except:
+            except (
+                json.JSONDecodeError, FileNotFoundError,
+                PermissionError, OSError
+            ):
                 return {}
         return {}
 

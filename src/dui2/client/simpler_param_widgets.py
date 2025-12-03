@@ -1258,10 +1258,9 @@ class IndexSimplerParamTab(SimpleParamTab):
         space_group_line = QLineEdit()
         # Simple validator to allow only characters in H-M symbols
 
-        #regex = QRegExp("[ABCPIFR][0-9a-d\-/:nmHR]+")
+        #FIXME here Python complains about wrong use of escape sequence
         regex = QRegularExpression("[ABCPIFR][0-9a-d\-/:nmHR]+")
 
-        #validatorHM = QRegExpValidator(regex)
         validatorHM = QRegularExpressionValidator(regex)
 
         space_group_line.setValidator(validatorHM)
@@ -1270,10 +1269,9 @@ class IndexSimplerParamTab(SimpleParamTab):
 
         unit_cell_label = QLabel("Unit cell")
         unit_cell_line = QLineEdit()
-        #regex = QRegExp("[0-9\., ]+")
+        #FIXME here Python complains about wrong use of escape sequence
         regex = QRegularExpression("[0-9\., ]+")
 
-        #validatorUC = QRegExpValidator(regex)
         validatorUC = QRegularExpressionValidator(regex)
 
         unit_cell_line.setValidator(validatorUC)
@@ -1369,7 +1367,7 @@ class SsxIndexSimplerParamTab(SimpleParamTab):
         space_group_label = QLabel("Space group")
         space_group_line = QLineEdit()
         # Simple validator to allow only characters in H-M symbols
-        #regex = QRegExp("[ABCPIFR][0-9a-d\-/:nmHR]+")
+        #FIXME here Python complains about wrong use of escape sequence
         regex = QRegularExpression("[ABCPIFR][0-9a-d\-/:nmHR]+")
 
         #validatorHM = QRegExpValidator(regex)
@@ -1381,7 +1379,7 @@ class SsxIndexSimplerParamTab(SimpleParamTab):
 
         unit_cell_label = QLabel("Unit cell")
         unit_cell_line = QLineEdit()
-        #regex = QRegExp("[0-9\., ]+")
+        #FIXME here Python complains about wrong use of escape sequence
         regex = QRegularExpression("[0-9\., ]+")
 
         #validatorUC = QRegExpValidator(regex)
@@ -2033,7 +2031,7 @@ class ExportWidget(QWidget):
             lst_par.append(["json.filename", str_value])
 
         self.str_2_save = str(str_value)
-        print("name of file to Download/Save =", self.str_2_save)
+        print("name of file to Download/Save = " + str(self.str_2_save))
 
         logging.info("lst_par(ExportWidget) = " + str(lst_par))
         self.all_items_changed.emit([lst_par])

@@ -518,6 +518,7 @@ class DoImageView(QObject):
                 thread.quit()
                 if not thread.wait(1200):  # Wait up to 1.2 seconds per thread
                     print(f"Thread {thread} did not exit gracefully")
+                    logging.info("Thread: " + str(thread) + " did not exit gracefully")
                     thread.terminate()  # Force termination if necessary
 
                 thread.wait()
@@ -895,7 +896,6 @@ class DoImageView(QObject):
 
         except AttributeError:
             logging.info("no mask to draw here")
-            #print("no mask to draw here (AttributeError)")
 
         except RuntimeError:
             logging.info(
@@ -1198,7 +1198,7 @@ class DoImageView(QObject):
             avg_scale = self.get_scale_n_set_label()
 
         except TypeError:
-            print("not ready for un-zooming")
+            print("not need to zoom-out")
 
     def scale_img(self, relative_new_scale):
         tmp_x1, tmp_y1, tmp_x2, tmp_y2 = self.det_tmp_x1_y1_x2_y2()

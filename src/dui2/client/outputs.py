@@ -41,9 +41,6 @@ class LoadFiles(QThread):
         tmp_dir = None, main_handler = None
     ):
         super(LoadFiles, self).__init__()
-
-        print("\n main_handler(LoadFiles) =", main_handler, "\n")
-
         self.cur_nod_num = cur_nod_num
         self.my_handler = main_handler
         if self.my_handler == None:
@@ -73,12 +70,12 @@ class LoadFiles(QThread):
                 full_exp_file = exp_req.decode('utf-8')
 
             except TypeError:
-                print("Type Err Catch (LoadFiles)")
+                logging.info("Type Err Catch (LoadFiles)")
                 self.loading_failed.emit()
                 return
 
             except AttributeError:
-                print("Attribute Err Catch (LoadFiles)")
+                logging.info("Attribute Err Catch (LoadFiles)")
                 self.loading_failed.emit()
                 return
 
@@ -109,25 +106,24 @@ class LoadFiles(QThread):
                 self.files_loaded.emit(self.files_path_n_nod_num)
 
             except TypeError:
-                print("Type Err catch while Loading data 4 R Lat View")
+                logging.info("Type Err catch while Loading data 4 R Lat View")
                 self.loading_failed.emit()
 
             except IndexError:
-                print("Type Index catch while Loading data 4 R Lat View")
+                logging.info("Type Index catch while Loading data 4 R Lat View")
                 self.loading_failed.emit()
 
     def emit_progr(self, percent_progr):
         self.progressing.emit(percent_progr)
 
     def unzip_n_emit_end(self, full_ref_file):
-        print("type(full_ref_file) =", type(full_ref_file))
-
         try:
             tmp_file = open(self.files_path_n_nod_num["tmp_ref_path"], "wb") # wb is the right one
             tmp_file.write(full_ref_file)
             tmp_file.close()
 
         except TypeError:
+            logging.info("Type Err Catch (LoadFiles) ... unzip")
             self.loading_failed.emit()
             return
 
@@ -135,7 +131,7 @@ class LoadFiles(QThread):
         self.files_loaded.emit(self.files_path_n_nod_num)
 
     def kill_proc(self):
-        logging.info("\n kill_proc(LoadFiles) \n")
+        logging.info("kill_proc(LoadFiles)")
         self.say_good_bye()
 
     def say_good_bye(self):
@@ -144,7 +140,7 @@ class LoadFiles(QThread):
             self.req_r_time.wait()
 
         else:
-            print("No need to kill << get_request_real_time >> QThread")
+            logging.info("No need to kill << get_request_real_time >> QThread")
 
 
 class LaunchReciprocalLattice(QThread):
@@ -270,7 +266,7 @@ class HandleReciprocalLatticeView(QObject):
         self.main_obj.window.progressBar.setValue(100)
 
     def failed_loading(self):
-        print("\n not running reciprocal_lattice_viewer, wrong node \n")
+        logging.info("not running reciprocal_lattice_viewer, wrong node")
         self.main_obj.window.progressBar.setValue(0)
 
     def quit_kill_all(self):
@@ -718,14 +714,14 @@ class ShowLog(QObject):
 
             except AttributeError:
                 txt2show = ["..."]
-                print("Attribute Err Catch from ShowLog.show_ready_log")
+                logging.info("Attribute Err Catch from ShowLog.show_ready_log")
 
             except KeyError:
-                print("Key Err Catch from ShowLog.show_ready_log")
+                logging.info("Key Err Catch from ShowLog.show_ready_log")
 
         else:
             txt2show = ["."]
-            print("else case  from ShowLog.show_ready_log")
+            logging.info("else case  from ShowLog.show_ready_log")
 
         self.main_obj.window.incoming_text.clear()
         self.main_obj.window.incoming_text.setTextColor(self.green_color)
@@ -769,12 +765,10 @@ class History_Box(QDialog):
             self.incoming_text.moveCursor(QTextCursor.End)
             self.incoming_text.insertPlainText(new_line)
 
-
         print("\n")
 
     def open_save(self):
         print("time to save")
-
         if self.win_exe:
             ext_str = ".bat"
 
@@ -797,10 +791,5 @@ class History_Box(QDialog):
 
         else:
             print("Canceled saving")
-
-
-
-
-
 
 

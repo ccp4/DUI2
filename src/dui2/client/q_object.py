@@ -989,7 +989,7 @@ class MainObject(QObject):
             except IndexError:
                 msg_str = False
 
-        print("\n local_clipboard =", self.local_clipboard)
+        print("Local clipboard =" + str(self.local_clipboard))
         if msg_str:
             clipboard_str = ""
             for single_param in self.local_clipboard[0]:
