@@ -1257,10 +1257,7 @@ class IndexSimplerParamTab(SimpleParamTab):
         space_group_label = QLabel("Space group")
         space_group_line = QLineEdit()
         # Simple validator to allow only characters in H-M symbols
-
-        #FIXME here Python complains about wrong use of escape sequence
-        regex = QRegularExpression("[ABCPIFR][0-9a-d\-/:nmHR]+")
-
+        regex = QRegularExpression("[ABCPIFR][0-9a-d-/:nmHR]+")
         validatorHM = QRegularExpressionValidator(regex)
 
         space_group_line.setValidator(validatorHM)
@@ -1269,9 +1266,7 @@ class IndexSimplerParamTab(SimpleParamTab):
 
         unit_cell_label = QLabel("Unit cell")
         unit_cell_line = QLineEdit()
-        #FIXME here Python complains about wrong use of escape sequence
-        regex = QRegularExpression("[0-9\., ]+")
-
+        regex = QRegularExpression("[0-9., ]+")
         validatorUC = QRegularExpressionValidator(regex)
 
         unit_cell_line.setValidator(validatorUC)
@@ -1367,10 +1362,7 @@ class SsxIndexSimplerParamTab(SimpleParamTab):
         space_group_label = QLabel("Space group")
         space_group_line = QLineEdit()
         # Simple validator to allow only characters in H-M symbols
-        #FIXME here Python complains about wrong use of escape sequence
-        regex = QRegularExpression("[ABCPIFR][0-9a-d\-/:nmHR]+")
-
-        #validatorHM = QRegExpValidator(regex)
+        regex = QRegularExpression("[ABCPIFR][0-9a-d-/:nmHR]+")
         validatorHM = QRegularExpressionValidator(regex)
 
         space_group_line.setValidator(validatorHM)
@@ -1379,10 +1371,7 @@ class SsxIndexSimplerParamTab(SimpleParamTab):
 
         unit_cell_label = QLabel("Unit cell")
         unit_cell_line = QLineEdit()
-        #FIXME here Python complains about wrong use of escape sequence
-        regex = QRegularExpression("[0-9\., ]+")
-
-        #validatorUC = QRegExpValidator(regex)
+        regex = QRegularExpression("[0-9., ]+")
         validatorUC = QRegularExpressionValidator(regex)
 
         unit_cell_line.setValidator(validatorUC)
