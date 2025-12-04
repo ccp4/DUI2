@@ -717,6 +717,7 @@ class ShowLog(QObject):
                 logging.info("Attribute Err Catch from ShowLog.show_ready_log")
 
             except KeyError:
+                txt2show = [":"]
                 logging.info("Key Err Catch from ShowLog.show_ready_log")
 
         else:
