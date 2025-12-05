@@ -59,7 +59,7 @@ Now we should activate our newly created environment, again replace `/PATH/TO/EN
 
 Finally clone the DUI2 source code from GitHub repository:
 
-       git clone -b v2025.9.24  https://github.com/ccp4/DUI2.git
+       git clone -b v2025.12.5  https://github.com/ccp4/DUI2.git
 
 The same tools as if installed with `curl` and `CCP4` are available, just different ways to invoke them. Remember that if you are running Dui2 from another directory, to put the full path of the `.py` file:
 
