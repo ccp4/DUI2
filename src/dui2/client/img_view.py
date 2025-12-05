@@ -1316,21 +1316,18 @@ class DoImageView(QObject):
                     self.my_scene.addRect(rectangle1, self.my_scene.overlay_pen1)
 
                 elif self.mask_comp == "circ":
-
                     dx = float(x_pos - self.mask_x_ini)
                     dy = float(y_pos - self.mask_y_ini)
-                    r = int(np.sqrt(dx * dx + dy * dy))
+                    r = float(np.sqrt(dx * dx + dy * dy) / 2.0)
+                    xc = self.mask_x_ini + dx / 2.0
+                    yc = self.mask_y_ini + dy / 2.0
+                    x1 = xc - r
+                    y1 = yc - r
                     rectangle1 = QRectF(
-                        x_pos - r, y_pos - r, 2 * r, 2 * r
+                        x1, y1, 2 * r, 2 * r
                     )
-
                     self.my_scene.addEllipse(
                         rectangle1, self.my_scene.overlay_pen1
-                    )
-
-                    self.my_scene.addLine(
-                        self.mask_x_ini, self.mask_y_ini, x_pos,
-                        y_pos, self.my_scene.overlay_pen1
                     )
 
                 elif self.mask_comp == "poly":
@@ -1391,16 +1388,18 @@ class DoImageView(QObject):
                     )
 
                 elif self.mask_comp == "circ":
-                    dx = float(self.mask_x_ini - x_pos)
-                    dy = float(self.mask_y_ini - y_pos)
-                    r = int(np.sqrt(dx * dx + dy * dy))
+                    dx = float(x_pos - self.mask_x_ini)
+                    dy = float(y_pos - self.mask_y_ini)
+                    r = int(np.sqrt(dx * dx + dy * dy) / 2)
+                    xc = int(self.mask_x_ini + dx / 2.0)
+                    yc = int(self.mask_y_ini + dy / 2.0)
 
                     self.new_mask_comp.emit(
                         {
                             "type"              : "circ" ,
-                            "x_c"               : int(x_pos) ,
-                            "y_c"               : int(y_pos) ,
-                            "r"                 : r ,
+                            "x_c"               :  xc ,
+                            "y_c"               :  yc ,
+                            "r"                 :  r  ,
                             "i23_multipanel"    : self.i23_multipanel,
                         }
                     )
