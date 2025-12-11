@@ -59,8 +59,9 @@ if __name__ == "__main__":
             'path': None,
             'cmd_str': [
                 'gtmi', str(img_num),
-                'params=' + params_str
-            ]
+                'params=' + params_str,
+            ],
+            'token': 'dummy_4_now',
         }
 
         req_get = requests.get(
