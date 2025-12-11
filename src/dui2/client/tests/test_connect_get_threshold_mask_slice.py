@@ -41,21 +41,6 @@ if __name__ == "__main__":
         ],
         'token': 'dummy_4_now',
     }
-    example_code = '''
-    'cmd_str': [
-        'gtmis', str(self.img_num),
-        'inv_scale=' + str(self.inv_scale),
-        'view_rect=' + str(self.x1) + "," + str(self.y1) +
-                 "," + str(self.x2) + "," + str(self.y2),
-        'params=' + params_str
-    ]
-
-
-{'nod_lst': [2], 'path': None, 'cmd_str': ['gtmis', '0', 'inv_scale=3', 'view_rect=0,0,2526,2462', "params={'algorithm': 'dispersion_extended', 'gain': 1.01, 'global_threshold': 0.1, 'min_count': 2, 'nsig_b': 6.2, 'nsig_s': 3.1, 'size': [4, 4]}"]}
-
-
-
-    '''
 
     req_get = requests.get(
         uni_url, stream = True, params = full_cmd, timeout = 15
