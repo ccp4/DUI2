@@ -35,7 +35,8 @@ if __name__ == "__main__":
         full_cmd = {
             'nod_lst': [1],
             'path': None,
-            'cmd_str': ['gis', str(img_num), 'inv_scale=1', 'view_rect=55,66,77,88']
+            'cmd_str': ['gis', str(img_num), 'inv_scale=1', 'view_rect=55,66,77,88'],
+            'token': 'dummy_4_now'
         }
 
         req_get = requests.get(
