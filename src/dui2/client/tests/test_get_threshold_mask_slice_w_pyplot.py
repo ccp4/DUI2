@@ -66,7 +66,8 @@ if __name__ == "__main__":
                 #'view_rect=595,560,4805,2270',
                 #coordds= row1,col1, row2,col2
                 'params=' + params_str
-            ]
+            ],
+            'token': 'dummy_4_now',
         }
 
         req_get = requests.get(
