@@ -51,11 +51,10 @@ from dials.command_line.symmetry import phil_scope as phil_scope_symmetry
 from dials.command_line.combine_experiments import (
     phil_scope as phil_scope_combine_params
 )
-from dui2.server.img_uploader import flex_arr_2_json
-from dui2.server.init_first import ini_data
-
 from dials.command_line.cosym import phil_scope as phil_scope_cosym
 
+from dui2.server.img_uploader import flex_arr_2_json
+from dui2.server.init_first import ini_data
 
 def spit_out(str_out = None, req_obj = None, out_type = None):
     if req_obj is None:
@@ -380,52 +379,39 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
 
     elif uni_cmd[0] == "get_resolution":
         for lin2go in cmd_dict["nod_lst"]:
-            #try:
+            try:
 
-            #panel_num = 0
-            for sub_par in uni_cmd[1:]:
+                #panel_num = 0
+                for sub_par in uni_cmd[1:]:
+                    print("sub_par(ini):", sub_par)
+                    eq_pos = sub_par.find("=")
+                    left_side = sub_par[0:eq_pos]
+                    right_side = sub_par[eq_pos + 1:]
+                    if left_side == "panel":
+                        panel_num = int(right_side)
 
-                print("sub_par(ini):", sub_par)
+                    elif left_side == "xy_coordinates":
+                        lst_str = right_side.split(",")
+                        x = float(lst_str[0])
+                        y = float(lst_str[1])
+                        print("x,y =", x, y)
 
-                eq_pos = sub_par.find("=")
-                left_side = sub_par[0:eq_pos]
-                right_side = sub_par[eq_pos + 1:]
+                flex_arr_2_json.get_resolution(panel_num, x, y)
 
-                print("left_side >>", left_side)
-                print("right_side <<", right_side)
 
-                if left_side == "panel":
-                    panel_num = int(right_side)
+                print("panel_num =", panel_num)
+                print("(x, y)=", x, y)
 
-                elif left_side == "xy_coordinates":
+                return_list = [x ** 2, y ** 2, panel_num ** 2]
 
-                    print("\n ================================ HERE \n")
-
-                    lst_str = right_side.split(",")
-
-                    print("lst_str =", lst_str)
-
-                    x = float(lst_str[0])
-                    y = float(lst_str[1])
-
-                    print("x,y =", x, y)
-
-                print("sub_par(end)=", sub_par)
-                print("\n")
-
-            print("panel_num =", panel_num)
-            print("(x, y)=", x, y)
-
-            return_list = [x ** 2, y ** 2, panel_num ** 2]
-
-            '''except (IndexError, AttributeError):
+            except (IndexError, AttributeError):
                 print(
                     "err catch , wrong line, not sending  resolution"
                 )
             except ValueError:
                 print(
                     "err catch , wrong command, not sending  resolution"
-                )'''
+                )
 
     elif uni_cmd[0] == "get_predictions":
         for lin2go in cmd_dict["nod_lst"]:

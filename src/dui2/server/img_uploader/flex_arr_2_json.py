@@ -119,6 +119,11 @@ def get_template_info(exp_path, img_num):
         return
 
 
+def get_resolution(panel_num, x, y):
+    print("\nget_resolution(panel_num, x, y) =", panel_num, x, y, "\n")
+
+
+
 def list_p_arrange_exp(
     bbox_col = None, pan_col = None, hkl_col = None, n_imgs = None,
     num_of_imgs_lst = None, imgs_shift_lst = None, id_col = None,
