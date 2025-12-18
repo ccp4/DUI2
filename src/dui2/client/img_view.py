@@ -183,7 +183,6 @@ class ImgGraphicsScene(QGraphicsScene):
         if self.my_mask_pix_map is not None:
             self.addPixmap(self.my_mask_pix_map)
 
-
     def check_if_draw_b_centr(self):
         if self.draw_b_center:
             self.draw_beam_center()
@@ -481,6 +480,12 @@ class DoImageView(QObject):
         timer_4_move = QTimer(self)
         timer_4_move.timeout.connect(self.check_move)
         timer_4_move.start(1600)
+
+        timer_4_resolution = QTimer(self)
+        timer_4_resolution.timeout.connect(self.check_if_new_mouse_xy)
+        self.mouse_xy = (-1, -1)
+        self.old_mouse_xy = self.mouse_xy
+        timer_4_resolution.start(250)
 
         QTimer.singleShot(4000, self.try_2_un_zoom)
 
@@ -995,6 +1000,44 @@ class DoImageView(QObject):
         self.old_img_num = self.cur_img_num
         self.old_threshold_params = self.threshold_params
 
+
+    def check_if_new_mouse_xy(self):
+        if self.mouse_xy != self.old_mouse_xy:
+            print(
+                "time to update mouse position to: ",
+                self.mouse_xy[0], self.mouse_xy[1]
+            )
+
+
+
+
+            full_cmd = {
+                'nod_lst': [self.cur_nod_num],
+                'cmd_str': [
+                    'get_resolution', 'panel=0',
+                    'xy_coordinates=' + str(self.mouse_xy[0]) +
+                    ',' + str(self.mouse_xy[1])
+                ]
+            }
+
+
+
+
+            lst_req = get_req_json_dat(
+                params_in = full_cmd, main_handler = self.my_handler
+            )
+            try:
+                json_data_dict = lst_req.result_out()[0]
+                print("json_data_dict =", json_data_dict)
+
+            except(TypeError, IndexError):
+                print("Err catch  while getting resolution")
+
+
+
+
+        self.old_mouse_xy = self.mouse_xy
+
     def det_tmp_x1_y1_x2_y2(self):
         viewport_rect = QRect(
             0, 0, self.main_obj.window.imageView.viewport().width(),
@@ -1288,6 +1331,8 @@ class DoImageView(QObject):
             str_out += "  mask = ?"
 
         self.main_obj.window.EasterEggButton.setText(str_out)
+
+        self.mouse_xy = (x_pos, y_pos)
 
         self.my_scene.update_tmp_mask(self.list_temp_mask)
         if self.mask_mode:

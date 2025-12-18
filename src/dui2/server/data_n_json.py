@@ -398,7 +398,6 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
                         y = float(lst_str[1])
                         print("x,y =", x, y)
 
-                #flex_arr_2_json.get_resolution(panel_num, x, y)
                 return_list = [
                     flex_arr_2_json.get_resolution(
                         experiments, x, y, panel_num
