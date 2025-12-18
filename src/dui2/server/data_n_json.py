@@ -380,8 +380,10 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
     elif uni_cmd[0] == "get_resolution":
         for lin2go in cmd_dict["nod_lst"]:
             try:
-
-                #panel_num = 0
+                experiments = flex_arr_2_json.get_experiments(
+                    step_list[lin2go]._lst_expt_out[0]
+                )
+                panel_num = 0
                 for sub_par in uni_cmd[1:]:
                     print("sub_par(ini):", sub_par)
                     eq_pos = sub_par.find("=")
@@ -396,13 +398,12 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
                         y = float(lst_str[1])
                         print("x,y =", x, y)
 
-                flex_arr_2_json.get_resolution(panel_num, x, y)
-
-
-                print("panel_num =", panel_num)
-                print("(x, y)=", x, y)
-
-                return_list = [x ** 2, y ** 2, panel_num ** 2]
+                #flex_arr_2_json.get_resolution(panel_num, x, y)
+                return_list = [
+                    flex_arr_2_json.get_resolution(
+                        experiments, x, y, panel_num
+                    )
+                ]
 
             except (IndexError, AttributeError):
                 print(
