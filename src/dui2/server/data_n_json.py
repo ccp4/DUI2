@@ -378,6 +378,55 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
                 logging.info(" Err Catch , not sending lambda ")
                 return_list = []
 
+    elif uni_cmd[0] == "get_resolution":
+        for lin2go in cmd_dict["nod_lst"]:
+            #try:
+
+            #panel_num = 0
+            for sub_par in uni_cmd[1:]:
+
+                print("sub_par(ini):", sub_par)
+
+                eq_pos = sub_par.find("=")
+                left_side = sub_par[0:eq_pos]
+                right_side = sub_par[eq_pos + 1:]
+
+                print("left_side >>", left_side)
+                print("right_side <<", right_side)
+
+                if left_side == "panel":
+                    panel_num = int(right_side)
+
+                elif left_side == "xy_coordinates":
+
+                    print("\n ================================ HERE \n")
+
+                    lst_str = right_side.split(",")
+
+                    print("lst_str =", lst_str)
+
+                    x = float(lst_str[0])
+                    y = float(lst_str[1])
+
+                    print("x,y =", x, y)
+
+                print("sub_par(end)=", sub_par)
+                print("\n")
+
+            print("panel_num =", panel_num)
+            print("(x, y)=", x, y)
+
+            return_list = [x ** 2, y ** 2, panel_num ** 2]
+
+            '''except (IndexError, AttributeError):
+                print(
+                    "err catch , wrong line, not sending  resolution"
+                )
+            except ValueError:
+                print(
+                    "err catch , wrong command, not sending  resolution"
+                )'''
+
     elif uni_cmd[0] == "get_predictions":
         for lin2go in cmd_dict["nod_lst"]:
             try:

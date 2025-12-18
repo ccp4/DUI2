@@ -56,6 +56,7 @@ def get_pair_list():
         ("gef",     "get_experiments_file"                  ),
         ("grf",     "get_reflections_file"                  ),
         ("gld",     "get_lambda"                            ),
+        ("grs",     "get_resolution"                        ),
         ("gb",      "get_bravais_sum"                       ),
         ("st",      "stop"                                  ),
         ("fdp",     "find_spots_params"                     ),
