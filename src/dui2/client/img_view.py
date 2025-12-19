@@ -1008,6 +1008,18 @@ class DoImageView(QObject):
                 self.mouse_xy[0], self.mouse_xy[1]
             )
 
+            if self.i23_multipanel:
+                print("\nCalculating correction for i23\n")
+
+                copy_pasted_4_editing = '''
+                panel_height = 213
+                panel_border = 18
+                panel_height_m_border = panel_height - panel_border
+                x_max = 2463
+                y_max = 5111
+                '''
+
+
 
 
 
@@ -1027,8 +1039,8 @@ class DoImageView(QObject):
                 params_in = full_cmd, main_handler = self.my_handler
             )
             try:
-                json_data_dict = lst_req.result_out()[0]
-                print("json_data_dict =", json_data_dict)
+                resolution = lst_req.result_out()[0]
+                print("resolution = ", resolution)
 
             except(TypeError, IndexError):
                 print("Err catch  while getting resolution")

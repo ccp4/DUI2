@@ -398,6 +398,8 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
                         y = float(lst_str[1])
                         print("x,y =", x, y)
 
+                print("panel_num =", panel_num)
+
                 return_list = [
                     flex_arr_2_json.get_resolution(
                         experiments, x, y, panel_num
@@ -412,6 +414,8 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
                 print(
                     "err catch , wrong command, not sending  resolution"
                 )
+            except RuntimeError:
+                print("Runtime Err catch , wrong panel not sending resolution")
 
     elif uni_cmd[0] == "get_predictions":
         for lin2go in cmd_dict["nod_lst"]:
