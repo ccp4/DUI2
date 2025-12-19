@@ -1003,16 +1003,11 @@ class DoImageView(QObject):
 
     def check_if_new_mouse_xy(self):
         if self.mouse_xy != self.old_mouse_xy:
-            print(
-                "time to update mouse position to: ",
-                self.mouse_xy[0], self.mouse_xy[1]
-            )
             x_pnt = self.mouse_xy[0]
             y_pnt = self.mouse_xy[1]
             panel_num = 0
 
             if self.i23_multipanel:
-                print("\nCalculating correction for i23\n")
                 panel_height = 213
                 panel_num = int(y_pnt / panel_height)
                 y_pnt = y_pnt - float(panel_num * panel_height)
@@ -1025,21 +1020,14 @@ class DoImageView(QObject):
                 ]
             }
 
-
-
-
             lst_req = get_req_json_dat(
                 params_in = full_cmd, main_handler = self.my_handler
             )
             try:
-                resolution = lst_req.result_out()[0]
-                print("resolution = ", resolution)
+                self.resolution = lst_req.result_out()[0]
 
             except(TypeError, IndexError):
                 print("Err catch  while getting resolution")
-
-
-
 
         self.old_mouse_xy = self.mouse_xy
 
@@ -1334,6 +1322,12 @@ class DoImageView(QObject):
 
         except (AttributeError, IndexError, TypeError):
             str_out += "  mask = ?"
+
+        try:
+            str_out += "  Resolution=" + "{:8.2f}".format(self.resolution)
+
+        except (AttributeError, TypeError):
+            str_out += "  Resolution= ? "
 
         self.main_obj.window.EasterEggButton.setText(str_out)
 
