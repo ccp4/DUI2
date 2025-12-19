@@ -1007,28 +1007,21 @@ class DoImageView(QObject):
                 "time to update mouse position to: ",
                 self.mouse_xy[0], self.mouse_xy[1]
             )
+            x_pnt = self.mouse_xy[0]
+            y_pnt = self.mouse_xy[1]
+            panel_num = 0
 
             if self.i23_multipanel:
                 print("\nCalculating correction for i23\n")
-
-                copy_pasted_4_editing = '''
                 panel_height = 213
-                panel_border = 18
-                panel_height_m_border = panel_height - panel_border
-                x_max = 2463
-                y_max = 5111
-                '''
-
-
-
-
+                panel_num = int(y_pnt / panel_height)
+                y_pnt = y_pnt - float(panel_num * panel_height)
 
             full_cmd = {
                 'nod_lst': [self.cur_nod_num],
                 'cmd_str': [
-                    'get_resolution', 'panel=0',
-                    'xy_coordinates=' + str(self.mouse_xy[0]) +
-                    ',' + str(self.mouse_xy[1])
+                    'get_resolution', 'panel=' + str(panel_num),
+                    'xy_coordinates=' + str(x_pnt) + ',' + str(y_pnt)
                 ]
             }
 
