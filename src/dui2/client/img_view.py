@@ -1000,34 +1000,37 @@ class DoImageView(QObject):
         self.old_img_num = self.cur_img_num
         self.old_threshold_params = self.threshold_params
 
-
     def check_if_new_mouse_xy(self):
         if self.mouse_xy != self.old_mouse_xy:
             x_pnt = self.mouse_xy[0]
             y_pnt = self.mouse_xy[1]
             panel_num = 0
-
-            if self.i23_multipanel:
-                panel_height = 213
-                panel_num = int(y_pnt / panel_height)
-                y_pnt = y_pnt - float(panel_num * panel_height)
-
-            full_cmd = {
-                'nod_lst': [self.cur_nod_num],
-                'cmd_str': [
-                    'get_resolution', 'panel=' + str(panel_num),
-                    'xy_coordinates=' + str(x_pnt) + ',' + str(y_pnt)
-                ]
-            }
-
-            lst_req = get_req_json_dat(
-                params_in = full_cmd, main_handler = self.my_handler
-            )
             try:
+                if self.i23_multipanel:
+                    panel_height = 213
+                    panel_num = int(y_pnt / panel_height)
+                    y_pnt = y_pnt - float(panel_num * panel_height)
+
+                full_cmd = {
+                    'nod_lst': [self.cur_nod_num],
+                    'cmd_str': [
+                        'get_resolution', 'panel=' + str(panel_num),
+                        'xy_coordinates=' + str(x_pnt) + ',' + str(y_pnt)
+                    ]
+                }
+                lst_req = get_req_json_dat(
+                    params_in = full_cmd, main_handler = self.my_handler
+                )
                 self.resolution = lst_req.result_out()[0]
 
-            except(TypeError, IndexError):
-                print("Err catch  while getting resolution")
+            except TypeError:
+                print("Type Err catch  while getting resolution")
+
+            except IndexError:
+                print("Index Err catch  while getting resolution")
+
+            except AttributeError:
+                print("Attribute Err catch  while getting resolution")
 
         self.old_mouse_xy = self.mouse_xy
 
