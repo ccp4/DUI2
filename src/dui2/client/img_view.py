@@ -485,7 +485,8 @@ class DoImageView(QObject):
         timer_4_resolution.timeout.connect(self.check_if_new_mouse_xy)
         self.mouse_xy = (-1, -1)
         self.old_mouse_xy = self.mouse_xy
-        timer_4_resolution.start(250)
+        self.mouse_moving = False
+        timer_4_resolution.start(350)
 
         QTimer.singleShot(4000, self.try_2_un_zoom)
 
@@ -1002,37 +1003,46 @@ class DoImageView(QObject):
 
     def check_if_new_mouse_xy(self):
         if self.mouse_xy != self.old_mouse_xy:
-            x_pnt = self.mouse_xy[0]
-            y_pnt = self.mouse_xy[1]
-            panel_num = 0
-            try:
-                if self.i23_multipanel:
-                    panel_height = 213
-                    panel_num = int(y_pnt / panel_height)
-                    y_pnt = y_pnt - float(panel_num * panel_height)
+            self.old_mouse_xy = self.mouse_xy
+            self.mouse_moving = True
 
-                full_cmd = {
-                    'nod_lst': [self.cur_nod_num],
-                    'cmd_str': [
-                        'get_resolution', 'panel=' + str(panel_num),
-                        'xy_coordinates=' + str(x_pnt) + ',' + str(y_pnt)
-                    ]
-                }
-                lst_req = get_req_json_dat(
-                    params_in = full_cmd, main_handler = self.my_handler
-                )
-                self.resolution = lst_req.result_out()[0]
+        elif self.mouse_moving:
+            self.get_resolution_if_stopped_moving()
+            self.mouse_moving = False
 
-            except TypeError:
-                print("Type Err catch  while getting resolution")
+    def get_resolution_if_stopped_moving(self):
+        x_pnt = self.mouse_xy[0]
+        y_pnt = self.mouse_xy[1]
+        panel_num = 0
+        try:
+            if self.i23_multipanel:
+                panel_height = 213
+                panel_num = int(y_pnt / panel_height)
+                y_pnt = y_pnt - float(panel_num * panel_height)
 
-            except IndexError:
-                print("Index Err catch  while getting resolution")
+            full_cmd = {
+                'nod_lst': [self.cur_nod_num],
+                'cmd_str': [
+                    'get_resolution', 'panel=' + str(panel_num),
+                    'xy_coordinates=' + str(x_pnt) + ',' + str(y_pnt)
+                ]
+            }
+            lst_req = get_req_json_dat(
+                params_in = full_cmd, main_handler = self.my_handler
+            )
+            self.resolution = lst_req.result_out()[0]
 
-            except AttributeError:
-                print("Attribute Err catch  while getting resolution")
+            print("resolution 2 update =", self.resolution)
+            self.update_real_time_label(x_pnt, y_pnt)
 
-        self.old_mouse_xy = self.mouse_xy
+        except TypeError:
+            print("Type Err catch  while getting resolution")
+
+        except IndexError:
+            print("Index Err catch  while getting resolution")
+
+        except AttributeError:
+            print("Attribute Err catch  while getting resolution")
 
     def det_tmp_x1_y1_x2_y2(self):
         viewport_rect = QRect(
@@ -1312,7 +1322,7 @@ class DoImageView(QObject):
         self.list_temp_mask = lst_of_lst_0
         self.refresh_pixel_map()
 
-    def on_mouse_move(self, x_pos, y_pos):
+    def update_real_time_label(self, x_pos, y_pos):
         try:
             str_out = "  I(" + str(x_pos) + ", " + str(y_pos) + ")  =  " +\
                   "{:8.1f}".format(self.np_full_img[y_pos, x_pos])
@@ -1334,8 +1344,12 @@ class DoImageView(QObject):
 
         self.main_obj.window.EasterEggButton.setText(str_out)
 
-        self.mouse_xy = (x_pos, y_pos)
+    def on_mouse_move(self, x_pos, y_pos):
+        #TODO: maybe self.update_real_time_label... can be done only when stop
+        #TODO: moving the mouse consider if the next line should run ALWAYS
+        self.update_real_time_label(x_pos, y_pos)
 
+        self.mouse_xy = (x_pos, y_pos)
         self.my_scene.update_tmp_mask(self.list_temp_mask)
         if self.mask_mode:
             self.my_scene.draw_temp_mask()
