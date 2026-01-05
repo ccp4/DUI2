@@ -120,11 +120,6 @@ def get_template_info(exp_path, img_num):
 
 
 
-'''def get_resolution(panel_num, x, y):
-    print("\nget_resolution(panel_num, x, y) =", panel_num, x, y, "\n")'''
-
-
-
 def get_resolution( experiments, x, y, panel_num=None):
     """
     Determine the resolution of a pixel.
@@ -147,35 +142,10 @@ def get_resolution( experiments, x, y, panel_num=None):
 
     if abs(panel.get_distance()) > 0:
         return panel.get_resolution_at_pixel(beam, (x, y))
+        #return panel.get_resolution_at_pixel(beam, flex.double(x), flex.double(y))
+
     else:
         return None
-
-
-if __name__ == "__main__":
-    # if imported.expt is from a dataset taken at I23
-    # it should give a very big resolution result
-    experiments_path = "imported.expt"
-
-    experiments = ExperimentList.from_file(experiments_path)
-    my_imageset = experiments.imagesets()[0]
-    detector = my_imageset.get_detector()
-
-    print("importing from:", experiments_path)
-
-    # this are the coordinates of somewhere very close to the beam center
-    # the last 3 parameters are x,y in that panel than panel number
-    resolution = get_resolution(
-        detector, experiments, 1063.531, 41.597, readout = 12
-    )
-
-    print("resolution =", resolution)
-
-
-
-
-
-
-
 
 
 def list_p_arrange_exp(

@@ -695,7 +695,7 @@ class InfoDisplayMenu(QMenu):
         else:
             self.exl_mask_rad.setChecked(True)
             self.sig_mask_yes_or_not()
-            #print("setting << Excluding mask >> to (Yes)")
+            logging.info("setting << Excluding mask >> to (Yes)")
 
     def set_thresh_mask(self):
         if self.threshol_mask_rad.isChecked():
@@ -704,7 +704,7 @@ class InfoDisplayMenu(QMenu):
         else:
             self.threshol_mask_rad.setChecked(True)
             self.sig_mask_yes_or_not()
-            #print("setting << Spot finding threshold mask >> to (Yes)")
+            logging.info("setting << Spot finding threshold mask >> to (Yes)")
 
     def sig_new_refl(self):
         logging.info("new_ref_list")

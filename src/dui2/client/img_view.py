@@ -1032,17 +1032,17 @@ class DoImageView(QObject):
             )
             self.resolution = lst_req.result_out()[0]
 
-            print("resolution 2 update =", self.resolution)
+            logging.info("resolution 2 update = " + str(self.resolution))
             self.update_real_time_label(x_pnt, y_pnt)
 
         except TypeError:
-            print("Type Err catch  while getting resolution")
+            logging.info("Type Err catch  while getting resolution")
 
         except IndexError:
-            print("Index Err catch  while getting resolution")
+            logging.info("Index Err catch  while getting resolution")
 
         except AttributeError:
-            print("Attribute Err catch  while getting resolution")
+            logging.info("Attribute Err catch  while getting resolution")
 
     def det_tmp_x1_y1_x2_y2(self):
         viewport_rect = QRect(

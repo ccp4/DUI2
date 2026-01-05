@@ -385,7 +385,6 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
                 )
                 panel_num = 0
                 for sub_par in uni_cmd[1:]:
-                    print("sub_par(ini):", sub_par)
                     eq_pos = sub_par.find("=")
                     left_side = sub_par[0:eq_pos]
                     right_side = sub_par[eq_pos + 1:]
@@ -396,9 +395,6 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
                         lst_str = right_side.split(",")
                         x = float(lst_str[0])
                         y = float(lst_str[1])
-                        print("x,y =", x, y)
-
-                print("panel_num =", panel_num)
 
                 return_list = [
                     flex_arr_2_json.get_resolution(
