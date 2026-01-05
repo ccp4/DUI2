@@ -144,6 +144,9 @@ def get_resolution( experiments, x, y, panel_num=None):
         return panel.get_resolution_at_pixel(beam, (x, y))
         #return panel.get_resolution_at_pixel(beam, flex.double(x), flex.double(y))
 
+        #example copy/pasted from C++ header in dials algorithm
+        #double d = panel.get_resolution_at_pixel(s0, vec2<double>(i, j));
+
     else:
         return None
 
