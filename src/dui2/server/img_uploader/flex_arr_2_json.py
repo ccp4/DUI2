@@ -133,11 +133,8 @@ def get_resolution( experiments, x, y, panel_num=None):
     detector = my_imageset.get_detector()
 
     beam = my_imageset.get_beam()
-    beam = beam.get_s0()
-
-    print("beam =", beam)
-
-    if detector is None or beam is None:
+    beam_tup = beam.get_s0()
+    if detector is None or beam_tup is None:
         return None
 
     if panel_num is None:
@@ -146,14 +143,7 @@ def get_resolution( experiments, x, y, panel_num=None):
     panel = detector[panel_num]
 
     if abs(panel.get_distance()) > 0:
-
-        print(type(beam), type(x), type(y))
-
-        return panel.get_resolution_at_pixel(beam, (x, y))
-        #return panel.get_resolution_at_pixel(beam, flex.double(x), flex.double(y))
-
-        #example copy/pasted from C++ header in dials algorithm
-        #double d = panel.get_resolution_at_pixel(s0, vec2<double>(i, j));
+        return panel.get_resolution_at_pixel(beam_tup, (x, y))
 
     else:
         return None

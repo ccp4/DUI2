@@ -402,12 +402,10 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
                     )
                 ]
 
-                tmp_off = '''
             except (IndexError, AttributeError):
                 print(
                     "err catch , wrong line, not sending  resolution"
                 )
-            '''
 
             except ValueError:
                 print(
