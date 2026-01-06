@@ -128,28 +128,12 @@ def get_resolution( experiments, x, y, panel_num=None):
     as a starting point this was copy/pasted from Dials Image Viewer
     """
 
-
-    #detector = self.raw_image.get_detector()
-    #beam = self.raw_image.get_beam()
-
-
-    #beam = experiments.beams()[0]
-
-
-
     my_imageset = experiments.imagesets()[0]
-
-    print("\n dir(my_imageset) =", dir(my_imageset), "\n")
-    print("\n dir(my_imageset.data) =", dir(my_imageset.data), "\n")
-    print("\n type(my_imageset.data) =", type(my_imageset.data), "\n")
-    print("\n type(my_imageset.data[0]) =", type(my_imageset.data[0]), "\n")
-    img_data = my_imageset.data()
-    print("\n type(img_data) =", type(img_data), "\n")
-    #print("\n type(img_data[0]) =", type(img_data[0]), "\n")
 
     detector = my_imageset.get_detector()
 
     beam = my_imageset.get_beam()
+    beam = beam.get_s0()
 
     print("beam =", beam)
 
