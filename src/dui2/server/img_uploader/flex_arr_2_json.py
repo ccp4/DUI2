@@ -127,10 +127,31 @@ def get_resolution( experiments, x, y, panel_num=None):
 
     as a starting point this was copy/pasted from Dials Image Viewer
     """
-    beam = experiments.beams()[0]
+
+
+    #detector = self.raw_image.get_detector()
+    #beam = self.raw_image.get_beam()
+
+
+    #beam = experiments.beams()[0]
+
+
 
     my_imageset = experiments.imagesets()[0]
+
+    print("\n dir(my_imageset) =", dir(my_imageset), "\n")
+    print("\n dir(my_imageset.data) =", dir(my_imageset.data), "\n")
+    print("\n type(my_imageset.data) =", type(my_imageset.data), "\n")
+    print("\n type(my_imageset.data[0]) =", type(my_imageset.data[0]), "\n")
+    img_data = my_imageset.data()
+    print("\n type(img_data) =", type(img_data), "\n")
+    #print("\n type(img_data[0]) =", type(img_data[0]), "\n")
+
     detector = my_imageset.get_detector()
+
+    beam = my_imageset.get_beam()
+
+    print("beam =", beam)
 
     if detector is None or beam is None:
         return None
@@ -141,6 +162,9 @@ def get_resolution( experiments, x, y, panel_num=None):
     panel = detector[panel_num]
 
     if abs(panel.get_distance()) > 0:
+
+        print(type(beam), type(x), type(y))
+
         return panel.get_resolution_at_pixel(beam, (x, y))
         #return panel.get_resolution_at_pixel(beam, flex.double(x), flex.double(y))
 
