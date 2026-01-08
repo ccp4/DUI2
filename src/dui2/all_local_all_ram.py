@@ -1,5 +1,10 @@
 import sys, json, os, logging, platform
 
+from dui2.shared_modules.format_utils import get_feedback_data
+feedback_data_list = get_feedback_data()
+
+from dui2.shared_modules.qt_libs import *
+
 from dui2.client.q_object import MainObject
 from dui2.client.init_firts import ini_data
 from dui2.shared_modules import format_utils, all_local_gui_connector
@@ -7,12 +12,10 @@ from dui2.shared_modules import format_utils, all_local_gui_connector
 from dui2.server import multi_node
 from dui2.server.init_first import ini_data as server_ini_data
 
-from dui2.shared_modules.qt_libs import *
 
 logging.basicConfig(filename='run_dui2_all_local_all_ram.log', level=logging.DEBUG)
 
 def main():
-
     os.environ["QTWEBENGINE_CHROMIUM_FLAGS"] = "--no-sandbox"
 
     logging.info("platform.system()" + str(platform.system()))
@@ -89,7 +92,5 @@ def main():
     )
     m_obj = MainObject(parent = app, multi_runner = m_gui_obj)
     sys.exit(app.exec_())
-
-
 
 

@@ -62,6 +62,7 @@ from dui2.client.simpler_param_widgets import (
     CombineExperimentSimplerParamTab,
 )
 from dui2.shared_modules._version import __version__
+from dui2.shared_modules.format_utils import get_feedback_data
 
 class MainObject(QObject):
     def __init__(self, parent = None, multi_runner = None):
@@ -681,6 +682,7 @@ class MainObject(QObject):
         resp = lst_req.result_out()
         self.do_image_view.quit_kill_all()
         print(" end Quit ...")
+        feedback_data_list = get_feedback_data()
 
     def open_tutorial(self):
         try:

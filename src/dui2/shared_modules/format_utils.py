@@ -35,6 +35,23 @@ def create_tmp_dir():
     return path2add
 
 
+def get_feedback_data():
+    lst_lines = [
+        "Please give feedback by eider:",
+        "Mail to:",
+        "luis.fuentes-montero@diamond.ac.uk",
+        "or",
+        "got to the link:",
+        "https://github.com/ccp4/DUI2/issues"
+    ]
+    print("\n")
+    for single_line in lst_lines:
+        print(single_line)
+
+    print("\n")
+    return lst_lines
+
+
 def print_logo():
     print("                                                                                                ")
     print("                                                          .. .. .....                           ")
