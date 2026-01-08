@@ -616,6 +616,10 @@ class MainObject(QObject):
             self.open_tutorial
         )
 
+        self.window.actionGive_feedback.triggered.connect(
+            self.give_feedback
+        )
+
         settings = self.html_view.settings()
         settings.setAttribute(
             QWebEngineSettings.WebAttribute.JavascriptEnabled, True
@@ -692,6 +696,19 @@ class MainObject(QObject):
             logging.info(
                 "Attribute Err catch, no path for HTML file (OpenBrowser)"
             )
+
+    def give_feedback(self):
+        print("time to give feedback\n")
+        feedback_data_list = get_feedback_data()
+        logging.info("Pop feedback info (QObject) ... 1")
+        msgBox  = QMessageBox()
+        txt_exit =  ""
+        for line_str in feedback_data_list:
+            txt_exit += "\n" + line_str + "\n"
+
+        msgBox.setText(txt_exit)
+        msgBox.exec()
+        logging.info("Pop feedback info (QObject) ... 2")
 
     def import_init(self):
         #FIXME do this QTimer.singleShot the way it is done in DoImageView
