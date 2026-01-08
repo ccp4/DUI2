@@ -702,11 +702,16 @@ class MainObject(QObject):
         feedback_data_list = get_feedback_data()
         logging.info("Pop feedback info (QObject) ... 1")
         msgBox  = QMessageBox()
-        txt_exit =  ""
+        full_txt =  "<p align='center'>"
         for line_str in feedback_data_list:
-            txt_exit += "\n" + line_str + "\n"
+            full_txt += line_str + "<br>"
+        full_txt += "</p>"
+        msgBox.setText(full_txt)
 
-        msgBox.setText(txt_exit)
+        '''msgBox.setText("<p align='center'>First Line<br>"
+"Second Line<br>"
+"Thirth Line</p>")'''
+
         msgBox.exec()
         logging.info("Pop feedback info (QObject) ... 2")
 
