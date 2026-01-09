@@ -37,7 +37,7 @@ def create_tmp_dir():
 
 def get_feedback_data():
     lst_lines = [
-        "Please give feedback by eider:",
+        "Please give feedback by either:",
         " ",
         "            Mail to:",
         " ",
@@ -45,7 +45,7 @@ def get_feedback_data():
         " ",
         "                or",
         " ",
-        "         got to the link:",
+        "         go to the link:",
         " ",
         "https://github.com/ccp4/DUI2/issues",
         " "
