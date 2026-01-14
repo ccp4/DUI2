@@ -516,6 +516,7 @@ class InfoDisplayMenu(QMenu):
     new_mask_colour = Signal(str)
     new_mask_transp = Signal(float)
     new_redraw = Signal()
+    save_img_2_disc = Signal()
     new_ref_list = Signal()
     new_mask_y_n = Signal()
     def __init__(self, parent = None):
@@ -666,7 +667,6 @@ class InfoDisplayMenu(QMenu):
         predict_h_layout.addWidget(self.z_dept_combo)
         fnd_vs_prd_layout.addLayout(predict_h_layout)
         find_vs_predict_group.setLayout(fnd_vs_prd_layout)
-
         left_side_box = QVBoxLayout()
         left_side_box.addWidget(palette_group)
         left_side_box.addWidget(mask_group)
@@ -675,11 +675,19 @@ class InfoDisplayMenu(QMenu):
         right_side_box.addWidget(info_group)
         right_side_box.addWidget(find_vs_predict_group)
 
+        self.save_img_butt = QPushButton("Save image")
+        right_side_box.addWidget(self.save_img_butt)
+        self.save_img_butt.clicked.connect(self.save_image)
+
         my_main_box = QHBoxLayout()
         my_main_box.addLayout(left_side_box)
         my_main_box.addLayout(right_side_box)
 
         self.setLayout(my_main_box)
+
+    def save_image(self):
+        print("Time to save image")
+        self.save_img_2_disc.emit()
 
     def sig_new_redraw(self):
         logging.info("new_redraw")

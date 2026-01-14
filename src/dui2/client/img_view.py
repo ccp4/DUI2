@@ -445,6 +445,8 @@ class DoImageView(QObject):
         self.pop_display_menu.new_redraw.connect(self.refresh_pixel_map)
         self.pop_display_menu.new_mask_y_n.connect(self.update_masking)
 
+        self.pop_display_menu.save_img_2_disc.connect(self.save_img_file)
+
         self.pop_display_menu.new_ref_list.connect(
             self.request_reflection_list
         )
@@ -517,6 +519,9 @@ class DoImageView(QObject):
             del self.load_thread_list[0:-45]
 
         self.load_thread_list.append(new_thread)
+
+    def save_img_file(self):
+        print("save_img_file")
 
     def quit_kill_all(self):
         for thread in self.load_thread_list:
