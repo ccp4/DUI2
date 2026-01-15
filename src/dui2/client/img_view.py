@@ -25,6 +25,9 @@ copyright (c) CCP4 - DLS
 import sys, os, logging, platform
 
 from dui2.shared_modules.qt_libs import *
+from dui2.shared_modules.img_view_utils import (
+    crunch_min_max, np2bmp_monocrome, np2bmp_heat, np2bmp_mask
+)
 
 import numpy as np
 import json
@@ -33,9 +36,6 @@ from dui2.client.init_firts import ini_data
 from dui2.client.exec_utils import get_req_json_dat
 from dui2.client.outputs import HandleLoadStatusLabel
 
-from dui2.client.img_view_utils import (
-    crunch_min_max, np2bmp_monocrome, np2bmp_heat, np2bmp_mask
-)
 
 from dui2.client.img_view_threads_n_menus import (
     LoadInThread, InfoDisplayMenu, ThresholdDisplayMenu, LoadFullImage,

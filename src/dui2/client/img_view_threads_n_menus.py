@@ -25,6 +25,10 @@ import sys, os, logging
 
 from dui2.shared_modules.qt_libs import *
 
+from dui2.shared_modules.img_view_utils import (
+    load_img_json_w_str, load_mask_img_json_w_str
+)
+
 import numpy as np
 import json, time
 
@@ -33,9 +37,6 @@ from dui2.client.exec_utils import (
     get_req_json_dat, get_request_real_time
 )
 
-from dui2.client.img_view_utils import (
-    load_img_json_w_str, load_mask_img_json_w_str
-)
 
 
 class LoadFullMaskImage(QThread):
