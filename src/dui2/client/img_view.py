@@ -520,9 +520,6 @@ class DoImageView(QObject):
 
         self.load_thread_list.append(new_thread)
 
-    def save_img_file(self):
-        print("save_img_file")
-
     def quit_kill_all(self):
         for thread in self.load_thread_list:
             if thread.isRunning():
@@ -917,6 +914,9 @@ class DoImageView(QObject):
             logging.info(
                 "Type Err Catch, attempting to show a mask without xy(max)"
             )
+
+    def save_img_file(self):
+        print("save_img_file")
 
     def change_i_min_max(self, new_i_min, new_i_max):
         self.i_min_max = [new_i_min, new_i_max]

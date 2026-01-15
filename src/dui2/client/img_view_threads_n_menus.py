@@ -687,7 +687,6 @@ class InfoDisplayMenu(QMenu):
         self.setLayout(my_main_box)
 
     def save_image(self):
-        print("Time to save image")
         self.save_img_2_disc.emit()
 
     def sig_new_redraw(self):
