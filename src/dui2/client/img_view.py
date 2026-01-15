@@ -916,33 +916,23 @@ class DoImageView(QObject):
             )
 
     def save_img_file(self):
-        '''
-        print("save_img_file:  \n\n")
-        print(self.my_scene.items())
-        print(dir(self.main_obj.window.imageView), "\n\n")
-        '''
-
-        '''
-        painter = QPainter(self.main_obj.window.imageView)
-        rd = self.my_scene.render(painter)
-        '''
-
-
-        # Create an image with desired format
+        zoom_dependant = '''
         img = QImage(
             self.main_obj.window.imageView.viewport().width(),
             self.main_obj.window.imageView.viewport().height(),
             QImage.Format_ARGB32
         )
+        '''
+        img = QImage(
+            self.img_d1_d2[0], self.img_d1_d2[1], QImage.Format_ARGB32
+        )
+
         img.fill(Qt.transparent)
 
         painter = QPainter(img)
         self.my_scene.render(painter)
         painter.end()
-        print("img =", img)
-
         img.save("test_scene_img.png")
-
 
     def change_i_min_max(self, new_i_min, new_i_max):
         self.i_min_max = [new_i_min, new_i_max]
