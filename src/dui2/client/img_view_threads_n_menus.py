@@ -345,6 +345,69 @@ class RadialParamWidget(QWidget):
         self.setLayout(v_right_box)
 
 
+
+
+def save_image_as_file(parent_scene = None, width = None, height = None):
+
+    try:
+        zoom_dependant = '''
+        img = QImage(
+            self.main_obj.window.imageView.viewport().width(),
+            self.main_obj.window.imageView.viewport().height(),
+            QImage.Format_ARGB32
+        )
+        img = QImage(
+            self.img_d1_d2[0], self.img_d1_d2[1], QImage.Format_ARGB32
+        )
+        '''
+        img = QImage(width, height, QImage.Format_ARGB32)
+
+        img.fill(Qt.transparent)
+
+        painter = QPainter(img)
+        #self.my_scene.render(painter)
+        parent_scene.render(painter)
+        painter.end()
+
+        print("\n\n Here 1 \n\n")
+
+        path_n_file = os.path.dirname(os.getcwd())
+        print("\n\n Here 2 \n\n")
+
+        print("path_n_file =", path_n_file)
+
+        fileResul = QFileDialog.getSaveFileName(
+            parent = None, caption = "Save image as PNG file", dir = path_n_file,
+            filter="ImageXX  (*.png)", selectedFilter = "image.png"
+        )
+
+        print("\n\n fileResul = ", fileResul, "\n\n")
+
+        file_name = fileResul[0]
+        if file_name != '':
+
+            if file_name[-4:] != ".png":
+                file_name += ".png"
+
+            print(" init save")
+            img.save(file_name)
+            print(" end save")
+
+        else:
+            print("Canceled Operation")
+
+
+
+    except TypeError:
+        print("Cannot save non existent image")
+
+
+
+
+
+
+
+
 class ThresholdDisplayMenu(QMenu):
     user_param_pass = Signal()
     new_threshold_param = Signal(dict)
@@ -517,7 +580,6 @@ class InfoDisplayMenu(QMenu):
     new_mask_colour = Signal(str)
     new_mask_transp = Signal(float)
     new_redraw = Signal()
-    save_img_2_disc = Signal()
     new_ref_list = Signal()
     new_mask_y_n = Signal()
     def __init__(self, parent = None):
@@ -687,7 +749,11 @@ class InfoDisplayMenu(QMenu):
         self.setLayout(my_main_box)
 
     def save_image(self):
-        self.save_img_2_disc.emit()
+        save_image_as_file(
+            parent_scene = self.my_parent.my_scene,
+            width = self.my_parent.img_d1_d2[0],
+            height = self.my_parent.img_d1_d2[1]
+        )
 
     def sig_new_redraw(self):
         logging.info("new_redraw")

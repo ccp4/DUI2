@@ -41,6 +41,7 @@ from dui2.client.img_view_threads_n_menus import (
     LoadInThread, InfoDisplayMenu, ThresholdDisplayMenu, LoadFullImage,
     LoadSliceImage, LoadSliceMaskImage, LoadFullMaskImage
 )
+
 from dui2.client.file_nav_utils import FileBrowser
 
 
@@ -444,9 +445,6 @@ class DoImageView(QObject):
 
         self.pop_display_menu.new_redraw.connect(self.refresh_pixel_map)
         self.pop_display_menu.new_mask_y_n.connect(self.update_masking)
-
-        self.pop_display_menu.save_img_2_disc.connect(self.save_img_file)
-
         self.pop_display_menu.new_ref_list.connect(
             self.request_reflection_list
         )
@@ -914,25 +912,6 @@ class DoImageView(QObject):
             logging.info(
                 "Type Err Catch, attempting to show a mask without xy(max)"
             )
-
-    def save_img_file(self):
-        zoom_dependant = '''
-        img = QImage(
-            self.main_obj.window.imageView.viewport().width(),
-            self.main_obj.window.imageView.viewport().height(),
-            QImage.Format_ARGB32
-        )
-        '''
-        img = QImage(
-            self.img_d1_d2[0], self.img_d1_d2[1], QImage.Format_ARGB32
-        )
-
-        img.fill(Qt.transparent)
-
-        painter = QPainter(img)
-        self.my_scene.render(painter)
-        painter.end()
-        img.save("test_scene_img.png")
 
     def change_i_min_max(self, new_i_min, new_i_max):
         self.i_min_max = [new_i_min, new_i_max]
