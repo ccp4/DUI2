@@ -141,8 +141,6 @@ def get_pair_list():
         ("Aaa",    "dials.sequence_to_stills"                 ),
         ("Aaa",    "dials.shadow_plot"                        ),
         ("Aaa",    "dials.show"                               ),
-        ("Aaa",    "dials.show_build_path"                    ),
-        ("Aaa",    "dials.show_dist_paths"                    ),
         ("Aaa",    "dials.sort_reflections"                   ),
         ("Aaa",    "dials.split_experiments"                  ),
         ("Aaa",    "dials.spot_counts_per_image"              ),
@@ -152,6 +150,8 @@ def get_pair_list():
         ("Aaa",    "dials.two_theta_offset"                   ),
         ("Aaa",    "dials.two_theta_refine"                   ),
         ("Aaa",    "dials.unit_cell_histogram"                ),
+        ("Aaa",    "dials.split_still_data"                   ),
+        ("Aaa",    "dials.correlation_matrix"                 ),
         ("Aaa",    "dials.version"                            ),
 
     ]
