@@ -120,6 +120,7 @@ class MainObject(QObject):
             "get_optional_command_list", self.runner_handler
         )
         self.optional_widg = OptionalWidget(cmd_lst = self.opt_cmd_lst)
+        self.optional_widg.set_parent(self)
         self.window.OptionalScrollArea.setWidget(self.optional_widg)
         self.optional_widg.all_items_changed.connect(
             self.all_items_param_changed

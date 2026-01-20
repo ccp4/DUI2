@@ -705,11 +705,16 @@ class ShowLog(QObject):
             self.main_obj.window.incoming_text.setTextColor(self.green_color)
             self.main_obj.window.incoming_text.insertPlainText(new_line)
 
-    def show_ready_log(self, show_help = None):
+    def show_ready_log(self, show_help = None, replace_w_this = None):
         logging.info('from: show_ready_log')
         if show_help == True:
             try:
-                str_cmd_key = self.main_obj.new_node.m_cmd_lst[0][6:]
+                if replace_w_this:
+                    str_cmd_key = replace_w_this
+
+                else:
+                    str_cmd_key = self.main_obj.new_node.m_cmd_lst[0][6:]
+
                 txt2show =self.main_obj.help_msg_dict[str_cmd_key]
 
             except AttributeError:

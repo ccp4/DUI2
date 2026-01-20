@@ -1878,6 +1878,9 @@ class OptionalWidget(SimpleParamTab):
         self.com_imp_txt.textChanged.connect(self.command_line_changed)
         self.par_imp_txt.textChanged.connect(self.param_line_changed)
 
+    def set_parent(self, parent = None):
+        self.main_obj = parent
+
     def reset_pars(self):
         logging.info("reset_pars(OptionalWidget)")
         self.cmd_menu.setCurrentIndex(0)
@@ -1903,6 +1906,13 @@ class OptionalWidget(SimpleParamTab):
         sender = self.sender()
         str_value = str(sender.item_list[value])
         self.com_imp_txt.setText(str_value)
+
+        self.main_obj_log = self.main_obj.log_show
+
+        self.main_obj_log.clear_4_run()
+        self.main_obj_log.show_ready_log(
+            show_help = True, replace_w_this = str_value
+        )
 
     def command_line_changed(self):
         logging.info("command_line_changed(OptionalWidget)")
