@@ -286,7 +286,6 @@ def get_help_messages(handler_in):
         "generate_distortion_maps",
         "geometry_viewer",
         "goniometer_calibration",
-        "import_xds",
         "indexed_as_integrated",
         "merge_cbf",
         "merge_reflection_lists",

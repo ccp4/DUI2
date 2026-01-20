@@ -650,7 +650,6 @@ def get_cmd_opt_list():
       "geometry_viewer"                        ,
       "goniometer_calibration"                 ,
       "image_viewer"                           ,
-      "import_xds"                             ,
       "indexed_as_integrated"                  ,
       "merge_cbf"                              ,
       "merge_reflection_lists"                 ,
@@ -744,11 +743,11 @@ def get_help_list(cmd_str):
         my_cmd_hlp = ["None(ModuleNotFoundError)"]
         inner_lst = ["dials." + cmd_str , "-h"]
         try:
-            inner_lst[0] = str(shutil.which(inner_lst[0]))
             print(
                 "capturing std output from >> " +
                 inner_lst[0] + " " + inner_lst[1]
             )
+            inner_lst[0] = str(shutil.which(inner_lst[0]))
             my_proc = subprocess.Popen(
                 inner_lst,
                 shell = False,
