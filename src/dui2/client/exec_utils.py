@@ -267,7 +267,6 @@ def get_help_messages(handler_in):
         "anvil_correction",
         "assign_experiment_identifiers",
         "augment_spots",
-        "background",
         "check_indexing_symmetry",
         "cluster_unit_cell",
         "compare_orientation_matrices",
