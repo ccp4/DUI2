@@ -313,16 +313,16 @@ def get_help_messages(handler_in):
     ]
     #TODO change the name of one of the cmd_str variables
     help_dict = {}
-    for cmd_str in lst_cmd:
-        cmd = {"nod_lst":"", "cmd_str":["gh", cmd_str]}
+    for dials_cmd_str in lst_cmd:
+        cmd = {"nod_lst":"", "cmd_str":["gh", dials_cmd_str]}
         lst_req = get_req_json_dat(params_in = cmd, main_handler = handler_in)
         json_hlp = lst_req.result_out()
 
         try:
-            help_dict[cmd_str] = json_hlp[0]
+            help_dict[dials_cmd_str] = json_hlp[0]
 
         except TypeError:
-            help_dict[cmd_str] = ['']
+            help_dict[dials_cmd_str] = ['']
 
     return help_dict
 
