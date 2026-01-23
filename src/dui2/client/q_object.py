@@ -708,11 +708,6 @@ class MainObject(QObject):
             full_txt += line_str + "<br>"
         full_txt += "</p>"
         msgBox.setText(full_txt)
-
-        '''msgBox.setText("<p align='center'>First Line<br>"
-"Second Line<br>"
-"Thirth Line</p>")'''
-
         msgBox.exec()
         logging.info("Pop feedback info (QObject) ... 2")
 
