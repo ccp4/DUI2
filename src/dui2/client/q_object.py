@@ -83,8 +83,6 @@ class MainObject(QObject):
 
         self.reseting = False
 
-        self.help_msg_dict = get_help_messages(self.runner_handler)
-
         root_widg = RootWidg()
         self.window.RootScrollArea.setWidget(root_widg)
 
@@ -642,6 +640,7 @@ class MainObject(QObject):
 
         self.window.show()
         self.import_init()
+        self.dials_help_init()
 
     def sharp_turns_triggered(self):
         self.sharp_turns_on = not self.sharp_turns_on
@@ -730,6 +729,9 @@ class MainObject(QObject):
                     big_nod_num = node["number"]
 
             self.on_node_click_w_left(big_nod_num)
+
+    def dials_help_init(self):
+        self.help_msg_dict = get_help_messages(self.runner_handler)
 
     def launch_reindex(self, sol_rei):
         try:
