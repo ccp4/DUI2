@@ -154,7 +154,12 @@ class LoadSliceMaskImage(QThread):
 
     def emit_n_end(self, byte_json):
         try:
-            d1d2_n_arr1d = np.frombuffer(byte_json, dtype = float)
+            #original old-stable version
+            #d1d2_n_arr1d = np.frombuffer(byte_json, dtype = float)
+
+            #suggestion from Claude
+            d1d2_n_arr1d = np.frombuffer(byte_json, dtype = float).copy()
+
             d1 = int(d1d2_n_arr1d[0])
             d2 = int(d1d2_n_arr1d[1])
             np_array_out = d1d2_n_arr1d[2:].reshape(d1, d2)

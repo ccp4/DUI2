@@ -898,7 +898,7 @@ class DoImageView(QObject):
             new_m_pixmap = QPixmap.fromImage(q_img)
             self.my_scene.add_mask_pixmap(new_m_pixmap)
             self.my_scene.refresh_imgs()
-            self.my_scene.self.draw_b_center = True
+            self.my_scene.draw_b_center = True
 
         except AttributeError:
             logging.info("no mask to draw here")
