@@ -36,7 +36,7 @@ from dui2.client.img_view import DoImageView
 from dui2.client.reindex_table import ReindexTable, get_label_from_str_list
 from dui2.client.exec_utils import (
     get_optional_list, build_advanced_params_widget, get_req_json_dat,
-    get_help_messages, post_req_w_output, CommandParamControl, build_thresh_comd
+    post_req_w_output, CommandParamControl, build_thresh_comd
 )
 
 
