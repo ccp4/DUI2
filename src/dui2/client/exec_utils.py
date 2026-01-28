@@ -240,91 +240,6 @@ def build_advanced_params_widget(cmd_str, h_box_search, handler_in):
     return advanced_parameters
 
 
-def get_help_messages(handler_in):
-    lst_cmd = [
-        "import",
-        "generate_mask",
-        "apply_mask",
-        "find_spots",
-        "filter_reflections",
-        "find_rotation_axis",
-        "index",
-        "ssx_index",
-        "refine_bravais_settings",
-        "reindex",
-        "refine",
-        "integrate",
-        "ssx_integrate",
-        "symmetry",
-        "scale",
-        "cosym",
-        "split_experiments",
-        "merge",
-        "combine_experiments",
-        "export",
-        "slice_sequence",
-        "align_crystal",
-        "anvil_correction",
-        "assign_experiment_identifiers",
-        "augment_spots",
-        "check_indexing_symmetry",
-        "cluster_unit_cell",
-        "compare_orientation_matrices",
-        "complete_full_sphere",
-        "compute_delta_cchalf",
-        "convert_to_cbf",
-        "create_profile_model",
-        "damage_analysis",
-        "detect_blanks",
-        "estimate_gain",
-        "export_best",
-        "export_bitmaps",
-        "find_bad_pixels",
-        "find_hot_pixels",
-        "frame_orientations",
-        "generate_distortion_maps",
-        "geometry_viewer",
-        "goniometer_calibration",
-        "indexed_as_integrated",
-        "merge_cbf",
-        "merge_reflection_lists",
-        "missing_reflections",
-        "model_background",
-        "modify_geometry",
-        "refine_error_model",
-        "reflection_viewer",
-        "rl_png",
-        "rlv",
-        "rs_mapper",
-        "search_beam_position",
-        "sequence_to_stills",
-        "shadow_plot",
-        "show",
-        "show_build_path",
-        "show_dist_paths",
-        "sort_reflections",
-        "spot_counts_per_image",
-        "spot_resolution_shells",
-        "stereographic_projection",
-        "stills_process",
-        "two_theta_offset",
-        "two_theta_refine",
-        "unit_cell_histogram"
-    ]
-    #TODO change the name of one of the cmd_str variables
-    help_dict = {}
-    for dials_cmd_str in lst_cmd:
-        cmd = {"nod_lst":"", "cmd_str":["gh", dials_cmd_str]}
-        lst_req = get_req_json_dat(params_in = cmd, main_handler = handler_in)
-        json_hlp = lst_req.result_out()
-
-        try:
-            help_dict[dials_cmd_str] = json_hlp[0]
-
-        except TypeError:
-            help_dict[dials_cmd_str] = ['']
-
-    return help_dict
 
 
 def rename_par(key_in):
@@ -691,6 +606,92 @@ class CommandParamControl(object):
         logging.info("lst_out(get_full_command_list) =" + str(lst_out))
         return lst_out
 
+
+def get_help_messages(handler_in):
+    lst_cmd = [
+        "import",
+        "generate_mask",
+        "apply_mask",
+        "find_spots",
+        "filter_reflections",
+        "find_rotation_axis",
+        "index",
+        "ssx_index",
+        "refine_bravais_settings",
+        "reindex",
+        "refine",
+        "integrate",
+        "ssx_integrate",
+        "symmetry",
+        "scale",
+        "cosym",
+        "split_experiments",
+        "merge",
+        "combine_experiments",
+        "export",
+        "slice_sequence",
+        "align_crystal",
+        "anvil_correction",
+        "assign_experiment_identifiers",
+        "augment_spots",
+        "check_indexing_symmetry",
+        "cluster_unit_cell",
+        "compare_orientation_matrices",
+        "complete_full_sphere",
+        "compute_delta_cchalf",
+        "convert_to_cbf",
+        "create_profile_model",
+        "damage_analysis",
+        "detect_blanks",
+        "estimate_gain",
+        "export_best",
+        "export_bitmaps",
+        "find_bad_pixels",
+        "find_hot_pixels",
+        "frame_orientations",
+        "generate_distortion_maps",
+        "geometry_viewer",
+        "goniometer_calibration",
+        "indexed_as_integrated",
+        "merge_cbf",
+        "merge_reflection_lists",
+        "missing_reflections",
+        "model_background",
+        "modify_geometry",
+        "refine_error_model",
+        "reflection_viewer",
+        "rl_png",
+        "rlv",
+        "rs_mapper",
+        "search_beam_position",
+        "sequence_to_stills",
+        "shadow_plot",
+        "show",
+        "show_build_path",
+        "show_dist_paths",
+        "sort_reflections",
+        "spot_counts_per_image",
+        "spot_resolution_shells",
+        "stereographic_projection",
+        "stills_process",
+        "two_theta_offset",
+        "two_theta_refine",
+        "unit_cell_histogram"
+    ]
+    #TODO change the name of one of the cmd_str variables
+    help_dict = {}
+    for dials_cmd_str in lst_cmd:
+        cmd = {"nod_lst":"", "cmd_str":["gh", dials_cmd_str]}
+        lst_req = get_req_json_dat(params_in = cmd, main_handler = handler_in)
+        json_hlp = lst_req.result_out()
+
+        try:
+            help_dict[dials_cmd_str] = json_hlp[0]
+
+        except TypeError:
+            help_dict[dials_cmd_str] = ['']
+
+    return help_dict
 
 
 class Help_Request(QThread):
