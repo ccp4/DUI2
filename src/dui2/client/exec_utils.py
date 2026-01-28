@@ -684,7 +684,7 @@ class Help_Request(QThread):
         ]
     def run(self):
         self.p_box.show()
-        self.p_box.update_me("Start getting help")
+        self.p_box.update_msg("Start getting help")
 
         #TODO change the name of one of the cmd_str variables
         help_dict = {}
@@ -701,11 +701,14 @@ class Help_Request(QThread):
             except TypeError:
                 help_dict[dials_cmd_str] = ['']
 
-            self.p_box.update_me("Getting help #" + str(num_r))
+            self.p_box.update_msg("Getting help #" + str(num_r))
 
-        self.p_box.update_me("End getting help")
+        self.p_box.update_msg("End getting help")
+
+        print("end loop")
+        self.p_box.button_close.clicked.emit()
         #FIXME: close the QDialog properly
-        #self.p_box.close()
+        #self.p_box.stop_me()
 
 
 class Progress_Box(QDialog):
@@ -713,15 +716,22 @@ class Progress_Box(QDialog):
         super(Progress_Box, self).__init__(parent)
 
         self.live_label = QLabel("progress")
-
+        self.button_close = QPushButton("Ok/Close")
+        self.button_close.clicked.connect(self.stop_me)
         mainLayout = QVBoxLayout()
         mainLayout.addWidget(self.live_label)
+        mainLayout.addWidget(self.button_close)
+
         self.setLayout(mainLayout)
         self.setWindowTitle("Loading")
 
-    def update_me(self, put_this):
+    def update_msg(self, put_this):
         self.live_label.setText(put_this)
 
+    def stop_me(self):
+        print("time to stop")
+        self.close()
+        #self.accept()
 
 
 if __name__ == "__main__":
