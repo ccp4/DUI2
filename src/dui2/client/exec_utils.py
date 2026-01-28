@@ -688,20 +688,22 @@ class Help_Request(QThread):
 
         #TODO change the name of one of the cmd_str variables
         help_dict = {}
+        list_size = len(self.lst_cmd)
         for num_r, dials_cmd_str in enumerate(self.lst_cmd):
             cmd = {"nod_lst":"", "cmd_str":["gh", dials_cmd_str]}
             lst_req = get_req_json_dat(
                 params_in = cmd, main_handler = self.runner_handler
             )
             json_hlp = lst_req.result_out()
-
             try:
                 help_dict[dials_cmd_str] = json_hlp[0]
 
             except TypeError:
                 help_dict[dials_cmd_str] = ['']
 
-            self.p_box.update_msg("Getting help #" + str(num_r))
+            msg_str = "Getting help for command: " + dials_cmd_str  + "\n\n progress: " + str(num_r) + "/" + str(list_size)
+
+            self.p_box.update_msg(msg_str)
 
         self.p_box.update_msg("End getting help")
 
