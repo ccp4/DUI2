@@ -64,6 +64,11 @@ from dui2.client.simpler_param_widgets import (
 from dui2.shared_modules._version import __version__
 from dui2.shared_modules.format_utils import get_feedback_data
 
+
+#FIXME: Progress_Box belongs elsewhere
+from dui2.client.exec_utils import Help_Request, Progress_Box
+
+
 class MainObject(QObject):
     def __init__(self, parent = None, multi_runner = None):
         super(MainObject, self).__init__(parent)
@@ -638,6 +643,9 @@ class MainObject(QObject):
 
         self.window.verticalLayout_html_view.addWidget(self.html_view)
 
+        self.p_box = Progress_Box()
+        self.h_req = Help_Request(self.p_box, self.runner_handler)
+
         self.window.show()
         self.import_init()
         self.dials_help_init()
@@ -731,7 +739,7 @@ class MainObject(QObject):
             self.on_node_click_w_left(big_nod_num)
 
     def dials_help_init(self):
-        self.help_msg_dict = get_help_messages(self.runner_handler)
+        self.h_req.start()
 
     def launch_reindex(self, sol_rei):
         try:

@@ -692,6 +692,41 @@ class CommandParamControl(object):
         return lst_out
 
 
+
+class Help_Request(QThread):
+    update_progress = Signal(int)
+    def __init__(self, prog_box, main_obj):
+        super(Help_Request, self).__init__()
+        self.p_box = prog_box
+        self.runner_handler = main_obj
+
+    def run(self):
+        self.p_box.show()
+
+        self.p_box.update_me("Start getting help")
+        self.help_msg_dict = get_help_messages(self.runner_handler)
+        self.p_box.update_me("End getting help")
+
+
+        self.update_progress.emit(100)
+
+
+class Progress_Box(QDialog):
+    def __init__(self, parent = None):
+        super(Progress_Box, self).__init__(parent)
+
+        self.live_label = QLabel("progress")
+
+        mainLayout = QVBoxLayout()
+        mainLayout.addWidget(self.live_label)
+        self.setLayout(mainLayout)
+        self.setWindowTitle("Loading")
+
+    def update_me(self, put_this):
+        self.live_label.setText(put_this)
+
+
+
 if __name__ == "__main__":
     tst_cmd = CommandParamControl(["my_cmd"])
 
