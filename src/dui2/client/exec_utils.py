@@ -663,9 +663,6 @@ class Help_Request(QThread):
             "model_background",
             "modify_geometry",
             "refine_error_model",
-            "reflection_viewer",
-            "rl_png",
-            "rlv",
             "rs_mapper",
             "search_beam_position",
             "sequence_to_stills",
@@ -682,6 +679,13 @@ class Help_Request(QThread):
             "two_theta_refine",
             "unit_cell_histogram"
         ]
+
+        removing_commands = '''
+            "reflection_viewer",
+            "rl_png",
+            "rlv",
+        '''
+
     def run(self):
         self.p_box.show()
         self.p_box.update_msg("Start getting help")
@@ -690,6 +694,8 @@ class Help_Request(QThread):
         help_dict = {}
         list_size = len(self.lst_cmd)
         for num_r, dials_cmd_str in enumerate(self.lst_cmd):
+
+            print("cmd #", num_r)
             cmd = {"nod_lst":"", "cmd_str":["gh", dials_cmd_str]}
             lst_req = get_req_json_dat(
                 params_in = cmd, main_handler = self.runner_handler
