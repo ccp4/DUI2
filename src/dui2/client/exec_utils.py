@@ -694,9 +694,9 @@ class Help_Request(QThread):
         #TODO change the name of one of the cmd_str variables
         help_dict = {}
         list_size = len(self.lst_cmd)
+        logging.info("starting to collect help messages")
         for num_r, dials_cmd_str in enumerate(self.lst_cmd):
-
-            print("cmd #", num_r)
+            logging.info("cmd #" + str(num_r))
             cmd = {"nod_lst":"", "cmd_str":["gh", dials_cmd_str]}
             lst_req = get_req_json_dat(
                 params_in = cmd, main_handler = self.runner_handler
@@ -713,10 +713,7 @@ class Help_Request(QThread):
             self.p_box.update_msg(msg_str)
 
         self.p_box.update_msg("End getting help")
-
-        print("end loop")
         self.p_box.button_close.clicked.emit()
-
         self.message_acquired.emit(help_dict)
 
 

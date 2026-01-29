@@ -729,7 +729,7 @@ def get_help_list(cmd_str):
         )
         single_str = my_cmd_mod.__doc__
         my_cmd_hlp = single_str.split("\n")
-        print("  getting  docstring from >> dials." + cmd_str)
+        logging.info("  getting  docstring from >> dials." + cmd_str)
 
     except AttributeError:
         my_cmd_mod = importlib.import_module(
@@ -737,13 +737,13 @@ def get_help_list(cmd_str):
         )
         single_str = my_cmd_mod.help_message
         my_cmd_hlp = single_str.split("\n")
-        print("getting help message from >> dials." + cmd_str)
+        logging.info("getting help message from >> dials." + cmd_str)
 
     except ModuleNotFoundError:
         my_cmd_hlp = ["None(ModuleNotFoundError)"]
         inner_lst = ["dials." + cmd_str , "-h"]
         try:
-            print(
+            logging.info(
                 "capturing std output from >> " +
                 inner_lst[0] + " " + inner_lst[1]
             )
