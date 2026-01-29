@@ -739,7 +739,11 @@ class MainObject(QObject):
             self.on_node_click_w_left(big_nod_num)
 
     def dials_help_init(self):
+        self.h_req.message_acquired.connect(self.dials_help_ended)
         self.h_req.start()
+
+    def dials_help_ended(self, hlp_msg):
+        self.help_msg_dict = hlp_msg
 
     def launch_reindex(self, sol_rei):
         try:

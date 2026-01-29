@@ -608,6 +608,7 @@ class CommandParamControl(object):
 
 
 class Help_Request(QThread):
+    message_acquired = Signal(dict)
     def __init__(self, prog_box, main_obj):
         super(Help_Request, self).__init__()
         self.p_box = prog_box
@@ -715,8 +716,8 @@ class Help_Request(QThread):
 
         print("end loop")
         self.p_box.button_close.clicked.emit()
-        #FIXME: close the QDialog properly
-        #self.p_box.stop_me()
+
+        self.message_acquired.emit(help_dict)
 
 
 class Progress_Box(QDialog):
