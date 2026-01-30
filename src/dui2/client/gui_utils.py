@@ -248,7 +248,7 @@ class find_scale_cmd(object):
         return self.found_scale
 
 
-class find_next_cmd(object):
+class FindNextCmd(object):
     '''
     This class works as a function that internally navigates with
     recursive calls to find the possible command to run next

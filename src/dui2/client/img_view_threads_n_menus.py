@@ -32,9 +32,9 @@ from dui2.shared_modules.img_view_utils import (
 import numpy as np
 import json, time
 
-from dui2.client.init_firts import ini_data
+from dui2.client.init_firts import IniData
 from dui2.client.exec_utils import (
-    get_req_json_dat, get_request_real_time
+    get_req_json_dat, GetRequestRealTime
 )
 
 
@@ -142,7 +142,7 @@ class LoadSliceMaskImage(QThread):
                 ]
             }
 
-        self.r_time_req = get_request_real_time(
+        self.r_time_req = GetRequestRealTime(
             params_in = my_cmd, main_handler = self.my_handler
         )
         self.r_time_req.prog_new_stat.connect(self.emit_progr)
@@ -209,7 +209,7 @@ class LoadSliceImage(QThread):
                   "path"    : self.exp_path,
                   "cmd_str" : my_cmd_lst}
 
-        self.r_time_req = get_request_real_time(
+        self.r_time_req = GetRequestRealTime(
             params_in = my_cmd, main_handler = self.my_handler
         )
         self.r_time_req.prog_new_stat.connect(self.emit_progr)
@@ -348,8 +348,6 @@ class RadialParamWidget(QWidget):
         v_right_box.addLayout(hbox_rad_nbin)
 
         self.setLayout(v_right_box)
-
-
 
 
 def save_image_as_file(parent_scene = None, width = None, height = None):

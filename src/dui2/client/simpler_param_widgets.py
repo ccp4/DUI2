@@ -29,8 +29,8 @@ from dui2.shared_modules.qt_libs import *
 
 import numpy as np
 
-from dui2.client.init_firts import ini_data
-from dui2.client.exec_utils import Mtz_Data_Request, get_req_json_dat
+from dui2.client.init_firts import IniData
+from dui2.client.exec_utils import MtzDataRequest, get_req_json_dat
 from dui2.client.file_nav_utils import FileBrowser
 
 
@@ -171,38 +171,6 @@ class SimpleParamTab(QWidget):
     def set_ed_pars(self):
         logging.info("set_ed_pars(SimpleParamTab)")
 
-maybe_will_be_removed = '''
-class ProgBarBox(QProgressDialog):
-    def __init__(self, max_val=100, min_val=0, text="Working", parent = None):
-        logging.info("ProgBarBox __init__")
-
-        if max_val <= min_val:
-            raise ValueError("max_val must be larger than min_val")
-
-        super(ProgBarBox, self).__init__(
-            labelText=text,
-            minimum=min_val,
-            maximum=max_val,
-            parent=None)
-
-        self.setValue(min_val)
-        self.setWindowTitle("Import DataSet")
-        self.setWindowModality(Qt.WindowModal)
-        self.setMinimumDuration(50)
-        self.setCancelButton(None)
-        self.show()
-
-    def __call__(self, updated_val):
-        self.setValue(updated_val)
-        loop = QEventLoop()
-        QTimer.singleShot(10, loop.quit)
-        loop.exec_()
-
-    def ended(self):
-        self.setValue(100)
-        logging.info("ProgBarBox ended")
-        self.close()
-'''
 
 def build_template(str_path_in):
     logging.info("time to build template from:" + str(str_path_in))
@@ -306,7 +274,7 @@ class ImportWidget(QWidget):
         self.do_emit = True
         self.dir_selected = None
         self.runner_handler = parent
-        data_init = ini_data()
+        data_init = IniData()
         self.run_local = data_init.get_if_local()
         self.win_exe = data_init.get_win_exe()
         sys_font = QFont()
@@ -2092,10 +2060,10 @@ class ExportWidget(QWidget):
         self.file_name = fileResul[0]
         if self.file_name != '':
             self.progress_label.setText("Requesting mtz file ...")
-            data_init = ini_data()
+            data_init = IniData()
             uni_url = data_init.get_url()
             cmd = {"nod_lst":[self.cur_nod_num], "cmd_str":["get_mtz"]}
-            self.dowl_thrd = Mtz_Data_Request(cmd, self.my_handler)
+            self.dowl_thrd = MtzDataRequest(cmd, self.my_handler)
             self.dowl_thrd.update_progress.connect(self.show_new_progress)
             self.dowl_thrd.done_download.connect(self.save_mtz_on_disc)
             self.dowl_thrd.finished.connect(self.restore_p_label)
@@ -2221,10 +2189,10 @@ class MergeWidget(QWidget):
         if self.file_name != '':
             self.progress_label.setText("Requesting mtz file ...")
 
-            data_init = ini_data()
+            data_init = IniData()
             uni_url = data_init.get_url()
             cmd = {"nod_lst":[self.cur_nod_num], "cmd_str":["get_mtz"]}
-            self.dowl_thrd = Mtz_Data_Request(cmd, self.my_handler)
+            self.dowl_thrd = MtzDataRequest(cmd, self.my_handler)
             self.dowl_thrd.update_progress.connect(self.show_new_progress)
             self.dowl_thrd.done_download.connect(self.save_mtz_on_disc)
             self.dowl_thrd.finished.connect(self.restore_p_label)

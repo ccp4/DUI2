@@ -205,7 +205,7 @@ def add_log_line(new_line, nod_req):
 class CmdNode(object):
     def __init__(self, parent_lst_in = None, data_init = None):
         if data_init == None:
-            data_init = ini_data()
+            data_init = IniData()
 
         self.win_exe = data_init.get_win_exe()
         self.parent_node_lst = []
@@ -652,8 +652,8 @@ class Runner(object):
         #self.list_of_posts = []
         self.tree_output = format_utils.TreeShow()
         if dat_ini == None:
-            from dui2.server.init_first import ini_data
-            self.data_init = ini_data()
+            from dui2.server.init_first import IniData
+            self.data_init = IniData()
 
         else:
             self.data_init = dat_ini

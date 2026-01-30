@@ -6,11 +6,11 @@ feedback_data_list = get_feedback_data()
 from dui2.shared_modules.qt_libs import *
 
 from dui2.client.q_object import MainObject
-from dui2.client.init_firts import ini_data
+from dui2.client.init_firts import IniData
 from dui2.shared_modules import format_utils, all_local_gui_connector
 
 from dui2.server import multi_node
-from dui2.server.init_first import ini_data as server_ini_data
+from dui2.server.init_first import IniData as ServerIniData
 
 
 logging.basicConfig(filename='run_dui2_all_local_all_ram.log', level=logging.DEBUG)
@@ -37,12 +37,12 @@ def main():
         ("windows_exe", win_str),
         ("token", "dummy_4_now"),
     )
-    data_init = ini_data()
+    data_init = IniData()
     data_init.set_data(par_def = par_def)
 
     format_utils.print_logo()
 
-    server_data_init = server_ini_data()
+    server_data_init = ServerIniData()
     server_data_init.set_data(par_def = par_def)
 
     tmp_dat_dir = format_utils.create_tmp_dir()

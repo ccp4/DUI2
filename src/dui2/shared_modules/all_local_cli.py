@@ -2,11 +2,11 @@ import sys, os, time, json, logging
 from dui2.shared_modules import all_local_server, format_utils
 from dui2.server.data_n_json import iter_dict
 from dui2.server import multi_node
-from dui2.server.init_first import ini_data
+from dui2.server.init_first import IniData
 
 #TODO: check if this module is needed at all
 
-class cli_object(object):
+class cliObject(object):
     def __init__(self, cmd_tree_runner = None):
         self.handler = all_local_server.ReqHandler(cmd_tree_runner)
         logging.info("inside QObject")
@@ -28,7 +28,7 @@ class cli_object(object):
 
 def main(par_def = None):
     format_utils.print_logo()
-    data_init = ini_data()
+    data_init = IniData()
     data_init.set_data(par_def)
 
     init_param = format_utils.get_par(par_def, sys.argv[1:])
@@ -52,7 +52,7 @@ def main(par_def = None):
 
     cmd_tree_runner.set_dir_path(tree_ini_path)
 
-    m_obj = cli_object(cmd_tree_runner = cmd_runner)
+    m_obj = cliObject(cmd_tree_runner = cmd_runner)
 
     for cmd_repeat in range(10):
         str_in = input("type: \"Node,command\":")

@@ -5,14 +5,14 @@ from dui2.shared_modules.qt_libs import *
 from dui2.shared_modules import all_local_server, format_utils
 from dui2.server.data_n_json import iter_dict
 from dui2.server import multi_node
-from dui2.server.init_first import ini_data
+from dui2.server.init_first import IniData
 
 #TODO: check if this module is needed at all
 
-class connect_thread(QThread):
+class ConnectThread(QThread):
     logging.infoing = Signal(str)
     def __init__(self, handler, cmd_in):
-        super(connect_thread, self).__init__()
+        super(ConnectThread, self).__init__()
         self.my_handler = handler
         self.my_cmd = cmd_in
 
@@ -37,7 +37,7 @@ class MultiRunner(QObject):
         self.thread_lst = []
 
     def run_one_work(self, handler, cmd_in):
-        new_thread = connect_thread(handler, cmd_in)
+        new_thread = ConnectThread(handler, cmd_in)
         new_thread.start()
         new_thread.logging.infoing.connect(self.console_out)
         self.thread_lst.append(new_thread)
@@ -79,7 +79,7 @@ class MainGuiObject(QObject):
 
 def main(par_def = None):
     format_utils.print_logo()
-    data_init = ini_data()
+    data_init = IniData()
     data_init.set_data(par_def)
 
     init_param = format_utils.get_par(par_def, sys.argv[1:])

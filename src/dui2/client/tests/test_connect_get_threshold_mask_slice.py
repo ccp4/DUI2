@@ -65,7 +65,7 @@ if __name__ == "__main__":
         print("progress =", progress)
 
     end_data = zlib.decompress(compresed)
-    print("get_request_real_time ... downloaded")
+    print("GetRequestRealTime ... downloaded")
     #print("end_data =\n", end_data)
 
     d1d2_n_arr1d = np.frombuffer(end_data, dtype = float)

@@ -28,7 +28,7 @@ import json, os, zlib, sys, time, logging
 from dui2.server import multi_node
 #from dui2.server.data_n_json import iter_dict
 from dui2.server.data_n_json import spit_out
-from dui2.server.init_first import ini_data
+from dui2.server.init_first import IniData
 from dui2.shared_modules import format_utils
 from dui2.shared_modules._version import __version__
 
@@ -267,7 +267,7 @@ def main(par_def = None, connection_out = None):
 
     ################################################ PROPER MAIN
 
-    data_init = ini_data()
+    data_init = IniData()
     data_init.set_data(par_def)
 
     token_from_cli = data_init.get_token()

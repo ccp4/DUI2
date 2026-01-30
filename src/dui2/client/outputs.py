@@ -26,9 +26,9 @@ import sys, os, logging
 from dui2.shared_modules.qt_libs import *
 
 from dui2.client.exec_utils import (
-    get_req_json_dat, get_request_shot, get_request_real_time
+    get_req_json_dat, get_request_shot, GetRequestRealTime
 )
-from dui2.client.init_firts import ini_data
+from dui2.client.init_firts import IniData
 
 import subprocess, psutil, shutil, webbrowser
 
@@ -85,7 +85,7 @@ class LoadFiles(QThread):
 
             my_cmd_refl = {"nod_lst" : [self.cur_nod_num],
                       "cmd_str" : ["get_reflections_file"]}
-            self.req_r_time = get_request_real_time(
+            self.req_r_time = GetRequestRealTime(
                 params_in = my_cmd_refl, main_handler = self.my_handler
             )
             self.req_r_time.prog_new_stat.connect(self.emit_progr)
@@ -140,7 +140,7 @@ class LoadFiles(QThread):
             self.req_r_time.wait()
 
         else:
-            logging.info("No need to kill << get_request_real_time >> QThread")
+            logging.info("No need to kill << GetRequestRealTime >> QThread")
 
 
 class LaunchReciprocalLattice(QThread):
@@ -148,7 +148,7 @@ class LaunchReciprocalLattice(QThread):
         super(LaunchReciprocalLattice, self).__init__()
         self.exp_path = exp_path
         self.ref_path = ref_path
-        data_init = ini_data()
+        data_init = IniData()
         self.win_exe = data_init.get_win_exe()
 
     def run(self):
@@ -226,7 +226,7 @@ class HandleReciprocalLatticeView(QObject):
         self.main_obj = parent
         self.my_handler = parent.runner_handler
         logging.info("HandleReciprocalLatticeView(__init__)")
-        data_init = ini_data()
+        data_init = IniData()
         self.uni_url = data_init.get_url()
         self.tmp_dir = data_init.get_tmp_dir()
         logging.info("tmp_dir =" + self.tmp_dir)
@@ -381,7 +381,7 @@ class DoLoadHTML(QObject):
         super(DoLoadHTML, self).__init__(parent)
         self.main_obj = parent
         self.my_handler = parent.runner_handler
-        data_init = ini_data()
+        data_init = IniData()
         self.uni_url = data_init.get_url()
         self.tmp_dir = data_init.get_tmp_dir()
 
@@ -597,7 +597,7 @@ class ShowLog(QObject):
     def __init__(self, parent = None):
         super(ShowLog, self).__init__(parent)
         self.main_obj = parent
-        data_init = ini_data()
+        data_init = IniData()
         self.uni_url = data_init.get_url()
         sys_font = QFont()
         font_point_size = sys_font.pointSize()
@@ -735,11 +735,11 @@ class ShowLog(QObject):
             self.main_obj.window.incoming_text.insertPlainText(sing_help_line)
 
 
-class History_Box(QDialog):
+class HistoryBox(QDialog):
     def __init__(self, parent = None):
-        super(History_Box, self).__init__(parent)
+        super(HistoryBox, self).__init__(parent)
 
-        data_init = ini_data()
+        data_init = IniData()
         self.win_exe = data_init.get_win_exe()
 
         self.incoming_text = QTextEdit()

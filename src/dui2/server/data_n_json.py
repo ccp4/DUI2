@@ -54,7 +54,7 @@ from dials.command_line.combine_experiments import (
 from dials.command_line.cosym import phil_scope as phil_scope_cosym
 
 from dui2.server.img_uploader import flex_arr_2_json
-from dui2.server.init_first import ini_data
+from dui2.server.init_first import IniData
 
 def spit_out(str_out = None, req_obj = None, out_type = None):
     if req_obj is None:
@@ -464,7 +464,7 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
         try:
             reqt_path = str(uni_cmd[1].replace("/", os.sep))
 
-            data_init = ini_data()
+            data_init = IniData()
             limit_path = str(data_init.get_lim_path())
             logging.info("reqt_path =" + str(reqt_path))
             logging.info("limit_path =" + str( limit_path))
@@ -512,7 +512,7 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
     return return_list
 
 
-class build_param_dict_data(object):
+class BuildParamDictData(object):
     """
     Recursively navigates the Phil objects and creates another list
     of dictionaries with info about parameters, this new list is still
@@ -710,7 +710,7 @@ def get_param_list(cmd_str):
     else:
         do_convertion_4_nprog = False
 
-    lst_dict = build_param_dict_data(
+    lst_dict = BuildParamDictData(
         connect_dict[cmd_str], do_convertion_4_nprog
     )
     lst_phil_obj = lst_dict()
@@ -718,7 +718,7 @@ def get_param_list(cmd_str):
 
 
 def get_help_list(cmd_str):
-    data_init = ini_data()
+    data_init = IniData()
     win_exe = data_init.get_win_exe()
     if cmd_str == "import":
         cmd_str ="dials_import"

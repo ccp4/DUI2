@@ -27,7 +27,7 @@ from dui2.shared_modules.qt_libs import *
 import requests, json, os, sys, zlib, time, logging
 
 from dui2.client.gui_utils import AdvancedParameters, widgets_defs
-from dui2.client.init_firts import ini_data
+from dui2.client.init_firts import IniData
 from dui2.shared_modules import format_utils
 
 class get_request_shot(QObject):
@@ -36,7 +36,7 @@ class get_request_shot(QObject):
         self.to_return = None
         if main_handler == None:
             try:
-                data_init = ini_data()
+                data_init = IniData()
                 uni_url = data_init.get_url()
                 token = data_init.get_token()
                 params_out = dict(params_in)
@@ -89,7 +89,7 @@ class get_req_json_dat(QObject):
         super(get_req_json_dat, self).__init__(parent)
         self.to_return = None
         if main_handler == None:
-            data_init = ini_data()
+            data_init = IniData()
             uni_url = data_init.get_url()
             token = data_init.get_token()
             try:
@@ -147,18 +147,18 @@ class get_req_json_dat(QObject):
         return self.to_return ##### search here for the all_local_all_ram issue
 
 
-class get_request_real_time(QThread):
+class GetRequestRealTime(QThread):
     prog_new_stat = Signal(int)
     load_ended = Signal(bytes)
     def __init__(self, params_in = None, main_handler = None):
-        super(get_request_real_time, self).__init__()
-        logging.info("params_in(get_request_real_time) =" + str(params_in))
-        data_init = ini_data()
+        super(GetRequestRealTime, self).__init__()
+        logging.info("params_in(GetRequestRealTime) =" + str(params_in))
+        data_init = IniData()
         self.url = data_init.get_url()
         self.token = data_init.get_token()
         self.params = params_in
         self.my_handler = main_handler
-        logging.info("params_in(get_request_real_time) got here" + str(params_in))
+        logging.info("params_in(GetRequestRealTime) got here" + str(params_in))
 
     def run(self):
         if self.my_handler == None:
@@ -188,19 +188,19 @@ class get_request_real_time(QThread):
                     self.prog_new_stat.emit(progress)
 
                 end_data = zlib.decompress(compresed)
-                logging.info("get_request_real_time ... downloaded")
+                logging.info("GetRequestRealTime ... downloaded")
 
             except zlib.error:
-                logging.info("zlib. err catch(get_request_real_time) <<")
+                logging.info("zlib. err catch(GetRequestRealTime) <<")
                 end_data = None
 
             except ConnectionError:
-                logging.info("Connection err catch (get_request_real_time)")
+                logging.info("Connection err catch (GetRequestRealTime)")
                 end_data = None
 
             except requests.exceptions.RequestException:
                 logging.info(
-                    "requests.exceptions.ReqExp (get_request_real_time)"
+                    "requests.exceptions.ReqExp (GetRequestRealTime)"
                 )
                 end_data = None
 
@@ -233,7 +233,7 @@ def build_advanced_params_widget(cmd_str, h_box_search, handler_in):
     lst_req = get_req_json_dat(params_in = cmd, main_handler = handler_in)
     lst_params = lst_req.result_out()
 
-    lin_lst = format_utils.param_tree_2_lineal(lst_params)
+    lin_lst = format_utils.ParamTree2Lineal(lst_params)
     par_def = lin_lst()
     advanced_parameters = AdvancedParameters()
     advanced_parameters.build_pars(par_def, h_box_search)
@@ -289,17 +289,17 @@ def build_thresh_comd(dict_in):
     return lst_out
 
 
-class Mtz_Data_Request(QThread):
+class MtzDataRequest(QThread):
     update_progress = Signal(int)
     done_download = Signal(bytes)
     def __init__(self, cmd, main_handler):
-        super(Mtz_Data_Request, self).__init__()
+        super(MtzDataRequest, self).__init__()
         self.cmd = cmd
         self.my_handler = main_handler
 
     def run(self):
         self.say_goodbye()
-        self.r_time_req = get_request_real_time(
+        self.r_time_req = GetRequestRealTime(
             params_in = self.cmd, main_handler = self.my_handler
         )
         self.r_time_req.prog_new_stat.connect(self.new_progress)
@@ -318,10 +318,10 @@ class Mtz_Data_Request(QThread):
             #self.r_time_req.wait()
 
         except AttributeError:
-            logging.info("not found QThread(get_request_real_time)")
+            logging.info("not found QThread(GetRequestRealTime)")
 
 
-class post_req_w_output(QThread):
+class PostRequestWithOutput(QThread):
     first_line = Signal(int)
     lst_out = Signal(list)
     new_line_out = Signal(str, int, str)
@@ -329,9 +329,9 @@ class post_req_w_output(QThread):
     def __init__(
         self, do_pred_n_rept = False, cmd_in = None, main_handler = None
     ):
-        super(post_req_w_output, self).__init__()
+        super(PostRequestWithOutput, self).__init__()
 
-        data_init = ini_data()
+        data_init = IniData()
         self.uni_url = data_init.get_url()
         self.token = data_init.get_token()
         self.cmd = cmd_in
@@ -344,7 +344,7 @@ class post_req_w_output(QThread):
             try:
                 data_in = dict(self.cmd)
                 data_in["token"] = self.token
-                logging.info("data_in(post_req_w_output)=" + str(data_in))
+                logging.info("data_in(PostRequestWithOutput)=" + str(data_in))
                 self.request = requests.post(
                     self.uni_url, stream = True, data = data_in
                 )
@@ -369,7 +369,7 @@ class post_req_w_output(QThread):
 
                         except IndexError:
                             logging.info(
-                                "post_req_w_output ... Index err catch"
+                                "PostRequestWithOutput ... Index err catch"
                             )
                             not_yet_read = True
 
@@ -419,7 +419,7 @@ class post_req_w_output(QThread):
                 self.already_read = True
 
             except IndexError:
-                logging.info("post_req_w_output ... Index err catch")
+                logging.info("PostRequestWithOutput ... Index err catch")
 
         elif '/*EOF*/' in line_str :
             logging.info(
@@ -607,10 +607,10 @@ class CommandParamControl(object):
         return lst_out
 
 
-class Help_Request(QThread):
+class HelpRequest(QThread):
     message_acquired = Signal(dict)
     def __init__(self, prog_box, main_obj):
-        super(Help_Request, self).__init__()
+        super(HelpRequest, self).__init__()
         self.p_box = prog_box
         self.runner_handler = main_obj
         self.lst_cmd = [
@@ -717,9 +717,9 @@ class Help_Request(QThread):
         self.message_acquired.emit(help_dict)
 
 
-class Progress_Box(QDialog):
+class ProgressBox(QDialog):
     def __init__(self, parent = None):
-        super(Progress_Box, self).__init__(parent)
+        super(ProgressBox, self).__init__(parent)
 
         self.live_label = QLabel("progress")
         self.button_close = QPushButton("Ok/Close")

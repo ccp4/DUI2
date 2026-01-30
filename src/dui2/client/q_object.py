@@ -27,20 +27,20 @@ from dui2.shared_modules.qt_libs import *
 
 from dui2.client.gui_utils import (
     TreeDirScene, widgets_defs, get_widget_def_dict, make_square_srting,
-    find_scale_cmd, find_next_cmd, check_if_predict_n_report
+    find_scale_cmd, FindNextCmd, check_if_predict_n_report
 )
 from dui2.client.outputs import (
-    DoLoadHTML, ShowLog, History_Box, HandleReciprocalLatticeView
+    DoLoadHTML, ShowLog, HistoryBox, HandleReciprocalLatticeView
 )
 from dui2.client.img_view import DoImageView
 from dui2.client.reindex_table import ReindexTable, get_label_from_str_list
 from dui2.client.exec_utils import (
     get_optional_list, build_advanced_params_widget, get_req_json_dat,
-    post_req_w_output, CommandParamControl, build_thresh_comd
+    PostRequestWithOutput, CommandParamControl, build_thresh_comd
 )
 
 
-from dui2.client.init_firts import ini_data
+from dui2.client.init_firts import IniData
 
 from dui2.client.simpler_param_widgets import RootWidg
 from dui2.client.simpler_param_widgets import ImportWidget
@@ -65,8 +65,8 @@ from dui2.shared_modules._version import __version__
 from dui2.shared_modules.format_utils import get_feedback_data
 
 
-#FIXME: Progress_Box belongs elsewhere
-from dui2.client.exec_utils import Help_Request, Progress_Box
+#FIXME: ProgressBox belongs elsewhere
+from dui2.client.exec_utils import HelpRequest, ProgressBox
 
 
 class MainObject(QObject):
@@ -643,8 +643,8 @@ class MainObject(QObject):
 
         self.window.verticalLayout_html_view.addWidget(self.html_view)
 
-        self.p_box = Progress_Box()
-        self.h_req = Help_Request(self.p_box, self.runner_handler)
+        self.p_box = ProgressBox()
+        self.h_req = HelpRequest(self.p_box, self.runner_handler)
 
         self.window.show()
         self.import_init()
@@ -668,7 +668,7 @@ class MainObject(QObject):
         self.tree_scene.try_draw_all()
 
     def history_triggered(self):
-        self.H_Box = History_Box()
+        self.H_Box = HistoryBox()
         self.H_Box.get_main_obj_n_request(self)
         self.H_Box.show()
 
@@ -725,7 +725,7 @@ class MainObject(QObject):
         loop.exec_()
         if len(self.server_nod_lst) == 1:
             self.nxt_key_clicked("import")
-            data_init = ini_data()
+            data_init = IniData()
             import_init = data_init.get_import_init()
             if import_init != "None":
                 self.imp_widg.set_selection(str(import_init), isdir = True)
@@ -1151,7 +1151,7 @@ class MainObject(QObject):
             if(
                 self.server_nod_lst[self.curr_nod_num]["status"] == "Succeeded"
             ):
-                fnd_nxt_cmd = find_next_cmd(
+                fnd_nxt_cmd = FindNextCmd(
                     self.server_nod_lst,
                     self.server_nod_lst[self.curr_nod_num]["parent_node_lst"],
                     str_key, self.param_widgets, self.opt_cmd_lst
@@ -1523,7 +1523,7 @@ class MainObject(QObject):
             self.window.RunPedictAndReportCheckBox.checkState()
         )
         logging.info("cmd(request_launch) =" + str(cmd))
-        post_thread = post_req_w_output(
+        post_thread = PostRequestWithOutput(
             cmd_in = cmd, do_pred_n_rept = do_predictions_n_report,
             main_handler = self.runner_handler
         )
@@ -1543,7 +1543,7 @@ class MainObject(QObject):
         logging.info("req_stop")
         nod_lst = [str(self.curr_nod_num)]
         cmd = {"nod_lst":nod_lst, "cmd_lst":["stop"]}
-        post_thread = post_req_w_output(
+        post_thread = PostRequestWithOutput(
             cmd_in = cmd, main_handler = self.runner_handler
         )
         post_thread.finished.connect(self.post_ended)
@@ -1566,7 +1566,7 @@ class MainObject(QObject):
                 self.do_load_html.reset_lst_html()
                 self.log_show.reset_mem()
 
-                post_thread = post_req_w_output(
+                post_thread = PostRequestWithOutput(
                     cmd_in = cmd, main_handler = self.runner_handler
                 )
                 post_thread.first_line.connect(self.respose_n1_from_reset)
@@ -1600,7 +1600,7 @@ class MainObject(QObject):
             'dials.split_experiments'
         ):
             cmd = {"nod_lst": [nod_num_out], "cmd_lst": ["split_node"]}
-            new_thrd = post_req_w_output(
+            new_thrd = PostRequestWithOutput(
                 cmd_in = cmd, main_handler = self.runner_handler
             )
             new_thrd.lst_out.connect(self.update_after_split)
@@ -1613,7 +1613,7 @@ class MainObject(QObject):
             self.new_pred_n_repo = True
             cmd = {"nod_lst":[nod_num_out], "cmd_lst":["run_predict_n_report"]}
             self.do_load_html.reset_lst_html()
-            new_thrd = post_req_w_output(
+            new_thrd = PostRequestWithOutput(
                 cmd_in = cmd, main_handler = self.runner_handler
             )
             new_thrd.finished.connect(self.refresh_output)
@@ -1633,7 +1633,7 @@ class MainObject(QObject):
                 "nod_lst":lst_new_nods, "cmd_lst":["run_predict_n_report"]
             }
             self.do_load_html.reset_lst_html()
-            new_thrd = post_req_w_output(
+            new_thrd = PostRequestWithOutput(
                 cmd_in = cmd, main_handler = self.runner_handler
             )
             new_thrd.finished.connect(self.refresh_output)

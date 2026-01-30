@@ -25,7 +25,7 @@ copyright (c) CCP4 - DLS
 import numpy as np
 import time, logging
 
-from dui2.client.init_firts import ini_data
+from dui2.client.init_firts import IniData
 from dui2.client.exec_utils import get_request_shot
 
 def load_img_json_w_str(
@@ -138,7 +138,7 @@ def crunch_min_max(data2d, i_min_max):
     return data2d_pos, data2d_pos_max, width, height
 
 
-class np2bmp_heat(object):
+class np2bmpHeat(object):
     def __init__(self):
         self.red_byte = np.empty( (255 * 3), 'int')
         self.green_byte = np.empty( (255 * 3), 'int')
@@ -208,7 +208,7 @@ class np2bmp_heat(object):
         return img_array
 
 
-class np2bmp_monocrome(object):
+class np2bmpMonocrome(object):
     def __init__(self):
         self.all_chan_byte = np.empty( (255), 'int')
         for i in range(255):
@@ -249,9 +249,9 @@ class np2bmp_monocrome(object):
         return img_array
 
 
-class np2bmp_mask(object):
+class np2bmpMask(object):
     def __init__(self):
-        logging.info("Dummy __init__ (np2bmp_mask)")
+        logging.info("Dummy __init__ (np2bmpMask)")
 
     def img_2d_rgb(self, data2d = None, colour_in = None, transp = None):
         try:

@@ -4,9 +4,9 @@ from dui2.shared_modules.qt_libs import *
 
 from dui2.shared_modules import all_local_server, format_utils
 
-class connect_get_thread(QThread):
+class ConnectGetThread(QThread):
     def __init__(self, handler, cmd_in, obj_out):
-        super(connect_get_thread, self).__init__()
+        super(ConnectGetThread, self).__init__()
         self.my_handler = handler
         self.my_cmd = cmd_in
         self.my_caller = obj_out
@@ -23,13 +23,13 @@ class connect_get_thread(QThread):
         self.my_caller.get_it_bin(data_out)
 
 
-class connect_post_thread(QThread):
+class ConnectPostThread(QThread):
     def __init__(self, handler, cmd_in, obj_out):
-        super(connect_post_thread, self).__init__()
+        super(ConnectPostThread, self).__init__()
         self.my_handler = handler
         self.my_cmd = cmd_in
         self.my_caller = obj_out
-        logging.info("my_cmd(connect_post_thread)=" + str(self.my_cmd))
+        logging.info("my_cmd(ConnectPostThread)=" + str(self.my_cmd))
 
     def run(self):
         self.my_handler.fake_post(
@@ -38,7 +38,7 @@ class connect_post_thread(QThread):
 
     def call_back_str(self, data_out):
         self.my_caller.get_it_str(data_out)
-        #logging.info("data going(connect_post_thread)=", data_out)
+        #logging.info("data going(ConnectPostThread)=", data_out)
 
 
 class MultiRunner(QObject):
@@ -51,7 +51,7 @@ class MultiRunner(QObject):
         self._my_timer.start(2000)
 
     def get_work(self, handler, cmd_in, obj_out):
-        new_thread = connect_get_thread(handler, cmd_in, obj_out)
+        new_thread = ConnectGetThread(handler, cmd_in, obj_out)
         new_thread.start()
         self.thread_lst.append(new_thread)
 
@@ -59,7 +59,7 @@ class MultiRunner(QObject):
             time.sleep(0.1)
 
     def post_work(self, handler, cmd_in, obj_out):
-        new_thread = connect_post_thread(handler, cmd_in, obj_out)
+        new_thread = ConnectPostThread(handler, cmd_in, obj_out)
         self.thread_lst.append(new_thread)
         new_thread.start()
 

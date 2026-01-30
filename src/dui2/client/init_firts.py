@@ -25,9 +25,9 @@ copyright (c) CCP4 - DLS
 import os, sys, logging
 from dui2.shared_modules import format_utils
 
-class ini_data(object):
+class IniData(object):
     def __init__(self):
-        logging.info("ini_data.__init__()")
+        logging.info("IniData.__init__()")
 
     def set_data(self, par_def = None):
         if par_def == None:
@@ -107,6 +107,6 @@ class ini_data(object):
 
 
 if __name__ == "__main__":
-    init_firts = ini_data()
-    logging.info("ini_data.uni_url =" + str(init_firts.get_url()))
+    init_firts = IniData()
+    logging.info("IniData.uni_url =" + str(init_firts.get_url()))
 

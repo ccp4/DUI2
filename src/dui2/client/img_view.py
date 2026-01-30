@@ -26,13 +26,13 @@ import sys, os, logging, platform
 
 from dui2.shared_modules.qt_libs import *
 from dui2.shared_modules.img_view_utils import (
-    crunch_min_max, np2bmp_monocrome, np2bmp_heat, np2bmp_mask
+    crunch_min_max, np2bmpMonocrome, np2bmpHeat, np2bmpMask
 )
 
 import numpy as np
 import json
 
-from dui2.client.init_firts import ini_data
+from dui2.client.init_firts import IniData
 from dui2.client.exec_utils import get_req_json_dat
 from dui2.client.outputs import HandleLoadStatusLabel
 
@@ -373,7 +373,7 @@ class DoImageView(QObject):
         self.main_obj = parent
         self.my_handler = parent.runner_handler
 
-        data_init = ini_data()
+        data_init = IniData()
         self.uni_url = data_init.get_url()
         self.l_stat = HandleLoadStatusLabel(self.main_obj)
         self.my_scene = ImgGraphicsScene(self)
@@ -407,7 +407,7 @@ class DoImageView(QObject):
 
         self.main_obj.window.EasterEggButton.clicked.connect(self.easter_egg)
 
-        data_init = ini_data()
+        data_init = IniData()
         self.run_local = data_init.get_if_local()
         if self.run_local:
             self.easter_egg_active = False
@@ -453,9 +453,9 @@ class DoImageView(QObject):
         self.my_scene.mouse_pressed.connect(self.on_mouse_press)
         self.my_scene.mouse_released.connect(self.on_mouse_release)
 
-        self.bmp_heat = np2bmp_heat()
-        self.bmp_m_cro = np2bmp_monocrome()
-        self.bmp_mask = np2bmp_mask()
+        self.bmp_heat = np2bmpHeat()
+        self.bmp_m_cro = np2bmpMonocrome()
+        self.bmp_mask = np2bmpMask()
 
         self.cur_img_num = None
         self.cur_nod_num = None
@@ -1548,7 +1548,7 @@ class MainImgViewObject(QObject):
         self.window = QtUiTools.QUiLoader().load(ui_path)
         self.window.setWindowTitle("CCP4 DUIs embedded image viewer")
 
-        data_init = ini_data()
+        data_init = IniData()
         self.uni_url = data_init.get_url()
 
         self.curr_nod_num = 1
@@ -1635,7 +1635,7 @@ def main(par_def = None):
         os.environ["QT_QPA_PLATFORM"] = "xcb"
         os.environ["WAYLAND_DISPLAY"] = ""
 
-    data_init = ini_data()
+    data_init = IniData()
     data_init.set_data(par_def)
     uni_url = data_init.get_url()
     app = QApplication(sys.argv)

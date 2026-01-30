@@ -26,7 +26,7 @@ import sys, time, logging, os, platform
 from dui2.shared_modules.qt_libs import *
 
 from dui2.client.q_object import MainObject
-from dui2.client.init_firts import ini_data
+from dui2.client.init_firts import IniData
 from dui2.client.exec_utils import get_req_json_dat
 
 from dui2.shared_modules import format_utils
@@ -41,7 +41,7 @@ def main(par_def = None):
         os.environ["QT_QPA_PLATFORM"] = "xcb"
         os.environ["WAYLAND_DISPLAY"] = ""
 
-    data_init = ini_data()
+    data_init = IniData()
     data_init.set_data(par_def)
     uni_url = str(data_init.get_url())
 

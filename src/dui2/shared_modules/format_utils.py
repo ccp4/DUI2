@@ -341,7 +341,7 @@ class TreeShow(object):
         return self.dat_lst
 
 
-class param_tree_2_lineal(object):
+class ParamTree2Lineal(object):
     """
     Recursively navigates the Phil objects in a way that the final
     self.lst_obj is a lineal list without ramifications
