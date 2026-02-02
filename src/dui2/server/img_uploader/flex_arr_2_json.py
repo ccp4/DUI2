@@ -397,44 +397,61 @@ def get_correct_img_num_n_sweep_num(experiments, img_num):
 def get_bytes_w_img_2d(experiments_list_path, img_num):
     experiments = get_experiments(experiments_list_path[0])
     if experiments is not None:
-        try:
-            on_sweep_img_num, n_sweep = get_correct_img_num_n_sweep_num(
-                experiments, img_num
+        if img_num < 0:
+            logging.warning(
+                "Attempted to access negative image number:" + str(img_num) +
+                " (get_bytes_w_img_2d)"
             )
-            my_sweep = experiments.imagesets()[n_sweep]
-            raw_dat = my_sweep.get_raw_data(on_sweep_img_num)
-            np_arr, i23_multipanel = img_stream_py.get_np_full_img(raw_dat)
-            byte_info = img_stream_py.np_arr_2_byte_stream(np_arr)
-            return byte_info
-        except OverflowError:
-            logging.info("Overflow Err Catch (get_bytes_w_img_2d)")
             return None
+
+        on_sweep_img_num, n_sweep = get_correct_img_num_n_sweep_num(
+            experiments, img_num
+        )
+        my_sweep = experiments.imagesets()[n_sweep]
+        try:
+            raw_dat = my_sweep.get_raw_data(on_sweep_img_num)
+
+        except OverflowError:
+            print("Overflow Err Catch (get_bytes_w_img_2d)")
+            return None
+
+        np_arr, i23_multipanel = img_stream_py.get_np_full_img(raw_dat)
+        byte_info = img_stream_py.np_arr_2_byte_stream(np_arr)
+        return byte_info
 
     else:
         return None
 
 
-def get_bytes_w_2d_slise(experiments_list_path, img_num, inv_scale, x1, y1, x2, y2):
+def get_bytes_w_2d_slise(
+    experiments_list_path, img_num, inv_scale, x1, y1, x2, y2
+    ):
     experiments = get_experiments(experiments_list_path[0])
     if experiments is not None:
-        try:
-            pan_num = 0
-            on_sweep_img_num, n_sweep = get_correct_img_num_n_sweep_num(
-                experiments, img_num
+        pan_num = 0
+        if img_num < 0:
+            logging.warning(
+                "Attempted to access negative image number:" + str(img_num) +
+                " (get_bytes_w_2d_slise)"
             )
-            my_sweep = experiments.imagesets()[n_sweep]
-            data_xy_flex = my_sweep.get_raw_data(on_sweep_img_num)
-
-            byte_data = img_stream_py.slice_arr_2_byte(
-                data_xy_flex, inv_scale,
-                int(float(x1)), int(float(y1)),
-                int(float(x2)), int(float(y2))
-            )
-
-        except OverflowError:
-            logging.info("Overflow Err Catch (get_bytes_w_2d_slise)")
             return None
 
+        on_sweep_img_num, n_sweep = get_correct_img_num_n_sweep_num(
+            experiments, img_num
+        )
+        my_sweep = experiments.imagesets()[n_sweep]
+        try:
+            data_xy_flex = my_sweep.get_raw_data(on_sweep_img_num)
+
+        except OverflowError:
+            print("Overflow Err Catch (get_bytes_w_2d_slise)")
+            return None
+
+        byte_data = img_stream_py.slice_arr_2_byte(
+            data_xy_flex, inv_scale,
+            int(float(x1)), int(float(y1)),
+            int(float(x2)), int(float(y2))
+        )
         if byte_data == "Error":
             logging.info('byte_data == "Error"')
             byte_data = None
