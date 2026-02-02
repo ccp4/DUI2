@@ -412,7 +412,7 @@ def get_bytes_w_img_2d(experiments_list_path, img_num):
             raw_dat = my_sweep.get_raw_data(on_sweep_img_num)
 
         except OverflowError:
-            print("Overflow Err Catch (get_bytes_w_img_2d)")
+            logging.info("Overflow Err Catch (get_bytes_w_img_2d)")
             return None
 
         np_arr, i23_multipanel = img_stream_py.get_np_full_img(raw_dat)
@@ -444,7 +444,7 @@ def get_bytes_w_2d_slise(
             data_xy_flex = my_sweep.get_raw_data(on_sweep_img_num)
 
         except OverflowError:
-            print("Overflow Err Catch (get_bytes_w_2d_slise)")
+            logging.info("Overflow Err Catch (get_bytes_w_2d_slise)")
             return None
 
         byte_data = img_stream_py.slice_arr_2_byte(

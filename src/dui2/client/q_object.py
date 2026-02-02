@@ -757,7 +757,10 @@ class MainObject(QObject):
             self.request_launch()
 
     def img_num_changed(self):
-        new_img_num = self.window.ImgNumEdit.text()
+        new_img_num = int(self.window.ImgNumEdit.text())
+        if new_img_num < 0:
+            self.window.ImgNumEdit.setText("0")
+
         self.refresh_output()
 
     def shift_img_num(self, sh_num):
