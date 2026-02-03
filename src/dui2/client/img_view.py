@@ -131,10 +131,7 @@ class ImgGraphicsScene(QGraphicsScene):
         self.draw_near_hkl = True
         self.beam_xy_pair = (-1, -1)
 
-        timer_4_b_centr = QTimer(self)
-        timer_4_b_centr.timeout.connect(self.check_if_draw_b_centr)
         self.draw_b_center = False
-        timer_4_b_centr.start(500)
 
     def draw_ref_rect(self):
 
@@ -143,6 +140,9 @@ class ImgGraphicsScene(QGraphicsScene):
             self.curr_pixmap = self.my_pix_map
 
         self.addPixmap(self.curr_pixmap)
+
+        self.check_if_draw_b_centr()
+
         if self.parent_obj.pop_display_menu.rad_but_obs.isChecked():
             tick_size = 10.0
             # Create list of QRectF objects first
