@@ -141,8 +141,6 @@ class ImgGraphicsScene(QGraphicsScene):
 
         self.addPixmap(self.curr_pixmap)
 
-        self.check_if_draw_b_centr()
-
         if self.parent_obj.pop_display_menu.rad_but_obs.isChecked():
             tick_size = 10.0
             # Create list of QRectF objects first
@@ -170,7 +168,6 @@ class ImgGraphicsScene(QGraphicsScene):
         else:
             z_dept_fl = float(self.parent_obj.pop_display_menu.z_dept_combo.value())
 
-            # Prepare data for the crosshair item
             positions = [(refl["x"], refl["y"]) for refl in self.refl_list]
             z_depths = [refl["z_dist"] for refl in self.refl_list]
 
@@ -183,6 +180,8 @@ class ImgGraphicsScene(QGraphicsScene):
 
         if self.my_mask_pix_map is not None:
             self.addPixmap(self.my_mask_pix_map)
+
+        self.check_if_draw_b_centr()
 
     def check_if_draw_b_centr(self):
         if self.draw_b_center:
