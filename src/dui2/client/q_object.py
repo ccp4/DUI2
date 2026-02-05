@@ -643,12 +643,12 @@ class MainObject(QObject):
 
         self.window.verticalLayout_html_view.addWidget(self.html_view)
 
-        self.p_box = ProgressBox()
-        self.h_req = HelpRequest(self.p_box, self.runner_handler)
+        #self.p_box = ProgressBox()
+        #self.h_req = HelpRequest(self.p_box, self.runner_handler)
 
         self.window.show()
         self.import_init()
-        self.dials_help_init()
+        #self.dials_help_init()
 
     def sharp_turns_triggered(self):
         self.sharp_turns_on = not self.sharp_turns_on
