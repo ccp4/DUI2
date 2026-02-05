@@ -1620,14 +1620,18 @@ class MainImgViewObject(QObject):
 
 def main(par_def = None):
 
+    win_str = "false"
     if platform.system() == "Windows":
+        print("running on Windows")
         win_str = "true"
 
-    else:
-        #TODO: test this variables on m1 mac
-        win_str = "false"
+    elif platform.system() == "Linux":
+        print("running on Linux")
         os.environ["QT_QPA_PLATFORM"] = "xcb"
         os.environ["WAYLAND_DISPLAY"] = ""
+
+    else:
+        print("nether Linux or Windows")
 
     data_init = IniData()
     data_init.set_data(par_def)

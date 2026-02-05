@@ -33,13 +33,17 @@ from dui2.shared_modules import format_utils
 
 def main(par_def = None):
     os.environ["QTWEBENGINE_CHROMIUM_FLAGS"] = "--no-sandbox"
-    if platform.system() == "Windows":
-        print("Running on Windows")
 
-    else:
-        print("Running on Unix-like O.S.")
+    if platform.system() == "Windows":
+        print("running on Windows")
+
+    elif platform.system() == "Linux":
+        print("running on Linux")
         os.environ["QT_QPA_PLATFORM"] = "xcb"
         os.environ["WAYLAND_DISPLAY"] = ""
+
+    else:
+        print("nether Linux or Windows")
 
     data_init = IniData()
     data_init.set_data(par_def)

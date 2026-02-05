@@ -132,13 +132,15 @@ class Form(QWidget):
 def main():
 
     if platform.system() == "Windows":
-        win_str = "true"
+        print("running on Windows")
 
-    else:
-        #TODO: test this variables on m1 mac
-        win_str = "false"
+    elif platform.system() == "Linux":
+        print("running on Linux")
         os.environ["QT_QPA_PLATFORM"] = "xcb"
         os.environ["WAYLAND_DISPLAY"] = ""
+
+    else:
+        print("nether Linux or Windows")
 
     par_def = (
         ("domain", "http://127.0.0.1"),
