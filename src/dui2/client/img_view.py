@@ -46,7 +46,9 @@ from dui2.client.file_nav_utils import FileBrowser
 
 
 class CrosshairItem(QGraphicsItem):
-    def __init__(self, positions, z_depths, z_depth_ref, pen, max_size=6, parent=None):
+    def __init__(
+        self, positions, z_depths, z_depth_ref, pen, max_size=6, parent=None
+    ):
         super().__init__(parent)
         self.positions = positions  # List of (x,y) tuples
         self.z_depths = z_depths    # List of z_dist values
@@ -166,7 +168,9 @@ class ImgGraphicsScene(QGraphicsScene):
                     )
 
         else:
-            z_dept_fl = float(self.parent_obj.pop_display_menu.z_dept_combo.value())
+            z_dept_fl = float(
+                self.parent_obj.pop_display_menu.z_dept_combo.value()
+            )
 
             positions = [(refl["x"], refl["y"]) for refl in self.refl_list]
             z_depths = [refl["z_dist"] for refl in self.refl_list]
@@ -520,7 +524,9 @@ class DoImageView(QObject):
                 thread.quit()
                 if not thread.wait(1200):  # Wait up to 1.2 seconds per thread
                     print(f"Thread {thread} did not exit gracefully")
-                    logging.info("Thread: " + str(thread) + " did not exit gracefully")
+                    logging.info(
+                        "Thread: " + str(thread) + " did not exit gracefully"
+                    )
                     thread.terminate()  # Force termination if necessary
 
                 thread.wait()
