@@ -643,12 +643,11 @@ class MainObject(QObject):
 
         self.window.verticalLayout_html_view.addWidget(self.html_view)
 
-        #self.p_box = ProgressBox()
-        #self.h_req = HelpRequest(self.p_box, self.runner_handler)
-
         self.window.show()
         self.import_init()
-        #self.dials_help_init()
+
+        QTimer.singleShot(2000, self.dials_help_init)
+
 
     def sharp_turns_triggered(self):
         self.sharp_turns_on = not self.sharp_turns_on
@@ -739,10 +738,15 @@ class MainObject(QObject):
             self.on_node_click_w_left(big_nod_num)
 
     def dials_help_init(self):
+        self.p_box = ProgressBox()
+        self.p_box.show()
+        self.h_req = HelpRequest(self.p_box, self.runner_handler)
+
         self.h_req.message_acquired.connect(self.dials_help_ended)
         self.h_req.start()
 
     def dials_help_ended(self, hlp_msg):
+        self.p_box.button_close.clicked.emit()
         self.help_msg_dict = hlp_msg
 
     def launch_reindex(self, sol_rei):

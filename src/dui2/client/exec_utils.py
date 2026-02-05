@@ -688,7 +688,6 @@ class HelpRequest(QThread):
         '''
 
     def run(self):
-        self.p_box.show()
         self.p_box.update_msg("Start getting help")
 
         #TODO change the name of one of the cmd_str variables
@@ -713,7 +712,6 @@ class HelpRequest(QThread):
             self.p_box.update_msg(msg_str)
 
         self.p_box.update_msg("End getting help")
-        self.p_box.button_close.clicked.emit()
         self.message_acquired.emit(help_dict)
 
 
