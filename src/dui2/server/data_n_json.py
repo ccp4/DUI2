@@ -403,16 +403,18 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
                 ]
 
             except (IndexError, AttributeError):
-                print(
+                logging.info(
                     "err catch , wrong line, not sending  resolution"
                 )
 
             except ValueError:
-                print(
+                logging.info(
                     "err catch , wrong command, not sending  resolution"
                 )
             except RuntimeError:
-                print("Runtime Err catch , wrong panel not sending resolution")
+                logging.info(
+                    "Runtime Err catch , wrong panel not sending resolution"
+                )
 
     elif uni_cmd[0] == "get_predictions":
         for lin2go in cmd_dict["nod_lst"]:

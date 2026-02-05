@@ -372,10 +372,8 @@ def save_image_as_file(parent_scene = None, width = None, height = None):
         parent_scene.render(painter)
         painter.end()
 
-        print("\n\n Here 1 \n\n")
 
         path_n_file = os.path.dirname(os.getcwd())
-        print("\n\n Here 2 \n\n")
 
         print("path_n_file =", path_n_file)
 
@@ -384,7 +382,7 @@ def save_image_as_file(parent_scene = None, width = None, height = None):
             filter="ImageXX  (*.png)", selectedFilter = "image.png"
         )
 
-        print("\n\n fileResul = ", fileResul, "\n\n")
+        print("FileResul = ", fileResul)
 
         file_name = fileResul[0]
         if file_name != '':
@@ -403,12 +401,6 @@ def save_image_as_file(parent_scene = None, width = None, height = None):
 
     except TypeError:
         print("Cannot save non existent image")
-
-
-
-
-
-
 
 
 class ThresholdDisplayMenu(QMenu):

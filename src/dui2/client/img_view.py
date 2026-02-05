@@ -1241,7 +1241,7 @@ class DoImageView(QObject):
             avg_scale = self.get_scale_n_set_label()
 
         except TypeError:
-            print("not need to zoom-out")
+            logging.info("not need to zoom-out(DoImageView)")
 
     def scale_img(self, relative_new_scale):
         tmp_x1, tmp_y1, tmp_x2, tmp_y2 = self.det_tmp_x1_y1_x2_y2()

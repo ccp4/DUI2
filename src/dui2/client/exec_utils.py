@@ -735,9 +735,7 @@ class ProgressBox(QDialog):
         self.live_label.setText(put_this)
 
     def stop_me(self):
-        print("time to stop")
         self.close()
-        #self.accept()
 
 
 if __name__ == "__main__":

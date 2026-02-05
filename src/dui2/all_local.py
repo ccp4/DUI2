@@ -59,7 +59,7 @@ def get_other_procs():
 
 
 def main():
-    print("\n platform.system()", platform.system())
+    print("\n Running on ", platform.system())
     get_other_procs()
 
     if platform.system() == "Windows":
