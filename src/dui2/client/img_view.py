@@ -181,9 +181,6 @@ class ImgGraphicsScene(QGraphicsScene):
         if self.my_mask_pix_map is not None:
             self.addPixmap(self.my_mask_pix_map)
 
-        self.check_if_draw_b_centr()
-
-    def check_if_draw_b_centr(self):
         if self.draw_b_center:
             self.draw_beam_center()
 
