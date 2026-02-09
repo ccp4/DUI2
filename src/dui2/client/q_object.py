@@ -30,7 +30,8 @@ from dui2.client.gui_utils import (
     find_scale_cmd, FindNextCmd, check_if_predict_n_report
 )
 from dui2.client.outputs import (
-    DoLoadHTML, ShowLog, HistoryBox, HandleReciprocalLatticeView
+    DoLoadHTML, ShowLog, HistoryBox,
+    HandleReciprocalLatticeView, DummyQWebEngine
 )
 from dui2.client.img_view import DoImageView
 from dui2.client.reindex_table import ReindexTable, get_label_from_str_list
@@ -557,8 +558,12 @@ class MainObject(QObject):
         self.window.RecipLattOpenButton.clicked.connect(
             self.RecipLattOpenClicked
         )
+        try:
+            self.html_view = QWebEngineView()
 
-        self.html_view = QWebEngineView()
+        except NameError:
+            self.html_view = DummyQWebEngine()
+
         self.do_load_html = DoLoadHTML(self)
         self.log_show = ShowLog(self)
 
@@ -623,19 +628,22 @@ class MainObject(QObject):
         self.window.actionGive_feedback.triggered.connect(
             self.give_feedback
         )
+        try:
+            settings = self.html_view.settings()
+            settings.setAttribute(
+                QWebEngineSettings.WebAttribute.JavascriptEnabled, True
+            )
+            settings.setAttribute(
+                QWebEngineSettings.WebAttribute.LocalContentCanAccessRemoteUrls,
+                True
+            )
+            settings.setAttribute(
+                QWebEngineSettings.WebAttribute.AllowRunningInsecureContent,
+                True
+            )
 
-        settings = self.html_view.settings()
-        settings.setAttribute(
-            QWebEngineSettings.WebAttribute.JavascriptEnabled, True
-        )
-        settings.setAttribute(
-            QWebEngineSettings.WebAttribute.LocalContentCanAccessRemoteUrls,
-            True
-        )
-        settings.setAttribute(
-            QWebEngineSettings.WebAttribute.AllowRunningInsecureContent,
-            True
-        )
+        except AttributeError:
+            print("working with dummy viewer")
 
         self.do_load_html.do_first_show()
 

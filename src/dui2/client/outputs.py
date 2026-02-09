@@ -376,6 +376,25 @@ def html_show(tmp_html_path, qt_html_obj, fil_obj):
         logging.info("not working HtmlView # 4")
 
 
+class DummyQWebEngine(QWidget):
+    def __init__(self, parent = None):
+        super(DummyQWebEngine, self).__init__(parent)
+        self.main_obj = parent
+
+        self.main_vbox = QVBoxLayout()
+        self.tmp_label = QLabel("Temp label")
+        self.main_vbox.addWidget(self.tmp_label)
+        self.setLayout(self.main_vbox)
+
+
+    def load(self, to_load):
+        print("to_load =", to_load)
+        print("type(to_load) =", type(to_load))
+
+
+
+
+
 class DoLoadHTML(QObject):
     def __init__(self, parent = None):
         super(DoLoadHTML, self).__init__(parent)

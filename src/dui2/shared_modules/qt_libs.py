@@ -21,23 +21,38 @@ copyright (c) CCP4 - DLS
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-
 try:
-    from PySide6.QtWebEngineWidgets import QWebEngineView
-    from PySide6.QtWebEngineCore import QWebEngineSettings
     from PySide6 import QtUiTools
     from PySide6.QtCore import *
     from PySide6.QtWidgets import *
     from PySide6.QtGui import *
     print("Using PySide6 as Qt bindings")
+    try:
+        from PySide6.QtWebEngineWidgets import QWebEngineView
+        from PySide6.QtWebEngineCore import QWebEngineSettings
 
-except ModuleNotFoundError:
-    from PySide2.QtWebEngineWidgets import QWebEngineView, QWebEngineSettings
+    except (ImportError, ModuleNotFoundError):
+        print(
+            " Web Engine module not found, working with system web browser "
+        )
+
+except (ImportError, ModuleNotFoundError):
+
     from PySide2 import QtUiTools
     from PySide2.QtCore import *
     from PySide2.QtWidgets import *
     from PySide2.QtGui import *
     print("Using PySide2 as Qt bindings")
+
+    try:
+        from PySide2.QtWebEngineWidgets import (
+            QWebEngineView, QWebEngineSettings
+        )
+
+    except (ImportError, ModuleNotFoundError):
+        print(
+            " Web Engine module not found, working with system web browser "
+        )
 
 should_be_imported_like_this = '''
 from dui2.shared_modules.qt_libs import *
