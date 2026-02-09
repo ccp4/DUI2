@@ -386,13 +386,12 @@ class DummyQWebEngine(QWidget):
         self.main_vbox.addWidget(self.tmp_label)
         self.setLayout(self.main_vbox)
 
+        #print(dir(self))
+        self.setMaximumHeight(5)
 
     def load(self, to_load):
         print("to_load =", to_load)
         print("type(to_load) =", type(to_load))
-
-
-
 
 
 class DoLoadHTML(QObject):
