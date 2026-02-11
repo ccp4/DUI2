@@ -34,7 +34,7 @@ There are three available command line tools after installation:
 
        dui2_client_app url=http://...[URL of the server]
 
-## Option 2, Installation of everything (including Dials) with conda, mamba and git
+## Option 2, Installation of everything mimicking the ccp4 installation (including Dials) with conda, mamba and git
 
 This assumes you have already installed an Anaconda package manger like `miniconda` and have a BASH shell active with the `conda` command enabled, see https://docs.anaconda.com/miniconda/install/ for details.
 
@@ -50,12 +50,11 @@ Provably Anaconda will ask you to run a specific command or to close and reopen 
 
 Next create a virtual environment with `Dials`, `PySide V2`, `PyQt webengine` and `git` inside it, replace `/PATH/TO/ENV/W/NAME` with the path where you want to install `Dials` and the GUI dependencies. This may take a few minutes:
 
-       mamba create -p /PATH/TO/ENV/W/NAME -c conda-forge python=3.11 dials pyside2 pyqtwebengine git
+       mamba create -p /PATH/TO/ENV/W/NAME -c conda-forge python=3.9 dials pyside2 pyqtwebengine git
 
 Now we should activate our newly created environment, again replace `/PATH/TO/ENV/W/NAME` with the path where you installed `Dials` and other dependencies:
 
-       conda activate /PATH/TO/ENV/W/NAME
-
+       mamba activate /PATH/TO/ENV/W/NAME
 
 Finally clone the DUI2 source code from GitHub repository:
 
