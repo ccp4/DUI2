@@ -1169,7 +1169,7 @@ class MainObject(QObject):
                 fnd_nxt_cmd = FindNextCmd(
                     self.server_nod_lst,
                     self.server_nod_lst[self.curr_nod_num]["parent_node_lst"],
-                    str_key, self.param_widgets, self.opt_cmd_lst
+                    str_key, self.param_widgets
                 )
                 nxt_cmd_lst = fnd_nxt_cmd.get_nxt_cmd()
                 for bt_str in nxt_cmd_lst:

@@ -53,7 +53,10 @@ widgets_defs = {
         "tooltip"       : "dials.import ...",
         "icon"          : "resources/import.png",
         "main_cmd"      :["dials.import"],
-        "nxt_widg_lst"  :["find_spots", "apply_mask", "split_experiments"]
+        "nxt_widg_lst"  :[
+            "find_spots", "apply_mask", "split_experiments",
+            "combine_experiments"
+        ]
     },
     "apply_mask" : {
         "tooltip"       : "dials.generate_mask && dials.apply_mask ...",
@@ -254,8 +257,7 @@ class FindNextCmd(object):
     recursive calls to find the possible command to run next
     '''
     def __init__(
-        self, nod_lst_in, parent_nod_num_lst,
-        str_key, param_widgets, opt_cmd_lst
+        self, nod_lst_in, parent_nod_num_lst, str_key, param_widgets
     ):
         self.nod_lst = nod_lst_in
         self.remove_combine = False
@@ -272,6 +274,9 @@ class FindNextCmd(object):
 
         try:
             self.default_list = param_widgets[str_key]["nxt_widg_lst"]
+
+            print("\n\n self.default_list =", self.default_list, "\n\n")
+
 
         except KeyError:
             self.default_list = ["optional"]
