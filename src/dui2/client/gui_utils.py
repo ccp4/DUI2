@@ -275,9 +275,6 @@ class FindNextCmd(object):
         try:
             self.default_list = param_widgets[str_key]["nxt_widg_lst"]
 
-            print("\n\n self.default_list =", self.default_list, "\n\n")
-
-
         except KeyError:
             self.default_list = ["optional"]
 
