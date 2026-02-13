@@ -943,36 +943,12 @@ class Runner(object):
 
     def split_node(self, node):
 
-        #TODO: don't run this if this node is not a split_experiments command
-
         lst_nod_out = [int(node.number)]
-        with open(node.log_file_path) as myfile:
-            log_line_lst = myfile.readlines()
+        lst_cont_expt = sorted(glob.glob(
+            node._run_dir + os.sep + "*" + ".expt"
+        ))
 
-        myfile.close()
-        max_num_split = 0
-        num_split = -1
-        for single_line_str in log_line_lst:
-            str_end = single_line_str[-6:]
-            logging.info("str_end =" + str(str_end))
-            if(
-                str_end == '.refl\n' or
-                str_end == '.expt\n'
-            ):
-                try:
-                    str_ini = single_line_str[:-6]
-                    pos4under = str_ini.rfind(" split_")
-                    num_split = int(str_ini[pos4under + 7:])
-                    logging.info("num_split:" + str(num_split))
-                    if num_split > max_num_split:
-                        max_num_split = num_split
-
-                except ValueError:
-                    logging.info(
-                        "skipping the string:\n" + single_line_str + "\n"
-                    )
-
-        for junior_number in range(1, max_num_split + 1):
+        for junior_number, expt_path in enumerate(lst_cont_expt[1:]):
             self.find_next_number()
             new_node = CmdNode(
                 parent_lst_in = None, data_init = self.data_init
@@ -995,27 +971,20 @@ class Runner(object):
                 shutil.copy(node.log_file_path, new_node._run_dir)
 
                 lof_file_2_apend = open(new_node.log_file_path, "a")
-                wrstring = "\n\n copied exp number "
-                wrstring += str(junior_number) + "\n\n"
+                wrstring = "\n\n copied split number "
+                wrstring += str(junior_number + 1) + "\n\n"
                 lof_file_2_apend.write(wrstring)
                 lof_file_2_apend.close()
 
             except FileNotFoundError:
                 logging.info("No log file in:" + node.log_file_path)
 
-            lst_cont_expt = glob.glob(
-                node._run_dir + os.sep + "*" + str(junior_number) + ".expt"
-            )
             logging.info("lst_cont_expt =" + str(lst_cont_expt))
-            for file_n in lst_cont_expt:
-                shutil.move(file_n, new_node._run_dir)
+            shutil.move(expt_path, new_node._run_dir)
 
-            lst_cont_refl = glob.glob(
-                node._run_dir + os.sep + "*" + str(junior_number) + ".refl"
-            )
-            logging.info("lst_cont_refl =" + str(lst_cont_refl))
-            for file_n in lst_cont_refl:
-                shutil.move(file_n, new_node._run_dir)
+            refl_path = expt_path[:-5] + ".refl"
+            if os.path.exists(refl_path):
+                shutil.move(refl_path, new_node._run_dir)
 
             new_node.set_exe_files_out()
 
@@ -1027,7 +996,6 @@ class Runner(object):
 
         node.set_exe_files_out()
         str_out = " Done duplicating node #" + str(node.number)
-        str_out += ", into " + str(max_num_split + 1) + " new nodes"
         logging.info(str_out)
 
         return lst_nod_out
