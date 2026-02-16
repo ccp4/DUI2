@@ -30,7 +30,8 @@ from dui2.client.exec_utils import (
 )
 from dui2.client.init_firts import IniData
 
-import subprocess, psutil, shutil, webbrowser
+import subprocess, psutil, shutil, webbrowser, pathlib
+#from pathlib import Path
 
 class LoadFiles(QThread):
     files_loaded = Signal(dict)
@@ -490,7 +491,9 @@ class DoLoadHTML(QObject):
     def open_browser_clicked(self):
         logging.info("open_browser_clicked(DoLoadHTML)")
         try:
-            webbrowser.open(self.new_file_path)
+            file_path = pathlib.Path(self.new_file_path).resolve()
+            file_url = file_path.as_uri()
+            webbrowser.open(file_url)
 
         except AttributeError:
             logging.info(
