@@ -59,7 +59,6 @@ class LoadFiles(QThread):
 
     def run(self):
         if self.my_handler == None:
-
             my_cmd_exp = {"nod_lst" : [self.cur_nod_num],
                       "cmd_str" : ["get_experiments_file"]}
             req_shot = get_request_shot(
@@ -362,8 +361,7 @@ def html_show(tmp_html_path, qt_html_obj, fil_obj):
     # before evoking the following:
     #
     # python .. DUI2\src\run_dui2_client.py \
-    # url=http://supercomputo.cimav.edu.mx:45678 windows_exe=true
-    #
+    # url=http://... windows_exe=true
 
     tmp_file.write(fil_obj)
     tmp_file.close()
@@ -392,6 +390,7 @@ class DummyQWebEngine(QWidget):
         print("to_load =", to_load)
         print("type(to_load) =", type(to_load))
         self.tmp_label.setText("Loaded")
+
 
 class DoLoadHTML(QObject):
     def __init__(self, parent = None):
@@ -445,12 +444,6 @@ class DoLoadHTML(QObject):
         self.loading_html = first_half \
         + "  Loading ..." \
         + second_half
-
-        code_2_remove = '''
-        self.failed_html = first_half \
-        + "  Failed Connection" \
-        + second_half
-        '''
 
         self.new_file_path = None
 
@@ -611,6 +604,7 @@ class DoLoadHTML(QObject):
 
         except TypeError:
             self.retry_time = 1
+
 
 class ShowLog(QObject):
     def __init__(self, parent = None):
