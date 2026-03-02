@@ -380,19 +380,19 @@ class DummyQWebEngine(QWidget):
         self.main_obj = parent
 
         self.main_vbox = QVBoxLayout()
-        self.tmp_label = QLabel("Temp label")
-        max_height = self.tmp_label.height()
-        self.main_vbox.addWidget(self.tmp_label)
+        self.warning_label = QLabel("Temp label")
+        max_height = self.warning_label.height()
+        self.main_vbox.addWidget(self.warning_label)
         self.setLayout(self.main_vbox)
         self.setMaximumHeight(max_height)
 
     def load(self, to_load):
         print("to_load =", to_load)
         print("type(to_load) =", type(to_load))
-
-        self.tmp_label.setAlignment(Qt.AlignCenter)
-
-        self.tmp_label.setText("Load a new report whenever \n creating or navigating\n to a new node.")
+        self.warning_label.setAlignment(Qt.AlignCenter)
+        self.warning_label.setText(
+            "Load a new report whenever \n creating or navigating\n to a new node."
+        )
 
 
 class DoLoadHTML(QObject):
