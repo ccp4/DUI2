@@ -389,7 +389,10 @@ class DummyQWebEngine(QWidget):
     def load(self, to_load):
         print("to_load =", to_load)
         print("type(to_load) =", type(to_load))
-        self.tmp_label.setText("Loaded")
+
+        self.tmp_label.setAlignment(Qt.AlignCenter)
+
+        self.tmp_label.setText("Load a new report whenever \n creating or navigating\n to a new node.")
 
 
 class DoLoadHTML(QObject):
