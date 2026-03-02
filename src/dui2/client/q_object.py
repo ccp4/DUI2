@@ -563,6 +563,9 @@ class MainObject(QObject):
 
         except NameError:
             self.html_view = DummyQWebEngine()
+            self.html_view.main_vbox.addWidget(self.window.DownloadReportButton)
+            self.html_view.main_vbox.addWidget(self.window.OpenBrowserButton)
+            self.html_view.main_vbox.addWidget(self.html_view.warning_label)
 
         self.do_load_html = DoLoadHTML(self)
         self.log_show = ShowLog(self)
@@ -655,7 +658,6 @@ class MainObject(QObject):
         self.import_init()
 
         QTimer.singleShot(2000, self.dials_help_init)
-
 
     def sharp_turns_triggered(self):
         self.sharp_turns_on = not self.sharp_turns_on
