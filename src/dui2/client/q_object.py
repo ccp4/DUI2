@@ -561,11 +561,26 @@ class MainObject(QObject):
         try:
             self.html_view = QWebEngineView()
 
+            settings = self.html_view.settings()
+            settings.setAttribute(
+                QWebEngineSettings.WebAttribute.JavascriptEnabled, True
+            )
+            settings.setAttribute(
+                QWebEngineSettings.WebAttribute.LocalContentCanAccessRemoteUrls,
+                True
+            )
+            settings.setAttribute(
+                QWebEngineSettings.WebAttribute.AllowRunningInsecureContent,
+                True
+            )
+            print("working with integrated HTML viewer by default")
+
         except NameError:
             self.html_view = DummyQWebEngine()
             self.html_view.main_vbox.addWidget(self.window.DownloadReportButton)
             self.html_view.main_vbox.addWidget(self.window.OpenBrowserButton)
             self.html_view.main_vbox.addWidget(self.html_view.warning_label)
+            print("working with external only HTML viewer")
 
         self.do_load_html = DoLoadHTML(self)
         self.log_show = ShowLog(self)
@@ -631,22 +646,6 @@ class MainObject(QObject):
         self.window.actionGive_feedback.triggered.connect(
             self.give_feedback
         )
-        try:
-            settings = self.html_view.settings()
-            settings.setAttribute(
-                QWebEngineSettings.WebAttribute.JavascriptEnabled, True
-            )
-            settings.setAttribute(
-                QWebEngineSettings.WebAttribute.LocalContentCanAccessRemoteUrls,
-                True
-            )
-            settings.setAttribute(
-                QWebEngineSettings.WebAttribute.AllowRunningInsecureContent,
-                True
-            )
-
-        except AttributeError:
-            print("working with dummy viewer")
 
         self.do_load_html.do_first_show()
 
