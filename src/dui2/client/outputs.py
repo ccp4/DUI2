@@ -31,7 +31,6 @@ from dui2.client.exec_utils import (
 from dui2.client.init_firts import IniData
 
 import subprocess, psutil, shutil, webbrowser, pathlib
-#from pathlib import Path
 
 class LoadFiles(QThread):
     files_loaded = Signal(dict)
