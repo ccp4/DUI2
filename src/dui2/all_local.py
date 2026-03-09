@@ -78,6 +78,8 @@ def main():
         ("all_local", "true"),
         ("windows_exe", win_str),
         ("token", "dummy_4_now"),
+        ("upload_mtz_url", "http://localhost:8080/"),
+
     )
     pipe_server_1, pipe_server_2 = Pipe()
     prcs_serv = Process(

@@ -41,6 +41,7 @@ def main():
         ("all_local", "true"),
         ("windows_exe", win_str),
         ("token", "dummy_4_now"),
+        ("upload_mtz_url", "http://localhost:8080/"),
     )
     data_init = IniData()
     data_init.set_data(par_def = par_def)
@@ -67,6 +68,8 @@ def main():
         print("assuming Dui2 already ran here")
 
     os.chdir(nodes_dir)
+
+    print("init_param...upload_mtz_url = ", init_param["upload_mtz_url"])
 
     tree_ini_path = init_param["limit_path"]
     if tree_ini_path == None:

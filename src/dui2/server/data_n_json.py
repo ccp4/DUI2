@@ -119,6 +119,12 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
                 )
 
 
+        data_init = IniData()
+        mtz_upl_url = data_init.get_upload_mtz_url()
+        print("\n mtz_upl_url =", mtz_upl_url, "\n")
+
+
+
     elif uni_cmd[0] == "get_files_path":
         for lin2go in cmd_dict["nod_lst"]:
             try:

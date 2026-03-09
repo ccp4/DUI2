@@ -1916,6 +1916,10 @@ class ExportWidget(QWidget):
 
         self.downl_but = QPushButton("Download/save hklout file")
         self.downl_but.clicked.connect(self.download_hklout)
+
+        self.upld_but = QPushButton("Upload hklout file")
+        self.upld_but.clicked.connect(self.upload_hklout)
+
         self.progress_label = QLabel("...")
 
         self.main_vbox = QVBoxLayout()
@@ -1927,6 +1931,7 @@ class ExportWidget(QWidget):
         self.main_vbox.addWidget(self.imp_extra_txt)
         self.main_vbox.addStretch()
         self.main_vbox.addWidget(self.downl_but)
+        self.main_vbox.addWidget(self.upld_but)
         self.main_vbox.addWidget(self.progress_label)
         self.main_vbox.addStretch()
         self.setLayout(self.main_vbox)
@@ -2071,6 +2076,9 @@ class ExportWidget(QWidget):
 
         else:
             logging.info("Canceled Operation")
+
+    def upload_hklout(self):
+        print("\n upload_hklout(ExportWidget) \n")
 
     def show_new_progress(self, new_prog):
         self.progress_label.setText(

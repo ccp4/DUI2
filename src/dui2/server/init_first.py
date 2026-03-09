@@ -36,6 +36,9 @@ class IniData(object):
         global token
         token = init_param["token"]
 
+        global upload_mtz_url
+        upload_mtz_url = init_param["upload_mtz_url"]
+
     def get_win_exe(self):
         return win_exe
 
@@ -44,6 +47,9 @@ class IniData(object):
 
     def get_token(self):
         return token
+
+    def get_upload_mtz_url(self):
+        return upload_mtz_url
 
 
 if __name__ == "__main__":
