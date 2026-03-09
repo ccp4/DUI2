@@ -2055,6 +2055,7 @@ class ExportWidget(QWidget):
         self.exp_txt.setEnabled(not do_enable)
         self.imp_extra_txt.setEnabled(not do_enable)
         self.downl_but.setEnabled(do_enable)
+        self.upld_but.setEnabled(do_enable)
         self.cur_nod_num = nod_num
 
     def download_hklout(self):
@@ -2097,8 +2098,12 @@ class ExportWidget(QWidget):
         )
 
     def msg_on_transfer(self, msg_in):
-        self.progress_label.setText("...")
         print("msg_in =", msg_in)
+        if msg_in[0] == "ok":
+            self.progress_label.setText("...")
+
+        else:
+            self.progress_label.setText(str(msg_in[0]))
 
     def save_mtz_on_disc(self, mtz_info):
         self.progress_label.setText("...")
