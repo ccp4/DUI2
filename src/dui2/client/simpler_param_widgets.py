@@ -2085,16 +2085,20 @@ class ExportWidget(QWidget):
         cmd = {"nod_lst":[self.cur_nod_num], "cmd_str":["transfer_mtz"]}
         self.tran_thrd = MtzDataTransfer(cmd, self.my_handler)
         self.tran_thrd.update_progress.connect(self.show_new_progress)
-        self.tran_thrd.finished.connect(self.restore_p_label)
+        self.tran_thrd.done_download.connect(self.msg_on_transfer)
+        self.tran_thrd.finished.connect(self.restore_p_label2)
         self.tran_thrd.start()
 
         print("\n upload_hklout(ExportWidget) ... end \n")
-
 
     def show_new_progress(self, new_prog):
         self.progress_label.setText(
             str("Downloading: " + str(new_prog) + " %")
         )
+
+    def msg_on_transfer(self, msg_in):
+        self.progress_label.setText("...")
+        print("msg_in =", msg_in)
 
     def save_mtz_on_disc(self, mtz_info):
         self.progress_label.setText("...")
@@ -2110,13 +2114,13 @@ class ExportWidget(QWidget):
 
     def restore_p_label(self):
         self.progress_label.setText("...")
-        try:
-            self.dowl_thrd.exit()
-
-        except AttributeError:
-            self.tran_thrd.exit()
-
+        self.dowl_thrd.exit()
         logging.info("Done Download")
+
+    def restore_p_label2(self):
+        self.progress_label.setText("...")
+        self.tran_thrd.exit()
+        logging.info("Done Transferring")
 
 
 class MergeWidget(QWidget):

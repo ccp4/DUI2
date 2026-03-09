@@ -165,14 +165,22 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
                         print(f"Upload failed with status code: {response.status_code}")
                         print(response.text)
 
+                        return_list = [
+                            "Upload failed with code:" + str(response.text)
+                        ]
+
+
                 except ConnectionRefusedError:
                     print("Connection Refused Err Catch")
+                    return_list = ["Connection Refused Err Catch"]
 
                 except requests.exceptions.ConnectionError:
                     print("Connection Err Catch")
+                    return_list = ["requests.exceptions. Connection Err Catch"]
 
                 except requests.exceptions.MissingSchema:
                     print("invalid URL Err Catch")
+                    return_list = ["invalid URL Err Catch"]
 
                 finally:
                     # Ensure the file is closed
