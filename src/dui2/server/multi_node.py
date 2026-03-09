@@ -43,6 +43,7 @@ def get_pair_list():
         ("gr",      "get_report"                            ),
         ("gh",      "get_help"                              ),
         ("gmt",     "get_mtz"                               ),
+        ("tmt",     "transfer_mtz"                          ),
         ("gt",      "get_template"                          ),
         ("gfp",     "get_files_path"                        ),
         ("gi",      "get_image"                             ),

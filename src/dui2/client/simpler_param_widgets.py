@@ -30,7 +30,9 @@ from dui2.shared_modules.qt_libs import *
 import numpy as np
 
 from dui2.client.init_firts import IniData
-from dui2.client.exec_utils import MtzDataRequest, get_req_json_dat
+from dui2.client.exec_utils import (
+    MtzDataRequest, MtzDataTransfer, get_req_json_dat
+)
 from dui2.client.file_nav_utils import FileBrowser
 
 
@@ -2078,7 +2080,16 @@ class ExportWidget(QWidget):
             logging.info("Canceled Operation")
 
     def upload_hklout(self):
-        print("\n upload_hklout(ExportWidget) \n")
+        print("\n upload_hklout(ExportWidget) ... ini \n")
+
+        cmd = {"nod_lst":[self.cur_nod_num], "cmd_str":["transfer_mtz"]}
+        self.tran_thrd = MtzDataTransfer(cmd, self.my_handler)
+        self.tran_thrd.update_progress.connect(self.show_new_progress)
+        self.tran_thrd.finished.connect(self.restore_p_label)
+        self.tran_thrd.start()
+
+        print("\n upload_hklout(ExportWidget) ... end \n")
+
 
     def show_new_progress(self, new_prog):
         self.progress_label.setText(
@@ -2099,7 +2110,12 @@ class ExportWidget(QWidget):
 
     def restore_p_label(self):
         self.progress_label.setText("...")
-        self.dowl_thrd.exit()
+        try:
+            self.dowl_thrd.exit()
+
+        except AttributeError:
+            self.tran_thrd.exit()
+
         logging.info("Done Download")
 
 

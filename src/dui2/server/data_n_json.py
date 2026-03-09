@@ -23,6 +23,9 @@ copyright (c) CCP4 - DLS
 
 import json, os, glob, logging
 import subprocess, shutil
+
+import requests
+
 import importlib
 import libtbx.phil
 
@@ -118,12 +121,72 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
                     "FileNotFound Err catch , sending empty mtz"
                 )
 
+    elif uni_cmd == ["transfer_mtz"]:
+        for lin2go in cmd_dict["nod_lst"]:
+            try:
+                mtz_dir_path = step_list[lin2go]._run_dir
+                mtz_path = glob.glob(mtz_dir_path + os.sep + "*.mtz")[0]
+                print("mtz_path =", mtz_path)
+                data_init = IniData()
+                mtz_upl_url = data_init.get_upload_mtz_url()
+                print("\n mtz_upl_url =", mtz_upl_url, "\n")
 
-        data_init = IniData()
-        mtz_upl_url = data_init.get_upload_mtz_url()
-        print("\n mtz_upl_url =", mtz_upl_url, "\n")
+                # Variables
+                original_example = '''
+                base_url = "https://data.cloud.ccp4.ac.uk/api" # Replace with actual API base URL
+                user = "example_user"
+                source_id = "upload"
+                data_id = "my_dataset_01"  # The {id} for this specific data entry
 
+                # Construct the endpoint URL
+                url = f"{base_url}/data/{user}/{source_id}/{data_id}/upload"
+                '''
+                url = mtz_upl_url
 
+                # Define the headers
+                cloudrun_id = "XXXX-XXXX-XXXX-XXXX"
+                headers = {
+                    "cloudrun_id": cloudrun_id
+                }
+                # Define the files to upload
+                # Format: 'file': ('filename', file_object)
+                files = {
+                    'file': (mtz_path, open(mtz_path, 'rb'))
+                }
+                try:
+                    response = requests.post(url, headers=headers, files=files)
+
+                    if response.status_code == 200:
+                        print("Upload Successful!")
+                        print(response.json())
+                        return_list = ["ok"]
+
+                    else:
+                        print(f"Upload failed with status code: {response.status_code}")
+                        print(response.text)
+
+                except ConnectionRefusedError:
+                    print("Connection Refused Err Catch")
+
+                except requests.exceptions.ConnectionError:
+                    print("Connection Err Catch")
+
+                except requests.exceptions.MissingSchema:
+                    print("invalid URL Err Catch")
+
+                finally:
+                    # Ensure the file is closed
+                    files['file'][1].close()
+
+            except IndexError:
+                logging.info(
+                    "Index Err catch , sending empty mtz"
+                )
+
+            except FileNotFoundError:
+                logging.info(
+                    "FileNotFound Err catch , sending empty mtz"
+                )
 
     elif uni_cmd[0] == "get_files_path":
         for lin2go in cmd_dict["nod_lst"]:

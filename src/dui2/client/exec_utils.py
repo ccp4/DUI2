@@ -321,6 +321,38 @@ class MtzDataRequest(QThread):
             logging.info("not found QThread(GetRequestRealTime)")
 
 
+class MtzDataTransfer(QThread):
+    update_progress = Signal(int)
+    done_download = Signal(bytes)
+    def __init__(self, cmd, main_handler):
+        super(MtzDataTransfer, self).__init__()
+        self.cmd = cmd
+        self.my_handler = main_handler
+
+    def run(self):
+        self.say_goodbye()
+        self.r_time_req = GetRequestRealTime(
+            params_in = self.cmd, main_handler = self.my_handler
+        )
+        self.r_time_req.prog_new_stat.connect(self.new_progress)
+        self.r_time_req.load_ended.connect(self.finishing)
+        self.r_time_req.start()
+
+    def new_progress(self, prog_persent):
+        self.update_progress.emit(prog_persent)
+
+    def finishing(self, mtz_data):
+        self.done_download.emit(mtz_data)
+
+    def say_goodbye(self):
+        try:
+            self.r_time_req.quit()
+            #self.r_time_req.wait()
+
+        except AttributeError:
+            logging.info("not found QThread(GetRequestRealTime)")
+
+
 class PostRequestWithOutput(QThread):
     first_line = Signal(int)
     lst_out = Signal(list)
