@@ -12,6 +12,8 @@ server_par_def = (
     ("all_local", "false"),
     ("windows_exe", "false"),
     ("token", "dummy_4_now"),
+    ("upload_mtz_url", "http://localhost:8080/"),
+    ("cloudrun_id", "xxxx-xxxx-xxxx-xxxx"),
 )
 
 def main():

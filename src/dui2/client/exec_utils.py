@@ -292,6 +292,10 @@ def build_thresh_comd(dict_in):
 class MtzDataRequest(QThread):
     update_progress = Signal(int)
     done_download = Signal(bytes)
+
+    #FIXME maybe we do not need two classes dearly identical
+    #FIXME check how similar is this one and the next one
+
     def __init__(self, cmd, main_handler):
         super(MtzDataRequest, self).__init__()
         self.cmd = cmd
@@ -324,6 +328,10 @@ class MtzDataRequest(QThread):
 class MtzDataTransfer(QThread):
     update_progress = Signal(int)
     done_download = Signal(bytes)
+
+    #FIXME maybe we do not need two classes dearly identical
+    #FIXME check how similar is this one and the previous one
+
     def __init__(self, cmd, main_handler):
         super(MtzDataTransfer, self).__init__()
         self.cmd = cmd

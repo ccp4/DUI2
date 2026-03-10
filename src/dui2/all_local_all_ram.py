@@ -42,6 +42,7 @@ def main():
         ("windows_exe", win_str),
         ("token", "dummy_4_now"),
         ("upload_mtz_url", "http://localhost:8080/"),
+        ("cloudrun_id", "xxxx-xxxx-xxxx-xxxx"),
     )
     data_init = IniData()
     data_init.set_data(par_def = par_def)
@@ -70,6 +71,7 @@ def main():
     os.chdir(nodes_dir)
 
     print("init_param...upload_mtz_url = ", init_param["upload_mtz_url"])
+    print("init_param...cloudrun_id= ", init_param["cloudrun_id"]),
 
     tree_ini_path = init_param["limit_path"]
     if tree_ini_path == None:

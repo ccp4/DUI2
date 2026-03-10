@@ -127,9 +127,6 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
                 mtz_dir_path = step_list[lin2go]._run_dir
                 mtz_path = glob.glob(mtz_dir_path + os.sep + "*.mtz")[0]
                 print("mtz_path =", mtz_path)
-                data_init = IniData()
-                mtz_upl_url = data_init.get_upload_mtz_url()
-                print("\n mtz_upl_url =", mtz_upl_url, "\n")
 
                 # Variables
                 original_example = '''
@@ -140,11 +137,15 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
 
                 # Construct the endpoint URL
                 url = f"{base_url}/data/{user}/{source_id}/{data_id}/upload"
-                '''
-                url = mtz_upl_url
-
-                # Define the headers
                 cloudrun_id = "XXXX-XXXX-XXXX-XXXX"
+                '''
+
+                data_init = IniData()
+                url = data_init.get_upload_mtz_url()
+                print("\n url (transfer_mtz) =", url, "\n")
+
+                cloudrun_id = data_init.get_cloudrun_id()
+                print("cloudrun_id  (transfer_mtz) =", cloudrun_id,"\n")
                 headers = {
                     "cloudrun_id": cloudrun_id
                 }
@@ -159,32 +160,30 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
                     if response.status_code == 200:
                         print("Upload Successful!")
                         print(response.json())
-                        return_list = ["ok"]
+                        return_str = "ok"
 
                     else:
                         print(f"Upload failed with status code: {response.status_code}")
                         print(response.text)
 
-                        return_list = [
-                            "Upload failed with code:" + str(response.text)
-                        ]
+                        return_str = "Upload failed with code:" + str(response.text)
 
 
                 except ConnectionRefusedError:
-                    print("Connection Refused Err Catch")
-                    return_list = ["Connection Refused Err Catch"]
+                    return_str = "Connection Refused Err Catch"
 
                 except requests.exceptions.ConnectionError:
-                    print("Connection Err Catch")
-                    return_list = ["requests.exceptions. Connection Err Catch"]
+                    return_str = "requests.exceptions. Connection Err Catch"
 
                 except requests.exceptions.MissingSchema:
-                    print("invalid URL Err Catch")
-                    return_list = ["invalid URL Err Catch"]
+                    return_str = "invalid URL Err Catch"
 
                 finally:
                     # Ensure the file is closed
                     files['file'][1].close()
+
+                print("\n", return_str, "\n")
+                return_list = bytes(return_str, 'utf-8')
 
             except IndexError:
                 logging.info(

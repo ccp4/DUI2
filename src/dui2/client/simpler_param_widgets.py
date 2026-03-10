@@ -2098,12 +2098,11 @@ class ExportWidget(QWidget):
         )
 
     def msg_on_transfer(self, msg_in):
-        print("msg_in =", msg_in)
-        if msg_in[0] == "ok":
-            self.progress_label.setText("...")
+        print("type(msg_in) =", type(msg_in))
 
-        else:
-            self.progress_label.setText(str(msg_in[0]))
+        print("msg_in =", msg_in)
+        print("str(msg_in) =", str(msg_in))
+
 
     def save_mtz_on_disc(self, mtz_info):
         self.progress_label.setText("...")

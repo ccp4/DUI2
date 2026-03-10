@@ -39,6 +39,9 @@ class IniData(object):
         global upload_mtz_url
         upload_mtz_url = init_param["upload_mtz_url"]
 
+        global cloudrun_id
+        cloudrun_id = init_param["cloudrun_id"]
+
     def get_win_exe(self):
         return win_exe
 
@@ -50,6 +53,9 @@ class IniData(object):
 
     def get_upload_mtz_url(self):
         return upload_mtz_url
+
+    def get_cloudrun_id(self):
+        return cloudrun_id
 
 
 if __name__ == "__main__":
