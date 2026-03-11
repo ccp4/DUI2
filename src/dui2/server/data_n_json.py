@@ -121,6 +121,50 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
                     "FileNotFound Err catch , sending empty mtz"
                 )
 
+
+    elif uni_cmd[0] == "get_files_path":
+        for lin2go in cmd_dict["nod_lst"]:
+            try:
+                exp_path = str(step_list[lin2go]._lst_expt_out[0])
+                ref_path = str(step_list[lin2go]._lst_refl_out[0])
+                return_list.append(
+                    {"experiments":exp_path, "reflections": ref_path}
+                )
+
+            except (IndexError, FileNotFoundError):
+                logging.info(
+                    " err catch , wrong line, NOT sending experiments file"
+                )
+
+    elif uni_cmd[0] == "get_experiments_file":
+        for lin2go in cmd_dict["nod_lst"]:
+            try:
+                exp_path = str(step_list[lin2go]._lst_expt_out[0])
+                with open(exp_path, 'rb') as fil_h1:
+                    exp_byt_data = fil_h1.read()
+
+                return_list = exp_byt_data
+
+            except (IndexError, FileNotFoundError):
+                logging.info(
+                    " err catch , wrong line, NOT sending experiments file"
+                )
+
+    elif uni_cmd[0] == "get_reflections_file":
+        for lin2go in cmd_dict["nod_lst"]:
+            try:
+                ref_path = str(step_list[lin2go]._lst_refl_out[0])
+                with open(ref_path, 'rb') as fil_h2:
+                    ref_byt_data = fil_h2.read()
+
+                return_list = ref_byt_data
+
+            except (IndexError, FileNotFoundError):
+                logging.info(
+                    " err catch , wrong line, NOT sending reflections file"
+                )
+
+
     elif uni_cmd == ["transfer_mtz"]:
         for lin2go in cmd_dict["nod_lst"]:
             try:
@@ -128,17 +172,17 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
                 mtz_path = glob.glob(mtz_dir_path + os.sep + "*.mtz")[0]
                 print("mtz_path =", mtz_path)
 
-                # Variables
-                original_example = '''
-                base_url = "https://data.cloud.ccp4.ac.uk/api" # Replace with actual API base URL
-                user = "example_user"
-                source_id = "upload"
-                data_id = "my_dataset_01"  # The {id} for this specific data entry
+                #original_example
 
-                # Construct the endpoint URL
-                url = f"{base_url}/data/{user}/{source_id}/{data_id}/upload"
-                cloudrun_id = "XXXX-XXXX-XXXX-XXXX"
-                '''
+                #base_url = "https://data.cloud.ccp4.ac.uk/api" # Replace with actual API base URL
+                #user = "example_user"
+                #source_id = "upload"
+                #data_id = "my_dataset_01"  # The {id} for this specific data entry
+                #
+                ## Construct the endpoint URL
+                #url = f"{base_url}/data/{user}/{source_id}/{data_id}/upload"
+                #cloudrun_id = "XXXX-XXXX-XXXX-XXXX"
+
 
                 data_init = IniData()
                 url = data_init.get_upload_mtz_url()
@@ -184,6 +228,7 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
 
                 print("\n", return_str, "\n")
                 return_list = bytes(return_str, 'utf-8')
+                #return_list = [bytes{"success": return_str}]
 
             except IndexError:
                 logging.info(
@@ -193,48 +238,6 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
             except FileNotFoundError:
                 logging.info(
                     "FileNotFound Err catch , sending empty mtz"
-                )
-
-    elif uni_cmd[0] == "get_files_path":
-        for lin2go in cmd_dict["nod_lst"]:
-            try:
-                exp_path = str(step_list[lin2go]._lst_expt_out[0])
-                ref_path = str(step_list[lin2go]._lst_refl_out[0])
-                return_list.append(
-                    {"experiments":exp_path, "reflections": ref_path}
-                )
-
-            except (IndexError, FileNotFoundError):
-                logging.info(
-                    " err catch , wrong line, NOT sending experiments file"
-                )
-
-    elif uni_cmd[0] == "get_experiments_file":
-        for lin2go in cmd_dict["nod_lst"]:
-            try:
-                exp_path = str(step_list[lin2go]._lst_expt_out[0])
-                with open(exp_path, 'rb') as fil_h1:
-                    exp_byt_data = fil_h1.read()
-
-                return_list = exp_byt_data
-
-            except (IndexError, FileNotFoundError):
-                logging.info(
-                    " err catch , wrong line, NOT sending experiments file"
-                )
-
-    elif uni_cmd[0] == "get_reflections_file":
-        for lin2go in cmd_dict["nod_lst"]:
-            try:
-                ref_path = str(step_list[lin2go]._lst_refl_out[0])
-                with open(ref_path, 'rb') as fil_h2:
-                    ref_byt_data = fil_h2.read()
-
-                return_list = ref_byt_data
-
-            except (IndexError, FileNotFoundError):
-                logging.info(
-                    " err catch , wrong line, NOT sending reflections file"
                 )
 
     elif uni_cmd == ["get_report"]:

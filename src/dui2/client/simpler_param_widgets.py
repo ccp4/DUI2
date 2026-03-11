@@ -31,7 +31,7 @@ import numpy as np
 
 from dui2.client.init_firts import IniData
 from dui2.client.exec_utils import (
-    MtzDataRequest, MtzDataTransfer, get_req_json_dat
+    MtzDataRequest, MtzDataTransfer, get_req_json_dat, PostRequestWithOutput
 )
 from dui2.client.file_nav_utils import FileBrowser
 
@@ -1890,6 +1890,86 @@ class OptionalWidget(SimpleParamTab):
         self.main_command_changed.emit(str_new_line)
 
 
+class UploadDialog(QDialog):
+    go_run = Signal(dict)
+    def __init__(self, parent=None):
+        super(UploadDialog, self).__init__(parent)
+        mainLayout = QVBoxLayout()
+
+        self.data_out = {}
+
+        url_layout = QHBoxLayout()
+        url_layout.addWidget(QLabel("URL:"))
+        self.url_txt = QLineEdit()
+        self.url_txt.textChanged.connect(self.line_changed)
+        url_layout.addWidget(self.url_txt)
+        mainLayout.addLayout(url_layout)
+
+        user_layout = QHBoxLayout()
+        user_layout.addWidget(QLabel("USER:"))
+        self.user_txt = QLineEdit()
+        self.user_txt.textChanged.connect(self.line_changed)
+        user_layout.addWidget(self.user_txt)
+        mainLayout.addLayout(user_layout)
+
+        id_layout = QHBoxLayout()
+        id_layout.addWidget(QLabel("CLOUDRUN_ID:"))
+        self.id_txt = QLineEdit()
+        self.id_txt.textChanged.connect(self.line_changed)
+        id_layout.addWidget(self.id_txt)
+        mainLayout.addLayout(id_layout)
+
+        project_layout = QHBoxLayout()
+        project_layout.addWidget(QLabel("PROJECT:"))
+        self.project_txt = QLineEdit()
+        self.project_txt.textChanged.connect(self.line_changed)
+        project_layout.addWidget(self.project_txt)
+        mainLayout.addLayout(project_layout)
+
+        title_layout = QHBoxLayout()
+        title_layout.addWidget(QLabel("TITLE:"))
+        self.title_txt = QLineEdit()
+        self.title_txt.textChanged.connect(self.line_changed)
+        title_layout.addWidget(self.title_txt)
+        mainLayout.addLayout(title_layout)
+        mainLayout.addWidget(
+            QLabel(
+                "______________________________________________________________"
+            )
+        )
+        LaunchButton = QPushButton("Launch command")
+        LaunchButton.clicked.connect(self.request_launch)
+        mainLayout.addWidget(LaunchButton)
+        self.setLayout(mainLayout)
+
+    def line_changed(self):
+        self.data_out["url"] = str(self.url_txt.text())
+        self.data_out["user"] = str(self.user_txt.text())
+
+        tmp_id_str = str(self.id_txt.text())
+
+        for pos_minus in [4, 9, 14]:
+            if len(tmp_id_str) >= pos_minus + 1:
+                if tmp_id_str[pos_minus] != "-":
+                    tmp_id_str = tmp_id_str[:pos_minus] + "-" + tmp_id_str[pos_minus:]
+
+                self.id_txt.setText(tmp_id_str)
+
+            if len(tmp_id_str) >= pos_minus + 2:
+                if tmp_id_str[pos_minus:pos_minus + 2] == "--":
+                    tmp_id_str = tmp_id_str[:pos_minus] + "-" + tmp_id_str[pos_minus + 2:]
+
+        self.id_txt.setText(tmp_id_str)
+
+        self.data_out["id"] = tmp_id_str
+        self.data_out["project"] = str(self.project_txt.text())
+        self.data_out["title"] = str(self.title_txt.text())
+
+    def request_launch(self):
+        print("data_out =", self.data_out)
+        self.go_run.emit(self.data_out)
+
+
 class ExportWidget(QWidget):
     '''
         This widget is a simplified version of ImportWidget since
@@ -1937,6 +2017,8 @@ class ExportWidget(QWidget):
         self.main_vbox.addWidget(self.progress_label)
         self.main_vbox.addStretch()
         self.setLayout(self.main_vbox)
+
+        self.thrd_lst = []
 
     def set_parent(self, parent = None):
         self.my_handler = parent.runner_handler
@@ -2068,8 +2150,6 @@ class ExportWidget(QWidget):
         self.file_name = fileResul[0]
         if self.file_name != '':
             self.progress_label.setText("Requesting mtz file ...")
-            data_init = IniData()
-            uni_url = data_init.get_url()
             cmd = {"nod_lst":[self.cur_nod_num], "cmd_str":["get_mtz"]}
             self.dowl_thrd = MtzDataRequest(cmd, self.my_handler)
             self.dowl_thrd.update_progress.connect(self.show_new_progress)
@@ -2082,6 +2162,15 @@ class ExportWidget(QWidget):
 
     def upload_hklout(self):
         print("\n upload_hklout(ExportWidget) ... ini \n")
+
+        self.tmp_dialod = UploadDialog(self)
+        self.tmp_dialod.show()
+        self.tmp_dialod.go_run.connect(self.run_upload_hklout)
+
+    def run_upload_hklout(self, data_in):
+        self.tmp_dialod.close()
+
+        print("\n CLOUDRUN_DATA = ", data_in, "\n")
 
         cmd = {"nod_lst":[self.cur_nod_num], "cmd_str":["transfer_mtz"]}
         self.tran_thrd = MtzDataTransfer(cmd, self.my_handler)
@@ -2099,10 +2188,13 @@ class ExportWidget(QWidget):
 
     def msg_on_transfer(self, msg_in):
         print("type(msg_in) =", type(msg_in))
-
         print("msg_in =", msg_in)
-        print("str(msg_in) =", str(msg_in))
 
+        if msg_in == b'ok':
+            self.progress_label.setText("...")
+
+        else:
+            self.progress_label.setText(str(msg_in))
 
     def save_mtz_on_disc(self, mtz_info):
         self.progress_label.setText("...")
@@ -2123,8 +2215,8 @@ class ExportWidget(QWidget):
 
     def restore_p_label2(self):
         self.progress_label.setText("...")
-        self.tran_thrd.exit()
-        logging.info("Done Transferring")
+        #self.tran_thrd.exit()
+        print("\n Done Transferring \n")
 
 
 class MergeWidget(QWidget):

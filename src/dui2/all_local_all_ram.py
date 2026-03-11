@@ -31,7 +31,7 @@ def main():
         os.environ["WAYLAND_DISPLAY"] = ""
 
     else:
-        print("nether Linux or Windows")
+        print("neither Linux or Windows")
 
     #    ("limit_path", "/home/ufn91840/V_Box_compartido"),
 
