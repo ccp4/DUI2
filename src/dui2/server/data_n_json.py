@@ -217,6 +217,21 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
                     for sigl_comm in lst_of_cmd:
                         f.write(sigl_comm + "\n")
 
+                cmd_lst = ["cloudrun", "-c",  cloudrun_cfg_file_path]
+                cloudrun_proc = subprocess.Popen(
+                    args = cmd_lst, shell = False
+                )
+                cloudrun_proc.wait()
+                exe_pool = cloudrun_proc.poll()
+
+                if exe_pool == 0:
+                    byt_data = bytes("ok".encode('utf-8'))
+
+                else:
+                    byt_data = bytes("error running cloudrun".encode('utf-8'))
+
+                return_list = byt_data
+
             except IndexError:
                 logging.info(
                     "Index Err catch , sending empty mtz"

@@ -554,6 +554,8 @@ class CmdNode(object):
                 new_line = rep_proc.stdout.readline()
                 lst_rep_out.append(new_line)
 
+            #TODO: consider if we need to capture the output for this command
+
             rep_proc.stdout.close()
             # in case needed there is the output of the report here:
             #logging.info("report stdout <<< \n", lst_rep_out, "\n >>>")
@@ -590,6 +592,8 @@ class CmdNode(object):
         while pred_proc.poll() is None or new_line != '':
             new_line = pred_proc.stdout.readline()
             lst_pred_out.append(new_line)
+
+        #TODO: consider if we need to capture the output for this command
 
         pred_proc.stdout.close()
         # in case needed there is the output of the prediction here:
