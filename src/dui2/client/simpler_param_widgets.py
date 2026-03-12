@@ -2172,7 +2172,17 @@ class ExportWidget(QWidget):
 
         print("\n CLOUDRUN_DATA = ", data_in, "\n")
 
-        cmd = {"nod_lst":[self.cur_nod_num], "cmd_str":["transfer_mtz"]}
+        #{'url': '1', 'user': '23', 'id': '33', 'project': '44', 'title': '55'}
+        data_tup_str = (
+            'url='     + str(data_in['url'])     + ","
+            'user='    + str(data_in['user'])    + ","
+            'id='      + str(data_in['id'])      + ","
+            'project=' + str(data_in['project']) + ","
+            'title='   + str(data_in['title'])
+        )
+        print("data_str =", data_tup_str)
+
+        cmd = {"nod_lst":[self.cur_nod_num], "cmd_str":["transfer_mtz", data_tup_str]}
         self.tran_thrd = MtzDataTransfer(cmd, self.my_handler)
         self.tran_thrd.update_progress.connect(self.show_new_progress)
         self.tran_thrd.done_download.connect(self.msg_on_transfer)

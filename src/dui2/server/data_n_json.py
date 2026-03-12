@@ -83,6 +83,20 @@ def spit_out(str_out = None, req_obj = None, out_type = None):
             logging.info(">> NOT utf-8,  len=" + str(len(str_out)) + "<<")
 
 
+def get_dict_from_str_with_pairs(str_in):
+    lst_str = str_in.split(",")
+    lst_pair = []
+    for pair_str in lst_str:
+        pair = pair_str.split("=")
+        if len(pair) == 2:
+            lst_pair.append(pair)
+
+    dict_w_data = {}
+    for pair in lst_pair:
+        dict_w_data[str(pair[0])] = str(pair[1])
+
+    return dict_w_data
+
 def get_info_data(uni_cmd, cmd_dict, step_list):
     return_list = []
     if uni_cmd == ["display_log"]:
@@ -165,7 +179,11 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
                 )
 
 
-    elif uni_cmd == ["transfer_mtz"]:
+    elif uni_cmd[0] == "transfer_mtz":
+        print("\n uni_cmd =", uni_cmd, "\n")
+        dict_4_cloud_run = get_dict_from_str_with_pairs(uni_cmd[1])
+        print("\n dict_4_cloud_run =", dict_4_cloud_run, "\n")
+
         for lin2go in cmd_dict["nod_lst"]:
             try:
                 mtz_dir_path = step_list[lin2go]._run_dir
