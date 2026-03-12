@@ -290,6 +290,17 @@ def main(par_def = None, connection_out = None):
 
     logging.info("run_local = " + str(run_local))
 
+
+    if init_param["chdir"] is not None:
+        try:
+            os.chdir(init_param["chdir"])
+
+        except FileNotFoundError:
+            print(
+                "unable to change to directory: ", init_param["chdir"],
+                "File Not Found Err Catch"
+            )
+
     if run_local:
         tree_lim_path = "/"
 

@@ -36,6 +36,7 @@ def main():
     #    ("limit_path", "/home/ufn91840/V_Box_compartido"),
 
     par_def = (
+        ("chdir", None),
         ("limit_path", "/"),
         ("import_init", None),
         ("all_local", "true"),
@@ -61,6 +62,16 @@ def main():
     #TODO: check if the following line is useful
     run_local = True
 
+    if init_param["chdir"] is not None:
+        try:
+            os.chdir(init_param["chdir"])
+
+        except FileNotFoundError:
+            print(
+                "unable to change to directory: ", init_param["chdir"],
+                "File Not Found Err Catch"
+            )
+
     nodes_dir = "run_dui2_nodes"
     try:
         os.mkdir(nodes_dir)
@@ -72,6 +83,7 @@ def main():
 
     print("init_param...upload_mtz_url = ", init_param["upload_mtz_url"])
     print("init_param...cloudrun_id= ", init_param["cloudrun_id"]),
+    print("init_param...chdir = ", init_param["chdir"])
 
     tree_ini_path = init_param["limit_path"]
     if tree_ini_path == None:
