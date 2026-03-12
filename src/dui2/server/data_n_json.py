@@ -186,67 +186,36 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
 
         for lin2go in cmd_dict["nod_lst"]:
             try:
+
+                #try:
                 mtz_dir_path = step_list[lin2go]._run_dir
                 mtz_path = glob.glob(mtz_dir_path + os.sep + "*.mtz")[0]
-                print("mtz_path =", mtz_path)
 
-                #original_example
-
-                #base_url = "https://data.cloud.ccp4.ac.uk/api" # Replace with actual API base URL
-                #user = "example_user"
-                #source_id = "upload"
-                #data_id = "my_dataset_01"  # The {id} for this specific data entry
+                #except IndexError:
+                #    logging.info(
+                #        "Index Err catch , sending empty mtz"
+                #    )
                 #
-                ## Construct the endpoint URL
-                #url = f"{base_url}/data/{user}/{source_id}/{data_id}/upload"
-                #cloudrun_id = "XXXX-XXXX-XXXX-XXXX"
+                #except FileNotFoundError:
+                #    logging.info(
+                #        "FileNotFound Err catch , sending empty mtz"
+                #    )
 
+                lst_of_cmd = [
+                    "URL          " + dict_4_cloud_run['url'],
+                    "USER         " + dict_4_cloud_run['user'],
+                    "CLOUDRUN_ID  " + dict_4_cloud_run['id'],
+                    "PROJECT      " + dict_4_cloud_run['project'],
+                    "TITLE        " + dict_4_cloud_run['title'],
+                    "TASK        import",
+                    "FILE         " + mtz_path
+                ]
 
-                data_init = IniData()
-                url = data_init.get_upload_mtz_url()
-                print("\n url (transfer_mtz) =", url, "\n")
-
-                cloudrun_id = data_init.get_cloudrun_id()
-                print("cloudrun_id  (transfer_mtz) =", cloudrun_id,"\n")
-                headers = {
-                    "cloudrun_id": cloudrun_id
-                }
-                # Define the files to upload
-                # Format: 'file': ('filename', file_object)
-                files = {
-                    'file': (mtz_path, open(mtz_path, 'rb'))
-                }
-                try:
-                    response = requests.post(url, headers=headers, files=files)
-
-                    if response.status_code == 200:
-                        print("Upload Successful!")
-                        print(response.json())
-                        return_str = "ok"
-
-                    else:
-                        print(f"Upload failed with status code: {response.status_code}")
-                        print(response.text)
-
-                        return_str = "Upload failed with code:" + str(response.text)
-
-
-                except ConnectionRefusedError:
-                    return_str = "Connection Refused Err Catch"
-
-                except requests.exceptions.ConnectionError:
-                    return_str = "requests.exceptions. Connection Err Catch"
-
-                except requests.exceptions.MissingSchema:
-                    return_str = "invalid URL Err Catch"
-
-                finally:
-                    # Ensure the file is closed
-                    files['file'][1].close()
-
-                print("\n", return_str, "\n")
-                return_list = bytes(return_str, 'utf-8')
-                #return_list = [bytes{"success": return_str}]
+                cloudrun_cfg_file_path = mtz_dir_path + os.sep + "cloudrun.cfg"
+                print("cloudrun_cfg_file_path =", cloudrun_cfg_file_path)
+                with open(cloudrun_cfg_file_path, 'w', encoding="utf-8") as f:
+                    for sigl_comm in lst_of_cmd:
+                        f.write(sigl_comm + "\n")
 
             except IndexError:
                 logging.info(
