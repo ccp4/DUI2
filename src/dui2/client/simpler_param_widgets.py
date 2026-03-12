@@ -1901,6 +1901,7 @@ class UploadDialog(QDialog):
         url_layout = QHBoxLayout()
         url_layout.addWidget(QLabel("URL:"))
         self.url_txt = QLineEdit()
+        self.url_txt.setText("https://cloud.ccp4.ac.uk")
         self.url_txt.textChanged.connect(self.line_changed)
         url_layout.addWidget(self.url_txt)
         mainLayout.addLayout(url_layout)
