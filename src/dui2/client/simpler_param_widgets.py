@@ -2004,7 +2004,7 @@ class ExportWidget(QWidget):
         self.downl_but = QPushButton("Download/save hklout file")
         self.downl_but.clicked.connect(self.download_hklout)
 
-        self.upld_but = QPushButton("Upload hklout file")
+        self.upld_but = QPushButton("Upload to CCP4-cloud")
         self.upld_but.clicked.connect(self.upload_hklout)
 
         self.progress_label = QLabel("...")
@@ -2255,7 +2255,7 @@ class MergeWidget(QWidget):
         self.downl_but = QPushButton("Download/save .mtz file")
         self.downl_but.clicked.connect(self.download_hklout)
 
-        self.upld_but = QPushButton("Upload hklout file")
+        self.upld_but = QPushButton("Upload to CCP4-cloud")
         self.upld_but.clicked.connect(self.upload_hklout)
 
         self.progress_label = QLabel("...")
