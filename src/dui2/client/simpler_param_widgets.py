@@ -1942,6 +1942,11 @@ class UploadDialog(QDialog):
         mainLayout.addWidget(LaunchButton)
         self.setLayout(mainLayout)
 
+        self.setModal(True)
+        self.show()
+
+
+
     def line_changed(self):
         self.data_out["url"] = str(self.url_txt.text())
         self.data_out["user"] = str(self.user_txt.text())
@@ -2162,24 +2167,24 @@ class ExportWidget(QWidget):
 
     def upload_hklout(self):
         print("\n upload_hklout(ExportWidget) ... ini \n")
-
         self.tmp_dialod = UploadDialog(self)
-        self.tmp_dialod.show()
         self.tmp_dialod.go_run.connect(self.run_upload_hklout)
 
     def run_upload_hklout(self, data_in):
         self.tmp_dialod.close()
-
         print("\n CLOUDRUN_DATA = ", data_in, "\n")
+        try:
+            data_tup_str = (
+                'url='     + str(data_in['url'])     + ","
+                'user='    + str(data_in['user'])    + ","
+                'id='      + str(data_in['id'])      + ","
+                'project=' + str(data_in['project']) + ","
+                'title='   + str(data_in['title'])
+            )
+        except KeyError:
+            print("... uncompleted data ...")
+            return
 
-        #{'url': '1', 'user': '23', 'id': '33', 'project': '44', 'title': '55'}
-        data_tup_str = (
-            'url='     + str(data_in['url'])     + ","
-            'user='    + str(data_in['user'])    + ","
-            'id='      + str(data_in['id'])      + ","
-            'project=' + str(data_in['project']) + ","
-            'title='   + str(data_in['title'])
-        )
         print("data_str =", data_tup_str)
 
         cmd = {"nod_lst":[self.cur_nod_num], "cmd_str":["transfer_mtz", data_tup_str]}
