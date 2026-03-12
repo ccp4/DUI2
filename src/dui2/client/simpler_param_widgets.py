@@ -2023,8 +2023,6 @@ class ExportWidget(QWidget):
         self.main_vbox.addStretch()
         self.setLayout(self.main_vbox)
 
-        self.thrd_lst = []
-
     def set_parent(self, parent = None):
         self.my_handler = parent.runner_handler
         #self.my_handler = None
@@ -2137,6 +2135,7 @@ class ExportWidget(QWidget):
 
             self.imp_extra_txt.setText(ext_par_full_text)
 
+
     def set_download_stat(self, do_enable = False, nod_num = None):
         self.setEnabled(True)
         self.exp_txt.setEnabled(not do_enable)
@@ -2144,6 +2143,7 @@ class ExportWidget(QWidget):
         self.downl_but.setEnabled(do_enable)
         self.upld_but.setEnabled(do_enable)
         self.cur_nod_num = nod_num
+
 
     def download_hklout(self):
         path_n_file = os.path.dirname(os.getcwd()) + os.sep + self.str_2_save
@@ -2254,6 +2254,10 @@ class MergeWidget(QWidget):
         self.exp_txt.textChanged.connect(self.line_changed)
         self.downl_but = QPushButton("Download/save .mtz file")
         self.downl_but.clicked.connect(self.download_hklout)
+
+        self.upld_but = QPushButton("Upload hklout file")
+        self.upld_but.clicked.connect(self.upload_hklout)
+
         self.progress_label = QLabel("...")
 
         self.main_vbox = QVBoxLayout()
@@ -2262,6 +2266,7 @@ class MergeWidget(QWidget):
         self.main_vbox.addWidget(self.exp_txt)
         self.main_vbox.addStretch()
         self.main_vbox.addWidget(self.downl_but)
+        self.main_vbox.addWidget(self.upld_but)
         self.main_vbox.addWidget(self.progress_label)
         self.main_vbox.addStretch()
         self.setLayout(self.main_vbox)
@@ -2310,6 +2315,7 @@ class MergeWidget(QWidget):
         self.setEnabled(True)
         self.exp_txt.setEnabled(not do_enable)
         self.downl_but.setEnabled(do_enable)
+        self.upld_but.setEnabled(do_enable)
         self.cur_nod_num = nod_num
 
     def download_hklout(self):
@@ -2340,10 +2346,51 @@ class MergeWidget(QWidget):
         else:
             logging.info("Canceled Operation")
 
+    def upload_hklout(self):
+        print("\n upload_hklout(ExportWidget) ... ini \n")
+        self.tmp_dialod = UploadDialog(self)
+        self.tmp_dialod.go_run.connect(self.run_upload_hklout)
+
+    def run_upload_hklout(self, data_in):
+        self.tmp_dialod.close()
+        print("\n CLOUDRUN_DATA = ", data_in, "\n")
+        try:
+            data_tup_str = (
+                'url='     + str(data_in['url'])     + ","
+                'user='    + str(data_in['user'])    + ","
+                'id='      + str(data_in['id'])      + ","
+                'project=' + str(data_in['project']) + ","
+                'title='   + str(data_in['title'])
+            )
+        except KeyError:
+            print("... uncompleted data ...")
+            return
+
+        print("data_str =", data_tup_str)
+
+        cmd = {"nod_lst":[self.cur_nod_num], "cmd_str":["transfer_mtz", data_tup_str]}
+        self.tran_thrd = MtzDataTransfer(cmd, self.my_handler)
+        self.tran_thrd.update_progress.connect(self.show_new_progress)
+        self.tran_thrd.done_download.connect(self.msg_on_transfer)
+        self.tran_thrd.finished.connect(self.restore_p_label2)
+        self.tran_thrd.start()
+
+        print("\n upload_hklout(ExportWidget) ... end \n")
+
     def show_new_progress(self, new_prog):
         self.progress_label.setText(
             str("Downloading: " + str(new_prog) + " %")
         )
+
+    def msg_on_transfer(self, msg_in):
+        print("type(msg_in) =", type(msg_in))
+        print("msg_in =", msg_in)
+
+        if msg_in == b'ok':
+            self.progress_label.setText("...")
+
+        else:
+            self.progress_label.setText(str(msg_in))
 
     def save_mtz_on_disc(self, mtz_info):
         self.progress_label.setText("...")
@@ -2363,7 +2410,11 @@ class MergeWidget(QWidget):
         self.dowl_thrd.exit()
         logging.info("Done Download")
 
-################################################################################
+    def restore_p_label2(self):
+        self.progress_label.setText("...")
+        #self.tran_thrd.exit()
+        print("\n Done Transferring \n")
+
 
 class TmpTstWidget(QWidget):
     def __init__(self, parent=None):
