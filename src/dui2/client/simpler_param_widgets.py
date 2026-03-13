@@ -1932,11 +1932,7 @@ class UploadDialog(QDialog):
         self.title_txt.textChanged.connect(self.line_changed)
         title_layout.addWidget(self.title_txt)
         mainLayout.addLayout(title_layout)
-        mainLayout.addWidget(
-            QLabel(
-                "______________________________________________________________"
-            )
-        )
+        mainLayout.addWidget(QLabel(" " * 200))
         LaunchButton = QPushButton("Launch command")
         LaunchButton.clicked.connect(self.request_launch)
         mainLayout.addWidget(LaunchButton)
@@ -2006,7 +2002,7 @@ class ExportWidget(QWidget):
         self.imp_extra_txt = QLineEdit()
         self.imp_extra_txt.textChanged.connect(self.line_changed)
 
-        self.downl_but = QPushButton("Download/save hklout file")
+        self.downl_but = QPushButton("Download/save file")
         self.downl_but.clicked.connect(self.download_hklout)
 
         self.upld_but = QPushButton("Upload to CCP4-cloud")
@@ -2265,7 +2261,7 @@ class MergeWidget(QWidget):
         )
         self.exp_txt = QLineEdit()
         self.exp_txt.textChanged.connect(self.line_changed)
-        self.downl_but = QPushButton("Download/save .mtz file")
+        self.downl_but = QPushButton("Download/save file")
         self.downl_but.clicked.connect(self.download_hklout)
 
         self.upld_but = QPushButton("Upload to CCP4-cloud")
