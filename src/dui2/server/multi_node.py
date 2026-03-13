@@ -844,7 +844,6 @@ class Runner(object):
 
         elif unalias_cmd_lst == ["history"]:
             print("Running history command")
-
             if self.win_exe:
                 make_dir_str = "md "
 

@@ -387,8 +387,6 @@ class DummyQWebEngine(QWidget):
         self.setMaximumHeight(max_height)
 
     def load(self, to_load):
-        print("to_load =", to_load)
-        print("type(to_load) =", type(to_load))
         self.warning_label.setAlignment(Qt.AlignCenter)
         self.warning_label.setText(
             "Load a new report whenever \n creating or navigating\n to a new node."

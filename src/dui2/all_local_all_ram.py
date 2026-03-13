@@ -80,11 +80,6 @@ def main():
         print("assuming Dui2 already ran here")
 
     os.chdir(nodes_dir)
-
-    print("init_param...upload_mtz_url = ", init_param["upload_mtz_url"])
-    print("init_param...cloudrun_id= ", init_param["cloudrun_id"]),
-    print("init_param...chdir = ", init_param["chdir"])
-
     tree_ini_path = init_param["limit_path"]
     if tree_ini_path == None:
         logging.info(

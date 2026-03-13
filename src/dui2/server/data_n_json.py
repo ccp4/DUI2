@@ -180,27 +180,11 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
 
 
     elif uni_cmd[0] == "transfer_mtz":
-        print("\n uni_cmd =", uni_cmd, "\n")
         dict_4_cloud_run = get_dict_from_str_with_pairs(uni_cmd[1])
-        print("\n dict_4_cloud_run =", dict_4_cloud_run, "\n")
-
         for lin2go in cmd_dict["nod_lst"]:
             try:
-
-                #try:
                 mtz_dir_path = step_list[lin2go]._run_dir
                 mtz_path = glob.glob(mtz_dir_path + os.sep + "*.mtz")[0]
-
-                #except IndexError:
-                #    logging.info(
-                #        "Index Err catch , sending empty mtz"
-                #    )
-                #
-                #except FileNotFoundError:
-                #    logging.info(
-                #        "FileNotFound Err catch , sending empty mtz"
-                #    )
-
                 lst_of_cmd = [
                     "URL          " + dict_4_cloud_run['url'],
                     "USER         " + dict_4_cloud_run['user'],
@@ -210,9 +194,7 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
                     "TASK        import",
                     "FILE         " + mtz_path
                 ]
-
                 cloudrun_cfg_file_path = mtz_dir_path + os.sep + "cloudrun.cfg"
-                print("cloudrun_cfg_file_path =", cloudrun_cfg_file_path)
                 with open(cloudrun_cfg_file_path, 'w', encoding="utf-8") as f:
                     for sigl_comm in lst_of_cmd:
                         f.write(sigl_comm + "\n")

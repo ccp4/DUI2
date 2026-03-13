@@ -35,21 +35,18 @@ def is_webengine_functional(pyside_ver):
             from PySide2 import QtWebEngineWidgets
 
     except ImportError:
-        print("Here fail #1")
+        print("Failed to import QtWebEngineWidgets")
         return False
 
     # 2. Locate the helper executable
     # Qt searches for this file to render web content
-    #process_path = QtCore.QLibraryInfo.location(QtCore.QLibraryInfo.LibraryExecutablesPath)
     process_path = QLibraryInfo.location(QLibraryInfo.LibraryExecutablesPath)
-    print("process_path =", process_path)
     if sys.platform == "win32":
         filename = "QtWebEngineProcess.exe"
 
     else:
         filename = "QtWebEngineProcess"
 
-    #filename = "QtWebEngineProcess.exe" if sys.platform == "win32" else "QtWebEngineProcess"
     full_path = os.path.join(process_path, filename)
 
     if not os.path.exists(full_path):
@@ -60,10 +57,11 @@ def is_webengine_functional(pyside_ver):
         )
 
     if not os.path.exists(full_path):
-        print("Here fail #2")
+        print(
+            "success to import QtWebEngineWidgets NO path to the module"
+        )
         return False
 
-    print("Here YES")
     return True
 
 

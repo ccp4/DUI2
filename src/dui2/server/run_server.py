@@ -117,9 +117,6 @@ def main(par_def = None, connection_out = None):
                     )
 
             else:
-
-                print("\n cmd_dict =", cmd_dict," \n")
-
                 try:
                     cmd_tree_runner.run_dui_command(cmd_dict, self)
                     logging.info("sending /*EOF*/ (Dui2 CMD)")

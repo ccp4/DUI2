@@ -1939,7 +1939,6 @@ class UploadDialog(QDialog):
         self.setLayout(mainLayout)
 
     def ShowAsModalFromData(self, data_4_starting):
-        print("data_4_starting = ", data_4_starting)
         self.setModal(True)
         self.url_txt.setText(data_4_starting["url"])
         self.user_txt.setText(data_4_starting["user"])
@@ -1972,7 +1971,7 @@ class UploadDialog(QDialog):
         self.data_out["title"] = str(self.title_txt.text())
 
     def request_launch(self):
-        print("data_out =", self.data_out)
+        logging.info("data_out(UploadDialog)=" + str(self.data_out))
         self.go_run.emit(self.data_out)
 
 
@@ -2097,8 +2096,6 @@ class ExportWidget(QWidget):
             lst_par.append(["json.filename", str_value])
 
         self.str_2_save = str(str_value)
-        print("name of file to Download/Save = " + str(self.str_2_save))
-
         logging.info("lst_par(ExportWidget) = " + str(lst_par))
         self.all_items_changed.emit([lst_par])
 
@@ -2173,7 +2170,6 @@ class ExportWidget(QWidget):
             logging.info("Canceled Operation")
 
     def upload_hklout(self):
-        print("\n upload_hklout(ExportWidget) ... ini \n")
         self.tmp_dialod = UploadDialog(self)
         self.tmp_dialod.go_run.connect(self.run_upload_hklout)
         self.tmp_dialod.ShowAsModalFromData(self.dict_data)
@@ -2181,7 +2177,7 @@ class ExportWidget(QWidget):
     def run_upload_hklout(self, data_in):
         self.tmp_dialod.close()
         self.dict_data = data_in
-        print("\n CLOUDRUN_DATA = ", data_in, "\n")
+        logging.info("CLOUDRUN_DATA=" + str(data_in))
         try:
             data_tup_str = (
                 'url='     + str(data_in['url'])     + ","
@@ -2191,11 +2187,8 @@ class ExportWidget(QWidget):
                 'title='   + str(data_in['title'])
             )
         except KeyError:
-            print("... uncompleted data ...")
+            logging.info("uncompleted data(CloudRun)")
             return
-
-        print("data_str =", data_tup_str)
-
         cmd = {"nod_lst":[self.cur_nod_num], "cmd_str":["transfer_mtz", data_tup_str]}
         self.tran_thrd = MtzDataTransfer(cmd, self.my_handler)
         self.tran_thrd.update_progress.connect(self.show_new_progress)
@@ -2203,17 +2196,12 @@ class ExportWidget(QWidget):
         self.tran_thrd.finished.connect(self.restore_p_label2)
         self.tran_thrd.start()
 
-        print("\n upload_hklout(ExportWidget) ... end \n")
-
     def show_new_progress(self, new_prog):
         self.progress_label.setText(
             str("Downloading: " + str(new_prog) + " %")
         )
 
     def msg_on_transfer(self, msg_in):
-        print("type(msg_in) =", type(msg_in))
-        print("msg_in =", msg_in)
-
         if msg_in == b'ok':
             self.progress_label.setText("...")
 
@@ -2239,8 +2227,6 @@ class ExportWidget(QWidget):
 
     def restore_p_label2(self):
         self.progress_label.setText("...")
-        #self.tran_thrd.exit()
-        print("\n Done Transferring \n")
 
 
 class MergeWidget(QWidget):
@@ -2362,14 +2348,13 @@ class MergeWidget(QWidget):
             logging.info("Canceled Operation")
 
     def upload_hklout(self):
-        print("\n upload_hklout(ExportWidget) ... ini \n")
         self.tmp_dialod = UploadDialog(self)
         self.tmp_dialod.go_run.connect(self.run_upload_hklout)
         self.tmp_dialod.ShowAsModalFromData(self.dict_data)
 
     def run_upload_hklout(self, data_in):
         self.tmp_dialod.close()
-        print("\n CLOUDRUN_DATA = ", data_in, "\n")
+        logging.info("CLOUDRUN_DATA=" + str(data_in))
         self.dict_data = data_in
         try:
             data_tup_str = (
@@ -2380,10 +2365,8 @@ class MergeWidget(QWidget):
                 'title='   + str(data_in['title'])
             )
         except KeyError:
-            print("... uncompleted data ...")
+            logging.info("uncompleted data(CloudRun)")
             return
-
-        print("data_str =", data_tup_str)
 
         cmd = {"nod_lst":[self.cur_nod_num], "cmd_str":["transfer_mtz", data_tup_str]}
         self.tran_thrd = MtzDataTransfer(cmd, self.my_handler)
@@ -2392,17 +2375,12 @@ class MergeWidget(QWidget):
         self.tran_thrd.finished.connect(self.restore_p_label2)
         self.tran_thrd.start()
 
-        print("\n upload_hklout(ExportWidget) ... end \n")
-
     def show_new_progress(self, new_prog):
         self.progress_label.setText(
             str("Downloading: " + str(new_prog) + " %")
         )
 
     def msg_on_transfer(self, msg_in):
-        print("type(msg_in) =", type(msg_in))
-        print("msg_in =", msg_in)
-
         if msg_in == b'ok':
             self.progress_label.setText("...")
 
@@ -2429,8 +2407,6 @@ class MergeWidget(QWidget):
 
     def restore_p_label2(self):
         self.progress_label.setText("...")
-        #self.tran_thrd.exit()
-        print("\n Done Transferring \n")
 
 
 class TmpTstWidget(QWidget):
