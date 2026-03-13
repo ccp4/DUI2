@@ -1901,7 +1901,6 @@ class UploadDialog(QDialog):
         url_layout = QHBoxLayout()
         url_layout.addWidget(QLabel("URL:"))
         self.url_txt = QLineEdit()
-        self.url_txt.setText("https://cloud.ccp4.ac.uk")
         self.url_txt.textChanged.connect(self.line_changed)
         url_layout.addWidget(self.url_txt)
         mainLayout.addLayout(url_layout)
@@ -1943,10 +1942,15 @@ class UploadDialog(QDialog):
         mainLayout.addWidget(LaunchButton)
         self.setLayout(mainLayout)
 
+    def ShowAsModalFromData(self, data_4_starting):
+        print("data_4_starting = ", data_4_starting)
         self.setModal(True)
+        self.url_txt.setText(data_4_starting["url"])
+        self.user_txt.setText(data_4_starting["user"])
+        self.id_txt.setText(data_4_starting["id"])
+        self.project_txt.setText(data_4_starting["project"])
+        self.title_txt.setText(data_4_starting["title"])
         self.show()
-
-
 
     def line_changed(self):
         self.data_out["url"] = str(self.url_txt.text())
@@ -2023,6 +2027,12 @@ class ExportWidget(QWidget):
         self.main_vbox.addWidget(self.progress_label)
         self.main_vbox.addStretch()
         self.setLayout(self.main_vbox)
+
+        self.dict_data = {
+            'url'    :"https://cloud.ccp4.ac.uk",
+            'user'   :"",   'id'     :"",
+            'project':"",   'title'  :"",
+        }
 
     def set_parent(self, parent = None):
         self.my_handler = parent.runner_handler
@@ -2170,9 +2180,11 @@ class ExportWidget(QWidget):
         print("\n upload_hklout(ExportWidget) ... ini \n")
         self.tmp_dialod = UploadDialog(self)
         self.tmp_dialod.go_run.connect(self.run_upload_hklout)
+        self.tmp_dialod.ShowAsModalFromData(self.dict_data)
 
     def run_upload_hklout(self, data_in):
         self.tmp_dialod.close()
+        self.dict_data = data_in
         print("\n CLOUDRUN_DATA = ", data_in, "\n")
         try:
             data_tup_str = (
@@ -2272,6 +2284,12 @@ class MergeWidget(QWidget):
         self.main_vbox.addStretch()
         self.setLayout(self.main_vbox)
 
+        self.dict_data = {
+            'url'    :"https://cloud.ccp4.ac.uk",
+            'user'   :"",   'id'     :"",
+            'project':"",   'title'  :"",
+        }
+
     def set_parent(self, parent = None):
         self.my_handler = parent.runner_handler
         #self.my_handler = None
@@ -2351,10 +2369,12 @@ class MergeWidget(QWidget):
         print("\n upload_hklout(ExportWidget) ... ini \n")
         self.tmp_dialod = UploadDialog(self)
         self.tmp_dialod.go_run.connect(self.run_upload_hklout)
+        self.tmp_dialod.ShowAsModalFromData(self.dict_data)
 
     def run_upload_hklout(self, data_in):
         self.tmp_dialod.close()
         print("\n CLOUDRUN_DATA = ", data_in, "\n")
+        self.dict_data = data_in
         try:
             data_tup_str = (
                 'url='     + str(data_in['url'])     + ","
