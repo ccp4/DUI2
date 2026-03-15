@@ -38,6 +38,7 @@ def is_webengine_functional(pyside_ver):
         print("Failed to import QtWebEngineWidgets")
         return False
 
+    to_study_and_tets_soon = '''
     # 2. Locate the helper executable
     # Qt searches for this file to render web content
     process_path = QLibraryInfo.location(QLibraryInfo.LibraryExecutablesPath)
@@ -61,6 +62,7 @@ def is_webengine_functional(pyside_ver):
             "success to import QtWebEngineWidgets NO path to the module"
         )
         return False
+    '''
 
     return True
 
