@@ -746,12 +746,15 @@ class MainObject(QObject):
     def dials_help_init(self):
         print("\n START getting help messages \n")
         self.h_req = HelpRequest(self.runner_handler)
-        self.h_req.message_acquired.connect(self.dials_help_ended)
+        self.help_msg_dict = {}
+        self.h_req.message_acquired.connect(self.dials_help_aquired)
         self.h_req.start()
 
-    def dials_help_ended(self, hlp_msg):
+    def dials_help_aquired(self, dict_key, hlp_msg):
+        self.help_msg_dict[dict_key] = hlp_msg
+
+    def dials_help_ended(self):
         print("\n END getting help messages \n")
-        self.help_msg_dict = hlp_msg
 
     def launch_reindex(self, sol_rei):
         try:

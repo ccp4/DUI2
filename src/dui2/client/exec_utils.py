@@ -648,8 +648,8 @@ class CommandParamControl(object):
 
 
 class HelpRequest(QThread):
-    message_acquired = Signal(dict)
-    #def __init__(self, prog_box, main_obj):
+    message_acquired = Signal(str, list)
+    retieving_ended = Signal()
     def __init__(self, main_obj):
         super(HelpRequest, self).__init__()
         self.runner_handler = main_obj
@@ -729,7 +729,8 @@ class HelpRequest(QThread):
 
     def run(self):
         #TODO change the name of one of the cmd_str variables
-        help_dict = {}
+
+        #help_dict = {}
         list_size = len(self.lst_cmd)
         logging.info("starting to collect help messages")
         for num_r, dials_cmd_str in enumerate(self.lst_cmd):
@@ -740,16 +741,15 @@ class HelpRequest(QThread):
             )
             json_hlp = lst_req.result_out()
             try:
-                help_dict[dials_cmd_str] = json_hlp[0]
+                msg_lst = json_hlp[0]
 
             except TypeError:
-                help_dict[dials_cmd_str] = ['']
+                msg_lst = ['']
 
-            msg_str = "Getting help for command: " + dials_cmd_str  + "\n\n progress: " + str(num_r) + "/" + str(list_size)
+            self.message_acquired.emit(dials_cmd_str, msg_lst)
 
         print("End getting help")
-        self.message_acquired.emit(help_dict)
-
+        self.retieving_ended.emit()
 
 
 if __name__ == "__main__":
