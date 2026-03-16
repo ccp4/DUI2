@@ -649,9 +649,9 @@ class CommandParamControl(object):
 
 class HelpRequest(QThread):
     message_acquired = Signal(dict)
-    def __init__(self, prog_box, main_obj):
+    #def __init__(self, prog_box, main_obj):
+    def __init__(self, main_obj):
         super(HelpRequest, self).__init__()
-        self.p_box = prog_box
         self.runner_handler = main_obj
         self.lst_cmd = [
             "import",
@@ -728,8 +728,6 @@ class HelpRequest(QThread):
         '''
 
     def run(self):
-        self.p_box.update_msg("Start getting help")
-
         #TODO change the name of one of the cmd_str variables
         help_dict = {}
         list_size = len(self.lst_cmd)
@@ -749,31 +747,9 @@ class HelpRequest(QThread):
 
             msg_str = "Getting help for command: " + dials_cmd_str  + "\n\n progress: " + str(num_r) + "/" + str(list_size)
 
-            self.p_box.update_msg(msg_str)
-
-        self.p_box.update_msg("End getting help")
+        print("End getting help")
         self.message_acquired.emit(help_dict)
 
-
-class ProgressBox(QDialog):
-    def __init__(self, parent = None):
-        super(ProgressBox, self).__init__(parent)
-
-        self.live_label = QLabel("progress")
-        self.button_close = QPushButton("Ok/Close")
-        self.button_close.clicked.connect(self.stop_me)
-        mainLayout = QVBoxLayout()
-        mainLayout.addWidget(self.live_label)
-        mainLayout.addWidget(self.button_close)
-
-        self.setLayout(mainLayout)
-        self.setWindowTitle("Loading")
-
-    def update_msg(self, put_this):
-        self.live_label.setText(put_this)
-
-    def stop_me(self):
-        self.close()
 
 
 if __name__ == "__main__":

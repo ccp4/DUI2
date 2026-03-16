@@ -65,10 +65,7 @@ from dui2.client.simpler_param_widgets import (
 from dui2.shared_modules._version import __version__
 from dui2.shared_modules.format_utils import get_feedback_data
 
-
-#FIXME: ProgressBox belongs elsewhere
-from dui2.client.exec_utils import HelpRequest, ProgressBox
-
+from dui2.client.exec_utils import HelpRequest
 
 class MainObject(QObject):
     def __init__(self, parent = None, multi_runner = None):
@@ -747,19 +744,13 @@ class MainObject(QObject):
             self.on_node_click_w_left(big_nod_num)
 
     def dials_help_init(self):
-
-        print("\n ProgressBox ... init \n")
-
-        self.p_box = ProgressBox()
-        #self.p_box.show()
-        self.h_req = HelpRequest(self.p_box, self.runner_handler)
-
+        print("\n START getting help messages \n")
+        self.h_req = HelpRequest(self.runner_handler)
         self.h_req.message_acquired.connect(self.dials_help_ended)
         self.h_req.start()
 
     def dials_help_ended(self, hlp_msg):
-        self.p_box.button_close.clicked.emit()
-        print("\n ProgressBox ... end \n")
+        print("\n END getting help messages \n")
         self.help_msg_dict = hlp_msg
 
     def launch_reindex(self, sol_rei):
