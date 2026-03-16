@@ -747,8 +747,11 @@ class MainObject(QObject):
             self.on_node_click_w_left(big_nod_num)
 
     def dials_help_init(self):
+
+        print("\n ProgressBox ... init \n")
+
         self.p_box = ProgressBox()
-        self.p_box.show()
+        #self.p_box.show()
         self.h_req = HelpRequest(self.p_box, self.runner_handler)
 
         self.h_req.message_acquired.connect(self.dials_help_ended)
@@ -756,6 +759,7 @@ class MainObject(QObject):
 
     def dials_help_ended(self, hlp_msg):
         self.p_box.button_close.clicked.emit()
+        print("\n ProgressBox ... end \n")
         self.help_msg_dict = hlp_msg
 
     def launch_reindex(self, sol_rei):
