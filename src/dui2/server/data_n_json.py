@@ -186,10 +186,7 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
                 mtz_dir_path = step_list[lin2go]._run_dir
                 #TODO reconsider how to get this path for this single file
                 mtz_path = glob.glob(mtz_dir_path + os.sep + "*.mtz")[0]
-                #mtz_path = /tmp/tst4dui2/run_dui2_nodes/run9/integrated.mtz
-
-                #path_2 = mtz_dir_path + os.sep + "integrated.mtz"
-                #print("\n path_2 =", path_2, "\n")
+                #mtz_path = mtz_dir_path + os.sep + "integrated.mtz"
 
                 lst_of_cmd = [
                     "URL          " + dict_4_cloud_run['url'],
@@ -225,19 +222,21 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
                         last_star_line = str(out_line[:-1])
 
                 if cloudrun_proc.poll() == 0:
-                    byt_data = bytes("ok".encode('utf-8'))
+                    return_list = bytes("ok".encode('utf-8'))
 
                 else:
-                    byt_data = bytes(last_star_line.encode('utf-8'))
-
-                return_list = byt_data
+                    return_list = bytes(last_star_line.encode('utf-8'))
 
             except IndexError:
+                return_list = bytes(" Index Err Catch".encode('utf-8'))
                 logging.info(
                     "Index Err catch , NOT running cloudrun"
                 )
 
             except FileNotFoundError:
+                return_list = bytes(
+                    " File Not Found Err Catch".encode('utf-8')
+                )
                 logging.info(
                     "FileNotFound Err catch , NOT running cloudrun"
                 )

@@ -355,7 +355,7 @@ class MtzDataTransfer(QThread):
     def say_goodbye(self):
         try:
             self.r_time_req.quit()
-            #self.r_time_req.wait()
+            self.r_time_req.wait()
 
         except AttributeError:
             logging.info("not found QThread(GetRequestRealTime)")

@@ -2209,6 +2209,7 @@ class ExportWidget(QWidget):
         else:
             self.progress_label.setStyleSheet("color: rgba(255, 1, 1, 255)")
             self.progress_label.setText(str(msg_in)[2:-1])
+            #self.progress_label.setText("  AAAAAAAAA   ")
 
     def save_mtz_on_disc(self, mtz_info):
         self.progress_label.setStyleSheet("color: rgba(0, 0, 0, 255")
