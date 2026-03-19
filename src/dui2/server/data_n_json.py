@@ -184,7 +184,13 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
         for lin2go in cmd_dict["nod_lst"]:
             try:
                 mtz_dir_path = step_list[lin2go]._run_dir
+                #TODO reconsider how to get this path for this single file
                 mtz_path = glob.glob(mtz_dir_path + os.sep + "*.mtz")[0]
+                #mtz_path = /tmp/tst4dui2/run_dui2_nodes/run9/integrated.mtz
+
+                #path_2 = mtz_dir_path + os.sep + "integrated.mtz"
+                #print("\n path_2 =", path_2, "\n")
+
                 lst_of_cmd = [
                     "URL          " + dict_4_cloud_run['url'],
                     "USER         " + dict_4_cloud_run['user'],
@@ -201,27 +207,39 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
 
                 cmd_lst = ["cloudrun", "-c",  cloudrun_cfg_file_path]
                 cloudrun_proc = subprocess.Popen(
-                    args = cmd_lst, shell = False
+                    args = cmd_lst, shell = False,
+                    stdout = subprocess.PIPE,
+                    stderr = subprocess.STDOUT,
+                    universal_newlines = True
                 )
-                cloudrun_proc.wait()
-                exe_pool = cloudrun_proc.poll()
 
-                if exe_pool == 0:
+                lst_line = []
+                new_line = None
+                while cloudrun_proc.poll() is None or new_line != '':
+                    new_line = cloudrun_proc.stdout.readline()
+                    print("cloudrun new_line =", new_line[:-1])
+                    lst_line.append(new_line)
+
+                for out_line in lst_line:
+                    if "***" in out_line:
+                        last_star_line = str(out_line[:-1])
+
+                if cloudrun_proc.poll() == 0:
                     byt_data = bytes("ok".encode('utf-8'))
 
                 else:
-                    byt_data = bytes("error running cloudrun".encode('utf-8'))
+                    byt_data = bytes(last_star_line.encode('utf-8'))
 
                 return_list = byt_data
 
             except IndexError:
                 logging.info(
-                    "Index Err catch , sending empty mtz"
+                    "Index Err catch , NOT running cloudrun"
                 )
 
             except FileNotFoundError:
                 logging.info(
-                    "FileNotFound Err catch , sending empty mtz"
+                    "FileNotFound Err catch , NOT running cloudrun"
                 )
 
     elif uni_cmd == ["get_report"]:

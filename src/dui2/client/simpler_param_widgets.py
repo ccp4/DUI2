@@ -2204,7 +2204,7 @@ class ExportWidget(QWidget):
     def msg_on_transfer(self, msg_in):
         if msg_in == b'ok':
             self.progress_label.setStyleSheet("color: rgba(0, 0, 0, 255")
-            self.progress_label.setText(" CloudRun launched successfully ")
+            self.progress_label.setText("Uploaded with CloudRun successfully ")
 
         else:
             self.progress_label.setStyleSheet("color: rgba(255, 1, 1, 255)")
