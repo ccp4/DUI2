@@ -2197,21 +2197,22 @@ class ExportWidget(QWidget):
         self.tran_thrd.start()
 
     def show_new_progress(self, new_prog):
+        self.progress_label.setStyleSheet("QLabel { color : black; }")
         self.progress_label.setText(
             str("Downloading: " + str(new_prog) + " %")
         )
 
     def msg_on_transfer(self, msg_in):
         if msg_in == b'ok':
-            self.progress_label.setStyleSheet("color: rgba(0, 0, 0, 255")
+            self.progress_label.setStyleSheet("QLabel { color : black; }")
             self.progress_label.setText("Uploaded with CloudRun successfully ")
 
         else:
-            self.progress_label.setStyleSheet("color: rgba(255, 1, 1, 255)")
+            self.progress_label.setStyleSheet("QLabel { color : red; }")
             self.progress_label.setText(str(msg_in)[2:-1])
 
     def save_mtz_on_disc(self, mtz_info):
-        self.progress_label.setStyleSheet("color: rgba(0, 0, 0, 255")
+        self.progress_label.setStyleSheet("QLabel { color : black; }")
         self.progress_label.setText("...")
         file_out = open(self.file_name, "wb")
         try:
@@ -2379,21 +2380,23 @@ class MergeWidget(QWidget):
         self.tran_thrd.start()
 
     def show_new_progress(self, new_prog):
+        self.progress_label.setStyleSheet("QLabel { color : black; }")
         self.progress_label.setText(
             str("Downloading: " + str(new_prog) + " %")
         )
 
     def msg_on_transfer(self, msg_in):
         if msg_in == b'ok':
-            self.progress_label.setStyleSheet("color: rgba(0, 0, 0, 255")
+            self.progress_label.setStyleSheet("QLabel { color : black; }")
             self.progress_label.setText("Uploaded with CloudRun successfully ")
 
+
         else:
-            self.progress_label.setStyleSheet("color: rgba(255, 1, 1, 255)")
+            self.progress_label.setStyleSheet("QLabel { color : red; }")
             self.progress_label.setText(str(msg_in)[2:-1])
 
     def save_mtz_on_disc(self, mtz_info):
-        self.progress_label.setStyleSheet("color: rgba(0, 0, 0, 255")
+        self.progress_label.setStyleSheet("QLabel { color : black; }")
         self.progress_label.setText("...")
         file_out = open(self.file_name, "wb")
 
