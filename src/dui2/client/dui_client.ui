@@ -93,7 +93,7 @@
                    </font>
                   </property>
                   <property name="currentIndex">
-                   <number>13</number>
+                   <number>9</number>
                   </property>
                   <widget class="QWidget" name="RootPage">
                    <layout class="QGridLayout" name="gridLayout_33">
@@ -158,8 +158,8 @@
                         <rect>
                          <x>0</x>
                          <y>0</y>
-                         <width>96</width>
-                         <height>26</height>
+                         <width>460</width>
+                         <height>331</height>
                         </rect>
                        </property>
                       </widget>
@@ -255,8 +255,8 @@
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>96</width>
-                             <height>26</height>
+                             <width>450</width>
+                             <height>292</height>
                             </rect>
                            </property>
                           </widget>
@@ -398,8 +398,8 @@
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>96</width>
-                             <height>26</height>
+                             <width>450</width>
+                             <height>292</height>
                             </rect>
                            </property>
                           </widget>
@@ -597,8 +597,8 @@
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>96</width>
-                             <height>26</height>
+                             <width>450</width>
+                             <height>292</height>
                             </rect>
                            </property>
                           </widget>
@@ -715,7 +715,7 @@
                     <item row="0" column="0">
                      <widget class="QTabWidget" name="tabWidget_4">
                       <property name="currentIndex">
-                       <number>1</number>
+                       <number>0</number>
                       </property>
                       <widget class="QWidget" name="tab_simple_4">
                        <attribute name="title">
@@ -1007,7 +1007,7 @@
                     <item row="0" column="0">
                      <widget class="QTabWidget" name="tabWidget_12">
                       <property name="currentIndex">
-                       <number>1</number>
+                       <number>0</number>
                       </property>
                       <widget class="QWidget" name="tab_simple_12">
                        <attribute name="title">
@@ -1051,8 +1051,8 @@
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>438</width>
-                             <height>272</height>
+                             <width>100</width>
+                             <height>30</height>
                             </rect>
                            </property>
                           </widget>
