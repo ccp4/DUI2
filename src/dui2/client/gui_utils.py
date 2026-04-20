@@ -139,6 +139,14 @@ widgets_defs = {
             "split_experiments", "optional"
         ]
     },
+    "two_theta_refine" : {
+        "tooltip"       : "dials.two_theta_refine ...",
+        "icon"          : "resources/tw_th_refine.png",
+        "main_cmd"      :["dials.two_theta_refine"],
+        "nxt_widg_lst"  :[
+            "symmetry", "scale", "cosym", "export", "optional"
+        ]
+    },
     "ssx_integrate" : {
         "tooltip"       : "dials.ssx_integrate ...",
         "icon"          : "resources/ssx_integrate.png",
@@ -147,21 +155,6 @@ widgets_defs = {
             "symmetry", "scale", "cosym", "export", "optional"
         ]
     },
-
-
-
-
-    "two_theta_refine" : {
-        "tooltip"       : "dials.two_theta_refine ...",
-        "icon"          : "resources/refine.png",  #FIXME put the right icon
-        "main_cmd"      :["dials.two_theta_refine"],
-        "nxt_widg_lst"  :[
-            "symmetry", "scale", "cosym", "export", "optional"
-        ]
-    },
-
-
-
 
     "symmetry" : {
         "tooltip"       : "dials.symmetry ...",
