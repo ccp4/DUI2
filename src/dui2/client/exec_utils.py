@@ -687,7 +687,6 @@ class HelpRequest(QThread):
             "find_hot_pixels",
             "frame_orientations",
             "generate_distortion_maps",
-            "geometry_viewer",
             "goniometer_calibration",
             "merge_cbf",
             "merge_reflection_lists",
@@ -708,6 +707,7 @@ class HelpRequest(QThread):
 
         removing_commands = '''
             "reflection_viewer",
+            "geometry_viewer",
             "rl_png",
             "rlv",
             "align_crystal",
@@ -748,7 +748,7 @@ class HelpRequest(QThread):
 
             self.message_acquired.emit(dials_cmd_str, msg_lst)
 
-        print("End getting help")
+        #print("End getting help")
         self.retieving_ended.emit()
 
 

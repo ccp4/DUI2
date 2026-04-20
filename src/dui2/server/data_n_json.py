@@ -867,6 +867,12 @@ def get_help_list(cmd_str):
         print(err_msg)
         my_cmd_hlp = []
 
+    except ImportError:
+        err_msg = "..." + cmd_str + " ...ImportError"
+        logging.info(err_msg)
+        print(err_msg)
+        my_cmd_hlp = []
+
     top_trimed_lst_1 = []
     found_sage_pp = False
     for single_line in my_cmd_hlp:

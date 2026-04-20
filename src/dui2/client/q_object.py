@@ -748,6 +748,7 @@ class MainObject(QObject):
         self.h_req = HelpRequest(self.runner_handler)
         self.help_msg_dict = {}
         self.h_req.message_acquired.connect(self.dials_help_aquired)
+        self.h_req.retieving_ended.connect(self.dials_help_ended)
         self.h_req.start()
 
     def dials_help_aquired(self, dict_key, hlp_msg):
