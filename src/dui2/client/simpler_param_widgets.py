@@ -1523,6 +1523,70 @@ class RefineSimplerParamTab(SimpleParamTab):
             self.detec_fix.setChecked(False)
 
 
+###############################################################################
+class TwoThetaRefineSimplerParamTab(SimpleParamTab):
+    """
+    This widget is the tool for tuning the simpler and most common parameters
+    in the two theta refiner, this widget is the first to appear once the button
+    "Two Theta Refine" is clicked
+    """
+    def __init__(self, parent=None):
+        super(TwoThetaRefineSimplerParamTab, self).__init__()
+        self.do_emit = True
+        self.main_v_layout = QVBoxLayout()
+        self.build_pars()
+        self.setLayout(self.main_v_layout)
+
+    def build_pars(self):
+        self.main_v_layout.addWidget(QLabel("Dummy 4 now"))
+
+        about_2_be_removed = '''
+        hbox_lay_scan_varying = QHBoxLayout()
+        label_scan_varying = QLabel("Scan varying refinement")
+        hbox_lay_scan_varying.addWidget(label_scan_varying)
+
+        box_scan_varying = DefaultComboBox(
+            "refinement.parameterisation.scan_varying",
+            ["True", "False", "Auto"], default_index=2
+        )
+        box_scan_varying.currentIndexChanged.connect(self.combobox_changed)
+        hbox_lay_scan_varying.addWidget(box_scan_varying)
+        self.main_v_layout.addLayout(hbox_lay_scan_varying)
+        hbox_lay_outlier_algorithm = QHBoxLayout()
+        label_outlier_algorithm = QLabel("Outlier rejection algorithm")
+        hbox_lay_outlier_algorithm.addWidget(label_outlier_algorithm)
+        box_outlier_algorithm = DefaultComboBox(
+            "refinement.reflections.outlier.algorithm", ["null", "Auto", "mcd",
+            "tukey", "sauter_poon"], default_index=1)
+        box_outlier_algorithm.currentIndexChanged.connect(
+            self.combobox_changed
+        )
+        hbox_lay_outlier_algorithm.addWidget(box_outlier_algorithm)
+        self.main_v_layout.addLayout(hbox_lay_outlier_algorithm)
+        self.detec_fix = QCheckBox("Set detector.fix=distance")
+        self.detec_fix.stateChanged.connect(self.detec_fix_changed)
+        self.main_v_layout.addWidget(
+            QLabel("\n Electron diffraction parameter")
+        )
+        self.main_v_layout.addWidget(self.detec_fix)
+        self.main_v_layout.addStretch()
+
+        self.lst_var_widg = []
+        self.lst_var_widg.append(box_scan_varying)
+        self.lst_var_widg.append(label_scan_varying)
+
+        self.lst_var_widg.append(box_outlier_algorithm)
+        self.lst_var_widg.append(label_outlier_algorithm)
+        '''
+
+    def reset_pars(self):
+        self.clearLayout(self.main_v_layout)
+        self.build_pars()
+
+
+
+###############################################################################
+
 class  IntegrateSimplerParamTab(SimpleParamTab):
     """
     This widget is the tool for tuning the simpler and most common parameters
