@@ -51,6 +51,11 @@ except:
 
 from dials.command_line.scale import phil_scope as phil_scope_scale
 from dials.command_line.symmetry import phil_scope as phil_scope_symmetry
+
+
+from dials.command_line.two_theta_refine import phil_scope as phil_scope_two_theta_refine
+
+
 from dials.command_line.combine_experiments import (
     phil_scope as phil_scope_combine_params
 )
@@ -781,6 +786,7 @@ def get_param_list(cmd_str):
             "integrate_params"               :phil_scope_integrate.objects     ,
             "ssx_integrate_params"           :ssx_phil_scope_integrate.objects ,
             "symmetry_params"                :phil_scope_symmetry.objects      ,
+            "two_theta_refine_params"        :phil_scope_two_theta_refine.objects ,
             "cosym_params"                   :phil_scope_cosym.objects ,
             "scale_params"                   :phil_scope_scale.objects         ,
             "combine_experiments_params"     :phil_scope_combine_params.objects,

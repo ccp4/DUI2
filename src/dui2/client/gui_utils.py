@@ -133,6 +133,7 @@ widgets_defs = {
         "icon"          : "resources/integrate.png",
         "main_cmd"      :["dials.integrate"],
         "nxt_widg_lst"  :[
+            "two_theta_refine",
             "symmetry", "scale", "cosym",
             "export", "combine_experiments",
             "split_experiments", "optional"
@@ -146,11 +147,28 @@ widgets_defs = {
             "symmetry", "scale", "cosym", "export", "optional"
         ]
     },
+
+
+
+
+    "two_theta_refine" : {
+        "tooltip"       : "dials.two_theta_refine ...",
+        "icon"          : "resources/refine.png",  #FIXME put the right icon
+        "main_cmd"      :["dials.two_theta_refine"],
+        "nxt_widg_lst"  :[
+            "symmetry", "scale", "cosym", "export", "optional"
+        ]
+    },
+
+
+
+
     "symmetry" : {
         "tooltip"       : "dials.symmetry ...",
         "icon"          : "resources/symmetry.png",
         "main_cmd"      :["dials.symmetry"],
         "nxt_widg_lst"  :[
+            "two_theta_refine",
             "scale", "export", "merge", "combine_experiments",
             "split_experiments", "optional"
         ]
