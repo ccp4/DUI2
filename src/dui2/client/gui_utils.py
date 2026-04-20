@@ -155,7 +155,6 @@ widgets_defs = {
             "symmetry", "scale", "cosym", "export", "optional"
         ]
     },
-
     "symmetry" : {
         "tooltip"       : "dials.symmetry ...",
         "icon"          : "resources/symmetry.png",

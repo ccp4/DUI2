@@ -1523,7 +1523,6 @@ class RefineSimplerParamTab(SimpleParamTab):
             self.detec_fix.setChecked(False)
 
 
-###############################################################################
 class TwoThetaRefineSimplerParamTab(SimpleParamTab):
     """
     This widget is the tool for tuning the simpler and most common parameters
@@ -1558,9 +1557,6 @@ class TwoThetaRefineSimplerParamTab(SimpleParamTab):
         self.clearLayout(self.main_v_layout)
         self.build_pars()
 
-
-
-###############################################################################
 
 class  IntegrateSimplerParamTab(SimpleParamTab):
     """

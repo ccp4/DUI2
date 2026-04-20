@@ -263,7 +263,6 @@ class MainObject(QObject):
             self.window.RefineAdvancedScrollArea
         )
 
-        #######################################################################
         tw_th_ref_simpl_widg = TwoThetaRefineSimplerParamTab()
         tw_th_ref_simpl_widg.item_changed.connect(self.item_param_changed)
         self.window.TwoThetaRefineSimplerScrollArea.setWidget(tw_th_ref_simpl_widg)
@@ -280,7 +279,6 @@ class MainObject(QObject):
         tw_th_rf_advanced_parameters.set_scroll_parent(
             self.window.TwoThetaRefineAdvancedScrollArea
         )
-        #######################################################################
 
         integr_simpl_widg = IntegrateSimplerParamTab()
         integr_simpl_widg.item_changed.connect(self.item_param_changed)
@@ -398,12 +396,8 @@ class MainObject(QObject):
         rf_advanced_parameters.twin_widg = ref_simpl_widg
         ref_simpl_widg.twin_widg = rf_advanced_parameters
 
-
-        #######################################################################
         tw_th_rf_advanced_parameters.twin_widg = tw_th_ref_simpl_widg
         tw_th_ref_simpl_widg.twin_widg = tw_th_rf_advanced_parameters
-        #######################################################################
-
 
         it_advanced_parameters.twin_widg = integr_simpl_widg
         integr_simpl_widg.twin_widg = it_advanced_parameters
@@ -480,12 +474,9 @@ class MainObject(QObject):
         self.param_widgets["refine"]["advanced"] = rf_advanced_parameters
         self.param_widgets["refine"]["main_page"] = self.window.RefinePage
 
-        ########################################################################
         self.param_widgets["two_theta_refine"]["simple"] = tw_th_ref_simpl_widg
         self.param_widgets["two_theta_refine"]["advanced"] = tw_th_rf_advanced_parameters
         self.param_widgets["two_theta_refine"]["main_page"] = self.window.TwoThetaRefinePage
-        ########################################################################
-
 
         self.param_widgets["integrate"]["simple"] = integr_simpl_widg
         self.param_widgets["integrate"]["advanced"] = it_advanced_parameters
