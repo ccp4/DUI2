@@ -93,7 +93,7 @@
                    </font>
                   </property>
                   <property name="currentIndex">
-                   <number>9</number>
+                   <number>14</number>
                   </property>
                   <widget class="QWidget" name="RootPage">
                    <layout class="QGridLayout" name="gridLayout_33">
@@ -158,8 +158,8 @@
                         <rect>
                          <x>0</x>
                          <y>0</y>
-                         <width>460</width>
-                         <height>331</height>
+                         <width>96</width>
+                         <height>26</height>
                         </rect>
                        </property>
                       </widget>
@@ -255,8 +255,8 @@
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>450</width>
-                             <height>292</height>
+                             <width>96</width>
+                             <height>26</height>
                             </rect>
                            </property>
                           </widget>
@@ -398,8 +398,8 @@
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>450</width>
-                             <height>292</height>
+                             <width>96</width>
+                             <height>26</height>
                             </rect>
                            </property>
                           </widget>
@@ -455,6 +455,21 @@
                   </widget>
                   <widget class="QWidget" name="SsxIndexPage">
                    <layout class="QGridLayout" name="gridLayout_39">
+                    <property name="leftMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="spacing">
+                     <number>2</number>
+                    </property>
                     <item row="0" column="0">
                      <widget class="QTabWidget" name="tabWidget_9">
                       <property name="currentIndex">
@@ -597,8 +612,8 @@
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>450</width>
-                             <height>292</height>
+                             <width>96</width>
+                             <height>26</height>
                             </rect>
                            </property>
                           </widget>
@@ -912,6 +927,21 @@
                   <widget class="QWidget" name="page_2"/>
                   <widget class="QWidget" name="SsxIntegratePage">
                    <layout class="QGridLayout" name="gridLayout_42">
+                    <property name="leftMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="spacing">
+                     <number>2</number>
+                    </property>
                     <item row="0" column="0">
                      <widget class="QTabWidget" name="tabWidget_10">
                       <property name="currentIndex">
@@ -1004,6 +1034,21 @@
                   </widget>
                   <widget class="QWidget" name="TwoThetaRefinePage">
                    <layout class="QGridLayout" name="gridLayout_49">
+                    <property name="leftMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="spacing">
+                     <number>2</number>
+                    </property>
                     <item row="0" column="0">
                      <widget class="QTabWidget" name="tabWidget_12">
                       <property name="currentIndex">
@@ -1014,6 +1059,21 @@
                         <string>Simple</string>
                        </attribute>
                        <layout class="QGridLayout" name="gridLayout_48">
+                        <property name="leftMargin">
+                         <number>2</number>
+                        </property>
+                        <property name="topMargin">
+                         <number>2</number>
+                        </property>
+                        <property name="rightMargin">
+                         <number>2</number>
+                        </property>
+                        <property name="bottomMargin">
+                         <number>2</number>
+                        </property>
+                        <property name="spacing">
+                         <number>2</number>
+                        </property>
                         <item row="0" column="0">
                          <widget class="QScrollArea" name="TwoThetaRefineSimplerScrollArea">
                           <property name="widgetResizable">
@@ -1024,8 +1084,8 @@
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>434</width>
-                             <height>276</height>
+                             <width>96</width>
+                             <height>26</height>
                             </rect>
                            </property>
                           </widget>
@@ -1116,8 +1176,8 @@
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>96</width>
-                             <height>26</height>
+                             <width>450</width>
+                             <height>292</height>
                             </rect>
                            </property>
                           </widget>
@@ -1155,8 +1215,8 @@
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>96</width>
-                             <height>26</height>
+                             <width>450</width>
+                             <height>288</height>
                             </rect>
                            </property>
                           </widget>
@@ -1292,7 +1352,7 @@
                     <property name="bottomMargin">
                      <number>2</number>
                     </property>
-                    <property name="horizontalSpacing">
+                    <property name="spacing">
                      <number>2</number>
                     </property>
                     <item row="0" column="0">
