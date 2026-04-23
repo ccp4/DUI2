@@ -66,9 +66,7 @@ def get_pair_list():
         ("rfp",     "refine_params"                         ),
         ("itp",     "integrate_params"                      ),
         ("smp",     "symmetry_params"                       ),
-
         ("trp",     "two_theta_refine_params"               ),
-
         ("csp",     "cosym_params"                          ),
         ("scp",     "scale_params"                          ),
         ("cep",     "combine_experiments_params"            ),
