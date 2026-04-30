@@ -2004,6 +2004,8 @@ class UploadDialog(QDialog):
         self.data_out["id"] = tmp_id_str
         self.data_out["project"] = str(self.project_txt.text())
         self.data_out["title"] = str(self.title_txt.text())
+        if self.data_out["title"] == "":
+            self.data_out["title"] = "none"
 
     def request_launch(self):
         logging.info("data_out(UploadDialog)=" + str(self.data_out))
