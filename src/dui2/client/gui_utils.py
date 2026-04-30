@@ -844,8 +844,8 @@ class TreeDirScene(QGraphicsScene):
             self.font_green_brush = QBrush(Qt.green, Qt.SolidPattern)
             self.font_gray_brush = QBrush(Qt.darkCyan, Qt.SolidPattern)
             self.cursor_brush = QBrush(Qt.blue, Qt.SolidPattern)
-            self.first_gray_brush = QBrush(Qt.gray, Qt.SolidPattern)
-            self.another_gray_brush = QBrush(Qt.darkGray, Qt.SolidPattern)
+            self.first_gray_brush = QBrush(Qt.darkGray, Qt.SolidPattern)
+            self.another_gray_brush = QBrush(QColor(69, 69, 69), Qt.SolidPattern)
             self.invisible_brush = QBrush(Qt.white, Qt.NoBrush)
             self.arrow_green_pen = QPen(
                 Qt.green, 1.6, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
