@@ -2,10 +2,6 @@ import sys, os, time, json, logging
 
 from dui2.shared_modules.qt_libs import *
 
-#from PySide6.QtCore import QEventLoop
-
-
-
 from dui2.shared_modules import all_local_server, format_utils
 
 class ConnectGetThread(QThread):
