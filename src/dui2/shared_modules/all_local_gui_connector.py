@@ -58,17 +58,13 @@ class MultiRunner(QObject):
         new_thread = ConnectGetThread(handler, cmd_in, obj_out)
         self.thread_lst.append(new_thread)
         new_thread.start()
-        loop = QEventLoop()
-        new_thread.finished.connect(loop.quit)
-        loop.exec()
+        new_thread.wait()
 
     def post_work(self, handler, cmd_in, obj_out):
         new_thread = ConnectPostThread(handler, cmd_in, obj_out)
         self.thread_lst.append(new_thread)
         new_thread.start()
-        loop = QEventLoop()
-        new_thread.finished.connect(loop.quit)
-        loop.exec()
+        new_thread.wait()
 
     def clean_memory(self):
         for trd in self.thread_lst:
