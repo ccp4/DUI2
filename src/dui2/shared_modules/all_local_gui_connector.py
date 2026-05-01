@@ -2,6 +2,10 @@ import sys, os, time, json, logging
 
 from dui2.shared_modules.qt_libs import *
 
+#from PySide6.QtCore import QEventLoop
+
+
+
 from dui2.shared_modules import all_local_server, format_utils
 
 class ConnectGetThread(QThread):
@@ -52,19 +56,19 @@ class MultiRunner(QObject):
 
     def get_work(self, handler, cmd_in, obj_out):
         new_thread = ConnectGetThread(handler, cmd_in, obj_out)
-        new_thread.start()
         self.thread_lst.append(new_thread)
-
-        while not new_thread.isFinished():
-            time.sleep(0.005)
+        new_thread.start()
+        loop = QEventLoop()
+        new_thread.finished.connect(loop.quit)
+        loop.exec()
 
     def post_work(self, handler, cmd_in, obj_out):
         new_thread = ConnectPostThread(handler, cmd_in, obj_out)
         self.thread_lst.append(new_thread)
         new_thread.start()
-
-        while not new_thread.isFinished():
-            time.sleep(0.005)
+        loop = QEventLoop()
+        new_thread.finished.connect(loop.quit)
+        loop.exec()
 
     def clean_memory(self):
         for trd in self.thread_lst:
