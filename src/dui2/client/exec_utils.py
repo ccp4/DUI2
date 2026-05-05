@@ -79,7 +79,7 @@ class get_request_shot(QObject):
 
     def result_out(self):
         while not self.done:
-            QThread.msleep(10) # Pauses the current thread for 10ms
+            QThread.msleep(10)
 
         return self.to_return
 
@@ -446,7 +446,7 @@ class PostRequestWithOutput(QThread):
             self.my_handler.post_from_main_dui(self.cmd, self)
 
             while not self.done:
-                QThread.msleep(10) # Pauses the current thread for 10ms
+                QThread.msleep(10)
 
         logging.info("ended post QThread")
 
@@ -462,10 +462,11 @@ class PostRequestWithOutput(QThread):
                 logging.info("PostRequestWithOutput ... Index err catch")
 
         elif '/*EOF*/' in line_str :
+            self.about_to_end.emit(self.number, self.do_predict_n_report)
             logging.info(
                 "do_predict_n_report = " + str(self.do_predict_n_report)
             )
-            self.about_to_end.emit(self.number, self.do_predict_n_report)
+            QThread.msleep(30)
             self.done = True
             self.exit()
             #self.wait()
