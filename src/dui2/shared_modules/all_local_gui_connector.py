@@ -38,36 +38,22 @@ class ConnectPostThread(QThread):
 
     def call_back_str(self, data_out):
         self.my_caller.get_it_str(data_out)
-        #logging.info("data going(ConnectPostThread)=", data_out)
 
 
 class MultiRunner(QObject):
     def __init__(self):
         super(MultiRunner, self).__init__()
-        self.thread_lst = []
-
-        self._my_timer = QTimer(self)
-        self._my_timer.timeout.connect(self.clean_memory)
-        self._my_timer.start(2000)
+        logging.info("MultiRunner start")
 
     def get_work(self, handler, cmd_in, obj_out):
         new_thread = ConnectGetThread(handler, cmd_in, obj_out)
-        self.thread_lst.append(new_thread)
         new_thread.start()
         new_thread.wait()
 
     def post_work(self, handler, cmd_in, obj_out):
         new_thread = ConnectPostThread(handler, cmd_in, obj_out)
-        self.thread_lst.append(new_thread)
         new_thread.start()
         new_thread.wait()
-
-    def clean_memory(self):
-        for trd in self.thread_lst:
-            if trd.isFinished():
-                # del trd
-                # or
-                self.thread_lst.remove(trd)
 
 
 class MainGuiObject(QObject):
