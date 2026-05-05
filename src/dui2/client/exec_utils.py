@@ -24,7 +24,7 @@ copyright (c) CCP4 - DLS
 
 from dui2.shared_modules.qt_libs import *
 
-import requests, json, os, sys, zlib, time, logging
+import requests, json, os, sys, zlib, logging
 
 from dui2.client.gui_utils import AdvancedParameters, widgets_defs
 from dui2.client.init_firts import IniData
@@ -78,8 +78,8 @@ class get_request_shot(QObject):
         self.done = True
 
     def result_out(self):
-        while self.done == False:
-            time.sleep(0.1)
+        while not self.done:
+            QThread.msleep(10) # Pauses the current thread for 10ms
 
         return self.to_return
 
@@ -445,8 +445,8 @@ class PostRequestWithOutput(QThread):
             self.already_read = False
             self.my_handler.post_from_main_dui(self.cmd, self)
 
-            while self.done == False:
-                time.sleep(0.1)
+            while not self.done:
+                QThread.msleep(10) # Pauses the current thread for 10ms
 
         logging.info("ended post QThread")
 
