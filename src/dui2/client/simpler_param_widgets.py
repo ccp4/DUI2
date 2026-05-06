@@ -1020,13 +1020,15 @@ class FindspotsSimplerParameterTab(SimpleParamTab):
         xds_global_threshold_hb.addWidget(xds_global_threshold_spn_bx)
         self.main_v_layout.addLayout(xds_global_threshold_hb)
 
+        if self.add_rad_prof:
+            self.main_v_layout.addWidget(self.set_rad_pro_alg)
+
         self.main_v_layout.addWidget(
-            QLabel("\n Electron diffraction parameters")
+            QLabel("\n Set resolution limits")
         )
         self.main_v_layout.addWidget(self.set_d_max)
         self.main_v_layout.addWidget(self.set_d_min)
-        if self.add_rad_prof:
-            self.main_v_layout.addWidget(self.set_rad_pro_alg)
+
 
         self.main_v_layout.addStretch()
         self.lst_var_widg = _get_all_direct_layout_widget_children(
@@ -1254,7 +1256,7 @@ class IndexSimplerParamTab(SimpleParamTab):
         self.main_v_layout.addLayout(qf)
 
         self.main_v_layout.addWidget(
-            QLabel("\n Electron diffraction parameter")
+            QLabel("\n ")
         )
         self.main_v_layout.addWidget(self.detec_fix)
 
@@ -1389,7 +1391,7 @@ class RefineBravaiSimplerParamTab(SimpleParamTab):
         hbox_lay_outlier_algorithm.addWidget(box_outlier_algorithm)
         self.main_v_layout.addLayout(hbox_lay_outlier_algorithm)
         self.main_v_layout.addWidget(
-            QLabel("\n Electron diffraction parameter")
+            QLabel("\n ")
         )
         self.main_v_layout.addWidget(self.detec_fix)
         self.main_v_layout.addStretch()
@@ -1475,7 +1477,7 @@ class RefineSimplerParamTab(SimpleParamTab):
         self.detec_fix = QCheckBox("Set detector.fix=distance")
         self.detec_fix.stateChanged.connect(self.detec_fix_changed)
         self.main_v_layout.addWidget(
-            QLabel("\n Electron diffraction parameter")
+            QLabel("\n ")
         )
         self.main_v_layout.addWidget(self.detec_fix)
         self.main_v_layout.addStretch()
