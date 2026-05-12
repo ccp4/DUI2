@@ -285,14 +285,12 @@ class FindNextCmd(object):
             self.default_list = param_widgets[str_key]["nxt_widg_lst"]
 
         except KeyError:
-            print("\n here 1 \n")
             str_key = self.nod_lst[parent_num]["cmd2show"][0][6:]
 
             try:
                 self.default_list = param_widgets[str_key]["nxt_widg_lst"]
 
             except KeyError:
-                print("\n\n here 2 \n\n")
                 str_key = self.nod_lst[parent_num]["cmd2show"][0][6:]
                 self.default_list = ["optional"]
 
