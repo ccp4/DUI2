@@ -725,7 +725,6 @@ def get_cmd_opt_list():
       "merge_reflection_lists"                 ,
       "model_background"                       ,
       "modify_geometry"                        ,
-      "rbs"                                    ,
       "search_beam_position"                   ,
       "sequence_to_stills"                     ,
       "sort_reflections"                       ,

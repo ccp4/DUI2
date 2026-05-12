@@ -664,7 +664,6 @@ class HelpRequest(QThread):
             "index",
             "ssx_index",
             "refine_bravais_settings",
-            "rbs",
             "reindex",
             "refine",
             "integrate",

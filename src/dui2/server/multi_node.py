@@ -116,7 +116,6 @@ def get_pair_list():
         ("Aaa",    "dials.modify_geometry"                    ),
         ("Aaa",    "dials.powder_calibrate"                   ),
         ("Aaa",    "dials.predict"                            ),
-        ("Aaa",    "dials.rbs"                                ),
         ("Aaa",    "dials.search_beam_position"               ),
         ("Aaa",    "dials.sequence_to_stills"                 ),
         ("Aaa",    "dials.sort_reflections"                   ),

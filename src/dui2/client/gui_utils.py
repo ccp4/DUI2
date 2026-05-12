@@ -272,13 +272,12 @@ class FindNextCmd(object):
         self.nod_lst = nod_lst_in
         self.remove_combine = False
         self.remove_split = False
+        parent_num = parent_nod_num_lst[0]
         if str_key == "combine_experiments":
-            parent_num = parent_nod_num_lst[0]
             str_key = self.nod_lst[parent_num]["cmd2show"][0][6:]
             self.remove_combine = True
 
         elif str_key == "split_experiments":
-            parent_num = parent_nod_num_lst[0]
             str_key = self.nod_lst[parent_num]["cmd2show"][0][6:]
             self.remove_split = True
 
@@ -286,7 +285,16 @@ class FindNextCmd(object):
             self.default_list = param_widgets[str_key]["nxt_widg_lst"]
 
         except KeyError:
-            self.default_list = ["optional"]
+            print("\n here 1 \n")
+            str_key = self.nod_lst[parent_num]["cmd2show"][0][6:]
+
+            try:
+                self.default_list = param_widgets[str_key]["nxt_widg_lst"]
+
+            except KeyError:
+                print("\n\n here 2 \n\n")
+                str_key = self.nod_lst[parent_num]["cmd2show"][0][6:]
+                self.default_list = ["optional"]
 
         self.par_cmd_lst = []
         for nod_num in parent_nod_num_lst:

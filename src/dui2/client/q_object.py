@@ -532,6 +532,7 @@ class MainObject(QObject):
         self.window.treeView.setScene(self.tree_scene)
 
         self.parent_nums_lst = []
+
         self.local_clipboard = []
 
         self.font_point_size = QFont().pointSize()
