@@ -323,11 +323,6 @@ class FindNextCmd(object):
             except ValueError:
                 return ["optional"]
 
-        still_2_prove = '''
-        if fin_cmd_lst == []:
-            fin_cmd_lst = ["optional"]
-        '''
-
         return fin_cmd_lst
 
 

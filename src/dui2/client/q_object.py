@@ -1193,6 +1193,7 @@ class MainObject(QObject):
             if(
                 self.server_nod_lst[self.curr_nod_num]["status"] == "Succeeded"
             ):
+                #TODO: simplify the next class instantiating
                 fnd_nxt_cmd = FindNextCmd(
                     self.server_nod_lst,
                     self.server_nod_lst[self.curr_nod_num]["parent_node_lst"],
@@ -1612,7 +1613,7 @@ class MainObject(QObject):
                     cmd_in = cmd, main_handler = self.runner_handler
                 )
                 post_thread.first_line.connect(self.respose_n1_from_reset)
-                post_thread.finished.connect(self.post_ended)
+                post_thread.finished.connect(self.reset_ended)
                 post_thread.start()
                 self.thrd_lst.append(post_thread)
 
@@ -1624,6 +1625,23 @@ class MainObject(QObject):
 
         else:
             logging.info("Cancel clicked to reset")
+
+    def reset_ended(self):
+        self.request_display()
+        self.curr_nod_num = 0
+        logging.info(
+            " self.curr_nod_num =" + str( self.curr_nod_num) +
+            "self.server_nod_lst = " + str( self.server_nod_lst)
+        )
+        self.check_nxt_btn()
+
+    def post_ended(self):
+        self.request_display()
+        logging.info(
+            " self.curr_nod_num =" + str( self.curr_nod_num) +
+            "self.server_nod_lst = " + str( self.server_nod_lst)
+        )
+        self.check_nxt_btn()
 
     def respose_n1_from_reset(self, line):
         logging.info("respose_from_reset(err code):" + str(line))
@@ -1685,7 +1703,4 @@ class MainObject(QObject):
         else:
             self.refresh_output()
 
-    def post_ended(self):
-        self.request_display()
-        self.check_nxt_btn()
 
