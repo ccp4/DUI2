@@ -1627,13 +1627,15 @@ class MainObject(QObject):
             logging.info("Cancel clicked to reset")
 
     def reset_ended(self):
-        self.request_display()
         self.curr_nod_num = 0
+        self.new_node = None
+        self.curr_widg_key = "root"
+        self.request_display()
         logging.info(
             " self.curr_nod_num =" + str( self.curr_nod_num) +
             "self.server_nod_lst = " + str( self.server_nod_lst)
         )
-        self.check_nxt_btn()
+        self.import_init()
 
     def post_ended(self):
         self.request_display()
