@@ -1631,6 +1631,7 @@ class MainObject(QObject):
         self.new_node = None
         self.curr_widg_key = "root"
         self.request_display()
+        self.do_image_view.reset()
         logging.info(
             " self.curr_nod_num =" + str( self.curr_nod_num) +
             "self.server_nod_lst = " + str( self.server_nod_lst)

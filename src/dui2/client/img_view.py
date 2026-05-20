@@ -483,6 +483,35 @@ class DoImageView(QObject):
 
         QTimer.singleShot(4000, self.try_2_un_zoom)
 
+    def reset(self):
+        """Clear the image viewer back to a blank state after a graph reset."""
+        self.cur_img_num = None
+        self.cur_nod_num = None
+        self.img_path = "?"
+        self.np_full_img = None
+        self.np_full_mask_img = None
+        self.beam_xy_pair = None
+        self.r_list0 = []
+        self.r_list1 = []
+        self.list_temp_mask = None
+        self.full_image_loaded = False
+        self.just_imported = False
+
+        # Reset the "old" values so check_move() doesn't fire stale reloads
+        self.old_img_num = None
+        self.old_nod_num = None
+
+        # Clear the scene
+        self.my_scene.my_pix_map = None
+        self.my_scene.my_mask_pix_map = None
+        self.my_scene.curr_pixmap = None
+        self.my_scene.refl_list = []
+        self.my_scene.clear()
+
+        # Reset path display label
+        self.main_obj.window.ImagePathText.setText("")
+        self.main_obj.window.ImgNumEdit.setText("0")
+
     def __call__(
         self, in_img_num, nod_or_path = True,
         on_filter_reflections = False
