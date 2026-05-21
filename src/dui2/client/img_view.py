@@ -497,18 +497,20 @@ class DoImageView(QObject):
         self.full_image_loaded = False
         self.just_imported = False
 
-        # Reset the "old" values so check_move() doesn't fire stale reloads
         self.old_img_num = None
         self.old_nod_num = None
 
-        # Clear the scene
-        self.my_scene.my_pix_map = None
-        self.my_scene.my_mask_pix_map = None
-        self.my_scene.curr_pixmap = None
-        self.my_scene.refl_list = []
-        self.my_scene.clear()
+        # Clear the scene by doing a full replacement
+        old_scene = self.my_scene
+        self.my_scene = ImgGraphicsScene(self)
+        self.main_obj.window.imageView.setScene(self.my_scene)
+        old_scene.deleteLater()
 
-        # Reset path display label
+        self.my_scene.img_scale.connect(self.scale_img)
+        self.my_scene.new_mouse_pos.connect(self.on_mouse_move)
+        self.my_scene.mouse_pressed.connect(self.on_mouse_press)
+        self.my_scene.mouse_released.connect(self.on_mouse_release)
+
         self.main_obj.window.ImagePathText.setText("")
         self.main_obj.window.ImgNumEdit.setText("0")
 
