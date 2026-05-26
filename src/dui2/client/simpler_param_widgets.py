@@ -1936,6 +1936,10 @@ class UploadDialog(QDialog):
         super(UploadDialog, self).__init__(parent)
         mainLayout = QVBoxLayout()
 
+        sys_font = QFont()
+        font_point_size = sys_font.pointSize()
+        star_font = QFont("Courier", font_point_size + 1, QFont.Bold)
+
         self.data_out = {}
 
         url_layout = QHBoxLayout()
@@ -1943,6 +1947,9 @@ class UploadDialog(QDialog):
         self.url_txt = QLineEdit()
         self.url_txt.textChanged.connect(self.line_changed)
         url_layout.addWidget(self.url_txt)
+        self.url_star = QLabel("*")
+        self.url_star.setFont(star_font)
+        url_layout.addWidget(self.url_star)
         mainLayout.addLayout(url_layout)
 
         user_layout = QHBoxLayout()
@@ -1950,6 +1957,9 @@ class UploadDialog(QDialog):
         self.user_txt = QLineEdit()
         self.user_txt.textChanged.connect(self.line_changed)
         user_layout.addWidget(self.user_txt)
+        self.user_star = QLabel("*")
+        self.user_star.setFont(star_font)
+        user_layout.addWidget(self.user_star)
         mainLayout.addLayout(user_layout)
 
         id_layout = QHBoxLayout()
@@ -1957,6 +1967,9 @@ class UploadDialog(QDialog):
         self.id_txt = QLineEdit()
         self.id_txt.textChanged.connect(self.line_changed)
         id_layout.addWidget(self.id_txt)
+        self.id_star = QLabel("*")
+        self.id_star.setFont(star_font)
+        id_layout.addWidget(self.id_star)
         mainLayout.addLayout(id_layout)
 
         project_layout = QHBoxLayout()
@@ -1964,6 +1977,9 @@ class UploadDialog(QDialog):
         self.project_txt = QLineEdit()
         self.project_txt.textChanged.connect(self.line_changed)
         project_layout.addWidget(self.project_txt)
+        self.project_star = QLabel("*")
+        self.project_star.setFont(star_font)
+        project_layout.addWidget(self.project_star)
         mainLayout.addLayout(project_layout)
 
         title_layout = QHBoxLayout()
@@ -1971,6 +1987,9 @@ class UploadDialog(QDialog):
         self.title_txt = QLineEdit()
         self.title_txt.textChanged.connect(self.line_changed)
         title_layout.addWidget(self.title_txt)
+        name_space = QLabel(" ")
+        name_space.setFont(star_font)
+        title_layout.addWidget(name_space)
         mainLayout.addLayout(title_layout)
         mainLayout.addWidget(QLabel(" " * 200))
         self.LaunchButton = QPushButton("Launch command")
@@ -2012,14 +2031,35 @@ class UploadDialog(QDialog):
         if self.data_out["title"] == "":
             self.data_out["title"] = "none"
 
-        if(
-            self.data_out["url"] == "" or self.data_out["user"] == ""
-            or self.data_out["id"] == "" or  self.data_out["project"] == ""
-        ):
+        self.LaunchButton.setEnabled(True)
+
+        if self.data_out["url"] == "":
             self.LaunchButton.setEnabled(False)
+            self.url_star.setText("*")
 
         else:
-            self.LaunchButton.setEnabled(True)
+            self.url_star.setText(" ")
+
+        if self.data_out["user"] == "":
+            self.LaunchButton.setEnabled(False)
+            self.user_star.setText("*")
+
+        else:
+            self.user_star.setText(" ")
+
+        if self.data_out["id"] == "":
+            self.LaunchButton.setEnabled(False)
+            self.id_star.setText("*")
+
+        else:
+            self.id_star.setText(" ")
+
+        if self.data_out["project"] == "":
+            self.LaunchButton.setEnabled(False)
+            self.project_star.setText("*")
+
+        else:
+            self.project_star.setText(" ")
 
     def request_launch(self):
         logging.info("data_out(UploadDialog)=" + str(self.data_out))
