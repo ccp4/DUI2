@@ -1973,9 +1973,9 @@ class UploadDialog(QDialog):
         title_layout.addWidget(self.title_txt)
         mainLayout.addLayout(title_layout)
         mainLayout.addWidget(QLabel(" " * 200))
-        LaunchButton = QPushButton("Launch command")
-        LaunchButton.clicked.connect(self.request_launch)
-        mainLayout.addWidget(LaunchButton)
+        self.LaunchButton = QPushButton("Launch command")
+        self.LaunchButton.clicked.connect(self.request_launch)
+        mainLayout.addWidget(self.LaunchButton)
         self.setLayout(mainLayout)
 
     def ShowAsModalFromData(self, data_4_starting):
@@ -2011,6 +2011,15 @@ class UploadDialog(QDialog):
         self.data_out["title"] = str(self.title_txt.text())
         if self.data_out["title"] == "":
             self.data_out["title"] = "none"
+
+        if(
+            self.data_out["url"] == "" or self.data_out["user"] == ""
+            or self.data_out["id"] == "" or  self.data_out["project"] == ""
+        ):
+            self.LaunchButton.setEnabled(False)
+
+        else:
+            self.LaunchButton.setEnabled(True)
 
     def request_launch(self):
         logging.info("data_out(UploadDialog)=" + str(self.data_out))
