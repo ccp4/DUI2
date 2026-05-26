@@ -226,7 +226,10 @@ class RootWidg(QWidget):
         )
         self.main_vbox = QVBoxLayout()
         self.main_vbox.addWidget(
-            QLabel("Nothing to do here ... \npress the Import button to start")
+            QLabel(
+                "This is the starting point.\n" +
+                "Click on a processing step to see its options."
+            )
         )
         self.setLayout(self.main_vbox)
 

@@ -1158,8 +1158,11 @@ class MainObject(QObject):
             str_key = self.server_nod_lst[self.curr_nod_num]["cmd2show"][0][6:]
             self.update_nxt_butt(str_key)
 
-        except (IndexError, AttributeError):
-            logging.info("NO need to run << update_nxt_butt >>")
+        except IndexError:
+            logging.info("NO need to run << update_nxt_butt >>(Index Err Catch)")
+
+        except AttributeError:
+            logging.info("NO need to run << update_nxt_butt >>(Attribute Err Catch)")
 
     def add_empty_label(self):
         for n_times in range(self.n_stretch_1):
@@ -1472,7 +1475,11 @@ class MainObject(QObject):
 
         else:
             logging.info("only clone (F or S)")
-            self.window.RetryButton.setEnabled(True)
+            if self.server_nod_lst[self.curr_nod_num]['cmd2show'] == ['dials.root']:
+                logging.info("clicked on root node, not supposed to clone here")
+
+            else:
+                self.window.RetryButton.setEnabled(True)
 
         self.check_if_exported_or_merged()
 
