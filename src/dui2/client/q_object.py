@@ -1158,11 +1158,8 @@ class MainObject(QObject):
             str_key = self.server_nod_lst[self.curr_nod_num]["cmd2show"][0][6:]
             self.update_nxt_butt(str_key)
 
-        except IndexError:
-            logging.info("NO need to run << update_nxt_butt >>(Index Err Catch)")
-
-        except AttributeError:
-            logging.info("NO need to run << update_nxt_butt >>(Attribute Err Catch)")
+        except (IndexError, AttributeError):
+            logging.info("NO need to run << update_nxt_butt >>")
 
     def add_empty_label(self):
         for n_times in range(self.n_stretch_1):
