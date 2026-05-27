@@ -557,6 +557,10 @@ class CommandParamControl(object):
         self.status = 'Ready'
         self.parent_node_lst = list(parent_s)
 
+        #TODO:the next 2 lines are a temporary patch, it needs more studying
+        if self.parent_node_lst == []:
+            self.parent_node_lst = [0]
+
     def add_or_remove_parent(self, nod_num):
         logging.info("New node to add or remove:" + str(nod_num))
         if nod_num not in self.parent_node_lst:
@@ -725,7 +729,6 @@ class HelpRequest(QThread):
 
             self.message_acquired.emit(dials_cmd_str, msg_lst)
 
-        #print("End getting help")
         self.retieving_ended.emit()
 
 

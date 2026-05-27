@@ -1472,7 +1472,11 @@ class MainObject(QObject):
 
         else:
             logging.info("only clone (F or S)")
-            self.window.RetryButton.setEnabled(True)
+            if self.server_nod_lst[self.curr_nod_num]['cmd2show'] == ['dials.root']:
+                logging.info("clicked on root node, not supposed to clone here")
+
+            else:
+                self.window.RetryButton.setEnabled(True)
 
         self.check_if_exported_or_merged()
 
