@@ -22,9 +22,9 @@ class IniData(object):
 
         global lim_pth
         lim_pth = init_param["limit_path"]
-        if lim_pth == None:
+        if lim_pth == None or lim_pth == "/":
             if init_param["windows_exe"].lower() == "true":
-                lim_pth = "c:\\"
+                lim_pth = ""
 
             else:
                 lim_pth = "/"

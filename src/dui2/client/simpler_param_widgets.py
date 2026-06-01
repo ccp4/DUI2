@@ -388,6 +388,7 @@ class ImportWidget(QWidget):
             logging.info("no selection ( canceled? )")
 
     def open_dir_widget(self):
+        '''
         if self.rad_but_sys_diag.isChecked():
             if(
                 self.rad_but_template.isChecked() or
@@ -406,38 +407,39 @@ class ImportWidget(QWidget):
                 self.set_selection(str_select = str(dir_path), isdir = True)
 
         else:
+        '''
 
-            cmd = {"nod_lst":"", "cmd_str":["dir_path"]}
-            lst_req = get_req_json_dat(
-                params_in = cmd, main_handler = self.runner_handler
-            )
-            dic_str = lst_req.result_out()
+        cmd = {"nod_lst":"", "cmd_str":["dir_path"]}
+        lst_req = get_req_json_dat(
+            params_in = cmd, main_handler = self.runner_handler
+        )
+        dic_str = lst_req.result_out()
 
-            path_serv_limit = str(dic_str[0])
-            str_already_there = from_path_2_dir(str(self.imp_txt.text()))
+        path_serv_limit = str(dic_str[0])
+        str_already_there = from_path_2_dir(str(self.imp_txt.text()))
 
-            if path_serv_limit in str_already_there:
-                init_path = str_already_there
+        if path_serv_limit in str_already_there:
+            init_path = str_already_there
 
-            else:
-                init_path = path_serv_limit
+        else:
+            init_path = path_serv_limit
 
-            if(
-                self.rad_but_template.isChecked() or
-                self.rad_but_img_file.isChecked()
-            ):
-                only_dir_bool = False
+        if(
+            self.rad_but_template.isChecked() or
+            self.rad_but_img_file.isChecked()
+        ):
+            only_dir_bool = False
 
-            elif self.rad_but_directory.isChecked():
-                only_dir_bool = True
+        elif self.rad_but_directory.isChecked():
+            only_dir_bool = True
 
-            self.open_widget = FileBrowser(
-                parent = self, path_ini = init_path,
-                limit_path = path_serv_limit, only_dir = only_dir_bool,
-                runner_handler = self.runner_handler
-            )
-            self.open_widget.resize(self.open_widget.size() * 2)
-            self.open_widget.select_done.connect(self.set_selection)
+        self.open_widget = FileBrowser(
+            parent = self, path_ini = init_path,
+            limit_path = path_serv_limit, only_dir = only_dir_bool,
+            runner_handler = self.runner_handler
+        )
+        self.open_widget.resize(self.open_widget.size() * 2)
+        self.open_widget.select_done.connect(self.set_selection)
 
     def reset_pars(self):
         self.do_emit = False

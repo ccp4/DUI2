@@ -557,9 +557,6 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
             logging.info("limit_path =" + str( limit_path))
             if reqt_path[0:len(limit_path)] == limit_path:
                 try:
-                    ''' TODO consider replacing listdir with scandir,
-                     maybe will make navigation faster but will need to
-                    rewrite the next 20 lines, and test '''
                     f_name_list =  sorted(os.listdir(reqt_path))
                     dict_list = []
                     for f_name in f_name_list:
