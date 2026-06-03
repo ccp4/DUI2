@@ -203,12 +203,22 @@ class ReqDirList(QThread):
         super(ReqDirList, self).__init__()
         self.my_handler = my_handler
         self.show_hidden = show_hidden
+        # this is for unix style OS
+        '''
         try:
             if curr_path[-1] != "/":
                 curr_path += "/"
 
         except IndexError:
             curr_path = "/"
+        '''
+        #test for windows
+        try:
+            if curr_path[-1] != "/":
+                curr_path += "/"
+
+        except IndexError:
+            curr_path = ""
 
         self.curr_path = str(curr_path)
 
@@ -313,6 +323,9 @@ class FileBrowser(QDialog):
         self.show()
 
     def build_content(self, path_in):
+
+        print("path_in =", path_in)
+
         self.curr_path = path_in
         self.refresh_content()
 

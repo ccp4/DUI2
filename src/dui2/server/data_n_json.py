@@ -21,7 +21,8 @@ copyright (c) CCP4 - DLS
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-import json, os, glob, logging
+import json, os, glob, logging, platform
+
 import subprocess, shutil
 
 import requests
@@ -101,6 +102,22 @@ def get_dict_from_str_with_pairs(str_in):
         dict_w_data[str(pair[0])] = str(pair[1])
 
     return dict_w_data
+
+def get_drives():
+    system = platform.system()
+
+    if system == "Windows":
+        import ctypes, string
+        drives = []
+        bitmask = ctypes.windll.kernel32.GetLogicalDrives()
+        for letter in string.ascii_uppercase:
+            if bitmask & 1:
+                drives.append(f"{letter}:\\")
+            bitmask >>= 1
+        return drives
+
+    else:
+        return sorted(os.listdir("/"))
 
 def get_info_data(uni_cmd, cmd_dict, step_list):
     return_list = []
@@ -556,14 +573,30 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
             logging.info("reqt_path =" + str(reqt_path))
             logging.info("limit_path =" + str( limit_path))
             if reqt_path[0:len(limit_path)] == limit_path:
+
+                print("reqt_path=", reqt_path)
+
+
+
                 try:
-                    f_name_list =  sorted(os.listdir(reqt_path))
-                    dict_list = []
-                    for f_name in f_name_list:
-                        f_path = reqt_path + f_name
-                        f_isdir = os.path.isdir(f_path)
-                        file_dict = {"fname": f_name, "isdir":f_isdir}
-                        dict_list.append(file_dict)
+
+                    if reqt_path == "\\" or reqt_path == "":
+                        f_name_list = get_drives()
+                        dict_list = []
+                        for f_name in f_name_list:
+                            dict_list.append({"fname": f_name, "isdir":True})
+
+                        print("dict_list =", dict_list)
+
+                    else:
+                        f_name_list = sorted(os.listdir(reqt_path))
+
+                        dict_list = []
+                        for f_name in f_name_list:
+                            f_path = reqt_path + f_name
+                            f_isdir = os.path.isdir(f_path)
+                            file_dict = {"fname": f_name, "isdir":f_isdir}
+                            dict_list.append(file_dict)
 
                     return_list = dict_list
 
