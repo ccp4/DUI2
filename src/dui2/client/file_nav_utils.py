@@ -137,7 +137,9 @@ class PathButtons(QWidget):
                 logging.info("empty dir_name")
                 new_butt.setIcon(self._root_icon)
 
-            path_str += dir_name + "/"
+            else:
+                path_str += dir_name + "/"
+
             new_butt.own_path = path_str
             parent_dir_path = str(path_str)
             new_butt.clicked.connect(self.dir_clicked)
@@ -213,12 +215,19 @@ class ReqDirList(QThread):
             curr_path = "/"
         '''
         #test for windows
+
+        print("curr_path(ReqDirList)", curr_path)
+
         try:
             if curr_path[-1] != "/":
                 curr_path += "/"
 
+                print("here 1")
+
             elif curr_path[-1] != "\\":
                 curr_path += "\\"
+
+                print("here 2")
 
 
         except IndexError:
@@ -254,7 +263,7 @@ class ReqDirList(QThread):
 class FileBrowser(QDialog):
     select_done = Signal(str, bool)
     def __init__(
-        self, parent = None, path_ini = "/", limit_path = "/",
+        self, parent = None, path_ini = None, limit_path = None,
         only_dir = False, runner_handler = None
     ):
         super(FileBrowser, self).__init__(parent)
@@ -295,7 +304,12 @@ class FileBrowser(QDialog):
 
         self.lst_vw =  MyDirView_list()
 
-        self.root_limit_path = limit_path
+        #self.root_limit_path = limit_path
+        #FIXME the previous line was how this was conceived
+        self.root_limit_path = ""
+
+        print("self.root_limit_path =", self.root_limit_path)
+
         self.build_content(path_ini)
 
         self.lst_vw.file_clickled.connect(self.fill_clik)
@@ -381,6 +395,9 @@ class FileBrowser(QDialog):
             self.OpenButton.setEnabled(True)
 
     def new_path_text(self, new_path):
+
+
+
         self.typed_path = str(new_path)
 
     def done_requesting(self, lst_dir):
@@ -388,6 +405,9 @@ class FileBrowser(QDialog):
         self.status_label.setText(" ")
         self.label_pos = -1
         self.refresh_sorted1()
+
+        print("self.curr_path(done_requesting)", self.curr_path)
+
         self.imp_dir_path.setText(
             str(self.curr_path)
         )

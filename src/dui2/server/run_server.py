@@ -305,7 +305,7 @@ def main(par_def = None, connection_out = None):
         tree_lim_path = init_param["limit_path"]
         if tree_lim_path == None:
             if init_param["windows_exe"].lower() == "true":
-                tree_lim_path = "c:\\"
+                tree_lim_path = ""
 
             else:
                 tree_lim_path = "/"

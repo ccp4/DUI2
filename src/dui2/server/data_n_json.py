@@ -576,8 +576,6 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
 
                 print("reqt_path=", reqt_path)
 
-
-
                 try:
 
                     if reqt_path == "\\" or reqt_path == "":
@@ -589,6 +587,7 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
                         print("dict_list =", dict_list)
 
                     else:
+                        reqt_path = reqt_path.lstrip("\\")
                         f_name_list = sorted(os.listdir(reqt_path))
 
                         dict_list = []
