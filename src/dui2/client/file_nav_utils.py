@@ -217,6 +217,10 @@ class ReqDirList(QThread):
             if curr_path[-1] != "/":
                 curr_path += "/"
 
+            elif curr_path[-1] != "\\":
+                curr_path += "\\"
+
+
         except IndexError:
             curr_path = ""
 
@@ -333,7 +337,7 @@ class FileBrowser(QDialog):
         parents_list = [self.root_limit_path[:-1]]
         rest_of_path = self.curr_path[len(self.root_limit_path):]
         try:
-            if rest_of_path[-1] == "/":
+            if rest_of_path[-1] == "/" or rest_of_path[-1] == "\\":
                 rest_of_path = rest_of_path[:-1]
 
         except IndexError:
