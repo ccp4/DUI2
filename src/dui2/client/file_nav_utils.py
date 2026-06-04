@@ -304,12 +304,13 @@ class FileBrowser(QDialog):
 
         self.lst_vw =  MyDirView_list()
 
-        #self.root_limit_path = limit_path
+        self.root_limit_path = limit_path
         #FIXME the previous line was how this was conceived
-        self.root_limit_path = ""
+        #self.root_limit_path = ""
 
         print("self.root_limit_path =", self.root_limit_path)
 
+        #self.build_content("")
         self.build_content(path_ini)
 
         self.lst_vw.file_clickled.connect(self.fill_clik)

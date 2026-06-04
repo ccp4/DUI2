@@ -314,6 +314,8 @@ def main(par_def = None, connection_out = None):
             logging.info(msg_txt)
             print(msg_txt)
 
+    print("tree_lim_path(run_server) =", tree_lim_path)
+
     nodes_dir = "run_dui2_token_" + token_from_cli
     try:
         os.mkdir(nodes_dir)
