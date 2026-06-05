@@ -310,6 +310,7 @@ class ImportWidget(QWidget):
 
         self.rad_but_template.setChecked(True)
 
+        '''
         self.diag_rad_butt_vbox = QVBoxLayout()
         group2 = QButtonGroup(self)
         self.rad_but_dui_diag = QRadioButton("Dui2 dialog")
@@ -318,6 +319,7 @@ class ImportWidget(QWidget):
         group2.addButton(self.rad_but_sys_diag)
         self.diag_rad_butt_vbox.addWidget(self.rad_but_dui_diag)
         self.diag_rad_butt_vbox.addWidget(self.rad_but_sys_diag)
+        '''
 
         self.imp_txt.textChanged.connect(self.line_changed)
         self.imp_extra_txt.textChanged.connect(self.line_changed)
@@ -341,7 +343,7 @@ class ImportWidget(QWidget):
 
         self.open_diag_hbox = QHBoxLayout()
         self.open_diag_hbox.addWidget(self.open_butt)
-        self.open_diag_hbox.addLayout(self.diag_rad_butt_vbox)
+        #self.open_diag_hbox.addLayout(self.diag_rad_butt_vbox)
         self.main_vbox.addLayout(self.open_diag_hbox)
 
         self.main_vbox.addStretch()
@@ -454,6 +456,7 @@ class ImportWidget(QWidget):
         self.dist_text_in.setText("Auto")
         self.check_shadow.setChecked(False)
         self.rad_but_img_file.setChecked(True)
+        '''
         if not self.run_local:
             self.rad_but_sys_diag.setEnabled(False)
 
@@ -463,6 +466,7 @@ class ImportWidget(QWidget):
 
         else:
             self.rad_but_dui_diag.setChecked(True)
+        '''
 
         self.do_emit = True
 
