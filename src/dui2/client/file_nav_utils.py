@@ -263,7 +263,7 @@ class ReqDirList(QThread):
 class FileBrowser(QDialog):
     select_done = Signal(str, bool)
     def __init__(
-        self, parent = None, path_ini = None, limit_path = None,
+        self, parent = None, path_ini = "", limit_path = None,
         only_dir = False, runner_handler = None
     ):
         super(FileBrowser, self).__init__(parent)

@@ -361,9 +361,12 @@ class ImportWidget(QWidget):
 
     def set_selection(self, str_select, isdir):
         logging.info("isdir(set_selection) =" + str(isdir))
+
+
         if str_select != "":
             self.dir_selected = isdir
             if self.dir_selected:
+                print("str_select =", str_select)
                 self.imp_txt.setText(str_select)
 
             else:
@@ -380,6 +383,7 @@ class ImportWidget(QWidget):
                     elif self.rad_but_img_file.isChecked():
                         file_path_str = build_template(str_select)[1]
 
+                print("file_path_str =",file_path_str)
                 self.imp_txt.setText(file_path_str)
 
             self.line_changed()
@@ -414,7 +418,6 @@ class ImportWidget(QWidget):
             params_in = cmd, main_handler = self.runner_handler
         )
         dic_str = lst_req.result_out()
-
         path_serv_limit = str(dic_str[0])
         str_already_there = from_path_2_dir(str(self.imp_txt.text()))
 
@@ -423,6 +426,8 @@ class ImportWidget(QWidget):
 
         else:
             init_path = path_serv_limit
+
+        print("init_path = ", init_path)
 
         if(
             self.rad_but_template.isChecked() or

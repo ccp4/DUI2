@@ -759,7 +759,7 @@ class MainObject(QObject):
             self.nxt_key_clicked("import")
             data_init = IniData()
             import_init = data_init.get_import_init()
-            if import_init != "None":
+            if import_init != None:
                 self.imp_widg.set_selection(str(import_init), isdir = True)
 
         else:
