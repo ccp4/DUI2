@@ -129,7 +129,13 @@ class PathButtons(QWidget):
             self.main_h_lay.removeWidget(single_widget)
 
         self.lst_butt = []
-        path_str = ""
+
+        if platform.system() == "Windows":
+            path_str = ""
+
+        else:
+            path_str = "/"
+
         parent_dir_path = None
         for dir_name in new_list[:-1]:
             new_butt = QPushButton(dir_name)
@@ -160,6 +166,7 @@ class PathButtons(QWidget):
 
     def dir_clicked(self):
         next_path = str(self.sender().own_path)
+        print("next_path =", next_path)
         self.up_dir_clickled.emit(next_path)
 
 
@@ -393,10 +400,8 @@ class FileBrowser(QDialog):
             self.OpenButton.setEnabled(True)
 
     def new_path_text(self, new_path):
-
-
-
         self.typed_path = str(new_path)
+        print("\n FileBrowser.typed_path =", self.typed_path, "\n")
 
     def done_requesting(self, lst_dir):
         self.lst_vw.enter_list(lst_in = lst_dir)
