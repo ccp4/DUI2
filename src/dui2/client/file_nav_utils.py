@@ -22,7 +22,7 @@ copyright (c) CCP4 - DLS
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 
-import sys, os, logging
+import sys, os, logging, platform
 
 from dui2.shared_modules.qt_libs import *
 
@@ -205,33 +205,30 @@ class ReqDirList(QThread):
         super(ReqDirList, self).__init__()
         self.my_handler = my_handler
         self.show_hidden = show_hidden
-        # this is for unix style OS
-        '''
-        try:
-            if curr_path[-1] != "/":
-                curr_path += "/"
 
-        except IndexError:
-            curr_path = "/"
-        '''
-        #test for windows
+        system = platform.system()
+        if system == "Windows":
+            #test for windows
+            try:
+                if curr_path[-1] != "/":
+                    curr_path += "/"
+
+                elif curr_path[-1] != "\\":
+                    curr_path += "\\"
+
+
+            except IndexError:
+                curr_path = ""
+        else:
+            # this is for unix style OS
+            try:
+                if curr_path[-1] != "/":
+                    curr_path += "/"
+
+            except IndexError:
+                curr_path = "/"
 
         print("curr_path(ReqDirList)", curr_path)
-
-        try:
-            if curr_path[-1] != "/":
-                curr_path += "/"
-
-                print("here 1")
-
-            elif curr_path[-1] != "\\":
-                curr_path += "\\"
-
-                print("here 2")
-
-
-        except IndexError:
-            curr_path = ""
 
         self.curr_path = str(curr_path)
 
