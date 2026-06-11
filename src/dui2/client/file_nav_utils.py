@@ -123,18 +123,29 @@ class PathButtons(QWidget):
         self._curr_dir_font.setBold(True)
         self._curr_dir_font.setUnderline(True)
 
-    def update_list(self, new_list):
+    def update_list(self, new_list, root_limit_path):
         for single_widget in self.lst_butt:
             single_widget.deleteLater()
             self.main_h_lay.removeWidget(single_widget)
 
         self.lst_butt = []
 
+        # This << if >> block is a bit redundant to make clear
+        # that we need to handle the beginning of the path
+        # differently on windows that on Unix
+
         if platform.system() == "Windows":
             path_str = ""
 
         else:
-            path_str = "/"
+            if root_limit_path == "":
+                path_str = "/"
+
+            else:
+                path_str = ""
+
+
+        print("\n root_limit_path =", root_limit_path, "\n")
 
         parent_dir_path = None
 
@@ -199,8 +210,8 @@ class PathBar(QWidget):
     def scroll_2_right(self, minimum, maximum):
         self.hscrollbar.setValue(maximum)
 
-    def update_list(self, new_list):
-        self.par_dir = self.path_buttons.update_list(new_list)
+    def update_list(self, new_list, root_limit_path):
+        self.par_dir = self.path_buttons.update_list(new_list, root_limit_path)
 
     def up_dir(self, next_path):
         if self.par_dir is not None:
@@ -371,7 +382,7 @@ class FileBrowser(QDialog):
         if parents_list[0:2] == ["", ""]:
             parents_list = parents_list[1:]
 
-        self.path_bar.update_list(parents_list)
+        self.path_bar.update_list(parents_list, self.root_limit_path)
 
     def refresh_content(self):
         try:
