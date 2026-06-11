@@ -137,10 +137,13 @@ class PathButtons(QWidget):
             path_str = "/"
 
         parent_dir_path = None
+
+        print("new_list =", new_list)
+
         for dir_name in new_list[:-1]:
             new_butt = QPushButton(dir_name)
             if dir_name == "":
-                logging.info("empty dir_name")
+                print("\n empty dir_name \n")
                 new_butt.setIcon(self._root_icon)
 
             else:
@@ -364,6 +367,9 @@ class FileBrowser(QDialog):
 
         for single_dir in rest_of_path.split("/"):
             parents_list.append(single_dir)
+
+        if parents_list[0:2] == ["", ""]:
+            parents_list = parents_list[1:]
 
         self.path_bar.update_list(parents_list)
 
