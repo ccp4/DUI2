@@ -151,7 +151,7 @@ class PathButtons(QWidget):
                 new_butt.setIcon(self._root_icon)
 
             else:
-                path_str += dir_name + "/"
+                path_str += dir_name + os.sep
 
             new_butt.own_path = path_str
             parent_dir_path = str(path_str)
@@ -224,12 +224,12 @@ class ReqDirList(QThread):
         if system == "Windows":
             #test for windows
             try:
-                if curr_path[-1] != "/":
-                    curr_path += "/"
-
-                elif curr_path[-1] != "\\":
+                if(
+                    ( not curr_path.endswith("/") )
+                        and
+                    ( not curr_path.endswith("\\") )
+                ):
                     curr_path += "\\"
-
 
             except IndexError:
                 curr_path = ""
@@ -358,7 +358,9 @@ class FileBrowser(QDialog):
         except IndexError:
             rest_of_path = ""
 
-        for single_dir in rest_of_path.split("/"):
+        rest_of_path.replace("/", "\\")
+
+        for single_dir in rest_of_path.split(os.sep):
             parents_list.append(single_dir)
 
         if parents_list[0:2] == ["", ""]:
