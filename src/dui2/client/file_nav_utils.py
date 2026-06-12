@@ -234,6 +234,9 @@ class ReqDirList(QThread):
             except IndexError:
                 curr_path = ""
 
+            if curr_path == "\\":
+                curr_path = ""
+
         else:
             # this is for unix style OS
             try:
