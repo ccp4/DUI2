@@ -42,13 +42,11 @@ def get_number_from_string(dict_in):
 
 
 def f_key(dic_in):
-    #return dic_in['name']
     return dic_in['isdir']
 
 
 def sort_dict_list(lst_in, key_in):
-    lst_out = sorted(lst_in, key=key_in)
-    return lst_out
+    return sorted(lst_in, key=key_in)
 
 
 class MyDirView_list(QListWidget):
@@ -144,12 +142,7 @@ class PathButtons(QWidget):
             else:
                 path_str = ""
 
-
-        print("\n root_limit_path =", root_limit_path, "\n")
-
         parent_dir_path = None
-
-        print("new_list =", new_list)
 
         for dir_name in new_list[:-1]:
             new_butt = QPushButton(dir_name)
@@ -249,8 +242,6 @@ class ReqDirList(QThread):
             except IndexError:
                 curr_path = "/"
 
-        print("curr_path(ReqDirList)", curr_path)
-
         self.curr_path = str(curr_path)
 
     def run(self):
@@ -323,12 +314,6 @@ class FileBrowser(QDialog):
         self.lst_vw =  MyDirView_list()
 
         self.root_limit_path = limit_path
-        #FIXME the previous line was how this was conceived
-        #self.root_limit_path = ""
-
-        print("self.root_limit_path =", self.root_limit_path)
-
-        #self.build_content("")
         self.build_content(path_ini)
 
         self.lst_vw.file_clickled.connect(self.fill_clik)
@@ -360,9 +345,6 @@ class FileBrowser(QDialog):
         self.show()
 
     def build_content(self, path_in):
-
-        print("path_in =", path_in)
-
         self.curr_path = path_in
         self.refresh_content()
 
@@ -425,9 +407,6 @@ class FileBrowser(QDialog):
         self.status_label.setText(" ")
         self.label_pos = -1
         self.refresh_sorted1()
-
-        print("self.curr_path(done_requesting)", self.curr_path)
-
         self.imp_dir_path.setText(
             str(self.curr_path)
         )
