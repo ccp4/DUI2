@@ -233,6 +233,7 @@ class ReqDirList(QThread):
 
             except IndexError:
                 curr_path = ""
+
         else:
             # this is for unix style OS
             try:
@@ -358,7 +359,13 @@ class FileBrowser(QDialog):
         except IndexError:
             rest_of_path = ""
 
-        rest_of_path.replace("/", "\\")
+        system = platform.system()
+        if system == "Windows":
+            rest_of_path.replace("/", "\\")
+
+        else:
+            rest_of_path.replace("\\", "/")
+
 
         for single_dir in rest_of_path.split(os.sep):
             parents_list.append(single_dir)
