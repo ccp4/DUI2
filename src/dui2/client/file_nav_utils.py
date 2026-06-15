@@ -22,7 +22,7 @@ copyright (c) CCP4 - DLS
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 
-import sys, os, logging, platform
+import os, logging, platform
 
 from dui2.shared_modules.qt_libs import *
 
@@ -50,11 +50,11 @@ def sort_dict_list(lst_in, key_in):
 
 
 class MyDirView_list(QListWidget):
-    file_clickled = Signal(dict)
+    file_clicked = Signal(dict)
     def __init__(self, parent = None):
         super(MyDirView_list, self).__init__(parent)
-        self.itemClicked.connect(self.someting_click)
-        self.itemDoubleClicked.connect(self.clicked_twise)
+        self.itemClicked.connect(self.something_clicked)
+        self.itemDoubleClicked.connect(self.clicked_twice)
         self.setWrapping(True)
         self.setResizeMode(QListView.Adjust)
         DirPixMapi = getattr(QStyle, 'SP_DirIcon')
@@ -91,15 +91,15 @@ class MyDirView_list(QListWidget):
         for tst_item in self.items_list:
             self.addItem(tst_item)
 
-    def someting_click(self, item):
-        self.file_clickled.emit({"isdir":item.f_isdir, "path":item.f_path})
+    def something_clicked(self, item):
+        self.file_clicked.emit({"isdir":item.f_isdir, "path":item.f_path})
 
-    def clicked_twise(self, item):
-        self.someting_click(item)
+    def clicked_twice(self, item):
+        self.something_clicked(item)
 
 
 class PathButtons(QWidget):
-    up_dir_clickled = Signal(str)
+    up_dir_clicked = Signal(str)
     def __init__(self, parent = None):
         super(PathButtons, self).__init__()
 
@@ -174,7 +174,7 @@ class PathButtons(QWidget):
     def dir_clicked(self):
         next_path = str(self.sender().own_path)
         print("next_path =", next_path)
-        self.up_dir_clickled.emit(next_path)
+        self.up_dir_clicked.emit(next_path)
 
 
 class PathBar(QWidget):
@@ -183,7 +183,7 @@ class PathBar(QWidget):
         super(PathBar, self).__init__(parent)
         main_h_layout = QHBoxLayout()
         self.path_buttons = PathButtons(self)
-        self.path_buttons.up_dir_clickled.connect(self.up_dir)
+        self.path_buttons.up_dir_clicked.connect(self.up_dir)
         self.scroll_path = QScrollArea()
         self.scroll_path.setWidgetResizable(True)
         self.scroll_path.setWidget(self.path_buttons)
@@ -320,7 +320,7 @@ class FileBrowser(QDialog):
         self.root_limit_path = limit_path
         self.build_content(path_ini)
 
-        self.lst_vw.file_clickled.connect(self.fill_clik)
+        self.lst_vw.file_clicked.connect(self.fill_clik)
         main_v_layout.addWidget(self.lst_vw)
 
         low_h_layout = QHBoxLayout()
@@ -364,11 +364,10 @@ class FileBrowser(QDialog):
 
         system = platform.system()
         if system == "Windows":
-            rest_of_path.replace("/", "\\")
+            rest_of_path = rest_of_path.replace("/", "\\")
 
         else:
-            rest_of_path.replace("\\", "/")
-
+            rest_of_path = rest_of_path.replace("\\", "/")
 
         for single_dir in rest_of_path.split(os.sep):
             parents_list.append(single_dir)
@@ -448,7 +447,7 @@ class FileBrowser(QDialog):
         self.typed_path = None
 
     def open_file(self):
-        if self.typed_path != None:
+        if self.typed_path is not None:
             self.build_content(self.typed_path)
 
         else:
