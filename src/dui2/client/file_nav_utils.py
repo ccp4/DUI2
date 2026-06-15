@@ -147,7 +147,7 @@ class PathButtons(QWidget):
         for dir_name in new_list[:-1]:
             new_butt = QPushButton(dir_name)
             if dir_name == "":
-                print("\n empty dir_name \n")
+                logging.info("empty dir_name(file_nav_utils)")
                 new_butt.setIcon(self._root_icon)
 
             else:
@@ -173,7 +173,7 @@ class PathButtons(QWidget):
 
     def dir_clicked(self):
         next_path = str(self.sender().own_path)
-        print("next_path =", next_path)
+        logging.info("next_path =" + str(next_path))
         self.up_dir_clicked.emit(next_path)
 
 
@@ -411,7 +411,7 @@ class FileBrowser(QDialog):
 
     def new_path_text(self, new_path):
         self.typed_path = str(new_path)
-        print("\n FileBrowser.typed_path =", self.typed_path, "\n")
+        logging.info("FileBrowser.typed_path =" + str(self.typed_path))
 
     def done_requesting(self, lst_dir):
         self.lst_vw.enter_list(lst_in = lst_dir)

@@ -573,9 +573,7 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
             logging.info("reqt_path =" + str(reqt_path))
             logging.info("limit_path =" + str( limit_path))
             if reqt_path[0:len(limit_path)] == limit_path:
-
-                print("reqt_path=", reqt_path)
-
+                logging.info("reqt_path=" + str(reqt_path))
                 try:
 
                     if reqt_path == "\\" or reqt_path == "":
@@ -584,7 +582,7 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
                         for f_name in f_name_list:
                             dict_list.append({"fname": f_name, "isdir":True})
 
-                        print("dict_list =", dict_list)
+                        logging.info("dict_list =" + str(dict_list))
 
                     else:
                         reqt_path = reqt_path.lstrip("\\")
@@ -605,13 +603,10 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
                     return_list = []
 
             else:
-                print(
-                    "Not allowing get_dir_ls >> ", reqt_path,
-                    " when limit_path =", limit_path
-                )
-                err_msg = "permission denied by Dui2 server err catch, " + \
-                "attempt to open not allowed path, not sending file list"
-                logging.info(err_msg)
+                msg_err = "Not allowing get_dir_ls >> " + str(reqt_path) + \
+                " when limit_path =" + str(limit_path)
+                print(msg_err)
+                logging.info(msg_err)
                 return_list = []
 
         except FileNotFoundError:

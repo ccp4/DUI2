@@ -175,9 +175,8 @@ class SimpleParamTab(QWidget):
 
 
 def build_template(str_path_in):
-    logging.info("time to build template from:" + str(str_path_in))
-
     found_a_digit = False
+    logging.info("building template from: " + str(str_path_in))
     for pos, single_char in enumerate(str_path_in):
         if single_char in "0123456789":
             last_digit_pos = pos
@@ -196,11 +195,13 @@ def build_template(str_path_in):
         star_str = str_path_in[
             0:begin_digit_pos + 1
         ] + "*" + str_path_in[last_digit_pos + 1:]
-
         return template_str, star_str
 
     else:
-        return None, 0
+        err_msg = "Non image file selected"
+        print("\n" + err_msg + "\n")
+        logging.info(err_msg)
+        return "", ""
 
 
 def get_lst_par_from_str(str_in):
@@ -368,7 +369,6 @@ class ImportWidget(QWidget):
         if str_select != "":
             self.dir_selected = isdir
             if self.dir_selected:
-                print("str_select =", str_select)
                 self.imp_txt.setText(str_select)
 
             else:
@@ -385,7 +385,7 @@ class ImportWidget(QWidget):
                     elif self.rad_but_img_file.isChecked():
                         file_path_str = build_template(str_select)[1]
 
-                print("file_path_str =",file_path_str)
+                logging.info("file_path_str =" + str(file_path_str))
                 self.imp_txt.setText(file_path_str)
 
             self.line_changed()
@@ -428,8 +428,6 @@ class ImportWidget(QWidget):
 
         else:
             init_path = path_serv_limit
-
-        print("init_path = ", init_path)
 
         if(
             self.rad_but_template.isChecked() or
@@ -597,7 +595,7 @@ class ImportWidget(QWidget):
                     self.dist_text_in.setText(str(par_dic["value"]))
 
         except IndexError:
-            print(" Not copying parameters from node (Index err catch )")
+            logging.info(" Not copying parameters from node (Index err catch )")
             self.imp_txt.setText("")
             self.imp_extra_txt.setText("")
 
