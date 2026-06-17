@@ -318,6 +318,8 @@ class FileBrowser(QDialog):
         self.lst_vw =  MyDirView_list()
 
         self.root_limit_path = limit_path
+        #self.root_limit_path = ""
+
         self.build_content(path_ini)
 
         self.lst_vw.file_clicked.connect(self.fill_clik)
@@ -350,16 +352,36 @@ class FileBrowser(QDialog):
 
     def build_content(self, path_in):
         self.curr_path = path_in
+
+        system = platform.system()
+        if system == "Windows":
+            print("Nothing to do here ... for now")
+
+        else:
+            if not self.curr_path.startswith("/"):
+                print("self.curr_path = ", self.curr_path)
+                self.curr_path = "/" + self.curr_path
+                print("self.curr_path = ", self.curr_path)
+
         self.refresh_content()
 
     def build_paren_list(self):
+
+        print("self.root_limit_path:::", self.root_limit_path, ":::")
         parents_list = [self.root_limit_path[:-1]]
+        print("parents_list:::", parents_list, ":::")
+        print("self.curr_path :::", self.curr_path, ":::")
         rest_of_path = self.curr_path[len(self.root_limit_path):]
+
+        print("rest_of_path", rest_of_path, ":::")
+
         try:
             if rest_of_path[-1] == "/" or rest_of_path[-1] == "\\":
+                print("cutting ", os.sep, "from:", rest_of_path)
                 rest_of_path = rest_of_path[:-1]
 
         except IndexError:
+            print("here IndexError")
             rest_of_path = ""
 
         system = platform.system()
@@ -373,6 +395,7 @@ class FileBrowser(QDialog):
             parents_list.append(single_dir)
 
         if parents_list[0:2] == ["", ""]:
+            print("removing \"\" from parents_list")
             parents_list = parents_list[1:]
 
         self.path_bar.update_list(parents_list, self.root_limit_path)
