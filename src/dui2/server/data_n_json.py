@@ -566,7 +566,14 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
         #and consequently go elsewhere
 
         try:
-            reqt_path = str(uni_cmd[1].replace("/", os.sep))
+            try:
+                reqt_path = str(uni_cmd[1].replace("/", os.sep))
+
+            except IndexError:
+                reqt_path = ""
+                print("empty path string to navigate, assuming (root)")
+
+            print("reqt_path =", reqt_path)
 
             data_init = IniData()
             limit_path = str(data_init.get_lim_path())

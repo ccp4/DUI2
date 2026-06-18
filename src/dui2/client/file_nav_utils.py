@@ -168,7 +168,7 @@ class PathButtons(QWidget):
 
         self.lst_butt.append(new_lab)
         self.main_h_lay.addWidget(new_lab)
-
+        print("parent_dir_path :::", parent_dir_path, ":::")
         return parent_dir_path
 
     def dir_clicked(self):
@@ -208,6 +208,9 @@ class PathBar(QWidget):
 
     def up_dir(self, next_path):
         if self.par_dir is not None:
+
+            print("next_path :::", next_path, ":::")
+
             self.clicked_up_dir.emit(next_path)
 
 
@@ -318,7 +321,8 @@ class FileBrowser(QDialog):
         self.lst_vw =  MyDirView_list()
 
         self.root_limit_path = limit_path
-        #self.root_limit_path = ""
+        #self.root_limit_path = "/"
+        print("self.root_limit_path :::", self.root_limit_path, ":::")
 
         self.build_content(path_ini)
 
@@ -351,8 +355,9 @@ class FileBrowser(QDialog):
         self.show()
 
     def build_content(self, path_in):
-        self.curr_path = path_in
+        print("path_in :::", path_in, ":::")
 
+        self.curr_path = path_in
         system = platform.system()
         if system == "Windows":
             print("Nothing to do here ... for now")
@@ -369,9 +374,14 @@ class FileBrowser(QDialog):
 
         print("self.root_limit_path:::", self.root_limit_path, ":::")
         parents_list = [self.root_limit_path[:-1]]
-        print("parents_list:::", parents_list, ":::")
-        print("self.curr_path :::", self.curr_path, ":::")
-        rest_of_path = self.curr_path[len(self.root_limit_path):]
+        print("self.curr_path :::", self.curr_path, ":::\n")
+
+        len_lim = len(self.root_limit_path)
+        if len_lim > 1:
+            rest_of_path = self.curr_path[len_lim:]
+
+        else:
+            rest_of_path = self.curr_path
 
         print("rest_of_path", rest_of_path, ":::")
 
