@@ -168,7 +168,7 @@ class PathButtons(QWidget):
 
         self.lst_butt.append(new_lab)
         self.main_h_lay.addWidget(new_lab)
-        print("parent_dir_path :::", parent_dir_path, ":::")
+        logging.debug("parent_dir_path :::" + str(parent_dir_path) + ":::")
         return parent_dir_path
 
     def dir_clicked(self):
@@ -209,7 +209,7 @@ class PathBar(QWidget):
     def up_dir(self, next_path):
         if self.par_dir is not None:
 
-            print("next_path :::", next_path, ":::")
+            logging.debug("next_path :::" + str(next_path) + ":::")
 
             self.clicked_up_dir.emit(next_path)
 
@@ -322,7 +322,7 @@ class FileBrowser(QDialog):
 
         self.root_limit_path = limit_path
         #self.root_limit_path = "/"
-        print("self.root_limit_path :::", self.root_limit_path, ":::")
+        logging.debug("self.root_limit_path :::" + str(self.root_limit_path) + ":::")
 
         self.build_content(path_ini)
 
@@ -355,26 +355,26 @@ class FileBrowser(QDialog):
         self.show()
 
     def build_content(self, path_in):
-        print("path_in :::", path_in, ":::")
+        logging.debug("path_in :::" + str(path_in) + ":::")
 
         self.curr_path = path_in
         system = platform.system()
         if system == "Windows":
-            print("Nothing to do here ... for now")
+            logging.debug("Nothing to do here ... for now")
 
         else:
             if not self.curr_path.startswith("/"):
-                print("self.curr_path = ", self.curr_path)
+                logging.debug("self.curr_path = " + str(self.curr_path))
                 self.curr_path = "/" + self.curr_path
-                print("self.curr_path = ", self.curr_path)
+                logging.debug("self.curr_path = " + str(self.curr_path))
 
         self.refresh_content()
 
     def build_paren_list(self):
 
-        print("self.root_limit_path:::", self.root_limit_path, ":::")
+        logging.debug("self.root_limit_path:::" + str(self.root_limit_path) + ":::")
         parents_list = [self.root_limit_path[:-1]]
-        print("self.curr_path :::", self.curr_path, ":::\n")
+        logging.debug("self.curr_path :::" + str(self.curr_path) + ":::")
 
         len_lim = len(self.root_limit_path)
         if len_lim > 1:
@@ -383,15 +383,15 @@ class FileBrowser(QDialog):
         else:
             rest_of_path = self.curr_path
 
-        print("rest_of_path", rest_of_path, ":::")
+        logging.debug("rest_of_path" + str(rest_of_path) + ":::")
 
         try:
             if rest_of_path[-1] == "/" or rest_of_path[-1] == "\\":
-                print("cutting ", os.sep, "from:", rest_of_path)
+                logging.debug("cutting " + os.sep + "from:" + str(rest_of_path))
                 rest_of_path = rest_of_path[:-1]
 
         except IndexError:
-            print("here IndexError")
+            logging.debug("here IndexError")
             rest_of_path = ""
 
         system = platform.system()
@@ -405,7 +405,7 @@ class FileBrowser(QDialog):
             parents_list.append(single_dir)
 
         if parents_list[0:2] == ["", ""]:
-            print("removing \"\" from parents_list")
+            logging.debug("removing \"\" from parents_list")
             parents_list = parents_list[1:]
 
         self.path_bar.update_list(parents_list, self.root_limit_path)

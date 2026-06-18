@@ -571,10 +571,9 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
 
             except IndexError:
                 reqt_path = ""
-                print("empty path string to navigate, assuming (root)")
+                logging.info("empty path string to navigate, assuming (root)")
 
-            print("reqt_path =", reqt_path)
-
+            logging.info("reqt_path =" + str(reqt_path))
             data_init = IniData()
             limit_path = str(data_init.get_lim_path())
             logging.info("reqt_path =" + str(reqt_path))
