@@ -22,7 +22,7 @@ copyright (c) CCP4 - DLS
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 
-import sys, os, logging
+import os, logging, platform
 
 from dui2.shared_modules.qt_libs import *
 
@@ -42,21 +42,19 @@ def get_number_from_string(dict_in):
 
 
 def f_key(dic_in):
-    #return dic_in['name']
     return dic_in['isdir']
 
 
 def sort_dict_list(lst_in, key_in):
-    lst_out = sorted(lst_in, key=key_in)
-    return lst_out
+    return sorted(lst_in, key=key_in)
 
 
 class MyDirView_list(QListWidget):
-    file_clickled = Signal(dict)
+    file_clicked = Signal(dict)
     def __init__(self, parent = None):
         super(MyDirView_list, self).__init__(parent)
-        self.itemClicked.connect(self.someting_click)
-        self.itemDoubleClicked.connect(self.clicked_twise)
+        self.itemClicked.connect(self.something_clicked)
+        self.itemDoubleClicked.connect(self.clicked_twice)
         self.setWrapping(True)
         self.setResizeMode(QListView.Adjust)
         DirPixMapi = getattr(QStyle, 'SP_DirIcon')
@@ -93,15 +91,15 @@ class MyDirView_list(QListWidget):
         for tst_item in self.items_list:
             self.addItem(tst_item)
 
-    def someting_click(self, item):
-        self.file_clickled.emit({"isdir":item.f_isdir, "path":item.f_path})
+    def something_clicked(self, item):
+        self.file_clicked.emit({"isdir":item.f_isdir, "path":item.f_path})
 
-    def clicked_twise(self, item):
-        self.someting_click(item)
+    def clicked_twice(self, item):
+        self.something_clicked(item)
 
 
 class PathButtons(QWidget):
-    up_dir_clickled = Signal(str)
+    up_dir_clicked = Signal(str)
     def __init__(self, parent = None):
         super(PathButtons, self).__init__()
 
@@ -123,21 +121,38 @@ class PathButtons(QWidget):
         self._curr_dir_font.setBold(True)
         self._curr_dir_font.setUnderline(True)
 
-    def update_list(self, new_list):
+    def update_list(self, new_list, root_limit_path):
         for single_widget in self.lst_butt:
             single_widget.deleteLater()
             self.main_h_lay.removeWidget(single_widget)
 
         self.lst_butt = []
-        path_str = ""
+
+        # This << if >> block is a bit redundant to make clear
+        # that we need to handle the beginning of the path
+        # differently on windows that on Unix
+
+        if platform.system() == "Windows":
+            path_str = ""
+
+        else:
+            if root_limit_path == "":
+                path_str = "/"
+
+            else:
+                path_str = ""
+
         parent_dir_path = None
+
         for dir_name in new_list[:-1]:
             new_butt = QPushButton(dir_name)
             if dir_name == "":
-                logging.info("empty dir_name")
+                logging.info("empty dir_name(file_nav_utils)")
                 new_butt.setIcon(self._root_icon)
 
-            path_str += dir_name + "/"
+            else:
+                path_str += dir_name + os.sep
+
             new_butt.own_path = path_str
             parent_dir_path = str(path_str)
             new_butt.clicked.connect(self.dir_clicked)
@@ -153,12 +168,12 @@ class PathButtons(QWidget):
 
         self.lst_butt.append(new_lab)
         self.main_h_lay.addWidget(new_lab)
-
         return parent_dir_path
 
     def dir_clicked(self):
         next_path = str(self.sender().own_path)
-        self.up_dir_clickled.emit(next_path)
+        logging.info("next_path =" + str(next_path))
+        self.up_dir_clicked.emit(next_path)
 
 
 class PathBar(QWidget):
@@ -167,7 +182,7 @@ class PathBar(QWidget):
         super(PathBar, self).__init__(parent)
         main_h_layout = QHBoxLayout()
         self.path_buttons = PathButtons(self)
-        self.path_buttons.up_dir_clickled.connect(self.up_dir)
+        self.path_buttons.up_dir_clicked.connect(self.up_dir)
         self.scroll_path = QScrollArea()
         self.scroll_path.setWidgetResizable(True)
         self.scroll_path.setWidget(self.path_buttons)
@@ -187,8 +202,8 @@ class PathBar(QWidget):
     def scroll_2_right(self, minimum, maximum):
         self.hscrollbar.setValue(maximum)
 
-    def update_list(self, new_list):
-        self.par_dir = self.path_buttons.update_list(new_list)
+    def update_list(self, new_list, root_limit_path):
+        self.par_dir = self.path_buttons.update_list(new_list, root_limit_path)
 
     def up_dir(self, next_path):
         if self.par_dir is not None:
@@ -203,12 +218,32 @@ class ReqDirList(QThread):
         super(ReqDirList, self).__init__()
         self.my_handler = my_handler
         self.show_hidden = show_hidden
-        try:
-            if curr_path[-1] != "/":
-                curr_path += "/"
 
-        except IndexError:
-            curr_path = "/"
+        system = platform.system()
+        if system == "Windows":
+            #test for windows
+            try:
+                if(
+                    ( not curr_path.endswith("/") )
+                        and
+                    ( not curr_path.endswith("\\") )
+                ):
+                    curr_path += "\\"
+
+            except IndexError:
+                curr_path = ""
+
+            if curr_path == "\\":
+                curr_path = ""
+
+        else:
+            # this is for unix style OS
+            try:
+                if curr_path[-1] != "/":
+                    curr_path += "/"
+
+            except IndexError:
+                curr_path = "/"
 
         self.curr_path = str(curr_path)
 
@@ -240,7 +275,7 @@ class ReqDirList(QThread):
 class FileBrowser(QDialog):
     select_done = Signal(str, bool)
     def __init__(
-        self, parent = None, path_ini = "/", limit_path = "/",
+        self, parent = None, path_ini = "", limit_path = None,
         only_dir = False, runner_handler = None
     ):
         super(FileBrowser, self).__init__(parent)
@@ -284,7 +319,7 @@ class FileBrowser(QDialog):
         self.root_limit_path = limit_path
         self.build_content(path_ini)
 
-        self.lst_vw.file_clickled.connect(self.fill_clik)
+        self.lst_vw.file_clicked.connect(self.fill_clik)
         main_v_layout.addWidget(self.lst_vw)
 
         low_h_layout = QHBoxLayout()
@@ -314,22 +349,50 @@ class FileBrowser(QDialog):
 
     def build_content(self, path_in):
         self.curr_path = path_in
+        system = platform.system()
+        if system == "Windows":
+            logging.debug("Nothing to do here ... for now")
+
+        else:
+            if not self.curr_path.startswith("/"):
+                logging.debug("self.curr_path = " + str(self.curr_path))
+                self.curr_path = "/" + self.curr_path
+                logging.debug("self.curr_path = " + str(self.curr_path))
+
         self.refresh_content()
 
     def build_paren_list(self):
         parents_list = [self.root_limit_path[:-1]]
-        rest_of_path = self.curr_path[len(self.root_limit_path):]
+        len_lim = len(self.root_limit_path)
+        if len_lim > 1:
+            rest_of_path = self.curr_path[len_lim:]
+
+        else:
+            rest_of_path = self.curr_path
+
         try:
-            if rest_of_path[-1] == "/":
+            if rest_of_path[-1] == "/" or rest_of_path[-1] == "\\":
                 rest_of_path = rest_of_path[:-1]
 
         except IndexError:
+            logging.debug("here IndexError, empty path")
             rest_of_path = ""
 
-        for single_dir in rest_of_path.split("/"):
+        system = platform.system()
+        if system == "Windows":
+            rest_of_path = rest_of_path.replace("/", "\\")
+
+        else:
+            rest_of_path = rest_of_path.replace("\\", "/")
+
+        for single_dir in rest_of_path.split(os.sep):
             parents_list.append(single_dir)
 
-        self.path_bar.update_list(parents_list)
+        if parents_list[0:2] == ["", ""]:
+            logging.debug("removing \"\" from parents_list")
+            parents_list = parents_list[1:]
+
+        self.path_bar.update_list(parents_list, self.root_limit_path)
 
     def refresh_content(self):
         try:
@@ -365,6 +428,7 @@ class FileBrowser(QDialog):
 
     def new_path_text(self, new_path):
         self.typed_path = str(new_path)
+        logging.info("FileBrowser.typed_path =" + str(self.typed_path))
 
     def done_requesting(self, lst_dir):
         self.lst_vw.enter_list(lst_in = lst_dir)
@@ -400,7 +464,7 @@ class FileBrowser(QDialog):
         self.typed_path = None
 
     def open_file(self):
-        if self.typed_path != None:
+        if self.typed_path is not None:
             self.build_content(self.typed_path)
 
         else:

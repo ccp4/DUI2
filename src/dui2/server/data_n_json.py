@@ -21,7 +21,8 @@ copyright (c) CCP4 - DLS
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-import json, os, glob, logging
+import json, os, glob, logging, platform
+
 import subprocess, shutil
 
 import requests
@@ -101,6 +102,22 @@ def get_dict_from_str_with_pairs(str_in):
         dict_w_data[str(pair[0])] = str(pair[1])
 
     return dict_w_data
+
+def get_drives():
+    system = platform.system()
+
+    if system == "Windows":
+        import ctypes, string
+        drives = []
+        bitmask = ctypes.windll.kernel32.GetLogicalDrives()
+        for letter in string.ascii_uppercase:
+            if bitmask & 1:
+                drives.append(f"{letter}:\\")
+            bitmask >>= 1
+        return drives
+
+    else:
+        return sorted(os.listdir("/"))
 
 def get_info_data(uni_cmd, cmd_dict, step_list):
     return_list = []
@@ -549,24 +566,40 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
         #and consequently go elsewhere
 
         try:
-            reqt_path = str(uni_cmd[1].replace("/", os.sep))
+            try:
+                reqt_path = str(uni_cmd[1].replace("/", os.sep))
 
+            except IndexError:
+                reqt_path = ""
+                logging.info("empty path string to navigate, assuming (root)")
+
+            logging.info("reqt_path =" + str(reqt_path))
             data_init = IniData()
             limit_path = str(data_init.get_lim_path())
             logging.info("reqt_path =" + str(reqt_path))
             logging.info("limit_path =" + str( limit_path))
-            if reqt_path[0:len(limit_path)] == limit_path:
+            if limit_path == "" or reqt_path.startswith(limit_path):
+                logging.info("reqt_path=" + str(reqt_path))
                 try:
-                    ''' TODO consider replacing listdir with scandir,
-                     maybe will make navigation faster but will need to
-                    rewrite the next 20 lines, and test '''
-                    f_name_list =  sorted(os.listdir(reqt_path))
-                    dict_list = []
-                    for f_name in f_name_list:
-                        f_path = reqt_path + f_name
-                        f_isdir = os.path.isdir(f_path)
-                        file_dict = {"fname": f_name, "isdir":f_isdir}
-                        dict_list.append(file_dict)
+
+                    if reqt_path == "\\" or reqt_path == "":
+                        f_name_list = get_drives()
+                        dict_list = []
+                        for f_name in f_name_list:
+                            dict_list.append({"fname": f_name, "isdir":True})
+
+                        logging.info("dict_list =" + str(dict_list))
+
+                    else:
+                        reqt_path = reqt_path.lstrip("\\")
+                        f_name_list = sorted(os.listdir(reqt_path))
+
+                        dict_list = []
+                        for f_name in f_name_list:
+                            f_path = reqt_path + f_name
+                            f_isdir = os.path.isdir(f_path)
+                            file_dict = {"fname": f_name, "isdir":f_isdir}
+                            dict_list.append(file_dict)
 
                     return_list = dict_list
 
@@ -576,13 +609,10 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
                     return_list = []
 
             else:
-                print(
-                    "Not allowing get_dir_ls >> ", reqt_path,
-                    " when limit_path =", limit_path
-                )
-                err_msg = "permission denied by Dui2 server err catch, " + \
-                "attempt to open not allowed path, not sending file list"
-                logging.info(err_msg)
+                msg_err = "Not allowing get_dir_ls >> " + str(reqt_path) + \
+                " when limit_path =" + str(limit_path)
+                print(msg_err)
+                logging.info(msg_err)
                 return_list = []
 
         except FileNotFoundError:
