@@ -1059,14 +1059,9 @@ class Runner(object):
             self.step_list.append(new_node)
 
     def set_dir_path(self, dir_path_in):
-
-        print("\ndir_path_in =", dir_path_in)
-
         if len(dir_path_in) > 1 and dir_path_in[-1] != os.sep:
             dir_path_in += os.sep
 
         self._dir_path = dir_path_in
-
-        print("\n self._dir_path =", self._dir_path, "\n")
 
 

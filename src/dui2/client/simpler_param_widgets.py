@@ -311,17 +311,6 @@ class ImportWidget(QWidget):
 
         self.rad_but_template.setChecked(True)
 
-        '''
-        self.diag_rad_butt_vbox = QVBoxLayout()
-        group2 = QButtonGroup(self)
-        self.rad_but_dui_diag = QRadioButton("Dui2 dialog")
-        self.rad_but_sys_diag = QRadioButton("System dialog")
-        group2.addButton(self.rad_but_dui_diag)
-        group2.addButton(self.rad_but_sys_diag)
-        self.diag_rad_butt_vbox.addWidget(self.rad_but_dui_diag)
-        self.diag_rad_butt_vbox.addWidget(self.rad_but_sys_diag)
-        '''
-
         self.imp_txt.textChanged.connect(self.line_changed)
         self.imp_extra_txt.textChanged.connect(self.line_changed)
         self.open_butt.clicked.connect(self.open_dir_widget)
@@ -394,27 +383,6 @@ class ImportWidget(QWidget):
             logging.info("no selection ( canceled? )")
 
     def open_dir_widget(self):
-        '''
-        if self.rad_but_sys_diag.isChecked():
-            if(
-                self.rad_but_template.isChecked() or
-                self.rad_but_img_file.isChecked()
-            ):
-                file_in_path = QFileDialog.getOpenFileName(
-                    parent = self, caption = "Open Image File",
-                    dir = "/", filter = "Files (*.*)"
-                )[0]
-                self.set_selection(str_select = str(file_in_path), isdir = False)
-
-            elif self.rad_but_directory.isChecked():
-                dir_path = QFileDialog.getExistingDirectory(
-                    parent = self, caption = "Open Directory", dir = "/"
-                )
-                self.set_selection(str_select = str(dir_path), isdir = True)
-
-        else:
-        '''
-
         cmd = {"nod_lst":"", "cmd_str":["dir_path"]}
         lst_req = get_req_json_dat(
             params_in = cmd, main_handler = self.runner_handler
@@ -454,18 +422,6 @@ class ImportWidget(QWidget):
         self.dist_text_in.setText("Auto")
         self.check_shadow.setChecked(False)
         self.rad_but_img_file.setChecked(True)
-        '''
-        if not self.run_local:
-            self.rad_but_sys_diag.setEnabled(False)
-
-        if self.run_local and self.win_exe:
-            self.rad_but_sys_diag.setChecked(True)
-            self.rad_but_dui_diag.setEnabled(False)
-
-        else:
-            self.rad_but_dui_diag.setChecked(True)
-        '''
-
         self.do_emit = True
 
     def set_ed_pars(self):

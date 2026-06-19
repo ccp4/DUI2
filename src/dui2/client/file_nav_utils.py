@@ -168,7 +168,6 @@ class PathButtons(QWidget):
 
         self.lst_butt.append(new_lab)
         self.main_h_lay.addWidget(new_lab)
-        logging.debug("parent_dir_path :::" + str(parent_dir_path) + ":::")
         return parent_dir_path
 
     def dir_clicked(self):
@@ -208,9 +207,6 @@ class PathBar(QWidget):
 
     def up_dir(self, next_path):
         if self.par_dir is not None:
-
-            logging.debug("next_path :::" + str(next_path) + ":::")
-
             self.clicked_up_dir.emit(next_path)
 
 
@@ -321,9 +317,6 @@ class FileBrowser(QDialog):
         self.lst_vw =  MyDirView_list()
 
         self.root_limit_path = limit_path
-        #self.root_limit_path = "/"
-        logging.debug("self.root_limit_path :::" + str(self.root_limit_path) + ":::")
-
         self.build_content(path_ini)
 
         self.lst_vw.file_clicked.connect(self.fill_clik)
@@ -355,8 +348,6 @@ class FileBrowser(QDialog):
         self.show()
 
     def build_content(self, path_in):
-        logging.debug("path_in :::" + str(path_in) + ":::")
-
         self.curr_path = path_in
         system = platform.system()
         if system == "Windows":
@@ -371,11 +362,7 @@ class FileBrowser(QDialog):
         self.refresh_content()
 
     def build_paren_list(self):
-
-        logging.debug("self.root_limit_path:::" + str(self.root_limit_path) + ":::")
         parents_list = [self.root_limit_path[:-1]]
-        logging.debug("self.curr_path :::" + str(self.curr_path) + ":::")
-
         len_lim = len(self.root_limit_path)
         if len_lim > 1:
             rest_of_path = self.curr_path[len_lim:]
@@ -383,15 +370,12 @@ class FileBrowser(QDialog):
         else:
             rest_of_path = self.curr_path
 
-        logging.debug("rest_of_path" + str(rest_of_path) + ":::")
-
         try:
             if rest_of_path[-1] == "/" or rest_of_path[-1] == "\\":
-                logging.debug("cutting " + os.sep + "from:" + str(rest_of_path))
                 rest_of_path = rest_of_path[:-1]
 
         except IndexError:
-            logging.debug("here IndexError")
+            logging.debug("here IndexError, empty path")
             rest_of_path = ""
 
         system = platform.system()

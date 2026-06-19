@@ -103,7 +103,7 @@ def main():
             recovery_data = None, dat_ini = server_data_init
         )
 
-    print("tree_ini_path(all_loca_all_ram) =", tree_ini_path)
+    logging.info("tree_ini_path(all_loca_all_ram) =" + str(tree_ini_path))
 
     cmd_runner.set_dir_path(tree_ini_path)
 

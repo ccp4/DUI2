@@ -578,7 +578,7 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
             limit_path = str(data_init.get_lim_path())
             logging.info("reqt_path =" + str(reqt_path))
             logging.info("limit_path =" + str( limit_path))
-            if reqt_path[0:len(limit_path)] == limit_path:
+            if limit_path == "" or reqt_path.startswith(limit_path):
                 logging.info("reqt_path=" + str(reqt_path))
                 try:
 
