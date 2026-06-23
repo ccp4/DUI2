@@ -9,6 +9,9 @@ dependencies = [
   'PySide2 > 5.15.1'
 ]
 
+[tool.setuptools.packages.find]
+where = ["src"]
+
 [project.scripts]
 dui2_server = "dui2.only_server:main"
 dui2_multi_user_server = "dui2.multi_user.http_multi_user_system:main"
