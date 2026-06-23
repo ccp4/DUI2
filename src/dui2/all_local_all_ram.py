@@ -33,11 +33,9 @@ def main():
     else:
         print("neither Linux or Windows")
 
-    #    ("limit_path", "/home/ufn91840/V_Box_compartido"),
-
     par_def = (
         ("chdir", None),
-        ("limit_path", "/"),
+        ("limit_path", None),
         ("import_init", None),
         ("all_local", "true"),
         ("windows_exe", win_str),
@@ -82,12 +80,16 @@ def main():
     os.chdir(nodes_dir)
     tree_ini_path = init_param["limit_path"]
     if tree_ini_path == None:
+        tree_ini_path = ""
+        '''
+        #TODO: consider the approach of the next 3 instructions instead
         logging.info(
             " using the dir from where the commad 'dui2_server_side' was invoqued"
         )
-        tree_ini_path = os.getcwd()
+        from pathlib import Path
+        tree_ini_path = str(Path.cwd().parent)
+        '''
 
-    #tree_dic_lst = iter_dict(tree_ini_path, 0)
     try:
         with open("run_data") as json_file:
             runner_data = json.load(json_file)
@@ -100,6 +102,8 @@ def main():
         cmd_runner = multi_node.Runner(
             recovery_data = None, dat_ini = server_data_init
         )
+
+    logging.info("tree_ini_path(all_loca_all_ram) =" + str(tree_ini_path))
 
     cmd_runner.set_dir_path(tree_ini_path)
 

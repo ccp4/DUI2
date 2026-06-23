@@ -175,9 +175,8 @@ class SimpleParamTab(QWidget):
 
 
 def build_template(str_path_in):
-    logging.info("time to build template from:" + str(str_path_in))
-
     found_a_digit = False
+    logging.info("building template from: " + str(str_path_in))
     for pos, single_char in enumerate(str_path_in):
         if single_char in "0123456789":
             last_digit_pos = pos
@@ -196,11 +195,13 @@ def build_template(str_path_in):
         star_str = str_path_in[
             0:begin_digit_pos + 1
         ] + "*" + str_path_in[last_digit_pos + 1:]
-
         return template_str, star_str
 
     else:
-        return None, 0
+        err_msg = "Non image file selected"
+        print("\n" + err_msg + "\n")
+        logging.info(err_msg)
+        return "", ""
 
 
 def get_lst_par_from_str(str_in):
@@ -310,15 +311,6 @@ class ImportWidget(QWidget):
 
         self.rad_but_template.setChecked(True)
 
-        self.diag_rad_butt_vbox = QVBoxLayout()
-        group2 = QButtonGroup(self)
-        self.rad_but_dui_diag = QRadioButton("Dui2 dialog")
-        self.rad_but_sys_diag = QRadioButton("System dialog")
-        group2.addButton(self.rad_but_dui_diag)
-        group2.addButton(self.rad_but_sys_diag)
-        self.diag_rad_butt_vbox.addWidget(self.rad_but_dui_diag)
-        self.diag_rad_butt_vbox.addWidget(self.rad_but_sys_diag)
-
         self.imp_txt.textChanged.connect(self.line_changed)
         self.imp_extra_txt.textChanged.connect(self.line_changed)
         self.open_butt.clicked.connect(self.open_dir_widget)
@@ -341,7 +333,7 @@ class ImportWidget(QWidget):
 
         self.open_diag_hbox = QHBoxLayout()
         self.open_diag_hbox.addWidget(self.open_butt)
-        self.open_diag_hbox.addLayout(self.diag_rad_butt_vbox)
+        #self.open_diag_hbox.addLayout(self.diag_rad_butt_vbox)
         self.main_vbox.addLayout(self.open_diag_hbox)
 
         self.main_vbox.addStretch()
@@ -361,6 +353,8 @@ class ImportWidget(QWidget):
 
     def set_selection(self, str_select, isdir):
         logging.info("isdir(set_selection) =" + str(isdir))
+
+
         if str_select != "":
             self.dir_selected = isdir
             if self.dir_selected:
@@ -380,6 +374,7 @@ class ImportWidget(QWidget):
                     elif self.rad_but_img_file.isChecked():
                         file_path_str = build_template(str_select)[1]
 
+                logging.info("file_path_str =" + str(file_path_str))
                 self.imp_txt.setText(file_path_str)
 
             self.line_changed()
@@ -388,56 +383,36 @@ class ImportWidget(QWidget):
             logging.info("no selection ( canceled? )")
 
     def open_dir_widget(self):
-        if self.rad_but_sys_diag.isChecked():
-            if(
-                self.rad_but_template.isChecked() or
-                self.rad_but_img_file.isChecked()
-            ):
-                file_in_path = QFileDialog.getOpenFileName(
-                    parent = self, caption = "Open Image File",
-                    dir = "/", filter = "Files (*.*)"
-                )[0]
-                self.set_selection(str_select = str(file_in_path), isdir = False)
+        cmd = {"nod_lst":"", "cmd_str":["dir_path"]}
+        lst_req = get_req_json_dat(
+            params_in = cmd, main_handler = self.runner_handler
+        )
+        dic_str = lst_req.result_out()
+        path_serv_limit = str(dic_str[0])
+        str_already_there = from_path_2_dir(str(self.imp_txt.text()))
 
-            elif self.rad_but_directory.isChecked():
-                dir_path = QFileDialog.getExistingDirectory(
-                    parent = self, caption = "Open Directory", dir = "/"
-                )
-                self.set_selection(str_select = str(dir_path), isdir = True)
+        if path_serv_limit in str_already_there:
+            init_path = str_already_there
 
         else:
+            init_path = path_serv_limit
 
-            cmd = {"nod_lst":"", "cmd_str":["dir_path"]}
-            lst_req = get_req_json_dat(
-                params_in = cmd, main_handler = self.runner_handler
-            )
-            dic_str = lst_req.result_out()
+        if(
+            self.rad_but_template.isChecked() or
+            self.rad_but_img_file.isChecked()
+        ):
+            only_dir_bool = False
 
-            path_serv_limit = str(dic_str[0])
-            str_already_there = from_path_2_dir(str(self.imp_txt.text()))
+        elif self.rad_but_directory.isChecked():
+            only_dir_bool = True
 
-            if path_serv_limit in str_already_there:
-                init_path = str_already_there
-
-            else:
-                init_path = path_serv_limit
-
-            if(
-                self.rad_but_template.isChecked() or
-                self.rad_but_img_file.isChecked()
-            ):
-                only_dir_bool = False
-
-            elif self.rad_but_directory.isChecked():
-                only_dir_bool = True
-
-            self.open_widget = FileBrowser(
-                parent = self, path_ini = init_path,
-                limit_path = path_serv_limit, only_dir = only_dir_bool,
-                runner_handler = self.runner_handler
-            )
-            self.open_widget.resize(self.open_widget.size() * 2)
-            self.open_widget.select_done.connect(self.set_selection)
+        self.open_widget = FileBrowser(
+            parent = self, path_ini = init_path,
+            limit_path = path_serv_limit, only_dir = only_dir_bool,
+            runner_handler = self.runner_handler
+        )
+        self.open_widget.resize(self.open_widget.size() * 2)
+        self.open_widget.select_done.connect(self.set_selection)
 
     def reset_pars(self):
         self.do_emit = False
@@ -447,16 +422,6 @@ class ImportWidget(QWidget):
         self.dist_text_in.setText("Auto")
         self.check_shadow.setChecked(False)
         self.rad_but_img_file.setChecked(True)
-        if not self.run_local:
-            self.rad_but_sys_diag.setEnabled(False)
-
-        if self.run_local and self.win_exe:
-            self.rad_but_sys_diag.setChecked(True)
-            self.rad_but_dui_diag.setEnabled(False)
-
-        else:
-            self.rad_but_dui_diag.setChecked(True)
-
         self.do_emit = True
 
     def set_ed_pars(self):
@@ -586,7 +551,7 @@ class ImportWidget(QWidget):
                     self.dist_text_in.setText(str(par_dic["value"]))
 
         except IndexError:
-            print(" Not copying parameters from node (Index err catch )")
+            logging.info(" Not copying parameters from node (Index err catch )")
             self.imp_txt.setText("")
             self.imp_extra_txt.setText("")
 
