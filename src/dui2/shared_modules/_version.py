@@ -1,3 +1,3 @@
 # This file must be separately readable and depend on nothing else in DUI
 # Format: YYYY.MM.PATCH
-__version__ = "2026.6.22"
+__version__ = "2026.6.23"
