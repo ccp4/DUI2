@@ -129,7 +129,7 @@ class LoadSliceMaskImage(QThread):
                       "cmd_str" : my_cmd_lst}
 
         else:
-            params_str = str(self.thrs_hld_pars)
+            params_str = json.dumps(self.thrs_hld_pars)
             my_cmd = {
                 'nod_lst': self.nod_num_lst,
                 'path': self.exp_path,

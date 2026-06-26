@@ -395,9 +395,8 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
                     eq_pos = sub_par.find("=")
                     left_side = sub_par[0:eq_pos]
                     right_side = sub_par[eq_pos + 1:]
-
                     if left_side == "params":
-                        params = eval(right_side)
+                        params = json.loads(right_side)
 
                 str_json = flex_arr_2_json.get_bytes_w_2d_threshold_mask(
                     step_list[lin2go]._lst_expt_out,
@@ -433,7 +432,7 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
                         [x1, y1, x2, y2] = right_side.split(",")
 
                     elif left_side == "params":
-                        params = eval(right_side)
+                        params = json.loads(right_side)
 
                 str_json = flex_arr_2_json.get_bytes_w_2d_threshold_mask_slise(
                     step_list[lin2go]._lst_expt_out,
