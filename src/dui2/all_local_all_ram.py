@@ -14,11 +14,10 @@ from dui2.server.init_first import IniData as ServerIniData
 
 
 logging.basicConfig(filename='run_dui2_all_local_all_ram.log', level=logging.DEBUG)
+#FIXME: this opens a log file before the directory was chosen
 
 def main():
     os.environ["QTWEBENGINE_CHROMIUM_FLAGS"] = "--no-sandbox"
-
-    logging.info("platform.system()" + str(platform.system()))
 
     win_str = "false"
     if platform.system() == "Windows":
@@ -35,6 +34,7 @@ def main():
 
     par_def = (
         ("chdir", None),
+        ("ask4dir", False),
         ("limit_path", None),
         ("import_init", None),
         ("all_local", "true"),
@@ -43,22 +43,42 @@ def main():
         ("upload_mtz_url", "http://localhost:8080/"),
         ("cloudrun_id", "xxxx-xxxx-xxxx-xxxx"),
     )
+
+
+    init_param = format_utils.get_par(par_def, sys.argv[1:])
     data_init = IniData()
     data_init.set_data(par_def = par_def)
+    print("\n ask4dir =", init_param["ask4dir"], "\n")
+    app = QApplication(sys.argv)
+    dir_2_change = None
+    if init_param["ask4dir"] is not False:
+        dir_2_change = QFileDialog.getExistingDirectory(caption = "Open Directory")
+
+        if dir_2_change != '':
+            print("dir_2_change =", dir_2_change)
+            new_chdir = dir_2_change
+
+        else:
+            print("Canceled Operation")
+            sys.exit(1)
 
     format_utils.print_logo()
 
     server_data_init = ServerIniData()
     server_data_init.set_data(par_def = par_def)
 
-    tmp_dat_dir = format_utils.create_tmp_dir()
-
-    data_init.set_tmp_dir(tmp_dat_dir)
-
-    init_param = format_utils.get_par(par_def, sys.argv[1:])
-
     #TODO: check if the following line is useful
     run_local = True
+
+    if dir_2_change is not None:
+        try:
+            os.chdir(dir_2_change)
+
+        except FileNotFoundError:
+            print(
+                "unable to change to directory: ", dir_2_change,
+                "File Not Found Err Catch"
+            )
 
     if init_param["chdir"] is not None:
         try:
@@ -69,6 +89,9 @@ def main():
                 "unable to change to directory: ", init_param["chdir"],
                 "File Not Found Err Catch"
             )
+
+    tmp_dat_dir = format_utils.create_tmp_dir()
+    data_init.set_tmp_dir(tmp_dat_dir)
 
     nodes_dir = "run_dui2_nodes"
     try:
@@ -107,7 +130,6 @@ def main():
 
     cmd_runner.set_dir_path(tree_ini_path)
 
-    app = QApplication(sys.argv)
     m_gui_obj = all_local_gui_connector.MainGuiObject(
         parent = app, cmd_tree_runner = cmd_runner
     )
