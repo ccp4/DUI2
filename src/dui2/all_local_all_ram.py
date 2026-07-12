@@ -13,8 +13,7 @@ from dui2.server import multi_node
 from dui2.server.init_first import IniData as ServerIniData
 
 
-logging.basicConfig(filename='run_dui2_all_local_all_ram.log', level=logging.DEBUG)
-#FIXME: this opens a log file before the directory was chosen
+#logging.basicConfig(filename='run_dui2_all_local_all_ram.log', level=logging.DEBUG)
 
 def main():
     os.environ["QTWEBENGINE_CHROMIUM_FLAGS"] = "--no-sandbox"
@@ -56,7 +55,6 @@ def main():
 
         if dir_2_change != '':
             print("dir_2_change =", dir_2_change)
-            new_chdir = dir_2_change
 
         else:
             print("Canceled Operation")
@@ -125,6 +123,10 @@ def main():
         cmd_runner = multi_node.Runner(
             recovery_data = None, dat_ini = server_data_init
         )
+
+    log_path = os.path.join(dir_2_change, 'run_dui2_all_local_all_ram.log')
+    logging.basicConfig(filename=log_path, level=logging.DEBUG, force=True)
+
 
     logging.info("tree_ini_path(all_loca_all_ram) =" + str(tree_ini_path))
 
