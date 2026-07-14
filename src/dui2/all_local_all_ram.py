@@ -33,7 +33,7 @@ def main():
 
     par_def = (
         ("chdir", None),
-        ("ask4dir", False),
+        ("ask4dir", "false"),
         ("limit_path", None),
         ("import_init", None),
         ("all_local", "true"),
@@ -49,16 +49,22 @@ def main():
     data_init.set_data(par_def = par_def)
     print("\n ask4dir =", init_param["ask4dir"], "\n")
     app = QApplication(sys.argv)
-    dir_2_change = None
-    if init_param["ask4dir"] is not False:
-        dir_2_change = QFileDialog.getExistingDirectory(caption = "Open Directory")
+
+    if init_param["ask4dir"] == "false":
+        print("Using same dir where Dui2 were invoked from as working dir")
+        dir_2_change = os.getcwd()
+
+    else:
+        dir_2_change = QFileDialog.getExistingDirectory(caption = "Chose working directory")
 
         if dir_2_change != '':
             print("dir_2_change =", dir_2_change)
 
         else:
             print("Canceled Operation")
-            sys.exit(1)
+            dir_2_change = os.getcwd()
+            #TODO consider interrupting here with the next t line
+            #sys.exit(1)
 
     format_utils.print_logo()
 
