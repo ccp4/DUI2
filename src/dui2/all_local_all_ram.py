@@ -47,7 +47,6 @@ def main():
     init_param = format_utils.get_par(par_def, sys.argv[1:])
     data_init = IniData()
     data_init.set_data(par_def = par_def)
-    print("\n ask4dir =", init_param["ask4dir"], "\n")
     app = QApplication(sys.argv)
 
     if init_param["ask4dir"] == "false":
@@ -58,7 +57,7 @@ def main():
         dir_2_change = QFileDialog.getExistingDirectory(caption = "Chose working directory")
 
         if dir_2_change != '':
-            print("dir_2_change =", dir_2_change)
+            print("Using ", dir_2_change, " as working dir")
 
         else:
             print("Canceled Operation")

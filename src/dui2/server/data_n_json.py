@@ -42,7 +42,7 @@ from dials.command_line.integrate import phil_scope as phil_scope_integrate
 try:
     from dials.command_line.ssx_integrate import phil_scope as ssx_phil_scope_integrate
 
-except:
+except (ImportError, ModuleNotFoundError):
     class dummy_tmp(object):
         pass
 
