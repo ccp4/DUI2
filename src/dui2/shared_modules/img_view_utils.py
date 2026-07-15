@@ -23,7 +23,7 @@ copyright (c) CCP4 - DLS
 
 
 import numpy as np
-import time, logging
+import time, logging, json
 
 from dui2.client.init_firts import IniData
 from dui2.client.exec_utils import get_request_shot
@@ -77,7 +77,7 @@ def load_mask_img_json_w_str(
                   "cmd_str" : my_cmd_lst}
 
     else:
-        params_str = str(threshold_params)
+        params_str = json.dumps(threshold_params)
         my_cmd = {
             'nod_lst': nod_num_lst,
             'path': exp_path,

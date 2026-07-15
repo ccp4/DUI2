@@ -26,6 +26,8 @@ from dui2.shared_modules.qt_libs import *
 
 import requests, json, os, sys, zlib, logging
 
+from threading import Event
+
 from dui2.client.gui_utils import AdvancedParameters, widgets_defs
 from dui2.client.init_firts import IniData
 from dui2.shared_modules import format_utils
@@ -61,26 +63,23 @@ class get_request_shot(QObject):
                 )
                 self.to_return = None
 
-            self.done = True
-
+            self._done = Event()
+            self._done.set()
         else:
-            self.done = False
+            self._done = Event()
             main_handler.get_from_main_dui(params_in, self)
-            #self.to_return = None
 
     def get_it_str(self, data_comming):
         self.to_return = data_comming
-        self.done = True
+        self._done.set()
 
     def get_it_bin(self, data_comming):
         logging.info("type(data_comming) = " + str(type(data_comming)))
         self.to_return = data_comming
-        self.done = True
+        self._done.set()
 
     def result_out(self):
-        while not self.done:
-            QThread.msleep(10)
-
+        self._done.wait()
         return self.to_return
 
 
@@ -441,12 +440,11 @@ class PostRequestWithOutput(QThread):
                 #TODO: put inside this [except] some way to kill [self]
 
         else:
-            self.done = False
+            self._done = Event()
             self.already_read = False
             self.my_handler.post_from_main_dui(self.cmd, self)
+            self._done.wait()
 
-            while not self.done:
-                QThread.msleep(10)
 
         logging.info("ended post QThread")
 
@@ -467,7 +465,8 @@ class PostRequestWithOutput(QThread):
                 "do_predict_n_report = " + str(self.do_predict_n_report)
             )
             QThread.msleep(30)
-            self.done = True
+            self._done.set()
+
             self.exit()
             #self.wait()
 

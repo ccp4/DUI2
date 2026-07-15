@@ -13,12 +13,10 @@ from dui2.server import multi_node
 from dui2.server.init_first import IniData as ServerIniData
 
 
-logging.basicConfig(filename='run_dui2_all_local_all_ram.log', level=logging.DEBUG)
+#logging.basicConfig(filename='run_dui2_all_local_all_ram.log', level=logging.DEBUG)
 
 def main():
     os.environ["QTWEBENGINE_CHROMIUM_FLAGS"] = "--no-sandbox"
-
-    logging.info("platform.system()" + str(platform.system()))
 
     win_str = "false"
     if platform.system() == "Windows":
@@ -35,6 +33,7 @@ def main():
 
     par_def = (
         ("chdir", None),
+        ("ask4dir", "false"),
         ("limit_path", None),
         ("import_init", None),
         ("all_local", "true"),
@@ -43,22 +42,46 @@ def main():
         ("upload_mtz_url", "http://localhost:8080/"),
         ("cloudrun_id", "xxxx-xxxx-xxxx-xxxx"),
     )
+
+
+    init_param = format_utils.get_par(par_def, sys.argv[1:])
     data_init = IniData()
     data_init.set_data(par_def = par_def)
+    app = QApplication(sys.argv)
+
+    if init_param["ask4dir"] == "false":
+        print("Using same dir where Dui2 were invoked from as working dir")
+        dir_2_change = os.getcwd()
+
+    else:
+        dir_2_change = QFileDialog.getExistingDirectory(caption = "Chose working directory")
+
+        if dir_2_change != '':
+            print("Using ", dir_2_change, " as working dir")
+
+        else:
+            print("Canceled Operation")
+            dir_2_change = os.getcwd()
+            #TODO consider interrupting here with the next t line
+            #sys.exit(1)
 
     format_utils.print_logo()
 
     server_data_init = ServerIniData()
     server_data_init.set_data(par_def = par_def)
 
-    tmp_dat_dir = format_utils.create_tmp_dir()
-
-    data_init.set_tmp_dir(tmp_dat_dir)
-
-    init_param = format_utils.get_par(par_def, sys.argv[1:])
-
     #TODO: check if the following line is useful
     run_local = True
+
+    if dir_2_change is not None:
+        try:
+            os.chdir(dir_2_change)
+
+        except FileNotFoundError:
+            print(
+                "unable to change to directory: ", dir_2_change,
+                "File Not Found Err Catch"
+            )
 
     if init_param["chdir"] is not None:
         try:
@@ -69,6 +92,9 @@ def main():
                 "unable to change to directory: ", init_param["chdir"],
                 "File Not Found Err Catch"
             )
+
+    tmp_dat_dir = format_utils.create_tmp_dir()
+    data_init.set_tmp_dir(tmp_dat_dir)
 
     nodes_dir = "run_dui2_nodes"
     try:
@@ -103,11 +129,14 @@ def main():
             recovery_data = None, dat_ini = server_data_init
         )
 
+    log_path = os.path.join(dir_2_change, 'run_dui2_all_local_all_ram.log')
+    logging.basicConfig(filename=log_path, level=logging.DEBUG, force=True)
+
+
     logging.info("tree_ini_path(all_loca_all_ram) =" + str(tree_ini_path))
 
     cmd_runner.set_dir_path(tree_ini_path)
 
-    app = QApplication(sys.argv)
     m_gui_obj = all_local_gui_connector.MainGuiObject(
         parent = app, cmd_tree_runner = cmd_runner
     )
