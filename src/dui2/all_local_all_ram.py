@@ -33,7 +33,7 @@ def main():
 
     par_def = (
         ("chdir", None),
-        ("ask4dir", "false"),
+        ("ask_for_dir", "false"),
         ("limit_path", None),
         ("import_init", None),
         ("all_local", "true"),
@@ -49,7 +49,7 @@ def main():
     data_init.set_data(par_def = par_def)
     app = QApplication(sys.argv)
 
-    if init_param["ask4dir"] == "false":
+    if init_param["ask_for_dir"] == "false":
         print("Using same dir where Dui2 were invoked from as working dir")
         dir_2_change = os.getcwd()
 
