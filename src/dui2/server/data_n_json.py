@@ -243,11 +243,21 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
                     if "***" in out_line:
                         last_star_line = str(out_line[:-1])
 
+                    if "Error" in out_line:
+                        last_star_line = str(out_line[:-1])
+
                 if cloudrun_proc.poll() == 0:
                     return_list = bytes("ok".encode('utf-8'))
 
                 else:
-                    return_list = bytes(last_star_line.encode('utf-8'))
+                    try:
+                        return_list = bytes(last_star_line.encode('utf-8'))
+
+                    except UnboundLocalError:
+                        odd_error = "Unexpected Unbound Local Err Catch (transfer_mtz)"
+                        print(odd_error)
+                        return_list = bytes(odd_error.encode('utf-8'))
+
 
             except IndexError:
                 return_list = bytes(" Index Err Catch".encode('utf-8'))
