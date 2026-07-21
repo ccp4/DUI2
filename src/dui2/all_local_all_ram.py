@@ -59,7 +59,10 @@ def main():
         dlg_msg = QDialog()
         dlg_msg.setWindowTitle("Starting DUI")
         layout = QVBoxLayout()
-        layout.addWidget(QLabel("\n Please choose a directory \n to save DUI data in \n"))
+        layout.addWidget(QLabel(
+            "\nPlease choose a directory \n" +
+            "\n  to save DUI data in     \n")
+        )
         ok_butt = QPushButton("Ok/Close")
         layout.addWidget(ok_butt)
         dlg_msg.setLayout(layout)
@@ -89,7 +92,9 @@ def main():
     if dir_2_change is not None:
         try:
             os.chdir(dir_2_change)
-            data_init.set_import_init(str(dir_2_change))
+            first_import_init = data_init.get_import_init()
+            if first_import_init == None:
+                data_init.set_import_init(str(dir_2_change))
 
         except FileNotFoundError:
             print(

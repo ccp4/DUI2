@@ -266,8 +266,11 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
                 )
 
             except FileNotFoundError:
-                return_list = bytes(
+                old_2_remove = '''return_list = bytes(
                     " File Not Found Err Catch".encode('utf-8')
+                )'''
+                return_list = bytes(
+                    " Cloudrun not available outside of CCP4 ".encode('utf-8')
                 )
                 logging.info(
                     "FileNotFound Err catch , NOT running cloudrun"
