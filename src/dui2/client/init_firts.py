@@ -87,6 +87,10 @@ class IniData(object):
         global tmp_dir
         tmp_dir = dir_path_in
 
+    def set_import_init(self, new_import_init):
+        global imp_ini_templ
+        imp_ini_templ = new_import_init
+
     def get_if_local(self):
         return run_local
 

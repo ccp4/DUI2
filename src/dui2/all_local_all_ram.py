@@ -76,6 +76,7 @@ def main():
     if dir_2_change is not None:
         try:
             os.chdir(dir_2_change)
+            data_init.set_import_init(str(dir_2_change))
 
         except FileNotFoundError:
             print(
