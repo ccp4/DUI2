@@ -2295,6 +2295,15 @@ class ExportWidget(QWidget):
     def restore_p_label2(self):
         self.progress_label.setText("...")
 
+    def do_gray_or_ungray(self, cloudrun_availability):
+        print("\n here ... export ")
+        print("cloudrun_availability =", cloudrun_availability, "\n")
+        if cloudrun_availability:
+            self.upld_but.setEnabled(True)
+
+        else:
+            self.upld_but.setEnabled(False)
+
 
 class MergeWidget(QWidget):
     '''
@@ -2479,6 +2488,15 @@ class MergeWidget(QWidget):
 
     def restore_p_label2(self):
         self.progress_label.setText("...")
+
+    def do_gray_or_ungray(self, cloudrun_availability):
+        print("\n here ... merge ")
+        print("cloudrun_availability =", cloudrun_availability, "\n")
+        if cloudrun_availability:
+            self.upld_but.setEnabled(True)
+
+        else:
+            self.upld_but.setEnabled(False)
 
 
 class TmpTstWidget(QWidget):
