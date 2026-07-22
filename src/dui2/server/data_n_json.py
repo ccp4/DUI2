@@ -224,7 +224,8 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
                     for sigl_comm in lst_of_cmd:
                         f.write(sigl_comm + "\n")
 
-                cmd_lst = ["cloudrun", "-c",  cloudrun_cfg_file_path]
+                cmd_w_path_n_ext = shutil.which("cloudrun")
+                cmd_lst = [cmd_w_path_n_ext, "-c",  cloudrun_cfg_file_path]
                 cloudrun_proc = subprocess.Popen(
                     args = cmd_lst, shell = False,
                     stdout = subprocess.PIPE,
@@ -254,23 +255,36 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
                         return_list = bytes(last_star_line.encode('utf-8'))
 
                     except UnboundLocalError:
-                        odd_error = "Unexpected Unbound Local Err Catch (transfer_mtz)"
-                        print(odd_error)
-                        return_list = bytes(odd_error.encode('utf-8'))
+                        return_list = bytes(
+                            "Unexpected Unbound Local Err " +
+                            "Catch (transfer_mtz)".encode('utf-8')
+                        )
+                        logging.info(
+                            "Unbound Err catch , NOT running cloudrun"
+                        )
 
+            except TypeError:
+                # most likely cmd_w_path_n_ext == None
+                return_list = bytes(
+                    " Cloudrun not available outside of CCP4 ".encode('utf-8')
+                )
+                logging.info(
+                    "Type Err catch , NOT running cloudrun"
+                )
 
             except IndexError:
-                return_list = bytes(" Index Err Catch".encode('utf-8'))
+                return_list = bytes(
+                    " Failed to launch cloudrun " +
+                    "(Index Err Catch)".encode('utf-8')
+                )
                 logging.info(
                     "Index Err catch , NOT running cloudrun"
                 )
 
             except FileNotFoundError:
-                old_2_remove = '''return_list = bytes(
-                    " File Not Found Err Catch".encode('utf-8')
-                )'''
                 return_list = bytes(
-                    " Cloudrun not available outside of CCP4 ".encode('utf-8')
+                    "Failed to launch cloudrun " +
+                    "(File Not Found Err Catch)".encode('utf-8')
                 )
                 logging.info(
                     "FileNotFound Err catch , NOT running cloudrun"
