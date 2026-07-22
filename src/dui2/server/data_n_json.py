@@ -200,7 +200,6 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
                     " err catch , wrong line, NOT sending reflections file"
                 )
 
-
     elif uni_cmd[0] == "transfer_mtz":
         dict_4_cloud_run = get_dict_from_str_with_pairs(uni_cmd[1])
         for lin2go in cmd_dict["nod_lst"]:
