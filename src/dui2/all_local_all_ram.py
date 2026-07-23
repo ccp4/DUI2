@@ -61,7 +61,7 @@ def main():
         layout = QVBoxLayout()
         layout.addWidget(QLabel(
             "\nPlease choose a directory \n" +
-            "\n  to save DUI data in     \n")
+            "\n    to save DUI data in   \n")
         )
         ok_butt = QPushButton("Ok/Close")
         layout.addWidget(ok_butt)

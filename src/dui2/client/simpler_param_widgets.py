@@ -2086,6 +2086,8 @@ class ExportWidget(QWidget):
         self.main_vbox.addStretch()
         self.setLayout(self.main_vbox)
 
+        self.is_cloudrun_available = True
+
         self.dict_data = {
             'url'    :"https://cloud.ccp4.ac.uk",
             'user'   :"",   'id'     :"",
@@ -2208,9 +2210,14 @@ class ExportWidget(QWidget):
         self.exp_txt.setEnabled(not do_enable)
         self.imp_extra_txt.setEnabled(not do_enable)
         self.downl_but.setEnabled(do_enable)
-        self.upld_but.setEnabled(do_enable)
-        self.cur_nod_num = nod_num
 
+        if self.is_cloudrun_available and do_enable:
+            self.upld_but.setEnabled(True)
+
+        else:
+            self.upld_but.setEnabled(False)
+
+        self.cur_nod_num = nod_num
 
     def download_hklout(self):
         path_n_file = os.path.dirname(os.getcwd()) + os.sep + self.str_2_save
@@ -2296,6 +2303,7 @@ class ExportWidget(QWidget):
         self.progress_label.setText("...")
 
     def do_gray_or_ungray(self, cloudrun_availability):
+        self.is_cloudrun_available = cloudrun_availability
         print("\n here ... export ")
         print("cloudrun_availability =", cloudrun_availability, "\n")
         if cloudrun_availability:
