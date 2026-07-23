@@ -60,7 +60,7 @@ def main():
         dlg_msg.setWindowTitle("Starting DUI")
         layout = QVBoxLayout()
         layout.addWidget(QLabel(
-            "\nPlease choose a directory \n" +
+            "\nPlease choose a directory " +
             "\n    to save DUI data in   \n")
         )
         ok_butt = QPushButton("Ok/Close")
