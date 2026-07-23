@@ -2204,7 +2204,6 @@ class ExportWidget(QWidget):
 
             self.imp_extra_txt.setText(ext_par_full_text)
 
-
     def set_download_stat(self, do_enable = False, nod_num = None):
         self.setEnabled(True)
         self.exp_txt.setEnabled(not do_enable)
@@ -2304,13 +2303,6 @@ class ExportWidget(QWidget):
 
     def do_gray_or_ungray(self, cloudrun_availability):
         self.is_cloudrun_available = cloudrun_availability
-        print("\n here ... export ")
-        print("cloudrun_availability =", cloudrun_availability, "\n")
-        if cloudrun_availability:
-            self.upld_but.setEnabled(True)
-
-        else:
-            self.upld_but.setEnabled(False)
 
 
 class MergeWidget(QWidget):
@@ -2349,6 +2341,8 @@ class MergeWidget(QWidget):
         self.main_vbox.addWidget(self.progress_label)
         self.main_vbox.addStretch()
         self.setLayout(self.main_vbox)
+
+        self.is_cloudrun_available = True
 
         self.dict_data = {
             'url'    :"https://cloud.ccp4.ac.uk",
@@ -2400,7 +2394,13 @@ class MergeWidget(QWidget):
         self.setEnabled(True)
         self.exp_txt.setEnabled(not do_enable)
         self.downl_but.setEnabled(do_enable)
-        self.upld_but.setEnabled(do_enable)
+
+        if self.is_cloudrun_available and do_enable:
+            self.upld_but.setEnabled(True)
+
+        else:
+            self.upld_but.setEnabled(False)
+
         self.cur_nod_num = nod_num
 
     def download_hklout(self):
@@ -2498,13 +2498,7 @@ class MergeWidget(QWidget):
         self.progress_label.setText("...")
 
     def do_gray_or_ungray(self, cloudrun_availability):
-        print("\n here ... merge ")
-        print("cloudrun_availability =", cloudrun_availability, "\n")
-        if cloudrun_availability:
-            self.upld_but.setEnabled(True)
-
-        else:
-            self.upld_but.setEnabled(False)
+        self.is_cloudrun_available = cloudrun_availability
 
 
 class TmpTstWidget(QWidget):

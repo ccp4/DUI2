@@ -54,8 +54,6 @@ def main():
         dir_2_change = os.getcwd()
 
     else:
-
-
         dlg_msg = QDialog()
         dlg_msg.setWindowTitle("Starting DUI")
         layout = QVBoxLayout()
@@ -70,7 +68,9 @@ def main():
 
         dlg_msg.exec_()
 
-        dir_2_change = QFileDialog.getExistingDirectory(caption = "Chose working directory")
+        dir_2_change = QFileDialog.getExistingDirectory(
+            caption = "Chose working directory"
+        )
 
         if dir_2_change != '':
             print("Using ", dir_2_change, " as working dir")

@@ -680,8 +680,8 @@ class MainObject(QObject):
         self.window.show()
         self.import_init()
 
+        QTimer.singleShot(1000, self.get_if_cloudrun_available)
         QTimer.singleShot(2000, self.dials_help_init)
-        QTimer.singleShot(4000, self.get_if_cloudrun_available)
 
     def get_if_cloudrun_available(self):
         cmd = {
@@ -694,6 +694,7 @@ class MainObject(QObject):
         cloudrun_availability = json_answ[0]
         self.merg_widg.do_gray_or_ungray(cloudrun_availability)
         self.expr_widg.do_gray_or_ungray(cloudrun_availability)
+        self.check_if_exported_or_merged()
 
     def sharp_turns_triggered(self):
         self.sharp_turns_on = not self.sharp_turns_on
