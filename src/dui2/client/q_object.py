@@ -1503,16 +1503,10 @@ class MainObject(QObject):
                 my_widg = self.merg_widg
 
             else:
-                my_widg = None
+                return
 
             if(
-                self.server_nod_lst[self.curr_nod_num][
-                    "status"
-                ]  == "Succeeded"
-                or
-                self.server_nod_lst[self.curr_nod_num][
-                    "status"
-                ]  == "Failed"
+                self.server_nod_lst[self.curr_nod_num]["status"]  == "Succeeded"
             ):
                 enabl = True
 
