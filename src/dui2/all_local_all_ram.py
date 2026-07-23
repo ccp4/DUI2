@@ -54,19 +54,11 @@ def main():
         dir_2_change = os.getcwd()
 
     else:
-        dlg_msg = QDialog()
-        dlg_msg.setWindowTitle("Starting DUI")
-        layout = QVBoxLayout()
-        layout.addWidget(QLabel(
-            "\nPlease choose a directory " +
-            "\n    to save DUI data in   \n")
-        )
-        ok_butt = QPushButton("Ok/Close")
-        layout.addWidget(ok_butt)
-        dlg_msg.setLayout(layout)
-        ok_butt.clicked.connect(dlg_msg.accept)
-
-        dlg_msg.exec_()
+        msgBox = QMessageBox()
+        msgBox.setIcon(QMessageBox.Information)
+        msgBox.setWindowTitle("Starting DUI")
+        msgBox.setText("Please choose a directory to save DUI data in.")
+        msgBox.exec()
 
         dir_2_change = QFileDialog.getExistingDirectory(
             caption = "Chose working directory"

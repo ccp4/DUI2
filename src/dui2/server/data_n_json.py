@@ -207,11 +207,10 @@ def get_info_data(uni_cmd, cmd_dict, step_list):
                     return_list = [True]
 
                 else:
-                    print(" \n Not found in path \n")
+                    logging.info("cloudrun not found in path")
                     return_list = [False]
 
             except (FileNotFoundError, TypeError):
-                print(" \n some other error \n")
                 logging.info(" Err Catch , failed to find cloudrun path ")
                 return_list = [False]
 

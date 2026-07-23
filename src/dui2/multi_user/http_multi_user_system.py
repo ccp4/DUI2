@@ -71,8 +71,12 @@ class RequestHandler(BaseHTTPRequestHandler):
                 print("\n server.new_port =", new_port, "\n")
                 port_str = "port=" + str(new_port)
 
+                global reused_host
+                host_str = "host=" + reused_host
+
                 cmd_lst = [
-                    str(sys.executable), str(code_path), token_str, port_str
+                    str(sys.executable), str(code_path), token_str,
+                    host_str, port_str
                 ]
                 print("\n Running: \n", cmd_lst, "\n")
                 new_dui2_server = subprocess.Popen(
@@ -153,6 +157,9 @@ def main():
 
         global new_port
         new_port = port_num + 1
+
+        global reused_host
+        reused_host = host
 
         try:
             server.serve_forever()
