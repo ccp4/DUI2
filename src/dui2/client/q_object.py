@@ -60,7 +60,7 @@ from dui2.client.simpler_param_widgets import (
     RefineBravaiSimplerParamTab, RefineSimplerParamTab,
     TwoThetaRefineSimplerParamTab,
     IntegrateSimplerParamTab, SymmetrySimplerParamTab,
-    CosymSimplerParamTab, ScaleSimplerParamTab,
+    SearchBeamSimplerParamTab, CosymSimplerParamTab, ScaleSimplerParamTab,
     CombineExperimentSimplerParamTab,
 )
 from dui2.shared_modules._version import __version__
@@ -331,6 +331,23 @@ class MainObject(QObject):
             self.window.SymmetryAdvancedScrollArea
         )
 
+        search_beam_simpl_widg = SearchBeamSimplerParamTab()
+        search_beam_simpl_widg.item_changed.connect(self.item_param_changed)
+        self.window.SearchBeamSimpleScrollArea.setWidget(search_beam_simpl_widg)
+        search_beam_advanced_parameters = build_advanced_params_widget(
+            "search_beam_position_params", self.window.SrchBeamSearchLayout,
+            self.runner_handler
+        )
+        search_beam_advanced_parameters.item_changed.connect(
+            self.item_param_changed
+        )
+        self.window.SearchBeamAdvancedScrollArea.setWidget(
+            search_beam_advanced_parameters
+        )
+        search_beam_advanced_parameters.set_scroll_parent(
+            self.window.SearchBeamAdvancedScrollArea
+        )
+
         cosym_simpl_widg = CosymSimplerParamTab()
         cosym_simpl_widg.item_changed.connect(self.item_param_changed)
         self.window.CosymSimplerScrollArea.setWidget(cosym_simpl_widg)
@@ -412,6 +429,11 @@ class MainObject(QObject):
         ce_advanced_parameters.twin_widg = comb_simpl_widg
         comb_simpl_widg.twin_widg = ce_advanced_parameters
 
+
+        search_beam_advanced_parameters.twin_widg = search_beam_simpl_widg
+        search_beam_simpl_widg.twin_widg = search_beam_advanced_parameters
+
+
         cosm_advanced_parameters.twin_widg = cosym_simpl_widg
         cosym_simpl_widg.twin_widg = cosm_advanced_parameters
 
@@ -480,19 +502,21 @@ class MainObject(QObject):
 
         self.param_widgets["integrate"]["simple"] = integr_simpl_widg
         self.param_widgets["integrate"]["advanced"] = it_advanced_parameters
-        self.param_widgets[
-            "integrate"
-        ]["main_page"] = self.window.IntegratePage
+        self.param_widgets["integrate"]["main_page"] = self.window.IntegratePage
 
         self.param_widgets["ssx_integrate"]["simple"] = ssx_integr_simpl_widg
         self.param_widgets["ssx_integrate"]["advanced"] = ssx_it_advanced_parameters
-        self.param_widgets[
-            "ssx_integrate"
-        ]["main_page"] = self.window.SsxIntegratePage
+        self.param_widgets["ssx_integrate"]["main_page"] = self.window.SsxIntegratePage
+
 
         self.param_widgets["symmetry"]["simple"] = sym_simpl_widg
         self.param_widgets["symmetry"]["advanced"] = sm_advanced_parameters
         self.param_widgets["symmetry"]["main_page"] = self.window.SimmetryPage
+
+        self.param_widgets["search_beam_position"]["simple"] = search_beam_simpl_widg
+        self.param_widgets["search_beam_position"]["advanced"] = search_beam_advanced_parameters
+        self.param_widgets["search_beam_position"]["main_page"] = self.window.SearchBeamPositionPage
+
 
         self.param_widgets["cosym"]["simple"] = cosym_simpl_widg
         self.param_widgets["cosym"]["advanced"] = cosm_advanced_parameters

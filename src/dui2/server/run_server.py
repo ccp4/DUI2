@@ -38,6 +38,53 @@ def main(par_def = None, connection_out = None):
     format_utils.print_logo()
     print("DUI2 Version = ", __version__)
     class ReqHandler(http.server.BaseHTTPRequestHandler):
+        def _send_ok_headers(self, content_type = 'text/plain', content_length = None):
+            try:
+                self.send_response(200)
+                self.send_header('Content-type', content_type)
+                if content_length is not None:
+                    self.send_header('Content-Length', content_length)
+                self.end_headers()
+
+            except AttributeError:
+                logging.info(
+                    "Attribute Err catch," +
+                    " not supposed send header info"
+                )
+
+        def _reject_invalid_token(self, log_msg):
+            logging.info(log_msg)
+            try:
+                self.send_response(401)
+                self.send_header('Content-type', 'text/plain')
+                self.end_headers()
+
+            except AttributeError:
+                logging.info(
+                    "Attribute Err catch," +
+                    " not supposed send header info"
+                )
+
+            spit_out(str_out = 'rejected: invalid token', req_obj = self, out_type = 'utf-8')
+            spit_out(str_out = '/*EOF*/', req_obj = self, out_type = 'utf-8')
+
+        def _send_eof(self, label):
+            try:
+                logging.info("sending /*EOF*/ (" + label + ")")
+                spit_out(
+                    str_out = '/*EOF*/', req_obj = self, out_type = 'utf-8'
+                )
+
+            except BrokenPipeError:
+                logging.info(
+                    "BrokenPipe err catch ** while sending EOF or JSON"
+                )
+
+            except ConnectionResetError:
+                logging.info(
+                    "ConnectionReset err catch ** while sending EOF or JSON"
+                )
+
         def do_POST(self):
             content_len = int(self.headers.get('Content-Length'))
             post_body = self.rfile.read(content_len)
@@ -51,26 +98,7 @@ def main(par_def = None, connection_out = None):
             tmp_cmd2lst = url_dict["cmd_lst"]
             token_from_url = url_dict["token"][0]
             if not run_local and token_from_url != token_from_cli:
-                logging.info("request (POST) with wrong token")
-
-                try:
-                    self.send_header('Content-type', 'text/plain')
-                    self.end_headers()
-
-                except AttributeError:
-                    logging.info(
-                        "Attribute Err catch," +
-                        " not supposed send header info"
-                    )
-
-                spit_out(
-                    str_out = 'rejected: invalid token',
-                    req_obj = self, out_type = 'utf-8'
-                )
-                spit_out(
-                    str_out = '/*EOF*/', req_obj = self,
-                    out_type = 'utf-8'
-                )
+                self._reject_invalid_token("request (POST) with wrong token")
                 return
 
             cmd_lst = []
@@ -97,48 +125,40 @@ def main(par_def = None, connection_out = None):
             if found_dials_command:
                 try:
                     cmd_tree_runner.run_dials_command(cmd_dict, self)
-                    logging.info("sending /*EOF*/ (Dials CMD)")
-                    spit_out(
-                        str_out = '/*EOF*/', req_obj = self,
-                        out_type = 'utf-8',
-                    )
 
                 except BrokenPipeError:
                     logging.info(
                         "BrokenPipe err catch ** while sending EOF or JSON"
                     )
+                    return
 
                 except ConnectionResetError:
                     logging.info(
                         "ConnectionReset err catch ** while sending EOF or JSON"
                     )
+                    return
+
+                self._send_eof("Dials CMD")
 
             else:
                 try:
                     cmd_tree_runner.run_dui_command(cmd_dict, self)
-                    logging.info("sending /*EOF*/ (Dui2 CMD)")
-                    spit_out(
-                        str_out = '/*EOF*/', req_obj = self,
-                        out_type = 'utf-8'
-                    )
 
                 except BrokenPipeError:
                     logging.info(
                         "** BrokenPipe err catch ** while sending EOF or JSON"
                     )
+                    return
 
                 except ConnectionResetError:
                     logging.info(
                         "ConnectionReset err catch ** while sending EOF or JSON"
                     )
+                    return
+
+                self._send_eof("Dui2 CMD")
 
         def do_GET(self):
-            try:
-                self.send_response(200)
-
-            except AttributeError:
-                logging.info("Attribute Err catch, not supposed send header info #3")
-
             url_path = self.path
             url_dict = parse_qs(urlparse(url_path).query)
 
@@ -149,16 +169,7 @@ def main(par_def = None, connection_out = None):
             lst_wt_cmd = url_dict["cmd_str"]
             token_from_url = url_dict["token"][0]
             if not run_local and token_from_url != token_from_cli:
-                logging.info("request (GET) with wrong token")
-                try:
-                    self.send_header('Content-type', 'text/plain')
-                    self.end_headers()
-
-                except AttributeError:
-                    logging.info("Attribute Err catch, not supposed send header info #4")
-
-                spit_out(str_out = 'rejected: invalid token', req_obj = self, out_type = 'utf-8')
-                spit_out(str_out = '/*EOF*/', req_obj = self, out_type = 'utf-8')
+                self._reject_invalid_token("request (GET) with wrong token")
                 return
 
             nod_lst = []
@@ -174,15 +185,7 @@ def main(par_def = None, connection_out = None):
                 lst_out = cmd_tree_runner.run_get_data(cmd_dict)
 
                 if type(lst_out) is list or type(lst_out) is dict:
-                    try:
-                        self.send_header('Content-type', 'text/plain')
-                        self.end_headers()
-
-                    except AttributeError:
-                        logging.info(
-                            "Attribute Err catch," +
-                            " not supposed send header info"
-                        )
+                    self._send_ok_headers('text/plain')
 
                     json_str = json.dumps(lst_out) + '\n'
                     spit_out(
@@ -210,23 +213,11 @@ def main(par_def = None, connection_out = None):
                 elif type(lst_out) is bytes:
                     byt_data = zlib.compress(lst_out)
                     siz_dat = str(len(byt_data))
-                    try:
-                        self.send_header('Content-type', 'application/zlib')
-                        self.send_header('Content-Length', siz_dat)
-                        self.end_headers()
-
-                    except AttributeError:
-                        logging.info(
-                            "Attribute Err catch," +
-                            " not supposed send header info"
-                        )
+                    self._send_ok_headers('application/zlib', siz_dat)
 
                     spit_out(str_out = byt_data, req_obj = self)
 
-                logging.info("sending /*EOF*/ (Get)")
-                spit_out(
-                    str_out = '/*EOF*/', req_obj = self, out_type = 'utf-8'
-                )
+                self._send_eof("Get")
 
             except BrokenPipeError:
                 logging.info("BrokenPipe err catch  while sending EOF or JSON")

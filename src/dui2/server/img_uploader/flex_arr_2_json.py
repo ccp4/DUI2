@@ -54,6 +54,14 @@ def get_template_info(exp_path, img_num):
     try:
         experiments = get_experiments(exp_path)
 
+        gonio_lst = experiments.goniometers()
+        if len(gonio_lst) > 0 and gonio_lst[0] is not None:
+            rot_axs = gonio_lst[0].get_rotation_axis()
+
+        else:
+            rot_axs = (-1, -1, -1)
+            logging.info("no goniometer (stills?), using sentinel rot_axs")
+
         max_img_num = 0
         for single_sweep in experiments.imagesets():
             max_img_num += len(single_sweep.indices())
@@ -97,7 +105,8 @@ def get_template_info(exp_path, img_num):
             "new_img_num"    :new_img_num    ,
             "i23_multipanel" :i23_multipanel ,
             "x_beam_pix"     :x_beam_pix     ,
-            "y_beam_pix"     :y_beam_pix
+            "y_beam_pix"     :y_beam_pix     ,
+            "rot_axs"        :rot_axs
         }
 
         return [dict_data]
@@ -135,9 +144,11 @@ def get_resolution( experiments, x, y, panel_num=None):
     beam = my_imageset.get_beam()
     beam_tup = beam.get_s0()
     if detector is None or beam_tup is None:
+        logging.info("unable to get resolution, detector or beam_tup = none")
         return None
 
-    if panel_num is None:
+    if panel_num is None or panel_num < 0:
+        logging.info("unable to get resolution, panel_num = None or < 0 ")
         return None
 
     panel = detector[panel_num]

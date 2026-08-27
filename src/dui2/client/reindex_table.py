@@ -352,11 +352,11 @@ if __name__ == "__main__":
     myWidget.show()
 
     if hasattr(app, "exec"):
-        print("\n using exec \n")
+        logging.info("using exec")
         app.exec()
 
     else:
-        print("\n using exec_ \n")
+        logging.info("using exec_")
         app.exec_()
 
 

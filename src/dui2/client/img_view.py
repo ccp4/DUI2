@@ -119,6 +119,7 @@ class ImgGraphicsScene(QGraphicsScene):
         self.curr_pixmap = None
         self.my_mask_pix_map = None
 
+        self.x_line_size = 20.0
         self.overlay_pen1 = QPen(
             Qt.white, 0.5, Qt.SolidLine,
             Qt.RoundCap, Qt.RoundJoin
@@ -132,6 +133,7 @@ class ImgGraphicsScene(QGraphicsScene):
         self.draw_all_hkl = False
         self.draw_near_hkl = True
         self.beam_xy_pair = (-1, -1)
+        self.rot_axs = (-1, -1, -1)
 
     def draw_ref_rect(self):
 
@@ -184,18 +186,48 @@ class ImgGraphicsScene(QGraphicsScene):
             self.addPixmap(self.my_mask_pix_map)
 
         self.draw_beam_center()
+        self.draw_rotation_axis()
 
     def draw_beam_center(self):
         x_bc = self.beam_xy_pair[0]
         y_bc = self.beam_xy_pair[1]
-        l_size = 20.0
         self.addLine(
-            x_bc, y_bc - l_size, x_bc, y_bc + l_size, self.overlay_pen1
+            x_bc, y_bc - self.x_line_size,
+            x_bc, y_bc + self.x_line_size, self.overlay_pen1
         )
 
         self.addLine(
-            x_bc - l_size, y_bc, x_bc + l_size, y_bc, self.overlay_pen1
+            x_bc - self.x_line_size, y_bc,
+            x_bc + self.x_line_size, y_bc, self.overlay_pen1
         )
+
+    def draw_rotation_axis(self):
+        x_ini = self.beam_xy_pair[0]
+        y_ini = self.beam_xy_pair[1]
+
+        x_end = x_ini + x_ini * self.rot_axs[0]
+        y_end = y_ini + y_ini * self.rot_axs[1]
+
+        x_ini += self.x_line_size * self.rot_axs[0] * 2
+        y_ini += self.x_line_size * self.rot_axs[1] * 2
+
+        self.addLine(x_ini, y_ini, x_end, y_end, self.overlay_pen1)
+
+        arrow_head_size = self.x_line_size / 3.0
+
+        x_b1 = x_ini + arrow_head_size * self.rot_axs[0]
+        y_b1 = y_ini + arrow_head_size * self.rot_axs[1]
+        x_b1 += arrow_head_size * self.rot_axs[1] / 2.0
+        y_b1 += arrow_head_size * self.rot_axs[0] / 2.0
+
+        x_b2 = x_ini + arrow_head_size * self.rot_axs[0]
+        y_b2 = y_ini + arrow_head_size * self.rot_axs[1]
+        x_b2 -= arrow_head_size * self.rot_axs[1] / 2.0
+        y_b2 -= arrow_head_size * self.rot_axs[0] / 2.0
+
+        self.addLine(x_ini, y_ini, x_b1, y_b1, self.overlay_pen1)
+        self.addLine(x_ini, y_ini, x_b2, y_b2, self.overlay_pen1)
+        self.addLine(x_b1, y_b1, x_b2, y_b2, self.overlay_pen1)
 
     def update_tmp_mask(self, new_temp_mask):
         self.temp_mask = new_temp_mask
@@ -266,12 +298,14 @@ class ImgGraphicsScene(QGraphicsScene):
             logging.info("Type Err Catch(draw_temp_mask)")
 
     def __call__(
-        self, new_pixmap, refl_list1, new_temp_mask, new_beam_xy_pair
+        self, new_pixmap, refl_list1, new_temp_mask,
+        new_beam_xy_pair, new_rot_axs
     ):
         self.my_pix_map = new_pixmap
         self.refl_list = refl_list1
         self.temp_mask = new_temp_mask
         self.beam_xy_pair = new_beam_xy_pair
+        self.rot_axs = new_rot_axs
         self.refresh_imgs()
 
     def refresh_imgs(self):
@@ -457,6 +491,7 @@ class DoImageView(QObject):
         self.full_image_loaded = False
         self.img_path = "?"
         self.beam_xy_pair = None
+        self.rot_axs = None
 
         self.load_thread_list = []
 
@@ -491,6 +526,7 @@ class DoImageView(QObject):
         self.np_full_img = None
         self.np_full_mask_img = None
         self.beam_xy_pair = None
+        self.rot_axs = None
         self.r_list0 = []
         self.r_list1 = []
         self.list_temp_mask = None
@@ -628,6 +664,27 @@ class DoImageView(QObject):
         load_template_thread.start()
         self.add_2_thread_list_n_review(load_template_thread)
 
+    def build_2d_array_background(self):
+        x_ax = np.arange(
+            start = -self.img_d1_d2[1] / 2,
+            stop = self.img_d1_d2[1] / 2 + 1,
+            step = 1
+        )
+        y_ax = np.arange(
+            start = -self.img_d1_d2[0] / 2,
+            stop = self.img_d1_d2[0] / 2 + 1,
+            step = 1
+        )
+        sx = x_ax * x_ax
+        sy = y_ax * y_ax
+        xx, yy = np.meshgrid(sx, sy, sparse = True)
+        tmp_2d_arr = xx + yy
+        tmp_2d_arr = tmp_2d_arr.max() - tmp_2d_arr
+        tmp_2d_arr = tmp_2d_arr ** 6
+        self.np_full_img = self.i_min_max[1] * (
+            tmp_2d_arr / tmp_2d_arr.max()
+        )
+
     def after_requesting_template(self, tup_data):
         try:
             json_data_dict = tup_data[0]
@@ -644,30 +701,14 @@ class DoImageView(QObject):
                 float(json_data_dict["x_beam_pix"]),
                 float(json_data_dict["y_beam_pix"])
             )
+            self.rot_axs = tuple(json_data_dict["rot_axs"])
 
             if(
-                self.img_path != new_img_path or
-                self.old_img_num != self.cur_img_num
+                (self.img_path != new_img_path or
+                self.old_img_num != self.cur_img_num)
+                and self.easter_egg_active
             ):
-                x_ax = np.arange(
-                    start = -self.img_d1_d2[1] / 2,
-                    stop = self.img_d1_d2[1] / 2 + 1,
-                    step = 1
-                )
-                y_ax = np.arange(
-                    start = -self.img_d1_d2[0] / 2,
-                    stop = self.img_d1_d2[0] / 2 + 1,
-                    step = 1
-                )
-                sx = x_ax * x_ax
-                sy = y_ax * y_ax
-                xx, yy = np.meshgrid(sx, sy, sparse = True)
-                tmp_2d_arr = xx + yy
-                tmp_2d_arr = tmp_2d_arr.max() - tmp_2d_arr
-                tmp_2d_arr = tmp_2d_arr ** 6
-                self.np_full_img = self.i_min_max[1] * (
-                    tmp_2d_arr / tmp_2d_arr.max()
-                )
+                self.build_2d_array_background()
 
             self.img_path = new_img_path
             self.main_obj.window.ImagePathText.setText(str(self.img_path))
@@ -680,7 +721,6 @@ class DoImageView(QObject):
             self.np_full_mask_img = np.zeros((
                 self.img_d1_d2[0], self.img_d1_d2[1]
                 ), dtype = 'float')
-            #self.np_full_mask_img[:,:] = 0.0
 
         except TypeError:
             self.np_full_mask_img = None
@@ -881,18 +921,19 @@ class DoImageView(QObject):
                 if self.pop_display_menu.rad_but_obs.isChecked():
                     self.my_scene(
                         new_pixmap, self.r_list0, self.list_temp_mask,
-                        self.beam_xy_pair
+                        self.beam_xy_pair, self.rot_axs
                     )
 
                 else:
                     self.my_scene(
                         new_pixmap, self.r_list1, self.list_temp_mask,
-                        self.beam_xy_pair
+                        self.beam_xy_pair, self.rot_axs
                     )
 
             else:
                 self.my_scene(
-                    new_pixmap, [], self.list_temp_mask, self.beam_xy_pair
+                    new_pixmap, [], self.list_temp_mask,
+                    self.beam_xy_pair, self.rot_axs
                 )
 
         except (TypeError, AttributeError):
@@ -1316,6 +1357,14 @@ class DoImageView(QObject):
 
     def easter_egg(self, event):
         self.easter_egg_active = not self.easter_egg_active
+        try:
+            self.np_full_img = np.zeros((
+                self.img_d1_d2[0], self.img_d1_d2[1]
+                ), dtype = 'float')
+
+        except TypeError:
+            self.np_full_img = None
+
         print("Easter egg activated/deactivated")
         print("scaling and cropping behaviour:" + str(self.easter_egg_active))
         print("remember to change the image (next/previous)")

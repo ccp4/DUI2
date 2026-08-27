@@ -14,8 +14,8 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout_32">
-    <item row="0" column="0">
+   <layout class="QVBoxLayout" name="verticalLayout_7">
+    <item>
      <layout class="QHBoxLayout" name="horizontalLayout_4">
       <item>
        <layout class="QVBoxLayout" name="VertNext2RunLayout">
@@ -93,7 +93,7 @@
                    </font>
                   </property>
                   <property name="currentIndex">
-                   <number>3</number>
+                   <number>15</number>
                   </property>
                   <widget class="QWidget" name="RootPage">
                    <layout class="QGridLayout" name="gridLayout_33">
@@ -158,8 +158,8 @@
                         <rect>
                          <x>0</x>
                          <y>0</y>
-                         <width>460</width>
-                         <height>331</height>
+                         <width>96</width>
+                         <height>26</height>
                         </rect>
                        </property>
                       </widget>
@@ -194,8 +194,8 @@
                         <rect>
                          <x>0</x>
                          <y>0</y>
-                         <width>460</width>
-                         <height>331</height>
+                         <width>96</width>
+                         <height>26</height>
                         </rect>
                        </property>
                       </widget>
@@ -255,8 +255,8 @@
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>450</width>
-                             <height>292</height>
+                             <width>415</width>
+                             <height>289</height>
                             </rect>
                            </property>
                           </widget>
@@ -337,8 +337,8 @@
                         <rect>
                          <x>0</x>
                          <y>0</y>
-                         <width>460</width>
-                         <height>331</height>
+                         <width>96</width>
+                         <height>26</height>
                         </rect>
                        </property>
                       </widget>
@@ -398,8 +398,8 @@
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>450</width>
-                             <height>292</height>
+                             <width>96</width>
+                             <height>26</height>
                             </rect>
                            </property>
                           </widget>
@@ -505,8 +505,8 @@
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>450</width>
-                             <height>292</height>
+                             <width>96</width>
+                             <height>26</height>
                             </rect>
                            </property>
                           </widget>
@@ -612,8 +612,8 @@
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>450</width>
-                             <height>292</height>
+                             <width>96</width>
+                             <height>26</height>
                             </rect>
                            </property>
                           </widget>
@@ -694,8 +694,8 @@
                         <rect>
                          <x>0</x>
                          <y>0</y>
-                         <width>460</width>
-                         <height>312</height>
+                         <width>96</width>
+                         <height>26</height>
                         </rect>
                        </property>
                       </widget>
@@ -762,8 +762,8 @@
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>450</width>
-                             <height>292</height>
+                             <width>96</width>
+                             <height>26</height>
                             </rect>
                            </property>
                           </widget>
@@ -869,8 +869,8 @@
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>450</width>
-                             <height>292</height>
+                             <width>96</width>
+                             <height>26</height>
                             </rect>
                            </property>
                           </widget>
@@ -977,8 +977,8 @@
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>450</width>
-                             <height>292</height>
+                             <width>96</width>
+                             <height>26</height>
                             </rect>
                            </property>
                           </widget>
@@ -1052,7 +1052,7 @@
                     <item row="0" column="0">
                      <widget class="QTabWidget" name="tabWidget_12">
                       <property name="currentIndex">
-                       <number>0</number>
+                       <number>1</number>
                       </property>
                       <widget class="QWidget" name="tab_simple_12">
                        <attribute name="title">
@@ -1084,8 +1084,8 @@
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>450</width>
-                             <height>292</height>
+                             <width>96</width>
+                             <height>26</height>
                             </rect>
                            </property>
                           </widget>
@@ -1111,8 +1111,8 @@
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>100</width>
-                             <height>30</height>
+                             <width>407</width>
+                             <height>273</height>
                             </rect>
                            </property>
                           </widget>
@@ -1144,7 +1144,7 @@
                     <item row="0" column="0">
                      <widget class="QTabWidget" name="tabWidget_6">
                       <property name="currentIndex">
-                       <number>0</number>
+                       <number>1</number>
                       </property>
                       <widget class="QWidget" name="tab_simple_6">
                        <attribute name="title">
@@ -1176,8 +1176,8 @@
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>450</width>
-                             <height>292</height>
+                             <width>415</width>
+                             <height>289</height>
                             </rect>
                            </property>
                           </widget>
@@ -1215,8 +1215,8 @@
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>96</width>
-                             <height>26</height>
+                             <width>415</width>
+                             <height>285</height>
                             </rect>
                            </property>
                           </widget>
@@ -1224,6 +1224,113 @@
                         </item>
                         <item row="0" column="0">
                          <layout class="QHBoxLayout" name="SymetrySearchLayout"/>
+                        </item>
+                       </layout>
+                      </widget>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                  <widget class="QWidget" name="SearchBeamPositionPage">
+                   <layout class="QGridLayout" name="gridLayout_51">
+                    <property name="leftMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="spacing">
+                     <number>2</number>
+                    </property>
+                    <item row="0" column="0">
+                     <widget class="QTabWidget" name="tabWidget_13">
+                      <property name="currentIndex">
+                       <number>0</number>
+                      </property>
+                      <widget class="QWidget" name="tab_simple_13">
+                       <attribute name="title">
+                        <string>Simple</string>
+                       </attribute>
+                       <layout class="QVBoxLayout" name="verticalLayout_6">
+                        <property name="spacing">
+                         <number>2</number>
+                        </property>
+                        <property name="leftMargin">
+                         <number>2</number>
+                        </property>
+                        <property name="topMargin">
+                         <number>2</number>
+                        </property>
+                        <property name="rightMargin">
+                         <number>2</number>
+                        </property>
+                        <property name="bottomMargin">
+                         <number>2</number>
+                        </property>
+                        <item>
+                         <widget class="QScrollArea" name="SearchBeamSimpleScrollArea">
+                          <property name="widgetResizable">
+                           <bool>true</bool>
+                          </property>
+                          <widget class="QWidget" name="scrollAreaWidgetContents_34">
+                           <property name="geometry">
+                            <rect>
+                             <x>0</x>
+                             <y>0</y>
+                             <width>419</width>
+                             <height>293</height>
+                            </rect>
+                           </property>
+                          </widget>
+                         </widget>
+                        </item>
+                       </layout>
+                      </widget>
+                      <widget class="QWidget" name="tab_advanced_13">
+                       <attribute name="title">
+                        <string>Advanced</string>
+                       </attribute>
+                       <layout class="QVBoxLayout" name="verticalLayout_8">
+                        <property name="spacing">
+                         <number>2</number>
+                        </property>
+                        <property name="leftMargin">
+                         <number>2</number>
+                        </property>
+                        <property name="topMargin">
+                         <number>2</number>
+                        </property>
+                        <property name="rightMargin">
+                         <number>2</number>
+                        </property>
+                        <property name="bottomMargin">
+                         <number>2</number>
+                        </property>
+                        <item>
+                         <layout class="QHBoxLayout" name="SrchBeamSearchLayout"/>
+                        </item>
+                        <item>
+                         <widget class="QScrollArea" name="SearchBeamAdvancedScrollArea">
+                          <property name="widgetResizable">
+                           <bool>true</bool>
+                          </property>
+                          <widget class="QWidget" name="scrollAreaWidgetContents_35">
+                           <property name="geometry">
+                            <rect>
+                             <x>0</x>
+                             <y>0</y>
+                             <width>419</width>
+                             <height>289</height>
+                            </rect>
+                           </property>
+                          </widget>
+                         </widget>
                         </item>
                        </layout>
                       </widget>
@@ -1283,8 +1390,8 @@
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>450</width>
-                             <height>292</height>
+                             <width>96</width>
+                             <height>26</height>
                             </rect>
                            </property>
                           </widget>
@@ -1390,8 +1497,8 @@
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>450</width>
-                             <height>292</height>
+                             <width>415</width>
+                             <height>289</height>
                             </rect>
                            </property>
                           </widget>
@@ -1429,8 +1536,8 @@
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>96</width>
-                             <height>26</height>
+                             <width>415</width>
+                             <height>285</height>
                             </rect>
                            </property>
                           </widget>
@@ -1497,8 +1604,8 @@
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>450</width>
-                             <height>256</height>
+                             <width>96</width>
+                             <height>26</height>
                             </rect>
                            </property>
                           </widget>
@@ -1536,8 +1643,8 @@
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>450</width>
-                             <height>252</height>
+                             <width>96</width>
+                             <height>26</height>
                             </rect>
                            </property>
                           </widget>
@@ -1581,8 +1688,8 @@
                         <rect>
                          <x>0</x>
                          <y>0</y>
-                         <width>452</width>
-                         <height>323</height>
+                         <width>96</width>
+                         <height>26</height>
                         </rect>
                        </property>
                       </widget>
@@ -1602,8 +1709,8 @@
                         <rect>
                          <x>0</x>
                          <y>0</y>
-                         <width>452</width>
-                         <height>323</height>
+                         <width>96</width>
+                         <height>26</height>
                         </rect>
                        </property>
                       </widget>
@@ -1623,8 +1730,8 @@
                         <rect>
                          <x>0</x>
                          <y>0</y>
-                         <width>452</width>
-                         <height>323</height>
+                         <width>96</width>
+                         <height>26</height>
                         </rect>
                        </property>
                       </widget>
@@ -1644,8 +1751,8 @@
                         <rect>
                          <x>0</x>
                          <y>0</y>
-                         <width>452</width>
-                         <height>323</height>
+                         <width>96</width>
+                         <height>26</height>
                         </rect>
                        </property>
                       </widget>
@@ -2173,7 +2280,7 @@
      <x>0</x>
      <y>0</y>
      <width>1613</width>
-     <height>30</height>
+     <height>34</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_file">

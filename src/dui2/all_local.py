@@ -68,8 +68,6 @@ def main():
     else:
         win_str = "false"
 
-    print("win_str =", win_str, "\n")
-
     server_par_def = (
         ("chdir", None),
         ("limit_path", None),

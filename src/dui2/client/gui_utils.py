@@ -69,7 +69,8 @@ widgets_defs = {
         "icon"          : "resources/find_spots.png",
         "main_cmd"      :["dials.find_spots"],
         "nxt_widg_lst"  :[
-            "index", "filter_reflections", "combine_experiments",
+            "index", "filter_reflections",
+            "search_beam_position", "combine_experiments",
             "ssx_index", "split_experiments", "optional"
         ]
     },
@@ -87,6 +88,7 @@ widgets_defs = {
         "main_cmd"      :["dials.index"],
         "nxt_widg_lst"  :[
             "refine_bravais_settings",
+            "search_beam_position",
             "refine",
             "combine_experiments",
             "split_experiments",
@@ -122,6 +124,7 @@ widgets_defs = {
         "main_cmd"      :["dials.refine"],
         "nxt_widg_lst"  :[
             "integrate",
+            "search_beam_position",
             "refine_bravais_settings",
             "combine_experiments",
             "split_experiments",
@@ -162,6 +165,16 @@ widgets_defs = {
         "nxt_widg_lst"  :[
             "two_theta_refine",
             "scale", "export", "merge", "combine_experiments",
+            "split_experiments", "optional"
+        ]
+    },
+    "search_beam_position" : {
+        "tooltip"       : "dials.search_beam_position ...",
+        "icon"          : "resources/search_beam.png",
+        "main_cmd"      :["dials.search_beam_position"],
+        "nxt_widg_lst"  :[
+            "two_theta_refine",
+            "index", "refine", "integrate", "combine_experiments",
             "split_experiments", "optional"
         ]
     },
