@@ -88,8 +88,8 @@ Next run the downloaded script with `bash` remember to replace `INSTALATION/DIR`
 ```
 bash dui_instaler_w_dials_v3p30p1.sh INSTALATION/DIR
 ```
-As in option 2 now you have available the same tools, the only difference is that now you should use `dials.python`  as your python interpreter. To launch the fully local app you should type something like:
+As in option 2 now you have available the same tools, the only difference is that now you should use the full path to your new _`dials python`_ interpreter. To launch the fully local app you should type something like:
 ```
-dials.python INSTALATION/DIR/DUI2/src/run_dui2.py
+INSTALATION/DIR/dials_w_pyside/bin/python INSTALATION/DIR/DUI2/src/run_dui2.py
 ```
-But again replace `INSTALATION/DIR` with the previously typed path. Using shell tab completion come pretty handy here, good luck.
+But again replace `INSTALATION/DIR` with the previously typed path _both times_. Using shell tab completion come pretty handy here, good luck.
