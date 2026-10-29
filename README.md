@@ -11,28 +11,30 @@ It's worth noting that DUI2 comes pre-installed with CCP4. The project depends o
 This assumes you have already installed and set up CCP4, which include `dials` and `pyside2`.
 
 First download install script for `DUI2`:
-
-      curl -L -O https://raw.githubusercontent.com/ccp4/DUI2/master/install_dui2_after_ccp4_w_curl.sh
+```
+curl -L -O https://raw.githubusercontent.com/ccp4/DUI2/master/install_dui2_after_ccp4_w_curl.sh
+```
 
 Next run the downloaded script with `bash`:
-
-      bash install_dui2_after_ccp4_w_curl.sh
-
+```
+bash install_dui2_after_ccp4_w_curl.sh
+```
 Follow the instruction at the end of the script.
 
 There are three available command line tools after installation:
 
 1. Fully local App (running both, server and client locally)
-
-       dui2
-
+```
+dui2
+```
 2. Server App (Which actually runs Dials commands)
-
-       dui2_server_side host=MY_HOST port=MY_PORT init_path=/PATH/TO/USER/DATA
-
+```
+dui2_server_side host=MY_HOST port=MY_PORT init_path=/PATH/TO/USER/DATA
+```
 3. Client App (GUI front end that talks to the Server App)
-
-       dui2_client_app url=http://...[URL of the server]
+```
+dui2_client_app url=http://...[URL of the server]
+```
 
 ## Option 2, Installation of everything mimicking the ccp4 installation (including Dials) with conda, mamba and git
 
