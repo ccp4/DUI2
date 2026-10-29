@@ -83,12 +83,14 @@ This assumes you have installed `curl`, `pip` and `git` on your GNU/Linux system
 First download installer script:
 ```
 curl -L -O https://raw.githubusercontent.com/ccp4/DUI2/master/dui_instaler_w_dials_v3p30p1.sh
-```       
+```
 Next run the downloaded script with `bash` remember to replace `INSTALATION/DIR` with the path where you want to install all the packages:
 ```
 bash dui_instaler_w_dials_v3p30p1.sh INSTALATION/DIR
 ```
-As in option 2 now you have available the same tools, the only difference is that now you should set the eviroment to your new _`dials`_ installation, by typing:
+From now on replace `INSTALATION/DIR` with the previously typed path _every time_. Using shell tab completion come pretty handy here
+
+As in option 2 now you have available the same tools, the only difference is that now you should set the environment to your new _`dials`_ installation, by typing:
 ```
 source INSTALATION/DIR/dials_w_pyside/setpaths.sh
 ```
@@ -96,4 +98,6 @@ And then you should use the full path to your new _`dials python`_ interpreter. 
 ```
 INSTALATION/DIR/dials_w_pyside/bin/python INSTALATION/DIR/DUI2/src/run_dui2.py
 ```
-But again replace `INSTALATION/DIR` with the previously typed path _in all  times_. Using shell tab completion come pretty handy here, good luck.
+Don't forget to give feedback or report any issue or suggestion in (https://github.com/ccp4/DUI2/issues)
+
+Thanks.
